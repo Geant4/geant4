@@ -24,9 +24,9 @@
 // ********************************************************************
 //
 //
-// $Id: G4CoupledTransportation.cc,v 1.23 2007/11/27 18:25:41 japost Exp $
+// $Id: G4CoupledTransportation.cc,v 1.27 2008/11/26 13:01:28 japost Exp $
 // --> Merged with 1.60.4.2.2.3 2007/05/09 09:30:28 japost 
-// GEANT4 tag $Name: geant4-09-01 $
+// GEANT4 tag $Name: geant4-09-02 $
 // ------------------------------------------------------------
 //  GEANT 4 class implementation
 // =======================================================================
@@ -49,6 +49,7 @@
 #include "G4ProductionCutsTable.hh"
 #include "G4ParticleTable.hh"
 #include "G4ChordFinder.hh"
+#include "G4FieldManagerStore.hh"
 class G4VSensitiveDetector;
 
 //////////////////////////////////////////////////////////////////////////
@@ -84,6 +85,7 @@ G4CoupledTransportation::G4CoupledTransportation( G4int verboseLevel )
 	   << fNavigatorId << G4endl;
   }
   fPathFinder=  G4PathFinder::GetInstance(); 
+  fpSafetyHelper = transportMgr->GetSafetyHelper();  // New 
 
   // Following assignment is to fix small memory leak from simple use of 'new'
   static G4TouchableHandle nullTouchableHandle;  // Points to (G4VTouchable*) 0
@@ -287,7 +289,7 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
       fPreviousSftOrigin  = startPosition ;
       fPreviousMassSafety = newMassSafety ;         
       fPreviousFullSafety = newFullSafety ; 
-      // fSafetyHelper->SetCurrentSafety( newFullSafety, startPosition);
+      // fpSafetyHelper->SetCurrentSafety( newFullSafety, startPosition);
 
 #ifdef G4DEBUG_TRANSPORT
       if( fVerboseLevel > 1 ){
@@ -395,8 +397,10 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
      // Changed to accomodate processes that cannot update the safety -- JA 22 Nov 06
 
   // Update safety for the end-point, if becomes negative at the end-point.
-  //                                       To-Try:  No safety update if at a boundary
-  if( startFullSafety < endpointDistance ) // && !fAnyGeometryLimitedStep ) 
+
+  if(   (startFullSafety < endpointDistance ) 
+	&& ( particleCharge != 0.0 ) )        //  Only needed to prepare for Mult Scat.
+   //   && !fAnyGeometryLimitedStep )          // To-Try:  No safety update if at a boundary
   {
       G4double endFullSafety =
 	fPathFinder->ComputeSafety( fTransportEndPosition); 
@@ -406,6 +410,9 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
         //   currently revise the safety  
         //   ==> so we use the all-geometry safety as a precaution
 
+      fpSafetyHelper->SetCurrentSafety( endFullSafety, fTransportEndPosition);
+        // Pushing safety to Helper avoids recalculation at this point
+
       G4ThreeVector centerPt= G4ThreeVector(0.0, 0.0, 0.0);  // Used for return value
       G4double endMassSafety= fPathFinder->ObtainSafety( fNavigatorId, centerPt); 
         //  Retrieves the mass value from PathFinder (it calculated it)
@@ -413,7 +420,6 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
       fPreviousMassSafety = endMassSafety ; 
       fPreviousFullSafety = endFullSafety; 
       fPreviousSftOrigin = fTransportEndPosition ;
-      // fSafetyHelper->SetCurrentSafety( endFullSafety, fTransportEndPosition);
 
       // The convention (Stepping Manager's) is safety from the start point
       //
@@ -829,8 +835,10 @@ G4CoupledTransportation::StartTracking(G4Track* aTrack)
 
      G4ChordFinder* chordF= fFieldPropagator->GetChordFinder();
      if( chordF ) chordF->ResetStepEstimate();
-     //  Should also do this for the chord finders of local field managers - TODO
   }
+  // Clear the chord finders of all fields (ie managers) derived objects
+  static G4FieldManagerStore* fieldMgrStore= G4FieldManagerStore::GetInstance();
+  fieldMgrStore->ClearAllChordFindersState(); 
 
 #ifdef G4DEBUG_TRANSPORT
   if( fVerboseLevel > 1 ){

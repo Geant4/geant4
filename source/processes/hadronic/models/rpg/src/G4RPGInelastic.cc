@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4RPGInelastic.cc,v 1.2 2007/08/15 20:38:25 dennis Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4RPGInelastic.cc,v 1.6 2008/03/22 00:03:24 dennis Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 
 #include "G4RPGInelastic.hh"
@@ -167,30 +167,30 @@ G4bool G4RPGInelastic::MarkLeadingStrangeParticle(
     }
   }
  
-void G4RPGInelastic::CalculateMomenta(
-  G4FastVector<G4ReactionProduct,256> &vec,
-  G4int &vecLen,
-  const G4HadProjectile *originalIncident,
-  const G4DynamicParticle *originalTarget,
-  G4ReactionProduct &modifiedOriginal,
-  G4Nucleus &targetNucleus,
-  G4ReactionProduct &currentParticle,
-  G4ReactionProduct &targetParticle,
-  G4bool &incidentHasChanged,
-  G4bool &targetHasChanged,
-  G4bool quasiElastic )
+void 
+G4RPGInelastic::CalculateMomenta(G4FastVector<G4ReactionProduct,256>& vec,
+                                 G4int& vecLen,
+                                 const G4HadProjectile* originalIncident,
+                                 const G4DynamicParticle* originalTarget,
+                                 G4ReactionProduct& modifiedOriginal,
+                                 G4Nucleus& targetNucleus,
+                                 G4ReactionProduct& currentParticle,
+                                 G4ReactionProduct& targetParticle,
+                                 G4bool& incidentHasChanged,
+                                 G4bool& targetHasChanged,
+                                 G4bool quasiElastic)
 {
   cache = 0;
   what = originalIncident->Get4Momentum().vect();
 
   G4ReactionProduct leadingStrangeParticle;
 
-  strangeProduction.ReactionStage(originalIncident, modifiedOriginal,
-                                  incidentHasChanged, originalTarget,
-                                  targetParticle, targetHasChanged,
-                                  targetNucleus, currentParticle,
-                                  vec, vecLen,
-				  false, leadingStrangeParticle);
+  //  strangeProduction.ReactionStage(originalIncident, modifiedOriginal,
+  //                                  incidentHasChanged, originalTarget,
+  //                                  targetParticle, targetHasChanged,
+  //                                  targetNucleus, currentParticle,
+  //                                  vec, vecLen,
+  //				  false, leadingStrangeParticle);
 
   if( quasiElastic )
   {
@@ -265,13 +265,22 @@ void G4RPGInelastic::CalculateMomenta(
   std::vector<G4ReactionProduct> savevec;
   for (G4int i = 0; i < vecLen; i++) savevec.push_back(*vec[i]);
 
-  if( annihilation || (vecLen >= 6) ||
-      (modifiedOriginal.GetKineticEnergy()/GeV >= 1.0) &&
+  // Call fragmentation code if
+  //   1) there is annihilation, or
+  //   2) there are more than 5 secondaries, or
+  //   3) incident KE is > 1 GeV AND
+  //        ( incident is a kaon AND rand < 0.5 OR twsup )
+  //
+
+  if( annihilation || vecLen > 5 ||
+      ( modifiedOriginal.GetKineticEnergy()/GeV >= 1.0 &&
+
       (((originalIncident->GetDefinition() == G4KaonPlus::KaonPlus() ||
          originalIncident->GetDefinition() == G4KaonMinus::KaonMinus() ||
          originalIncident->GetDefinition() == G4KaonZeroLong::KaonZeroLong() ||
          originalIncident->GetDefinition() == G4KaonZeroShort::KaonZeroShort()) &&
-        rand1 < 0.5) || rand2 > twsup[vecLen]) )
+	  rand1 < 0.5) 
+       || rand2 > twsup[vecLen]) ) )
 
     finishedGenXPt =
       fragmentation.ReactionStage(originalIncident, modifiedOriginal,
@@ -281,20 +290,15 @@ void G4RPGInelastic::CalculateMomenta(
                                   vec, vecLen,
                                   leadFlag, leadingStrangeParticle);
 
-  if( finishedGenXPt )
-  {
-    Rotate(vec, vecLen);
-    return;
-  }
+  if (finishedGenXPt) return;
 
   G4bool finishedTwoClu = false;
-  if( modifiedOriginal.GetTotalMomentum()/MeV < 1.0 )
-  {
-    for(G4int i=0; i<vecLen; i++) delete vec[i];
+
+  if (modifiedOriginal.GetTotalMomentum() < 1.0) {
+    for (G4int i = 0; i < vecLen; i++) delete vec[i];
     vecLen = 0;
-  }
-  else
-  {
+
+  } else {
     // Occaisionally, GenerateXandPt will fail in the annihilation channel.
     // Restore current, target and secondaries to pre-GenerateXandPt state
     // before trying annihilation in TwoCluster
@@ -312,12 +316,14 @@ void G4RPGInelastic::CalculateMomenta(
       }
     }
 
-    pionSuppression.ReactionStage(originalIncident, modifiedOriginal,
-                                  incidentHasChanged, originalTarget,
-                                  targetParticle, targetHasChanged,
-                                  targetNucleus, currentParticle,
-                                  vec, vecLen,
-                                  false, leadingStrangeParticle);
+    // Big violations of energy conservation in this method - don't use
+    // 
+    //    pionSuppression.ReactionStage(originalIncident, modifiedOriginal,
+    //                                  incidentHasChanged, originalTarget,
+    //                                  targetParticle, targetHasChanged,
+    //                                  targetNucleus, currentParticle,
+    //                                  vec, vecLen,
+    //                                  false, leadingStrangeParticle);
 
     try
     {
@@ -336,11 +342,7 @@ void G4RPGInelastic::CalculateMomenta(
     }
   }
 
-  if( finishedTwoClu )
-  {
-    Rotate(vec, vecLen);
-    return;
-  }
+  if (finishedTwoClu) return;
 
   twoBody.ReactionStage(originalIncident, modifiedOriginal,
                         incidentHasChanged, originalTarget,
@@ -350,7 +352,7 @@ void G4RPGInelastic::CalculateMomenta(
                         false, leadingStrangeParticle);
 }
 
- 
+/*
  void G4RPGInelastic::
  Rotate(G4FastVector<G4ReactionProduct,256> &vec, G4int &vecLen)
  {
@@ -364,69 +366,68 @@ void G4RPGInelastic::CalculateMomenta(
      vec[i]->SetMomentum(momentum);
    }
  }      
+*/
 
 void 
-G4RPGInelastic::SetUpChange(G4FastVector<G4ReactionProduct,256> &vec,
-                            G4int &vecLen,
-                            G4ReactionProduct &currentParticle,
-                            G4ReactionProduct &targetParticle,
-                            G4bool &incidentHasChanged )
+G4RPGInelastic::SetUpChange(G4FastVector<G4ReactionProduct,256>& vec,
+                            G4int& vecLen,
+                            G4ReactionProduct& currentParticle,
+                            G4ReactionProduct& targetParticle,
+                            G4bool& incidentHasChanged )
 {
   theParticleChange.Clear();
-  G4ParticleDefinition *aKaonZL = G4KaonZeroLong::KaonZeroLong();
-  G4ParticleDefinition *aKaonZS = G4KaonZeroShort::KaonZeroShort();
+  G4ParticleDefinition* aKaonZL = G4KaonZeroLong::KaonZeroLong();
+  G4ParticleDefinition* aKaonZS = G4KaonZeroShort::KaonZeroShort();
   G4int i;
-  if( currentParticle.GetDefinition() == aKaonZL )
-  {
-    if( G4UniformRand() <= 0.5 )
-    {
-      currentParticle.SetDefinition( aKaonZS );
+
+  if (currentParticle.GetDefinition() == particleDef[k0]) {
+    if (G4UniformRand() < 0.5) {
+      currentParticle.SetDefinitionAndUpdateE(aKaonZL);
       incidentHasChanged = true;
+    } else {
+      currentParticle.SetDefinitionAndUpdateE(aKaonZS);
     }
-  }
-  else if( currentParticle.GetDefinition() == aKaonZS )
-  {
-    if( G4UniformRand() > 0.5 )
-    {
-      currentParticle.SetDefinition( aKaonZL );
+  } else if (currentParticle.GetDefinition() == particleDef[k0b]) {
+    if (G4UniformRand() < 0.5) {
+      currentParticle.SetDefinitionAndUpdateE(aKaonZL);
+    } else {
+      currentParticle.SetDefinitionAndUpdateE(aKaonZS);
       incidentHasChanged = true;
     }
   }
 
-  if( targetParticle.GetDefinition() == aKaonZL )
-  {
-    if( G4UniformRand() <= 0.5 )targetParticle.SetDefinition( aKaonZS );
-  }
-  else if( targetParticle.GetDefinition() == aKaonZS )
-  {
-    if( G4UniformRand() > 0.5 )targetParticle.SetDefinition( aKaonZL );
-  }
-  for( i=0; i<vecLen; ++i )
-  {
-    if( vec[i]->GetDefinition() == aKaonZL )
-    {
-      if( G4UniformRand() <= 0.5 )vec[i]->SetDefinition( aKaonZS );
-    }
-    else if( vec[i]->GetDefinition() == aKaonZS )
-    {
-      if( G4UniformRand() > 0.5 )vec[i]->SetDefinition( aKaonZL );
+  if (targetParticle.GetDefinition() == particleDef[k0] || 
+      targetParticle.GetDefinition() == particleDef[k0b] ) {
+    if (G4UniformRand() < 0.5) {
+      targetParticle.SetDefinitionAndUpdateE(aKaonZL);
+    } else {
+      targetParticle.SetDefinitionAndUpdateE(aKaonZS);
     }
   }
 
-  if( incidentHasChanged )
-  {
+  for (i = 0; i < vecLen; ++i) {
+    if (vec[i]->GetDefinition() == particleDef[k0] ||
+        vec[i]->GetDefinition() == particleDef[k0b] ) {
+      if (G4UniformRand() < 0.5) {
+        vec[i]->SetDefinitionAndUpdateE(aKaonZL);
+      } else {
+        vec[i]->SetDefinitionAndUpdateE(aKaonZS);
+      }
+    }
+  }
+
+  if (incidentHasChanged) {
     G4DynamicParticle* p0 = new G4DynamicParticle;
-    p0->SetDefinition( currentParticle.GetDefinition() );
-    p0->SetMomentum( currentParticle.GetMomentum() );
+    p0->SetDefinition(currentParticle.GetDefinition() );
+    p0->SetMomentum(currentParticle.GetMomentum() );
     theParticleChange.AddSecondary( p0 );
     theParticleChange.SetStatusChange( stopAndKill );
     theParticleChange.SetEnergyChange( 0.0 );
-  }
-  else
-  {
+
+  } else {
     G4double p = currentParticle.GetMomentum().mag()/MeV;
     G4ThreeVector m = currentParticle.GetMomentum();
-    if( p > DBL_MIN )
+    if (p > DBL_MIN)
       theParticleChange.SetMomentumChange( m.x()/p, m.y()/p, m.z()/p );
     else
       theParticleChange.SetMomentumChange( 0.0, 0.0, 1.0 );
@@ -436,7 +437,7 @@ G4RPGInelastic::SetUpChange(G4FastVector<G4ReactionProduct,256> &vec,
     theParticleChange.SetEnergyChange( aE );
   }
 
-  if( targetParticle.GetMass() > 0.0 )  // Tgt particle can be eliminated in TwoBody
+  if (targetParticle.GetMass() > 0.0)  // Tgt particle can be eliminated in TwoBody
   {
     G4ThreeVector momentum = targetParticle.GetMomentum();
     momentum = momentum.rotate(cache, what);
@@ -454,8 +455,7 @@ G4RPGInelastic::SetUpChange(G4FastVector<G4ReactionProduct,256> &vec,
   }
 
   G4DynamicParticle* p;
-  for( i=0; i<vecLen; ++i )
-  {
+  for (i = 0; i < vecLen; ++i) {
     G4double secKE = vec[i]->GetKineticEnergy();
     G4ThreeVector momentum = vec[i]->GetMomentum();
     G4ThreeVector dir(0.0, 0.0, 1.0);
@@ -469,5 +469,125 @@ G4RPGInelastic::SetUpChange(G4FastVector<G4ReactionProduct,256> &vec,
     delete vec[i];
   }
 }
- 
+
+
+std::pair<G4int, G4double>
+G4RPGInelastic::interpolateEnergy(G4double e) const
+{
+  G4int index = 29;
+  G4double fraction = 0.0;
+
+  for (G4int i = 1; i < 30; i++) {
+    if (e < energyScale[i]) {
+      index = i-1;
+      fraction = (e - energyScale[index]) / (energyScale[i] - energyScale[index]);
+      break;
+    }
+  }
+  return std::pair<G4int, G4double>(index, fraction);
+}
+
+
+G4int
+G4RPGInelastic::sampleFlat(std::vector<G4double> sigma) const
+{
+  G4int i;
+  G4double sum(0.);
+  for (i = 0; i < G4int(sigma.size()); i++) sum += sigma[i];
+
+  G4double fsum = sum*G4UniformRand();
+  G4double partialSum = 0.0;
+  G4int channel = 0;
+
+  for (i = 0; i < G4int(sigma.size()); i++) {
+    partialSum += sigma[i];
+    if (fsum < partialSum) {
+      channel = i;
+      break;
+    }
+  }
+
+  return channel;
+}
+
+
+void G4RPGInelastic::CheckQnums(G4FastVector<G4ReactionProduct,256> &vec,
+                                G4int &vecLen,
+                                G4ReactionProduct &currentParticle,
+                                G4ReactionProduct &targetParticle,
+                                G4double Q, G4double B, G4double S)
+{
+  G4ParticleDefinition* projDef = currentParticle.GetDefinition();
+  G4ParticleDefinition* targDef = targetParticle.GetDefinition();
+  G4double chargeSum = projDef->GetPDGCharge() + targDef->GetPDGCharge();
+  G4double baryonSum = projDef->GetBaryonNumber() + targDef->GetBaryonNumber();
+  G4double strangenessSum = projDef->GetQuarkContent(3) - 
+                            projDef->GetAntiQuarkContent(3) + 
+                            targDef->GetQuarkContent(3) -
+                            targDef->GetAntiQuarkContent(3);
+
+  G4ParticleDefinition* secDef = 0;
+  for (G4int i = 0; i < vecLen; i++) {
+    secDef = vec[i]->GetDefinition();
+    chargeSum += secDef->GetPDGCharge();
+    baryonSum += secDef->GetBaryonNumber();
+    strangenessSum += secDef->GetQuarkContent(3) 
+                    - secDef->GetAntiQuarkContent(3);
+  }
+
+  G4bool OK = true;
+  if (chargeSum != Q) {
+    G4cout << " Charge not conserved " << G4endl;
+    OK = false;
+  }
+  if (baryonSum != B) {
+    G4cout << " Baryon number not conserved " << G4endl;
+    OK = false;
+  }
+  if (strangenessSum != S) {
+    G4cout << " Strangeness not conserved " << G4endl;
+    OK = false;
+  } 
+
+  if (!OK) {
+    G4cout << " projectile: " << projDef->GetParticleName() 
+           << "  target: " << targDef->GetParticleName() << G4endl;
+    for (G4int i = 0; i < vecLen; i++) {
+      secDef = vec[i]->GetDefinition();
+      G4cout << secDef->GetParticleName() << " " ;
+    }
+    G4cout << G4endl;
+  }
+
+}
+
+
+const G4double G4RPGInelastic::energyScale[30] = {
+  0.0,  0.01, 0.013, 0.018, 0.024, 0.032, 0.042, 0.056, 0.075, 0.1,
+  0.13, 0.18, 0.24,  0.32,  0.42,  0.56,  0.75,  1.0,   1.3,   1.8,
+  2.4,  3.2,  4.2,   5.6,   7.5,   10.0,  13.0,  18.0,  24.0, 32.0 };
+
+G4ParticleDefinition* p0 = G4PionZero::PionZero();
+G4ParticleDefinition* p1 = G4PionPlus::PionPlus();
+G4ParticleDefinition* p2 = G4PionMinus::PionMinus();
+G4ParticleDefinition* p3 = G4KaonPlus::KaonPlus();
+G4ParticleDefinition* p4 = G4KaonMinus::KaonMinus();
+G4ParticleDefinition* p5 = G4KaonZero::KaonZero();
+G4ParticleDefinition* p6 = G4AntiKaonZero::AntiKaonZero();
+G4ParticleDefinition* p7 = G4Proton::Proton();
+G4ParticleDefinition* p8 = G4Neutron::Neutron();
+G4ParticleDefinition* p9 = G4Lambda::Lambda();
+G4ParticleDefinition* p10 = G4SigmaPlus::SigmaPlus();
+G4ParticleDefinition* p11 = G4SigmaZero::SigmaZero();
+G4ParticleDefinition* p12 = G4SigmaMinus::SigmaMinus();
+G4ParticleDefinition* p13 = G4XiZero::XiZero();
+G4ParticleDefinition* p14 = G4XiMinus::XiMinus();
+G4ParticleDefinition* p15 = G4OmegaMinus::OmegaMinus();
+G4ParticleDefinition* p16 = G4AntiProton::AntiProton();
+G4ParticleDefinition* p17 = G4AntiNeutron::AntiNeutron();
+
+G4ParticleDefinition* G4RPGInelastic::particleDef[18] = {
+  p0, p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12, p13, p14, 
+  p15, p16, p17 };
+
 /* end of file */

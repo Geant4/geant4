@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MuMultipleScattering.hh,v 1.1 2007/10/26 09:52:37 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4MuMultipleScattering.hh,v 1.2 2008/04/13 17:19:13 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // -----------------------------------------------------------------------------
 //
@@ -59,7 +59,7 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class G4MuMscModel;
+class G4VMscModel;
 
 class G4MuMultipleScattering : public G4VMultipleScattering
 
@@ -93,7 +93,7 @@ protected:
 
 private:        // data members
 
-  G4MuMscModel* mscModel;
+  G4VMscModel* mscModel;
 
   G4double thetaLimit;
   G4double dtrl;

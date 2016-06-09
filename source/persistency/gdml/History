@@ -1,4 +1,4 @@
-$Id: History,v 1.5 2007/11/30 15:11:22 gcosmo Exp $
+$Id: History,v 1.96 2008/12/04 08:32:08 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,281 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+4 December 2008 Gabriele Cosmo (gdml-V09-01-21)
+- Updated default GDML schema location in G4GDMLParser to point to new
+  GDML schema.
+
+21 November 2008 Tatiana Nikitina (gdml-V09-01-20)
+- Updated schema to include new features introduced in reader/writer plugin.
+
+21 November 2008 Gabriele Cosmo (gdml-V09-01-19)
+- Added missing solid Elliptical-Cone to reader and writer.
+
+20 November 2008 Gabriele Cosmo (gdml-V09-01-18)
+- Implemented mechanism for importing GDML descriptions with extensions
+  to the GDML schema, identified by a new tag "extension".
+- Added implementation .cc file for G4GDMLParser.
+
+17 November 2008 Gabriele Cosmo (gdml-V09-01-17)
+- Get rid of module-name pre-pended to entity names.
+- Added StripNamePointers() method to G4GDMLParser, utility to be invoked in
+  the user-code to strip off pointers from entity names in a GDML modular setup
+  after loading all modules.
+
+14 November 2008 Gabriele Cosmo (gdml-V09-01-16)
+- Enhanced name stripping in G4GDMLRead, to remove also additional IDs
+  prepended to the original name of entities in the case of modular GDML files.
+
+13 November 2008 Gabriele Cosmo (gdml-V09-01-15)
+- Added support for new serializer API as introduced in Xerces-3.0.0.
+- Cleared compilation warnings on Intel-icc compiler.
+
+22 August 2008 Tatiana Nikitina (gdml-V09-01-14)
+- G4GDMLReadStructure: added methods ReplicaRead(), AxisRead(), QuantityRead()
+  and introduced corrections in order to read replica volumes conforming to the
+  GDML Schema. Added possibility to read/write replication for Rho and Phi axes.
+- G4GDMLWriteStructure: introduced corrections in order to write replica
+  volumes conforming to the GDML Schema.
+
+20 August 2008 Gabriele Cosmo (gdml-V09-01-13)
+- G4GDMLParser: added argument to Write() for specify if appending or not
+  reference pointer to generated names. Default is TRUE.
+- G4GDMLRead: implemented filtering of names to remove from entity names
+  appended reference pointer which may have been generated. Simplified
+  name generated for physical-volumes to only append "_PV" to its logical
+  volume name.
+- Removed wherever applicable additional strings appended to names.
+
+18 August 2008 Gabriele Cosmo (gdml-V09-01-12)
+- G4GDMLWriteSolids: fixes in naming convention for solids; added specification
+  of units where missing. Introduced parsing of vertices for tessellated solids
+  to avoid duplication in writing.
+
+29 July 2008 Tatiana Nikitina
+- Fixes to parameterisation read and write to match the schema.
+
+24 July 2008 Tatiana Nikitina
+- Added to reader the possibility to have a reference to position and rotation
+  for Boolean solids, as it was possible in GDML_2_10_0.
+
+24 July 2008 Tatiana Nikitina
+- Fixes in reading/writing G4TwistedTrap shapes.
+ 
+22 July 2008 Tatiana Nikitina
+- Added G4Paraboloid to list of supported solids for reader and writer.
+
+16 July 2008 Gabriele Cosmo (gdml-V09-01-11)
+- Renamed internal methods wherever needed to match code policy and having
+  them starting with capital letter.
+
+15 July 2008 Gabriele Cosmo (gdml-V09-01-10)
+- Code review, formatting and adoption of canonical form for calls to
+  G4Exception. Usage of std:: namespace for calls to standard mathematical
+  functions.
+- Added class G4STRead, copy of the original class implemented by Z.Torzsok.
+- Corrected compilation error on Windows/VC++8 compiler for incorrect
+  signature of method in base class.
+
+3 July 2008 Gabriele Cosmo (gdml-V09-01-09)
+- Corrected bugs introduced in last commits for modularization of files;
+  Restored original use of maps.
+- Corrected syntax for parser writer to (optionally) take a pointer to the
+  top physical-volume instead of the logical volume.
+
+25 June 2008 Zoltan Torzsok (gdml-V09-01-08)
+- Units are set according to CLHEP units in G4GDMLEvaluator.
+
+23 June 2008 Zoltan Torzsok
+- Optimised string handling. Schema location can be set in the writer.
+
+20 June 2008 Zoltan Torzsok (gdml-V09-01-07)
+- Set correct URL for schema for 'noNamespaceSchemaLocation' parameter.
+
+17 June 2008 Zoltan Torzsok
+- Added schema validation.
+- Added schema definition files.
+
+10 June 2008 Zoltan Torzsok (gdml-V09-01-06)
+- Modularization can be done either by physvol/depth/mixed.
+  Volume auxiliary information is requested by pointer instead of by name.
+
+9 June 2008 Zoltan Torzsok
+- Naming convention can be configured in the writer.
+
+5 June 2008 Zoltan Torzsok
+- Module name is optional now. If no name is specified,
+  the logical volume name will be the filename.
+
+2 June 2008 Zoltan Torzsok (gdml-V09-01-05)
+- Writer checks if the file to be created does already exist.
+- Added GetVolume() function.
+
+29 May 2008 Zoltan Torzsok
+- Added support for writing modular files.
+
+28 May 2008 Zoltan Torzsok
+- Only the referenced materials/elements/isotopes are written out, not the
+  whole material/element/isotope store.
+- Assigned the name to world physical volume.
+
+27 May 2008 Zoltan Torzsok
+- Optimized/simplified writing of structure: no array required for sorting.
+- Only the referenced solids are written out, not the whole solid store.
+
+23 May 2008 Zoltan Torzsok
+- Writer: precision is now considered in case of scale, rotation and position
+  of the physical-volume. DBL_EPSILON is used to filter precision for avoiding
+  unnecessary scaling, rotation or positioning.
+
+6 May 2008 Zoltan Torzsok (gdml-V09-01-04)
+- Added a constant limiting the maximum number of reflections/displacements of a single solid
+
+21 April 2008 Zoltan Torzsok
+- Divisionvol, replicavol and paramvol are resolved now.
+
+11 April 2008 Zoltan Torzsok (gdml-V09-01-03)
+- Referenced solid in volume is resolved in case of displacements/reflections.
+
+10 April 2008 Zoltan Torzsok
+- Added text output to console to inform of progress during processing.
+
+9 April 2008 Zoltan Torzsok
+- Worked out an algorithm for sorting logical volumes in the writer.
+
+4 April 2008 Zoltan Torzsok
+- Modified writing out of volumes to happen in recursive way.
+  Still needs optimization. Does not recompute touched branches!
+
+1 April 2008 Z.Torzsok
+- Corrected function names to have all starting with capital letter.
+
+11 March 2008 Z.Torzsok (gdml-V09-01-02)
+- Added border surface to reader.
+- Added skin surface to reader.
+- Fixed compilation problems on Intel/icc compiler.
+
+7 March 2008 Z.Torzsok (gdml-V09-01-01)
+- Material properties added to reader
+
+20 February 2008 Z.Torzsok
+- Completed support for parameterised volumes in writer.
+- Name is added to physvol in reader.
+
+19 February 2008 Z.Torzsok
+- Replicavol is simplified and no longer restricted to replication along axes.
+
+18 February 2008 Z.Torzsok
+- Added G4GDMLWriteParamvol class implementing the parameterised volumes
+  in the writer. Added box parameterisation and succesfully tested.
+
+15 February 2008 Z.Torzsok
+- Division volumes added to writer and succesfully tested.
+
+14 February 2008 Z.Torzsok
+- Replica volumes added to writer and succesfully tested.
+
+13 February 2008 Z.Torzsok
+- Added getRotationMatrix() function to G4GDMLReadDefine: this function
+  converts rotation angles into a rotation matrix. This wad used in physvol,
+  reflectedSolid and boolean solid. Now this conversion is in one place
+- Added 'firstrotation' and 'firstposition' to boolean solid. Now the first
+  solid can be transformed too (Boolean solid is succesfully tested).
+
+11 February 2008 Z.Torzsok
+- Added matrices to writer.
+- Exception handling is added to loops (identify infinite loops).
+
+8 Febryary 2008 Z.Torzsok
+- Naming of physvol changed to 'ReferencedVolumeName_in_MotherVolumeName'.
+
+7 February 2008 Z.Torzsok
+- Added twistedtrap and twistedtubs to writer.
+
+6 february 2008 Z.Torzsok
+- Tet, Twistedbox and Twistedtrd added to writer and succesfully tested.
+
+5 February 2008 Z.Torzsok
+- Hype, orb and para added to writer.
+  Succesfully tested, except the para.
+
+1 February 2008 Z.Torzsok
+- Ellipsoid and elliptical-tube added to writer.
+
+31 January 2008 Z.Torzsok
+- Quantities now can be referenced
+- Naming of physical volumes changed: MotherLogicalName_daughter(index)
+
+30 January 2008 Z.Torzsok
+- If there is only one setup defined, name does not matter, that setup
+  will be loaded.
+- Temperature, pressure and state are now processed in the reader.
+  Added Nist support.
+
+28 January 2008 Z.Torzsok
+- Element added to writer.
+- Polyhedra and torus added to writer.
+- Now the package is able to read/write the CMS geometry.
+
+25 January 2008 Z.Torzsok
+- Bugs fixed in the writer in G4GMLWriteStructure::physvolWrite():
+  the signs of the rotational angles were incorrect in certain cases
+  (180 degrees, 90 degrees,...). The reflection was incorrect in case
+  of reflecting a subtree.
+- Now the package is capable of reading and writing back the LHCb
+  geometry correctly.
+
+23 January 2008 Z.Torzsok
+- Composite materials added to writer.
+- Cone and tube added to writer.
+- Boolean solid (intersection, subtraction, union) added to writer.
+
+22 January 2008 Z.Torzsok
+- Extruded solid is added to writer.
+- Reflected solid is removed from the written GDML files.
+  Scale transformation is used instead.
+- Optimization to tha case of reading multiple GDML files and writing out
+  into a single GDML file:
+  The mother volume is moved to the end of the list after its daugthers are
+  processed... only when necessary, when new logical volumes come from the
+  daughters!
+
+21 January 2008 Z.Torzsok
+- Reflected solid is added to the writer.
+- Solved problem of reading multiple GDML files and writing out into a single
+  GDML file:
+  if a logical volume (let's say the mother volume) is instantiated, it will
+  be added to the end of list of volumes (G4LogicalVolumeStore).
+  Once this logical volume is instantiated we can add daughters.
+  If a daughter refers to an external file, additional logical volumes will
+  come. These logical volumes will be added to the list as well, AFTER the
+  mother volume. In the mother volume these logical volumes can be referenced
+  ...but these logical volumes are not instantiated yet when we instantiate
+  the mother! That's why we move the mother volume at the end of the list
+  after the daughters are processed.
+  
+18 January 2008 Z.Torzsok
+- The class hierarchy of the GDML parser/writer is finished:
+  Write <- WriteDefine <- WriteMaterials <- WriteSolids
+        <- WriteSetup <- WriteStructure
+  Parser Read <- ReadDefine <- ReadMaterials <- ReadSolids
+              <- ReadSetup <- ReadParamvol <- ReadStructure.
+
+16 January 2008 Z.Torzsok
+- Starting the materials section.
+
+15 January 2008 Z.Torzsok
+- Writer implements the setup section too.
+
+11 January 2008 Z.Torzsok (gdml-V09-01-00)
+- Reader is now capable of resolving entities.
+
+08 January 2008 Z.Torzsok
+- Vertex referencing is fixed in tessellated solid 
+  (using the identifier "vertex" according to the schema).
+
+07 January 2008 Z.Torzsok
+- Starting to implement the writer.
 
 30 November, 07  Z.Torzsok (gdml-V09-00-04)
 - Fine tuning of the class hierarchy and fixed issue with reflections.

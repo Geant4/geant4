@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoringMessenger.cc,v 1.36 2007/11/12 13:27:31 asaim Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4ScoringMessenger.cc,v 1.39 2008/11/26 21:27:35 asaim Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // ---------------------------------------------------------------------
 
@@ -33,6 +33,7 @@
 #include "G4ScoringManager.hh"
 #include "G4VScoringMesh.hh"
 #include "G4ScoringBox.hh"
+#include "G4ScoringCylinder.hh"
 
 #include "G4UIdirectory.hh"
 #include "G4UIcmdWithoutParameter.hh"
@@ -76,9 +77,9 @@ G4ScoringMessenger::G4ScoringMessenger(G4ScoringManager* SManager)
   meshBoxCreateCmd->SetGuidance("Create scoring box mesh.");
   meshBoxCreateCmd->SetParameterName("MeshName",false);
   //
-//  meshTubsCreateCmd = new G4UIcmdWithAString("/score/create/tubsMesh",this);
-//  meshTubsCreateCmd->SetGuidance("Create scoring mesh.");
-//  meshTubsCreateCmd->SetParameterName("MeshName",false);
+  meshCylinderCreateCmd = new G4UIcmdWithAString("/score/create/cylinderMesh",this);
+  meshCylinderCreateCmd->SetGuidance("Create scoring mesh.");
+  meshCylinderCreateCmd->SetParameterName("MeshName",false);
   //
 //  meshSphereCreateCmd = new G4UIcmdWithAString("/score/create/sphereMesh",this);
 //  meshSphereCreateCmd->SetGuidance("Create scoring mesh.");
@@ -97,17 +98,36 @@ G4ScoringMessenger::G4ScoringMessenger(G4ScoringManager* SManager)
   //
   mBoxSizeCmd = new G4UIcmdWith3VectorAndUnit("/score/mesh/boxSize",this);
   mBoxSizeCmd->SetGuidance("Define size of the scoring mesh.");
+  mBoxSizeCmd->SetGuidance("Dx  Dy  Dz  unit");
   mBoxSizeCmd->SetParameterName("Di","Dj","Dk",false,false);
   mBoxSizeCmd->SetRange("Di>0. && Dj>0. && Dk>0.");
   mBoxSizeCmd->SetDefaultUnit("mm");
+  //
+  mCylinderSizeCmd = new G4UIcommand("/score/mesh/cylinderSize",this);
+  mCylinderSizeCmd->SetGuidance("Define size of the scoring mesh.");
+  mCylinderSizeCmd->SetGuidance("R   Dz  unit");
+  param = new G4UIparameter("R",'d',false);
+  param->SetParameterRange("R>0");
+  mCylinderSizeCmd->SetParameter(param);
+  param = new G4UIparameter("Dz",'d',false);
+  param->SetParameterRange("Dz>0");
+  mCylinderSizeCmd->SetParameter(param);
+  param = new G4UIparameter("unit",'s',true);
+  param->SetDefaultValue("mm");
+  mCylinderSizeCmd->SetParameter(param);
   //
   //   Division command
   mBinCmd = new G4UIcommand("/score/mesh/nBin",this);
   mBinCmd->SetGuidance("Define segments of the scoring mesh.");
   mBinCmd->SetGuidance("[usage] /score/mesh/nBin");
-  mBinCmd->SetGuidance("  Ni  :(int) Number of bins i ");
-  mBinCmd->SetGuidance("  Nj  :(int) Number of bins j ");
-  mBinCmd->SetGuidance("  Nk  :(int) Number of bins k ");
+  mBinCmd->SetGuidance(" In case of boxMesh, parameters are given in");
+  mBinCmd->SetGuidance("   Ni  :(int) Number of bins i (in x-axis) ");
+  mBinCmd->SetGuidance("   Nj  :(int) Number of bins j (in y-axis) ");
+  mBinCmd->SetGuidance("   Nk  :(int) Number of bins k (in z-axis) ");
+  mBinCmd->SetGuidance(" In case of cylinderMesh, parameters are given in");
+  mBinCmd->SetGuidance("   Nr  :(int) Number of bins in radial axis ");
+  mBinCmd->SetGuidance("   Nz  :(int) Number of bins in z axis ");
+  mBinCmd->SetGuidance("   Nphi:(int) Number of bins in phi axis ");
   //mBinCmd->SetGuidance("  Axis:(int) Axis of division ");
 //  mBinCmd->SetGuidance("  P1..Pn-1  :(double) \"paramter from P1 to Pn-1 for division.\"");
   param = new G4UIparameter("Ni",'i',false);
@@ -213,6 +233,24 @@ G4ScoringMessenger::G4ScoringMessenger(G4ScoringManager* SManager)
   colorMapMinMaxCmd->SetParameter(param);
   param = new G4UIparameter("maxValue",'d',false);
   colorMapMinMaxCmd->SetParameter(param);
+
+  chartCmd = new G4UIcommand("/score/drawChart",this);
+  chartCmd->SetGuidance("Draw color chart on the screen.");
+  chartCmd->SetGuidance("[usage] /score/drawChart");
+  chartCmd->SetGuidance("  mesh    :(String) Mesh name.");
+  chartCmd->SetGuidance("  psname  :(String) PS name.");
+  chartCmd->SetGuidance("  On/Off  :(boolean) On or Off the color chart.");
+  chartCmd->SetGuidance("  scale   :(String) default=linear, or log ");
+  param = new G4UIparameter("meshName",'s',false);
+  chartCmd->SetParameter(param);
+  param = new G4UIparameter("psName",'s',false);
+  chartCmd->SetParameter(param);
+  param = new G4UIparameter("On",'s',true);
+  param->SetDefaultValue("true");
+  chartCmd->SetParameter(param);
+  param = new G4UIparameter("scale",'s',true);
+  param->SetDefaultValue("linear");
+  chartCmd->SetParameter(param);
   
   // Dump a scored quantity 
   dumpQtyToFileCmd = new G4UIcommand("/score/dumpQuantityToFile", this);
@@ -245,7 +283,7 @@ G4ScoringMessenger::~G4ScoringMessenger()
     //
     delete           meshCreateDir;
     delete           meshBoxCreateCmd;
-//    delete           meshTubsCreateCmd;
+    delete           meshCylinderCreateCmd;
 //    delete           meshSphereCreateCmd;
     //
     delete          meshOpnCmd;
@@ -255,8 +293,8 @@ G4ScoringMessenger::~G4ScoringMessenger()
     delete          meshDir;
     //
     delete  mBoxSizeCmd;
-    delete  mTubsSizeCmd;
-    delete  mSphereSizeCmd;
+    delete  mCylinderSizeCmd;
+//    delete  mSphereSizeCmd;
     //
     delete      mBinCmd;
     //
@@ -269,6 +307,7 @@ G4ScoringMessenger::~G4ScoringMessenger()
     delete   mRotZCmd;
     delete   mRotDir;
     //
+    delete     chartCmd;
     delete     dumpCmd;
     delete     drawCmd;
     delete     drawColumnCmd;
@@ -303,6 +342,14 @@ void G4ScoringMessenger::SetNewValue(G4UIcommand * command,G4String newVal)
       G4int iColumn = StoI(next());
       G4String colorMapName = next();
       fSMan->DrawMesh(meshName,psName,iPlane,iColumn,colorMapName);
+  } else if(command==chartCmd ){
+      G4Tokenizer next(newVal);
+      G4String meshName = next();
+      G4String psName = next();
+      //G4bool   onFlag = StoB(next());
+      G4String scaleOption = next();
+//      fSMan->DrawChart(meshName,psName,onFlag,scaleOption);
+
   } else if(command==dumpQtyToFileCmd) { 
       G4Tokenizer next(newVal);
       G4String meshName = next();
@@ -322,7 +369,8 @@ void G4ScoringMessenger::SetNewValue(G4UIcommand * command,G4String newVal)
       G4VScoringMesh* currentmesh = fSMan->GetCurrentMesh(); 
       if ( currentmesh ){
 	G4cerr << "ERROR[" << meshBoxCreateCmd->GetCommandPath()
-	       << "] : Mesh <" << currentmesh->GetWorldName() << "> is still open. Close it first. Command ignored." << G4endl;
+	       << "] : Mesh <" << currentmesh->GetWorldName() 
+	       << "> is still open. Close it first. Command ignored." << G4endl;
       } else {
 
 	G4VScoringMesh*  mesh = fSMan->FindMesh(newVal);
@@ -335,6 +383,24 @@ void G4ScoringMessenger::SetNewValue(G4UIcommand * command,G4String newVal)
 		 << "> already exists. Command ignored." << G4endl;
 	}
       }
+  } else if(command==meshCylinderCreateCmd) {
+      G4VScoringMesh* currentmesh = fSMan->GetCurrentMesh(); 
+      if ( currentmesh ){
+	G4cerr << "ERROR[" << meshBoxCreateCmd->GetCommandPath()
+	       << "] : Mesh <" << currentmesh->GetWorldName() 
+	       << "> is still open. Close it first. Command ignored." << G4endl;
+      } else {
+
+	G4VScoringMesh*  mesh = fSMan->FindMesh(newVal);
+	if ( !mesh ){
+	  mesh = new G4ScoringCylinder(newVal);
+	  fSMan->RegisterScoringMesh(mesh);
+	}else{
+	  G4cerr << "ERROR[" << meshCylinderCreateCmd->GetCommandPath()
+		 << "] : Scoring mesh <" << newVal
+		 << "> already exists. Command ignored." << G4endl;
+	}
+      }
   } else if(command==listColorMapCmd) {
       fSMan->ListScoreColorMaps();
   } else if(command==floatMinMaxCmd) {
@@ -343,7 +409,9 @@ void G4ScoringMessenger::SetNewValue(G4UIcommand * command,G4String newVal)
       { colorMap->SetFloatingMinMax(true); }
       else
       { G4cerr << "ERROR[" << floatMinMaxCmd->GetCommandPath()
-	       << "] : color map <" << newVal << "> is not defined. Command ignored." << G4endl; }
+	       << "] : color map <" << newVal << "> is not defined. Command ignored." 
+	       << G4endl; 
+      }
   } else if(command==colorMapMinMaxCmd) {
       G4Tokenizer next(newVal);
       G4String mapName = next();
@@ -355,7 +423,9 @@ void G4ScoringMessenger::SetNewValue(G4UIcommand * command,G4String newVal)
         colorMap->SetMinMax(minVal,maxVal); }
       else
       { G4cerr << "ERROR[" << colorMapMinMaxCmd->GetCommandPath()
-	       << "] : color map <" << newVal << "> is not defined. Command ignored." << G4endl; }
+	       << "] : color map <" << newVal << "> is not defined. Command ignored." 
+	       << G4endl; 
+      }
   } else if(command==meshOpnCmd) {
       G4VScoringMesh* currentmesh = fSMan->GetCurrentMesh(); 
       if ( currentmesh ){
@@ -401,6 +471,21 @@ void G4ScoringMessenger::SetNewValue(G4UIcommand * command,G4String newVal)
 	      } else {
                  G4cerr << "ERROR[" << mBoxSizeCmd->GetCommandPath()
 			<< "] : This mesh is not Box. Command ignored." << G4endl;
+	      }
+	  }else if(command==mCylinderSizeCmd) {
+	      MeshShape shape = mesh->GetShape();
+	      if ( shape == cylinderMesh ){
+		  G4double vsize[3];
+		  vsize[0]     = StoD(token[0]);
+		  vsize[1]     = StoD(token[1]);
+		  G4double unt = mCylinderSizeCmd->ValueOf(token[2]);
+		  vsize[0] *= unt;
+		  vsize[1] *= unt;
+		  vsize[2]  = 0.0;
+		  mesh->SetSize(vsize);
+	      } else {
+		  G4cerr << "ERROR[" << mBoxSizeCmd->GetCommandPath()
+			 << "] : This mesh is not Box. Command ignored." << G4endl;
 	      }
 	  } else if(command==mBinCmd) {
 	      MeshBinCommand(mesh,token);

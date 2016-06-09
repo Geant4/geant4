@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4PAIySection.cc,v 1.3 2007/10/01 18:38:10 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // 
 // G4PAIySection.cc -- class implementation file

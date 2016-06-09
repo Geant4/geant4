@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: History,v 1.4 2005/12/07 10:50:31 guatelli Exp $
+$Id: History,v 1.6 2008/11/24 15:13:51 cirrone Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -8,18 +8,27 @@ $Id: History,v 1.4 2005/12/07 10:50:31 guatelli Exp $
 
                           History file
                           ------------
-07-12-2005 - Susanna Guatelli (gammaraytel-V07-01-00) 
-- GammaRayParticles introduced
-- G4Exception deriving from Hadronic Physics List deleted
+24.11.2008   G.A.P.Cirrone, Tag: gammaraytel-V09-01-02
+             Updated History file
 
-3rd May 2005  John Allison  (examples-V07-00-03)
-- Replaced vis manager with G4VisExecutive.
+24.11.2008   G.A.P.Cirrone, Tag: gammaraytel-V09-01-01
+             Fixed compilation problems
 
-10.12.2004 - Gabriele Cosmo (gammaraytel-V06-02-01)
+11.06.2008   G.A.P.Cirrone (gammaraytel-V09-01-00)
+             Fixed errors in compilation
+
+07-12-2005   Susanna Guatelli (gammaraytel-V07-01-00) 
+             GammaRayParticles introduced
+             G4Exception deriving from Hadronic Physics List deleted
+
+3rd May 2005 John Allison  (examples-V07-00-03)
+             Replaced vis manager with G4VisExecutive.
+
+10.12.2004   Gabriele Cosmo (gammaraytel-V06-02-01)
              Replaced usage of M_PI with CLHEP's pi.
 
-01.12.2004 - Francesco Longo (gammaraytel-V06-02-00)
+01.12.2004   Francesco Longo (gammaraytel-V06-02-00)
              Updates and migration to <cmath>.
 
-01.06.2004 - Susanna Guatelli
+01.06.2004   Susanna Guatelli
              Migration to AIDA 3.2.1 and PI 1.2.1.

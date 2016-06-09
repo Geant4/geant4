@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HistoManager.cc,v 1.21 2007/11/28 12:37:56 maire Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: HistoManager.cc,v 1.26 2008/09/13 17:05:40 maire Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -53,8 +53,8 @@ HistoManager::HistoManager()
 #endif 
  
   fileName[0] = "testem5";
-  fileType    = "hbook";
-  fileOption  = "--noErrors uncompress";  
+  fileType    = "root";
+  fileOption  = "--noErrors export=root uncompress";  
   // histograms
   for (G4int k=0; k<MaxHisto; k++) {
     histo[k] = 0;
@@ -198,7 +198,7 @@ void HistoManager::SetHisto(G4int ih,
 		  "(reflect , charged) : projected angle at exit",	//33
 		  "dummy","dummy","dummy","dummy","dummy","dummy",	//34-39
 		  "(reflect , neutral) : kinetic energy at exit",	//40
-		  "(reflect , neutral) : ener fluence: dE(MeV)/dOmega"	//41
+		  "(reflect , neutral) : ener fluence: dE(MeV)/dOmega",	//41
 		  "(reflect , neutral) : space angle: dN/dOmega",	//42
 		  "(reflect , neutral) : projected angle at exit",	//43
 		  "dummy","dummy","dummy","dummy","dummy","dummy"	//44-49
@@ -244,9 +244,23 @@ void HistoManager::RemoveHisto(G4int ih)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+void HistoManager::Scale(G4int ih, G4double fac)
+{
+ if (ih > MaxHisto) {
+    G4cout << "---> warning from HistoManager::Scale() : histo " << ih
+           << "does not exist.  (fac = " << fac << ")" << G4endl;
+    return;
+  }
+#ifdef G4ANALYSIS_USE
+  if(exist[ih]) histo[ih]->scale(fac);
+#endif
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 void HistoManager::PrintHisto(G4int ih)
 {
- if (ih < MaxHisto) ascii[ih] = true;
+ if (ih < MaxHisto) { ascii[ih] = true; ascii[0] = true; }
  else
     G4cout << "---> warning from HistoManager::PrintHisto() : histo " << ih
            << "does not exist" << G4endl;
@@ -259,6 +273,8 @@ void HistoManager::PrintHisto(G4int ih)
 void HistoManager::saveAscii()
 {
 #ifdef G4ANALYSIS_USE
+
+ if (!ascii[0]) return;
  
  G4String name = fileName[0] + ".ascii";
  std::ofstream File(name, std::ios::out);
@@ -272,7 +288,8 @@ void HistoManager::saveAscii()
      
       for (G4int iBin=0; iBin<Nbins[ih]; iBin++) {
          File << "  " << iBin << "\t" 
-              << histo[ih]->binMean(iBin) << "\t"
+              << 0.5*(histo[ih]->axis().binLowerEdge(iBin) +
+	              histo[ih]->axis().binUpperEdge(iBin)) << "\t"	      
 	      << histo[ih]->binHeight(iBin) 
 	      << G4endl;
       } 

@@ -27,13 +27,19 @@
 // J.P. Wellisch, Nov-1996
 // A prototype of the low energy neutron transport model.
 //
+// 080801 Give a warning message for irregular mass value in data file by T. Koi
+//        Introduce theNDLDataA,Z which has A and Z of NDL data by T. Koi
+// 081024 G4NucleiPropertiesTable:: to G4NucleiProperties::
+//
 #include "G4NeutronHPInelasticBaseFS.hh"
 #include "G4Nucleus.hh"
-#include "G4NucleiPropertiesTable.hh"
+#include "G4NucleiProperties.hh"
 #include "G4He3.hh"
 #include "G4Alpha.hh"
 #include "G4Electron.hh"
 #include "G4NeutronHPDataUsed.hh"
+
+#include "G4ParticleTable.hh"
 
 void G4NeutronHPInelasticBaseFS::InitGammas(G4double AR, G4double ZR)
 {
@@ -54,8 +60,8 @@ void G4NeutronHPInelasticBaseFS::InitGammas(G4double AR, G4double ZR)
     
    G4double eps = 0.001;
    theNuclearMassDifference = 
-       G4NucleiPropertiesTable::GetBindingEnergy(static_cast<G4int>(ZR+eps),static_cast<G4int>(AR+eps)) -
-       G4NucleiPropertiesTable::GetBindingEnergy(static_cast<G4int>(theBaseZ+eps), static_cast<G4int>(theBaseA+eps));
+       G4NucleiProperties::GetBindingEnergy(static_cast<G4int>(AR+eps),static_cast<G4int>(ZR+eps)) -
+       G4NucleiProperties::GetBindingEnergy(static_cast<G4int>(theBaseA+eps), static_cast<G4int>(theBaseZ+eps));
    theGammas.Init(theGammaData);
    //   delete aName;
 }
@@ -73,6 +79,8 @@ void G4NeutronHPInelasticBaseFS::Init (G4double A, G4double Z, G4String & dirNam
   G4String filename = aFile.GetName();
   theBaseA = aFile.GetA();
   theBaseZ = aFile.GetZ();
+   theNDLDataA = (int)aFile.GetA();
+   theNDLDataZ = aFile.GetZ();
   if(!dbool || ( Z<2.5 && ( std::abs(theBaseZ - Z)>0.0001 || std::abs(theBaseA - A)>0.0001)))
   {
     if(getenv("NeutronHPNamesLogging")) G4cout << "Skipped = "<< filename <<" "<<A<<" "<<Z<<G4endl;
@@ -169,12 +177,14 @@ void G4NeutronHPInelasticBaseFS::BaseApply(const G4HadProjectile & theTrack,
 // prepare target
   G4double targetMass;
   G4double eps = 0.0001;
-  targetMass = ( G4NucleiPropertiesTable::GetNuclearMass(static_cast<G4int>(theBaseZ+eps), static_cast<G4int>(theBaseA+eps))) /
+  targetMass = ( G4NucleiProperties::GetNuclearMass(static_cast<G4int>(theBaseA+eps), static_cast<G4int>(theBaseZ+eps))) /
                G4Neutron::Neutron()->GetPDGMass();
   if(theEnergyAngData!=0)
      { targetMass = theEnergyAngData->GetTargetMass(); }
   if(theAngularDistribution!=0)
      { targetMass = theAngularDistribution->GetTargetMass(); }
+//080731a
+if ( targetMass == 0 ) G4cout << "080731a It looks like something wrong value in G4NDL, please update the latest version. If you use the latest, then please report this problem to Geant4 Hyper news." << G4endl;
   G4Nucleus aNucleus;
   G4ReactionProduct theTarget; 
   G4ThreeVector neuVelo = (1./incidentParticle->GetDefinition()->GetPDGMass())*theNeutron.GetMomentum();
@@ -254,7 +264,7 @@ void G4NeutronHPInelasticBaseFS::BaseApply(const G4HadProjectile & theTrack,
       }
     }
     G4ReactionProduct * aHadron;
-    G4double localMass = ( G4NucleiPropertiesTable::GetNuclearMass(static_cast<G4int>(theBaseZ+eps), static_cast<G4int>(theBaseA+eps)));
+    G4double localMass = ( G4NucleiProperties::GetNuclearMass(static_cast<G4int>(theBaseA+eps), static_cast<G4int>(theBaseZ+eps)));
     G4ThreeVector bufferedDirection(0,0,0);
     for(i0=0; i0<nDef; i0++)
     {
@@ -290,7 +300,7 @@ void G4NeutronHPInelasticBaseFS::BaseApply(const G4HadProjectile & theTrack,
 	    G4double mn = G4Neutron::Neutron()->GetPDGMass();
 	    G4int z1 = static_cast<G4int>(theBaseZ+eps-theDefs[0]->GetPDGCharge()-theDefs[1]->GetPDGCharge());
 	    G4int a1 = static_cast<G4int>(theBaseA+eps)-theDefs[0]->GetBaryonNumber()-theDefs[1]->GetBaryonNumber();
-	    G4double concreteMass = G4NucleiPropertiesTable::GetNuclearMass(z1, a1);
+	    G4double concreteMass = G4NucleiProperties::GetNuclearMass(a1, z1);
 	    G4double availableEnergy = eKinetic+mn+localMass-m1-m2-concreteMass;
 	    // available kinetic energy in CMS (non relativistic)
 	    G4double emin = availableEnergy+m1+m2 - std::sqrt((m1+m2)*(m1+m2)+orgMomentum*orgMomentum);
@@ -356,10 +366,10 @@ void G4NeutronHPInelasticBaseFS::BaseApply(const G4HadProjectile & theTrack,
     G4double eBindProducts = 0;
     G4double eBindN = 0;
     G4double eBindP = 0;
-    G4double eBindD = G4NucleiPropertiesTable::GetBindingEnergy(1,2);
-    G4double eBindT = G4NucleiPropertiesTable::GetBindingEnergy(1,3);
-    G4double eBindHe3 = G4NucleiPropertiesTable::GetBindingEnergy(2,3);
-    G4double eBindA = G4NucleiPropertiesTable::GetBindingEnergy(2,4);
+    G4double eBindD = G4NucleiProperties::GetBindingEnergy(2,1);
+    G4double eBindT = G4NucleiProperties::GetBindingEnergy(3,1);
+    G4double eBindHe3 = G4NucleiProperties::GetBindingEnergy(3,2);
+    G4double eBindA = G4NucleiProperties::GetBindingEnergy(4,2);
     for(i=0; i<tmpHadrons->size(); i++)
     {
       if(tmpHadrons->operator[](i)->GetDefinition() == G4Neutron::Neutron())
@@ -453,6 +463,13 @@ void G4NeutronHPInelasticBaseFS::BaseApply(const G4HadProjectile & theTrack,
 // some garbage collection
   delete thePhotons;
   delete tmpHadrons;
+
+//080721 
+   G4ParticleDefinition* targ_pd = G4ParticleTable::GetParticleTable()->GetIon ( (G4int)theBaseZ , (G4int)theBaseA , 0.0 );
+   G4LorentzVector targ_4p_lab ( theTarget.GetMomentum() , std::sqrt( targ_pd->GetPDGMass()*targ_pd->GetPDGMass() + theTarget.GetMomentum().mag2() ) );
+   G4LorentzVector proj_4p_lab = theTrack.Get4Momentum();
+   G4LorentzVector init_4p_lab = proj_4p_lab + targ_4p_lab;
+   adjust_final_state ( init_4p_lab ); 
 
 // clean up the primary neutron
   theResult.SetStatusChange(stopAndKill);

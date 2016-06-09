@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HadronPhysicsFTFP_BERT.hh,v 1.2 2007/11/15 16:58:16 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: HadronPhysicsFTFP_BERT.hh,v 1.3 2008/06/19 08:08:23 gunter Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 //---------------------------------------------------------------------------
 //
@@ -35,6 +35,7 @@
 // Modified:
 // 23.11.2005 G.Folger: migration to non static particles
 // 08.06.2006 V.Ivanchenko: remove stopping
+// 19.06.2008 G.Folger: change default for QE to NOT use Chips QE
 //
 //----------------------------------------------------------------------------
 //
@@ -64,7 +65,7 @@
 class HadronPhysicsFTFP_BERT : public G4VPhysicsConstructor
 {
   public: 
-    HadronPhysicsFTFP_BERT(const G4String& name ="hadron",G4bool quasiElastic=true);
+    HadronPhysicsFTFP_BERT(const G4String& name ="hadron",G4bool quasiElastic=false);
     virtual ~HadronPhysicsFTFP_BERT();
 
   public: 

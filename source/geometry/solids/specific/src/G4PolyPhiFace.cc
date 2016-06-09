@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PolyPhiFace.cc,v 1.13 2007/07/19 12:57:14 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4PolyPhiFace.cc,v 1.15 2008/05/15 11:41:59 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // 
 // --------------------------------------------------------------------
@@ -46,6 +46,9 @@
 #include "G4SolidExtentList.hh"
 #include "G4GeometryTolerance.hh"
 
+#include "Randomize.hh"
+#include "G4TwoVector.hh"
+
 //
 // Constructor
 //
@@ -62,6 +65,7 @@ G4PolyPhiFace::G4PolyPhiFace( const G4ReduciblePolygon *rz,
                                     G4double phiOther )
 {
   kCarTolerance = G4GeometryTolerance::GetInstance()->GetSurfaceTolerance();
+  fSurfaceArea = 0.;  
 
   numEdges = rz->NumVertices();
   
@@ -102,13 +106,14 @@ G4PolyPhiFace::G4PolyPhiFace( const G4ReduciblePolygon *rz,
   // Allocate corners
   //
   corners = new G4PolyPhiFaceVertex[numEdges];
-
   //
   // Fill them
   //
   G4ReduciblePolygonIterator iterRZ(rz);
   
   G4PolyPhiFaceVertex *corn = corners;
+  G4PolyPhiFaceVertex *helper=corners;
+
   iterRZ.Begin();
   do
   {
@@ -116,6 +121,22 @@ G4PolyPhiFace::G4PolyPhiFace( const G4ReduciblePolygon *rz,
     corn->z = iterRZ.GetB();
     corn->x = corn->r*radial.x();
     corn->y = corn->r*radial.y();
+
+    // Add pointer on prev corner
+    //
+    if( corn == corners )
+      { corn->prev = corners+numEdges-1;}
+    else
+      { corn->prev = helper; }
+
+    // Add pointer on next corner
+    //
+    if( corn < corners+numEdges-1 )
+      { corn->next = corn+1;}
+    else
+      { corn->next = corners; }
+
+    helper = corn;
   } while( ++corn, iterRZ.Next() );
 
   //
@@ -321,7 +342,7 @@ void G4PolyPhiFace::CopyStuff( const G4PolyPhiFace &source )
   numEdges  = source.numEdges;
   normal    = source.normal;
   radial    = source.radial;
-  surface    = source.surface;
+  surface   = source.surface;
   rMin    = source.rMin;
   rMax    = source.rMax;
   zMin    = source.zMin;
@@ -329,6 +350,7 @@ void G4PolyPhiFace::CopyStuff( const G4PolyPhiFace &source )
   allBehind  = source.allBehind;
 
   kCarTolerance = source.kCarTolerance;
+  fSurfaceArea = source.fSurfaceArea;
 
   //
   // Corner dynamic array
@@ -893,4 +915,389 @@ G4bool G4PolyPhiFace::InsideEdges( G4double r, G4double z,
   
   *bestDist2 = bestDistance2;
   return answer;
+}
+
+//
+// Calculation of Surface Area of a Triangle 
+// In the same time Random Point in Triangle is given
+//
+G4double G4PolyPhiFace::SurfaceTriangle( G4ThreeVector p1,
+                                         G4ThreeVector p2,
+                                         G4ThreeVector p3,
+                                         G4ThreeVector *p4 )
+{
+  G4ThreeVector v, w;
+  
+  v = p3 - p1;
+  w = p1 - p2;
+  G4double lambda1 = G4UniformRand();
+  G4double lambda2 = lambda1*G4UniformRand();
+ 
+  *p4=p2 + lambda1*w + lambda2*v;
+  return 0.5*(v.cross(w)).mag();
+}
+
+//
+// Compute surface area
+//
+G4double G4PolyPhiFace::SurfaceArea()
+{
+  if ( fSurfaceArea==0. ) { Triangulate(); }
+  return fSurfaceArea;
+}
+
+//
+// Return random point on face
+//
+G4ThreeVector G4PolyPhiFace::GetPointOnFace()
+{
+  Triangulate();
+  return surface_point;
+}
+
+//
+// Auxiliary Functions used for Finding the PointOnFace using Triangulation
+//
+
+//
+// Calculation of 2*Area of Triangle with Sign
+//
+G4double G4PolyPhiFace::Area2( G4TwoVector a,
+                               G4TwoVector b,
+                               G4TwoVector c )
+{
+  return ((b.x()-a.x())*(c.y()-a.y())-
+          (c.x()-a.x())*(b.y()-a.y()));
+}
+
+//
+// Boolean function for sign of Surface
+//
+G4bool G4PolyPhiFace::Left( G4TwoVector a,
+                            G4TwoVector b,
+                            G4TwoVector c )
+{
+  return Area2(a,b,c)>0;
+}
+
+//
+// Boolean function for sign of Surface
+//
+G4bool G4PolyPhiFace::LeftOn( G4TwoVector a,
+                              G4TwoVector b,
+                              G4TwoVector c )
+{
+  return Area2(a,b,c)>=0;
+}
+
+//
+// Boolean function for sign of Surface
+//
+G4bool G4PolyPhiFace::Collinear( G4TwoVector a,
+                                 G4TwoVector b,
+                                 G4TwoVector c )
+{
+  return Area2(a,b,c)==0;
+}
+
+//
+// Boolean function for finding "Proper" Intersection
+// That means Intersection of two lines segments (a,b) and (c,d)
+// 
+G4bool G4PolyPhiFace::IntersectProp( G4TwoVector a,
+                                     G4TwoVector b,
+                                     G4TwoVector c, G4TwoVector d )
+{
+  if( Collinear(a,b,c) || Collinear(a,b,d)||
+      Collinear(c,d,a) || Collinear(c,d,b) )  { return false; }
+
+  G4bool Positive;
+  Positive = !(Left(a,b,c))^!(Left(a,b,d));
+  return Positive && (!Left(c,d,a)^!Left(c,d,b));
+}
+
+//
+// Boolean function for determining if Point c is between a and b
+// For the tree points(a,b,c) on the same line
+//
+G4bool G4PolyPhiFace::Between( G4TwoVector a, G4TwoVector b, G4TwoVector c )
+{
+  if( !Collinear(a,b,c) ) { return false; }
+
+  if(a.x()!=b.x())
+  {
+    return ((a.x()<=c.x())&&(c.x()<=b.x()))||
+           ((a.x()>=c.x())&&(c.x()>=b.x()));
+  }
+  else
+  {
+    return ((a.y()<=c.y())&&(c.y()<=b.y()))||
+           ((a.y()>=c.y())&&(c.y()>=b.y()));
+  }
+}
+
+//
+// Boolean function for finding Intersection "Proper" or not
+// Between two line segments (a,b) and (c,d)
+//
+G4bool G4PolyPhiFace::Intersect( G4TwoVector a,
+                                 G4TwoVector b,
+                                 G4TwoVector c, G4TwoVector d )
+{
+ if( IntersectProp(a,b,c,d) )
+   { return true; }
+ else if( Between(a,b,c)||
+          Between(a,b,d)||
+          Between(c,d,a)||
+          Between(c,d,b) )
+   { return true; }
+ else
+   { return false; }
+}
+
+//
+// Boolean Diagonalie help to determine 
+// if diagonal s of segment (a,b) is convex or reflex
+//
+G4bool G4PolyPhiFace::Diagonalie( G4PolyPhiFaceVertex *a,
+                                  G4PolyPhiFaceVertex *b )
+{
+  G4PolyPhiFaceVertex   *corner = triangles;
+  G4PolyPhiFaceVertex   *corner_next=triangles;
+
+  // For each Edge (corner,corner_next) 
+  do
+  {
+    corner_next=corner->next;
+
+    // Skip edges incident to a of b
+    //
+    if( (corner!=a)&&(corner_next!=a)
+      &&(corner!=b)&&(corner_next!=b) )
+    {
+       G4TwoVector rz1,rz2,rz3,rz4;
+       rz1 = G4TwoVector(a->r,a->z);
+       rz2 = G4TwoVector(b->r,b->z);
+       rz3 = G4TwoVector(corner->r,corner->z);
+       rz4 = G4TwoVector(corner_next->r,corner_next->z);
+       if( Intersect(rz1,rz2,rz3,rz4) ) { return false; }
+    }
+    corner=corner->next;   
+   
+  } while( corner != triangles );
+
+  return true;
+}
+
+//
+// Boolean function that determine if b is Inside Cone (a0,a,a1)
+// being a the center of the Cone
+//
+G4bool G4PolyPhiFace::InCone( G4PolyPhiFaceVertex *a, G4PolyPhiFaceVertex *b )
+{
+  // a0,a and a1 are consecutive vertices
+  //
+  G4PolyPhiFaceVertex *a0,*a1;
+  a1=a->next;
+  a0=a->prev;
+
+  G4TwoVector arz,arz0,arz1,brz;
+  arz=G4TwoVector(a->r,a->z);arz0=G4TwoVector(a0->r,a0->z);
+  arz1=G4TwoVector(a1->r,a1->z);brz=G4TwoVector(b->r,b->z);
+    
+  
+  if(LeftOn(arz,arz1,arz0))  // If a is convex vertex
+  {
+    return Left(arz,brz,arz0)&&Left(brz,arz,arz1);
+  }
+  else                       // Else a is reflex
+  {
+    return !( LeftOn(arz,brz,arz1)&&LeftOn(brz,arz,arz0));
+  }
+}
+
+//
+// Boolean function finding if Diagonal is possible
+// inside Polycone or PolyHedra
+//
+G4bool G4PolyPhiFace::Diagonal( G4PolyPhiFaceVertex *a, G4PolyPhiFaceVertex *b )
+{ 
+  return InCone(a,b) && InCone(b,a) && Diagonalie(a,b);
+}
+
+//
+// Initialisation for Triangulisation by ear tips
+// For details see "Computational Geometry in C" by Joseph O'Rourke
+//
+void G4PolyPhiFace::EarInit()
+{
+  G4PolyPhiFaceVertex   *corner = triangles;
+  G4PolyPhiFaceVertex *c_prev,*c_next;
+  
+  do
+  {
+     // We need to determine three consecutive vertices
+     //
+     c_next=corner->next;
+     c_prev=corner->prev; 
+
+     // Calculation of ears
+     //
+     corner->ear=Diagonal(c_prev,c_next);   
+     corner=corner->next;
+
+  } while( corner!=triangles );
+}
+
+//
+// Triangulisation by ear tips for Polycone or Polyhedra
+// For details see "Computational Geometry in C" by Joseph O'Rourke
+//
+void G4PolyPhiFace::Triangulate()
+{ 
+  // The copy of Polycone is made and this copy is reordered in order to 
+  // have a list of triangles. This list is used for GetPointOnFace().
+
+  G4PolyPhiFaceVertex *tri_help = new G4PolyPhiFaceVertex[numEdges];
+  triangles = tri_help;
+  G4PolyPhiFaceVertex *triang = triangles;
+
+  std::vector<G4double> areas;
+  std::vector<G4ThreeVector> points;
+  G4double area=0.;
+  G4PolyPhiFaceVertex *v0,*v1,*v2,*v3,*v4;
+  v2=triangles;
+
+  // Make copy for prev/next for triang=corners
+  //
+  G4PolyPhiFaceVertex *helper = corners;
+  G4PolyPhiFaceVertex *helper2 = corners;
+  do
+  {
+    triang->r = helper->r;
+    triang->z = helper->z;
+    triang->x = helper->x;
+    triang->y= helper->y;
+
+    // add pointer on prev corner
+    //
+    if( helper==corners )
+      { triang->prev=triangles+numEdges-1; }
+    else
+      { triang->prev=helper2; }
+
+    // add pointer on next corner
+    //
+    if( helper<corners+numEdges-1 )
+      { triang->next=triang+1; }
+    else
+      { triang->next=triangles; }
+    helper2=triang;
+    helper=helper->next;
+    triang=triang->next;
+
+  } while( helper!=corners );
+
+  EarInit();
+ 
+  G4int n=numEdges;
+  G4int i=0;
+  G4ThreeVector p1,p2,p3,p4;
+  const G4int max_n_loops=numEdges*10000; // protection against infinite loop
+
+  // Each step of outer loop removes one ear
+  //
+  while(n>3)  // Inner loop searches for one ear
+  {
+    v2=triangles; 
+    do
+    {
+      if(v2->ear)  // Ear found. Fill variables
+      {
+        // (v1,v3) is diagonal
+        //
+        v3=v2->next; v4=v3->next;
+        v1=v2->prev; v0=v1->prev;
+        
+        // Calculate areas and points
+
+        p1=G4ThreeVector((v2)->x,(v2)->y,(v2)->z);
+        p2=G4ThreeVector((v1)->x,(v1)->y,(v1)->z);
+        p3=G4ThreeVector((v3)->x,(v3)->y,(v3)->z);
+
+        G4double result1 = SurfaceTriangle(p1,p2,p3,&p4 );
+        points.push_back(p4);
+        areas.push_back(result1);
+        area=area+result1;
+
+        // Update earity of diagonal endpoints
+        //
+        v1->ear=Diagonal(v0,v3);
+        v3->ear=Diagonal(v1,v4);
+
+        // Cut off the ear v2 
+        // Has to be done for a copy and not for real PolyPhiFace
+        //
+        v1->next=v3;
+        v3->prev=v1;
+        triangles=v3; // In case the head was v2
+        n--;
+ 
+        break; // out of inner loop
+      }        // end if ear found
+
+      v2=v2->next;
+    
+    } while( v2!=triangles );
+
+    i++;
+    if(i>=max_n_loops)
+    {
+      G4Exception( "G4PolyPhiFace::Triangulation()",
+                   "Bad_Definition_of_Solid", FatalException,
+                   "Maximum number of steps is reached for triangulation!" );
+    }
+  }   // end outer while loop
+
+  if(v2->next)
+  {
+     // add last triangle
+     //
+     v2=v2->next;
+     p1=G4ThreeVector((v2)->x,(v2)->y,(v2)->z);
+     p2=G4ThreeVector((v2->next)->x,(v2->next)->y,(v2->next)->z);
+     p3=G4ThreeVector((v2->prev)->x,(v2->prev)->y,(v2->prev)->z);
+     G4double result1 = SurfaceTriangle(p1,p2,p3,&p4 );
+     points.push_back(p4);
+     areas.push_back(result1);
+     area=area+result1;
+  }
+ 
+  // Surface Area is stored
+  //
+  fSurfaceArea = area;
+  
+  // Second Step: choose randomly one surface
+  //
+  G4double chose = area*G4UniformRand();
+   
+  // Third Step: Get a point on choosen surface
+  //
+  G4double Achose1, Achose2;
+  Achose1=0; Achose2=0.; 
+  i=0;
+  do 
+  {
+    Achose2+=areas[i];
+    if(chose>=Achose1 && chose<Achose2)
+    {
+      G4ThreeVector point;
+       point=points[i] ;
+       surface_point=point;
+       break;     
+    }
+    i++; Achose1=Achose2;
+  } while( i<numEdges-2 );
+ 
+  delete [] tri_help;
 }

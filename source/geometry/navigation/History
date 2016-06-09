@@ -1,4 +1,4 @@
-$Id: History,v 1.113 2007/11/16 09:39:26 gcosmo Exp $
+$Id: History,v 1.126 2008/12/11 10:53:12 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,85 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+December 11th, 2008 - T.Nikitina (geomnav-V09-01-10)
+--------------------------------
+- Reinstated G4MultiLevelLocator as the default locator to allow for proper
+  tuning of parameters in propagation in field and avoid CPU penalty currently
+  induced by default parameters.
+- Corrected text in exceptions in locators classes.
+
+November 14th, 2008 - T.Nikitina, J.Apostolakis (geomnav-V09-01-09)
+-----------------------------------------------
+- Introduced first implementation of new optional method in locator classes
+  AdjustementOfFoundIntersection() using surface-normal of the intersecting
+  solid to boost accuracy. Added the optional call to the new method in each
+  concrete locator.
+- Removed unnecessary accessors for Brent locator in G4PropagatorInField.
+- G4VoxelNavigation: implemented additional check when running in "check"
+  mode; if it is on the surface, ensure that it can move on next step;
+  either DistanceToIn(p,v) or DistanceToOut(p,v) should return a finite
+  value greater than the tolerance.
+
+November 10th, 2008 - G.Cosmo (geomnav-V09-01-08)
+-----------------------------
+- G4PathFinder: cleared unecessary calls to ComputeSafety() in ReLocate().
+
+October 28th, 2008 - T.Nikitina (geomnav-V09-01-07)
+-------------------------------
+- Moved method LocateIntersectionPoint() in G4PropagatorInField to a separate
+  class G4VIntersectionLocator, now allowing to use different location
+  algorithms: Brent, MultiLevel, Simple.
+- New classes: G4VIntersectionLocator, G4SimpleLocator, G4BrentLocator and
+  G4MultiLevelLocator.  
+- Coworks with tag "field-V09-01-03".
+
+October 10th, 2008 - G.Cosmo (geomnav-V09-01-06)
+----------------------------
+- Introduced optional Boolean argument in G4Navigator::ComputeSafety() to
+  allow for computation of safety without modifying the state restoring of
+  the navigator.
+- Modified accordingly the following classes, for calls to ComputeSafety():
+  G4SafetyHelper, G4PathFinder (now calling ComputeSafety() with TRUE
+  argument to preserve navigator's state), G4MultiNavigator and
+  G4ErrorPropagationNavigator.
+
+May 5th, 2008 - T.Nikitina (geomnav-V09-01-05)
+--------------------------
+- Added Brent method for LocateIntersectionPoint() in G4PropagatorInField.
+  The Brent method is now used as default and can be switched off through
+  call to the proper accessor function SetBrentMethod().
+- Requires related update to G4ChordFinder in geometry/magneticfield module
+  included in tag "field-V09-01-02".
+
+April 29th, 2008 - M.Asai (geomnav-V09-01-04)
+-------------------------
+- G4PathFinder: commented out warning and exception in ComputeStep()
+  for step smaller than minimum threshold.
+
+April 28th, 2008 - G.Cosmo (geomnav-V09-01-03)
+--------------------------
+- Corrected condition for wrong evaluation order introduced in the
+  previous tag.
+
+March 13th, 2008 - G.Cosmo (geomnav-V09-01-02)
+--------------------------
+- Cleared compilation warnings in G4ReplicaNavigation on gcc-4.3.0 for
+  ambiguous use of parentheses in condition statements.
+
+January 24th, 2008 - T.Nikitina (geomnav-V09-01-01)
+-------------------------------
+- G4PropagatorInField: changed condition for 'ReEstimationEndPoint'
+  in order to better handle very strict parameters of propagation.
+  Also added more verbosity in case of error for negative step.
+  Fixes rare problem observed in production by ATLAS.
+
+January 22nd, 2008 - P.Arce (geomnav-V09-01-00)
+---------------------------
+- G4PhantomParameterisation:
+  o Bug fix in GetReplicaNo() to catch overflows in X and Y.
+    (on suggestion by S.Stute)
+  o Made CheckVoxelsFillContainer() visible in public interface.
 
 November 16th, 2007 - G.Cosmo (geomnav-V09-00-12)
 -----------------------------

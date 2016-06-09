@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4OpenGLBitMapStore.cc,v 1.4 2007/11/15 10:14:23 allison Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // 
 // John Allison  6th January 2007

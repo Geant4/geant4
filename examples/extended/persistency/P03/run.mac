@@ -1,0 +1,25 @@
+# 
+# can be run in batch, without graphic
+# or interactively: Idle> /control/execute run.mac
+#
+/run/verbose 2
+/event/verbose 0
+/control/verbose 1
+#
+# photon 10 MeV to the direction (0.,0.,1.)
+#
+/geometry/textInput/verbose 0
+
+/run/initialize
+
+/vis/scene/create
+/vis/open OGLIX
+
+/vis/scene/add/trajectories
+/vis/scene/endOfEventAction accumulate
+
+/gun/particle gamma
+/gun/energy 10 MeV
+/tracking/verbose 0
+/run/beamOn 10
+

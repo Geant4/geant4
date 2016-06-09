@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4hMultipleScattering.cc,v 1.7 2007/12/07 17:35:52 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4hMultipleScattering.cc,v 1.13 2008/10/15 17:53:44 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // -----------------------------------------------------------------------------
 //
@@ -57,16 +57,8 @@ using namespace std;
 G4hMultipleScattering::G4hMultipleScattering(const G4String& processName)
   : G4VMultipleScattering(processName)
 {
-  dtrl              = 0.05;
-  lambdalimit       = 1.*mm;
-  
-  samplez           = false ; 
-  isInitialized     = false;  
-
-  SetLateralDisplasmentFlag(true);
-  SetSkin(0.0);
-  SetRangeFactor(0.2);
-  SetGeomFactor(0.1);
+  isInitialized = false;  
+  isIon         = false;
   SetStepLimitType(fMinimal);
 }
 
@@ -88,7 +80,7 @@ void G4hMultipleScattering::InitialiseProcess(const G4ParticleDefinition* p)
 {
   // Modification of parameters between runs
   if(isInitialized) {
-    if (p->GetParticleType() != "nucleus") {
+    if (p->GetParticleType() != "nucleus" && p->GetPDGMass() < GeV) {
       mscUrban->SetStepLimitType(StepLimitType());
       mscUrban->SetLateralDisplasmentFlag(LateralDisplasmentFlag());
       mscUrban->SetSkin(Skin());
@@ -98,20 +90,24 @@ void G4hMultipleScattering::InitialiseProcess(const G4ParticleDefinition* p)
     return;
   }
 
-  // initialisation of parameters
-  G4String part_name = p->GetParticleName();
-  mscUrban = new G4UrbanMscModel90(RangeFactor(),dtrl,lambdalimit,
-                                 GeomFactor(),Skin(),
-                                 samplez,StepLimitType());
-  mscUrban->SetLateralDisplasmentFlag(LateralDisplasmentFlag());
-
-  if (p->GetParticleType() == "nucleus") {
-    mscUrban->SetStepLimitType(fMinimal);
+  // defaults for ions, which cannot be overwritten
+  if (p->GetParticleType() == "nucleus" || p->GetPDGMass() > GeV) {
+    SetStepLimitType(fMinimal);
     SetLateralDisplasmentFlag(false);
     SetBuildLambdaTable(false);
-    SetSkin(0.0);
-    SetRangeFactor(0.2);
+    if(p->GetParticleType() == "nucleus") isIon = true;
   }
+
+  // initialisation of parameters
+  G4String part_name = p->GetParticleName();
+  mscUrban = new G4UrbanMscModel90();
+
+  mscUrban->SetStepLimitType(StepLimitType());
+  mscUrban->SetLateralDisplasmentFlag(LateralDisplasmentFlag());
+  mscUrban->SetSkin(Skin());
+  mscUrban->SetRangeFactor(RangeFactor());
+  mscUrban->SetGeomFactor(GeomFactor());
+
   AddEmModel(1,mscUrban);
   isInitialized = true;
 }
@@ -120,10 +116,37 @@ void G4hMultipleScattering::InitialiseProcess(const G4ParticleDefinition* p)
 
 void G4hMultipleScattering::PrintInfo()
 {
-  G4cout << "      Boundary/stepping algorithm is active with RangeFactor= "
-	 << RangeFactor()
-	 << "  Step limit type " << StepLimitType()
+  G4cout << "      RangeFactor= " << RangeFactor()
+	 << ", step limit type: " << StepLimitType()
+         << ", lateralDisplacement: " << LateralDisplasmentFlag()
+	 << ", skin= " << Skin()  
+    //	 << ", geomFactor= " << GeomFactor()  
 	 << G4endl;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4double G4hMultipleScattering::AlongStepGetPhysicalInteractionLength(
+                             const G4Track& track,
+                             G4double,
+                             G4double currentMinimalStep,
+                             G4double& currentSafety,
+                             G4GPILSelection* selection)
+{
+  // get Step limit proposed by the process
+  valueGPILSelectionMSC = NotCandidateForSelection;
+
+  G4double escaled = track.GetKineticEnergy();
+  if(isIon) escaled *= track.GetDynamicParticle()->GetMass()/proton_mass_c2;
+
+  G4double steplength = GetMscContinuousStepLimit(track,
+						  escaled,
+						  currentMinimalStep,
+						  currentSafety);
+  // G4cout << "StepLimit= " << steplength << G4endl;
+  // set return value for G4GPILSelection
+  *selection = valueGPILSelectionMSC;
+  return  steplength;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

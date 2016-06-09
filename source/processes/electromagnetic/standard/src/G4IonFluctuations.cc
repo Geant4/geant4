@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4IonFluctuations.cc,v 1.5 2007/09/27 14:01:12 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4IonFluctuations.cc,v 1.24 2008/10/22 16:25:21 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // -------------------------------------------------------------------
 //
@@ -45,6 +45,8 @@
 // 23-05-03 Add control on parthalogical cases (V.Ivanchenko)
 // 16-10-03 Changed interface to Initialisation (V.Ivanchenko)
 // 27-09-07 Use FermiEnergy from material, add cut dependence (V.Ivanchenko)
+// 01-02-08 Add protection for small energies and optimise the code (V.Ivanchenko)
+// 01-06-08 Added initialisation of effective charge prestep (V.Ivanchenko)
 //
 // Class Description:
 //
@@ -59,20 +61,24 @@
 #include "G4Poisson.hh"
 #include "G4Material.hh"
 #include "G4DynamicParticle.hh"
-#include "G4ParticleDefinition.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 using namespace std;
 
 G4IonFluctuations::G4IonFluctuations(const G4String& nam)
- :G4VEmFluctuationModel(nam),
-  particle(0),
-  minNumberInteractionsBohr(10.0),
-  theBohrBeta2(50.0*keV/proton_mass_c2),
-  minFraction(0.2),
-  xmin(0.2),
-  minLoss(0.001*eV)
+  : G4VEmFluctuationModel(nam),
+    particle(0),
+    particleMass(proton_mass_c2),
+    charge(1.0),
+    chargeSquare(1.0),
+    effChargeSquare(1.0),
+    parameter(10.0*CLHEP::MeV/CLHEP::proton_mass_c2),
+    minNumberInteractionsBohr(0.0),
+    theBohrBeta2(50.0*keV/CLHEP::proton_mass_c2),
+    minFraction(0.2),
+    xmin(0.2),
+    minLoss(0.001*eV)
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -88,27 +94,35 @@ void G4IonFluctuations::InitialiseMe(const G4ParticleDefinition* part)
   particleMass   = part->GetPDGMass();
   charge         = part->GetPDGCharge()/eplus;
   chargeSquare   = charge*charge;
-  chargeSqRatio  = 1.0;
+  effChargeSquare= chargeSquare;
+  uniFluct.InitialiseMe(part);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4double G4IonFluctuations::SampleFluctuations(const G4Material* material,
                                                const G4DynamicParticle* dp,
-                                                     G4double& tmax,
-                                                     G4double& length,
-                                                     G4double& meanLoss)
+					       G4double& tmax,
+					       G4double& length,
+					       G4double& meanLoss)
 {
-  if(meanLoss <= minLoss) return meanLoss;
   //  G4cout << "### meanLoss= " << meanLoss << G4endl;
+  if(meanLoss <= minLoss) return meanLoss;
+
+  //G4cout << "G4IonFluctuations::SampleFluctuations E(MeV)= " << dp->GetKineticEnergy()
+  //	 << "  Elim(MeV)= " << parameter*charge*particleMass << G4endl; 
+
+  // Vavilov fluctuations
+  if(dp->GetKineticEnergy() > parameter*charge*particleMass) {
+    return uniFluct.SampleFluctuations(material,dp,tmax,length,meanLoss);
+  }
 
   G4double siga = Dispersion(material,dp,tmax,length);
   G4double loss = meanLoss;
   
   G4double navr = minNumberInteractionsBohr;
-
   navr = meanLoss*meanLoss/siga;
-  //  G4cout << "### siga= " << sqrt(siga) << "  navr= " << navr << G4endl;
+  //G4cout << "### siga= " << sqrt(siga) << "  navr= " << navr << G4endl;
 
   // Gaussian fluctuation
   if (navr >= minNumberInteractionsBohr) {
@@ -125,12 +139,15 @@ G4double G4IonFluctuations::SampleFluctuations(const G4Material* material,
     }
     //       G4cout << "siga= " << siga << G4endl;
     siga = sqrt(siga);
-
     G4double lossmax = meanLoss+meanLoss;
-    do {
-      loss = G4RandGauss::shoot(meanLoss,siga);
-    } while (0.0 > loss || loss > lossmax);
 
+    if(siga > 5.0*meanLoss) {
+      loss = lossmax*G4UniformRand();
+    } else {
+      do {
+	loss = G4RandGauss::shoot(meanLoss,siga);
+      } while (0.0 > loss || loss > lossmax);
+    }
   // Poisson fluctuations
   } else {
 
@@ -138,71 +155,73 @@ G4double G4IonFluctuations::SampleFluctuations(const G4Material* material,
     loss = meanLoss*n/navr;
   }
 
-  //  G4cout << "meanLoss= " << meanLoss << " loss= " << loss << G4endl;
+  //G4cout << "meanLoss= " << meanLoss << " loss= " << loss << G4endl;
   return loss;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4IonFluctuations::Dispersion(
-                          const G4Material* material,
-                          const G4DynamicParticle* dp,
- 				G4double& tmax,
-			        G4double& length)
+G4double G4IonFluctuations::Dispersion(const G4Material* material,
+				       const G4DynamicParticle* dp,
+				       G4double& tmax,
+				       G4double& length)
 {
-  particle       = dp->GetDefinition();
-  charge         = particle->GetPDGCharge()/eplus;
-  particleMass   = particle->GetPDGMass();
-  G4double q     = dp->GetCharge()/eplus;
-  chargeSquare   = q*q;
-  chargeSqRatio  = chargeSquare/(charge*charge);
-
-  //chargeSquare   = charge*charge;
-  //chargeSqRatio  = 1.0;
-
-  G4double electronDensity = material->GetElectronDensity();
-  kineticEnergy  = dp->GetKineticEnergy();
+  kineticEnergy = dp->GetKineticEnergy();
   G4double etot = kineticEnergy + particleMass;
-  //G4cout << "e= " <<  kineticEnergy << " m= " << particleMass
-  //	 << " tmax= " << tmax << " l= " << length << " q^2= " << chargeSquare << G4endl;
   beta2 = kineticEnergy*(kineticEnergy + 2.*particleMass)/(etot*etot);
 
+  G4double electronDensity = material->GetElectronDensity();
+
+  /*
+  G4cout << "e= " <<  kineticEnergy << " m= " << particleMass
+  	 << " tmax= " << tmax << " l= " << length 
+  	 << " q^2= " << effChargeSquare << " beta2=" << beta2<< G4endl;
+  */
   G4double siga = (1. - beta2*0.5)*tmax*length*electronDensity*
     twopi_mc2_rcl2*chargeSquare/beta2;
 
   // Low velocity - additional ion charge fluctuations according to
   // Q.Yang et al., NIM B61(1991)149-155.
-  G4double zeff  = electronDensity/(material->GetTotNbOfAtomsPerVolume());
-  //G4cout << "siga= " << siga << " zeff= " << zeff << " c= " << c << G4endl;
+  //G4cout << "sigE= " << sqrt(siga) << " charge= " << charge <<G4endl;
 
-  // correction factors with cut dependence  
-  if ( beta2 < 3.0*theBohrBeta2*zeff ) {
+  G4double Z = electronDensity/material->GetTotNbOfAtomsPerVolume();
+ 
+  G4double fac = Factor(material, Z);
 
-    G4double a = CoeffitientA (zeff);
-    G4double b = CoeffitientB (material, zeff);
-    //     G4cout << "a= " << a <<  " b= " << b << G4endl;
-    siga *= (1. + (a*chargeSqRatio + b - 1.0)*2.0*electron_mass_c2*beta2/tmax);
-  } else {
+  // heavy ion correction
+  G4double f1 = 1.065e-4*chargeSquare;
+  if(beta2 > theBohrBeta2)  f1/= beta2;
+  else                      f1/= theBohrBeta2;
+  if(f1 > 2.5) f1 = 2.5;
+  fac *= (1.0 + f1);
 
-    // H.Geissel et al. NIM B, 195 (2002) 3.
-    siga *= (1. + RelativisticFactor(material, zeff)*2.0*electron_mass_c2*beta2/
-	     (tmax*(1.0 - beta2)));
+  // taking into account the cut
+  if(fac > 1.0) {
+    siga *= (1.0 + (fac - 1.0)*2.0*electron_mass_c2*beta2/(tmax*(1.0 - beta2)));
   }
-  //  G4cout << "siga= " << siga << G4endl;
+  //G4cout << "siga(keV)= " << sqrt(siga)/keV << " fac= " << fac 
+  //	 << "  f1= " << f1 << G4endl;
 
   return siga;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4IonFluctuations::CoeffitientA(G4double& zeff)
+G4double G4IonFluctuations::Factor(const G4Material* material, G4double Z)
 {
   // The aproximation of energy loss fluctuations
   // Q.Yang et al., NIM B61(1991)149-155.
 
   // Reduced energy in MeV/AMU
-  G4double energy = kineticEnergy * amu_c2/(particleMass*MeV) ;
-  static G4double a[96][4] = {
+  G4double energy = kineticEnergy *amu_c2/(particleMass*MeV) ;
+
+  // simple approximation for higher beta2
+  G4double s1 = RelativisticFactor(material, Z);
+
+  // tabulation for lower beta2
+  if( beta2 < 3.0*theBohrBeta2*Z ) {
+
+    static G4double a[96][4] = {
  {-0.3291, -0.8312,  0.2460, -1.0220},
  {-0.5615, -0.5898,  0.5205, -0.7258},
  {-0.5280, -0.4981,  0.5519, -0.5865},
@@ -246,7 +265,7 @@ G4double G4IonFluctuations::CoeffitientA(G4double& zeff)
  {-0.3977, -0.3608,  1.0260, -0.5852},
  {-0.3972, -0.3600,  1.0260, -0.5842},
 
-{-0.3985, -0.3803,  1.0200, -0.6013},
+ {-0.3985, -0.3803,  1.0200, -0.6013},
  {-0.3985, -0.3979,  1.0150, -0.6168},
  {-0.3968, -0.3990,  1.0160, -0.6195},
  {-0.3971, -0.4432,  1.0050, -0.6591},
@@ -308,27 +327,21 @@ G4double G4IonFluctuations::CoeffitientA(G4double& zeff)
  {-0.4307, -0.3292,  1.6210, -0.6447},
  {-0.4284, -0.3204,  1.6290, -0.6380},
  {-0.4227, -0.3217,  1.6360, -0.6438}
-  } ;
+    } ;
 
-  G4int iz = (G4int)zeff - 2 ;
-  if( 0 > iz ) iz = 0 ;
-  if(95 < iz ) iz = 95 ;
+    G4int iz = G4int(Z) - 2;
+    if( 0 > iz )      iz = 0;
+    else if(95 < iz ) iz = 95;
 
-  G4double q = 1.0 / (1.0 + a[iz][0]*pow(energy,a[iz][1])+
-                          + a[iz][2]*pow(energy,a[iz][3])) ;
-
-  return q ;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-G4double G4IonFluctuations::CoeffitientB(const G4Material* material, G4double& zeff)
-{
-  // The aproximation of energy loss fluctuations
-  // Q.Yang et al., NIM B61(1991)149-155.
-
-  // Reduced energy in MeV/AMU
-  G4double energy = kineticEnergy *amu_c2/(particleMass*MeV) ;
+    G4double ss = 1.0 + a[iz][0]*pow(energy,a[iz][1])+
+      + a[iz][2]*pow(energy,a[iz][3]);
+  
+    // protection for the validity range for low beta
+    G4double slim = 0.001;
+    if(ss < slim) s1 = 1.0/slim;
+    // for high value of beta
+    else if(s1*ss < 1.0) s1 = 1.0/ss;
+  }
 
   G4int i = 0 ;
   G4double factor = 1.0 ;
@@ -352,7 +365,8 @@ G4double G4IonFluctuations::CoeffitientB(const G4Material* material, G4double& z
 
   // ions
   } else {
-    factor = charge * pow(charge/zeff, 0.3333) ;
+
+    factor = charge * pow(charge/Z, 0.33333333);
 
     if( kStateGas == material->GetState() ) {
       energy /= (charge * sqrt(charge)) ;
@@ -364,35 +378,44 @@ G4double G4IonFluctuations::CoeffitientB(const G4Material* material, G4double& z
       }
 
     } else {
-      energy /= (charge * sqrt(charge*zeff)) ;
+      energy /= (charge * sqrt(charge*Z)) ;
       i = 4 ;
     }
   }
 
-  G4double x = b[i][2] * (1.0 - exp( - energy * b[i][3] )) ;
+  G4double x = b[i][2];
+  G4double y = energy * b[i][3];
+  if(y <= 0.2) x *= (y*(1.0 - 0.5*y));
+  else         x *= (1.0 - exp(-y));
 
-  G4double q = factor * x * b[i][0] /
-             ((energy - b[i][1])*(energy - b[i][1]) + x*x) ;
+  y = energy - b[i][1];
 
-  return q ;
+  G4double s2 = factor * x * b[i][0] / (y*y + x*x);
+  /*  
+  G4cout << "s1= " << s1 << " s2= " << s2 << " q^2= " << effChargeSquare 
+	 << " e= " << energy << G4endl;
+  */
+  return s1*effChargeSquare/chargeSquare + s2;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4IonFluctuations::RelativisticFactor(const G4Material* material, 
-					       G4double& zeff)
+G4double G4IonFluctuations::RelativisticFactor(const G4Material* mat, 
+					       G4double Z)
 {
-  // H.Geissel et al. NIM B, 195 (2002) 3.
-  G4double eF = material->GetIonisation()->GetFermiEnergy();
-  G4double bF2= 2.0*eF/electron_mass_c2;
-  G4double I  = material->GetIonisation()->GetMeanExcitationEnergy();
-  G4double f  = 0.4*bF2*(1.0 - beta2)/((1.0 - 0.5*beta2)*beta2*zeff);
-  if(beta2 > bF2) f *= log(2.0*electron_mass_c2*beta2/I);
-  else            f *= log(4.0*eF/I);
-  
-  G4double factor = (1.0 + f)*(1.0 + 1.415e-4*chargeSquare/beta2);
+  G4double eF = mat->GetIonisation()->GetFermiEnergy();
+  G4double I  = mat->GetIonisation()->GetMeanExcitationEnergy();
 
-  return factor;
+  // H.Geissel et al. NIM B, 195 (2002) 3.
+  G4double bF2= 2.0*eF/electron_mass_c2;
+  G4double f  = 0.4*(1.0 - beta2)/((1.0 - 0.5*beta2)*Z);
+  if(beta2 > bF2) f *= log(2.0*electron_mass_c2*beta2/I)*bF2/beta2;
+  else            f *= log(4.0*eF/I);
+
+  //  G4cout << "f= " << f << " beta2= " << beta2 
+  //	 << " bf2= " << bF2 << " q^2= " << chargeSquare << G4endl;
+
+  return 1.0 + f;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4RPGTwoBody.cc,v 1.2 2007/08/15 20:38:37 dennis Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4RPGTwoBody.cc,v 1.4 2008/05/05 21:21:55 dennis Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 
 #include "G4RPGTwoBody.hh"
@@ -80,12 +80,10 @@ ReactionStage(const G4HadProjectile* /*originalIncident*/,
                             targetMass*targetMass +
                             2.0*targetMass*etCurrent );  // in GeV
 
-  if( (pCurrent < 0.1) || (cmEnergy < 0.01) ) // 2-body scattering not possible
-  {
+  if (cmEnergy < 0.01) { // 2-body scattering not possible
     targetParticle.SetMass( 0.0 );  // flag that the target particle doesn't exist
-  }
-  else
-  {
+
+  } else {
     // Projectile momentum in cm
 
     G4double pf = targetMass*pCurrent/cmEnergy;
@@ -230,9 +228,9 @@ ReactionStage(const G4HadProjectile* /*originalIncident*/,
     edta = targetNucleus.GetDTABlackTrackEnergy();  // was enp3 in fortran code
     const G4double pnCutOff = 0.0001;       // GeV
     const G4double dtaCutOff = 0.0001;      // GeV
-    const G4double kineticMinimum = 0.0001;
-    const G4double kineticFactor = -0.010;
-    G4double sprob = 0.0; // sprob = probability of self-absorption in heavy molecules
+    //    const G4double kineticMinimum = 0.0001;
+    //    const G4double kineticFactor = -0.010;
+    //    G4double sprob = 0.0; // sprob = probability of self-absorption in heavy molecules
     if( epnb >= pnCutOff )
     {
       npnb = G4Poisson( epnb/0.02 );
@@ -248,8 +246,7 @@ ReactionStage(const G4HadProjectile* /*originalIncident*/,
 
     if (npnb == 0 && ndta == 0) npnb = 1;
 
-    AddBlackTrackParticles(epnb, npnb, edta, ndta, sprob, kineticMinimum, 
-                           kineticFactor, modifiedOriginal, 
+    AddBlackTrackParticles(epnb, npnb, edta, ndta, modifiedOriginal, 
                            PinNucleus, NinNucleus, targetNucleus,
                            vec, vecLen);
   }

@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4VisFeaturesOfOpenGL.hh,v 1.6 2007/10/03 14:20:23 lgarnier Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // 
 

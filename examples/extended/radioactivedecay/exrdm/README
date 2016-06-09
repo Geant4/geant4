@@ -6,10 +6,12 @@
                        Extended Example for G4RadioactiveDecay
                        -------------------- 
 
-  The exRDM is created to show how to use the G4RadioactiveDecay process to simulate the decays of radioactive 
-  isotopes as well as the induced radioactivity resulted from nuclear interactions. In the example a simple 
-  geometry consists of a cylindric target placed in the centre of a tube shaped detector is used. Various primary event
-  generation and tallying options are available. More documentations are available at
+  The exRDM is created to show how to use the G4RadioactiveDecay process to simulate the decays of 
+  radioactive isotopes as well as the induced radioactivity resulted from nuclear interactions. 
+
+  In this example a simple geometry consists of a cylindric target placed in the centre of a tube detector 
+  is constructed. Various primary event generation and tallying options are available. Further documentations 
+  are available at
 
 	  http://reat.space.qinetiq.com/septimess/exrdm
 
@@ -30,10 +32,10 @@
 	          radius of the target. The default thickness of the tube is 2 cm and it is  
                   5 cm long. The default material is "Germanium".
 
-     The user can change the target/detector size and material at the at the "PreIni" state, using the commands under
+     The user can change the target/detector size and material at the at the "PreIni" state, using the 
+     commands in the directory
 		  
 		/exrdm/det
-
 
   2. PHYSICS
 
@@ -57,11 +59,9 @@
 	        /grdm/noVolumes
 	        /grdm/selectVolume Target
 
-
-
        - Hadronic processes:
 	  Hadronic processes are not invoked by default. They can be activated by the user at the "PreIni" 
- 	  state of the execution via the command
+ 	  state via the command
 
 		/exrdm/phys/SelectPhysics
 
@@ -71,7 +71,6 @@
 		the standdard hadron physics list avaible in the G4 distribution, i.e. 
 		"QGSP_BERT", "QGSP_BIC", "QGSP_HP", "LHEP_BERT", "LHEP_BERT_HP", "LHEP_BIC",
 		"LHEP_BIC_HP".
-
 
   3. EVENT:
 
@@ -83,8 +82,9 @@
 
   4. DETECTOR RESPONSE:
 
-     No Geant4 HITS and SD are defined in this example. All the relevant information of the simulation is extracted
-     at the "UserSteppingAction" stage, if the variable "G4ANALYSIS_USE" is defined. These include:
+     No Geant4 HITS and SD are defined in this example. If the variable "G4ANALYSIS_USE" is defined, all 
+     the relevant information of the simulation is collected  at the "UserSteppingAction" stage. These 
+     include:
 
        - Emission particles in the RadioactiveDecay process: 
            particle PDGcode,
@@ -111,34 +111,43 @@
 
   6. ANALYSIS:
 
-     This example implements an AIDA-compliant analysis system as well as the ROOT file format for 
-     histograms and ntuples. If the the user has an AIDA-compliant tool such as 
-     AIDAJNI, ANAPHE, or PI installed on his/her system, the analysis part of this example can 
+     This example implements an AIDA-compliant analysis system as well as the ROOT system, for accumulating 
+     and output histograms and ntuples. If the the user has an AIDA-compliant tool such as 
+     AIDAJNI, ANAPHE, OpenScientist or PI installed, the analysis part of this example can 
      be activated by 
 	
-	setenv G4ANALYSIS_USE_AIDA 1
+	setenv G4ANALYSIS_USE 1
 
-     before building the executable.  The user can also add the "root" file format option by define 
+     before building the executable.  
+
+     The user can also use the executable with the ROOT system, if it is available. This is done by 
       
-       setenv G4ANALYSIS_USE_RROT 1
+       setenv G4ANALYSIS_USE_ROOT 1
        
-     before the compilation.
+     again before the compilation. The AIDA and ROOT systems can be used individually, or in parallel 
+     at the same time!
 
-     At the completion of a simulation run a file "exrdm.root" by default is produced which contains 
-     these data structures. The user can change the name of this output file with the command
+     If no analysis system is activated, there is no output file produced apart from the screen dump. 
+     A file called "exrdm.aida" is produced by default for AIDA system and "exrdm.root" if the ROOT 
+     system is selected. 
+  
+     The user can change the name of this output file with the command
 
 	/histo/fileName new-filename
 
-     The output file by default is in "root" format and can be analysed offline using the ROOT tool, 
-     which allows the histograms and ntuples to examined, manipulated, saved and printed.
-
-     User can also change the output file format to "hbook"  or "xml" using the commands
+     The output AIDA file by default is in xml format. The AIDA system allows the use of other file format
+     such as "root" and "hbook". User can change the output format to "hbook"  or "root" using the command 
+     /histo/fileType.e.g.
 	
 	/histo/fileType hbook  
-	/histo/fileType xml
+	/histo/fileType root
      
-     The output file, in "xml" or "hbook" or "root" format, conatins the 3 ntuples (100,200,300) whose details have been 
-     described in section 4. In addition, there are 7 histograms in the file:
+     When "root" format is selected for the AIDA system, the output AIDA file name is changed to 
+     fileName_aida.root. This is to separate it from the the ROOT system output file fileName.root, in case 
+     both systems are used.
+    
+     The output file, in "aida" or "hbook" or "root" format, conatins the 3 ntuples (100,200,300) which have 
+     been described in section 4. In addition, there are 7 histograms in the file:
 
 	histogram 10: The Pulse Height Spectrum (PHS) of the target.
 	histogram 11: The PHS of the detector.
@@ -152,29 +161,28 @@
         
         /histo/setHisto
 
-     It is assumed the detector and target pulses both have an integration time of 1 micro-second, and the 
-     coincidence gate is 2 microsecond wide. The target and detctor have a threshold of 10 keV in the 
-     anti-/coincidence modes.        
+     It is assumed the detector and target pulses both have an integration time of 1 microsecond, and the 
+     gate is 2 microsecond for the coincidence spectrum. The target and detctor have a threshold of 10 keV 
+     in the anti-/coincidence modes.        
 
      Histograms 10-15 were derived from the same data stored in ntuple-300(the energy depositions), while
      Histogram 16 is obtained with data in ntuple-100 (the emission particles). The user should be able to
-     reproduce these histograms, or new histograms, with the ntuple data in an analyis tool such as JAS3. 
-        
+     reproduce these histograms, or new histograms, with the ntuple data in an off-line analyis tool.
 
   7. GETTING STARTED:
 
      i) If you have an AIDA-compliant analysis system installed than you shall switch on the analysis part of
      example by 
 
-	setenv G4ANALYSIS_USE_AIDA 1
+	setenv G4ANALYSIS_USE 1
  
-     in addition if you want to add the ROOT file format, do
+     in addition if you want to add the ROOT link to the ROOT system, do
        
         setenv G4ANALYSIS_USE_ROOT 1
 
-     otherwise make sure the G4ANALYSIS_USE_AIDA and G4ANALYSIS_USE_ROOT are not definded
+     Otherwise make sure the G4ANALYSIS_USE and G4ANALYSIS_USE_ROOT are not definded
  
-	unsetenv G4ANALYSIS_USE_AIDA
+	unsetenv G4ANALYSIS_USE
 	unsetenv G4ANALYSIS_USE_ROOT
 	 
      ii) Build the exRDM executable:
@@ -183,23 +191,22 @@
          gmake clean
          gmake
 
-     gmake will create tmp and bin directories in your $G4TMP and $G4BIN directories. 
+     Depends on the setup, gmake will create tmp and bin directories in your $G4TMP and $G4BIN directories. 
      The executable, named exRDM, will be in $G4BIN/$G4SYSTEM/ directory.
 
      iii) Run the executable: while in the exrdm directory do 
 
          $G4BIN/$G4SYSTEM/exRDM exrdm.in
 
-     If all goes well, the execution shall be terminated in a few seconds. If G4ANALYSIS_USE_ROOT is 
-     defined, there will be a proton.root file in the current directory.
-
-     One can use ROOT to exam the file.
+     If all goes well, the execution shall be terminated in a few seconds. If G4ANALYSIS_USE is defined, one
+     should see a "proton.aida" file created. If G4ANALYSIS_USE_ROOT is defined, there will be 
+     a proton.root file in the same directory.
 
  8. FURTHER EXAMPLES:
 
-    There are a number of g4mac files in the ./macros subdirectory, to show the features of the G4RadioactiveDecay
-    process. Most of them will lead to the creation of an aida file in the same name of the micro file, which can 
-    be examed and analysed with an analysis tool such as ROOT.
+    There are a number of g4mac files in the ./macros subdirectory, to show the features of the 
+    G4RadioactiveDecay process. Most of them will lead to the creation of an aida file in the same name 
+    of the micro file, which can be examed and analysed with an analysis tool such as OpenScientist ,or JAS3.
  
 	vrml.mac:  to visulise the geometry and the incident of one 100 MeV Cf240 isotope and its decay. A vrml
              	   file (g4_xx.vrml) is created at the end. If a default vrml viewer has been set, one shall  

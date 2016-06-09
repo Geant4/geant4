@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4PolarizedComptonScattering.hh,v 1.9 2006/06/29 19:51:14 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // --------- G4PolarizedComptonScattering physics process ----------------------
 //                   by Vicente Lara, March 1998

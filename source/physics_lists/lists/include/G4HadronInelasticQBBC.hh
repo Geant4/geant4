@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronInelasticQBBC.hh,v 1.4 2007/11/15 12:18:11 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4HadronInelasticQBBC.hh,v 1.7 2008/09/24 18:10:51 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 //---------------------------------------------------------------------------
 //
@@ -89,9 +89,6 @@ public:
 
 private:
 
-  void Register(G4ParticleDefinition*, G4HadronicProcess*, 
-		G4HadronicInteraction*, const G4String&);
-
   G4PiNuclearCrossSection thePiCross;
   G4ProtonInelasticCrossSection  theXSecP;
   G4NeutronInelasticCrossSection theXSecN;
@@ -104,13 +101,15 @@ private:
 
   G4PreCompoundModel* thePreEquilib;
   G4QuasiElasticChannel*    theQuasiElastic;
-  //  G4GeneratorPrecompoundInterface* theCascade;
+  G4GeneratorPrecompoundInterface* preCompound;
   G4BinaryCascade* theCascade;
   G4QStringChipsParticleLevelInterface * theCHIPSCascade;
   G4QGSModel< G4QGSParticipants > * theQGStringModel;
   G4ExcitedStringDecay* theQGStringDecay;
-  G4ExcitedStringDecay* theFTFStringDecay;
-  G4FTFModel*           theFTFStringModel;
+  G4ExcitedStringDecay* theFTFBStringDecay;
+  G4ExcitedStringDecay* theFTFCStringDecay;
+  G4FTFModel*           theFTFBStringModel;
+  G4FTFModel*           theFTFCStringModel;
 
   G4int    verbose;
   G4bool   ftfFlag;

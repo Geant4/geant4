@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // $Id: RunAction.hh,v 1.8 2007/11/21 17:41:19 maire Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

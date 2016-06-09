@@ -24,11 +24,15 @@
 // ********************************************************************
 //
 //
-// $Id: G4VPreCompoundFragment.icc,v 1.4 2006/08/20 01:07:40 dennis Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4VPreCompoundFragment.icc,v 1.7 2008/09/22 10:18:36 ahoward Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // by V. Lara
-
+//
+// Modif (03 September 2008) by J. M. Quesada for external choice of inverse 
+// cross section option 
+// JMQ (06 September 2008) Also external choice has been added for:
+//                      - superimposed Coulomb barrier (if useSICB=true) 
 
 inline G4double G4VPreCompoundFragment::GetA() const 
 { 
@@ -136,3 +140,16 @@ inline void G4VPreCompoundFragment::IncrementStage()
   theStage++;
 }
 
+//for inverse cross section choice
+inline void G4VPreCompoundFragment::SetOPTxs(G4int opt)
+{
+  OPTxs=opt;
+  return;
+}
+
+//for superimposed Coulomb Barrier for inverse cross sections
+inline void G4VPreCompoundFragment::UseSICB(G4bool use)
+{
+  useSICB=use;
+  return;
+}

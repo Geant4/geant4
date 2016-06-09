@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunManagerKernel.cc,v 1.41 2007/05/30 00:42:09 asaim Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4RunManagerKernel.cc,v 1.43 2008/07/10 09:27:19 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 //
 
@@ -84,7 +84,7 @@ G4RunManagerKernel::G4RunManagerKernel()
 
   // construction of Geant4 kernel classes
   eventManager = new G4EventManager();
-  defaultRegion = new G4Region("DefaultRegionForTheWorld");
+  defaultRegion = new G4Region("DefaultRegionForTheWorld"); // deleted by store
   defaultRegion->SetProductionCuts(
     G4ProductionCutsTable::GetProductionCutsTable()->GetDefaultProductionCuts());
 
@@ -129,8 +129,6 @@ G4RunManagerKernel::~G4RunManagerKernel()
   }
   delete eventManager;
   if(verboseLevel>1) G4cout << "EventManager deleted." << G4endl;
-  delete defaultRegion;
-  if(verboseLevel>1) G4cout << "Default detector region deleted." << G4endl;
   G4UImanager* pUImanager = G4UImanager::GetUIpointer();
   {
     if(pUImanager) delete pUImanager;
@@ -188,7 +186,7 @@ void G4RunManagerKernel::DefineWorldVolume(G4VPhysicalVolume* worldVol,
     }
     std::vector<G4LogicalVolume*>::iterator lvItr
      = defaultRegion->GetRootLogicalVolumeIterator();
-    defaultRegion->RemoveRootLogicalVolume(*lvItr);
+    defaultRegion->RemoveRootLogicalVolume(*lvItr,false);
     if(verboseLevel>1) G4cout 
      << "Obsolete world logical volume is removed from the default region." << G4endl;
   }
@@ -305,11 +303,11 @@ G4bool G4RunManagerKernel::RunInitialization()
     return false;
   }
 
-  if(numberOfParallelWorld>0)
-  { // Confirm G4CoupledTransportation is used 
-    if(!ConfirmCoupledTransportation())
-    { G4Exception("G4CoupledTransportation must be used for parallel world."); }
-  }
+  //if(numberOfParallelWorld>0)
+  //{ // Confirm G4CoupledTransportation is used 
+  //  if(!ConfirmCoupledTransportation())
+  //  { G4Exception("G4CoupledTransportation must be used for parallel world."); }
+  //}
     
   UpdateRegion();
   BuildPhysicsTables();

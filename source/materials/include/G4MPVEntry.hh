@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4MPVEntry.hh,v 1.6 2006/06/29 19:11:11 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4MPVEntry.hh,v 1.7 2008/06/05 23:36:56 gum Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // 
 ////////////////////////////////////////////////////////////////////////
@@ -83,7 +83,7 @@ public: // Without description
 	// Constructor and Destructor
 	///////////////////////////////
 
-	G4MPVEntry(G4double aPhotonMomentum, G4double aPropertyValue); 
+	G4MPVEntry(G4double aPhotonEnergy, G4double aPropertyValue); 
 
 	G4MPVEntry(const G4MPVEntry &right);
 
@@ -93,7 +93,7 @@ public: // Without description
 	// Methods
 	////////////
 
-	G4double GetPhotonMomentum();
+	G4double GetPhotonEnergy();
 
 	G4double GetProperty();
 	
@@ -109,7 +109,7 @@ private:
 	// Private Data members 
 	/////////////////////////
 
-	G4double thePhotonMomentum;
+	G4double thePhotonEnergy;
 	G4double theProperty;
 };
 
@@ -117,14 +117,14 @@ private:
 // Inline methods
 ////////////////////
 
-// GetPhotonMomentum
-// -----------------
+// GetPhotonEnergy
+// ---------------
 //
 
 inline 
-G4double G4MPVEntry::GetPhotonMomentum()
+G4double G4MPVEntry::GetPhotonEnergy()
 {
-	return thePhotonMomentum;
+	return thePhotonEnergy;
 }
 
 // GetProperty

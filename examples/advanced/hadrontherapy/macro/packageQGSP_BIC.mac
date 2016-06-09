@@ -1,0 +1,46 @@
+############################################################################
+#
+# PHYSICS LIST:
+# ============= 
+#
+#  Geant4 Physics List: 
+#  
+#   - QGSP_BIC 3.3
+#
+##############################################################################
+
+
+####################
+# VERBOSITY LEVELS #
+####################
+
+/control/verbose 1
+/tracking/verbose 0
+/run/verbose 0
+/event/verbose 0
+
+
+###########
+# PHYSICS #
+###########
+
+/physics/addPackage QGSP_BIC
+
+
+##############################
+# BEAM LINE SETTINGS AND RUN #
+##############################
+
+/run/initialize
+
+###  IF YOU WANT A RANGE SHIFTER PLEASE CHANGE
+###  THE FOLLOWIG PARAMETERS
+###  SETTING FOR THE RANGE SHIFTER
+
+#/beamLine/RangeShifter/thickness 4 cm
+#/beamLine/RangeShifter/RSMat Water
+
+/run/beamOn 200
+
+
+

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HadrontherapyAnalisysManager.cc;  May 2005
+// $Id: HadrontherapyAnalisysManager.cc; Last modified: G.A.P.Cirrone, February 2008;
 // ----------------------------------------------------------------------------
 //                 GEANT 4 - Hadrontherapy example
 // ----------------------------------------------------------------------------
@@ -125,9 +125,17 @@ void HadrontherapyAnalysisManager::book()
   aFact = AIDA_createAnalysisFactory();
   AIDA::ITreeFactory* treeFact = aFact -> createTreeFactory();
 
-  // Create the .hbk file
-  G4String fileName = "hadrontherapy.hbk";
+  // Create the .hbk or the .root file
+  G4String fileName = "hadrontherapyOutput.hbk";
+  G4String rootFileName = "hadrontherapyOutput.root";
+  
+  std::string opts = "export=root";
+ 
   theTree = treeFact -> create(fileName,"hbook",false,true);
+  theTree = treeFact -> create(rootFileName,"ROOT",false,true,opts);
+
+  // Factories are not "managed" by an AIDA analysis system.
+  // They must be deleted by the AIDA user code.
   delete treeFact;
 
   // Create the histogram and the ntuple factory
@@ -135,23 +143,23 @@ void HadrontherapyAnalysisManager::book()
   tupFact = aFact -> createTupleFactory(*theTree);
 
   // Create the histograms with the enrgy deposit along the X axis
-  h1 = histFact -> createHistogram1D("10","slice, energy", 200, 0., 200. );
+  h1 = histFact -> createHistogram1D("10","slice, energy", 400, 0., 400. );
 
-  h2 = histFact -> createHistogram1D("20","Secondary protons - slice, energy", 200, 0., 200. );
+  h2 = histFact -> createHistogram1D("20","Secondary protons - slice, energy", 400, 0., 400. );
  
-  h3 = histFact -> createHistogram1D("30","Secondary neutrons - slice, energy", 200, 0., 200. );
+  h3 = histFact -> createHistogram1D("30","Secondary neutrons - slice, energy", 400, 0., 400. );
 
-  h4 = histFact -> createHistogram1D("40","Secondary alpha - slice, energy", 200, 0., 200. );
+  h4 = histFact -> createHistogram1D("40","Secondary alpha - slice, energy", 400, 0., 400. );
 
-  h5 = histFact -> createHistogram1D("50","Secondary gamma - slice, energy", 200, 0., 200. );
+  h5 = histFact -> createHistogram1D("50","Secondary gamma - slice, energy", 400, 0., 400. );
 
-  h6 = histFact -> createHistogram1D("60","Secondary electron - slice, energy", 200, 0., 200. );
+  h6 = histFact -> createHistogram1D("60","Secondary electron - slice, energy", 400, 0., 400. );
 
-  h7 = histFact -> createHistogram1D("70","Secondary triton - slice, energy", 200, 0., 200. );
+  h7 = histFact -> createHistogram1D("70","Secondary triton - slice, energy", 400, 0., 400. );
 
-  h8 = histFact -> createHistogram1D("80","Secondary deuteron - slice, energy", 200, 0., 200. );
+  h8 = histFact -> createHistogram1D("80","Secondary deuteron - slice, energy", 400, 0., 400. );
 
-  h9 = histFact -> createHistogram1D("90","Secondary pion - slice, energy", 200, 0., 200. );
+  h9 = histFact -> createHistogram1D("90","Secondary pion - slice, energy", 400, 0., 400. );
  
   h10 = histFact -> createHistogram1D("100","Energy distribution of secondary electrons", 70, 0., 70. );
  

@@ -25,7 +25,7 @@
 //
 //
 // $Id: F01PhysicsList.hh,v 1.5 2007/05/23 09:14:09 japost Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 
 #ifndef F01PhysicsList_h

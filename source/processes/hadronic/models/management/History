@@ -14,6 +14,23 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+19 June 2008 - G.Cosmo  (hadr-modman-V09-01-03)
+-----------------------------------------------
+-  included change introduced in hadr-modman-V09-01-01 and
+   discarded by imstake in the last tag ...
+
+19 June 2008 - V.Ivanchenko (hadr-modman-V09-01-02)
+-------------------------------------------------
+-  comment out destructor of G4HadronicInteractionRegistry
+
+16 May 2008 - G.Folger    (hadr-modman-V09-01-01)
+-------------------------------------------------
+-  add pure virtual G4V3DNucleus::SortNucleonsInZ() 
+
+21 Mar 2008 - D.H. Wright (hadr-modman-V09-01-00)
+-------------------------------------------------
+  Fix gcc-4.3 compiler warning in G4InelasticInteraction.cc
+
 11 Jan 2007 - D.H. Wright (hadr-modman-V08-02-00)
 -------------------------------------------------
   For error reporting, add model name arguments and default names to 

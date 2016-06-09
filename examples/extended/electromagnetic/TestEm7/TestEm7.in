@@ -1,4 +1,4 @@
-# $Id: TestEm7.in,v 1.15 2007/06/12 14:01:13 vnivanch Exp $
+# $Id: TestEm7.in,v 1.20 2008/11/20 20:34:50 vnivanch Exp $
 #
 # Macro file for "TestEm7.cc"
 # (can be run in batch, without graphic)
@@ -18,8 +18,7 @@
 /testem/det/tallyPosition  0.  0. 0. cm
 /testem/det/tallyPosition  5.  0. 0. cm
 #
-/testem/phys/addPhysics  standard	# em physics  
-###/testem/phys/addPhysics  binary	# hadronic physics
+/testem/phys/addPhysics   emstandard_opt3
 #
 /run/initialize
 #
@@ -40,7 +39,23 @@
 /run/beamOn 1000
 #
 /testem/det/setMat G4_Cu
+/testem/det/tallyMat G4_Cu
 /testem/det/update
 /gun/particle kaon+
 /gun/energy 100 MeV
 /run/beamOn 1000
+#
+/testem/det/setMat TechVacuum
+/testem/det/tallyMat TechVacuum
+/testem/det/update
+/gun/particle alpha
+/gun/energy 0.265 keV
+/run/beamOn 100
+#
+/testem/det/setMat G4_WATER
+/testem/det/tallyMat G4_WATER
+/testem/det/update
+/gun/particle alpha
+/gun/energy 100 MeV
+/run/beamOn 100
+#

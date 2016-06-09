@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PVDivision.cc,v 1.20 2006/06/29 18:18:31 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4PVDivision.cc,v 1.22 2008/12/03 16:41:45 arce Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // class G4PVDivision Implementation file
 //
@@ -217,12 +217,12 @@ G4PVDivision::CheckAndSetParameters( const EAxis pAxis,
   //
   G4String msolType = pMotherLogical->GetSolid()->GetEntityType();
   G4String dsolType = GetLogicalVolume()->GetSolid()->GetEntityType();
-  if( msolType != dsolType )
+  if( msolType != dsolType && ( msolType != "G4Trd" || dsolType != "G4Trap" ) )
   {
     G4String message =
       "Incorrect solid type for division of volume " + GetName()
     + "    It is: " + msolType + ", while it should be: " + dsolType;
-    G4Exception("G4VDivisionParameterisation::CheckAndSetParameters()",
+    G4Exception("G4PVDivision::CheckAndSetParameters()",
                 "IllegalConstruct", FatalException, message );
   }
 }

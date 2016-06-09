@@ -24,8 +24,10 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPContEnergyAngular.hh,v 1.11 2007/06/06 12:45:13 ahoward Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4NeutronHPContEnergyAngular.hh,v 1.12 2008/07/21 23:26:29 tkoi Exp $
+// GEANT4 tag $Name: geant4-09-02 $
+//
+// 080721 Add ClearHistories() method by T. Koi
 //
 #ifndef G4NeutronHPContEnergyAngular_h
 #define G4NeutronHPContEnergyAngular_h 1
@@ -82,6 +84,9 @@ G4ReactionProduct * Sample(G4double anEnergy, G4double massCode, G4double mass);
   G4NeutronHPContAngularPar * theAngular;
   
   G4double currentMeanEnergy;
+
+   public:
+      void ClearHistories(); 
   
 };
 #endif

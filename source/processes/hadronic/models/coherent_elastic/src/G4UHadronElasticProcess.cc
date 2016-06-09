@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UHadronElasticProcess.cc,v 1.35 2007/11/15 15:53:25 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4UHadronElasticProcess.cc,v 1.39 2008/10/22 08:16:40 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // Geant4 Hadron Elastic Scattering Process -- header file
 // 
@@ -57,6 +57,7 @@
 G4UHadronElasticProcess::G4UHadronElasticProcess(const G4String& pName, G4double)
   : G4HadronicProcess(pName), lowestEnergy(0.0), first(true)
 {
+  SetProcessSubType(fHadronElastic);
   AddDataSet(new G4HadronElasticDataSet);
   theProton   = G4Proton::Proton();
   theNeutron  = G4Neutron::Neutron();
@@ -88,9 +89,10 @@ BuildPhysicsTable(const G4ParticleDefinition& aParticleType)
     // defined lowest threshold for the projectile
     if(theParticle->GetPDGCharge() != 0.0) lowestEnergy = eV;
      
-    if(verboseLevel>1 || 
-       (verboseLevel==1 && theParticle == theNeutron)) {
-      G4cout << G4endl;
+    //    if(verboseLevel>1 || 
+    //   (verboseLevel==1 && theParticle == theNeutron)) {
+    if(verboseLevel>1 && theParticle == theNeutron) {
+    //      G4cout << G4endl;
       G4cout << "G4UHadronElasticProcess for " 
 	     << theParticle->GetParticleName()
              << " PDGcode= " << pPDG
@@ -99,7 +101,8 @@ BuildPhysicsTable(const G4ParticleDefinition& aParticleType)
 	     << G4endl;
     } 
   }
-  store->BuildPhysicsTable(aParticleType);
+  G4HadronicProcess::BuildPhysicsTable(aParticleType);
+  //store->BuildPhysicsTable(aParticleType);
 }
 
 G4double G4UHadronElasticProcess::GetMeanFreePath(const G4Track& track, 
@@ -168,7 +171,7 @@ G4double G4UHadronElasticProcess::GetMicroscopicCrossSection(
     x = 0.0;
     if(ni == 0) {
       G4int N = G4int(elm->GetN()+0.5) - iz;
-      x = qCManager->GetCrossSection(true,momentum,iz,N,pPDG);
+      x = qCManager->GetCrossSection(false,momentum,iz,N,pPDG);
       xsecH[0] = x;
 #ifdef G4VERBOSE
       if(verboseLevel>1) 
@@ -177,7 +180,6 @@ G4double G4UHadronElasticProcess::GetMicroscopicCrossSection(
 	       << " mom(GeV)= " << momentum/GeV 
 	       << "  " << qCManager << G4endl; 
 #endif
-
     } else {
       G4double* ab = elm->GetRelativeAbundanceVector();
       for(G4int j=0; j<ni; j++) {
@@ -187,12 +189,14 @@ G4double G4UHadronElasticProcess::GetMicroscopicCrossSection(
 	} else {
 	  N = 2;
 	}
+#ifdef G4VERBOSE
 	if(verboseLevel>1) 
 	  G4cout << "G4UHadronElasticProcess compute CHIPS CS for Z= " << iz
 		 << " N= "  << N << " pdg= " << pPDG 
 		 << " mom(GeV)= " << momentum/GeV 
 		 << "  " << qCManager << G4endl; 
-	G4double y = ab[j]*qCManager->GetCrossSection(true,momentum,iz,N,pPDG);
+#endif
+	G4double y = ab[j]*qCManager->GetCrossSection(false,momentum,iz,N,pPDG);
 	x += y;
 	xsecH[j] = x;
       }

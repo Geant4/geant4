@@ -28,7 +28,7 @@
 // and all its terms.
 //
 // $Id: G4SurfaceOfRevolution.cc,v 1.4 2006/06/29 18:42:53 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file

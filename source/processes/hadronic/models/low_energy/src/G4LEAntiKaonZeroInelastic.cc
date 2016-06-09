@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4LEAntiKaonZeroInelastic.cc,v 1.10 2006/06/29 20:44:39 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// GEANT4 tag $Name: geant4-09-02 $
 //
  // Hadronic Process: Low Energy KaonZeroLong Inelastic Process
  // J.L. Chuma, TRIUMF, 11-Feb-1997

@@ -1,4 +1,4 @@
-$Id: History,v 1.103 2007/12/11 13:32:08 gcosmo Exp $
+$Id: History,v 1.132 2008/12/11 10:24:18 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,93 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+11-12-08 G.Cosmo (materials-V09-01-20)
+- Added dummy default constructor in G4OpticalSurface and G4SurfaceProperty.
+- Removed debug printout function Overwrite().
+
+14-11-08 G.Cosmo (materials-V09-01-19)
+- Added SetName() method to G4Element, G4Isotope, G4Material for use
+  in detector persistency. Use "const G4String&" for accessors, instead
+  of implicit copy...
+
+02-11-08 V.Ivanchenko (materials-V09-01-18)
+- G4IronStoppingICRU73, G4MaterialStoppingICRU73,
+  G4SimpleMaterialStoppingICRU73: fixed inline methods.
+
+24-10-08 V.Ivanchenko (materials-V09-01-17)
+- G4IronStoppingICRU73, G4MaterialStoppingICRU73,
+  G4SimpleMaterialStoppingICRU73: renamed ICRU'73 data classes and inlined
+  accessors.
+
+20-10-08 V.Ivanchenko (materials-V09-01-16)
+- G4IronStopping, G4MaterialStopping, G4SimpleMaterialStopping: added 
+  ICRU'73 data on stopping powers 25 keV/n - 10 MeV/n
+
+13-08-08 V.Ivanchenko (materials-V09-01-15)
+- G4Material: use array size defined in material constructor, extend it if
+  a component is a compound material 
+
+07-08-08 V.Ivanchenko (materials-V09-01-14)
+- G4NistElementBuilder: use best known parameterisation for total
+  binding energy of atoms, use standard masses for lightest stable isotopes
+- G4NistManager and G4NistElementBuilder: added method 
+  GetTotalElectronBindingEnergy().
+- G4Isotope: use AtomicMass instead of NuclearMass.
+- G4Element: use G4int(fZeff) everywhere in the class.
+
+23-07-08 V.Ivanchenko (materials-V09-01-13)
+- G4NistManager: fixed bug introduced in tag (-11).
+
+21-07-08 P.Gumplinger (materials-V09-01-12)
+- G4SurfaceProperty and G4OpticalSurface, make them truly polymorphic.
+
+17-07-08 V.Ivanchenko (materials-V09-01-11)
+- G4NistManager: added inline methods to speed up EM computations.
+
+16-07-08 P.Gumplinger (materials-V09-01-10)
+- G4SurfaceProperty changed method name from DumpInfo to DumpTableInfo.
+
+08-07-08 V.Ivanchenko (materials-V09-01-09)
+- G4IonisParamMat - added fMeanEnergyPerIon and Set/Get methods
+
+27-06-08 G.Cosmo (materials-V09-01-08)
+- Added virtual destructor to G4OpticalSurface and derivated.
+  Addresses problem report #1014.
+
+05-06-08 P.Gumplinger (materials-V09-01-07)
+- G4MPVEntry, G4MaterialPropertyVector, G4MaterialPropertiesTable -
+  trivial name changes: momentum->energy, momenta->energies
+
+04-06-08 V.Ivanchenko (materials-V09-01-06)
+- G4NistElementBuilder - provided unique name for each isotope of an element
+                         (P.Gumplinger)
+- G4IonisParamElm - added Fermi velocity and L-factor (both used for 
+                    parameterizations of the effective charge and 
+                    stragling of ions);
+- G4IonisParamMat - use Fermi velocity and L-factor from G4IonisParamElm
+
+02-06-08 V.Ivanchenko (materials-V09-01-05)
+- G4Element - extended printput of errors and warnings; more safe check
+              of consistence between Z and A in the constructor
+
+28-04-08 V.Ivanchenko (materials-V09-01-04)
+- G4NistManager, G4NistMaterialBuilder, G4NistElementBuilder 
+  added better comments
+     
+17-03-08 mma (materials-V09-01-03)
+- G4Material : cout << NuclearInteractionLength
+     
+11-03-08 mma (materials-V09-01-02)
+- G4IonisParamMat - remove NistManager dependence
+     
+10-03-08 mma (materials-V09-01-01)
+- G4IonisParamMat - add Birks constant
+  
+06-03-08 V.Ivanchenko (materials-V09-01-00)
+- G4NistMaterialBuilder - use correct dimension for the density for
+  ConstructNewMaterial methods
+- G4Material - improve G4cerr printout
 
 11-12-07 G.Cosmo (materials-V09-00-08)
 - Made GetZ13() and GetLOGA() in G4NistManager not inlined (since they

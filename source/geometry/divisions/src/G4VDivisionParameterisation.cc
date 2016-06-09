@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VDivisionParameterisation.cc,v 1.12 2007/05/11 13:26:26 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4VDivisionParameterisation.cc,v 1.14 2008/12/03 16:41:15 arce Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // class G4VDivisionParameterisation Implementation file
 //

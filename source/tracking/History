@@ -1,5 +1,5 @@
-$Id: History,v 1.121 2007/10/09 03:51:06 tsasaki Exp $
-$Name: geant4-09-01 $ 
+$Id: History,v 1.126 2008/12/09 01:37:25 asaim Exp $
+$Name: geant4-09-02 $ 
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,6 +17,22 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+08 Doc 2008  M.Asai (tracking-V09-01-04)
+- Fixing bug of fN2ndaries variables in G4STeppingManager2.cc
+
+02 Oct 2008  T.Sasaki (tracking-V09-01-03)
+- G4SteppingManager2.cc: PhyscalStep etc was not updated when 
+  any flaga for ForceCondition is set. (since begining of Geant4)
+
+25 Sep 2008  T.Sasaki (tracking-V09-01-02)
+- G4SteppingManager2.cc: Bug fix for the previous tag
+
+24 Sep 2008  T.Sasaki (tracking-V09-01-01)
+- G4SteppingManager2.cc: Bug fix for PhysicalStep
+
+06 May 2008  T.Sasaki (tracking-V09-01-00)
+- G4SteppingManager.cc: fTouchableHandle was not properly updated 
 
 08 Oct 2007 T.Sasaki (tracking-V09-00-01)
 - G4SteppingManager.hh: use kCarTolerance in CalculateSafety() instead of zero

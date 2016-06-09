@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4ParameterisationPolyhedra.hh,v 1.8 2006/06/29 18:18:20 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// GEANT4 tag $Name: geant4-09-02 $
 // 
 // classes G4ParameterisationPolyhedraRho,
 //         G4ParameterisationPolyhedraPhi,

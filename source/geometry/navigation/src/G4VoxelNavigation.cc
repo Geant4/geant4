@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VoxelNavigation.cc,v 1.7 2007/05/11 13:43:59 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4VoxelNavigation.cc,v 1.9 2008/11/14 18:26:35 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 //
 // class G4VoxelNavigation Implementation
@@ -253,9 +253,9 @@ G4VoxelNavigation::ComputeStep( const G4ThreeVector& localPoint,
                 EInside insideIntPt= sampleSolid->Inside(intersectionPoint); 
                 G4String solidResponse = "-kInside-";
                 if (insideIntPt == kOutside)
-                  solidResponse = "-kOutside-";
+                  { solidResponse = "-kOutside-"; }
                 else if (insideIntPt == kSurface)
-                  solidResponse = "-kSurface-";
+                  { solidResponse = "-kSurface-"; }
                 if( fVerbose == 1 )
                 {
                   G4cout << "*** G4VoxelNavigation::ComputeStep(): ***"<<G4endl
@@ -264,6 +264,20 @@ G4VoxelNavigation::ComputeStep( const G4ThreeVector& localPoint,
                          << ". Solid replied: " << solidResponse << G4endl
                          << "    For point p: " << intersectionPoint
                          << ", considered as 'intersection' point." << G4endl;
+                }
+                G4double safetyIn= -1, safetyOut= -1;  //  Set to invalid values
+                G4double newDistIn= -1,  newDistOut= -1;
+                if( insideIntPt != kInside )
+                {
+                  safetyIn= sampleSolid->DistanceToIn(intersectionPoint);
+                  newDistIn= sampleSolid->DistanceToIn(intersectionPoint,
+                                                       sampleDirection);
+                }
+                if( insideIntPt != kOutside )
+                {
+                  safetyOut= sampleSolid->DistanceToOut(intersectionPoint);
+                  newDistOut= sampleSolid->DistanceToOut(intersectionPoint,
+                                                         sampleDirection);
                 }
                 if( insideIntPt != kSurface )
                 {
@@ -276,18 +290,53 @@ G4VoxelNavigation::ComputeStep( const G4ThreeVector& localPoint,
                          << sampleStep << " yet returns " << solidResponse
                          << " for this point !" << G4endl; 
                   G4cout << "          Point = " << intersectionPoint << G4endl;
+                  G4cout << "          Safety values: " << G4endl;
                   if ( insideIntPt != kInside )
-                    G4cout << "        DistanceToIn(p) = " 
-                           << sampleSolid->DistanceToIn(intersectionPoint)
+                  {
+                    G4cout << "          DistanceToIn(p)  = " << safetyIn
                            << G4endl;
-                  if ( insideIntPt != kOutside ) 
-                    G4cout << "        DistanceToOut(p) = " 
-                           << sampleSolid->DistanceToOut(intersectionPoint)
+                  }
+                  if ( insideIntPt != kOutside )
+                  {
+                    G4cout << "          DistanceToOut(p) = " << safetyOut
                            << G4endl;
+                  }
                   G4Exception("G4VoxelNavigation::ComputeStep()", 
                               "InaccurateDistanceToIn", JustWarning,
-                              "Navigator gets conflicting response from Solid.");
+                              "Conflicting response from Solid.");
                   G4cout.precision(oldcoutPrec);
+                }
+                else
+                {  
+                  // If it is on the surface, *ensure* that either DistanceToIn
+                  // or DistanceToOut returns a finite value ( >= Tolerance).
+                  //
+                  if( std::max( newDistIn, newDistOut ) <= kCarTolerance )
+                  { 
+                    G4cout << "ERROR - G4VoxelNavigation::ComputeStep()"
+                       << G4endl
+                       << "  Identified point for which the solid " 
+                       << sampleSolid->GetName() << G4endl
+                       << "  has MAJOR problem:  " << G4endl
+                       << "  --> Both DistanceToIn(p,v) and DistanceToOut(p,v) "
+                       << "return Zero, an equivalent value or negative value."
+                       << G4endl; 
+                    G4cout << "    Solid: " << sampleSolid << G4endl;
+                    G4cout << "    Point p= " << intersectionPoint << G4endl;
+                    G4cout << "    Direction v= " << sampleDirection << G4endl;
+                    G4cout << "    DistanceToIn(p,v)     = " << newDistIn
+                           << G4endl;
+                    G4cout << "    DistanceToOut(p,v,..) = " << newDistOut
+                           << G4endl;
+                    G4cout << "    Safety values: " << G4endl;
+                    G4cout << "      DistanceToIn(p)  = " << safetyIn
+                           << G4endl;
+                    G4cout << "      DistanceToOut(p) = " << safetyOut
+                           << G4endl;
+                    G4Exception("G4VoxelNavigation::ComputeStep()", 
+                              "DistanceToInAndOutAreZero", FatalException,
+                              "Zero from both Solid DistanceIn and Out(p,v).");
+                  }
                 }
               }
 #endif

@@ -1,0 +1,27 @@
+-------------------------------------------------------------------
+$Id: History,v 1.8 2008/06/27 20:33:05 sincerti Exp $
+-------------------------------------------------------------------
+
+     =========================================================
+ 		      Geant4 - Microdosimetry example
+     =========================================================
+
+                       Package History file
+                       --------------------
+
+27 June 2008 - S. Incerti - microdosimetry-V09-01-04
+- modified PhysicsList.cc and SteppingAction.cc to take into account
+new G4CrossSectionElasticScreenedRutherfordLE and HE classes
+(from emlowen-V09-01-21 only !)
+- removed G4CrossSectionExcitationEmfietzoglou.cc
+
+20 June 2008 - S. Incerti - microdosimetry-V09-01-03
+- updated History
+
+10 June 2008 - S. Incerti - microdosimetry-V09-01-02
+- added G4CrossSectionExcitationEmfietzoglou.cc with higher low energy limit (10 eV) than default (7.4 eV)
+- added G4DNA process names in Physics list
+- removed useless G4DNAProcess.hh and G4DNAProcess.icc files
+
+06 June 2008 - S. Incerti - microdosimetry-V09-01-01
+- Package created.

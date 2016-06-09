@@ -1,4 +1,4 @@
-$Id: History,v 1.16 2007/05/30 17:49:56 ahoward Exp $
+$Id: History,v 1.18 2008/09/07 17:12:38 asaim Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,12 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+September 7th, 2008 M.Asai (procscore-V09-01-01)
+- Correction of incorrect modification in the previous tag.
+
+February 12th, 2008 M.Asai (procscore-V09-01-00)
+- Add copying non-ionizing energy deposit in G4Step.
 
 May 30th A.Howard (procscore-V08-03-03)
 - clean tag with files in the right place (!)

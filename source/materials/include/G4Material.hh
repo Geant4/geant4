@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Material.hh,v 1.25 2006/06/29 19:11:13 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4Material.hh,v 1.27 2008/11/14 15:14:24 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 
 // class description
@@ -102,7 +102,7 @@ enum G4State { kStateUndefined, kStateSolid, kStateLiquid, kStateGas };
 
 class G4Material
 {
-public:  // with description
+ public:  // with description
 
   //
   // Constructor to create a material from scratch.
@@ -144,60 +144,59 @@ public:  // with description
                      
   virtual ~G4Material();
   
-  void SetChemicalFormula(const G4String& chF) {fChemicalFormula=chF;};
-                          
+  void SetChemicalFormula (const G4String& chF) {fChemicalFormula=chF;}
+
   //
   // retrieval methods
   // 
-  G4String GetName()            const {return fName;};
-  G4String GetChemicalFormula() const {return fChemicalFormula;};
-  G4double GetDensity()         const {return fDensity;};
-
-  G4State  GetState()       const {return fState;};
-  G4double GetTemperature() const {return fTemp;};
-  G4double GetPressure()    const {return fPressure;};
+  const G4String& GetName()            const {return fName;}
+  const G4String& GetChemicalFormula() const {return fChemicalFormula;}
+  G4double GetDensity()     const {return fDensity;}
+  G4State  GetState()       const {return fState;}
+  G4double GetTemperature() const {return fTemp;}
+  G4double GetPressure()    const {return fPressure;}
     
   //number of elements constituing this material:    
-  size_t GetNumberOfElements()         const {return fNumberOfElements;};
+  size_t GetNumberOfElements()         const {return fNumberOfElements;}
     
   //vector of pointers to elements constituing this material:          
   const
-  G4ElementVector* GetElementVector()  const {return theElementVector;};
+  G4ElementVector* GetElementVector()  const {return theElementVector;}
   
   //vector of fractional mass of each element:
-  const  G4double* GetFractionVector() const {return fMassFractionVector;};
+  const  G4double* GetFractionVector() const {return fMassFractionVector;}
     
   //vector of atom count of each element:
-  const  G4int*    GetAtomsVector()    const {return fAtomsVector;};
+  const  G4int*    GetAtomsVector()    const {return fAtomsVector;}
 
   //return a pointer to an element, given its index in the material:
   const 
-  G4Element* GetElement(G4int iel) const {return (*theElementVector)[iel];};
+  G4Element* GetElement(G4int iel) const {return (*theElementVector)[iel];}
   
   //vector of nb of atoms per volume of each element in this material:
   const
-  G4double* GetVecNbOfAtomsPerVolume() const {return VecNbOfAtomsPerVolume;};
+  G4double* GetVecNbOfAtomsPerVolume() const {return VecNbOfAtomsPerVolume;}
   //total number of atoms per volume:
-  G4double  GetTotNbOfAtomsPerVolume() const {return TotNbOfAtomsPerVolume;};
+  G4double  GetTotNbOfAtomsPerVolume() const {return TotNbOfAtomsPerVolume;}
   //total number of electrons per volume:
-  G4double  GetTotNbOfElectPerVolume() const {return TotNbOfElectPerVolume;};
+  G4double  GetTotNbOfElectPerVolume() const {return TotNbOfElectPerVolume;}
 
   //obsolete names (5-10-98) see the 2 functions above
   const
-  G4double* GetAtomicNumDensityVector() const {return VecNbOfAtomsPerVolume;};
-  G4double  GetElectronDensity()        const {return TotNbOfElectPerVolume;};
+  G4double* GetAtomicNumDensityVector() const {return VecNbOfAtomsPerVolume;}
+  G4double  GetElectronDensity()        const {return TotNbOfElectPerVolume;}
     
   // Radiation length:     
-  G4double         GetRadlen()          const {return fRadlen;};
+  G4double         GetRadlen()          const {return fRadlen;}
     
   // Nuclear interaction length:     
-  G4double GetNuclearInterLength()      const {return fNuclInterLen;};
+  G4double GetNuclearInterLength()      const {return fNuclInterLen;}
         
   // ionisation parameters:
-  G4IonisParamMat* GetIonisation()      const {return fIonisation;};
+  G4IonisParamMat* GetIonisation()      const {return fIonisation;}
   
   // Sandia table:
-  G4SandiaTable*   GetSandiaTable()     const {return fSandiaTable;};
+  G4SandiaTable*   GetSandiaTable()     const {return fSandiaTable;}
   
   //meaningful only for single material:
   G4double GetZ() const;
@@ -205,10 +204,10 @@ public:  // with description
   
   //the MaterialPropertiesTable (if any) attached to this material:
   void SetMaterialPropertiesTable(G4MaterialPropertiesTable* anMPT)
-                                     {fMaterialPropertiesTable = anMPT;};
+                                     {fMaterialPropertiesTable = anMPT;}
   				       
   G4MaterialPropertiesTable* GetMaterialPropertiesTable() const
-                                     {return fMaterialPropertiesTable;};
+                                     {return fMaterialPropertiesTable;}
 
   //the (static) Table of Materials:
   //
@@ -219,7 +218,7 @@ public:  // with description
   size_t GetNumberOfMaterials();
   
   //the index of this material in the Table:    
-  size_t GetIndex() const {return fIndexInTable;};
+  size_t GetIndex() const {return fIndexInTable;}
     
   //return  pointer to a material, given its name:    
   static  G4Material* GetMaterial(G4String name, G4bool warning=true);
@@ -231,7 +230,7 @@ public:  // with description
   friend std::ostream& operator<<(std::ostream&, G4Material&);    
   friend std::ostream& operator<<(std::ostream&, G4MaterialTable);
     
-public:  // without description 
+ public:  // without description 
        
   G4int operator==(const G4Material&) const;
   G4int operator!=(const G4Material&) const;
@@ -240,7 +239,9 @@ public:  // without description
     // persistency for clients requiring preallocation of memory for
     // persistifiable objects.
 
-private:
+  void SetName (const G4String& name) {fName=name;}
+
+ private:
 
   G4Material(const G4Material&);
   const G4Material& operator=(const G4Material&);
@@ -272,6 +273,7 @@ private:
   G4double         fPressure;             // Pressure    (defaults: STP)
 
   G4int            maxNbComponents;       // totalNbOfComponentsInTheMaterial 
+  G4int            fArrayLength;          // the length of FAtomVector 
   size_t           fNumberOfComponents;   // Nb of components declared so far
 
   size_t           fNumberOfElements;     // Nb of Elements in the material

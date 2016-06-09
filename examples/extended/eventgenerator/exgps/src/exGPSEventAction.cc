@@ -27,7 +27,6 @@
 #include "exGPSEventAction.hh"
 
 #ifdef G4ANALYSIS_USE
-#include <AIDA/AIDA.h>
 #include "exGPSAnalysisManager.hh"
 #endif
 
@@ -88,7 +87,8 @@ void exGPSEventAction::EndOfEventAction(const G4Event* evt)
       G4double E0=evt->GetPrimaryVertex(j)->GetPrimary(i)->GetG4code()->GetPDGMass();
       E=std::sqrt(P*P+E0*E0);   
       E -= E0;
-      G4String pname = evt->GetPrimaryVertex(j)->GetPrimary(i)->GetG4code()->GetParticleName();
+//      G4String pname = evt->GetPrimaryVertex(j)->GetPrimary(i)->GetG4code()->GetParticleName();
+      G4double pid = G4double(evt->GetPrimaryVertex(j)->GetPrimary(i)->GetPDGcode());
       //
       direction=direction*(1./direction.mag());                
       direction = -direction;  // reverse the direction
@@ -100,11 +100,13 @@ void exGPSEventAction::EndOfEventAction(const G4Event* evt)
       y=position.y();
       z=position.z();
       w = evt->GetPrimaryVertex(j)->GetPrimary(i)->GetWeight();
-      exGPSAnalysisManager::getInstance()->Fill(pname,E,x,y,z,Theta,Phi,w);
+//      exGPSAnalysisManager::getInstance()->Fill(pname,E,x,y,z,Theta,Phi,w);
+     exGPSAnalysisManager::getInstance()->Fill(pid,E,x,y,z,Theta,Phi,w);
     }
   }   
 #endif
-  
+
+#ifdef G4VIS_USE
   // extract the trajectories and draw them
   if (G4VVisManager::GetConcreteInstance())
     {
@@ -121,6 +123,7 @@ void exGPSEventAction::EndOfEventAction(const G4Event* evt)
 	 trj->DrawTrajectory(0);				   
        }
    }             
+#endif
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

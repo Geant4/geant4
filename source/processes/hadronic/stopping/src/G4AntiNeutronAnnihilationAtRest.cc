@@ -40,7 +40,7 @@
 // constructor
  
 G4AntiNeutronAnnihilationAtRest::G4AntiNeutronAnnihilationAtRest(const G4String& processName,
-                                      				G4ProcessType   aType ) :
+                                                                 G4ProcessType aType) :
   G4VRestProcess (processName, aType),       // initialization
   massPionMinus(G4PionMinus::PionMinus()->GetPDGMass()/GeV),
   massPionZero(G4PionZero::PionZero()->GetPDGMass()/GeV),
@@ -62,7 +62,7 @@ G4AntiNeutronAnnihilationAtRest::G4AntiNeutronAnnihilationAtRest(const G4String&
   if (verboseLevel>0) {
     G4cout << GetProcessName() << " is created "<< G4endl;
   }
-
+  SetProcessSubType(fHadronAtRest);
   pv   = new G4GHEKinematicsVector [MAX_SECONDARIES+1];
   eve  = new G4GHEKinematicsVector [MAX_SECONDARIES];
   gkin = new G4GHEKinematicsVector [MAX_SECONDARIES];

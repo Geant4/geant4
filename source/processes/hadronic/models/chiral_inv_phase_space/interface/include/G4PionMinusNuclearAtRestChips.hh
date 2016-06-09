@@ -31,6 +31,7 @@
 #include "G4StopElementSelector.hh"
 #include "G4PionMinus.hh"
 #include "G4ChiralInvariantPhaseSpace.hh"
+#include "G4HadronicProcessType.hh"
 
 class G4PionMinusNuclearAtRestChips : public G4VRestProcess
 {
@@ -42,7 +43,10 @@ class G4PionMinusNuclearAtRestChips : public G4VRestProcess
   public:
  
      G4PionMinusNuclearAtRestChips(const G4String& processName ="PionMinusAnnihilationAtRest")
-      : G4VRestProcess (processName) {}
+      : G4VRestProcess (processName, fHadronic) 
+     {
+       SetProcessSubType(fHadronAtRest);
+     }
  
     ~G4PionMinusNuclearAtRestChips() {}
 

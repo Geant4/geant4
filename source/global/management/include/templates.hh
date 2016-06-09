@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: templates.hh,v 1.10 2006/06/29 19:03:54 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: templates.hh,v 1.13 2008/08/15 12:15:53 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // 
 // -*- C++ -*-
@@ -52,6 +52,7 @@
 #define templates_h 1
 
 #include <limits>
+#include <climits>
 
 //
 // If HIGH_PRECISION is defined to TRUE (ie. != 0) then the type "Float"
@@ -110,8 +111,8 @@ typedef float Float;
 //---------------------------------
 
 template <class T>
-inline void G4SwapPtr(T* a, T* b) {
-  T* tmp=a;
+inline void G4SwapPtr(T*& a, T*& b) {
+  T* tmp= a;
   a = b;
   b = tmp;
 }

@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MuIonisation.cc,v 1.54 2007/05/22 17:35:58 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4MuIonisation.cc,v 1.57 2008/10/27 10:55:07 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // -------------------------------------------------------------------
 //
@@ -98,9 +98,10 @@ G4MuIonisation::G4MuIonisation(const G4String& name)
     theBaseParticle(0),
     isInitialised(false)
 {
-  SetStepFunction(0.2, 1*mm);
-  SetIntegral(true);
-  SetVerboseLevel(1);
+  //  SetStepFunction(0.2, 1*mm);
+  //SetIntegral(true);
+  //SetVerboseLevel(1);
+  SetProcessSubType(fIonisation);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -124,7 +125,7 @@ void G4MuIonisation::InitialiseEnergyLossProcess(const G4ParticleDefinition* par
     flucModel = new G4UniversalFluctuation();
 
     G4VEmModel* em = new G4BraggModel();
-    em->SetLowEnergyLimit(0.1*keV);
+    em->SetLowEnergyLimit(MinKinEnergy());
     em->SetHighEnergyLimit(0.2*MeV);
     AddEmModel(1, em, flucModel);
     G4VEmModel* em1 = new G4BetheBlochModel();
@@ -133,7 +134,7 @@ void G4MuIonisation::InitialiseEnergyLossProcess(const G4ParticleDefinition* par
     AddEmModel(2, em1, flucModel);
     G4VEmModel* em2 = new G4MuBetheBlochModel();
     em2->SetLowEnergyLimit(1.0*GeV);
-    em2->SetHighEnergyLimit(100.0*TeV);
+    em2->SetHighEnergyLimit(MaxKinEnergy());
     AddEmModel(3, em2, flucModel);
 
     ratio = electron_mass_c2/mass;
@@ -144,12 +145,7 @@ void G4MuIonisation::InitialiseEnergyLossProcess(const G4ParticleDefinition* par
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void G4MuIonisation::PrintInfo()
-{
-  G4cout << "      Bether-Bloch model for E > 0.2 MeV, "
-         << "parametrisation of Bragg peak below, "
-         << G4endl;
-  G4cout << "      radiative corrections for E > 1 GeV" << G4endl;
-}
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

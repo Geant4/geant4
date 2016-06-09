@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4FieldManager.hh,v 1.16 2006/06/29 18:22:15 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 //  
 // class G4FieldManager

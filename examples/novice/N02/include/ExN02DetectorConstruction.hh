@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: ExN02DetectorConstruction.hh,v 1.9 2007/10/17 08:50:35 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: ExN02DetectorConstruction.hh,v 1.10 2008/09/22 16:41:20 maire Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -67,6 +67,7 @@ class ExN02DetectorConstruction : public G4VUserDetectorConstruction
      void setTargetMaterial (G4String);
      void setChamberMaterial(G4String);
      void SetMagField(G4double);
+     void SetMaxStep (G4double);     
      
   private:
 

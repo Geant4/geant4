@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4IonisParamElm.hh,v 1.9 2006/06/29 19:11:02 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4IonisParamElm.hh,v 1.10 2008/06/03 14:30:10 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 
 // class description
@@ -74,7 +74,10 @@ public:  // with description
                        // parameters for the low energy ion.loss
     
     G4double  GetMeanExcitationEnergy()  const {return fMeanExcitationEnergy;}
-                                        // 16*std::pow(Z,0.9)*eV 
+                       // ICRU'37 report 
+
+    G4double  GetFermiVelocity()          const {return fVFermi;};
+    G4double  GetLFactor()                const {return fLFactor;};
       
     G4double* GetShellCorrectionVector() const {return fShellCorrectionVector;}
                                        // shell correction coefficients
@@ -109,6 +112,10 @@ private:
     G4double  fAlow,fBlow,fClow;      // parameters for the low energy ion.loss
     G4double  fMeanExcitationEnergy;  //     
     G4double* fShellCorrectionVector; // shell correction coefficients
+
+    // parameters for ion corrections computations
+    G4double fVFermi;
+    G4double fLFactor;
 };
 
 #endif

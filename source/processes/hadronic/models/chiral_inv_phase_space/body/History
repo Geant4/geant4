@@ -1,0 +1,40 @@
+
+       ==========================================================
+       Geant4 - an Object-Oriented Toolkit for Physics Simulation
+       ==========================================================
+
+        History file for hadronic/models/chiral_inv_phase_space/interface 
+	
+This file should be used to summarize modifications introduced in the 
+code and to keep track of all tags.
+
+     ---------------------------------------------------------------
+     * Please list in reverse chronological order (last date on top)
+     ---------------------------------------------------------------
+
+31-Mar-2008 Dennis Wright               (hadr-chips-body-V09-01-04)
+-------------------------------------------------------------------
+- add more parentheses around && within || to satisfy gcc-4.3 compiler
+  files affected:
+    G4QChipolino.cc
+    G4QEnvironment.cc
+    G4QNucleus.cc
+    G4Quasmon.cc
+
+19-Mar-2008 Dennis Wright               (hadr-chips-body-V09-01-03)
+-------------------------------------------------------------------
+- add parentheses around && within || to satisfy gcc-4.3 compiler
+  files affected:
+    G4QChipolino.cc
+    G4QContent.cc
+    G4QEnvironment.cc
+    G4QNucleus.cc
+    G4QPDGCode.cc
+    G4Quasmon.cc
+
+- add braces and ; for empty while blocks to satisfy gcc-4.3
+  files affected:
+    G4QHadron.cc
+
+18-Mar-2008 Vladimir Ivanchenko         (hadr-chips-body-V09-01-02)
+- G4QNucleus - fixed compillation warnings at Windows for constructors

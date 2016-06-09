@@ -23,89 +23,47 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4FinalStateExcitationEmfietzoglou.cc,v 1.2 2007/11/09 20:11:04 pia Exp $
-// GEANT4 tag $Name: geant4-09-01 $
-// 
-// Contact Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
-//
-// Reference: TNS Geant4-DNA paper
-// Reference for implementation model: NIM. 155, pp. 145-156, 1978
-
-// History:
-// -----------
-// Date         Name              Modification
-// 28 Apr 2007  M.G. Pia          Created in compliance with design described in TNS paper
-//
-// -------------------------------------------------------------------
-
-// Class description:
-// Reference: TNS Geant4-DNA paper
-// S. Chauvie et al., Geant4 physics processes for microdosimetry simulation:
-// design foundation and implementation of the first set of models,
-// IEEE Trans. Nucl. Sci., vol. 54, no. 6, Dec. 2007.
-// Further documentation available from http://www.ge.infn.it/geant4/dna
-
-// -------------------------------------------------------------------
-
+// $Id: G4FinalStateExcitationEmfietzoglou.cc,v 1.5 2008/12/05 11:58:16 sincerti Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 
 #include "G4FinalStateExcitationEmfietzoglou.hh"
-#include "G4Track.hh"
-#include "G4Step.hh"
-#include "G4DynamicParticle.hh"
-#include "Randomize.hh"
 
-#include "G4ParticleTypes.hh"
-#include "G4ParticleDefinition.hh"
-#include "G4Electron.hh"
-#include "G4SystemOfUnits.hh"
-#include "G4ParticleMomentum.hh"
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4FinalStateExcitationEmfietzoglou::G4FinalStateExcitationEmfietzoglou()
 {
-  name = "FinalStateExcitationEmfietzoglou";
-  lowEnergyLimit = 7.4 * eV;
+  lowEnergyLimit = 8.23 * eV;
   highEnergyLimit = 10 * MeV;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4FinalStateExcitationEmfietzoglou::~G4FinalStateExcitationEmfietzoglou()
-{ 
-  // empty
-  // G4DynamicParticle objects produced are owned by client
-}
+{}
  
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 const G4FinalStateProduct& G4FinalStateExcitationEmfietzoglou::GenerateFinalState(const G4Track& track, const G4Step& /* step */)
 {
-  // Clear previous secondaries, energy deposit and particle kill status
   product.Clear();
 
   const G4DynamicParticle* particle = track.GetDynamicParticle();
 
-  // Kinetic energy of primary particle
   G4double k = particle->GetKineticEnergy();
 
-  // Select excitation level on the basis of partial excitation cross section
   G4int level = cross.RandomSelect(k);
-  // Excitation energy corresponding to the selected level
+
   G4double excitationEnergy = waterStructure.ExcitationEnergy(level);
   G4double newEnergy = k - excitationEnergy;
   
-  if (newEnergy > lowEnergyLimit)
-    {
-      // Deposit excitation energy locally, modify primary energy accordingly 
-      // Particle direction is unchanged
+  if (newEnergy >= lowEnergyLimit)
+  {
       product.ModifyPrimaryParticle(particle->GetMomentumDirection(),newEnergy);
       product.AddEnergyDeposit(excitationEnergy);
-    }
-  else
-    {
-      // Primary particle is killed
-      product.KillPrimaryParticle();
-    }
+  }
+ 
+  else product.KillPrimaryParticle();
 
   return product;
 }
-
 

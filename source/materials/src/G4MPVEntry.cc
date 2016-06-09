@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4MPVEntry.cc,v 1.7 2006/06/29 19:12:49 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4MPVEntry.cc,v 1.8 2008/06/05 23:39:18 gum Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // 
 ////////////////////////////////////////////////////////////////////////
@@ -58,7 +58,7 @@
 //
 G4bool G4MPVEntry::operator ==(const G4MPVEntry &right) const  
 {
-	if (thePhotonMomentum == right.thePhotonMomentum) 
+	if (thePhotonEnergy == right.thePhotonEnergy) 
 		return true;
 	else
 		return false; 
@@ -70,7 +70,7 @@ G4bool G4MPVEntry::operator ==(const G4MPVEntry &right) const
 //
 G4bool G4MPVEntry::operator <(const G4MPVEntry &right) const  
 {
-	if (thePhotonMomentum < right.thePhotonMomentum) 
+	if (thePhotonEnergy < right.thePhotonEnergy) 
 		return true;
 	else
 		return false;
@@ -84,7 +84,7 @@ G4MPVEntry& G4MPVEntry::operator =(const G4MPVEntry& right)
 {
         if (this == &right) return *this;
 	
-        thePhotonMomentum = right.thePhotonMomentum;
+        thePhotonEnergy = right.thePhotonEnergy;
         theProperty = right.theProperty;
         return *this;
 }
@@ -93,15 +93,15 @@ G4MPVEntry& G4MPVEntry::operator =(const G4MPVEntry& right)
         // Constructors
         /////////////////
 
-G4MPVEntry::G4MPVEntry(G4double aPhotonMomentum, G4double aProperty)
+G4MPVEntry::G4MPVEntry(G4double aPhotonEnergy, G4double aProperty)
 {
-        thePhotonMomentum = aPhotonMomentum;
+        thePhotonEnergy = aPhotonEnergy;
         theProperty = aProperty;
 }
 
 G4MPVEntry::G4MPVEntry(const G4MPVEntry &right)
 {
-        thePhotonMomentum = right.thePhotonMomentum;
+        thePhotonEnergy = right.thePhotonEnergy;
         theProperty = right.theProperty;
 }
 
@@ -119,7 +119,7 @@ G4MPVEntry::~G4MPVEntry(){}
 void G4MPVEntry::DumpEntry()
 {
 	G4cout << "(" 
-	     << thePhotonMomentum 
+	     << thePhotonEnergy
 	     << ", " 
 	     << theProperty
  	     << ")" 

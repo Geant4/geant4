@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4StringModel.cc,v 1.4 2006/06/29 20:55:45 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // G4StringModel
 #include "G4StringModel.hh"

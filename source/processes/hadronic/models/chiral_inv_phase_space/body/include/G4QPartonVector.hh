@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4QPartonVector.hh,v 1.1 2006/10/30 10:40:34 mkossov Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 //      ---------------- G4QCandidateVector ----------------
 //             by Mikhail Kossov, Oct 2006.
@@ -36,7 +36,7 @@
 #define G4QPartonVector_h 1
 //
 // $Id: G4QPartonVector.hh,v 1.1 2006/10/30 10:40:34 mkossov Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file

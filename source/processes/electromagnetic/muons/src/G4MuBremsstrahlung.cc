@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MuBremsstrahlung.cc,v 1.38 2007/05/22 17:35:58 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4MuBremsstrahlung.cc,v 1.41 2008/10/16 13:37:04 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // -------------------------------------------------------------------
 //
@@ -81,7 +81,9 @@ G4MuBremsstrahlung::G4MuBremsstrahlung(const G4String& name)
     theBaseParticle(0),
     lowestKinEnergy(1.*GeV),
     isInitialised(false)
-{}
+{
+  SetProcessSubType(fBremsstrahlung);
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -90,8 +92,9 @@ G4MuBremsstrahlung::~G4MuBremsstrahlung()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4MuBremsstrahlung::InitialiseEnergyLossProcess(const G4ParticleDefinition* part,
-                                                     const G4ParticleDefinition*)
+void G4MuBremsstrahlung::InitialiseEnergyLossProcess(
+				 const G4ParticleDefinition* part,
+				 const G4ParticleDefinition*)
 {
   if(!isInitialised) {
 
@@ -104,9 +107,9 @@ void G4MuBremsstrahlung::InitialiseEnergyLossProcess(const G4ParticleDefinition*
     G4MuBremsstrahlungModel* em = new G4MuBremsstrahlungModel();
     em->SetLowestKineticEnergy(lowestKinEnergy);
 
-    G4VEmFluctuationModel* fm = new G4UniversalFluctuation();
-    em->SetLowEnergyLimit(0.1*keV);
-    em->SetHighEnergyLimit(100.0*TeV);
+    G4VEmFluctuationModel* fm = 0;
+    em->SetLowEnergyLimit(MinKinEnergy());
+    em->SetHighEnergyLimit(MaxKinEnergy());
     AddEmModel(1, em, fm);
   }
 }
@@ -114,10 +117,7 @@ void G4MuBremsstrahlung::InitialiseEnergyLossProcess(const G4ParticleDefinition*
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void G4MuBremsstrahlung::PrintInfo()
-{
-  G4cout << "      Parametrised model "
-         << G4endl;
-}
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

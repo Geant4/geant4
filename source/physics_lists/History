@@ -1,4 +1,4 @@
-$Id: History,v 1.47 2007/12/10 17:38:48 gunter Exp $
+$Id: History,v 1.75 2008/12/05 15:14:36 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,104 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+05-12-2008, G.Cosmo phys-lists-V09-01-20
+- Added missing dependency to "run" category in GLOBLIBS for DLL parsing
+  induced by G4PhysicsListFactory which now brings in dependency on
+  G4VModularPhysicsList.
+
+01-12-2008, V.Ivanchenko phys-lists-V09-01-19
+G4HadronElasticPhysics - fixed adding optional Barashenkov Xsection
+QBBC - added QBBBG option
+
+21-11-2008, V.Ivanchenko phys-lists-V09-01-18
+- Added sigma_c+, sigma_c++ in the list of stable hadrons
+- added interfaces to G4PhysicsListFactory - ALICE requirement
+
+20-11-2008, V.Ivanchenko phys-lists-V09-01-17
+- Added charge exchange process to QBBC Physics Lists
+
+17-11-2008, V.Ivanchenko phys-lists-V09-01-16
+- Added names to string models builders
+
+14-11-2008, V.Ivanchenko phys-lists-V09-01-15
+G4EmStandardPhysics_option1 - disable ApplyCuts option
+G4EmStandardPhysics_option3 - linLossLimit set to be default (0.01)
+G4PhysicsListFactory - added QBBCG
+
+15-10-2008, V.Ivanchenko phys-lists-V09-01-14
+In all EM builders - set inactive for AlongStep for bremsstrahlung and pair
+                     production porcesses for minor CPU improvenment
+
+15-10-2008, V.Ivanchenko phys-lists-V09-01-13
+In all EM builders: added hadron bemsstrahlung and e+e- pair production
+  and e-msc for e+-; 
+G4EmStandardPhysics_option2 - enable "ApplyCuts", disable "SubCutoff" 
+G4EmStandardPhysics_option3 - added G4LowEnergyRayleigh, set 120 bins
+  for tables (60 is the default), StepFunction per particle type
+
+24-09-2008, V.Ivanchenko phys-lists-V09-01-12
+- QBBC temporary variant which is equivalent QGSP_BERT without LHEP
+  for protons, neutrons and pions   
+
+17-09-2008, V.Ivanchenko phys-lists-V09-01-11
+- G4NeutronTrackingCut - added Set methods to define time and energy
+                         limits directly
+- G4HadronInelasticQBBC, QBBC - use FTF with Binary Casacde, improved cout
+
+04-08-2008, V.Ivanchenko phys-lists-V09-01-10 
+- G4EmStandardPhysics_option2 : use mu-msc for all particles, 
+	                        switch off "subcut" option,
+                                switch on "ApplyCuts" option
+- G4EmStandardPhysics_option3 : use e-msc for all particles, 
+	                        switch off subcutoff 
+- QBBC - use FTF as a default, remove obsolete methods
+
+30-4-2008, G.Folger      phys-lists-V09-01-09
+- Update lists/include/FTF*.icc and lists/include/HadronPhysicsFTF*.icc 
+   to NOT use Quasielastic from Chips, as FTF now has quasi-elastic included
+   in the FTF model itsself. 
+
+30-05-2008, V.Ivanchenko phys-lists-V09-01-08
+- GNUmakefile - added electromagnetic/highenergy 
+- G4EmStandardPhysics_option3 : define linLossLimit per particle type
+- G4EmStandardPhysics_option2 : define linLossLimit 0.01,
+                added hadron induced bremsstrahlung and pair production 
+
+19-05-2008, V.Ivanchenko phys-lists-V09-01-07
+- removed obsolete class G4HadronProcessStore (similar is available
+  in processes/hadronic/management)
+
+30-4-2008, G.Folger      phys-lists-V09-01-06
+- Fix delete using uninitialized pointers in FTF-BIC, in
+   HadronPhysicsFTF_BIC.{hh,cc},  G4FTFBinaryNeutronBuilder.{hh,cc} and
+   G4LEPNeutronBuilder.cc
+- Remove QGSP_BIC2 and QGSP_CASC lists, and related files.
+
+
+29-04-2008, V.Ivanchenko phys-lists-V09-01-05
+- fixed link problem 
+
+25-04-2008, V.Ivanchenko phys-lists-V09-01-04
+- Added D and B mesons to all EM bulders G4EmStandardPhysics*
+- QBBC - fixed compillation warning
+- G4EmStandardPhysics_option2,3 - use spline for Physics Tables
+- G4PhysListFactory - new helper class for building PhysList
+
+26-03-2008, V.Ivanchenko phys-lists-V09-01-03
+26-03-2008, mma
+- G4EmStandardPhysics_option3 : SetStepFunction() per particle type     
+     
+18-03-2008, V.Ivanchenko phys-lists-V09-01-02
+17-03-2008, mma
+- cosmetic in G4EmStandardPhysics_ to handle G4EmProcessOptions
+
+13-03-2008, V.Ivanchenko phys-lists-V09-01-01
+- Added new builder G4EmStandardPhysics_option3
+
+08-01-2008, V.Ivanchenko phys-lists-V09-01-00
+- G4EmExtraPhysics - fixed bug #993 (swap of synkrotron radiation
+  and mu-nuclear activation).
 
 16-11-2007, G.Folger      phys-list-V09-00-12
 - New PL QGSP_BERT_DIF; as QGSP_BERT with projectile diffraction for proton

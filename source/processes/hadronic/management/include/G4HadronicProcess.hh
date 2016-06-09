@@ -25,16 +25,14 @@
 //
 //
 //
- // This is the top level Hadronic Process class
- // The inelastic, elastic, capture, and fission processes
- // should derive from this class
- // This is an abstract base class, since the pure virtual function
- // PostStepDoIt has not been defined yet.
- // Note:  there is no .cc file
- //
- // original by H.P.Wellisch
- // J.L. Chuma, TRIUMF, 10-Mar-1997
- // Last modified: 04-Apr-1997
+// This is the top level Hadronic Process class
+// The inelastic, elastic, capture, and fission processes
+// should derive from this class
+//
+// original by H.P.Wellisch
+// J.L. Chuma, TRIUMF, 10-Mar-1997
+// Last modified: 04-Apr-1997
+// 19-May-2008 V.Ivanchenko cleanup and added comments
  
 #ifndef G4HadronicProcess_h
 #define G4HadronicProcess_h 1
@@ -49,193 +47,173 @@
 #include "G4IsoParticleChange.hh"
 #include "G4VCrossSectionDataSet.hh"
 #include "G4VLeadingParticleBiasing.hh"
-#include "G4Delete.hh"
+//#include "G4Delete.hh"
 #include "G4CrossSectionDataStore.hh"
-#include "G4HadronicException.hh"
-
+#include "G4HadronicProcessType.hh"
 
 class G4Track;
 class G4Step;
 class G4Element;
 class G4ParticleChange;
 
- class G4HadronicProcess : public G4VDiscreteProcess
- {
- public:
+class G4HadronicProcess : public G4VDiscreteProcess
+{
+public:
     
-    G4HadronicProcess( const G4String &processName = "Hadronic", 
-                       G4ProcessType   aType = fHadronic );    
-    virtual ~G4HadronicProcess();
+  G4HadronicProcess( const G4String &processName = "Hadronic", 
+		     G4ProcessType   aType = fHadronic );    
 
-    void RegisterMe( G4HadronicInteraction *a );
+  virtual ~G4HadronicProcess();
 
-    void AddDataSet(G4VCrossSectionDataSet * aDataSet)
-    {
-       theCrossSectionDataStore->AddDataSet(aDataSet);
-    }
-        
-    virtual G4VParticleChange *PostStepDoIt( const G4Track &aTrack, 
-                                            const G4Step &aStep ) = 0;
-        
-    virtual 
-    G4double GetMicroscopicCrossSection(const G4DynamicParticle *aParticle, 
-                                        const G4Element *anElement, 
-					G4double aTemp ) = 0;
-    
-    G4double GetMeanFreePath(const G4Track &aTrack, G4double, 
-                             G4ForceCondition *);
+  // register generator of secondaries
+  void RegisterMe( G4HadronicInteraction *a );
 
-    // Set methods for isotope production
-    
-    static void EnableIsotopeProductionGlobally();
-    static void DisableIsotopeProductionGlobally();
-    
-    void EnableIsotopeCounting()  {isoIsOnAnyway = 1;}
-    void DisableIsotopeCounting() {isoIsOnAnyway = -1;}
-    
-    void RegisterIsotopeProductionModel(G4VIsotopeProduction * aModel)
-    { theProductionModels.push_back(aModel); }
+  // get cross section per element
+  virtual 
+  G4double GetMicroscopicCrossSection(const G4DynamicParticle *aParticle, 
+				      const G4Element *anElement, 
+				      G4double aTemp );
 
-    static G4IsoParticleChange * GetIsotopeProductionInfo() 
-    { 
-      G4IsoParticleChange * anIsoResult = theIsoResult;
-      if(theIsoResult) theOldIsoResult = theIsoResult;
-      theIsoResult = 0;
-      return anIsoResult;
-    }
+  // generic PostStepDoIt recommended for all derived classes
+  virtual G4VParticleChange* PostStepDoIt(const G4Track& aTrack, 
+					  const G4Step& aStep);
 
-    void BiasCrossSectionByFactor(G4double aScale) 
-    {
-      xBiasOn = true;
-      aScaleFactor = aScale;
-      G4String it = GetProcessName(); 
-      if( (it != "PhotonInelastic") && 
-          (it != "ElectroNuclear") && 
-	  (it != "PositronNuclear") )
-      {
-        G4Exception("G4HadronicProcess", "007", FatalException,
-                    "Cross-section biasing available only for gamma and electro nuclear reactions.");
-      }
-      if(aScale<100)
-      {
-        G4Exception("G4HadronicProcess", "001", JustWarning,
-                    "Cross-section bias readjusted to be above safe limit. New value is 100");        
-        aScaleFactor = 100.;
-      }
-    }
-    
- protected:
-    
-    virtual void ResetNumberOfInteractionLengthLeft()
-    {
-      G4VProcess::theNumberOfInteractionLengthLeft =  
-                                         -std::log( G4UniformRand() );
-      theInitialNumberOfInteractionLength = 
-                                 G4VProcess::theNumberOfInteractionLengthLeft;
-    }
+  // initialisation of physics tables and G4HadronicProcessStore
+  virtual void PreparePhysicsTable(const G4ParticleDefinition&);
 
-    G4VParticleChange *GeneralPostStepDoIt( const G4Track &aTrack, 
-                                           const G4Step &aStep );
-    
-    void SetDispatch( G4HadronicProcess *value )
-    { dispatch=value; }
-    
-    G4Element* ChooseAandZ(const G4DynamicParticle *aParticle,
-                           const G4Material *aMaterial);
+  // build physics tables and print out the configuration of the process
+  virtual void BuildPhysicsTable(const G4ParticleDefinition&);
 
-    inline const G4EnergyRangeManager &GetEnergyRangeManager() const
-    { return theEnergyRangeManager; }
+  // dump physics tables 
+  inline void DumpPhysicsTable(const G4ParticleDefinition& p)
+  { theCrossSectionDataStore->DumpPhysicsTable(p); }
+
+  // add cross section data set
+  inline void AddDataSet(G4VCrossSectionDataSet * aDataSet)
+  { theCrossSectionDataStore->AddDataSet(aDataSet);}
+
+  // access to the manager
+  inline G4EnergyRangeManager *GetManagerPointer()
+  { return &theEnergyRangeManager; }
+          
+  // get inverse cross section per volume
+  G4double GetMeanFreePath(const G4Track &aTrack, G4double, 
+			   G4ForceCondition *);
+
+protected:    
+
+  // reset number of interaction length and save  
+  virtual void ResetNumberOfInteractionLengthLeft()
+  { G4VProcess::ResetNumberOfInteractionLengthLeft(); 
+    theInitialNumberOfInteractionLength = 
+      G4VProcess::theNumberOfInteractionLengthLeft;
+  }
+
+  // generic method to choose secondary generator 
+  // recommended for all derived classes
+  inline G4HadronicInteraction *ChooseHadronicInteraction(
+      G4double kineticEnergy, G4Material *aMaterial, G4Element *anElement )
+  { return theEnergyRangeManager.GetHadronicInteraction(kineticEnergy,
+							aMaterial,anElement);
+  }
+
+public:
+
+  // Methods for isotope production    
+  static void EnableIsotopeProductionGlobally();
+  static void DisableIsotopeProductionGlobally();
     
-    inline void SetEnergyRangeManager( const G4EnergyRangeManager &value )
-    { theEnergyRangeManager = value; }
-
-    inline G4HadronicInteraction *ChooseHadronicInteraction(
-     G4double kineticEnergy, G4Material *aMaterial, G4Element *anElement )
-    {
-      G4EnergyRangeManager* ERMan = GetManagerPointer();
-      if(!ERMan->GetHadronicInteractionCounter())
-        G4cout<< "*G4HadronicProcess::ChooseHadronicInteraction: process = "
-              << GetProcessName() << ", nM=" 
-              << ERMan->GetHadronicInteractionCounter() << G4endl;
-      return ERMan->GetHadronicInteraction(kineticEnergy,aMaterial,anElement);
-    }
-
-    inline G4HadronicInteraction *GetHadronicInteraction()
-    { return theInteraction; }
+  void EnableIsotopeCounting()  {isoIsOnAnyway = 1;}
+  void DisableIsotopeCounting() {isoIsOnAnyway = -1;}
     
- public:
-    inline G4EnergyRangeManager *GetManagerPointer()
-    { return &theEnergyRangeManager; }
- protected:
+  void RegisterIsotopeProductionModel(G4VIsotopeProduction * aModel)
+  { theProductionModels.push_back(aModel); }
 
-    G4CrossSectionDataStore* GetCrossSectionDataStore()
-    {
-       return theCrossSectionDataStore;
-    }
+  static G4IsoParticleChange * GetIsotopeProductionInfo();
+
+  void BiasCrossSectionByFactor(G4double aScale);
+    
+protected:
+            
+  // obsolete method will be removed
+  inline const G4EnergyRangeManager &GetEnergyRangeManager() const
+  { return theEnergyRangeManager; }
+    
+  // obsolete method will be removed
+  inline void SetEnergyRangeManager( const G4EnergyRangeManager &value )
+  { theEnergyRangeManager = value; }
+
+  // access to the chosen generator
+  inline G4HadronicInteraction *GetHadronicInteraction()
+  { return theInteraction; }
+    
+  // access to the cross section data store
+  inline G4CrossSectionDataStore* GetCrossSectionDataStore()
+  { return theCrossSectionDataStore; }
    
-    G4double GetLastCrossSection() {return theLastCrossSection;}
- private:
+  // access to the cross section data set
+  inline G4double GetLastCrossSection() 
+  { return theLastCrossSection; }
+
+private:
     
-    G4HadFinalState * DoIsotopeCounting(G4HadFinalState * aResult,
-                                          const G4Track & aTrack,
-                                          const G4Nucleus & aNucleus);
+  void FillTotalResult(G4HadFinalState * aR, const G4Track & aT);
+
+  G4HadFinalState * DoIsotopeCounting(G4HadFinalState * aResult,
+				      const G4Track & aTrack,
+				      const G4Nucleus & aNucleus);
                                           
-    G4IsoResult * ExtractResidualNucleus(const G4Track & aTrack,
-                                         const G4Nucleus & aNucleus,
-                                         G4HadFinalState * aResult);
+  G4IsoResult * ExtractResidualNucleus(const G4Track & aTrack,
+				       const G4Nucleus & aNucleus,
+				       G4HadFinalState * aResult);
 
-    G4double GetTotalNumberOfInteractionLengthTraversed()
-    {
-      return theInitialNumberOfInteractionLength
-            -G4VProcess::theNumberOfInteractionLengthLeft;
-    }
+  inline G4double GetTotalNumberOfInteractionLengthTraversed()
+  { return theInitialNumberOfInteractionLength
+      -G4VProcess::theNumberOfInteractionLengthLeft;
+  }
+        
+  //  inline void SetCrossSectionDataStore(G4CrossSectionDataStore* aDataStore)
+  //  { theCrossSectionDataStore = aDataStore; }
     
+  G4double XBiasSurvivalProbability();
+  G4double XBiasSecondaryWeight();
+    
+private:
+    
+  G4EnergyRangeManager theEnergyRangeManager;
+    
+  G4HadronicInteraction *theInteraction;
 
-    void FillTotalResult(G4HadFinalState * aR, const G4Track & aT);
-    
-    void SetCrossSectionDataStore(G4CrossSectionDataStore* aDataStore)
-    {
-       theCrossSectionDataStore = aDataStore;
-    }
-    
-    G4double XBiasSurvivalProbability();
-    G4double XBiasSecondaryWeight();
-    
- private:
-    
-    G4EnergyRangeManager theEnergyRangeManager;
-    
-    G4HadronicInteraction *theInteraction;
-
-    G4CrossSectionDataStore* theCrossSectionDataStore;
+  G4CrossSectionDataStore* theCrossSectionDataStore;
  
-    G4Nucleus targetNucleus;
+  G4Nucleus targetNucleus;
     
-    G4HadronicProcess *dispatch;
+  G4HadronicProcess *dispatch;
 
-// swiches for isotope production
-    
-    static G4bool isoIsEnabled; // true or false; local swich overrides
-    G4int isoIsOnAnyway; // true(1), false(-1) or default(0)
-    
-    G4IsoParticleChange theIsoPC;
-    std::vector<G4VIsotopeProduction *> theProductionModels;
-    
-    std::vector<G4VLeadingParticleBiasing *> theBias;
+  bool G4HadronicProcess_debug_flag;
 
-    static G4IsoParticleChange* theIsoResult;
-    static G4IsoParticleChange* theOldIsoResult;
+  // swiches for isotope production    
+  static G4bool isoIsEnabled; // true or false; local swich overrides
+  G4int isoIsOnAnyway; // true(1), false(-1) or default(0)
     
-    G4ParticleChange* theTotalResult; 
+  G4IsoParticleChange theIsoPC;
+  std::vector<G4VIsotopeProduction *> theProductionModels;
     
-    G4double theInitialNumberOfInteractionLength;   
+  std::vector<G4VLeadingParticleBiasing *> theBias;
 
-    G4double aScaleFactor;
-    G4bool xBiasOn;
-    G4double theLastCrossSection;
+  static G4IsoParticleChange* theIsoResult;
+  static G4IsoParticleChange* theOldIsoResult;
+    
+  G4ParticleChange* theTotalResult; 
+    
+  G4double theInitialNumberOfInteractionLength;   
 
-    G4int ModelingState;
- };
+  G4double aScaleFactor;
+  G4bool xBiasOn;
+  G4double theLastCrossSection;
+
+  G4int ModelingState;
+};
  
 #endif
  

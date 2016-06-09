@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Transportation.cc,v 1.72 2007/11/08 17:55:57 japost Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4Transportation.cc,v 1.72.2.3 2008/11/21 18:35:15 japost Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 // 
 // ------------------------------------------------------------
 //  GEANT 4  include file implementation
@@ -36,20 +36,23 @@
 // a particle, ie the geometrical propagation that encounters the 
 // geometrical sub-volumes of the detectors.
 //
-// It is also tasked with part of updating the "safety".
+// It is also tasked with the key role of proposing the "isotropic safety",
+//   which will be used to update the post-step point's safety.
 //
 // =======================================================================
 // Modified:   
-//            19 Jan  2006, P.MoraDeFreitas: Fix for suspended tracks (StartTracking)
-//            11 Aug  2004, M.Asai: Add G4VSensitiveDetector* for updating stepPoint.
-//            21 June 2003, J.Apostolakis: Calling field manager with 
-//                            track, to enable it to configure its accuracy
-//            13 May  2003, J.Apostolakis: Zero field areas now taken into
-//                            account correclty in all cases (thanks to W Pokorski).
-//            29 June 2001, J.Apostolakis, D.Cote-Ahern, P.Gumplinger: 
-//                          correction for spin tracking   
-//            20 Febr 2001, J.Apostolakis:  update for new FieldTrack
-//            22 Sept 2000, V.Grichine:     update of Kinetic Energy
+//   20 Nov  2008, J.Apostolakis: Push safety to helper - after ComputeSafety
+//    9 Nov  2007, J.Apostolakis: Flag for short steps, push safety to helper
+//   19 Jan  2006, P.MoraDeFreitas: Fix for suspended tracks (StartTracking)
+//   11 Aug  2004, M.Asai: Add G4VSensitiveDetector* for updating stepPoint.
+//   21 June 2003, J.Apostolakis: Calling field manager with 
+//                     track, to enable it to configure its accuracy
+//   13 May  2003, J.Apostolakis: Zero field areas now taken into
+//                     account correclty in all cases (thanks to W Pokorski).
+//   29 June 2001, J.Apostolakis, D.Cote-Ahern, P.Gumplinger: 
+//                     correction for spin tracking   
+//   20 Febr 2001, J.Apostolakis:  update for new FieldTrack
+//   22 Sept 2000, V.Grichine:     update of Kinetic Energy
 // Created:  19 March 1997, J. Apostolakis
 // =======================================================================
 
@@ -57,6 +60,8 @@
 #include "G4ProductionCutsTable.hh"
 #include "G4ParticleTable.hh"
 #include "G4ChordFinder.hh"
+#include "G4SafetyHelper.hh"
+#include "G4FieldManagerStore.hh"
 class G4VSensitiveDetector;
 
 //////////////////////////////////////////////////////////////////////////
@@ -87,7 +92,7 @@ G4Transportation::G4Transportation( G4int verboseLevel )
 
   fFieldPropagator = transportMgr->GetPropagatorInField() ;
 
-  // fpSafetyHelper = fpTransportManager->GetSafetyHelper();  // New 
+  fpSafetyHelper =   transportMgr->GetSafetyHelper();  // New 
 
   // Cannot determine whether a field exists here,
   //  because it would only work if the field manager has informed 
@@ -95,14 +100,6 @@ G4Transportation::G4Transportation( G4int verboseLevel )
   //  is constructed.
   // Instead later the method DoesGlobalFieldExist() is called
 
-  // Small memory leak from this new
-  //    fCurrentTouchableHandle = new G4TouchableHistory();
-  // Fixes: 
-  // 1) static G4TouchableHistory sfNullTouchableHistory = new G4TouchableHistory();
-  //    fCurrentTouchableHandle = new G4TouchableHandle( sfNullTouchableHistory );
-  // 2) set it to (G4TouchableHistory*) 0 
-  //    fCurrentTouchableHandle = new G4TouchableHandle( (G4TouchableHistory*) 0 ); 
-  // 3) Below:
   static G4TouchableHandle nullTouchableHandle;  // Points to (G4VTouchable*) 0
   fCurrentTouchableHandle = nullTouchableHandle; 
 
@@ -114,15 +111,6 @@ G4Transportation::G4Transportation( G4int verboseLevel )
 
 G4Transportation::~G4Transportation()
 {
-
-  // --- Alternative code to delete 'junk data' in touchable handle
-  //  ** Corresponds to the case that the constructor has
-  //       fCurrentTouchableHandle = new G4TouchableHistory();
-  //  ** Likely incorrect - as at the end of the simulation 
-  //     the handle no longer holds the original 'null' history
-  // G4VTouchable*  pTouchable= fCurrentTouchableHandle();  //  Incorrect
-  // delete  pTouchable;  // Incorrect
-
   if( (fVerboseLevel > 0) && (fSumEnergyKilled > 0.0 ) ){ 
     G4cout << " G4Transportation: Statistics for looping particles " << G4endl;
     G4cout << "   Sum of energy of loopers killed: " <<  fSumEnergyKilled << G4endl;
@@ -239,7 +227,7 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
        //
        fPreviousSftOrigin = startPosition ;
        fPreviousSafety    = newSafety ; 
-       // fSafetyHelper->SetCurrentSafety( newSafety, startPosition);
+       // fpSafetyHelper->SetCurrentSafety( newSafety, startPosition);
 
        // The safety at the initial point has been re-calculated:
        //
@@ -318,7 +306,7 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
      //
      fPreviousSftOrigin = startPosition ;
      fPreviousSafety    = currentSafety ;         
-     // fSafetyHelper->SetCurrentSafety( newSafety, startPosition);
+     // fpSafetyHelper->SetCurrentSafety( newSafety, startPosition);
        
      // Get the End-Position and End-Momentum (Dir-ection)
      //
@@ -421,26 +409,32 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
   //
   if( currentSafety < endpointDistance ) 
   {
-      G4double endSafety =
-               fLinearNavigator->ComputeSafety( fTransportEndPosition) ;
-      currentSafety      = endSafety ;
-      fPreviousSftOrigin = fTransportEndPosition ;
-      fPreviousSafety    = currentSafety ; 
-      // fSafetyHelper->SetCurrentSafety( currentSafety, fTransportEndPosition);
+      // if( particleCharge == 0.0 ) 
+      //    G4cout  << "  Avoiding call to ComputeSafety : charge = 0.0 " << G4endl;
+ 
+      if( particleCharge != 0.0 ) {
 
-      // Because the Stepping Manager assumes it is from the start point, 
-      //  add the StepLength
-      //
-      currentSafety     += endpointDistance ;
+	 G4double endSafety =
+               fLinearNavigator->ComputeSafety( fTransportEndPosition) ;
+	 currentSafety      = endSafety ;
+	 fPreviousSftOrigin = fTransportEndPosition ;
+	 fPreviousSafety    = currentSafety ; 
+	 fpSafetyHelper->SetCurrentSafety( currentSafety, fTransportEndPosition);
+
+	 // Because the Stepping Manager assumes it is from the start point, 
+	 //  add the StepLength
+	 //
+	 currentSafety     += endpointDistance ;
 
 #ifdef G4DEBUG_TRANSPORT 
-      G4cout.precision(12) ;
-      G4cout << "***G4Transportation::AlongStepGPIL ** " << G4endl  ;
-      G4cout << "  Called Navigator->ComputeSafety at " << fTransportEndPosition
-             << "    and it returned safety= " << endSafety << G4endl ; 
-      G4cout << "  Adding endpoint distance " << endpointDistance 
-             << "   to obtain pseudo-safety= " << currentSafety << G4endl ; 
+	 G4cout.precision(12) ;
+	 G4cout << "***G4Transportation::AlongStepGPIL ** " << G4endl  ;
+	 G4cout << "  Called Navigator->ComputeSafety at " << fTransportEndPosition
+		<< "    and it returned safety= " << endSafety << G4endl ; 
+	 G4cout << "  Adding endpoint distance " << endpointDistance 
+		<< "   to obtain pseudo-safety= " << currentSafety << G4endl ; 
 #endif
+      }
   }            
 
   fParticleChange.ProposeTrueStepLength(geometryStepLength) ;
@@ -723,12 +717,17 @@ G4Transportation::StartTracking(G4Track* aTrack)
   //
   if( DoesGlobalFieldExist() ) {
      fFieldPropagator->ClearPropagatorState();   
-       // Resets safety values, in case of overlaps.  
+       // Resets all state of field propagator class (ONLY)
+       //  including safety values (in case of overlaps and to wipe for first track).
 
-     G4ChordFinder* chordF= fFieldPropagator->GetChordFinder();
-     if( chordF ) chordF->ResetStepEstimate();
+     // G4ChordFinder* chordF= fFieldPropagator->GetChordFinder();
+     // if( chordF ) chordF->ResetStepEstimate();
   }
-  
+
+  // Make sure to clear the chord finders of all fields (ie managers)
+  static G4FieldManagerStore* fieldMgrStore= G4FieldManagerStore::GetInstance();
+  fieldMgrStore->ClearAllChordFindersState(); 
+
   // Update the current touchable handle  (from the track's)
   //
   fCurrentTouchableHandle = aTrack->GetTouchableHandle();

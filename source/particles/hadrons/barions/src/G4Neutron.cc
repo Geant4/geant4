@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Neutron.cc,v 1.21 2007/03/11 07:17:34 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4Neutron.cc,v 1.23 2008/09/18 08:37:27 kurasige Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // 
 // ----------------------------------------------------------------------
@@ -68,12 +68,15 @@ G4Neutron* G4Neutron::Definition()
   //               type    lepton number  baryon number   PDG encoding
   //             stable         lifetime    decay table
   //             shortlived      subType    anti_encoding
+  // use constants in CLHEP
+  // static const double  neutron_mass_c2 = 939.56563 * MeV;
+
     anInstance = new G4Ions(
-                 name,  0.93956563*GeV, 7.432e-28*GeV,         0.0, 
+                 name, neutron_mass_c2, 7.480e-28*GeV,         0.0, 
 		    1,              +1,             0,          
 		    1,              -1,             0,             
 	     "baryon",               0,            +1,        2112,
-		false,    886.7*second,          NULL,
+		false,    885.7*second,          NULL,
 		false,       "nucleon",             0,
                   0.0 
               );

@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4Box.cc,v 1.44 2006/10/19 15:33:37 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // 
 //

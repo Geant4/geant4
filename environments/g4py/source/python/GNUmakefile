@@ -1,28 +1,13 @@
-# $Id: GNUmakefile,v 1.3 2006/06/29 01:39:00 kmura Exp $
-# $Name: geant4-09-01 $
+# $Id: GNUmakefile,v 1.4 2008/12/03 07:08:08 kmura Exp $
+# $Name: geant4-09-02 $
 # ===========================================================
 #   Makefile for building Geant4Py modules
 # ===========================================================
 include ../../config/config.gmk
 
+install_dir := $(Q_LIBDIR)/Geant4
+
 include $(G4PY_INSTALL)/config/g4py.gmk
 include $(G4PY_INSTALL)/config/sys/$(Q_SYSTEM).gmk
-
-G4PY_LIBDIR  := $(Q_LIBDIR)/Geant4
-
-pys  := $(wildcard *.py)
-pycs := $(patsubst %.py, %.pyc, $(pys))
-pyos := $(patsubst %.py, %.pyo, $(pys))
-
-.PHONY: clean
-
-all: $(pycs) $(pyos)
-
-install: $(pycs) $(pyos)
-	@echo ... intall "*.py" into $(G4PY_LIBDIR)
-	@if [ ! -d $(G4PY_LIBDIR) ]; then install -d $(G4PY_LIBDIR); fi
-	@install -m 644 $(pys) $(pycs) $(pyos) $(G4PY_LIBDIR)
-
-clean:
-	@-\rm -f $(pycs) $(pyos)
+include $(G4PY_INSTALL)/config/script-install.gmk
 

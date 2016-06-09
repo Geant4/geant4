@@ -24,14 +24,16 @@
 // ********************************************************************
 //
 //
-// $Id: G4ShellEMDataSet.hh,v 1.9 2007/10/15 08:31:49 pia Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4ShellEMDataSet.hh,v 1.12 2008/03/17 13:45:25 pia Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
 //
 // History:
 // -----------
 // 31 Jul 2001   MGP        Created
+//  9 Mar 2008   MGP        Cleaned up unreadable code modified by former developer
+//                          (Further clean-up needed) 
 //
 // -------------------------------------------------------------------
 
@@ -43,58 +45,66 @@
 
 // -------------------------------------------------------------------
 
-#ifndef   G4SHELLEMDATASET_HH
- #define  G4SHELLEMDATASET_HH 1
+#ifndef  G4SHELLEMDATASET_HH
+#define  G4SHELLEMDATASET_HH 1
 
- #include "globals.hh"
- #include "G4VEMDataSet.hh"
- #include <vector>
+#include "globals.hh"
+#include "G4VEMDataSet.hh"
+#include <vector>
 
- class G4VDataSetAlgorithm;
+class G4VDataSetAlgorithm;
 
- class G4ShellEMDataSet : public G4VEMDataSet 
- { 
-  public:
-   G4ShellEMDataSet(G4int argZ, G4VDataSetAlgorithm* argAlgorithm, G4double argUnitEnergies=MeV, G4double argUnitData=barn);
-   virtual ~G4ShellEMDataSet();
+class G4ShellEMDataSet : public G4VEMDataSet 
+{ 
+public:
+  G4ShellEMDataSet(G4int Z, 
+		   G4VDataSetAlgorithm* algo, 
+		   G4double eUnit=MeV, 
+		   G4double dataUnit=barn);
+
+  virtual ~G4ShellEMDataSet();
  
-   virtual G4double FindValue(G4double argEnergy, G4int argComponentId=0) const;
+  virtual G4double FindValue(G4double energy, G4int componentId=0) const;
   
-   virtual void PrintData(void) const;
+  virtual void PrintData(void) const;
 
-   virtual const G4VEMDataSet*  GetComponent(G4int argComponentId) const { return components[argComponentId]; }
-   virtual void AddComponent(G4VEMDataSet * argDataSet) { components.push_back(argDataSet); }
-   virtual size_t NumberOfComponents(void) const { return components.size(); }
+  virtual const G4VEMDataSet*  GetComponent(G4int componentId) const { return components[componentId]; }
+  virtual void AddComponent(G4VEMDataSet* dataSet) { components.push_back(dataSet); }
+  virtual size_t NumberOfComponents(void) const { return components.size(); }
 
-   virtual const G4DataVector& GetEnergies(G4int argComponentId) const { return GetComponent(argComponentId)->GetEnergies(0); }
-   virtual const G4DataVector& GetData(G4int argComponentId) const { return GetComponent(argComponentId)->GetData(0); }
-   virtual void SetEnergiesData(G4DataVector * argEnergies, G4DataVector * argData, G4int argComponentId);
+  virtual const G4DataVector& GetEnergies(G4int componentId) const { return GetComponent(componentId)->GetEnergies(0); }
+  virtual const G4DataVector& GetData(G4int componentId) const { return GetComponent(componentId)->GetData(0); }
+  virtual void SetEnergiesData(G4DataVector* energies, G4DataVector* data, G4int componentId);
 
-   virtual G4bool LoadData(const G4String & argFileName);
-   virtual G4bool SaveData(const G4String & argFileName) const;
+  virtual G4bool LoadData(const G4String& fileName);
+  virtual G4bool SaveData(const G4String& fileName) const;
+
+  virtual G4double RandomSelect(G4int /*componentId = 0*/) const { return -1.; };
    
- protected:
-   G4double GetUnitEnergies() const { return unitEnergies; }
-   G4double GetUnitData() const { return unitData; }
-   const G4VDataSetAlgorithm* GetAlgorithm() const { return algorithm; }
+protected:
+
+  G4double GetUnitEnergies() const { return unitEnergies; }
+  G4double GetUnitData() const { return unitData; }
+  const G4VDataSetAlgorithm* GetAlgorithm() const { return algorithm; }
    
-   void CleanUpComponents(void);
+  void CleanUpComponents(void);
 
- private:
-   G4String FullFileName(const G4String & argFileName) const;
+private:
+
+  G4String FullFileName(const G4String& fileName) const;
   
-   // Hide copy constructor and assignment operator 
-   G4ShellEMDataSet();
-   G4ShellEMDataSet(const G4ShellEMDataSet & copy);
-   G4ShellEMDataSet& operator=(const G4ShellEMDataSet & right);
+  // Hide copy constructor and assignment operator 
+  G4ShellEMDataSet();
+  G4ShellEMDataSet(const G4ShellEMDataSet& copy);
+  G4ShellEMDataSet& operator=(const G4ShellEMDataSet& right);
 
-   std::vector<G4VEMDataSet*> components;          // Owned pointers
+  std::vector<G4VEMDataSet*> components;          // Owned pointers
 
-   G4int z;
+  G4int z;
 
-   G4VDataSetAlgorithm* algorithm;           // Owned pointer 
+  G4VDataSetAlgorithm* algorithm;           // Owned pointer 
   
-   G4double unitEnergies;
-   G4double unitData;
- };
+  G4double unitEnergies;
+  G4double unitData;
+};
 #endif /* G4SHELLEMDATASET_HH */

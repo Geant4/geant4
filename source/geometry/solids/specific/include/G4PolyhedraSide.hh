@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PolyhedraSide.hh,v 1.9 2007/05/11 13:54:28 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4PolyhedraSide.hh,v 1.11 2008/05/15 11:41:59 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // 
 // --------------------------------------------------------------------
@@ -69,7 +69,7 @@ struct G4PolyhedraSideRZ
 class G4PolyhedraSide : public G4VCSGface
 {
 
-  public:
+  public:  // with description
 
     G4PolyhedraSide( const G4PolyhedraSideRZ *prevRZ,
                      const G4PolyhedraSideRZ *tail,
@@ -103,7 +103,21 @@ class G4PolyhedraSide : public G4VCSGface
                                 G4SolidExtentList &extentList );
 
     G4VCSGface *Clone() { return new G4PolyhedraSide( *this ); }
-  
+
+  public:  // without description
+
+    // Methods used for GetPointOnSurface()
+
+    G4double SurfaceTriangle( G4ThreeVector p1,
+                              G4ThreeVector p2,
+                              G4ThreeVector p3,
+                              G4ThreeVector *p4 );
+    G4ThreeVector GetPointOnPlane( G4ThreeVector p0, G4ThreeVector p1, 
+                                   G4ThreeVector p2, G4ThreeVector p3,
+                                   G4double *Area );
+    G4double SurfaceArea();
+    G4ThreeVector GetPointOnFace();  
+
   public:  // without description
 
     G4PolyhedraSide(__void__&);
@@ -183,6 +197,7 @@ class G4PolyhedraSide : public G4VCSGface
   private:
 
     G4double kCarTolerance;  // Geometrical surface thickness
+    G4double fSurfaceArea;   // Surface Area 
 };
 
 #endif

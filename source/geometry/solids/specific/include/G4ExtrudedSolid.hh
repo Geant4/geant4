@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ExtrudedSolid.hh,v 1.5 2007/02/26 08:40:01 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4ExtrudedSolid.hh,v 1.7 2008/02/27 12:32:48 ivana Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // 
 // --------------------------------------------------------------------
@@ -139,10 +139,13 @@ class G4ExtrudedSolid : public G4TessellatedSolid
 
     G4bool IsSameLine(G4TwoVector p,
                       G4TwoVector l1, G4TwoVector l2) const;
+    G4bool IsSameLineSegment(G4TwoVector p,
+                      G4TwoVector l1, G4TwoVector l2) const;
     G4bool IsSameSide(G4TwoVector p1, G4TwoVector p2, 
                       G4TwoVector l1, G4TwoVector l2) const;
     G4bool IsPointInside(G4TwoVector a, G4TwoVector b, G4TwoVector c, 
                       G4TwoVector p) const;
+    G4double GetAngle(G4TwoVector p0, G4TwoVector pa, G4TwoVector pb) const;                      
       
     G4VFacet* MakeDownFacet(G4int ind1, G4int ind2, G4int ind3) const;      
     G4VFacet* MakeUpFacet(G4int ind1, G4int ind2, G4int ind3) const;      

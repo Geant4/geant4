@@ -1,4 +1,4 @@
-$Id: History,v 1.21 2007/07/27 17:52:04 vnivanch Exp $
+$Id: History,v 1.23 2008/06/11 22:34:05 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,12 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+12-06-08 mma (testem10-V09-01-01)
+- Remove AIDA from GNUmakefile 
+     
+07-05-08 mma (testem10-V09-01-00)
+- README : update Aida informations
 
 27-07-07 V.Ivant  (testem10-V09-00-00)
 - Create VisManager only for interactive session, improve destructor

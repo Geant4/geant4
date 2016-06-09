@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4ForwardXrayTR.cc,v 1.14 2007/05/11 14:23:04 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // G4ForwardXrayTR class -- implementation file
 

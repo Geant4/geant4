@@ -23,11 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4PreCompoundAlpha.hh,v 1.6 2007/10/01 10:41:59 ahoward Exp $
-// GEANT4 tag $Name: geant4-09-01 $
-//
 // by V. Lara
+//
+//J. M. Quesada (July 08) 
+
 
 #ifndef G4PreCompoundAlpha_h
 #define G4PreCompoundAlpha_h 1
@@ -35,9 +34,8 @@
 #include "G4PreCompoundIon.hh"
 #include "G4ReactionProduct.hh"
 #include "G4Alpha.hh"
-
 #include "G4AlphaCoulombBarrier.hh"
-
+#include "G4PreCompoundParameters.hh"
 
 class G4PreCompoundAlpha : public G4PreCompoundIon
 {
@@ -46,7 +44,7 @@ public:
   G4PreCompoundAlpha():G4PreCompoundIon(4,2,&theAlphaCoulombBarrier,"Alpha") {}
 
   // copy constructor
-  G4PreCompoundAlpha(const G4PreCompoundAlpha &right): G4PreCompoundIon(right) {}
+  G4PreCompoundAlpha(const G4PreCompoundAlpha &right): G4PreCompoundIon(right){}
 
   // destructor
   ~G4PreCompoundAlpha() {}
@@ -65,81 +63,45 @@ public:
   { return G4PreCompoundIon::operator!=(right);}
 
 
-  G4ReactionProduct * GetReactionProduct() const
-  {
-    G4ReactionProduct * theReactionProduct =
-      new G4ReactionProduct(G4Alpha::AlphaDefinition());
-    theReactionProduct->SetMomentum(GetMomentum().vect());
-    theReactionProduct->SetTotalEnergy(GetMomentum().e());
-#ifdef PRECOMPOUND_TEST
-    theReactionProduct->SetCreatorModel("G4PrecompoundModel");
-#endif
-    return theReactionProduct;
-  }   
-    
+  G4ReactionProduct * GetReactionProduct() const;
+
 private:
 
-// added Rj method according to literature and JMQ
-  virtual G4double GetRj(const G4int NumberParticles, const G4int NumberCharged)
-  {
-    G4double rj = 1.0;
-    G4double denominator = NumberParticles*(NumberParticles-1)*(NumberParticles-2)*(NumberParticles-3);
-    if(denominator !=0) rj = 6.0*static_cast<G4double>(NumberCharged*(NumberCharged-1)*(NumberParticles-NumberCharged)*(NumberParticles-NumberCharged-1))/static_cast<G4double>(denominator); //JMQ 23/8/07
+  virtual G4double GetRj(const G4int NumberParticles, const G4int NumberCharged);
 
-    return rj;
-  }
+  virtual G4double CrossSection(const  G4double K) ; 
 
+  virtual G4double FactorialFactor(const G4double N, const G4double P);
 
-  virtual G4double GetAlpha()
-  {
-    G4double C = 0.0;
-    G4double aZ = GetZ() + GetRestZ();
-    if (aZ <= 30) 
-      {
-	C = 0.10;
-      } 
-    else if (aZ <= 50) 
-      {
-	C = 0.1 + -((aZ-50.)/20.)*0.02;
-      } 
-    else if (aZ < 70) 
-      {
-	C = 0.08 + -((aZ-70.)/20.)*0.02;
-      }
-    else 
-      {
-	C = 0.06;
-      }
-    return 1.0+C;
-  }
+  virtual G4double CoalescenceFactor(const G4double A);
 
-  virtual G4double GetBeta()
-  {
-    return -GetCoulombBarrier();
-  }
+  G4double GetOpt0(const G4double K);
+  G4double GetOpt12(const G4double K);
+  G4double GetOpt34(const G4double K);
 
-  virtual G4double FactorialFactor(const G4double N, const G4double P)
-  {
-    return 
-      (N-4.0)*(P-3.0)*(
-		       (((N-3.0)*(P-2.0))/2.0) *(
-						 (((N-2.0)*(P-1.0))/3.0) *(
-									   (((N-1.0)*P)/2.0)
-									   )
-						 )
-		       );
-  }
+  G4double GetAlpha();
+  
+  G4double GetBeta();
 
-  virtual G4double CoalescenceFactor(const G4double A)
-  {
-    return 4096.0/(A*A*A);
-  }    
-private:
+//data members
 
-  G4AlphaCoulombBarrier theAlphaCoulombBarrier;
+      G4AlphaCoulombBarrier theAlphaCoulombBarrier;
+      G4double ResidualA;
+      G4double ResidualZ; 
+      G4double theA;
+      G4double theZ;
+      G4double ResidualAthrd;
+      G4double FragmentA;
+      G4double FragmentAthrd;
 
 };
-
 #endif
+
+
+
+
+
  
+
+
 

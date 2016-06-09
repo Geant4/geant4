@@ -27,6 +27,8 @@
 // J.P. Wellisch, Nov-1996
 // A prototype of the low energy neutron transport model.
 //
+// 080801 Prohibit level transition to oneself by T. Koi
+//
 #include "G4NeutronHPDeExGammas.hh"
 
 void G4NeutronHPDeExGammas::Init(std::ifstream & aDataFile)
@@ -122,6 +124,15 @@ void G4NeutronHPDeExGammas::Init(std::ifstream & aDataFile)
         it = ii;
       }
     }
+//080728
+    if ( it != -1 && currentLevelE == theLevels[it].GetLevelEnergy() )
+    {
+       //TK Comment; Some data file in /Inelastic/Gammas has inconsistent level data (no level to transit)
+       //G4cout << "DeExGammas Transition level error: it " << it << " " << currentLevelE << " " << gammaE << " " << theLevels[it-1].GetLevelEnergy() << " " << currentLevelE - theLevels[it-1].GetLevelEnergy() << G4endl;
+       // Forced to connect the next(previous) level 
+       it +=-1;
+    }
+//080728
     if(it!=-1) theGammas[i]->SetNext(&theLevels[it]);
   }
   // some garbage collection

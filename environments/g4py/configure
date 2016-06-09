@@ -1,5 +1,5 @@
 #! /bin/sh -
-#$Id: configure,v 1.7 2007/11/25 19:37:44 kmura Exp $
+#$Id: configure,v 1.15 2008/12/03 07:48:55 kmura Exp $
 # ======================================================================
 #  A configure script for Geant4Py
 # ======================================================================
@@ -9,6 +9,20 @@ IFS='
  	'
 PATH=/bin:/usr/bin
 export PATH
+
+# ======================================================================
+# testing the echo features
+# ======================================================================
+if `(echo "testing\c"; echo 1,2,3) | grep c > /dev/null` ; then
+  if `(echo -n testing; echo 1,2,3) | sed s/-n/xn/ | grep xn > /dev/null`; then
+    ac_n= ac_c='
+' ac_t='        '
+  else
+    ac_n=-n ac_c= ac_t=
+  fi
+else
+  ac_n= ac_c='\c' ac_t=
+fi
 
 # ======================================================================
 # help message
@@ -26,22 +40,18 @@ Options:
 
 Installation directories:
   --prefix=PREFIX           Installation prefix  [./]
-  --libdir=DIR              Python modules installaion dir [PREFIX/lib]
-  --incdir=DIR              Header installaion dir [PREFIX/include]
+  --libdir=DIR              Python modules dir [PREFIX/lib]
 
 Fine tuning of the library path:
   --with-g4-incdir=DIR      Geant4 header dir [\$G4INCLUDE]
   --with-g4-libdir=DIR      Geant4 library dir [\$G4LIB/\$G4SYSTEM]
-  --with-g4-version=NUM     Geant4 version (700/701/710/711)
-                            Not required after ver.8.0
-
   --with-clhep-incdir=DIR   CLHEP header dir [\$CLHEP_INCLUDE_DIR]
   --with-clhep-libdir=DIR   CLHEP library dir [\$CLHEP_LIB_DIR]
   --with-clhep-lib=LIB      library name of libCLHEP.so [CLHEP|\$CLHEP_LIB]
 
-  --with-python-incdir=DIR  Python header dir [/usr/include/python],
+  --with-python-incdir=DIR  Python header dir [/usr/include/python(2.#)],
                             (location of pyconfig.h)
-  --with-python-libdir=DIR  Python library dir [/usr/lib]
+  --with-python-libdir=DIR  Python library dir [/usr/lib(64)]
 
   --with-boost-incdir=DIR   BOOST-C++ header dir [/usr/include],
                             (location of boost/)
@@ -50,24 +60,21 @@ Fine tuning of the library path:
 
   --with-package-dir=DIR    Geant4 Package dir
 
-  --with-gdml-incdir=DIR    GDML header dir
-  --with-gdml-libdir=DIR    GDML library dir
+  --with-extra-dir=DIR      Install path for extra packages [/usr/local]
 
   --with-xercesc-incdir=DIR Xerces-C header dir [/usr/include]
-  --with-xercesc-libdir=DIR Xerces-C library dir [/usr/lib]
+  --with-xercesc-libdir=DIR Xerces-C library dir [/usr/lib(64)]
 
 Enable/disable options: prefix with either --enable- or --disable-
   openglx      OpenGLX support    [auto]
   openglxm     OpenGLXm support   [disable, \$G4VIS_USE_OPENGLXM]
   raytracerx   RayTracerX support [disable, \$G4VIS_USE_RAYTRACERX]
-  g4gdml       GDML support (G4 module) [disable]
-  gdml         GDML support (external, experimental) [disable]
-               also specifying inc/lib directories
 
 Supported Architectures:
-  linux           for Linux gcc 3.x and 4.x
+  linux           for Linux gcc 3.x and 4.x (32bit)
+  linux64         for Linux gcc 3.x and 4.x (64bit, alias to linuxx8664gcc)
   linuxx8664gcc   for AMD Opteron and Intel EM64T Linux gcc 3.x and 4.x
-  macosx          for MacOSX with gcc (Tiger and XCode 2.3)
+  macosx          for MacOSX with gcc (Tiger/Leopard and Xcode)
 
 EOF
 }
@@ -85,13 +92,12 @@ current_dir=`pwd`
 g4_incdir=${G4INCLUDE:-/zzz}
 g4_libdir=${G4LIB:+$G4LIB/$G4SYSTEM}
 g4_libdir=${g4_libdir:-/zzz}
-g4_version=${G4VERSION_NUMBER:-auto}
 
 clhep_incdir=${CLHEP_INCLUDE_DIR:-/zzz}
 clhep_libdir=${CLHEP_LIB_DIR:-/zzz}
 clhep_lib=${CLHEP_LIB:-CLHEP}
 
-python_incdir=/usr/include/python
+python_incdir=/zzz
 boost_incdir=/usr/include
 boost_python_lib=boost_python
 
@@ -103,22 +109,23 @@ enable_raytracerx=${enable_raytracerx:-0}
 
 enable_physicslist=0
 
-enable_g4gdml=0
-
 enable_gdml=0
-gdml_incdir=/zzz
-gdml_libdir=/zzz
 
 xercesc_incdir=/usr/include
 
+extra_dir=/usr/local
+
 # checking system
 case $1 in
-  linux|linuxx8664gcc|macosx)
+  linux|linux64|linuxx8664gcc|macosx)
     system=$1
-    echo -n "Checking for system type ... "
+    if [ $system = linux64 ]; then
+      system=linuxx8664gcc
+    fi
+    echo $ac_n "Checking for system type ... $ac_c"
     if [ ! -e "config/sys/$system.gmk" ]; then
       echo "no"
-      echo -n "### Invalid system type. "
+      echo $ac_n "### Invalid system type. $ac_c"
       echo "Please taka a look in config/sys/."
       exit -1
     fi
@@ -157,17 +164,15 @@ do
                                clhep_libdir=$optarg/lib          ;;
     --with-g4-incdir=*)        g4_incdir=$optarg                 ;;
     --with-g4-libdir=*)        g4_libdir=$optarg                 ;;
-    --with-g4-version=*)       g4_version=$optarg                ;;
     --with-clhep-incdir=*)     clhep_incdir=$optarg              ;;
     --with-clhep-libdir=*)     clhep_libdir=$optarg              ;;
     --with-clhep-lib=*)        clhep_lib=$optarg                 ;;
+    --with-extra-dir=*)        extra_dir=$optarg                 ;;
     --with-python-incdir=*)    python_incdir=$optarg             ;;
     --with-python-libdir=*)    python_libdir=$optarg             ;;
     --with-boost-incdir=*)     boost_incdir=$optarg              ;;
     --with-boost-libdir=*)     boost_libdir=$optarg              ;;
     --with-boost-python-lib=*) boost_python_lib=$optarg          ;;
-    --with-gdml-incdir=*)      gdml_incdir=$optarg               ;;
-    --with-gdml-libdir=*)      gdml_libdir=$optarg               ;;
     --with-xercesc-incdir=*)   xercesc_incdir=$optarg            ;;
     --with-xercesc-libdir=*)   xercesc_libdir=$optarg            ;;
     # ---------------------------------------------------------------
@@ -177,10 +182,6 @@ do
     --disable-openglxm )       enable_openglxm=0                 ;;
     --enable-raytracerx )      enable_raytracerx=1               ;;
     --disable-raytracerx )     enable_raytracerx=0               ;;
-    --enable-g4gdml )          enable_g4gdml=1                   ;;
-    --disable-g4gdml )         enable_g4gdml=0                   ;;
-    --enable-gdml )            enable_gdml=1                     ;;
-    --disable-gdml )           enable_gdml=0                     ;;
     # ---------------------------------------------------------------
     -*)
       echo "Unrecognized option: $1"
@@ -196,105 +197,98 @@ done
 
 # check variables
 arch=32
-if [ $system == linuxx8664gcc ]; then
+if [ $system = linuxx8664gcc ]; then
   arch=64
 fi
 
 shlib=so
-if [ $system == macosx ]; then
+if [ $system = macosx ]; then
 shlib=dylib
 fi
 
-echo -n "Checking for prefix ... "
+extra_incdir=$extra_dir/include
+if [ $arch = 64 ];then
+  extra_libdir=$extra_dir/lib64
+else
+  extra_libdir=$extra_dir/lib
+fi
+
+echo $ac_n "Checking for prefix ... $ac_c"
 echo $prefix
 
-echo -n "Checking for lib dir ... "
-
+echo $ac_n "Checking for lib dir ... $ac_c"
 libdir=${libdir:-$prefix/lib}
 echo $libdir
 
-echo -n "Checking for include dir ... "
-incdir=${incdir:-$prefix/include}
-echo $libdir
-
-echo -n "Checking for G4 include dir ... "
+echo $ac_n "Checking for G4 include dir ... $ac_c"
 if [ ! -d "$g4_incdir" ]; then
   echo "no"
-  echo -n "### $g4_incdir (g4-incdir) does not exist. "
+  echo $ac_n "### $g4_incdir (g4-incdir) does not exist. $ac_c"
   echo "Try --with-g4-incdir option."
   exit -1
 fi
 echo "$g4_incdir"
 
-echo -n "Checking for G4 lib dir ... "
+echo $ac_n "Checking for G4 lib dir ... $ac_c"
 if [ ! -d "$g4_libdir" ]; then
   echo "no"
-  echo -n "### $g4_libdir (g4-libdir) does not exist. "
+  echo $ac_n "### $g4_libdir (g4-libdir) does not exist. $ac_c"
   echo "Try --with-g4-libdir option."
   exit -1
 fi
 echo "$g4_libdir"
 
-echo -n "Checking for G4 version ... "
-case $g4_version in
-  auto|700|701|710|711)
-    echo "$g4_version"
-    ;;
-  *)
-    echo "no"
-    echo "### $g4_version (g4-version) is invalid (700/701/710/711)."
-    exit -1
-    ;;
-esac
-
-if [ "$g4_version" = "auto" ]; then
-  if [ ! -f "$g4_incdir"/G4Version.hh ]; then
-    echo "### G4Version.hh does not exist. Try --with-g4-version option."
-    exit -1
-  fi
-fi
-
 # ---
-echo -n "Checking for CLHEP include dir ... "
+echo $ac_n "Checking for CLHEP include dir ... $ac_c"
 if [ ! -d "$clhep_incdir" ]; then
   echo "no"
-  echo -n "### $clhep_incdir (clhep-incdir) does not exist. "
+  echo $ac_n "### $clhep_incdir (clhep-incdir) does not exist. $ac_c"
   echo "Try --with-clhep-incdir option."
   exit -1
 fi
 echo "$clhep_incdir"
 
-echo -n "Checking for CLHEP lib dir ... "
+echo $ac_n "Checking for CLHEP lib dir ... $ac_c"
 if [ ! -d "$clhep_libdir" ]; then
   echo "no"
-  echo -n "### $clhep_libdir (clhep-libdir) does not exist. "
+  echo $ac_n "### $clhep_libdir (clhep-libdir) does not exist. $ac_c"
   echo "Try --with-clhep-libdir option."
   exit -1
 fi
 echo "$clhep_libdir"
 
-echo -n "Checking for CLHEP lib name ... "
+echo $ac_n "Checking for CLHEP lib name ... $ac_c"
 if [ ! -f "$clhep_libdir"/lib${clhep_lib}.${shlib} ]; then
   echo "no"
-  echo -n "### lib${clhep_lib}.${shlib} (clhep-lib) does not exist. "
+  echo $ac_n "### lib${clhep_lib}.${shlib} (clhep-lib) does not exist. $ac_c"
   echo "Try --with-clhep-lib option."
   exit -1
 fi
 echo "lib${clhep_lib}.${shlib}"
 
 # ---
-echo -n "Checking for Python include dir (pyconfig.h) ... "
+echo $ac_n "Checking for Python include dir (pyconfig.h) ... $ac_c"
+# check version
+set python python2.5 python2.4 python2.3 python2.2
+for aincdir in $*
+do
+  if [ -d /usr/include/$aincdir ]; then
+    python_incdir=/usr/include/$aincdir
+    break
+  fi
+done
+
 if [ ! -f "$python_incdir"/pyconfig.h ]; then
   echo "no"
-  echo -n "### $python_incdir (python-incdir) is invalid. "
+  echo $ac_n "### $python_incdir (python-incdir) is invalid. $ac_c"
   echo "Try --with-python-incdir option."
   exit -1
 fi
 echo "$python_incdir"
 
-echo -n "Checking for Python lib dir ... "
+echo $ac_n "Checking for Python lib dir ... $ac_c"
 if [ ! $python_libdir ]; then
-  if [ $arch == 64 ]; then
+  if [ $arch = 64 ]; then
     python_libdir=/usr/lib64
   else
     python_libdir=/usr/lib
@@ -302,51 +296,90 @@ if [ ! $python_libdir ]; then
 fi
 if [ ! -d "$python_libdir" ]; then
   echo "no"
-  echo -n "### $python_libdir (python-libdir) does not exist. "
+  echo $ac_n "### $python_libdir (python-libdir) does not exist. $ac_c"
   echo "Try --with-python-libdir option."
   exit -1
 fi
 echo "$python_libdir"
 
 # ---
-echo -n "Checking for Boost include dir (boost/python.hpp) ... "
+echo $ac_n "Checking for Boost include dir (boost/python.hpp) ... $ac_c"
+set $boost_incdir $extra_incdir
+for adir in $*
+do
+  if [ -f "$adir"/boost/python.hpp ]; then
+    boost_incdir=$adir
+    break
+  fi
+done
 if [ ! -f "$boost_incdir"/boost/python.hpp ]; then
   echo "no"
-  echo -n "### $boost_incdir (boost-incdir) is invalid. "
+  echo $ac_n "### $boost_incdir (boost-incdir) is invalid. $ac_c"
   echo "Try --with-boost-incdir option."
   exit -1
 fi
 echo "$boost_incdir"
 
-echo -n "Checking for Boost lib dir ... "
+echo $ac_n "Checking for Boost version ... $ac_c"
+cat > conftest.cc <<EOF
+#include <boost/version.hpp>
+
+int main() {
+  if (BOOST_VERSION >= 103200)
+    return 0;
+  else
+    return 1;
+}
+EOF
+g++ -o conftest conftest.cc > /dev/null 2>&1
+./conftest
+q_boost_version=$?
+rm conftest.cc conftest
+if [ $q_boost_version = 0 ]; then
+  echo "ok"
+else
+  echo "boost version >= 1.32.00 is required."
+  exit -1
+fi
+
+echo $ac_n "Checking for Boost lib dir ... $ac_c"
 if [ ! $boost_libdir ]; then
-  if [ $arch == 64 ]; then
+  if [ $arch = 64 ]; then
     boost_libdir=/usr/lib64
   else
     boost_libdir=/usr/lib
   fi
 fi
+set $boost_libdir $extra_libdir
+for adir in $*
+do
+  if [ -f "$adir"/lib${boost_python_lib}.${shlib} ]; then
+    boost_libdir=$adir
+    break
+  fi
+done
+
 if [ ! -d "$boost_libdir" ]; then
   echo "no"
-  echo -n "### $boost_libdir (boost-libdir) does not exist. "
+  echo $ac_n "### $boost_libdir (boost-libdir) does not exist. $ac_c"
   echo "Try --with-boost-libdir option."
   exit -1
 fi
 echo "$boost_libdir"
 
-echo -n "Checking for Boost Python lib name ... "
+echo $ac_n "Checking for Boost Python lib name ... $ac_c"
 if [ ! -f "$boost_libdir"/lib${boost_python_lib}.${shlib} ]; then
   echo "no"
-  echo -n "### lib${boost_python_lib}.${shlib} (boost-python-lib) does not exist. "
-  echo "Try --with-boost-libdir option."
+  echo $ac_n "### lib${boost_python_lib}.${shlib} (boost-python-lib) does not exist. $ac_c"
+  echo "Try --with-boost-python-lib option."
   exit -1
 fi
 echo "lib${boost_python_lib}.${shlib}"
 
 # ---
-echo -n "Checking for OpenGL support ..."
+echo $ac_n "Checking for OpenGL support ...$ac_c"
 if [ -f "$g4_libdir"/libG4OpenGL.${shlib} ]; then
-  if [ $enable_openglx == 0 ]; then
+  if [ $enable_openglx = 0 ]; then
     echo "disabled"
   else
     echo "yes"
@@ -357,63 +390,37 @@ else
 fi
 
 # ---
-echo -n "Checking for physics list support ..."
+echo $ac_n "Checking for physics list support ...$ac_c"
 if [ -f "$g4_incdir"/QGSP.hh ]; then
   enable_physicslist=1
 fi
-if [ $enable_physicslist == 0 ]; then
+if [ $enable_physicslist = 0 ]; then
   echo "no"
 else
   echo "yes"
 fi
 
 # ---
-echo -n "Checking for G4GDML support ..."
-if [ $enable_g4gdml == 0 ]; then
-  echo "no"
-else
-  if [ -f "$g4_incdir"/G4GDMLParser.hh ]; then
-    echo "yes"
-  else
-    echo "no"
-    echo "### G4 GDML component is not found."
-    exit -1
-  fi  
-fi
-
-# ---
-echo -n "Checking for GDML support ..."
-if [ $enable_gdml == 0 ]; then
-  echo "no"
-else
+echo $ac_n "Checking for GDML support ...$ac_c"
+if [ -f "$g4_incdir"/G4GDMLParser.hh ]; then
   echo "yes"
-fi
-
-if [ $enable_gdml == 1 ]; then
-  echo -n "Checking for GDML include dir ..."
-  if [ -d "$gdml_incdir"/G4Binding ]; then
-    echo "yes"
-  else
-    echo "no"
-    echo "### $gdml_incdir/G4Binding does not exist. "
-    echo "Try --with-gdml-incdir option."
-    exit -1
-  fi
-
-  echo -n "Checking for GDML lib dir ..."
-  if [ -f "$gdml_libdir"/libG4Processor.so ]; then
-    echo "yes"
-  else
-    echo "no"
-    echo "### $gdml_libdir/libG4Processor.so does not exist. "
-    echo "Try --with-gdml-libdir option."
-    exit -1
-  fi
+  enable_gdml=1
+else
+  echo "no"
+  enable_gdml=0
 fi
 
 # ---
-if [ $enable_g4gdml == 1 -o $enable_gdml == 1 ]; then
-  echo -n "Checking for Xerces-C include dir ..."
+if [ $enable_gdml = 1 ]; then
+  echo $ac_n "Checking for Xerces-C include dir ...$ac_c"
+  set $xercesc_incdir $extra_incdir
+  for adir in $*
+  do
+    if [ -d "$adir/xercesc" ]; then
+      xercesc_incdir=$adir
+      break
+    fi
+  done
   if [ -d "$xercesc_incdir/xercesc" ]; then
     echo "yes"
   else
@@ -423,26 +430,35 @@ if [ $enable_g4gdml == 1 -o $enable_gdml == 1 ]; then
     exit -1
   fi
 
-  echo -n "Checking for Xerces-C lib dir ..."
+  echo $ac_n "Checking for Xerces-C lib dir ...$ac_c"
   if [ ! $xercesc_libdir ]; then
-    if [ $arch == 64 ]; then
+    if [ $arch = 64 ]; then
       xercesc_libdir=/usr/lib64
     else
       xercesc_libdir=/usr/lib
     fi
   fi
-  if [ -f "$xercesc_libdir"/libxerces-c.so ]; then
+  set $xerces_libdir $extra_libdir
+  for adir in $*
+  do
+    if [ -f "$adir"/libxerces-c.${shlib} ]; then
+      xercesc_libdir=$adir
+      break
+    fi
+  done
+
+  if [ -f "$xercesc_libdir"/libxerces-c.${shlib} ]; then
     echo "yes"
   else
     echo "no"
-    echo "### $xercesc_libdir/libxerces-c.so does not exist. "
+    echo "### $xercesc_libdir/libxerces-c.${shlib} does not exist. "
     echo "Try --with-xercesc-libdir option."
     exit -1
   fi
 fi
 
 # ---
-echo -n "Writing config.gmk ... "
+echo $ac_n "Writing config.gmk ... $ac_c"
 
 make_config=config/config.gmk
 
@@ -459,17 +475,11 @@ Q_SYSTEM              := $system
 
 Q_PREFIX              := $prefix
 Q_LIBDIR              := $libdir
-Q_INCDIR              := $incdir
 
 Q_G4_INCDIR           := $g4_incdir
 Q_G4_LIBDIR           := $g4_libdir
 EOF
 
-if [ $g4_version != auto ]; then
-cat >> $make_config <<EOF
-Q_G4_VERSION          := $g4_version
-EOF
-fi
 
 cat >> $make_config <<EOF
 
@@ -489,18 +499,10 @@ Q_ENABLE_RAYTRACERX   := $enable_raytracerx
 
 Q_ENABLE_PHYSICSLIST  := $enable_physicslist
 
-Q_ENABLE_G4GDML       := $enable_g4gdml
 Q_ENABLE_GDML         := $enable_gdml
 EOF
 
-if [ $enable_gdml == 1 ]; then
-cat >> $make_config <<EOF
-Q_GDML_INCDIR         := $gdml_incdir
-Q_GDML_LIBDIR         := $gdml_libdir
-EOF
-fi
-
-if [ $enable_g4gdml == 1 -o $enable_gdml == 1 ]; then
+if [ $enable_gdml = 1 ]; then
 cat >> $make_config <<EOF
 Q_XERCESC_INCDIR      := $xercesc_incdir
 Q_XERCESC_LIBDIR      := $xercesc_libdir
@@ -508,35 +510,31 @@ EOF
 fi
 
 echo "done"
-echo -n "Writing config.status ... "
+echo $ac_n "Writing config.status ... $ac_c"
 echo $arguments > config.status
 echo "done"
 
 # ---
 echo ""
-echo -n "Enabled support for"
+echo $ac_n "Enabled support for$ac_c"
 if [ $enable_openglx = 1 ]; then
-  echo -n " openglx"
+  echo $ac_n " openglx$ac_c"
 fi
 
 if [ $enable_openglxm = 1 ]; then
-  echo -n " openglxm"
+  echo $ac_n " openglxm$ac_c"
 fi
 
 if [ $enable_raytracerx = 1 ]; then
-  echo -n " raytracerx"
+  echo $ac_n " raytracerx$ac_c"
 fi
 
 if [ $enable_physicslist = 1 ]; then
-  echo -n " physicslist"
-fi
-
-if [ $enable_g4gdml = 1 ]; then
-  echo -n " g4gdml"
+  echo $ac_n " physicslist$ac_c"
 fi
 
 if [ $enable_gdml = 1 ]; then
-  echo -n " gdml"
+  echo $ac_n " gdml$ac_c"
 fi
 
 echo "."

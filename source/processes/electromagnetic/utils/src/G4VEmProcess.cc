@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEmProcess.cc,v 1.48 2007/10/29 08:38:58 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4VEmProcess.cc,v 1.60 2008/10/17 14:46:16 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // -------------------------------------------------------------------
 //
@@ -81,25 +81,34 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4VEmProcess::G4VEmProcess(const G4String& name, G4ProcessType type):
-                      G4VDiscreteProcess(name, type),
-  selectedModel(0),		      
+  G4VDiscreteProcess(name, type),
+  secondaryParticle(0),
+  buildLambdaTable(true),
   theLambdaTable(0),
   theEnergyOfCrossSectionMax(0),
   theCrossSectionMax(0),
-  particle(0),
-  secondaryParticle(0),
-  nLambdaBins(90),
-  lambdaFactor(0.8),
-  currentCouple(0),
   integral(false),
-  buildLambdaTable(true),
   applyCuts(false),
   startFromNull(true),
-  nRegions(0)
+  nRegions(0),
+  selectedModel(0),
+  particle(0),
+  currentCouple(0)
 {
   SetVerboseLevel(1);
+
+  // Size of tables assuming spline
   minKinEnergy = 0.1*keV;
-  maxKinEnergy = 100.0*GeV;
+  maxKinEnergy = 100.0*TeV;
+  nLambdaBins  = 84;
+
+  // default lambda factor
+  lambdaFactor  = 0.8;
+
+  // default limit on polar angle
+  polarAngleLimit = 0.0;
+
+  // particle types
   theGamma     = G4Gamma::Gamma();
   theElectron  = G4Electron::Electron();
   thePositron  = G4Positron::Positron();
@@ -372,7 +381,8 @@ G4VParticleChange* G4VEmProcess::PostStepDoIt(const G4Track& track,
 	  if (e < (*theCutsElectron)[currentMaterialIndex]) good = false;
 
 	} else if (p == thePositron) {
-	  if (e < (*theCutsPositron)[currentMaterialIndex]) {
+	  if (electron_mass_c2 < (*theCutsGamma)[currentMaterialIndex] &&
+	      e < (*theCutsPositron)[currentMaterialIndex]) {
 	    good = false;
 	    e += 2.0*electron_mass_c2;
 	  }
@@ -396,42 +406,34 @@ G4VParticleChange* G4VEmProcess::PostStepDoIt(const G4Track& track,
 void G4VEmProcess::PrintInfoDefinition()
 {
   if(verboseLevel > 0) {
-    G4cout << G4endl << GetProcessName() << ": " ;
+    G4cout << G4endl << GetProcessName() << ":   for  "
+           << particle->GetParticleName();
+    if(integral) G4cout << ", integral: 1 ";
+    if(applyCuts) G4cout << ", applyCuts: 1 ";
+    G4cout << "    SubType= " << GetProcessSubType() << G4endl;
+    if(buildLambdaTable) {
+      G4cout << "      Lambda tables from "
+	     << G4BestUnit(minKinEnergy,"Energy") 
+	     << " to "
+	     << G4BestUnit(maxKinEnergy,"Energy")
+	     << " in " << nLambdaBins << " bins, spline: " 
+	     << (G4LossTableManager::Instance())->SplineFlag()
+	     << G4endl;
+    }
     PrintInfo();
-    if(integral) {
-      G4cout << "      Integral mode is used  "<< G4endl;
-    }
+    modelManager->DumpModelList(verboseLevel);
   }
 
-  if (!buildLambdaTable)  return;
-  
-  if(verboseLevel > 0) {
-    G4cout << "      tables are built for  "
-           << particle->GetParticleName()
-           << G4endl
-           << "      Lambda tables from "
-           << G4BestUnit(minKinEnergy,"Energy") 
-           << " to "
-           << G4BestUnit(maxKinEnergy,"Energy")
-           << " in " << nLambdaBins << " bins."
-           << G4endl;
-  }
-
-  if(verboseLevel > 1) {
-    G4cout << "Tables are built for " << particle->GetParticleName()
-           << G4endl;
-
-  if(verboseLevel > 2) {
-    G4cout << "LambdaTable address= " << theLambdaTable << G4endl;
+  if(verboseLevel > 2 && buildLambdaTable) {
+    G4cout << "      LambdaTable address= " << theLambdaTable << G4endl;
     if(theLambdaTable) G4cout << (*theLambdaTable) << G4endl;
-    }
   }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4VEmProcess::MicroscopicCrossSection(G4double kineticEnergy,
-                                         const G4MaterialCutsCouple* couple)
+G4double G4VEmProcess::CrossSectionPerVolume(G4double kineticEnergy,
+					     const G4MaterialCutsCouple* couple)
 {
   // Cross section per atom is calculated
   DefineMaterial(couple);
@@ -440,8 +442,6 @@ G4double G4VEmProcess::MicroscopicCrossSection(G4double kineticEnergy,
   if(theLambdaTable) {
     cross = (((*theLambdaTable)[currentMaterialIndex])->
                            GetValue(kineticEnergy, b));
-
-    cross /= currentMaterial->GetTotNbOfAtomsPerVolume();
   } else {
     G4VEmModel* model = SelectModel(kineticEnergy);
     cross = 
@@ -507,6 +507,10 @@ G4bool G4VEmProcess::RetrievePhysicsTable(const G4ParticleDefinition* part,
              << filename << ">"
              << G4endl;
     }
+    if((G4LossTableManager::Instance())->SplineFlag()) {
+      size_t n = theLambdaTable->length();
+      for(size_t i=0; i<n; i++) {(* theLambdaTable)[i]->SetSpline(true);}
+    }
   } else {
     if (1 < verboseLevel) {
       G4cout << "Lambda table for " << particleName << " in file <"
@@ -567,6 +571,7 @@ G4PhysicsVector* G4VEmProcess::LambdaPhysicsVector(const G4MaterialCutsCouple*)
 {
   G4PhysicsVector* v = 
     new G4PhysicsLogVector(minKinEnergy, maxKinEnergy, nLambdaBins);
+  v->SetSpline((G4LossTableManager::Instance())->SplineFlag());
   return v;
 }
 

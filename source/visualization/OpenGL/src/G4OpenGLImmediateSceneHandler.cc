@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLImmediateSceneHandler.cc,v 1.27 2007/04/04 16:50:26 allison Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4OpenGLImmediateSceneHandler.cc,v 1.30 2008/04/04 13:32:22 allison Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // 
 // Andrew Walkden  10th February 1997
@@ -129,10 +129,13 @@ void G4OpenGLImmediateSceneHandler::AddPrimitive (const G4NURBS& nurbs)
 }
 
 void G4OpenGLImmediateSceneHandler::BeginPrimitives
-(const G4Transform3D& objectTransformation) {
+(const G4Transform3D& objectTransformation)
+{
   G4OpenGLSceneHandler::BeginPrimitives (objectTransformation);
-  glPushMatrix();
+
   G4OpenGLTransform3D oglt (objectTransformation);
+
+  glPushMatrix();
 
   /*************************** Check matrix.
   const GLdouble* m = oglt.GetGLMatrix ();
@@ -157,19 +160,22 @@ void G4OpenGLImmediateSceneHandler::EndPrimitives ()
   G4OpenGLSceneHandler::EndPrimitives ();
 }
 
-void G4OpenGLImmediateSceneHandler::BeginPrimitives2D()
+void G4OpenGLImmediateSceneHandler::BeginPrimitives2D
+(const G4Transform3D& objectTransformation)
 {
-  G4OpenGLSceneHandler::BeginPrimitives2D();
+  G4OpenGLSceneHandler::BeginPrimitives2D(objectTransformation);
 
   // Push current 3D world matrices and load identity to define screen
   // coordinates...
   glMatrixMode (GL_PROJECTION);
   glPushMatrix();
   glLoadIdentity();
-  glOrtho (-1., 1., -1., 1., -G4OPENGL_DBL_MAX, G4OPENGL_DBL_MAX);
+  glOrtho (-1., 1., -1., 1., -G4OPENGL_FLT_BIG, G4OPENGL_FLT_BIG);
   glMatrixMode (GL_MODELVIEW);
   glPushMatrix();
   glLoadIdentity();
+  G4OpenGLTransform3D oglt (objectTransformation);
+  glMultMatrixd (oglt.GetGLMatrix ());
 }
 
 void G4OpenGLImmediateSceneHandler::EndPrimitives2D()

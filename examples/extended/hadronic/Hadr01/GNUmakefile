@@ -1,5 +1,5 @@
-# $Id: GNUmakefile,v 1.7 2006/10/31 15:05:33 vnivanch Exp $
-# GEANT4 tag $Name: geant4-09-01 $
+# $Id: GNUmakefile,v 1.8 2008/06/13 15:41:34 vnivanch Exp $
+# GEANT4 tag $Name: geant4-09-02 $
 # --------------------------------------------------------------
 # GNUmakefile for examples module with AIDA interface
 # --------------------------------------------------------------
@@ -15,17 +15,7 @@ endif
 .PHONY: all
 all: lib bin
 
-ifdef G4ANALYSIS_USE
-  CPPFLAGS += -DG4ANALYSIS_USE
-endif
-
 include $(G4INSTALL)/config/architecture.gmk
-
-# for the aida-config command see the README file
-ifdef G4ANALYSIS_USE
-  CPPFLAGS += `aida-config --include`
-  LOADLIBS += `aida-config --lib`
-endif
 
 include $(G4INSTALL)/config/binmake.gmk
 

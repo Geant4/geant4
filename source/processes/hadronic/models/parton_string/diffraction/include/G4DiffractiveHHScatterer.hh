@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DiffractiveHHScatterer.hh,v 1.3 2006/06/29 20:54:25 gunter Exp $
+// $Id: G4DiffractiveHHScatterer.hh,v 1.4 2008/04/25 14:20:13 vuzhinsk Exp $
 
 #ifndef G4DiffractiveHHScatterer_h
 #define G4DiffractiveHHScatterer_h 1
@@ -43,6 +43,7 @@ class G4DiffractiveExcitation;
 class G4LundStringFragmentation;
 class G4KineticTrack;
 #include "G4KineticTrackVector.hh"
+#include "G4FTFParameters.hh"                            // Uzhi 21.04.08
 
 class G4DiffractiveHHScatterer
 {
@@ -56,6 +57,7 @@ private:
 
 const G4DiffractiveExcitation * theExcitation;
 G4LundStringFragmentation * theStringFragmentation;
+G4FTFParameters  *theParameters;                       // Uzhi  21.04.08
 };
 
 #endif

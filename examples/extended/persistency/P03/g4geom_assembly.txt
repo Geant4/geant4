@@ -1,0 +1,26 @@
+// Define rotation matrix
+:ROTM RM0 0. 0. 0.
+:ROTM RM90Y 0. 90. 0.
+:ROTM RM_REFLZ 90. 0. 90. 90. 180. 0.
+
+// Define volumes and place them
+:VOLU world BOX 100. 100. 100. G4_AIR
+:VOLU vol1 BOX 10. 10. 20. G4_Cu
+:VOLU vol2 TORUS 5. 10. 20. 0. 360. G4_WATER
+:VOLU vol3 POLYCONE 0. 90.*deg 4
+ 5. -30. 
+ 10. 0.
+ 20. 25.
+ 5.  30.
+  G4_Al
+
+
+:VOLU_ASSEMBLY Assembly 4
+  vol1 RM0 0. 0. 0. 
+  vol2 RM90Y 20. 0. 0.
+  vol3 RM0 50. 0. 0.
+  vol3 RM_REFLZ -35. 0. 0.
+
+:PLACE_ASSEMBLY Assembly world RM0 0. 0. -30. 
+:PLACE_ASSEMBLY Assembly world RM0 0. 0. 50. 
+

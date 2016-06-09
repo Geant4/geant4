@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4EqMagElectricField.cc,v 1.13 2006/06/29 18:23:46 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4EqMagElectricField.cc,v 1.14 2008/04/24 12:33:35 tnikitin Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 //
 //  This is the standard right-hand side for equation of motion.
@@ -86,6 +86,8 @@ G4EqMagElectricField::EvaluateRhsGivenB(const G4double y[],
    dydx[4] = cof1*(cof2*Field[4] + (y[5]*Field[0] - y[3]*Field[2])) ; 
  
    dydx[5] = cof1*(cof2*Field[5] + (y[3]*Field[1] - y[4]*Field[0])) ;  
+
+   dydx[6] = 0.;//not used
 
    // Lab Time of flight
    dydx[7] = inverse_velocity;

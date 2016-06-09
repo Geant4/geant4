@@ -7,6 +7,22 @@ ANALYSISLIBS :=
 
 ifdef G4ANALYSIS_USE
   CPPFLAGS += -DG4ANALYSIS_USE
+  ifndef G4ANALYSIS_AIDA_CONFIG_CFLAGS
+    ifneq (,$(findstring WIN32-VC,$(G4SYSTEM)))
+      # The "aida-config --include" for VC may return information
+      # by using the Windows /I syntax which is not understood
+      # by "g++ -M" used by the Geant4 make system to get dependencies.
+      # Then we transform to use the -I syntax which is understood by 
+      # both g++ and CL.exe compilers :
+      G4ANALYSIS_TMP := $(shell echo "`aida-config --include`")
+      G4ANALYSIS_AIDA_CONFIG_CFLAGS := $(patsubst /I%,-I"%",$(G4ANALYSIS_TMP))
+    else
+      G4ANALYSIS_AIDA_CONFIG_CFLAGS := `aida-config --include`
+    endif
+  endif
+  ifndef G4ANALYSIS_AIDA_CONFIG_LIBS
+    G4ANALYSIS_AIDA_CONFIG_LIBS := `aida-config --lib`
+  endif
   CPPFLAGS += $(G4ANALYSIS_AIDA_CONFIG_CFLAGS)
   ANALYSISLIBS += $(G4ANALYSIS_AIDA_CONFIG_LIBS)
 endif

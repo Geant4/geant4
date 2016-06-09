@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: PhysicsList.cc,v 1.14 2007/09/26 10:23:17 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: PhysicsList.cc,v 1.16 2008/12/05 17:46:12 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -35,11 +35,13 @@
 #include "PhysicsListMessenger.hh"
 
 #include "G4EmStandardPhysics.hh"
+#include "G4EmStandardPhysics_option1.hh"
+#include "G4EmStandardPhysics_option2.hh"
+#include "G4EmStandardPhysics_option3.hh"
 #include "G4DecayPhysics.hh"
 
-#include "PhysListEmModelPai.hh"
-#include "PhysListEmPaiPhoton.hh"
-#include "PhysListEmPAI.hh"
+#include "G4PAIModel.hh"
+#include "G4PAIPhotonModel.hh"
 
 #include "G4Gamma.hh"
 #include "G4Electron.hh"
@@ -68,15 +70,14 @@ PhysicsList::PhysicsList() : G4VModularPhysicsList()
 
   pMessenger = new PhysicsListMessenger(this);
 
-  SetVerboseLevel(1);
-
   // Decay Physics is always defined
   generalPhysicsList = new G4DecayPhysics();
 
   // EM physics
   emName = G4String("emstandard");
-  emPhysicsList = new G4EmStandardPhysics();
+  emPhysicsList = new G4EmStandardPhysics(1);
 
+  SetVerboseLevel(1);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -103,6 +104,7 @@ void PhysicsList::ConstructProcess()
 {
   AddTransportation();
   emPhysicsList->ConstructProcess();
+  em_config.AddModels();
   generalPhysicsList->ConstructProcess();
   for(size_t i=0; i<hadronPhys.size(); i++) hadronPhys[i]->ConstructProcess();
   AddStepMax();
@@ -112,35 +114,43 @@ void PhysicsList::ConstructProcess()
 
 void PhysicsList::AddPhysicsList(const G4String& name)
 {
-  if (verboseLevel>-1) {
+  if (verboseLevel>1) {
     G4cout << "PhysicsList::AddPhysicsList: <" << name << ">" << G4endl;
   }
 
-  if (name == emName) return;
+  if (name == emName) {
+    return;
 
-  if (name == "pai") 
-  {
+  } else if (name == "emstandard_opt1") {
+
     emName = name;
     delete emPhysicsList;
-    emPhysicsList = new PhysListEmModelPai(name);
-    G4cout<<"PhysListEmModelPai is called"<<G4endl;
-  }
-  else if (name == "pai_photon") 
-  {
+    emPhysicsList = new G4EmStandardPhysics_option1();
+
+  } else if (name == "emstandard_opt2") {
+
     emName = name;
     delete emPhysicsList;
-    emPhysicsList = new PhysListEmPaiPhoton(name);
-    G4cout<<"PhysListEmModelPaiPhoton is called"<<G4endl;
-  } 
-  else if (name == "pai_brem") 
-  {
+    emPhysicsList = new G4EmStandardPhysics_option2();
+
+  } else if (name == "emstandard_opt3") {
+
     emName = name;
     delete emPhysicsList;
-    emPhysicsList = new PhysListEmPAI(name);
-    G4cout<<"PhysListEmPAI is called (bremsstrahlung dedx added)"<<G4endl;
-  } 
-  else 
-  {
+    emPhysicsList = new G4EmStandardPhysics_option3();
+
+  } else if (name == "pai") {
+
+    emName = name;
+    AddPAIModel(name);
+
+  } else if (name == "pai_photon") { 
+
+    emName = name;
+    AddPAIModel(name);
+
+  } else {
+
     G4cout << "PhysicsList::AddPhysicsList: <" << name << ">"
            << " is not defined"
            << G4endl;
@@ -155,7 +165,6 @@ void PhysicsList::AddStepMax()
   stepMaxProcess = new StepMax();
 
   theParticleIterator->reset();
-
   while ((*theParticleIterator)())
   {
     G4ParticleDefinition* particle = theParticleIterator->value();
@@ -211,6 +220,48 @@ void PhysicsList::SetCutForPositron(G4double cut)
 {
   cutForPositron = cut;
   SetParticleCuts(cutForPositron, G4Positron::Positron());
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void PhysicsList::AddPAIModel(const G4String& modname)
+{
+  theParticleIterator->reset();
+  while ((*theParticleIterator)())
+  {
+    G4ParticleDefinition* particle = theParticleIterator->value();
+    G4String partname = particle->GetParticleName();
+    if(partname == "e-" || partname == "e+") {
+      NewPAIModel(particle, modname, "eIoni");
+
+    } else if(partname == "mu-" || partname == "mu+") {
+      NewPAIModel(particle, modname, "muIoni");
+
+    } else if(partname == "proton" ||
+	      partname == "pi+" ||
+              partname == "pi-"   
+	      ) {
+      NewPAIModel(particle, modname, "hIoni");
+    }
+  }
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void PhysicsList::NewPAIModel(const G4ParticleDefinition* part, 
+			      const G4String& modname,
+			      const G4String& procname)
+{
+  G4String partname = part->GetParticleName();
+  if(modname == "pai") {
+    G4PAIModel* pai = new G4PAIModel(part,"PAIModel");
+    em_config.SetExtraEmModel(partname,procname,pai,"VertexDetector",
+			      0.0,100.*TeV,pai);
+  } else if(modname == "pai_photon") {
+    G4PAIPhotonModel* pai = new G4PAIPhotonModel(part,"PAIPhotModel");
+    em_config.SetExtraEmModel(partname,procname,pai,"VertexDetector",
+			      0.0,100.*TeV,pai);
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

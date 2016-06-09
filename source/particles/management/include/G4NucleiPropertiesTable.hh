@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4NucleiPropertiesTable.hh,v 1.13 2006/06/29 19:23:56 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4NucleiPropertiesTable.hh,v 1.14 2008/10/22 12:35:46 kurasige Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // -------------------------------------------------------------------
 //      GEANT 4 class file --- Copyright CERN 1997
@@ -66,6 +66,7 @@
 //	Beta Decay Energy
 //	Atomic Mass
 
+class G4NucleiProperties;
 
 class G4NucleiPropertiesTable 
 {
@@ -82,7 +83,11 @@ public:
   enum  {nEntries = 2931,MaxA = 273}; 
 
   // Other Operations 
- public: // With Description
+  // all methods are private and can be used only by G4NucleiProperties
+
+  friend class G4NucleiProperties;  
+
+private:
 
   // Operation: GetMassExcess
   static G4double GetMassExcess(G4int Z, G4int A); 

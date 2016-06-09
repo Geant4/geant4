@@ -1,5 +1,5 @@
--------------------------------------------------------------------
-$Id: History,v 1.15 2006/11/14 14:49:19 ribon Exp $
+Hi-------------------------------------------------------------------
+$Id: History,v 1.16 2008/06/12 23:15:27 cirrone Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -8,6 +8,8 @@ $Id: History,v 1.15 2006/11/14 14:49:19 ribon Exp $
 
                       Category History file
                       ---------------------
+12.06.2008 - G.A.P.Cirrone (lAr_calorimeter-V09-01-00)
+             Fixed a compilation error in the Analysis manager
 
 14.11.2006 - A.Ribon (lAr_calorimeter-V08-01-01)
              Removed hadronic_lists.gmk after the inclusion of

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<gdml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://service-spi.web.cern.ch/service-spi/app/releases/GDML/schema/gdml.xsd">
+ <define>
+  <position name="v0" unit="mm" x="10" y="10" z="0" />
+  <position name="v1" unit="mm" x="-10" y="10" z="0" />
+  <position name="v2" unit="mm" x="0" y="0" z="20" />
+  <position name="v3" unit="mm" x="-10" y="-10" z="0" />
+  <position name="v4" unit="mm" x="10" y="-10" z="0" />
+  <position name="physdetinWorldp" unit="mm" x="100" y="0" z="0" />
+ </define>
+ <materials>
+  <element Z="7" formula="N" name="Nitrogen" >
+   <atom value="14.01" />
+  </element>
+  <element Z="8" formula="O" name="Oxygen" >
+   <atom value="16" />
+  </element>
+  <material formula=" " name="AirinTest" >
+   <D value="0.00129" />
+   <fraction n="0.7" ref="Nitrogen" />
+   <fraction n="0.3" ref="Oxygen" />
+  </material>
+ </materials>
+ <solids>
+  <box aunit="radian" lunit="mm" name="world" x="10000" y="10000" z="10000" />
+  <box aunit="radian" lunit="mm" name="det" x="2000" y="2000" z="2000" />
+  <tessellated aunit="degree" lunit="mm" name="tessel" >
+   <triangular vertex1="v0" vertex2="v1" vertex3="v2" />
+   <triangular vertex1="v1" vertex2="v3" vertex3="v2" />
+   <triangular vertex1="v3" vertex2="v4" vertex3="v2" />
+   <triangular vertex1="v4" vertex2="v0" vertex3="v2" />
+   <quadrangular vertex1="v4" vertex2="v3" vertex3="v1" vertex4="v0" />
+  </tessellated>
+ </solids>
+ <structure>
+  <volume name="lTes" >
+   <materialref ref="AirinTest" />
+   <solidref ref="tessel" />
+  </volume>
+  <volume name="lDetector" >
+   <materialref ref="AirinTest" />
+   <solidref ref="det" />
+   <physvol>
+    <volumeref ref="lTes" />
+   </physvol>
+  </volume>
+  <volume name="World" >
+   <materialref ref="AirinTest" />
+   <solidref ref="world" />
+   <physvol>
+    <volumeref ref="lDetector" />
+    <positionref ref="physdetinWorldp" />
+   </physvol>
+  </volume>
+ </structure>
+ <setup name="Default" version="1.0" >
+  <world ref="World" />
+ </setup>
+</gdml>

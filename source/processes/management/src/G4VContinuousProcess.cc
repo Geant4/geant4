@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4VContinuousProcess.cc,v 1.5 2007/10/02 08:23:20 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // 
 // --------------------------------------------------------------

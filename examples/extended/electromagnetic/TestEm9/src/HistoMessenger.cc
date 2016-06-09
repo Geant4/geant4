@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: HistoMessenger.cc,v 1.6 2006/06/29 17:03:16 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: HistoMessenger.cc,v 1.7 2008/08/22 14:11:53 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -59,7 +59,7 @@ HistoMessenger::HistoMessenger(Histo* manager)
   histoCmd->SetGuidance("  nbBins; valMin; valMax; unit (of vmin and vmax)");
   //
   G4UIparameter* ih = new G4UIparameter("ih",'i',false);
-  ih->SetGuidance("histo number : from 1 to MaxHisto");
+  ih->SetGuidance("histo number : from 0 to MaxHisto-1");
   histoCmd->SetParameter(ih);
   //
   G4UIparameter* nbBins = new G4UIparameter("nbBins",'i',false);
@@ -109,7 +109,8 @@ void HistoMessenger::SetNewValue(G4UIcommand* command,G4String newValues)
      is >> ih >> nbBins >> vmin >> vmax >> unts;
      G4String unit = unts;
      G4double vUnit = 1. ;
-     if (unit != "none") vUnit = G4UIcommand::ValueOf(unit);
+     if(unit != "none") vUnit = G4UIcommand::ValueOf(unit);
+     if(vUnit <= 0.0)  vUnit = 1.;
      histo->setHisto1D(ih,nbBins,vmin,vmax,vUnit);
    }
 }

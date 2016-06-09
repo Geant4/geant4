@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4IVContinuousDiscreteProcess.cc,v 1.9 2006/06/29 21:08:02 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4IVContinuousDiscreteProcess.cc,v 1.10 2007/11/15 04:10:18 kurasige Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // $Id: 
 // --------------------------------------------------------------
@@ -48,8 +48,8 @@ G4IVContinuousDiscreteProcess::G4IVContinuousDiscreteProcess()
 G4IVContinuousDiscreteProcess::G4IVContinuousDiscreteProcess(const G4String& aName , G4ProcessType aType)
                   : G4VProcess(aName, aType),BIGSTEP(1.e10)
 {
+  enableAtRestDoIt = false;
 }
-
 G4IVContinuousDiscreteProcess::~G4IVContinuousDiscreteProcess()
 {
 }

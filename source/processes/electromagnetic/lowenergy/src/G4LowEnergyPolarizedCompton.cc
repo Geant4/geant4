@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4LowEnergyPolarizedCompton.cc,v 1.22 2006/06/29 19:40:25 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4LowEnergyPolarizedCompton.cc,v 1.25 2008/05/02 19:23:38 pia Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file
@@ -109,6 +109,10 @@ G4LowEnergyPolarizedCompton::G4LowEnergyPolarizedCompton(const G4String& process
 
   rangeTest = new G4RangeTest;
 
+  // For Doppler broadening
+  shellData.SetOccupancyData();
+
+
    if (verboseLevel > 0)
      {
        G4cout << GetProcessName() << " is created " << G4endl
@@ -138,6 +142,11 @@ void G4LowEnergyPolarizedCompton::BuildPhysicsTable(const G4ParticleDefinition& 
   crossSectionHandler->LoadData(crossSectionFile);
   delete meanFreePathTable;
   meanFreePathTable = crossSectionHandler->BuildMeanFreePathForMaterials();
+
+  // For Doppler broadening
+  G4String file = "/doppler/shell-doppler";
+  shellData.LoadData(file);
+
 }
 
 G4VParticleChange* G4LowEnergyPolarizedCompton::PostStepDoIt(const G4Track& aTrack,
@@ -326,11 +335,82 @@ G4VParticleChange* G4LowEnergyPolarizedCompton::PostStepDoIt(const G4Track& aTra
   G4double diry = sinTheta*std::sin(phi);
   G4double dirz = cosTheta ;
   
+
+  // oneCosT , eom
+
+
+
+  // Doppler broadening -  Method based on:
+  // Y. Namito, S. Ban and H. Hirayama, 
+  // "Implementation of the Doppler Broadening of a Compton-Scattered Photon Into the EGS4 Code" 
+  // NIM A 349, pp. 489-494, 1994
+  
+  // Maximum number of sampling iterations
+
+  G4int maxDopplerIterations = 1000;
+  G4double bindingE = 0.;
+  G4double photonEoriginal = epsilon * gammaEnergy0;
+  G4double photonE = -1.;
+  G4int iteration = 0;
+  G4double eMax = gammaEnergy0;
+
+  do
+    {
+      iteration++;
+      // Select shell based on shell occupancy
+      G4int shell = shellData.SelectRandomShell(Z);
+      bindingE = shellData.BindingEnergy(Z,shell);
+      
+      eMax = gammaEnergy0 - bindingE;
+     
+      // Randomly sample bound electron momentum (memento: the data set is in Atomic Units)
+      G4double pSample = profileData.RandomSelectMomentum(Z,shell);
+      // Rescale from atomic units
+      G4double pDoppler = pSample * fine_structure_const;
+      G4double pDoppler2 = pDoppler * pDoppler;
+      G4double var2 = 1. + onecost * E0_m;
+      G4double var3 = var2*var2 - pDoppler2;
+      G4double var4 = var2 - pDoppler2 * cosTheta;
+      G4double var = var4*var4 - var3 + pDoppler2 * var3;
+      if (var > 0.)
+	{
+	  G4double varSqrt = std::sqrt(var);        
+	  G4double scale = gammaEnergy0 / var3;  
+          // Random select either root
+ 	  if (G4UniformRand() < 0.5) photonE = (var4 - varSqrt) * scale;               
+	  else photonE = (var4 + varSqrt) * scale;
+	} 
+      else
+	{
+	  photonE = -1.;
+	}
+   } while ( iteration <= maxDopplerIterations && 
+	     (photonE < 0. || photonE > eMax || photonE < eMax*G4UniformRand()) );
+ 
+  // End of recalculation of photon energy with Doppler broadening
+  // Revert to original if maximum number of iterations threshold has been reached
+  if (iteration >= maxDopplerIterations)
+    {
+      photonE = photonEoriginal;
+      bindingE = 0.;
+    }
+
+  gammaEnergy1 = photonE;
+ 
+  // G4cout << "--> PHOTONENERGY1 = " << photonE/keV << G4endl;
+
+
+  /// Doppler Broadeing 
+
+
+
+
   //
   // update G4VParticleChange for the scattered photon 
   //
 
-  gammaEnergy1 = epsilon*gammaEnergy0;
+  //  gammaEnergy1 = epsilon*gammaEnergy0;
+
 
   // New polarization
 
@@ -364,11 +444,13 @@ G4VParticleChange* G4LowEnergyPolarizedCompton::PostStepDoIt(const G4Track& aTra
   // kinematic of the scattered electron
   //
 
-  G4double ElecKineEnergy = gammaEnergy0 - gammaEnergy1 ;
+  G4double ElecKineEnergy = gammaEnergy0 - gammaEnergy1 -bindingE;
+
 
   // Generate the electron only if with large enough range w.r.t. cuts and safety
 
   G4double safety = aStep.GetPostStepPoint()->GetSafety();
+
 
   if (rangeTest->Escape(G4Electron::Electron(),couple,ElecKineEnergy,safety))
     {
@@ -378,12 +460,13 @@ G4VParticleChange* G4LowEnergyPolarizedCompton::PostStepDoIt(const G4Track& aTra
       G4DynamicParticle* electron = new G4DynamicParticle (G4Electron::Electron(),ElecDirection.unit(),ElecKineEnergy) ;
       aParticleChange.SetNumberOfSecondaries(1);
       aParticleChange.AddSecondary(electron);
-      aParticleChange.ProposeLocalEnergyDeposit(0.); 
+      //      aParticleChange.ProposeLocalEnergyDeposit(0.); 
+      aParticleChange.ProposeLocalEnergyDeposit(bindingE);
     }
   else
     {
       aParticleChange.SetNumberOfSecondaries(0);
-      aParticleChange.ProposeLocalEnergyDeposit(ElecKineEnergy);
+      aParticleChange.ProposeLocalEnergyDeposit(ElecKineEnergy+bindingE);
     }
   
   return G4VDiscreteProcess::PostStepDoIt( aTrack, aStep);
@@ -491,17 +574,23 @@ G4ThreeVector G4LowEnergyPolarizedCompton::SetNewPolarization(G4double epsilon,
   //  G4double cossqrth = 1.-sinSqrTh;
   //  G4double sinsqrphi = sinPhi*sinPhi;
   G4double normalisation = std::sqrt(1. - cosSqrPhi*sinSqrTh);
-  
+ 
 
   // Determination of Theta 
   
-  G4double thetaProbability;
+  // ---- MGP ---- Commented out the following 3 lines to avoid compilation 
+  // warnings (unused variables)
+  // G4double thetaProbability;
   G4double theta;
-  G4double a, b;
-  G4double cosTheta;
+  // G4double a, b;
+  // G4double cosTheta;
 
+  /*
+
+  depaola method
+  
   do
-    {
+  {
       rand1 = G4UniformRand();
       rand2 = G4UniformRand();
       thetaProbability=0.;
@@ -514,6 +603,30 @@ G4ThreeVector G4LowEnergyPolarizedCompton::SetNewPolarization(G4double epsilon,
   while ( rand2 > thetaProbability );
   
   G4double cosBeta = cosTheta;
+
+  */
+
+
+  // Dan Xu method (IEEE TNS, 52, 1160 (2005))
+
+  rand1 = G4UniformRand();
+  rand2 = G4UniformRand();
+
+  if (rand1<(epsilon+1.0/epsilon-2)/(2.0*(epsilon+1.0/epsilon)-4.0*sinSqrTh*cosSqrPhi))
+    {
+      if (rand2<0.5)
+	theta = pi/2.0;
+      else
+	theta = 3.0*pi/2.0;
+    }
+  else
+    {
+      if (rand2<0.5)
+	theta = 0;
+      else
+	theta = pi;
+    }
+  G4double cosBeta = std::cos(theta);
   G4double sinBeta = std::sqrt(1-cosBeta*cosBeta);
   
   G4ThreeVector gammaPolarization1;

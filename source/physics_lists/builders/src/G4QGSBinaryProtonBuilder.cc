@@ -32,7 +32,7 @@
  G4QGSBinaryProtonBuilder(G4bool quasiElastic) 
  {
    theMin = 12*GeV;
-   theModel = new G4TheoFSGenerator;
+   theModel = new G4TheoFSGenerator("QGSB");
 
    theStringModel = new G4QGSModel< G4QGSParticipants >;
    theStringDecay = new G4ExcitedStringDecay(new G4QGSMFragmentation);

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4QHadron.cc,v 1.51 2007/11/15 09:33:22 mkossov Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4QHadron.cc,v 1.53 2008/03/20 20:11:38 dennis Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 //      ---------------- G4QHadron ----------------
 //             by Mikhail Kossov, Sept 1999.
@@ -205,10 +205,14 @@ const G4QHadron& G4QHadron::operator=(const G4QHadron &right)
 
 G4QHadron::~G4QHadron()
 {
-  std::deque<G4QParton*>::iterator pos;
-  for(pos=Color.begin(); pos<Color.end(); pos++) {delete [] *pos;}
+  std::list<G4QParton*>::iterator ipos = Color.begin();
+  std::list<G4QParton*>::iterator epos = Color.end();
+  for( ; ipos != epos; ipos++) {delete [] *ipos;}
   Color.clear();
-  for(pos=AntiColor.begin(); pos<AntiColor.end(); pos++) {delete [] *pos;}
+
+  ipos = AntiColor.begin();
+  epos = AntiColor.end();
+  for( ; ipos != epos; ipos++) {delete [] *ipos;}
   AntiColor.clear();
 }
 
@@ -1074,7 +1078,7 @@ void G4QHadron::SplitUp()
 {  
   if (IsSplit()) return;
   Splitting();
-  if (Color.size()!=0) return;
+  if (Color.empty()) return;
   if (GetSoftCollisionCount() == 0)
   {
     // Diffractive splitting: take the particle definition and get the partons
@@ -1234,36 +1238,44 @@ void G4QHadron::SplitUp()
       if (std::abs(ColorEncoding) <= 1000 && std::abs(AntiColorEncoding) <= 1000) beta1 = 1.; //...  in a meson        
       ColorX = SampleX(Xmin, NumberOfUnsampledSeaQuarks, 2*nSeaPair, aBeta);
       HPWtest = ColorX;
-      while (ColorX < Xmin || ColorX > 1.|| 1. -  ColorX <= Xmin); 
+      while (ColorX < Xmin || ColorX > 1.|| 1. -  ColorX <= Xmin) {
+        ;  // Possible dead loop?  Don't know why this loop is here - DHW
+      } 
       Color.back()->SetX(SumX = ColorX);// this is the valenz quark.
-      for(G4int aPair = 0; aPair < nSeaPair; aPair++) 
+
+      std::list<G4QParton*>::iterator icolor = Color.begin();
+      std::list<G4QParton*>::iterator ecolor = Color.end();
+      std::list<G4QParton*>::iterator ianticolor = AntiColor.begin();
+      std::list<G4QParton*>::iterator eanticolor = AntiColor.end();
+      for ( ; icolor != ecolor && ianticolor != eanticolor; ++icolor, ++ianticolor)
       {
         NumberOfUnsampledSeaQuarks--;
         ColorX = SampleX(Xmin, NumberOfUnsampledSeaQuarks, 2*nSeaPair, aBeta);
-        Color[aPair]->SetX(ColorX);
+        (*icolor)->SetX(ColorX);
         SumX += ColorX; 
         NumberOfUnsampledSeaQuarks--;
         AntiColorX = SampleX(Xmin, NumberOfUnsampledSeaQuarks, 2*nSeaPair, aBeta);
-        AntiColor[aPair]->SetX(AntiColorX); // the 'sea' partons
+        (*ianticolor)->SetX(AntiColorX); // the 'sea' partons
         SumX += AntiColorX;
         if (1. - SumX <= Xmin)  break;
       }
     } while (1. - SumX <= Xmin); 
-    (*(AntiColor.end()-1))->SetX(1. - SumX); // the di-quark takes the rest, then go to momentum
+    AntiColor.back()->SetX(1.0 - SumX); // the di-quark takes the rest, then go to momentum
     // and here is the bug ;-) @@@@@@@@@@@@@
     if(getenv("debug_QGSMSplitableHadron") )G4cout << "particle energy at split = "<<Get4Momentum().t()<<G4endl;
     G4double lightCone = ((!Direction) ? Get4Momentum().minus() : Get4Momentum().plus());
     // lightCone -= 0.5*Get4Momentum().m();
     // hpw testing @@@@@ lightCone = 2.*Get4Momentum().t();
     if(getenv("debug_QGSMSplitableHadron") )G4cout << "Light cone = "<<lightCone<<G4endl;
-    for(aSeaPair = 0; aSeaPair < nSeaPair+1; aSeaPair++) 
+    std::list<G4QParton*>::iterator icolor = Color.begin();
+    std::list<G4QParton*>::iterator ecolor = Color.end();
+    std::list<G4QParton*>::iterator ianticolor = AntiColor.begin();
+    std::list<G4QParton*>::iterator eanticolor = AntiColor.end();
+    for ( ; icolor != ecolor && ianticolor != eanticolor; ++icolor, ++ianticolor)
     {
-      G4QParton* aParton = Color[aSeaPair];
-      aParton->DefineMomentumInZ(lightCone, Direction);
-
-      aParton = AntiColor[aSeaPair]; 
-      aParton->DefineMomentumInZ(lightCone, Direction);
-    }  
+      (*icolor)->DefineMomentumInZ(lightCone, Direction);
+      (*ianticolor)->DefineMomentumInZ(lightCone, Direction);
+    }
     //G4cout <<G4endl<<"XSAMPLE "<<HPWtest<<G4endl;
     return;
   }
@@ -1572,7 +1584,9 @@ G4bool G4QHadron::SplitBaryon(G4int PDGcode, G4int* quark, G4int* diQuark)
 G4ThreeVector G4QHadron::GaussianPt(G4double widthSquare, G4double maxPtSquare)
 {
   G4double R=0.;
-  while((R = -widthSquare*std::log(G4UniformRand())) > maxPtSquare);
+  while ((R = -widthSquare*std::log(G4UniformRand())) > maxPtSquare) {
+    ;
+  }
   R = std::sqrt(R);
   G4double phi = twopi*G4UniformRand();
   return G4ThreeVector(R*std::cos(phi), R*std::sin(phi), 0.);    

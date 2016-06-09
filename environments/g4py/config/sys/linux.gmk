@@ -1,5 +1,5 @@
-# $Id: linux.gmk,v 1.6 2007/11/13 08:04:34 kmura Exp $
-# $Name: geant4-09-01 $
+# $Id: linux.gmk,v 1.9 2008/12/01 10:14:36 kmura Exp $
+# $Name: geant4-09-02 $
 # ===========================================================
 #   System specific terms
 # ===========================================================
@@ -9,6 +9,7 @@ CXX      := g++ -m32
 
 ifdef COMPILE_WITH_BOOST
   CXXFLAGS := -fPIC -ftemplate-depth-255 -finline-functions -Wno-inline
+  CXXFLAGS += -fpermissive
   CXXFLAGS += -DBOOST_PYTHON_DYNAMIC_LIB
   CXXFLAGS += -O2
   ifndef DEBUG
@@ -24,6 +25,7 @@ endif
 ifdef COMPILE_G4PY
   CXXFLAGS := -fPIC -ansi -pipe
   CXXFLAGS += -ftemplate-depth-255 -finline-functions
+  CXXFLAGS += -fpermissive
   CXXFLAGS += -DBOOST_PYTHON_DYNAMIC_LIB
   CXXFLAGS += -O2
   ifndef DEBUG
@@ -53,27 +55,18 @@ ifdef Q_BOOST_LIBDIR
   rpath0 := $(Q_BOOST_LIBDIR)
 endif
 
-ifdef G4PY_EXLIB_LIBDIR
-  rpath1 := $(G4PY_EXLIB_LIBDIR)
-endif
-
 ifdef COMPILE_G4PY
-  #rpath2 := $(Q_G4_LIBDIR):$(Q_CLHEP_LIBDIR)
-  ifneq ($(Q_G4_LIBDIR), $(BOOST_LIBDIR))
-    rpath2 := $(Q_G4_LIBDIR)
-  endif
+  rpath1 := $(Q_G4_LIBDIR)
   ifneq ($(Q_CLHEP_LIBDIR), $(Q_G4_LIBDIR))
-    rpath3 := $(Q_CLHEP_LIBDIR)
+    rpath2 := $(Q_CLHEP_LIBDIR)
   endif
-  ifeq ($(Q_ENABLE_GDML), 1)
-    ifneq ($(Q_GDML_LIBDIR), $(Q_G4_LIBDIR))
-      rpath3 += :$(Q_GDML_LIBDIR)
-    endif
-  endif
-  rpath4 := $(Q_LIBDIR)
 endif
 
-rpathflag := -Wl,-rpath,$(rpath0):$(rpath1):$(rpath2):$(rpath3):$(rpath4)
+ifdef G4PY_EXLIB_LIBDIR
+  rpath3 := $(G4PY_EXLIB_LIBDIR)
+endif
+
+rpathflag := -Wl,-rpath,$(rpath0):$(rpath1):$(rpath2):$(rpath3)
 
 ifdef CPPVERBOSE
   define build-library

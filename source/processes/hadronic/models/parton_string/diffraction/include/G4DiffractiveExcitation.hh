@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DiffractiveExcitation.hh,v 1.1 2007/05/25 06:56:53 vuzhinsk Exp $
+// $Id: G4DiffractiveExcitation.hh,v 1.2 2008/04/25 14:20:13 vuzhinsk Exp $
 
 #ifndef G4DiffractiveExcitation_h
 #define G4DiffractiveExcitation_h 1
@@ -41,6 +41,7 @@
 #include "globals.hh"
 class G4VSplitableHadron;
 class G4ExcitedString;
+#include "G4FTFParameters.hh"                            // Uzhi 19.04.08
 #include "G4ThreeVector.hh"
 
 class G4DiffractiveExcitation 
@@ -51,35 +52,23 @@ class G4DiffractiveExcitation
       G4DiffractiveExcitation();                           // Uzhi
       virtual ~G4DiffractiveExcitation();
 
-      virtual G4bool ExciteParticipants (G4VSplitableHadron *aPartner, G4VSplitableHadron * bPartner) const;
-      virtual G4ExcitedString * String(G4VSplitableHadron * aHadron, G4bool isProjectile) const;
-      
-//      void SetPtWidth(G4double aValue) { widthOfPtSquare = aValue*aValue; }
-//      void SetExtraMass(G4double aValue) { minExtraMass = aValue; }
-//      void SetMinimumMass(G4double aValue) { minmass = aValue; }
+      virtual G4bool ExciteParticipants (G4VSplitableHadron *aPartner, 
+                                         G4VSplitableHadron * bPartner,
+                                         G4FTFParameters *theParameters) const;
 
+      virtual G4ExcitedString * String(G4VSplitableHadron * aHadron, G4bool isProjectile) const;
 
   private:
 
       G4DiffractiveExcitation(const G4DiffractiveExcitation &right);
       
-//    G4double ChooseX(G4double Xmin, G4double Xmax) const;                       // Uzhi
+      G4ThreeVector GaussianPt(G4double  AveragePt2, G4double maxPtSquare) const; // Uzhi
       G4double ChooseP(G4double Pmin, G4double Pmax) const;                       // Uzhi
-
-//    G4ThreeVector GaussianPt(G4double widthSquare, G4double maxPtSquare) const;
-      G4ThreeVector GaussianPt(G4double  AveragePt2, G4double maxPtSquare) const;  // Uzhi
       
       const G4DiffractiveExcitation & operator=(const G4DiffractiveExcitation &right);
       int operator==(const G4DiffractiveExcitation &right) const;
       int operator!=(const G4DiffractiveExcitation &right) const;
 
-  private:
-// Model Parameters:
-/*                                                                                // Uzhi
-	const G4double widthOfPtSquare;	// width^2 of pt for string excitation    
-	const G4double minExtraMass;	// minimum excitation mass                
-	const G4double minmass;	// mean pion transverse mass; used for Xmin       
-*/                                                                                // Uzhi
 };
 
 #endif

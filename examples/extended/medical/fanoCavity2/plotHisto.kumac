@@ -1,0 +1,20 @@
+macro plotHisto.kumac
+*
+h/file 1 fanocavity2.hbook
+*
+h/list
+*
+opt stat
+h/pl 1
+h/pl 2
+h/pl 3
+h/pl 4
+h/pl 5
+h/pl 6
+h/pl 7
+h/pl 8
+h/pl 9
+h/pl 10
+h/pl 11
+*
+return

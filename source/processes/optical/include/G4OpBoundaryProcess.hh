@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpBoundaryProcess.hh,v 1.16 2007/10/15 21:16:24 gum Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4OpBoundaryProcess.hh,v 1.18 2008/11/07 17:59:37 gum Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // 
 ////////////////////////////////////////////////////////////////////////
@@ -67,6 +67,10 @@
 #include "templates.hh"
 #include "geomdefs.hh"
 #include "Randomize.hh"
+
+#include "G4RandomTools.hh"
+#include "G4RandomDirection.hh"
+
 #include "G4Step.hh"
 #include "G4VDiscreteProcess.hh"
 #include "G4DynamicParticle.hh"
@@ -161,19 +165,7 @@ public: // With description
 
 private:
 
-	void G4Swap(G4double* a, G4double* b) const;
-
-	void G4Swap(G4Material* a, G4Material* b) const;
-
-	void G4VectorSwap(G4ThreeVector* vec1, G4ThreeVector* vec2) const;
-
 	G4bool G4BooleanRand(const G4double prob) const;
-
-	G4ThreeVector G4IsotropicRand() const;
-
-	G4ThreeVector G4LambertianRand(const G4ThreeVector& normal);
-
-	G4ThreeVector G4PlaneVectorRand(const G4ThreeVector& normal) const;
 
 	G4ThreeVector GetFacetNormal(const G4ThreeVector& Momentum,
 				     const G4ThreeVector&  Normal) const;
@@ -228,112 +220,11 @@ private:
 ////////////////////
 
 inline
-void G4OpBoundaryProcess::G4Swap(G4double* a, G4double* b) const
-{
-	// swaps the contents of the objects pointed
-	// to by 'a' and 'b'!
-
-  G4double temp;
-
-  temp = *a;
-  *a = *b;
-  *b = temp;
-}
-
-inline
-void G4OpBoundaryProcess::G4Swap(G4Material* a, G4Material* b) const
-{
-	// ONLY swaps the pointers; i.e. what used to be pointed
-	// to by 'a' is now pointed to by 'b' and vice versa!
-
-   G4Material* temp = a;
-
-   a = b;
-   b = temp;
-}
-
-inline
-void G4OpBoundaryProcess::G4VectorSwap(G4ThreeVector* vec1,
-				       G4ThreeVector* vec2) const
-{
-        // swaps the contents of the objects pointed
-        // to by 'vec1' and 'vec2'!
-
-  G4ThreeVector temp;
-
-  temp = *vec1;
-  *vec1 = *vec2;
-  *vec2 = temp;
-}
-
-inline
 G4bool G4OpBoundaryProcess::G4BooleanRand(const G4double prob) const
 {
   /* Returns a random boolean variable with the specified probability */
 
   return (G4UniformRand() < prob);
-}
-
-inline
-G4ThreeVector G4OpBoundaryProcess::G4IsotropicRand() const
-{
-  /* Returns a random isotropic unit vector. */
-
-  G4ThreeVector vect;
-  G4double len2;
-
-  do {
-
-    vect.setX(G4UniformRand() - 0.5);
-    vect.setY(G4UniformRand() - 0.5);
-    vect.setZ(G4UniformRand() - 0.5);
-
-    len2 = vect.mag2();
-
-  } while (len2 < 0.01 || len2 > 0.25);
-
-  return vect.unit();
-}
-
-inline
-G4ThreeVector G4OpBoundaryProcess::
-	      G4LambertianRand(const G4ThreeVector& normal)
-{
-  /* Returns a random lambertian unit vector. */
-
-  G4ThreeVector vect;
-  G4double ndotv;
-
-  do {
-    vect = G4IsotropicRand();
-
-    ndotv = normal * vect;
-
-    if (ndotv < 0.0) {
-      vect = -vect;
-      ndotv = -ndotv;
-    }
-
-  } while (!G4BooleanRand(ndotv));
-  return vect;
-}
-
-inline
-G4ThreeVector G4OpBoundaryProcess::
-	      G4PlaneVectorRand(const G4ThreeVector& normal) const
-
-  /* This function chooses a random vector within a plane given
-     by the unit normal */
-{
-  G4ThreeVector vec1 = normal.orthogonal();
-
-  G4ThreeVector vec2 = vec1.cross(normal);
-
-  G4double phi = twopi*G4UniformRand();
-  G4double cosphi = std::cos(phi);
-  G4double sinphi = std::sin(phi);
-
-  return cosphi * vec1 + sinphi * vec2;
 }
 
 inline

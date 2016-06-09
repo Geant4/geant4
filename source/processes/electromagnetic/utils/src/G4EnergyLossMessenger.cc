@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4EnergyLossMessenger.cc,v 1.29 2007/06/11 14:56:51 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4EnergyLossMessenger.cc,v 1.35 2008/10/20 13:27:45 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // -------------------------------------------------------------------
 //
@@ -48,6 +48,7 @@
 //          is needed after the command (V.Ivanchenko)
 // 16-03-07 modify /process/eLoss/minsubsec command (V.Ivanchenko)
 // 18-05-07 add /process/msc directory and commands (V.Ivanchenko)
+// 11-03-08 add /process/em directory and commands (V.Ivanchenko)
 //
 // -------------------------------------------------------------------
 //
@@ -83,6 +84,8 @@ G4EnergyLossMessenger::G4EnergyLossMessenger()
   eLossDirectory->SetGuidance("Commands for EM processes.");
   mscDirectory = new G4UIdirectory("/process/msc/");
   mscDirectory->SetGuidance("Commands for EM scattering processes.");
+  emDirectory = new G4UIdirectory("/process/em/");
+  emDirectory->SetGuidance("General commands for EM processes.");
 
   RndmStepCmd = new G4UIcmdWithABool("/process/eLoss/rndmStep",this);
   RndmStepCmd->SetGuidance("Randomize the proposed step by eLoss.");
@@ -145,81 +148,104 @@ G4EnergyLossMessenger::G4EnergyLossMessenger()
   MaxEnCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
   IntegCmd = new G4UIcmdWithABool("/process/eLoss/integral",this);
-  IntegCmd->SetGuidance("Switch true/false the integration of cross section over step.");
+  IntegCmd->SetGuidance("Switch true/false the integral option");
   IntegCmd->SetParameterName("integ",true);
   IntegCmd->SetDefaultValue(true);
   IntegCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
   rangeCmd = new G4UIcmdWithABool("/process/eLoss/CSDARange",this);
-  rangeCmd->SetGuidance("Switch true/false the precise range calculation.");
+  rangeCmd->SetGuidance("Switch true/false the CSDA range calculation");
   rangeCmd->SetParameterName("range",true);
   rangeCmd->SetDefaultValue(true);
   rangeCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
   lpmCmd = new G4UIcmdWithABool("/process/eLoss/LPM",this);
-  lpmCmd->SetGuidance("Switch true/false the LPM effect calculation.");
+  lpmCmd->SetGuidance("The flag of the LPM effect calculation");
   lpmCmd->SetParameterName("lpm",true);
   lpmCmd->SetDefaultValue(true);
   lpmCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
+  splCmd = new G4UIcmdWithABool("/process/em/spline",this);
+  splCmd->SetGuidance("The flag of usage spline for Physics Vectors");
+  splCmd->SetParameterName("spl",true);
+  splCmd->SetDefaultValue(false);
+  splCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+
+  aplCmd = new G4UIcmdWithABool("/process/em/applyCuts",this);
+  aplCmd->SetGuidance("The flag to Apply Cuts for gamma processes");
+  aplCmd->SetParameterName("apl",true);
+  aplCmd->SetDefaultValue(false);
+  aplCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+
   dedxCmd = new G4UIcmdWithAnInteger("/process/eLoss/binsDEDX",this);
-  dedxCmd->SetGuidance("Set number of bins for DEDX tables.");
+  dedxCmd->SetGuidance("Set number of bins for DEDX tables");
   dedxCmd->SetParameterName("binsDEDX",true);
   dedxCmd->SetDefaultValue(120);
   dedxCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
   lamCmd = new G4UIcmdWithAnInteger("/process/eLoss/binsLambda",this);
-  lamCmd->SetGuidance("Set number of bins for Lambda tables.");
+  lamCmd->SetGuidance("Set number of bins for Lambda tables");
   lamCmd->SetParameterName("binsL",true);
   lamCmd->SetDefaultValue(120);
   lamCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
   verCmd = new G4UIcmdWithAnInteger("/process/eLoss/verbose",this);
-  verCmd->SetGuidance("Set verbose level for EM physics.");
+  verCmd->SetGuidance("Set verbose level for EM physics");
   verCmd->SetParameterName("verb",true);
   verCmd->SetDefaultValue(1);
   verCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
+  ver1Cmd = new G4UIcmdWithAnInteger("/process/em/verbose",this);
+  ver1Cmd->SetGuidance("Set verbose level for EM physics");
+  ver1Cmd->SetParameterName("verb1",true);
+  ver1Cmd->SetDefaultValue(1);
+  ver1Cmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+
   lllCmd = new G4UIcmdWithADouble("/process/eLoss/linLossLimit",this);
-  lllCmd->SetGuidance("Set linearLossLimit parameter.");
+  lllCmd->SetGuidance("Set linearLossLimit parameter");
   lllCmd->SetParameterName("linlim",true);
   lllCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
-  labCmd = new G4UIcmdWithADouble("/process/eLoss/lambdaFactor",this);
-  labCmd->SetGuidance("Set lambdaFactor parameter.");
+  labCmd = new G4UIcmdWithADouble("/process/eLoss/LambdaFactor",this);
+  labCmd->SetGuidance("Set lambdaFactor parameter for integral option");
   labCmd->SetParameterName("Fl",true);
   labCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
   mscCmd = new G4UIcmdWithAString("/process/msc/StepLimit",this);
-  mscCmd->SetGuidance("Set msc step limitation type.");
+  mscCmd->SetGuidance("Set msc step limitation type");
   mscCmd->SetParameterName("StepLim",true);
   mscCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
   latCmd = new G4UIcmdWithABool("/process/msc/LateralDisplacement",this);
-  latCmd->SetGuidance("Switch true/false sampling of latra dislacent.");
+  latCmd->SetGuidance("Set flag of sampling of lateral displacement");
   latCmd->SetParameterName("lat",true);
   latCmd->SetDefaultValue(true);
   latCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
   frCmd = new G4UIcmdWithADouble("/process/msc/RangeFactor",this);
-  frCmd->SetGuidance("Set RangeFactor parameter for msc process.");
+  frCmd->SetGuidance("Set RangeFactor parameter for msc processes");
   frCmd->SetParameterName("Fr",true);
   frCmd->SetRange("Fr>0");
   frCmd->SetDefaultValue(0.02);
   frCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
   fgCmd = new G4UIcmdWithADouble("/process/msc/GeomFactor",this);
-  fgCmd->SetGuidance("Set GeomFactor parameter for msc process.");
+  fgCmd->SetGuidance("Set GeomFactor parameter for msc processes");
   fgCmd->SetParameterName("Fg",true);
   fgCmd->SetRange("Fg>0");
   fgCmd->SetDefaultValue(3.5);
   fgCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
   skinCmd = new G4UIcmdWithADouble("/process/msc/Skin",this);
-  skinCmd->SetGuidance("Set skin parameter for multiple scattering.");
+  skinCmd->SetGuidance("Set skin parameter for msc processes");
   skinCmd->SetParameterName("skin",true);
   skinCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
+  angCmd = new G4UIcmdWithADoubleAndUnit("/process/msc/ThetaLimit",this);
+  angCmd->SetGuidance("Set the limit on the polar angle");
+  angCmd->SetParameterName("theta",true);
+  angCmd->SetUnitCategory("Angle");
+  angCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -234,13 +260,17 @@ G4EnergyLossMessenger::~G4EnergyLossMessenger()
   delete StepFuncCmd;
   delete eLossDirectory;
   delete mscDirectory;
+  delete emDirectory;
   delete MinEnCmd;
   delete MaxEnCmd;
   delete IntegCmd;
   delete rangeCmd;
   delete lpmCmd;
+  delete splCmd;
+  delete aplCmd;
   delete latCmd;
   delete verCmd;
+  delete ver1Cmd;
   delete mscCmd;
   delete dedxCmd;
   delete frCmd;
@@ -249,6 +279,7 @@ G4EnergyLossMessenger::~G4EnergyLossMessenger()
   delete lamCmd;
   delete labCmd;
   delete skinCmd;
+  delete angCmd;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -316,9 +347,9 @@ void G4EnergyLossMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
     G4UImanager::GetUIpointer()->ApplyCommand("/run/physicsModified");
   }  
 
-  if (command == IntegCmd) 
+  if (command == IntegCmd) {
     opt->SetIntegral(IntegCmd->GetNewBoolValue(newValue));
-  
+  }
   if (command == rangeCmd) {
     opt->SetBuildCSDARange(rangeCmd->GetNewBoolValue(newValue));
     G4UImanager::GetUIpointer()->ApplyCommand("/run/physicsModified");
@@ -329,20 +360,32 @@ void G4EnergyLossMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
     G4UImanager::GetUIpointer()->ApplyCommand("/run/physicsModified");
   }
 
+  if (command == splCmd) {
+    opt->SetSplineFlag(splCmd->GetNewBoolValue(newValue));
+    G4UImanager::GetUIpointer()->ApplyCommand("/run/physicsModified");
+  }
+
+  if (command == aplCmd) {
+    opt->SetApplyCuts(aplCmd->GetNewBoolValue(newValue));
+  }
+
   if (command == latCmd) {
     opt->SetMscLateralDisplacement(latCmd->GetNewBoolValue(newValue));
     G4UImanager::GetUIpointer()->ApplyCommand("/run/physicsModified");
   }
 
-  if (command == verCmd) 
+  if (command == verCmd) {
     opt->SetVerbose(verCmd->GetNewIntValue(newValue));
-
-  if (command == lllCmd) 
+  }
+  if (command == ver1Cmd) {
+    opt->SetVerbose(ver1Cmd->GetNewIntValue(newValue));
+  }
+  if (command == lllCmd) {
     opt->SetLinearLossLimit(lllCmd->GetNewDoubleValue(newValue));
-
-  if (command == labCmd) 
+  }
+  if (command == labCmd) {
     opt->SetLambdaFactor(labCmd->GetNewDoubleValue(newValue));
-  
+  }
   if (command == skinCmd) {
     opt->SetSkin(skinCmd->GetNewDoubleValue(newValue));
     G4UImanager::GetUIpointer()->ApplyCommand("/run/physicsModified");
@@ -363,6 +406,10 @@ void G4EnergyLossMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
     opt->SetMscGeomFactor(fgCmd->GetNewDoubleValue(newValue));
     G4UImanager::GetUIpointer()->ApplyCommand("/run/physicsModified");
   }
+  if (command == angCmd) { 
+    opt->SetPolarAngleLimit(angCmd->GetNewDoubleValue(newValue));
+    G4UImanager::GetUIpointer()->ApplyCommand("/run/physicsModified");
+  }  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

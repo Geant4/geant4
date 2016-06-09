@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysicsList.cc,v 1.27 2007/11/19 15:02:04 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: PhysicsList.cc,v 1.36 2008/11/21 12:53:13 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -34,12 +34,15 @@
 
 #include "PhysListEmStandard.hh"
 #include "PhysListEmStandardSS.hh"
-#include "PhysListEmStandardIG.hh"
+#include "PhysListEmStandardNR.hh"
 #include "PhysListEmLivermore.hh"
 #include "PhysListEmPenelope.hh"
 #include "G4EmStandardPhysics.hh"
 #include "G4EmStandardPhysics_option1.hh"
 #include "G4EmStandardPhysics_option2.hh"
+#include "G4EmStandardPhysics_option3.hh"
+
+#include "G4DecayPhysics.hh"
 
 #include "G4HadronElasticPhysics.hh"
 #include "G4HadronDElasticPhysics.hh"
@@ -48,13 +51,16 @@
 #include "G4HadronInelasticQBBC.hh"
 #include "G4IonBinaryCascadePhysics.hh"
 
-#include "G4EmProcessOptions.hh"
-
 #include "G4LossTableManager.hh"
 #include "G4UnitsTable.hh"
 
 #include "G4ProcessManager.hh"
 #include "G4Decay.hh"
+
+#include "StepMax.hh"
+
+#include "G4IonFluctuations.hh"
+#include "G4IonParametrisedLossModel.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -77,8 +83,11 @@ PhysicsList::PhysicsList() : G4VModularPhysicsList()
   SetVerboseLevel(1);
 
   // EM physics
-  emPhysicsList = new PhysListEmStandard(emName = "standard");
+  emPhysicsList = new G4EmStandardPhysics(1);
+  emName = G4String("emstandard");
 
+  // Deacy physics and all particles
+  decPhysicsList = new G4DecayPhysics();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -87,68 +96,19 @@ PhysicsList::~PhysicsList()
 {
   delete pMessenger;
   delete emPhysicsList;
-  for(size_t i=0; i<hadronPhys.size(); i++) delete hadronPhys[i];
+  delete decPhysicsList;
+  for(size_t i=0; i<hadronPhys.size(); i++) {delete hadronPhys[i];}
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-// Bosons
-#include "G4ChargedGeantino.hh"
-#include "G4Geantino.hh"
-#include "G4Gamma.hh"
-
-// leptons
-#include "G4MuonPlus.hh"
-#include "G4MuonMinus.hh"
-#include "G4NeutrinoMu.hh"
-#include "G4AntiNeutrinoMu.hh"
-
-#include "G4Electron.hh"
-#include "G4Positron.hh"
-#include "G4NeutrinoE.hh"
-#include "G4AntiNeutrinoE.hh"
-
-// Hadrons
-#include "G4MesonConstructor.hh"
-#include "G4BaryonConstructor.hh"
-#include "G4IonConstructor.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void PhysicsList::ConstructParticle()
 {
-// pseudo-particles
-  G4Geantino::GeantinoDefinition();
-  G4ChargedGeantino::ChargedGeantinoDefinition();
-  
-// gamma
-  G4Gamma::GammaDefinition();
-  
-// leptons
-  G4Electron::ElectronDefinition();
-  G4Positron::PositronDefinition();
-  G4MuonPlus::MuonPlusDefinition();
-  G4MuonMinus::MuonMinusDefinition();
-
-  G4NeutrinoE::NeutrinoEDefinition();
-  G4AntiNeutrinoE::AntiNeutrinoEDefinition();
-  G4NeutrinoMu::NeutrinoMuDefinition();
-  G4AntiNeutrinoMu::AntiNeutrinoMuDefinition();  
-
-// mesons
-  G4MesonConstructor mConstructor;
-  mConstructor.ConstructParticle();
-
-// barions
-  G4BaryonConstructor bConstructor;
-  bConstructor.ConstructParticle();
-
-// ions
-  G4IonConstructor iConstructor;
-  iConstructor.ConstructParticle();
+  decPhysicsList->ConstructParticle();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 void PhysicsList::ConstructProcess()
 {
   // transportation
@@ -158,49 +118,33 @@ void PhysicsList::ConstructProcess()
   // electromagnetic physics list
   //
   emPhysicsList->ConstructProcess();
+  em_config.AddModels();
+
+  // decay physics list
+  //
+  decPhysicsList->ConstructProcess();
   
   // hadronic physics lists
-  for(size_t i=0; i<hadronPhys.size(); i++) hadronPhys[i]->ConstructProcess();
-  
-  // decay process
-  //
-  G4Decay* fDecayProcess = new G4Decay();
-
-  theParticleIterator->reset();
-  while( (*theParticleIterator)() ){
-    G4ParticleDefinition* particle = theParticleIterator->value();
-    G4ProcessManager* pmanager = particle->GetProcessManager();
-
-    if (fDecayProcess->IsApplicable(*particle) && !particle->IsShortLived()) { 
-
-      pmanager ->AddProcess(fDecayProcess);
-
-      // set ordering for PostStepDoIt and AtRestDoIt
-      pmanager ->SetProcessOrdering(fDecayProcess, idxPostStep);
-      pmanager ->SetProcessOrdering(fDecayProcess, idxAtRest);
-
-    }
+  for(size_t i=0; i<hadronPhys.size(); i++) {
+    hadronPhys[i]->ConstructProcess();
   }
   
   // step limitation (as a full process)
   //  
-  AddStepMax();
-  
-  G4EmProcessOptions opt;
-  opt.SetDEDXBinning(480);
+  AddStepMax();  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void PhysicsList::AddPhysicsList(const G4String& name)
 {
-  if (verboseLevel>-1) {
+  if (verboseLevel>1) {
     G4cout << "PhysicsList::AddPhysicsList: <" << name << ">" << G4endl;
   }
 
   if (name == emName) return;
 
-  if (name == "standard") {
+  if (name == "standard_local") {
 
     emName = name;
     delete emPhysicsList;
@@ -210,7 +154,7 @@ void PhysicsList::AddPhysicsList(const G4String& name)
 
     emName = name;
     delete emPhysicsList;
-    emPhysicsList = new G4EmStandardPhysics();
+    emPhysicsList = new G4EmStandardPhysics(1);
 
   } else if (name == "emstandard_opt1") {
 
@@ -223,6 +167,12 @@ void PhysicsList::AddPhysicsList(const G4String& name)
     emName = name;
     delete emPhysicsList;
     emPhysicsList = new G4EmStandardPhysics_option2();
+    
+  } else if (name == "emstandard_opt3") {
+
+    emName = name;
+    delete emPhysicsList;
+    emPhysicsList = new G4EmStandardPhysics_option3();    
 
   } else if (name == "standardSS") {
 
@@ -234,7 +184,18 @@ void PhysicsList::AddPhysicsList(const G4String& name)
 
     emName = name;
     delete emPhysicsList;
-    emPhysicsList = new PhysListEmStandardIG(name);
+    emPhysicsList = new PhysListEmStandardNR(name);
+
+  } else if (name == "standardICRU73") {
+
+    emName = name;
+    delete emPhysicsList;
+    emPhysicsList = new PhysListEmStandard(name);
+    em_config.SetExtraEmModel("GenericIon","ionIoni",
+			      new G4IonParametrisedLossModel(),
+			      "",0.0, 100.0*TeV,
+			      new G4IonFluctuations());
+    G4cout << "standardICRU73" << G4endl;
 
   } else if (name == "livermore") {
     emName = name;
@@ -280,8 +241,6 @@ void PhysicsList::AddPhysicsList(const G4String& name)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "StepMax.hh"
-
 void PhysicsList::AddStepMax()
 {
   // Step limitation seen as a process
@@ -289,13 +248,13 @@ void PhysicsList::AddStepMax()
 
   theParticleIterator->reset();
   while ((*theParticleIterator)()){
-      G4ParticleDefinition* particle = theParticleIterator->value();
-      G4ProcessManager* pmanager = particle->GetProcessManager();
+    G4ParticleDefinition* particle = theParticleIterator->value();
+    G4ProcessManager* pmanager = particle->GetProcessManager();
 
-      if (stepMaxProcess->IsApplicable(*particle) && pmanager)
-        {
-	  pmanager ->AddDiscreteProcess(stepMaxProcess);
-        }
+    if (stepMaxProcess->IsApplicable(*particle) && pmanager)
+      {
+	pmanager ->AddDiscreteProcess(stepMaxProcess);
+      }
   }
 }
 

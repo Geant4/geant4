@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PathFinder.cc,v 1.58 2007/11/14 10:04:21 gcosmo Exp $
+// $Id: G4PathFinder.cc,v 1.61 2008/11/13 12:59:26 gcosmo Exp $
 // GEANT4 tag $ Name:  $
 // 
 // class G4PathFinder Implementation
@@ -254,6 +254,7 @@ G4PathFinder::ComputeStep( const G4FieldTrack &InitialFieldTrack,
                   "Number of geometries limiting the step not set."); 
     }
   }
+#ifdef G4DEBUG_PATHFINDER      
   else
   {
      if( proposedStepLength < fTrueMinStep )  // For 2nd+ geometry 
@@ -306,16 +307,16 @@ G4PathFinder::ComputeStep( const G4FieldTrack &InitialFieldTrack,
         // client accessing information for the current track, step 
         // We will simply retrieve the results of the synchronous
         // stepping for this Navigator Id below.
-#ifdef G4DEBUG_PATHFINDER      
+        //
         if( fVerboseLevel > 1 )
         { 
            G4cout << " G4P::CS -> Not calling DoNextLinearStep: " 
                   << " stepNo= " << stepNo << " last= " << fLastStepNo 
                   << " new= " << fNewTrack << " Step already done" << G4endl; 
         }
-#endif
      } 
   }
+#endif
 
   fNewTrack= false; 
 
@@ -579,18 +580,9 @@ void G4PathFinder::ReLocate( const G4ThreeVector& position )
 
   if( (!fNewTrack) && ( longMoveEnd && longMoveSaf ) )
   {  
-     G4ThreeVector  LastSafetyLocation;
-       // Copy to keep last value - and restore
-
-     LastSafetyLocation= fSafetyLocation; 
-
      // Recompute ComputeSafety for end position
      //
      revisedSafety= ComputeSafety(lastEndPosition); 
-
-     // Reset the state of last call to ComputeSafety
-     //
-     ComputeSafety( LastSafetyLocation ); 
 
 #ifdef G4DEBUG_PATHFINDER
 
@@ -755,11 +747,11 @@ G4double  G4PathFinder::ComputeSafety( const G4ThreeVector& position )
    G4double minSafety= kInfinity; 
   
    std::vector<G4Navigator*>::iterator pNavigatorIter;
-   pNavigatorIter= fpTransportManager-> GetActiveNavigatorsIterator();
+   pNavigatorIter= fpTransportManager->GetActiveNavigatorsIterator();
 
    for( register G4int num=0; num<fNoActiveNavigators; ++pNavigatorIter,++num )
    {
-      G4double safety = (*pNavigatorIter)->ComputeSafety( position );
+      G4double safety = (*pNavigatorIter)->ComputeSafety( position,true );
       if( safety < minSafety ) { minSafety = safety; } 
       fNewSafetyComputed[num]= safety;
    } 
@@ -1181,7 +1173,7 @@ G4PathFinder::DoNextCurvedStep( const G4FieldTrack &initialState,
      G4double minSafety= kInfinity, safety; 
      for( numNav=0; numNav < fNoActiveNavigators; ++numNav )
      {
-        safety= fpNavigator[numNav]->ComputeSafety( startPoint );
+        safety= fpNavigator[numNav]->ComputeSafety( startPoint, false );
         fPreSafetyValues[numNav]= safety; 
         fCurrentPreStepSafety[numNav]= safety; 
         minSafety = std::min( safety, minSafety ); 

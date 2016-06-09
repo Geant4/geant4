@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleDefinition.cc,v 1.30 2007/11/14 02:22:08 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4ParticleDefinition.cc,v 1.31 2008/06/08 12:43:19 kurasige Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // 
 // --------------------------------------------------------------
@@ -112,6 +112,9 @@ G4ParticleDefinition::G4ParticleDefinition(
    // check name and register this particle into ParticleTable
    theParticleTable = G4ParticleTable::GetParticleTable();
    theParticleTable->Insert(this);
+   
+   //set verboseLevel equal to ParticleTable 
+   verboseLevel = theParticleTable->GetVerboseLevel();
 
    if (anti_encoding !=0) theAntiPDGEncoding = anti_encoding;
 
@@ -179,6 +182,7 @@ G4int G4ParticleDefinition::FillQuarkContents()
   }
 
   G4PDGCodeChecker checker;
+  checker.SetVerboseLevel(verboseLevel);
 
   G4int temp = checker.CheckPDGCode(thePDGEncoding, theParticleType);
 
@@ -192,7 +196,7 @@ G4int G4ParticleDefinition::FillQuarkContents()
       if (!checker.CheckCharge(thePDGCharge) ){
 	temp = 0;
 #ifdef G4VERBOSE
-	if (verboseLevel>1) {
+	if (verboseLevel>0) {
 	  G4cout << "G4ParticleDefinition::FillQuarkContents  : ";
 	  G4cout << " illegal charge (" << thePDGCharge/eplus;
 	  G4cout << " PDG code=" << thePDGEncoding <<G4endl;
@@ -203,7 +207,7 @@ G4int G4ParticleDefinition::FillQuarkContents()
       if (checker.GetSpin() != thePDGiSpin) {
 	temp=0;
 #ifdef G4VERBOSE
-	if (verboseLevel>1) {
+	if (verboseLevel>0) {
 	  G4cout << "G4ParticleDefinition::FillQuarkContents  : ";
 	  G4cout << " illegal SPIN (" << thePDGiSpin << "/2";
 	  G4cout << " PDG code=" << thePDGEncoding <<G4endl;

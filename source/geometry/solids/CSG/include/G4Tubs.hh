@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Tubs.hh,v 1.17 2007/05/18 07:38:00 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4Tubs.hh,v 1.21 2008/11/06 10:55:40 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // 
 // --------------------------------------------------------------------
@@ -38,9 +38,9 @@
 //
 //   A tube or tube segment with curved sides parallel to
 //   the z-axis. The tube has a specified half-length along
-//   the z axis, about which it is centred, and a given
+//   the z-axis, about which it is centered, and a given
 //   minimum and maximum radius. A minimum radius of 0
-//   signifies a filled tube /cylinder. The tube segment is
+//   corresponds to filled tube /cylinder. The tube segment is
 //   specified by starting and delta angles for phi, with 0
 //   being the +x axis, PI/2 the +y axis.
 //   A delta angle of 2PI signifies a complete, unsegmented
@@ -56,6 +56,8 @@
 //          adjusted such that fSPhi+fDPhi<=2PI, fSPhi>-2PI
 //
 //   fDPhi  Delta angle of the segment.
+//
+//   fPhiFullTube   Boolean variable used for indicate the Phi Section
 
 // History:
 // 10.08.95 P.Kent: General cleanup, use G4VSolid extent helper functions
@@ -102,7 +104,7 @@ class G4Tubs : public G4CSGSolid
     inline void SetZHalfLength   (G4double newDz);
     inline void SetStartPhiAngle (G4double newSPhi);
     inline void SetDeltaPhiAngle (G4double newDPhi);
-
+    
     // Methods for solid
 
     inline G4double GetCubicVolume();
@@ -143,6 +145,7 @@ class G4Tubs : public G4CSGSolid
   public:  // without description
 
     G4Tubs(__void__&);
+      //
       // Fake default constructor for usage restricted to direct object
       // persistency for clients requiring preallocation of memory for
       // persistifiable objects.
@@ -163,26 +166,42 @@ class G4Tubs : public G4CSGSolid
       // Creates the List of transformed vertices in the format required
       // for G4VSolid:: ClipCrossSection and ClipBetweenSections
 
-    G4double fRMin,fRMax,fDz,fSPhi,fDPhi;
-
-    // Used by distanceToOut
+    G4double fRMin, fRMax, fDz, fSPhi, fDPhi;
+    G4bool fPhiFullTube;
+   
+      // Used by distanceToOut
 
     enum ESide {kNull,kRMin,kRMax,kSPhi,kEPhi,kPZ,kMZ};
 
-    // used by normal
+      // Used by normal
 
     enum ENorm {kNRMin,kNRMax,kNSPhi,kNEPhi,kNZ};
 
   private:
 
+    inline void Initialize();
+      //
+      // Reset relevant values to zero
+
+    inline void InitializeTrigonometry();
+      //
+      // Recompute relevant trigonometric values and cache them
+
     G4ThreeVector ApproxSurfaceNormal( const G4ThreeVector& p ) const;
+      //
       // Algorithm for SurfaceNormal() following the original
       // specification for points not on the surface
 
   private:
 
     G4double kRadTolerance, kAngTolerance;
+      //
       // Radial and angular tolerances
+
+    G4double sinCPhi, cosCPhi, cosHDPhiOT, cosHDPhiIT,
+             sinSPhi, cosSPhi, sinEPhi, cosEPhi;
+      //
+      // Cached trigonometric values
 };
 
 #include "G4Tubs.icc"

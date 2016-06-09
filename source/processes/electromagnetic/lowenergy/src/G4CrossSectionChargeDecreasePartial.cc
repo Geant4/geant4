@@ -23,41 +23,12 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4CrossSectionChargeDecreasePartial.cc,v 1.1 2007/11/08 18:25:25 pia Exp $
-// GEANT4 tag $Name: geant4-09-01 $
-// 
-// Contact Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
-//
-// Reference: TNS Geant4-DNA paper
-// Reference for implementation model: NIM. 155, pp. 145-156, 1978
-
-// History:
-// -----------
-// Date         Name              Modification
-// 28 Apr 2007  M.G. Pia          Created in compliance with design described in TNS paper
-// 08 Nov 2007  MGP               Got code from S.I.; added variable initialisation to avoid compilation warnings
-//
-// -------------------------------------------------------------------
-
-// Class description:
-// Geant4-DNA Cross total cross section for electron elastic scattering in water
-// Reference: TNS Geant4-DNA paper
-// S. Chauvie et al., Geant4 physics processes for microdosimetry simulation:
-// design foundation and implementation of the first set of models,
-// IEEE Trans. Nucl. Sci., vol. 54, no. 6, Dec. 2007.
-// Further documentation available from http://www.ge.infn.it/geant4/dna
-
-// -------------------------------------------------------------------
-
+// $Id: G4CrossSectionChargeDecreasePartial.cc,v 1.2 2008/07/14 20:47:34 sincerti Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 
 #include "G4CrossSectionChargeDecreasePartial.hh"
-#include "G4ParticleDefinition.hh"
-#include "G4Proton.hh"
-#include "G4DNAGenericIonsManager.hh"
 
-#include "Randomize.hh"
-
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4CrossSectionChargeDecreasePartial::G4CrossSectionChargeDecreasePartial()
 {
@@ -115,9 +86,13 @@ G4CrossSectionChargeDecreasePartial::G4CrossSectionChargeDecreasePartial()
 
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 G4CrossSectionChargeDecreasePartial::~G4CrossSectionChargeDecreasePartial()
-{ }
+{}
  
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 G4double G4CrossSectionChargeDecreasePartial::CrossSection(G4double k, G4int index, 
 							   const G4ParticleDefinition* particleDefinition)
 {
@@ -148,7 +123,7 @@ G4double G4CrossSectionChargeDecreasePartial::CrossSection(G4double k, G4int ind
   //
   
   if (x1[index][particleTypeIndex]<x0[index][particleTypeIndex])
-    {
+  {
       //
       // if x1 < x0 means that x1 and b1 will be calculated with the following formula (this piece of code is run on all alphas and not on protons)
       //
@@ -162,7 +137,7 @@ G4double G4CrossSectionChargeDecreasePartial::CrossSection(G4double k, G4int ind
       b1[index][particleTypeIndex]=(a0[index][particleTypeIndex] - a1[index][particleTypeIndex]) * x1[index][particleTypeIndex] 
 	+ b0[index][particleTypeIndex] - c0[index][particleTypeIndex] * std::pow(x1[index][particleTypeIndex] 
 										 - x0[index][particleTypeIndex], d0[index][particleTypeIndex]);
-    }
+  }
 
   G4double x(std::log10(k/eV));
   G4double y;
@@ -196,29 +171,31 @@ G4int G4CrossSectionChargeDecreasePartial::RandomSelect(G4double k,
   G4int i = n;
   
   while (i>0)
-    {
+  {
       i--;
       values[i]=CrossSection(k, i, particleDefinition);
       value+=values[i];
-    }
+  }
   
   value*=G4UniformRand();
   
   i=n;
   while (i>0)
-    {
+  {
       i--;
    
       if (values[i]>value)
 	break;
   
       value-=values[i];
-    }
+  }
   
   delete[] values;
   
   return i;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4double G4CrossSectionChargeDecreasePartial::Sum(G4double k, const G4ParticleDefinition* particleDefinition)
 {
@@ -233,10 +210,8 @@ G4double G4CrossSectionChargeDecreasePartial::Sum(G4double k, const G4ParticleDe
   G4double totalCrossSection = 0.;
 
   for (G4int i=0; i<numberOfPartialCrossSections[particleTypeIndex]; i++)
-    {
-      totalCrossSection += CrossSection(k,i,particleDefinition);
-    }
+  {
+    totalCrossSection += CrossSection(k,i,particleDefinition);
+  }
   return totalCrossSection;
 }
-
-

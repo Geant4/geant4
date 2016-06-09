@@ -29,8 +29,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4HtmlPPReporter.cc,v 1.5 2007/03/11 07:17:35 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4HtmlPPReporter.cc,v 1.6 2008/06/08 14:05:33 kurasige Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // 
 // ---------------------------------------------------------------
@@ -98,9 +98,22 @@ void G4HtmlPPReporter::SparseOption(const G4String& option)
   outFile << sTR;
   outFile << sTD << sLFONT << "Code" << eLFONT<< eTD; 
   outFile << sTD << sLFONT << "Name" << eLFONT<< eTD; 
+  outFile << sTD << sLFONT << "Mass" << eLFONT << eTD;
+  outFile << sTD << sLFONT << "Charge" << eLFONT << eTD;
+  outFile << sTD << sLFONT << "Life Time" << eLFONT << eTD;
   outFile << sTD << sLFONT << "Anti-Particle" << eLFONT<< eTD; 
   outFile << eTR << G4endl;;
   
+  // Raw #2
+  outFile << sTR;
+  outFile << sTD << " " << eTD; 
+  outFile << sTD << " " << eTD; 
+  outFile << sTD <<  " [GeV/c" << sSUP << "2" << eSUP << "]" << eTD;
+  outFile << sTD << " " << eTD; 
+  outFile << sTD <<  " [ns]" << eTD;
+  outFile << sTD << " " << eTD; 
+  outFile << eTR << G4endl;;
+
   for (size_t i=0; i< pList.size(); i++){
     if (pList[i]->GetPDGEncoding()<0) continue;
 
@@ -118,13 +131,24 @@ void G4HtmlPPReporter::SparseOption(const G4String& option)
     outFile << "<A HREF=" << '"' << fname << '"' << ">";
     outFile << name << "</A>" << eTD << G4endl;
    
-    // column 3 AntiParticle
+    // column 3 mass
+    outFile << sTD <<  pList[i]->GetPDGMass()/GeV << eTD << G4endl;
+
+    // column 4 charge
+    outFile << sTD <<  pList[i]->GetPDGCharge()/eplus << eTD << G4endl;
+
+    // column 5 life time
+    outFile << sTD <<  pList[i]->GetPDGLifeTime()/ns << eTD << G4endl;
+    
+    // column 6 AntiParticle
     if  ( (pList[i]->GetAntiPDGEncoding()!= 0) &&
           (pList[i]->GetAntiPDGEncoding() != pList[i]->GetPDGEncoding() ) ) {
       G4ParticleDefinition* anti_particle  = G4ParticleTable::GetParticleTable()->FindParticle( pList[i]->GetAntiPDGEncoding() ); 
       
       outFile << sTD <<  anti_particle->GetParticleName() << eTD << G4endl;;
     }
+
+    // end raw
     outFile << eTR << G4endl;;
   }
   

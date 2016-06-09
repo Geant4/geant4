@@ -14,7 +14,62 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+27 November 2008 - V.Ivanchenko (hadr-cohe-V09-01-08)
+----------------------------------------------------
+  G4ChargeExchangeProcess - added high and low energy protections into 
+   cross section
+
+20 November 2008 - V.Ivanchenko (hadr-cohe-V09-01-07)
+----------------------------------------------------
+  G4ChargeExchangeProcess and G4ChargeExchange model prepaed to be used
+    in Physics Lists; energy threshold is set to 1.0 MeV
+
+22 August 2008 -  V.Ivanchenko (hadr-cohe-V09-01-06)
+----------------------------------------------------
+  - set process sub-types according to enumerator for G4UHadronElasticProcess 
+    and for G4ChargeExchangeProcess
+
+05 August 2008 -  V.Ivanchenko (hadr-cohe-V09-01-05)
+----------------------------------------------------
+  G4HadronElastic - added protection inside LElastic model against rare 
+                    unphysical values of sampled t
+
+08 Jul 2008 -  D.H. Wright (hadr-cohe-V09-01-04)
+------------------------------------------------
+  - set process sub-type to 11 for G4UHadronElasticProcess and 16 for
+    G4ChargeExchangeProcess
+
+19 May 2008 -  V.Ivanchenko (hadr-cohe-V09-01-03)
+------------------------------------------------
+  G4HadronElastic - added counts of abnornal sampling results and cout
+                    at the destructor of the class
+  G4UHadronElasticProcess and G4ChargeExchangeProcess - added call to 
+                    BuildPhysicsTable of the base class G4HadronicProcess
+
+10 Apr 2008 -  V.Ivanchenko (hadr-cohe-V09-01-02)
+------------------------------------------------
+  G4HadronElastic - added extra protection against precision lost
+                    when projectile almostly lost kinetic energy;
+                    set lowestEnergyLimit=1.e-6*eV (was 0.0)
+
+29 Jan 2008 -  V.Ivanchenko (hadr-cohe-V09-01-01)
+-------------------------------------------------
+  G4UHadronElasticProcess - call to G4QElasticCrossSection with option 
+                            "false", so parameters for sampling of
+                            scattering are precalculated
+  G4HadronElastic - added extra protection - if sampled t out of the 
+                    physics range then no scattering
+
+16 Jan 2008 -  V.Ivanchenko (hadr-cohe-V09-01-00)
+------------------------------------------------
+  G4DiffuseElastic       - remove dependence on other elastic models
+  G4ElasticHadrNucleusHE - fixed non-reproducibility, removed commented
+                           part of old code; add more formatting 
+  G4HadronElastic - return back threshold to G4ElasticHadrNucleusHE 
+                    model 1 GeV
+
 10 Dec 2007 -  V.Ivanchenko (hadr-cohe-V09-00-07)
+------------------------------------------------
   G4HadronElastic - set threshold to G4ElasticHadrNucleusHE model
                     DBL_MAX
 

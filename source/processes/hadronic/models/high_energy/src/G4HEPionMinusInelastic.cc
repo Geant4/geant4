@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4HEPionMinusInelastic.cc,v 1.14 2007/10/16 19:13:35 fjones Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4HEPionMinusInelastic.cc,v 1.15 2008/03/17 20:49:17 dennis Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 
 // 11-OCT-2007 F.W. Jones: fixed incorrect Imax (should be Imin) in
 //             sampling of charge exchange.
@@ -292,8 +292,8 @@ G4HEPionMinusInelastic::FirstIntInCasPionMinus( G4bool &inElastic,
      }                                          // end of initialization
 
          
-                                              // initialize the first two places
-                                              // the same as beam and target                                    
+   // initialize the first two places
+   // the same as beam and target                                    
    pv[0] = incidentParticle;
    pv[1] = targetParticle;
    vecLen = 2;
@@ -302,7 +302,7 @@ G4HEPionMinusInelastic::FirstIntInCasPionMinus( G4bool &inElastic,
       return;
 
                                         
-//                                            inelastic scattering
+   // inelastic scattering
 
    np = 0, nm = 0, nz = 0;
    G4double eab = availableEnergy;
@@ -311,8 +311,8 @@ G4HEPionMinusInelastic::FirstIntInCasPionMinus( G4bool &inElastic,
    G4double supp[] = {0., 0.4, 0.55, 0.65, 0.75, 0.82, 0.86, 0.90, 0.94, 0.98};
    if( (ieab <= 9) && (G4UniformRand() >= supp[ieab]) ) 
      {
-//                                            suppress high multiplicity events at low momentum
-//                                            only one additional pion will be produced
+       // suppress high multiplicity events at low momentum
+       // only one additional pion will be produced
        G4double cech[] = {1., 0.95, 0.79, 0.32, 0.19, 0.16, 0.14, 0.12, 0.10, 0.08};
        G4int iplab = Imin(9, G4int( incidentTotalMomentum*5.));
        if( G4UniformRand() < cech[iplab] )
@@ -348,7 +348,7 @@ G4HEPionMinusInelastic::FirstIntInCasPionMinus( G4bool &inElastic,
              { np = 0; nm = 1; nz = 0; }       
          } 
        else 
-         {                                               // target is a neutron
+         {                                           // target is a neutron
            w0 = -sqr(1.+neutb)/(2.*c*c);
            wm = -sqr(-1.+neutb)/(2.*c*c);
            w0 = std::exp(w0);
@@ -361,91 +361,83 @@ G4HEPionMinusInelastic::FirstIntInCasPionMinus( G4bool &inElastic,
      }
    else
      {
-//                    number of total particles vs. centre of mass Energy - 2*proton mass
+       // number of total particles vs. centre of mass Energy - 2*proton mass
    
        G4double aleab = std::log(availableEnergy);
        G4double n     = 3.62567+aleab*(0.665843+aleab*(0.336514
                     + aleab*(0.117712+0.0136912*aleab))) - 2.0;
    
-//                    normalization constant for kno-distribution.
-//                    calculate first the sum of all constants, check for numerical problems.   
+       // normalization constant for kno-distribution.
+       // calculate first the sum of all constants, check for numerical problems.   
        G4double test, dum, anpn = 0.0;
 
-       for( nt=1; nt<=numSec; nt++ ) 
-         {
-           test = std::exp( Amin( expxu, Amax( expxl, -(pi/4.0)*(nt*nt)/(n*n) ) ) );
-           dum = pi*nt/(2.0*n*n);
-           if( std::fabs(dum) < 1.0 ) 
-             if( test >= 1.0e-10 )anpn += dum*test;
-           else 
-             anpn += dum*test;
+       for (nt=1; nt<=numSec; nt++) {
+         test = std::exp( Amin( expxu, Amax( expxl, -(pi/4.0)*(nt*nt)/(n*n) ) ) );
+         dum = pi*nt/(2.0*n*n);
+         if (std::fabs(dum) < 1.0) { 
+           if( test >= 1.0e-10 )anpn += dum*test;
+         } else { 
+           anpn += dum*test;
          }
+       }
    
        G4double ran = G4UniformRand();
        G4double excs = 0.0;
        if( targetCode == protonCode ) 
          {
            counter = -1;
-           for( np=0; np<numSec/3; np++ ) 
-              {
-                for( nm=Imax(0,np-1); nm<=(np+1); nm++ ) 
-                   {
-                     for( nz=0; nz<numSec/3; nz++ ) 
-                        {
-                          if( ++counter < numMul ) 
-                            {
-                              nt = np+nm+nz;
-                              if( (nt>0) && (nt<=numSec) ) 
-                                {
-                                  test = std::exp( Amin( expxu, Amax( expxl, -(pi/4.0)*(nt*nt)/(n*n) ) ) );
-                                  dum = (pi/anpn)*nt*protmul[counter]*protnorm[nt-1]/(2.0*n*n);
-                                  if( std::fabs(dum) < 1.0 ) 
-                                        if( test >= 1.0e-10 )excs += dum*test;
-                                   else 
-                                        excs += dum*test;
-                                   if (ran < excs) goto outOfLoop;      //----------------------->
-                                }   
-                            }    
-                        }     
-                   }                                                                                  
-              }
+           for (np=0; np<numSec/3; np++) {
+             for (nm=Imax(0,np-1); nm<=(np+1); nm++) {
+               for (nz=0; nz<numSec/3; nz++) {
+                 if (++counter < numMul) {
+                   nt = np+nm+nz;
+                   if ( (nt>0) && (nt<=numSec) ) {
+                     test = std::exp( Amin( expxu, Amax( expxl, -(pi/4.0)*(nt*nt)/(n*n) ) ) );
+                     dum = (pi/anpn)*nt*protmul[counter]*protnorm[nt-1]/(2.0*n*n);
+                     if (std::fabs(dum) < 1.0) { 
+                       if( test >= 1.0e-10 )excs += dum*test;
+                     } else { 
+                       excs += dum*test;
+		     }
+                     if (ran < excs) goto outOfLoop;      //----------------------->
+		   }
+		 }
+	       }
+	     }
+	   }
        
-                                              // 3 previous loops continued to the end
+           // 3 previous loops continued to the end
            inElastic = false;                 // quasi-elastic scattering   
            return;
          }
        else   
          {                                         // target must be a neutron
            counter = -1;
-           for( np=0; np<numSec/3; np++ ) 
-              {
-                for( nm=np; nm<=(np+2); nm++ ) 
-                   {
-                     for( nz=0; nz<numSec/3; nz++ ) 
-                        {
-                          if( ++counter < numMul ) 
-                            {
-                              nt = np+nm+nz;
-                              if( (nt>=1) && (nt<=numSec) ) 
-                                {
-                                  test = std::exp( Amin( expxu, Amax( expxl, -(pi/4.0)*(nt*nt)/(n*n) ) ) );
-                                  dum = (pi/anpn)*nt*neutmul[counter]*neutnorm[nt-1]/(2.0*n*n);
-                                  if( std::fabs(dum) < 1.0 ) 
-                                      if( test >= 1.0e-10 )excs += dum*test;
-                                  else 
-                                      excs += dum*test;
-                                  if (ran < excs) goto outOfLoop;       // -------------------------->
-                                }
-                            }
-                        }
-                   }
-              }
-                                                  // 3 previous loops continued to the end
+           for (np=0; np<numSec/3; np++) {
+             for (nm=np; nm<=(np+2); nm++) {
+               for (nz=0; nz<numSec/3; nz++) {
+                 if (++counter < numMul) {
+                   nt = np+nm+nz;
+                   if ( (nt>=1) && (nt<=numSec) ) {
+                     test = std::exp( Amin( expxu, Amax( expxl, -(pi/4.0)*(nt*nt)/(n*n) ) ) );
+                     dum = (pi/anpn)*nt*neutmul[counter]*neutnorm[nt-1]/(2.0*n*n);
+                     if (std::fabs(dum) < 1.0) { 
+                       if( test >= 1.0e-10 )excs += dum*test;
+                     } else { 
+                       excs += dum*test;
+	             }
+                     if (ran < excs) goto outOfLoop;     // ----------------->
+		   }
+		 }
+	       }
+	     }
+	   }
+           // 3 previous loops continued to the end
            inElastic = false;                     // quasi-elastic scattering.
            return;
          }
      } 
-   outOfLoop:           //  <------------------------------------------------------------------------   
+   outOfLoop:           //  <-----------------------------------------------   
     
    if( targetCode == protonCode)
      {

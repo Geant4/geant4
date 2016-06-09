@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4SemiLogInterpolation.cc,v 1.6 2006/06/29 19:41:18 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
 //

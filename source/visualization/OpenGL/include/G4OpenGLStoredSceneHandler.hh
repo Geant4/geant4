@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredSceneHandler.hh,v 1.24 2007/04/04 16:50:26 allison Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4OpenGLStoredSceneHandler.hh,v 1.27 2008/04/28 16:19:40 allison Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // 
 // Andrew Walkden  10th February 1997
@@ -57,7 +57,7 @@ public:
   virtual ~G4OpenGLStoredSceneHandler ();
   void BeginPrimitives (const G4Transform3D& objectTransformation);
   void EndPrimitives ();
-  void BeginPrimitives2D ();
+  void BeginPrimitives2D (const G4Transform3D& objectTransformation);
   void EndPrimitives2D ();
   void BeginModeling ();
   void EndModeling ();
@@ -86,8 +86,7 @@ protected:
   // PODL = Persistent Object Display List.
   GLint  fTopPODL;                  // List which calls the other PODLs.
   struct PO {
-    PO(G4int id, const G4Transform3D& tr = G4Transform3D()):
-      fDisplayListId(id), fTransform(tr), fPickName(0) {}
+    PO(G4int id, const G4Transform3D& tr = G4Transform3D());
     G4int fDisplayListId;
     G4Transform3D fTransform;
     GLuint fPickName;
@@ -96,9 +95,7 @@ protected:
   
   // TO = Transparent Object.
   struct TO {
-    TO(G4int id, const G4Transform3D& tr = G4Transform3D()):
-      fDisplayListId(id), fTransform(tr), fPickName(0),
-      fStartTime(-G4OPENGL_DBL_MAX), fEndTime(G4OPENGL_DBL_MAX) {}
+    TO(G4int id, const G4Transform3D& tr = G4Transform3D());
     G4int fDisplayListId;
     G4Transform3D fTransform;
     GLuint fPickName;
@@ -110,9 +107,6 @@ protected:
   // Stop-gap solution of structure re-use.
   // A proper implementation would use geometry hierarchy.
   std::map <const G4VSolid*, G4int, std::less <const G4VSolid*> > fSolidMap;
-
-private:
-  G4bool fProcessing2D;
 };
 
 #endif

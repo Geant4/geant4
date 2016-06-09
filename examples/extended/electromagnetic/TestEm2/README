@@ -1,4 +1,4 @@
-$Id: README,v 1.23 2006/05/15 14:38:40 maire Exp $
+$Id: README,v 1.26 2008/10/23 13:08:23 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -35,15 +35,27 @@ $Id: README,v 1.23 2006/05/15 14:38:40 maire Exp $
      eg: /testem/det/setField 5 tesla 
      
  2- PHYSICS LISTS
-
-    Modular PhysicsList are used. The following modules can be activated:
-    1. "standard"    - (alternative) standard EM physics
-    2. "g4v52"       - (alternative) standard EM physics version G4 5.2
-    3. "high_energy" - add high energy processes
-
-    To activate a specific module the UI command can be used:
-    "/testem/phys/addPhysics  title"
-    By default "standard" module is loaded.
+ 
+    Physics lists can be local (eg. in this example) or from G4 kernel
+    physics_lists subdirectory.
+     
+    Local physics lists:	 
+    - "standard"	standard EM physics with current 'best' options setting.
+                        these options are explicited in PhysListEmStandard
+    - "livermore"       low-energy EM physics using Livermore data
+    - "penelope"        low-energy EM physics implementing Penelope models
+    
+    From geant4/source/physics_lists/builders:	 
+    - "emstandard"      recommended standard EM physics for LHC
+    - "emstandard_opt1" best CPU performance standard physics for LHC
+    - "emstandard_opt2"     
+    - "emstandard_opt3" 
+    
+    Physics lists and options can be (re)set with UI commands
+    
+    Please, notice that options set through G4EmProcessOPtions are global, eg
+    for all particle types. In G4 builders, it is shown how to set options per
+    particle type.
 
  3- AN EVENT : THE PRIMARY GENERATOR
 
@@ -126,7 +138,7 @@ $Id: README,v 1.23 2006/05/15 14:38:40 maire Exp $
    "/testem/histo/setFileType type"
 
  The following types are available: "hbook", "root", "XML"
- By default the name is "testem2" and the type "hbook".
+ By default the name is "testem2" and the type "root".
  
  Before compilation of the example it is optimal to clean up old files:
   	gmake histclean
@@ -135,45 +147,5 @@ $Id: README,v 1.23 2006/05/15 14:38:40 maire Exp $
  8- USING HISTOGRAMS
 
   To use histograms, at least one of the AIDA implementations should be 
-  available (see http://aida.freehep.org).
+  available. See InstallAida.txt
   
- 8a - PI 
-
-  A package including AIDA and extended interfaces also using Python is PI, 
-  available from: http://cern.ch/pi
-
-  Once installed PI or PI-Lite in a specified local area $MYPY, it is required 
-  to add the installation path to $PATH, i.e. for example, for release 1.2.1 of 
-  PI:
-  setenv PATH ${PATH}:$MYPI/1.2.1/app/releases/PI/PI_1_2_1/rh73_gcc32/bin
-
-  CERN users can use the PATH to the LCG area on AFS.
-  Before running the example the command should be issued:
-  eval `aida-config --runtime csh`
-
- 8b -  OpenScientist
-
-  OpenScientist is available at http://OpenScientist.lal.in2p3.fr.
-
-  You have to "setup" the OpenScientist AIDA implementation before compiling
-  (then with G4ANALYSIS_USE set) and running your Geant4 application.
-
- On UNIX you setup, with a csh flavoured shell : 
-	csh> source <<OpenScientist install path>/aida-setup.csh 
-        or with a sh flavoured shell : 
-	sh> . <<OpenScientist install path>/aida-setup.sh
- On Windows : 
-	DOS> call <<OpenScientist install path>/aida-setup.bat 
-
-  You can use various file formats for writing (AIDA-XML, hbook, root).
-  These formats are readable by the Lab onx interactive program
-  or the OpenPAW application. See the web pages.
-
-
-  With OpenPAW, on a run.hbook file, one can view the histograms
-  with something like :
-	OS> opaw 
-        opaw> h/file 1 run.hbook  ( or opaw> h/file 1 run.aida or run.root)  
-	opaw> zone 2 2 
-	opaw> h/plot 1 
-	opaw> h/plot 2

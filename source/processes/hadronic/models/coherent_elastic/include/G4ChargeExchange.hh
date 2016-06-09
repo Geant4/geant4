@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ChargeExchange.hh,v 1.3 2006/08/02 10:55:54 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4ChargeExchange.hh,v 1.4 2008/11/19 18:28:36 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 //
 // G4 Model: Charge and strangness exchange based on G4LightMedia model
@@ -49,17 +49,12 @@
 #include "G4Nucleus.hh"
 
 class G4ParticleDefinition;
-class G4VQCrossSection;
-class G4ElasticHadrNucleusHE;
-class G4HadronElastic;
 
 class G4ChargeExchange : public G4HadronicInteraction
 {
 public:
 
-  G4ChargeExchange(G4HadronElastic* hel = 0,
-                   G4double elim = 100.*keV,
-		   G4double ehigh= GeV);
+  G4ChargeExchange();
 
   virtual ~G4ChargeExchange();
 
@@ -67,16 +62,13 @@ public:
                    const G4HadProjectile & aTrack,
                    G4Nucleus & targetNucleus);
 
-  void SetKinEnergyLow(G4double value);
+  void SetLowestEnergyLimit(G4double value);
 
-  void SetKinEnergyHigh(G4double value);
+  void SetRecoilKinEnergyLimit(G4double value);
+
+  G4double SampleT(G4double p, G4double A);
 
 private:
-
-  G4VQCrossSection*           qCManager;
-  G4ElasticHadrNucleusHE*     hElastic;
-  G4HadronElastic*            fElastic;
-  G4bool                      native;
 
   G4ParticleDefinition* theProton;
   G4ParticleDefinition* theNeutron;
@@ -108,19 +100,19 @@ private:
   G4ParticleDefinition* theA;
   G4ParticleDefinition* theHe3;
 
-  G4double ekinlim;  
-  G4double ekinlow;  
-  G4double ekinhigh;  
+  G4double lowEnergyRecoilLimit;
+  G4double lowestEnergyLimit;
+
 };
 
-inline void G4ChargeExchange::SetKinEnergyLow(G4double value)
+inline void G4ChargeExchange::SetRecoilKinEnergyLimit(G4double value)
 {
-  ekinlow = value;
+  lowEnergyRecoilLimit = value;
 }
 
-inline void G4ChargeExchange::SetKinEnergyHigh(G4double value)
+inline void G4ChargeExchange::SetLowestEnergyLimit(G4double value)
 {
-  ekinhigh = value;
+  lowestEnergyLimit = value;
 }
 
 #endif

@@ -25,8 +25,8 @@
 //
 // 
 // -------------------------------------------------------------------
-// $Id: G4PenelopeBremsstrahlungContinuous.hh,v 1.3 2006/06/29 19:36:19 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4PenelopeBremsstrahlungContinuous.hh,v 1.4 2008/12/09 15:04:05 pandola Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // Author: L.Pandola
 //
@@ -34,6 +34,8 @@
 // -----------
 // 20 Feb 2003  L. Pandola       1st implementation
 // 17 Mar 2003  L. Pandola       Added the correction for positrons
+// 09 Dec 2008  L. Pandola       Cosmetics: say what variables are
+// 
 // Class description:
 // Calculation of continuous energy loss for Penelope Bremsstrahlung
 // It is used both for electrons and positrons
@@ -53,13 +55,13 @@ private:
 
 public:
  
-  G4PenelopeBremsstrahlungContinuous(G4int Zmat,G4double tCut, G4double emin, G4double emax,
-				     const G4String partName); 
+  G4PenelopeBremsstrahlungContinuous(G4int Z,G4double energyCut, G4double energyMin, 
+				     G4double energyMax,
+				     const G4String particleName); 
   ~G4PenelopeBremsstrahlungContinuous();
-  G4double CalculateStopping(G4double PrimaryEnergy);
+  G4double CalculateStopping(G4double energy);
  
 private:
-
   void PrepareInterpolationTable();
   void LoadFromFile();
   G4double PositronCorrection(G4double energy); //correction function for positrons
@@ -74,7 +76,7 @@ private:
   G4double TotalCS[NumberofEPoints];
   G4double ExtendedLogEnergy[NumberofExtendedEGrid];
   G4double p0[NumberofExtendedEGrid][NumberofKPoints];
-  //G4double Pbcut[NumberofExtendedEGrid]; //serve?
+  //G4double Pbcut[NumberofExtendedEGrid]; //useful?
 };
 
 

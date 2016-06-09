@@ -1,0 +1,70 @@
+macro sandia.kumac
+*
+set * ; opt * 
+*
+filecase keep
+
+set *fon -40
+set mscf 1.5
+
+set ygti 0.5  ; set gsiz 0.35 ; set ymgu 1.5
+set vsiz 0.25 ; set yval 0.3  ; set ylab 0.55
+set asiz 0.25 ; set yhti 0.9  ; set xlab 1.2
+* 
+title 'Depth dose distribution of 1033 keV e- in Al'
+*
+h/file 1 al.1033kev.hbook
+*
+h/list
+*
+opt liny
+*
+set dmod 1 ; set hcol 1 ; set plci 1
+h/pl //lun1/8
+key 0.6 3.0 1 'G4 9.1-cand-01' ! l
+atitle 'x/r0' 'MeV*cm**2/g'
+
+* *** data
+* G.J.Lockwood et al.
+*     Sandia report SAND79-0414.UC-34a, February 1987
+* O.Kadri et al. NIM B 258 (2007) 381
+*
+fname = 'data/Al_1033keV.ascii'
+vector/create nb(1)
+vector/read nb [fname] ! 'O'
+nbin = nb(1)
+vector/create vect(2,[nbin])
+vector/read vect [fname] ! 'C'
+***vector/write vect ! (1x,f6.4,3x,f5.3)
+
+set mtyp 22
+set pmci 2
+graph [nbin] vect(1) vect(2)  P
+
+vector/create xmark(1)
+vector/create mark(1)
+vector/input xmark 0.57
+vector/input mark  2.85
+graph 1 xmark mark P
+itx   0.64 2.8 'Sandia data'
+			           
+exec Redraw-Axis
+
+return
+
+Macro Redraw-Axis
+set plci 1
+   X1 = $GRAFINFO('WNXMIN')
+   X2 = $GRAFINFO('WNXMAX')
+   Y1 = $GRAFINFO('WNYMIN')
+   Y2 = $GRAFINFO('WNYMAX')
+   IS = $GRAFINFO('?FAIS')
+   IC = $GRAFINFO('?FACI')
+   Set FAIS 0 ; Set FACI 1
+   Box [X1] [X2] [Y1] [Y2]
+   Set FAIS [IS] ; Set FACI [IC]
+   Tick XL [X1] !
+*   Tick YB ! [Y1]
+   Return
+
+

@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RunAction.cc,v 1.9 2006/12/08 16:38:38 maire Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: RunAction.cc,v 1.10 2007/12/17 17:22:44 maire Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -58,7 +58,11 @@ void RunAction::BeginOfRunAction(const G4Run*)
 {
   //set precision for printing
   G4int prec = G4cout.precision(6);
-   
+  
+  //instanciate EmCalculator
+  G4EmCalculator emCal;
+  //  emCal.SetVerbose(2);
+     
   // get particle 
   G4ParticleDefinition* particle = primary->GetParticleGun()
                                           ->GetParticleDefinition();
@@ -76,7 +80,7 @@ void RunAction::BeginOfRunAction(const G4Run*)
          << G4BestUnit(energy,"Energy") << ") in " 
 	 << material->GetName() << " (density: " 
 	 << G4BestUnit(density,"Volumic Mass") << ";   radiation length: "
-	 << G4BestUnit(radl,   "Length")       << ")" << G4endl;	 
+	 << G4BestUnit(radl,   "Length")       << ")" << G4endl;
 
   // get cuts	 
   GetCuts();
@@ -89,7 +93,20 @@ void RunAction::BeginOfRunAction(const G4Run*)
 	  << "\t e- " << std::setw(8) << G4BestUnit(energyCut[1],"Energy")
 	  << G4endl;
    }
-   	  
+   
+  // max energy transfert
+  if (charge != 0.) {
+  G4double Mass_c2 = particle->GetPDGMass();
+  G4double moverM = electron_mass_c2/Mass_c2;
+  G4double gamM1 = energy/Mass_c2, gam = gamM1 + 1., gamP1 = gam + 1.;
+  G4double Tmax = 
+            (2*electron_mass_c2*gamM1*gamP1)/(1.+2*gam*moverM+moverM*moverM);
+  G4double range = emCal.GetCSDARange(Tmax,G4Electron::Electron(),material);
+  
+  G4cout << "\n Max_energy _transferable : " << G4BestUnit(Tmax,"Energy")
+         << " (" << G4BestUnit(range,"Length") << ")" << G4endl;   	    
+  }
+     	  
   // get processList and extract EM processes (but not MultipleScattering)
   G4ProcessVector* plist = particle->GetProcessManager()->GetProcessList();
   G4String procName;
@@ -113,10 +130,6 @@ void RunAction::BeginOfRunAction(const G4Run*)
   for (size_t j=0; j<emName.size();j++)
     G4cout << "\t" << std::setw(13) << emName[j] << "\t";
   G4cout << "\t" << std::setw(13) <<"total";
-      
-  //instanciate EmCalculator
-  G4EmCalculator emCal;
-  //  emCal.SetVerbose(2);
   
   //compute cross section per atom (only for single material)
   if (material->GetNumberOfElements() == 1) {

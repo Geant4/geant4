@@ -149,8 +149,8 @@ G4CollisionOutput G4Fissioner::collide(G4InuclParticle* /*bullet*/,
       std::pair<G4double, G4double> COS_SIN = randomCOS_SIN();
       G4double Fi = randomPHI();
       G4double P1 = pmod * COS_SIN.second;
-      std::vector<G4double> mom1(4);
-      std::vector<G4double> mom2(4);
+      G4CascadeMomentum mom1;
+      G4CascadeMomentum mom2;
 
       mom1[1] = P1 * std::cos(Fi);
       mom1[2] = P1 * std::sin(Fi);

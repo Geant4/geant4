@@ -93,11 +93,7 @@ void F04Materials::CreateMaterials()
   elements.push_back("C");     natoms.push_back(9);
   elements.push_back("H");     natoms.push_back(10);
 
-  // density = 1.032*g/cm3; 
-  // ==> when using ConstructNewMaterial give the density in g/cm3
-  // ==> but do NOT multiply by the unit!!!
-
-  density = 1.032;
+  density = 1.032*g/cm3;;
 
   Sci = nistMan->
           ConstructNewMaterial("Scintillator", elements, natoms, density);

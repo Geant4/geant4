@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eBremsstrahlungModel.hh,v 1.22 2007/05/23 08:47:34 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4eBremsstrahlungModel.hh,v 1.25 2008/11/13 19:28:58 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // -------------------------------------------------------------------
 //
@@ -68,7 +68,7 @@ class G4eBremsstrahlungModel : public G4VEmModel
 public:
 
   G4eBremsstrahlungModel(const G4ParticleDefinition* p = 0, 
-			 const G4String& nam = "StandBrem");
+			 const G4String& nam = "eBrem");
 
   virtual ~G4eBremsstrahlungModel();
 
@@ -99,12 +99,6 @@ public:
 				 const G4DynamicParticle*,
 				 G4double tmin,
 				 G4double maxEnergy);
-
-  inline void SetLPMflag(G4bool val);
-  inline G4bool LPMflag() const;
-
-  inline void SetEnergyThreshold(G4double val);
-  inline G4double EnergyThreshold() const;
 
 protected:
 
@@ -153,8 +147,6 @@ private:
   G4double probsup;
   G4double MigdalConstant;
   G4double LPMconstant;
-  G4double highEnergyTh;
-  G4bool   theLPMflag;
   G4bool   isInitialised;
 
   std::vector<G4DataVector*> partialSumSigma;
@@ -204,38 +196,6 @@ G4double G4eBremsstrahlungModel::MaxSecondaryEnergy(
     				       G4double kineticEnergy)
 {
   return kineticEnergy;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline 
-void G4eBremsstrahlungModel::SetLPMflag(G4bool val) 
-{
-  theLPMflag = val;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline 
-G4bool G4eBremsstrahlungModel::LPMflag() const 
-{
-  return theLPMflag;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline 
-void G4eBremsstrahlungModel::SetEnergyThreshold(G4double val) 
-{
-  highEnergyTh = val;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline 
-G4double G4eBremsstrahlungModel::EnergyThreshold() const 
-{
-  return highEnergyTh;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

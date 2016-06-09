@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HadrontherapyProtonPrecompound.cc; May 2005
+// $Id: HadrontherapyProtonPrecompound.cc; November 2008
 // ----------------------------------------------------------------------------
 //                 GEANT 4 - Hadrontherapy example
 // ----------------------------------------------------------------------------
@@ -89,7 +89,6 @@ void HIIonLEP::ConstructProcess()
   deuteronLEPModel -> SetMaxEnergy(ionLEPMaxEnergy);
 
   deuteronInelasticProcess -> AddDataSet(ionTripathiCrossSection);
-  deuteronInelasticProcess -> AddDataSet(ionShenCrossSection);
   deuteronInelasticProcess -> RegisterMe(deuteronLEPModel);
 
   particle = G4Deuteron::Deuteron();
@@ -107,7 +106,6 @@ void HIIonLEP::ConstructProcess()
   tritonLEPModel -> SetMaxEnergy(ionLEPMaxEnergy);
 
   tritonInelasticProcess -> AddDataSet(ionTripathiCrossSection);
-  tritonInelasticProcess -> AddDataSet(ionShenCrossSection);
   tritonInelasticProcess -> RegisterMe(tritonLEPModel);
 
   particle = G4Triton::Triton();
@@ -125,7 +123,6 @@ void HIIonLEP::ConstructProcess()
   alphaLEPModel -> SetMaxEnergy(ionLEPMaxEnergy);
  
   alphaInelasticProcess -> AddDataSet(ionTripathiCrossSection);
-  alphaInelasticProcess -> AddDataSet(ionShenCrossSection);
   alphaInelasticProcess -> RegisterMe(alphaLEPModel);
  
   particle = G4Alpha::Alpha();

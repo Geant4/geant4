@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: F02FieldMessenger.hh,v 1.4 2006/06/29 17:17:20 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: F02FieldMessenger.hh,v 1.6 2008/05/14 15:27:01 tnikitin Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // 
 
@@ -42,6 +42,7 @@ class F02ElectricFieldSetup;
 class G4UIdirectory;
 class G4UIcmdWithAString;
 class G4UIcmdWithAnInteger;
+class G4UIcmdWithADouble;
 class G4UIcmdWithADoubleAndUnit;
 class G4UIcmdWithoutParameter;
 
@@ -62,7 +63,7 @@ class F02FieldMessenger: public G4UImessenger
     G4UIdirectory*             F02detDir;
 
     G4UIcmdWithAnInteger*      StepperCmd;
-    G4UIcmdWithADoubleAndUnit* MagFieldCmd;
+    G4UIcmdWithADoubleAndUnit* ElFieldCmd;
     G4UIcmdWithADoubleAndUnit* MinStepCmd;
     G4UIcmdWithoutParameter*   UpdateCmd;
 

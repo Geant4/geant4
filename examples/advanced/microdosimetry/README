@@ -1,0 +1,140 @@
+-------------------------------------------------------------------
+$Id: README,v 1.5 2008/06/11 11:56:16 sincerti Exp $
+-------------------------------------------------------------------
+
+     =========================================================
+ 		  Geant4 - Microdosimetry example
+     =========================================================
+
+                                README file
+                          ----------------------
+
+                           CORRESPONDING AUTHOR 
+
+S. Incerti (a, *) et al.
+a. Centre d'Etudes Nucleaires de Bordeaux-Gradignan 
+(CENBG), IN2P3 / CNRS / Bordeaux 1 University, 33175 Gradignan, France
+* e-mail:incerti@cenbg.in2p3.fr
+
+Last modified by S. Incerti, 27/02/2007
+
+---->0. INTRODUCTION.                                                    
+                                                                       
+The microdosimetry example simulates the track of a 10 keV Helium+ (positive
+charge is +e) particle in liquid water using only G4DNA processes.
+
+---->1. GEOMETRY SET-UP.
+ 
+The geometry is a 1 mm side cube of liquid water.
+
+---->2. SET-UP 
+                                                                        
+- a standard Geant4 example GNUmakefile is provided                     
+
+setup with:                                                             
+compiler = gcc-3.4.6
+G4SYSTEM = linux-g++                                                    
+
+The following section gives the necessary environment variables.                     
+
+------->>2.1  ENVIRONMENT VARIABLES
+
+All variables are defined with their default value.
+
+ - G4SYSTEM = Linux-g++
+
+ - G4INSTALL              points to the installation directory of GEANT4;
+
+ - G4LIB                  point to the compiled libraries of GEANT4;
+
+ - G4WORKDIR              points to the work directory;
+
+ - CLHEP_BASE_DIR         points to the installation directory of CHLEP; 
+
+ - G4LEDATA               points to the low energy electromagnetic libraries;
+
+ - LD_LIBRARY_PATH = $CLHEP_BASE_DIR/lib
+
+ - G4LEVELGAMMADATA       points to the photoevaporation library;
+
+ - NeutronHPCrossSections points to the neutron data files;
+
+ - G4RADIOACTIVEDATA      points to the libraries for radio-active decay 
+                          hadronic processes;
+ 
+However, the $G4LEVELGAMMADATA, $NeutronHPCrossSections and $G4RADIOACTIVEDATA
+variables do not need to be defined for this example.
+
+Once these variables have been set, simply type gmake to compile the
+Microdosimetry example. 
+
+------->>2.2  VISUALIZATION
+
+Visualization is not activated by default.
+
+---->3. HOW TO RUN THE EXAMPLE                                         
+
+In interactive mode, run:
+
+> $G4WORDIR/bin/$G4SYSTEM/Microdosimetry
+
+The macro microdosimetry.mac is executed by default. 
+
+To get visualization, make sure to uncomment the /vis/... lines in the macro.
+
+---->4. PHYSICS
+
+This example shows how to use the Geant4 DNA processes AND how to affect them a
+name.
+
+Look at the PhyscisList.cc file.
+
+Note that the G4CrossSectionElasticScreenedRutherford.cc is put in the src
+directory with an increased (10 eV instead of 7 eV) lower limit of the model energy range to
+avoid an energy region where electrons do not lose any energy and may undergo
+elastic scattering without limit.
+
+Same remark for the G4CrossSectionExcitationEmfietzoglou.cc file whre the lower
+limit has been set to 10 eV instead of 7.4 eV.
+
+
+---->5. SIMULATION OUTPUT AND RESULT ANALYZIS                                    
+
+This example does not need any external analysis package. 
+The output results consists in a track.txt file, containing at each line :
+- the type of particle for the current step
+- the type of process for the current step
+- the track position of the current step (in nanometers)
+
+This file can be easily analyzed using for example the provided ROOT macro 
+file plot.C; to do so :
+* be sure to have ROOT installed on your machine
+* be sure to be in the microdosimetry directory
+* launch ROOT by typing root
+* under your ROOT session, type in : .X plot.C to execute the macro file
+
+The naming scheme on the displayed ROOT plots is as follows (see SteppingAction.cc):
+
+-particles:
+e-       : 1    
+proton   : 2
+hydrogen : 3
+alpha    : 4
+alpha+   : 5
+helium   : 6
+
+-processes:
+ElasticBrennerZaider 		: 11
+ElasticScreenedRutherford 	: 12
+ExcitationBorn 			: 13
+ExcitationEmfietzoglou 		: 14
+ExcitationMillerGreen 		: 15
+IonisationBorn 			: 16
+IonisationRudd 			: 17
+ChargeDecrease 			: 18
+ChargeIncrease 			: 19
+
+---------------------------------------------------------------------------
+
+Should you have any enquiry, please do not hesitate to contact: 
+incerti@cenbg.in2p3.fr

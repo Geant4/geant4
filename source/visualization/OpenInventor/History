@@ -1,4 +1,4 @@
-$Id: History,v 1.94 2007/10/23 14:56:35 gcosmo Exp $
+$Id: History,v 1.96 2008/04/30 10:05:31 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,12 @@ committal in the CVS repository !
 
 History file for visualization/OpenInventor
 -------------------------------------------
+
+30th April 2008  John Allison  (openinventor-V09-01-01)
+- Fixes more gcc-4.3.0 compiler warnings.
+
+4th April 2008  John Allison  (openinventor-V09-01-00)
+- Fixes most gcc-4.3.0 compiler warnings.
 
 23rd October 2007  Gabriele Cosmo
 - Initialise local vectors in SoPolyhedron.cc to fix compilation warnings

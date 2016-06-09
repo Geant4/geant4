@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 // 
-// $Id: PhysicsList.cc,v 1.5 2006/08/17 13:50:45 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: PhysicsList.cc,v 1.7 2008/11/16 22:14:35 maire Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -179,10 +179,24 @@ void PhysicsList::ConstructProcess()
   
   // Em options
   //
+  // Main options and setting parameters are shown here.
+  // Several of them have default values.
+  //
   G4EmProcessOptions emOptions;
-  emOptions.SetBuildCSDARange(true);
+  
+  //physics tables
+  //
+  emOptions.SetMinEnergy(100*eV);	//default    
+  emOptions.SetMaxEnergy(100*TeV);	//default  
+  emOptions.SetDEDXBinning(12*20);	//default=12*7  
+  emOptions.SetLambdaBinning(12*20);	//default=12*7
+
+  emOptions.SetBuildCSDARange(true);     
   emOptions.SetMaxEnergyForCSDARange(100*TeV);
-  emOptions.SetDEDXBinningForCSDARange(120);
+  emOptions.SetDEDXBinningForCSDARange(12*20);
+  
+  emOptions.SetSplineFlag(true);	//default
+     
   emOptions.SetVerbose(0);  
 }
 
@@ -217,7 +231,10 @@ void PhysicsList::AddPhysicsList(const G4String& name)
 #include "G4Positron.hh"
 
 void PhysicsList::SetCuts()
-{    
+{ 
+  // fixe lower limit for cut
+  G4ProductionCutsTable::GetProductionCutsTable()->SetEnergyRange(100*eV, 1*GeV);
+  
   // set cut values for gamma at first and for e- second and next for e+,
   // because some processes for e+/e- need cut values for gamma
   SetCutValue(cutForGamma, "gamma");

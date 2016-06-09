@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProcessPlacer.cc,v 1.4 2007/10/31 18:05:44 ahoward Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4ProcessPlacer.cc,v 1.5 2008/04/21 09:10:29 ahoward Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // $Id: TiaraGeometry.cc,v 1.5 2006/06/29 15:45:03 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 
 #include "TiaraGeometry.hh"

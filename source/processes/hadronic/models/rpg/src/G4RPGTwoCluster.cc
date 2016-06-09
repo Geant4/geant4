@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4RPGTwoCluster.cc,v 1.2 2007/08/15 20:38:48 dennis Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4RPGTwoCluster.cc,v 1.5 2008/06/09 18:13:35 dennis Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 
 #include "G4RPGTwoCluster.hh"
@@ -127,7 +127,7 @@ ReactionStage(const G4HadProjectile* originalIncident,
   G4double backwardMass = targetParticle.GetMass()/GeV;
   G4double bMass = backwardMass;
 
-  G4int backwardNucleonCount = 1;  // number of nucleons in backward hemisphere
+  //  G4int backwardNucleonCount = 1;  // number of nucleons in backward hemisphere
     
   for( i=0; i<vecLen; ++i )
   {
@@ -162,9 +162,9 @@ ReactionStage(const G4HadProjectile* originalIncident,
   G4int nuclearExcitationCount = G4Poisson( xtarg );
 
   if(atomicWeight<1.0001) nuclearExcitationCount = 0;
-  G4int extraNucleonCount = 0;
-  G4double extraMass = 0.0;
-  G4double extraNucleonMass = 0.0;
+  //  G4int extraNucleonCount = 0;
+  //  G4double extraMass = 0.0;
+  //  G4double extraNucleonMass = 0.0;
   if( nuclearExcitationCount > 0 )
   {
     G4int momentumBin = std::min( 4, G4int(pOriginal/3.0) );     
@@ -182,9 +182,9 @@ ReactionStage(const G4HadProjectile* originalIncident,
           pVec->SetDefinition( aProton );
         else
           pVec->SetDefinition( aNeutron );
-        ++backwardNucleonCount;
-        ++extraNucleonCount;
-        extraNucleonMass += pVec->GetMass()/GeV;
+	// Not used        ++backwardNucleonCount;
+	// Not used        ++extraNucleonCount;
+	// Not used        extraNucleonMass += pVec->GetMass()/GeV;
       }
       else
       {                                       // add a pion
@@ -195,15 +195,22 @@ ReactionStage(const G4HadProjectile* originalIncident,
           pVec->SetDefinition( aPiZero );
         else
           pVec->SetDefinition( aPiMinus );
+
+	// DHW: add following two lines to correct energy balance
+	//        ++backwardCount;
+	//        backwardMass += pVec->GetMass()/GeV;
       }
       pVec->SetSide( -2 );    // backside particle
-      extraMass += pVec->GetMass()/GeV;
+      // Not used     extraMass += pVec->GetMass()/GeV;
       pVec->SetNewlyAdded( true );
       vec.SetElement( vecLen++, pVec );
     }
   }
 
-  // Masses of particles added from cascade not included in energy balance
+  // Masses of particles added from cascade not included in energy balance.
+  // That's correct for nucleons from the intra-nuclear cascade but not for 
+  // pions from the cascade.
+ 
   G4double forwardEnergy = (centerofmassEnergy-cMass-bMass)/2.0 +cMass - forwardMass;
   G4double backwardEnergy = (centerofmassEnergy-cMass-bMass)/2.0 +bMass - backwardMass;
   G4double eAvailable = centerofmassEnergy - (forwardMass+backwardMass);
@@ -778,13 +785,13 @@ ReactionStage(const G4HadProjectile* originalIncident,
 
     const G4double pnCutOff = 0.001;     // GeV
     const G4double dtaCutOff = 0.001;    // GeV
-    const G4double kineticMinimum = 1.e-6;
-    const G4double kineticFactor = -0.005;
+    //    const G4double kineticMinimum = 1.e-6;
+    //    const G4double kineticFactor = -0.005;
       
-    G4double sprob = 0.0;   // sprob = probability of self-absorption in 
+    //    G4double sprob = 0.0;   // sprob = probability of self-absorption in 
                             // heavy molecules
-    const G4double ekIncident = originalIncident->GetKineticEnergy()/GeV;
-    if( ekIncident >= 5.0 )sprob = std::min( 1.0, 0.6*std::log(ekIncident-4.0) );
+    // Not currently used (DHW 9 June 2008)  const G4double ekIncident = originalIncident->GetKineticEnergy()/GeV;
+    //    if( ekIncident >= 5.0 )sprob = std::min( 1.0, 0.6*std::log(ekIncident-4.0) );
       
     if( epnb >= pnCutOff )
     {
@@ -802,8 +809,7 @@ ReactionStage(const G4HadProjectile* originalIncident,
 
     // DEBUGGING --> DumpFrames::DumpFrame(vec, vecLen);
 
-    AddBlackTrackParticles(epnb, npnb, edta, ndta, sprob, kineticMinimum, 
-                           kineticFactor, modifiedOriginal, 
+    AddBlackTrackParticles(epnb, npnb, edta, ndta, modifiedOriginal, 
                            PinNucleus, NinNucleus, targetNucleus,
                            vec, vecLen );
     // DEBUGGING --> DumpFrames::DumpFrame(vec, vecLen);

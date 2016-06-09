@@ -27,7 +27,7 @@
 #define G4QPomeron_h 1
 //
 // $Id: G4QPomeron.hh,v 1.2 2006/12/12 11:02:22 mkossov Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file

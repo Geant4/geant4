@@ -18,9 +18,9 @@
 # you may fetch it yourself from your nearest archive site.)
 #
 
-# $Id: Configure,v 1.103 2007/11/28 13:49:23 bmorgan Exp $
+# $Id: Configure,v 1.110 2008/12/03 15:34:57 bmorgan Exp $
 #
-# Generated on Wed Nov 28 13:43:54 GMT 2007 [metaconfig 3.0 PL70]
+# Generated on Wed Dec  3 15:33:49 GMT 2008 [metaconfig 3.0 PL70]
 
 cat >/tmp/c1$$ <<EOF
 WARNING!!!!!
@@ -142,6 +142,12 @@ hint=''
 myuname=''
 osname=''
 osvers=''
+g4_qt_cxxflags=''
+g4_qt_gl_cxxflags=''
+g4_qt_gl_libs=''
+g4_qt_libs=''
+g4_qt_moc=''
+g4_qt_version=''
 Author=''
 Date=''
 Header=''
@@ -205,7 +211,6 @@ g4ui_xawlibs=''
 g4vis_xmflags=''
 g4vis_xmhome=''
 g4vis_xmlibs=''
-g4_qthome=''
 g4ui_build_qt_session=''
 g4ui_use_qt=''
 g4vis_build_asciitree_driver=''
@@ -293,11 +298,10 @@ g4_qthome=''
 #INITIALIZE QT UI OPTIONS
 g4ui_build_qt_session='n'
 g4ui_use_qt='n'
-g4_qthome=''
 #END QT UI OPTIONS
 #INITIALIZE QT VIS DRIVER OPTIONS
 g4vis_build_openglqt_driver='n'
-g4ui_use_openglqt='n'
+g4vis_use_openglqt='n'
 #END QT VIS DRIVER OPTIONS
 
 : Find the basic shell for Bourne shell scripts
@@ -1139,6 +1143,7 @@ $eunicefix loc
 loclist="
 awk
 cat
+echo
 expr
 grep
 rm
@@ -2226,6 +2231,376 @@ case "$cf_by" in
 	esac ;;
 esac
 
+cat <<EOSC >qt
+$startsh
+#
+# Autoconf(ish) style check for Qt headers, libraries and moc application
+#
+
+#
+# These are variables that the final unit generated script may use
+#
+with_qt_dir="\$qt_search_dir"
+
+#
+# Only run if we haven't succesfully found Qt already
+#
+if test "x\$g4_qt_is_configured" = "x" ; then
+    #
+    # Flag specifying if we've configured Qt o.k.
+    #
+    g4_qt_is_configured="yes" # Optimism
+
+    # Flag to be set if any part of configuration fails
+    g4_havegoodqt="yes" # Optimism
+
+    # Qt4 flag
+    g4_is_qt4="no"
+
+    # Variables to be set
+    g4_qt_include_dir=''
+    g4_qt_lib_dir=''
+    g4_qt_moc=''
+
+    g4_qt_version=''
+    g4_qt_cxxflags=''
+    g4_qt_gl_cxxflags=''
+    g4_qt_libs=''
+    g4_qt_gl_libs=''
+
+    #
+    # User may supply a value for 'QTDIR' and in that case we ASSUME a
+    # Trolltech style installation or a Mac Framework
+    #
+    if test "x\$with_qt_dir" != "x" ; then
+        g4_qt_dir="\$with_qt_dir"
+        g4_qt_possible_qt_include_dirs="\$with_qt_dir/include/QtCore
+                                        \$with_qt_dir/include/Qt 
+                                        \`ls -dr \$with_qt_dir/include/qt*/QtCore 2>/dev/null\` 
+                                        \`ls -dr \$with_qt_dir/include/qt*/Qt 2>/dev/null\` 
+                                        \`ls -dr \$with_qt_dir/include/qt* 2>/dev/null\` 
+                                        \$with_qt_dir/include
+                                        \$with_qt_dir/QtCore.framework/Headers"
+
+        # Check for qglobal.h
+        g4_qglobal_loc=\`./loc qglobal.h no \$g4_qt_possible_qt_include_dirs\`
+
+        if test "x\$g4_qglobal_loc" = "xno" ; then
+            g4_havegoodqt=no
+            g4_qt_include_dir=no
+        fi
+        echo "checking for qglobal.h... \$g4_qglobal_loc"
+
+        if test "x\$g4_qglobal_loc" != "xno" ; then
+            g4_qt_include_dir="\`dirname \$g4_qglobal_loc\`"
+        fi
+
+    else
+        # We use standard search paths...
+        qt_direct_test_header="qglobal.h"
+
+        g4_qt_include_path_list="
+            \`ls -dr /Library/Frameworks/QtCore.framework/Headers 2>/dev/null\` 
+            \`ls -dr /System/Library/Frameworks/QtCore.framework/Headers 2>/dev/null\`
+            /usr/include/QtCore
+            \`ls -dr /usr/include/qt*/QtCore 2>/dev/null\`
+	    \`ls -dr /usr/local/include/QtCore 2>/dev/null\`
+            \`ls -dr /usr/local/include/qt*/QtCore 2>/dev/null\`
+	    \`ls -dr /usr/local/qt*/include/QtCore 2>/dev/null\` 
+            \`ls -dr /opt/qt*/include/QtCore 2>/dev/null\` 
+            \`ls -dr /usr/qt*/include/QtCore 2>/dev/null\`
+            \`ls -dr /usr/qt/*/include/QtCore 2>/dev/null\` 
+            \`ls -dr /usr/include/qt/*/QtCore 2>/dev/null\`
+            \`ls -dr /sw/include/QtCore 2>/dev/null\`
+            \`ls -dr /sw/qt*/include/QtCore 2>/dev/null\`
+            \`ls -dr /sw/qt/*/include/QtCore 2>/dev/null\`
+            /usr/include
+            \`ls -dr /usr/include/qt* 2>/dev/null\`
+            \`ls -dr /usr/local/include 2>/dev/null\`
+	    \`ls -dr /usr/local/include/qt* 2>/dev/null\`
+            \`ls -dr /usr/local/qt*/include 2>/dev/null\`
+            \`ls -dr /opt/qt*/include 2>/dev/null\` 
+            \`ls -dr /usr/qt*/include 2>/dev/null\`
+            \`ls -dr /usr/qt/*/include 2>/dev/null\` 
+            \`ls -dr /usr/include/qt/* 2>/dev/null\`
+            \`ls -dr /sw/include 2>/dev/null\`
+            \`ls -dr /sw/qt*/include 2>/dev/null\`
+            \`ls -dr /sw/qt/*/include 2>/dev/null\`
+            /usr/include/Qt
+            \`ls -dr /usr/include/qt*/Qt 2>/dev/null\`
+            \`ls -dr /usr/local/include/Qt 2>/dev/null\`
+            \`ls -dr /usr/local/include/qt*/Qt 2>/dev/null\`
+            \`ls -dr /opt/qt*/include/Qt 2>/dev/null\` 
+            \`ls -dr /usr/qt*/include/Qt 2>/dev/null\`
+            \`ls -dr /usr/qt/*/include/Qt 2>/dev/null\` 
+            \`ls -dr /usr/include/qt/*/Qt 2>/dev/null\`
+            \`ls -dr /sw/include/Qt 2>/dev/null\`
+            \`ls -dr /sw/qt*/include/Qt 2>/dev/null\`
+            \`ls -dr /sw/qt/*/include/Qt 2>/dev/null\`
+        "
+
+        # Find ALL installed versions of qglobal.h
+        for g4_qt_dir in \$g4_qt_include_path_list ; do
+            if test -r "\$g4_qt_dir/\$qt_direct_test_header" ; then
+                g4_qt_found_dirs="\$g4_qt_found_dirs \$g4_qt_dir"
+            fi
+        done
+
+        # Which one relates to the newest Qt?
+        g4_qt_prev_ver=0
+        for g4_qt_dir in \$g4_qt_found_dirs ; do
+            g4_qt_this_ver=\`grep -w '#define QT_VERSION' \$g4_qt_dir/\$qt_direct_test_header | sed s/'#define QT_VERSION'//\`
+
+            if expr \$g4_qt_this_ver '>' \$g4_qt_prev_ver > /dev/null ; then
+                g4_qt_include_dir=\$g4_qt_dir
+                g4_qt_prev_ver=\$g4_qt_this_ver
+            fi
+        done
+
+        if test "x\$g4_qt_include_dir" = "x" ; then
+            g4_qt_include_dir=no
+            g4_havegoodqt=no
+        fi
+
+        echo "checking for qglobal.h... \$g4_qt_include_dir/qglobal.h"
+    fi # END TEST with_qt_dir is set
+
+    #
+    # Result of above tests should have given us g4_qt_include_dir
+    # We can now use this to check other things, taking care to deal with the
+    # correct paths...
+    #
+
+    # Immediate and obvious Darwin check...
+    if test "x\`basename \$g4_qt_include_dir\`" = "xHeaders" ; then
+        #check for moc
+        if test -x "/usr/bin/moc" ; then
+            g4_qt_moc="/usr/bin/moc"
+            echo "checking for moc... \$g4_qt_moc"
+
+            g4_qt_dir=\`dirname \$g4_qt_include_dir\`
+            g4_qt_dir=\`dirname \$g4_qt_dir\`
+
+	    g4_qt_version="4"
+            g4_qt_cxxflags="-I\$g4_qt_dir/QtCore.framework/Headers -I\$g4_qt_dir/QtGui.framework/Headers"
+            g4_qt_gl_cxxflags="-I\$g4_qt_dir/QtOpenGl.framework/Headers"
+            g4_qt_libs="-F\$g4_qt_dir -framework QtCore -framework QtGui"
+            g4_qt_gl_libs="-framework QtOpenGL"
+        else
+            echo "checking for moc... no"
+            g4_havegoodqt=no
+        fi
+    else
+        # Probably have Unix-style installation, in which case estimated
+        # 'QTDIR' equivalent is $with_qt_dir if supplied, or directory
+        # one level below the 'include' directory in \$g4_qt_include_dir
+        if test "x\$with_qt_dir" = "x" ; then
+            # We need to strip g4_qt_include_dir, if it was found
+            g4_qt_dir=\$g4_qt_include_dir
+
+            # Only do this IF there's an 'include' in the path name!
+            if test "x\`echo \$g4_qt_dir | grep include\`" != "x" ; then
+                while test "x\`basename \$g4_qt_dir\`" != "xinclude" ;
+                do
+                    g4_qt_dir=\`dirname \$g4_qt_dir\`
+                done
+            fi
+
+            #Now should be one level above equivalent QTDIR
+            g4_qt_dir=\`dirname \$g4_qt_dir\`
+        fi
+
+        # At this point, we need get Qt version of detected qglobal.h because
+        # Qt3/4 libraries MAY be installed alongside each other...
+        qt_direct_test_header=qglobal.h
+        g4_qt_major_ver=\`grep QT_VERSION_STR \$g4_qt_include_dir/\$qt_direct_test_header 2>/dev/null | sed 's/.* \"\([0-9]\)\..*\"/\1/'\`
+
+        #
+        # We might have an odd install where our found qglobal.h #includes
+        # the real qglobal...
+        #
+        if test "x\$g4_qt_major_ver" = "x" ; then
+            # check for a #include of qglobal...
+            possible_actual_qglobal=\`grep '#include.*qglobal' \$g4_qt_include_dir/\$qt_direct_test_header 2>/dev/null\`
+
+            if test "x\$possible_actual_qglobal" != "x" ; then
+                #We did get something, and it's likely the include
+                #will give us a relative path (but an ASSUMPTION at present)
+                relative_path_to_qglobal=\`grep '#include.*qglobal' \$g4_qt_include_dir/\$qt_direct_test_header 2>/dev/null | sed 's/.*\"\(.*\)\"/\1/'\`
+
+                if test -r \$g4_qt_include_dir/\$relative_path_to_qglobal ; then
+                    g4_qt_major_ver=\`grep QT_VERSION_STR \$g4_qt_include_dir/\$relative_path_to_qglobal 2>/dev/null | sed 's/.* \"\([0-9]\)\..*\"/\1/'\`
+                else
+                    g4_qt_major_ver=no
+                    g4_havegoodqt=no
+                fi
+            else
+                g4_qt_major_ver=no
+                g4_havegoodqt=no
+            fi
+        fi #END TEST odd qglobal includes qglobal behaviour
+            
+        if test "x\$g4_qt_major_ver" = "x4" ; then
+            g4_is_qt4=yes
+        else
+            g4_is_qt4=no
+        fi
+        echo "checking Qt major version... \$g4_qt_major_ver"
+
+        #
+        # We also need to check for Qt4 installations with QtCore type
+        # directory structures. That being the case, make sure we have
+        # the extra headers..
+        #
+        if test "x\`basename \$g4_qt_include_dir\`" = "xQtCore" ; then
+            g4_qt_extra_headers=""
+            g4_qt_gl_headers=""
+            g4_qt_extra_packages="QtGui"
+            g4_qt_gl_packages="QtOpenGL"
+
+            for i in \$g4_qt_extra_packages ; do
+                if test -d "\`dirname \$g4_qt_include_dir\`/\$i" ; then
+                    echo "checking for \$i headers... yes"
+                    g4_qt_extra_headers="\$g4_qt_extra_headers \`dirname \$g4_qt_include_dir\`/\$i"
+                else
+                    echo "checking for \$i headers... no"
+                    g4_havegoodqt=no
+                fi
+            done
+
+            for i in \$g4_qt_gl_packages ; do
+                if test -d "\`dirname \$g4_qt_include_dir\`/\$i" ; then
+                    echo "checking for \$i headers... yes"
+                    g4_qt_gl_headers="\$g4_qt_gl_headers \`dirname \$g4_qt_include_dir\`/\$i"
+                else
+                    echo "checking for \$i headers... no"
+                    g4_havegoodqt=no
+                fi
+            done
+
+        fi #END TEST QtCore style install
+
+
+        #
+        # Now check for appropriate library...
+        #
+        if test -d "\$g4_qt_dir/lib64" ; then
+            g4_qt_lib_dir=\$g4_qt_dir/lib64
+        else
+            g4_qt_lib_dir=\$g4_qt_dir/lib
+        fi
+
+        if test "x\$g4_is_qt4" = "xyes" ; then
+            g4_qt_lib="\`ls \$g4_qt_lib_dir/libQtCore* 2> /dev/null | sed -n 1p |
+                    sed s@\$g4_qt_lib_dir/lib@@ | sed s@[.].*@@\`"
+
+            if test "x\$g4_qt_lib" = "x" ; then
+                # We might be on Windows...
+                g4_qt_lib="\`ls \$g4_qt_lib_dir/QtCore4.lib 2> /dev/null | sed -n 1p | sed s@\$g4_qt_lib_dir/@@\`"
+            fi
+
+            if test "x\$g4_qt_lib" != "x" ; then
+                echo "checking for QtCore library... \$g4_qt_lib"
+            else
+                echo "checking for QtCore library... no"
+                g4_havegoodqt=no
+            fi
+        else
+            g4_qt_lib="\`ls \$g4_qt_lib_dir/libqt-mt.* \$g4_qt_lib_dir/libqt.* 2> /dev/null | sed -n 1p | sed s@\$g4_qt_lib_dir/lib@@ | sed s@[.].*@@\`"
+
+            if test "x\$g4_qt_lib" != "x" ; then
+                echo "checking for qt-mt or qt library... \$g4_qt_lib"
+
+                # On Darwin we also need libqui for Qt3
+                if test "x\$osname" = "xdarwin" ; then
+                    g4_qt_lib_qui="\`ls \$g4_qt_lib_dir/libqui.* 2> /dev/null | 
+                                    sed -n 1p | sed s@\$g4_qt_lib_dir/lib@@ | 
+                                    sed s@[.].*@@\`"
+                    if test "x\$g4_qt_lib_qui" != "x" ; then
+                        echo "checking for qui library... yes"
+                    else
+                        echo "checking for qui library... no"
+                        g4_havegoodqt=no
+                    fi
+                fi
+            else
+                echo "checking for qt-mt or qt library... no"
+                g4_havegoodqt=no
+            fi
+        fi #END TEST for Qt4/3 libraries
+
+        #
+        # Finally, we need to search for moc
+        #
+        g4_qt_bin_dir=\$g4_qt_dir/bin
+        g4_qtmoc=no
+        if test -x "\$g4_qt_bin_dir/moc" ; then
+           g4_qtmoc="\$g4_qt_bin_dir/moc"
+        elif test -x "\$g4_qt_bin_dir/moc-qt4" ; then
+           g4_qtmoc="\$g4_qt_bin_dir/moc-qt4"
+        elif test -x "\$g4_qt_bin_dir/qt4-moc" ; then
+           g4_qtmoc="\$g4_qt_bin_dir/qt4-moc"
+        else
+            g4_havegoodqt=no
+        fi
+        echo "checking for moc... \$g4_qtmoc"
+
+        ## THIS IS POINT AT WHICH TO DO FALLBACK TESTS I.E DOES
+        ## COMPILATION OF SMALL TEST PROGRAM WORK - THEN HEADERS AND
+        ## LIBS ARE AUTOMATICALLY FOUND BY LINKER
+
+        #
+        ## Finally, set output variables, raw for now
+        #
+        if test "x\$g4_havegoodqt" = "xyes" ; then
+	    g4_qt_version=\$g4_qt_major_ver
+            
+            # Take care of Qt4 style header structure...
+            if test "x\`basename \$g4_qt_include_dir\`" = "xQtCore"; then
+		g4_qt_cxxflags="-I\`dirname \$g4_qt_include_dir\` -I\$g4_qt_include_dir"
+	    else
+	    	g4_qt_cxxflags="-I\$g4_qt_include_dir"
+	    fi
+            if test "x\$g4_is_qt4" = "xyes" ; then
+                for i in \$g4_qt_extra_headers ; do
+                    g4_qt_cxxflags="\$g4_qt_cxxflags -I\$i"
+                done
+                for i in \$g4_qt_gl_headers ; do
+                    g4_qt_gl_cxxflags="\$g4_qt_gl_cxxflags -I\$i"
+                done
+            fi
+
+            g4_qt_libs="-L\$g4_qt_lib_dir"
+            if test "x\$g4_qt_lib" = "xQtCore4.lib" ; then
+                #We have Windows...
+                g4_qt_libs="\$g4_qt_libs QtCore4.lib QtGui4.lib"
+                g4_qt_gl_libs="QtOpenGL4.lib"
+            else
+                g4_qt_libs="\$g4_qt_libs -l\$g4_qt_lib"
+                if test "x\$g4_is_qt4" = "xyes" ; then
+                    g4_qt_libs="\$g4_qt_libs -lQtGui"
+                    g4_qt_gl_libs="-lQtOpenGL"
+                fi
+            fi
+            if test "x\$g4_qt_lib_qui" != "x" ; then
+                g4_qt_libs="\$g4_qt_libs -lqui"
+            fi
+
+
+            g4_qt_moc=\$g4_qtmoc
+
+            g4_qt_is_configured=yes
+        else
+            g4_qt_is_configured=''
+        fi
+    fi #END TEST for Darwin Framework
+
+else
+    #Probably also want flags here to reset variables if requested
+    echo "configure: Qt already configured, no recheck neccessary"
+fi #END TEST "x\$g4_qt_is_configured" = "x" 
+
+EOSC
 : decide how portable to be
 case "$d_portable" in
 "$define") dflt=y;;
@@ -2741,8 +3116,18 @@ gans=$ans
 	esac
 done
 
+g4data_photonevaporation_version='PhotonEvaporation2.0'
+g4data_radioactivedecay_version='RadioactiveDecay3.2'
+g4data_g4emlow_version='G4EMLOW6.2'
+g4data_g4ndl_version='G4NDL3.13'
+g4data_g4abla_version='G4ABLA3.0'
+#END GEANT4 DATA OPTIONS
 echo " "
 
+
+#
+# Set defaults for data paths - here, because we depend on g4install
+#
 case "$g4data" in
 '')
 	g4data=$g4install/data
@@ -2751,171 +3136,254 @@ esac
 
 case "$g4levelgammadata" in
 '')
-	g4levelgammadata=$g4data/PhotonEvaporation2.0
+	g4levelgammadata=$g4data/$g4data_photonevaporation_version
 	;;
 esac
 
 case "$g4radioactivedata" in
 '')
-	g4radioactivedata=$g4data/RadioactiveDecay3.2
+	g4radioactivedata=$g4data/$g4data_radioactivedecay_version
 	;;
 esac
 
 case "$g4ledata" in
 '')
-	g4ledata=$g4data/G4EMLOW5.1
+	g4ledata=$g4data/$g4data_g4emlow_version
 	;;
 esac
 
 case "$g4neutronhpcrosssections" in
 '')
-	g4neutronhpcrosssections=$g4data/G4NDL3.12
+	g4neutronhpcrosssections=$g4data/$g4data_g4ndl_version
 	;;
 esac
 
 case "$g4abladata" in
 '')
-	g4abladata=$g4data/G4ABLA3.0
+	g4abladata=$g4data/$g4data_g4abla_version
 	;;
 esac
 
 
-#case "$g4elasticdata" in
-#'')
-#	g4elasticdata=$g4data/G4ELASTIC1.1
-#	;;
-#esac
+#
+# Now we have defaults, prompt user to see if this is where they want to use
+# 
+g4data_alllibs="$g4data_photonevaporation_version $g4data_radioactivedecay_version $g4data_g4emlow_version $g4data_g4ndl_version $g4data_g4abla_version"
 
-#########################################################################
+g4message=`cat <<EOM
+Specify the path where are the Geant4 data libraries 
 
-# while test 1 = 1  ; do
+$g4data_alllibs 
 
-g4message=`cat << EOM
-
-Please, specify default directory where ALL the Geant4 data is installed:
-
- G4LEVELGAMMADATA:		$g4levelgammadata
-
- G4RADIOACTIVEDATA:		$g4radioactivedata
-
- G4LEDATA:			$g4ledata
-
- G4NEUTRONHPDATA:		$g4neutronhpcrosssections
-
- G4ABLADATA:                    $g4abladata
-
-You will be asked about customizing these next.
-
+are installed. For now, a flat directory structure is assumed, and this can 
+be customized at the next step if needed.
 EOM`
 
-#dflt="NO DEFAULT ANSWER"
 dflt=$g4data
-#fn='d~'
-rp=$g4message
-#. ./myread
-gans=$ans
-
-		dflt=$g4data
-		fn='d~'
-		. ./getfile
-
-		if [ X$g4data != X$ans ] ; then
-		g4data=$ans
-
-		g4levelgammadata=$g4data/PhotonEvaporation2.0
-		g4radioactivedata=$g4data/RadioactiveDecay3.2
-		g4ledata=$g4data/G4EMLOW5.1
-		g4neutronhpcrosssections=$g4data/G4NDL3.12
-		g4abladata=$g4data/G4ABLA3.0
-#		g4elasticdata=$g4data/G4ELASTIC1.1
-		fi
-# done
-
-###################################################################
-
-while test 1 = 1  ; do
-
-g4message=`cat << EOM
-
-Please, specify default directory where the Geant4 data is installed:
-
-1) G4LEVELGAMMADATA:		$g4levelgammadata
-
-2) G4RADIOACTIVEDATA:		$g4radioactivedata
-
-3) G4LEDATA:			$g4ledata
-
-4) G4NEUTRONHPDATA:		$g4neutronhpcrosssections
-
-5) G4ABLADATA:                  $g4abladata
-
-To modify default settings, select number above (e.g. 2) 
-EOM`
-
-#dflt="NO DEFAULT ANSWER"
-dflt="Press [Enter] for default settings"
-#fn='d~'
 rp=$g4message
 . ./myread
-gans=$ans
+g4data=$ans
 
+#
+# Using this, we can now check that the libs exist, but only on a directory
+# level
+#
+g4data_foundall='yes'
+promptend="no"
+g4data_customize="no"
+
+while test "x$promptend" = "xno" ; do
+	### PhotonEvaporation
+	$echo $n "checking for $g4data_photonevaporation_version... $c"
+	if test -d "$g4data/$g4data_photonevaporation_version" ; then
+		$echo "yes"
+		g4levelgammadata=$g4data/$g4data_photonevaporation_version
+	else
+		$echo "no"
+		g4data_foundall="no"
+	fi
+
+	### RadioactiveDecay
+	$echo $n "checking for $g4data_radioactivedecay_version... $c"
+	if test -d "$g4data/$g4data_radioactivedecay_version" ; then
+        	$echo "yes"
+        	g4radioactivedata=$g4data/$g4data_radioactivedecay_version
+	else
+        	$echo "no"
+        	g4data_foundall="no"
+	fi
+
+	### G4EMLOW
+	$echo $n "checking for $g4data_g4emlow_version... $c"
+	if test -d "$g4data/$g4data_g4emlow_version" ; then
+        	$echo "yes"
+        	g4ledata=$g4data/$g4data_emlow_version
+	else
+        	$echo "no"
+        	g4data_foundall="no"
+	fi
+
+	### G4NDL
+	$echo $n "checking for $g4data_g4ndl_version... $c"
+	if test -d "$g4data/$g4data_g4ndl_version" ; then
+        	$echo "yes"
+        	g4neutronhpcrosssections=$g4data/$g4data_g4ndl_version
+	else
+        	$echo "no"
+        	g4data_foundall="no"
+	fi
+
+	### G4ABLA
+	$echo $n "checking for $g4data_g4abla_version... $c"
+	if test -d "$g4data/$g4data_g4abla_version" ; then
+        	$echo "yes"
+        	g4levelgammadata=$g4data/$g4data_g4abla_version
+	else
+        	$echo "no"
+        	g4data_foundall="no"
+	fi
+
+	#
+	# If we haven't found all the data, query the user as to whether they
+	# want to
+	# 1) try again with a different path
+	# 2) use the path they input
+	# 3) customize paths
+	#
+	if test "x$g4data_foundall" = "xyes" ; then
+		promptend=yes
+	else
+		g4message=`cat << EOM
+
+Failed to locate one or more of the Geant4 data libraries in 
+
+$g4data 
+
+Please enter
+1) Another path to search in
+2) 'f' to force the use of the path you entered previously (the data libraries
+   are not needed to build Geant4, but are needed to run applications later).
+3) 'c' to customize the data paths, e.g. if you have the data libraries
+   installed in different locations.
+EOM`
+		dflt="f"
+		rp=$g4message
+		. ./myread
+		gans=$ans
+
+		if test "x$gans" = "xf" ; then
+			# Force paths
+			promptend="yes"
+			g4levelgammadata="$g4data/$g4data_photonevaporation_version"
+			g4radioactivedata="$g4data/$g4data_radioactivedecay_version"
+			g4ledata="$g4data/$g4data_g4emlow_version"
+			g4neutronhpcrosssections="$g4data/$g4data_g4ndl_version"
+			g4abladata="$g4data/$g4data_g4abla_version"
+			
+
+		elif test "x$gans" = "xc" ; then
+			# enable customization - we use input g4data to set
+			# defaults
+			promptend="yes"
+			g4data_customize="yes"
+
+			g4levelgammadata="$g4data/$g4data_photonevaporation_version"
+                        g4radioactivedata="$g4data/$g4data_radioactivedecay_version"
+                        g4ledata="$g4data/$g4data_g4emlow_version"
+                        g4neutronhpcrosssections="$g4data/$g4data_g4ndl_version"
+                        g4abladata="$g4data/$g4data_g4abla_version"
+
+
+		else
+			#try again
+			g4data=$gans
+		fi
+	fi
+done
+
+
+#
+# Now customize paths if required
+#
+if test "x$g4data_customize" = "xyes" ; then
+while test "x" = "x" ; do
+
+	g4message=`cat <<EOM
+
+You have chosen to customize the Geant4 data library paths.
+
+1) $g4data_photonevaporation_version: 
+	$g4levelgammadata
+2) $g4data_radioactivedecay_version: 
+	$g4radioactivedata
+3) $g4data_g4emlow_version: 
+	$g4ledata
+4) $g4data_g4ndl_version: 
+	$g4neutronhpcrosssections
+5) $g4data_g4abla_version: 
+	$g4abladata
+
+Choose a number from the list above to customize that path (e.g. 2)
+EOM`
+
+	dflt="Press [Enter] to exit customization with paths as above"
+	rp=$g4message
+	. ./myread
+	gans=$ans
 
 	case $gans in
 
-	1) 
+	"1")
 		dflt=$g4levelgammadata
 		fn='d~'
-		rp="Where is Geant4 PhotonEvaporation2.0 data installed?"
+		rp="Custom path to $g4data_photonevaporation_version?"
 		. ./getfile
 		g4levelgammadata=$ans
 		;;
-	2) 
+
+	"2")
 		dflt=$g4radioactivedata
 		fn='d~'
-		rp="Where is Geant4 RadioactiveDecay3.2 data installed?"
+		rp="Custom path to $g4data_radioactivedecay_version?"
 		. ./getfile
 		g4radioactivedata=$ans
 		;;
-	3) 
+
+	"3")
 		dflt=$g4ledata
 		fn='d~'
-		rp="Where is G4EMLOW5.1 data installed ?"
+		rp="Custom path to $g4data_g4emlow_version?"
 		. ./getfile
 		g4ledata=$ans
 		;;
-	4) 
+
+	"4")
 		dflt=$g4neutronhpcrosssections
 		fn='d~'
-		rp="Where is G4NDL3.12 data installed?"
+		rp="Custom path to $g4data_g4ndl_version?"
 		. ./getfile
 		g4neutronhpcrosssections=$ans
 		;;
 
-	5)
+	"5")
 		dflt=$g4abladata
 		fn='d~'
-		rp="Where is G4ABLA3.0 data installed?"
+		rp="Custom path to $g4data_g4abla_version?"
 		. ./getfile
 		g4abladata=$ans
 		;;
 
-#	5) 
-#		dflt=$g4elasticdata
-#		fn='d~'
-#		rp="Where is G4ELASTIC1.1 data installed?"
-#		. ./getfile
-#		g4elasticdata=$ans
-#		;;
-
-#	[eE]) 
-#		break
-#		;;
-	*) 
+	*)
 		break
-#		echo " "
 		;;
+
 	esac
+
 done
+fi
+
+
+
 
 
 if test "X$g4clhep_base_dir" = "X" ; then
@@ -3976,11 +4444,20 @@ g4ui_xawlibs=" -L$g4ui_xawhome/lib -lXaw -lXmu -lXt -lX11 -lXext "
 fi
 
 if test "X$g4osname" = "XLinux" ; then
-g4ui_xawflags=" -I$g4ui_xawhome/include "
-	if test "X$g4ui_xawhome" = "X/usr/X11R6" ; then
+	if test "X$g4ui_xawhome" = "X" ; then
+		g4ui_xawflags=""
+	else
+		g4ui_xawflags=" -I$g4ui_xawhome/include "
+	fi
+
+	if test "X$g4ui_xawhome" = "X/usr/X11R6" -o "X$g4ui_xawhome" = "X" ; then
 		g4ui_xawlibs=" -lXaw "
 	else
-		g4ui_xawlibs=" -L$g4ui_xawhome/lib -lXaw "
+		if test -d "$g4ui_xawhome/lib64" ; then
+			g4ui_xawlibs=" -L$g4ui_xawhome/lib64 -lXaw "
+		else
+			g4ui_xawlibs=" -L$g4ui_xawhome/lib -lXaw "
+		fi
 	fi
 fi
 
@@ -4179,10 +4656,9 @@ done
 fi
 
 if test "X$g4osname" = "XLinux"; then 
-
-if test "X$g4vis_xmhome" = "X/usr" -o "X$g4vis_xmhome" = "X/usr/local" ; then
-g4vis_xmhome=""
-fi
+	if test "X$g4vis_xmhome" = "X/usr" -o "X$g4vis_xmhome" = "X/usr/local" ; then
+		g4vis_xmhome=""
+	fi
 fi
 fi # g4vis_build_opheglxm_driver
 
@@ -4198,11 +4674,20 @@ g4vis_xmlibs=" -L$g4vis_xmhome/lib -lXm -lXt -lX11 "
 fi
 
 if test "X$g4osname" = "XLinux" ; then
-g4vis_xmflags=" -I$g4vis_xmhome/include "
-	if test "X$g4vis_xmhome" = "X/usr/X11R6" ; then
+	if test "X$g4vis_xmhome" = "X" ; then
+		g4vis_xmflags=""
+	else
+		g4vis_xmflags=" -I$g4vis_xmhome/include "
+	fi
+
+	if test "X$g4vis_xmhome" = "X/usr/X11R6" -o "X$g4vis_xmhome" = "X" ; then
 		g4vis_xmlibs=" -lXm -lXpm "
 	else
-		g4vis_xmlibs=" -L$g4vis_xmhome/lib -lXm -lXpm "
+		if test -d "$g4vis_xmhome/lib64" ; then
+			g4vis_xmlibs=" -L$g4vis_xmhome/lib64 -lXm -lXpm "
+		else
+			g4vis_xmlibs=" -L$g4vis_xmhome/lib -lXm -lXpm "
+		fi
 	fi
 fi
 
@@ -4299,199 +4784,94 @@ esac
 # BEGIN QT/QTUI PROBE
 #
 
-#
-# We only perform the query/probe for Linux-g++ and Darwin-g++ systems..
-#
-if test "x$g4system" = "xLinux-g++" -o "x$g4system" = "xDarwin-g++" ; then
-
-# Now, IF g4ui_none HAS NOT BEEN SET TO Y, proceed to the query/probe section
+# Checks applied for all systems ONLY IF g4ui_none HAS NOT BEEN SET TO y
 if test "x$g4ui_none" = "xn" ; then
+    # Query the user to see if build of Qt UI module is needed
+    g4message=`cat <<EOM
 
-   # Query the user to see if they want to build the Qt UI module
-
-   g4message=`cat << EOM
-
-   G4UI_BUILD_QT_SESSION
-   G4UI_USE_QT
+    G4UI_BUILD_QT_SESSION
+    G4UI_USE_QT
 
 Setting these variables will enable the building of the G4 Qt based 
 user interface module and the use of this module in your applications
 respectively.
-The Qt4 headers, libraries and binaries are required to enable the
-building of this module.
-### WARNING! THIS FEATURE IS EXPERIMENTAL IN THIS RELEASE! ###
-### WARNING! THIS FEATURE WILL ONLY WORK WITH Qt4!         ###
+The Qt3 or Qt4 headers, libraries and moc application are required to enable
+the building of this module.
 Do you want to enable build and use of this module?
 EOM`
 
-   #
-   # read in the user response
-   #
-   dflt=$g4ui_build_qt_session
-   rp=$g4message
-   . ./myread
-   gans=$ans
+    # Read in the user response
+    dflt=$g4ui_build_qt_session
+    rp=$g4message
+    . ./myread
+    gans=$ans
 
-   #
-   # Check response
-   #
-   case $gans in
-	n*|N*)
-		g4ui_build_qt_session=n
-		g4ui_use_qt=n
-		;;
+    # Check response and take set variables as needed.
+    case $gans in
+        n*|N*)
+	    g4ui_build_qt_session=n
+            g4ui_use_qt=n
+	    ;;
 	y*|Y*)
-		g4ui_build_qt_session=y
-		g4ui_use_qt=y
-		;;
-   esac
+	    g4ui_build_qt_session=y
+            g4ui_use_qt=y
+            ;;
+    esac
 
+    ##########
 
-   #########################################
+    ##########
+    # Now, if user chose to build module, we need to check for a Qt
+    # installation
+    #
+    if test "x$g4ui_build_qt_session" = "xy" ; then
+	echo " "
+	# NB Have to supply arg to qt script, just blank in this case!
+	qt_search_dir=""
+	. ./qt
 
+	# If we didn't find Qt automatically, then ask user if they know
+	# where it's installed...
+	if test "x$g4_havegoodqt" = "xno" ; then
+	    promptend="no"
+	    user_qthome="the standard locations"
 
-   #####################################################################
-   # Now, if we want to build/use the Qt UI module, we need to probe for
-   # a Qt4 installation
-   #
-   if test "x$g4ui_build_qt_session" = "xy" ; then
+            while test "x$promptend" = "xno" ; do
+	        g4message=`cat << EOM
 
-      echo " "
-      g4_havegoodqt=no
-
-      g4_qthome=`./loc qglobal.h no /usr/include/Qt /usr/local/include/Qt /opt/local/include/Qt /sw/include/Qt`
-
-      echo "checking for Qt4 installation... $g4_qthome"
-
-      #If we found an installation, proceed to other tests.
-      if test "x$g4_qthome" != "xno" ; then
-
-	 #Set Qt installation to good at this point
-	 g4_havegoodqt=yes
-      
-	#Check that this is Qt4...
-	g4_qtver=`$grep QT_VERSION_STR $g4_qthome | $sed 's/.* \"\([0-9]\)\..*\"/\1/'`
-
-	echo "checking Qt version... $g4_qtver"
-
-	#Now strip qthome back so we can check for moc...
-	g4_qthome=`dirname $g4_qthome`
-	g4_qthome=`dirname $g4_qthome`
-	g4_qthome=`dirname $g4_qthome`
-
-	#If version is o.k, check for moc
-	if test "x$g4_qtver" = "x4" ; then
-	   #Check for moc
-	   g4_qthavemoc=`./loc moc no $g4_qthome/bin`
-
-	   echo "checking for moc... $g4_qthavemoc"
-
-	   if test "x$g4_qthavemoc" = "xno" ; then
-	      g4_havegoodqt=no
-	   fi
-	else
-	   g4_havegoodqt=no
-	fi #END CHECK Qt VERSION
-      fi #END CHECK QTHOME
-      #
-      # END QT AUTOPROBE
-      ####################################################################
-
-
-      ####################################################################
-      # Based on result of Qt autoprobe, we decide if user input is needed to
-      # locate Qt...
-      #
-      if test "x$g4_havegoodqt" = "xno" ; then
-	 promptend="no"
-	 qthomeloc="the standard locations"
-
-	 while test "x$promptend" = "xno" ; do
-	       g4message=`cat << EOM
-
-Autodetection failed to locate Qt4 in $qthomeloc on your system.
-Please enter the path to your Qt4 install (i.e. if Qt4 is installed
-in PATH/include/Qt, or PATH/include, enter PATH), or type '-' to
-CANCEL the build of the Qt UI module.
+Autodetection failed to locate Qt3 or Qt4 in $qthomeloc on your system.
+Please enter the path to your Qt3 OR Qt4 install (i.e. if Qt4 is installed
+in PATH/include/QT, PATH/include or PATH/include/qt4, enter PATH),
+or type '-' to CANCEL the build of the Qt UI module.
 Qt path:
 EOM`
-	       dflt="/usr"
-	       fn='d~(-)'
-	       rp=$g4message
-	       . ./getfile
+		dflt=""
+                fn='d~(-)'
+		rp=$g4message
+		. ./getfile
+		user_qthome=$ans
 
-	       #Check for user cancellation
-	       if test "x$ans" = "x-" ; then
-		  g4ui_build_qt_session=n
-		  g4ui_use_qt=n
-		  g4_qthome=""
-		  echo "build/use of Qt UI module cancelled..."
-		  promptend=yes
+		if test "x$user_qthome" = "x-" ; then
+		    # Cancel build...
+		    g4ui_build_qt_session=n
+		    g4ui_use_qt=n
+		    echo "configure: build/use of Qt UI module cancelled"
+		    promptend=yes
+		else
+		    # Check for installation in user directory
+		    echo " "
+		    qt_search_dir=$user_qthome
+		    . ./qt
 
-	       else
-		  #We want to probe for Qt in the user supplied directory
-		  echo " "
-		  qthomeloc=$ans
-		  g4_havegoodqt=no
-		  g4_qthome=`./loc qglobal.h no $ans/include/Qt $ans/include`
+		    if test "x$g4_havegoodqt" = "xyes" ; then
+			promptend=yes
+		    fi
+		fi #END TEST user_qthome = -
+            done #END while promptend=no (for user input of Qt install)
+        fi #END TEST g4_havegoodqt = no (for user prompt)
+    fi #END TEST g4ui_build_qt_session (whether to build at all)
+fi #END TEST g4ui_none = n
 
-		  echo "checking for Qt4 installation... $g4_qthome"
-
-		  #If we found an installation, proceed to other tests.
-		  if test "x$g4_qthome" != "xno" ; then
-		     #Set Qt installation to good at this point
-		     g4_havegoodqt=yes		
-
-		     #Check that this is Qt4...
-		     g4_qtver=`$grep QT_VERSION_STR $g4_qthome | $sed 's/.* \"\([0-9]\)\..*\"/\1/'`
-
-		     echo "checking Qt version... $g4_qtver"
-
-		     #Now strip qthome back so we can check for moc...
-		     g4_qthome=`dirname $g4_qthome`
-
-		     #At this point we could have include/Qt
-		     #or include
-		     if test `basename $g4_qthome` = "Qt" ; then
-			g4_qthome=`dirname $g4_qthome`
-			g4_qthome=`dirname $g4_qthome`
-		     else
-			g4_qthome=`dirname $g4_qthome`
-		     fi
-
-		     #If version is o.k, check for moc
-		     if test "x$g4_qtver" = "x4" ; then
-			#Check for moc
-			g4_qthavemoc=`./loc moc no $g4_qthome/bin`
-
-			echo "checking for moc... $g4_qthavemoc"
-
-			if test "x$g4_qthavemoc" = "xno" ; then
-			   g4_havegoodqt=no
-			fi
-		     else
-		        g4_havegoodqt=no
-		     fi #END CHECK Qt VERSION
-		  fi #END CHECK QTHOME
-
-		  #If we have a good Qt, end prompt
-		  if test "x$g4_havegoodqt" = "xyes" ; then
-		     promptend=yes
-		  fi
-	       fi #END CHECK USER CANCELLATION
-         done #END USER PROMPT FOR QT DETECTION
-
-      fi #END USER DIRECTED QT DETECTION
-      #
-      #END QT USER INPUT PROBE
-      ####################################################################
-
-   fi #END CHECK OF G4UI_BUILD_QT_SESSION=Y
-   ###########################################
-
-fi #END TEST G4UI_NONE=N
-fi #END TEST G4SYSTEM = Linux-g++ OR Darwin-g++
-########################
 echo " "
 case "$g4vis_none" in
 '')
@@ -4906,11 +5286,20 @@ g4vis_xmlibs=" -L$g4vis_xmhome/lib -lXm -lXt -lX11 "
 fi
 
 if test "X$g4osname" = "XLinux" ; then
-g4vis_xmflags=" -I$g4vis_xmhome/include "
-	if test "X$g4vis_xmhome" = "X/usr/X11R6" ; then
+	if test "X$g4vis_xmhome" = "X" ; then
+		g4vis_xmflags=""
+	else
+		g4vis_xmflags=" -I$g4vis_xmhome/include "
+	fi
+
+	if test "X$g4vis_xmhome" = "X/usr/X11R6" -o "X$g4vis_xmhome" = "X" ; then
 		g4vis_xmlibs=" -lXm -lXpm "
 	else
-		g4vis_xmlibs=" -L$g4vis_xmhome/lib -lXm -lXpm "
+		if test -d "$g4vis_xmhome/lib64" ; then
+			g4vis_xmlibs=" -L$g4vis_xmhome/lib64 -lXm -lXpm "
+		else
+			g4vis_xmlibs=" -L$g4vis_xmhome/lib -lXm -lXpm "
+		fi
 	fi
 fi
 
@@ -5770,221 +6159,95 @@ fi # if platform (Unix vs Win)
 #
 # BEGIN QTVIS/QT PROBE
 #
-
+# Because the vis driver only works with UI, only probe if g4ui_none is
+# NOT set AND also that g4vis_none is NOT set
 #
-# We only run on a Linux-g++ or Darwin-g++ system
-#
-if test "x$g4system" = "xLinux-g++" -o "x$g4system" = "xDarwin-g++" ; then
+if test "x$g4ui_none" = "xn" -a "x$g4vis_none" = "xn" ; then
+    # Query the user to see if build of Qt UI module is needed
+    g4message=`cat <<EOM
 
-   # Only proceed further if g4vis_none is not set
-   if test "x$g4vis_none" = "xn" ; then
-      #Query the user on whether to activate the module
-      g4message=`cat << EOM
+    G4UI_BUILD_OPENGLQT_DRIVER
+    G4UI_USE_OPENGLQT
 
-    G4VIS_BUILD_OPENGLQT_DRIVER
-    G4VIS_USE_OPENGLQT
-
-Setting these variables will enable the building of the G4 OpenGL Qt based
+Setting these variables will enable the building of the G4 OpenGL Qt based 
 visualisation driver and the use of this driver in your applications
 respectively.
-The Qt4 headers, libraries and binaries are required to enable the
-building of this module.
-### WARNING! THIS FEATURE IS EXPERIMENTAL IN THIS RELEASE! ###
-### WARNING! THIS FEATURE WILL ONLY WORK WITH Qt4!         ###
+The Qt3 or Qt4 headers, libraries and moc application are required to enable
+the building of this module.
 Do you want to enable build and use of this module?
 EOM`
 
-      #Read the user response
-      dflt=$g4vis_build_openglqt_driver
-      rp=$g4message
-      . ./myread
-      gans=$ans
+    # Read in the user response
+    dflt=$g4vis_build_openglqt_driver
+    rp=$g4message
+    . ./myread
+    gans=$ans
 
-      #
-      # Check response
-      #
-      case $gans in
-	   n*|N*)
-		g4vis_build_openglqt_driver=n
-                g4vis_use_openglqt=n
-                ;;
-	   y*|Y*)
-                g4vis_build_openglqt_driver=y
-                g4vis_use_openglqt=y
-                ;;
-      esac
+    # Check response and take set variables as needed.
+    case $gans in
+        n*|N*)
+	    g4vis_build_openglqt_driver=n
+            g4vis_use_openglqt=n
+	    ;;
+	y*|Y*)
+	    g4vis_build_openglqt_driver=y
+            g4vis_use_openglqt=y
+            ;;
+    esac
 
-      ###################
+    ##########
 
+    ##########
+    # Now, if user chose to build module, we need to check for a Qt
+    # installation
+    #
+    if test "x$g4vis_build_openglqt_driver" = "xy" ; then
+	echo " "
+	# NB Have to supply arg to qt script, just blank in this case!
+	qt_search_dir=""
+	. ./qt
 
+	# If we didn't find Qt automatically, then ask user if they know
+	# where it's installed...
+	if test "x$g4_havegoodqt" = "xno" ; then
+	    promptend="no"
+	    user_qthome="the standard locations"
 
-      ####################################################################
-      # Now, if we have selected to build the driver, we need to check for
-      # a Qt4 installation, which may have been done for use by the UI
-      # module...
-      #
-      if test "x$g4vis_build_openglqt_driver" = "xy" ; then
-	 	 
-	 #Now check whether g4_qthome has been set previously - if it hasn't
-	 #proceed to probe for Qt4... (assume it's unfiltered, i.e. not
-	 #set to '' by earlier probe if it was /usr or /usr/local
-	 if test "x$g4_qthome" != "x" ; then
-	    echo " "
-	    echo "configure: Qt4 preconfigured, no recheck neccessary"
-	 else
-	 #################################################################
-	    #We repeat the search used for the UI module
-	    
-	    echo " "
-	    g4_havegoodqt=no
+            while test "x$promptend" = "xno" ; do
+	        g4message=`cat << EOM
 
-	    g4_qthome=`./loc qglobal.h no /usr/include/Qt /usr/local/include/Qt /opt/local/include/Qt /sw/include/Qt`
-
-	    echo "checking for Qt4 installation... $g4_qthome"
-
-	    #If we found an installation, proceed to other tests.
-	    if test "x$g4_qthome" != "xno" ; then
-
-	       #Set Qt installation to good at this point
-	       g4_havegoodqt=yes
-      
-		#Check that this is Qt4...
-		g4_qtver=`$grep QT_VERSION_STR $g4_qthome | $sed 's/.* \"\([0-9]\)\..*\"/\1/'`
-
-		echo "checking Qt version... $g4_qtver"
-
-		#Now strip qthome back so we can check for moc...
-		g4_qthome=`dirname $g4_qthome`
-		g4_qthome=`dirname $g4_qthome`
-		g4_qthome=`dirname $g4_qthome`
-
-		#If version is o.k, check for moc
-		if test "x$g4_qtver" = "x4" ; then
-		   #Check for moc
-		   g4_qthavemoc=`./loc moc no $g4_qthome/bin`
-
-		   echo "checking for moc... $g4_qthavemoc"
-
-		   if test "x$g4_qthavemoc" = "xno" ; then
-		      g4_havegoodqt=no
-		   fi
-		else
-		   g4_havegoodqt=no
-		fi #END CHECK Qt VERSION
-	    fi #END CHECK QTHOME
-	    #
-	    # END QT AUTOPROBE	    
-
-
-	    # Based on result of Qt autoprobe, we decide if user input is
-	    # needed to locate Qt...
-            #
-	    if test "x$g4_havegoodqt" = "xno" ; then
-	       promptend="no"
-	       qthomeloc="the standard locations"
-
-	       while test "x$promptend" = "xno" ; do
-		     g4message=`cat << EOM
-
-Autodetection failed to locate Qt4 in $qthomeloc on your system.
-Please enter the path to your Qt4 install (i.e. if Qt4 is installed
-in PATH/include/Qt, or PATH/include, enter PATH), or type '-' to
-CANCEL the build of the Qt UI module.
+Autodetection failed to locate Qt3 or Qt4 in $qthomeloc on your system.
+Please enter the path to your Qt3 OR Qt4 install (i.e. if Qt4 is installed
+in PATH/include/QT, PATH/include or PATH/include/qt4, enter PATH),
+or type '-' to CANCEL the build of the Qt UI module.
 Qt path:
 EOM`
-		     dflt="/usr"
-		     fn='d~(-)'
-		     rp=$g4message
-		     . ./getfile
+		dflt=""
+                fn='d~(-)'
+		rp=$g4message
+		. ./getfile
+		user_qthome=$ans
 
-		     #Check for user cancellation
-		     if test "x$ans" = "x-" ; then
-			g4ui_build_qt_session=n
-			g4ui_use_qt=n
-			g4_qthome=""
-			echo "build/use of OpenGl Qt driver cancelled..."
+		if test "x$user_qthome" = "x-" ; then
+		    # Cancel build...
+		    g4vis_build_openglqt_driver=n
+		    g4vis_use_openglqt=n
+		    echo "configure: build/use of Qt OpenGl driver cancelled"
+		    promptend=yes
+		else
+		    # Check for installation in user directory
+		    echo " "
+		    qt_search_dir=$user_qthome
+		    . ./qt
+
+		    if test "x$g4_havegoodqt" = "xyes" ; then
 			promptend=yes
-
-		     else
-		        #We want to probe for Qt in the user supplied directory
-			echo " "
-			qthomeloc=$ans
-			g4_havegoodqt=no
-			g4_qthome=`./loc qglobal.h no $ans/include/Qt $ans/include`
-
-			echo "checking for Qt4 installation... $g4_qthome"
-
-			#If we found an installation, proceed to other tests.
-			if test "x$g4_qthome" != "xno" ; then
-			   #Set Qt installation to good at this point
-			   g4_havegoodqt=yes		
-
-			   #Check that this is Qt4...
-			   g4_qtver=`$grep QT_VERSION_STR $g4_qthome | $sed 's/.* \"\([0-9]\)\..*\"/\1/'`
-
-			   echo "checking Qt version... $g4_qtver"
-
-			   #Now strip qthome back so we can check for moc...
-			   g4_qthome=`dirname $g4_qthome`
-
-			   #At this point we could have include/Qt
-			   #or include
-			   if test `basename $g4_qthome` = "Qt" ; then
-			      g4_qthome=`dirname $g4_qthome`
-			      g4_qthome=`dirname $g4_qthome`
-			   else
-			      g4_qthome=`dirname $g4_qthome`
-			   fi
-
-			   #If version is o.k, check for moc
-			   if test "x$g4_qtver" = "x4" ; then
-			      #Check for moc
-			      g4_qthavemoc=`./loc moc no $g4_qthome/bin`
-
-			      echo "checking for moc... $g4_qthavemoc"
-
-			      if test "x$g4_qthavemoc" = "xno" ; then
-				 g4_havegoodqt=no
-			      fi
-			   else
-			      g4_havegoodqt=no
-			   fi #END CHECK Qt VERSION
-			fi #END CHECK QTHOME
-
-			#If we have a good Qt, end prompt
-			if test "x$g4_havegoodqt" = "xyes" ; then
-			   promptend=yes
-			fi
-		     fi #END CHECK USER CANCELLATION
-	       done #END USER PROMPT FOR QT DETECTION
-
-            fi #END USER DIRECTED QT DETECTION
-	    #
-	    #END QT USER INPUT PROBE
-	 #################################################################
-	 fi #END TEST G4_QTHOME IS SET
-
-
-      fi #END TEST G4VIS_BUILD_OPENGLQT_DRIVER = y
-
-      
-      #
-      # Put a filter in here on /usr and /usr/local as QTHOME in line
-      # with other paths - done here as this is the last place QT is
-      # checked for
-      #DEACTIVATED AT PRESENT BECAUSE OF USE OF MOC
-      #
-      #if test "x$g4_qthome" = "x/usr" -o "x$g4_qthome" = "x/usr/local" ; then
-	# g4_qthome=""
-      #fi
-	 
-
-   fi #END TEST G4VIS_NONE IS N
-
-fi #END TEST G4SYSTEM IS Linux-g++ OR Darwin-g++
-
-#
-# END OF QTVIS/QT PROBE
+		    fi
+		fi #END TEST user_qthome = -
+            done #END while promptend=no (for user input of Qt install)
+        fi #END TEST g4_havegoodqt = no (for user prompt)
+    fi #END TEST g4vis_build_openglqt_driver (whether to build at all)
+fi #END TEST g4ui_none = n AND g4vis_none=n
 
 #
 # BEGIN GDML/XERCESC PROBE 
@@ -6403,7 +6666,12 @@ g4_gmake='$g4_gmake'
 g4_gmake_version='$g4_gmake_version'
 g4_make='$g4_make'
 g4_make_version='$g4_make_version'
-g4_qthome='$g4_qthome'
+g4_qt_cxxflags='$g4_qt_cxxflags'
+g4_qt_gl_cxxflags='$g4_qt_gl_cxxflags'
+g4_qt_gl_libs='$g4_qt_gl_libs'
+g4_qt_libs='$g4_qt_libs'
+g4_qt_moc='$g4_qt_moc'
+g4_qt_version='$g4_qt_version'
 g4abladata='$g4abladata'
 g4base='$g4base'
 g4bin='$g4bin'

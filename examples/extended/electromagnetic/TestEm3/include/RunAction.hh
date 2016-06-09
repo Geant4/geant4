@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RunAction.hh,v 1.18 2007/04/22 16:25:21 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: RunAction.hh,v 1.19 2008/05/29 16:59:27 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -55,7 +55,7 @@ class RunAction : public G4UserRunAction
 public:
 
   RunAction(DetectorConstruction*, PrimaryGeneratorAction*, HistoManager*);
-  virtual ~RunAction();
+  ~RunAction();
 
   void BeginOfRunAction(const G4Run*);
   void   EndOfRunAction(const G4Run*);
@@ -63,9 +63,9 @@ public:
   void fillPerEvent(G4int,G4double,G4double);
     
   void sumEnergyFlow(G4int plane, G4double Eflow)
-                                                 {EnergyFlow[plane]  += Eflow;};
+                                            {EnergyFlow[plane]  += Eflow;};
   void sumLateralEleak(G4int cell, G4double Eflow)
-                                                 {lateralEleak[cell] += Eflow;};
+                                            {lateralEleak[cell] += Eflow;};
     
   void PrintDedxTables();
     

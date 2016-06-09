@@ -50,7 +50,8 @@ class G4InuclElementaryParticle : public G4InuclParticle {
 public:
 
   G4InuclElementaryParticle() { 
-
+    particleType = 0;     // DHW: added to keep 4.3 compiler happy
+    particleMass = 0.;    //            "              "
     valid_particle = false;
   };
 
@@ -61,7 +62,7 @@ public:
     valid_particle = false;
   };
 
-  G4InuclElementaryParticle(const std::vector<G4double>& mom,
+  G4InuclElementaryParticle(const G4CascadeMomentum& mom,
 			    G4int type) 
     : G4InuclParticle(mom),
       particleType(type) {
@@ -73,7 +74,7 @@ public:
   };
 
   
-  G4InuclElementaryParticle(const std::vector<G4double>& mom,
+  G4InuclElementaryParticle(const G4CascadeMomentum& mom,
 			    G4int type, G4int model) 
     : G4InuclParticle(mom),
       particleType(type) {
@@ -91,7 +92,6 @@ public:
     : particleType(type) {
 
     particleMass = getParticleMass(type);
-    momentum.resize(4);
     momentum[0] = ekin + particleMass;
     momentum[3] = std::sqrt(momentum[0] * momentum[0] - particleMass * particleMass); 
     momentum[1] = momentum[2] = 0.0;
@@ -104,7 +104,7 @@ public:
     particleMass = getParticleMass(ityp);
   };
 
-  void setMomentum(const std::vector<G4double>& mom) {
+  void setMomentum(const G4CascadeMomentum& mom) {
 
     momentum = mom;
     momentum[0] = std::sqrt(momentum[1] * momentum[1] + momentum[2] * momentum[2] +

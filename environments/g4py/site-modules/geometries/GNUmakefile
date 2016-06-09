@@ -1,10 +1,10 @@
-# $Id: GNUmakefile,v 1.2 2006/04/25 10:25:12 kmura Exp $
-# $Name: geant4-09-01 $
+# $Id: GNUmakefile,v 1.3 2008/12/01 07:07:05 kmura Exp $
+# $Name: geant4-09-02 $
 # ===========================================================
 #   Makefile for building Geant4Py site-modules
 # ===========================================================
 
-SUBDIR := Qgeom ExN01geom ExN03geom 
+SUBDIR := Qgeom ExN01geom ExN03geom ezgeom
 
 .PHONY: all install clean cleanlib
 

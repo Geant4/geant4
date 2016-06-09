@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4LowEnergyPhotoElectric.cc,v 1.56 2006/06/29 19:40:23 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // Author: A. Forti
 //         Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)

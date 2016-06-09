@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4VUserPrimaryParticleInformation.cc,v 1.2 2006/06/29 19:26:22 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 #include "G4VUserPrimaryParticleInformation.hh"
 G4VUserPrimaryParticleInformation::G4VUserPrimaryParticleInformation() {;}

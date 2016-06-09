@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VLongitudinalStringDecay.hh,v 1.4 2007/04/24 14:55:23 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4VLongitudinalStringDecay.hh,v 1.6 2008/06/23 08:35:54 vuzhinsk Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 // Maxim Komogorov
 //
 // -----------------------------------------------------------------------------
@@ -42,24 +42,111 @@
 #include "G4HadronBuilder.hh"
 
 class G4FragmentingString;
-//**********************************************************************************************
+//**************************************************************************************
 
 class G4VLongitudinalStringDecay 
    {
 public:
-   G4VLongitudinalStringDecay();     
+            G4VLongitudinalStringDecay();     
    virtual ~G4VLongitudinalStringDecay();
 
 private:
-//  G4VLongitudinalStringDecay(const G4VLongitudinalStringDecay &right);
-//  const G4VLongitudinalStringDecay & operator=(const G4VLongitudinalStringDecay &right);
+
    int operator==(const G4VLongitudinalStringDecay &right) const;
    int operator!=(const G4VLongitudinalStringDecay &right) const;
 
 public:
    virtual G4KineticTrackVector* FragmentString(const G4ExcitedString& theString)=0;
+
+protected: 
+
+// For changing Mass Cut used for selection of very small mass strings
+   virtual void SetMassCut(G4double aValue);
+
+// For handling a string with very low mass
+   G4KineticTrackVector * LightFragmentationTest(const G4ExcitedString * const theString);
+
+// To store created quarks or 2 last hadrons
+   typedef std::pair<G4ParticleDefinition*, G4ParticleDefinition*> pDefPair;
+
+// For creation of hadrons from given quark pair 
+   typedef G4ParticleDefinition * (G4HadronBuilder::*Pcreate)
+		   			(G4ParticleDefinition*, G4ParticleDefinition*);
+
+//-----------------------------------------------------------------------------
+// Used by LightFragmentationTest for estimation of lowest possible mass of
+// given quark system
+   G4double FragmentationMass(const G4FragmentingString * const string,
+		              Pcreate build=0,
+		              pDefPair * pdefs=0);
+
+   G4ParticleDefinition* FindParticle(G4int Encoding); 
+
+   virtual void Sample4Momentum(G4LorentzVector* Mom,     G4double Mass, 
+                                G4LorentzVector* AntiMom, G4double AntiMass, 
+                                G4double InitialMass)=0; 
+//-----------------------------------------------------------------------------
+// For decision on continue or stop string fragmentation
+   virtual G4bool StopFragmenting(const G4FragmentingString  * const string)=0;
+   virtual G4bool IsFragmentable(const G4FragmentingString * const string)=0;
+
+// If a string can not fragment, make last break into 2 hadrons
+   virtual G4bool SplitLast(G4FragmentingString * string, 
+		    G4KineticTrackVector * LeftVector,
+		    G4KineticTrackVector * RightVector)=0;
+//-----------------------------------------------------------------------------
+
+// If a string fragments, do the following
+
+// For transver of a string to its CMS frame
+   G4ExcitedString *CPExcited(const G4ExcitedString& string);
+
+   G4KineticTrack * Splitup(G4FragmentingString *string, 
+                            G4FragmentingString *&newString);
+
+   G4ParticleDefinition * QuarkSplitup(G4ParticleDefinition* decay,
+		   		       G4ParticleDefinition *&created);
+
+   G4ParticleDefinition * DiQuarkSplitup(G4ParticleDefinition* decay,
+		   			 G4ParticleDefinition *&created);
+					
+   pDefPair CreatePartonPair(G4int NeedParticle, G4bool AllowDiquarks=true);
+
+public:
+//   used by G4VKinkyStringDecy..
+   G4int SampleQuarkFlavor(void);
+   G4ThreeVector SampleQuarkPt();
+
+protected:
+
+//-----------------------------------------------------------------------------
+// For determination of kinematical properties of created hadron
+//   virtual G4LorentzVector * SplitEandP(G4ParticleDefinition * pHadron,    // Uzhi
+//                                        G4FragmentingString * string  )=0; // Uzhi
+
+   virtual G4LorentzVector * SplitEandP(G4ParticleDefinition * pHadron,      // Uzhi
+                                        G4FragmentingString * string,        // Uzhi
+                                        G4FragmentingString * newString  )=0;// Uzhi
+
+   virtual G4double GetLightConeZ(G4double zmin, G4double zmax, 
+                                  G4int PartonEncoding,  
+                                  G4ParticleDefinition* pHadron, 
+                                  G4double Px, G4double Py       ) = 0;      
+
+   void CalculateHadronTimePosition(G4double theInitialStringMass, 
+                                    G4KineticTrackVector *);
+
+// Used for some test purposes ------------------------------------------------ 
+   void ConstructParticle();
+
+   G4ParticleDefinition* CreateHadron(G4int id1, G4int id2, 
+                                      G4bool theGivenSpin, G4int theSpin); 
    
+//-----------------------------------------------------------------------------
+public:
+
    G4KineticTrackVector* DecayResonans (G4KineticTrackVector* aHadrons);
+
    void SetSigmaTransverseMomentum(G4double aQT);
    void SetStrangenessSuppression(G4double aValue);
    void SetDiquarkSuppression(G4double aValue);
@@ -71,10 +158,8 @@ public:
    void SetScalarMesonMixings( std::vector<G4double> aVector);
    void SetVectorMesonMixings( std::vector<G4double> aVector);
 
-//   used by G4VKinkyStringDecy..
-   G4int SampleQuarkFlavor(void);
-   G4ThreeVector SampleQuarkPt();
-        
+   void SetStringTensionParameter(G4double aValue);            // Uzhi 20 June 08
+
 //private:
 protected:  
    G4double GetDiquarkSuppress()	{return DiquarkSuppress;};
@@ -82,14 +167,9 @@ protected:
    G4double GetStrangeSuppress()	{return StrangeSuppress;};
    G4double GetClusterMass()		{return ClusterMass;};
    G4int    GetClusterLoopInterrupt()   {return ClusterLoopInterrupt;};
+
+   G4double GetStringTensionParameter() {return Kappa;};       // Uzhi 20 June 08
    
-   G4ParticleDefinition* CreateHadron(G4int id1, G4int id2, G4bool theGivenSpin, G4int theSpin); 
-   virtual void Sample4Momentum(G4LorentzVector* Mom, G4double Mass, G4LorentzVector* AntiMom, G4double AntiMass, G4double InitialMass)=0; 
-
-protected:
-   // Additional protected declarations 
-   virtual G4double GetLightConeZ(G4double zmin, G4double zmax, G4int PartonEncoding,  G4ParticleDefinition* pHadron, G4double Px, G4double Py) = 0;      
-
 //private:
 protected:  
    G4double  MassCut;
@@ -104,52 +184,21 @@ protected:
    G4int     SideOfDecay;
    G4HadronBuilder *hadronizer;
 
-   void ConstructParticle();
-
    G4double pspin_meson;
    G4double pspin_barion;
    std::vector<G4double> vectorMesonMix;
    std::vector<G4double> scalarMesonMix;
    
    G4bool    PastInitPhase;
-   
 
-   G4KineticTrackVector * LightFragmentationTest(const G4ExcitedString * const theString);
-   virtual G4bool StopFragmenting(const G4FragmentingString  * const string)=0;
-   virtual G4bool IsFragmentable(const G4FragmentingString * const string)=0;
+   G4double Kappa; // String tension parameter                 // Uzhi 20 June 08
+
 //   G4double MinFragmentationMass(G4ExcitedString * theString,
 //				G4ParticleDefinition*& Hadron1,
 //				G4ParticleDefinition*& Hadron2);
-   typedef std::pair<G4ParticleDefinition*, G4ParticleDefinition*> pDefPair;
-   typedef G4ParticleDefinition * (G4HadronBuilder::*Pcreate)
-		   			(G4ParticleDefinition*, G4ParticleDefinition*);
-   G4double FragmentationMass(
-		const G4FragmentingString * const string,
-		Pcreate build=0,
-		pDefPair * pdefs=0);
-   G4KineticTrack * Splitup(G4FragmentingString *string, G4FragmentingString *&newString);
-   virtual G4LorentzVector * SplitEandP(G4ParticleDefinition * pHadron, G4FragmentingString * string)=0;
-   virtual G4bool SplitLast(G4FragmentingString * string, 
-		    G4KineticTrackVector * LeftVector,
-		    G4KineticTrackVector * RightVector)=0;
-   void CalculateHadronTimePosition(G4double theInitialStringMass, G4KineticTrackVector *);
-   G4ExcitedString *CPExcited(const G4ExcitedString& string);
-   G4ParticleDefinition* FindParticle(G4int Encoding); 
-
-   // Additional Implementation Declarations
-   G4ParticleDefinition * QuarkSplitup(G4ParticleDefinition* decay,
-		   		G4ParticleDefinition *&created);
-   G4ParticleDefinition * DiQuarkSplitup(G4ParticleDefinition* decay,
-		   			G4ParticleDefinition *&created);
-					
-   pDefPair CreatePartonPair(G4int NeedParticle, G4bool AllowDiquarks=true);
-
 
 };
 
-
-//**********************************************************************************************
+//*************************************************************************************
 // Class G4VLongitudinalStringDecay 
 #endif
-
-

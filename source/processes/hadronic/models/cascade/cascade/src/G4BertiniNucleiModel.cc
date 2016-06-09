@@ -354,7 +354,7 @@ G4InuclElementaryParticle G4BertiniNucleiModel::generateNucleon(G4int type,
   const G4double one_third = 1.0 / 3.0;
   ///G4double pmod = getFermiMomentum(type, zone) * std::pow(inuclRndm(), one_third);
   G4double pmod = fermi_momenta[type - 1][zone] * std::pow(inuclRndm(), one_third);
-  std::vector<G4double> mom(4);
+  G4CascadeMomentum mom;
   std::pair<G4double, G4double> COS_SIN = randomCOS_SIN();
   G4double FI = randomPHI();
   G4double pt = pmod * COS_SIN.second;
@@ -373,11 +373,11 @@ G4InuclElementaryParticle G4BertiniNucleiModel::generateQuasiDeutron(G4int type1
     G4cout << " >>> G4BertiniNucleiModel::generateQuasiDeutron" << G4endl;
   }
 
-  std::vector<G4double> mom = generateNucleon(type1, zone).getMomentum(); 
+  G4CascadeMomentum mom = generateNucleon(type1, zone).getMomentum(); 
 
-  std::vector<G4double> mom1 = generateNucleon(type2, zone).getMomentum();
+  G4CascadeMomentum mom1 = generateNucleon(type2, zone).getMomentum();
 
-  std::vector<G4double> dmom(4);
+  G4CascadeMomentum dmom;
 
   for(G4int i = 1; i < 4; i++) dmom[i] = mom[i] + mom1[i]; 
 
@@ -422,7 +422,7 @@ partners G4BertiniNucleiModel::generateInteractionPartners(G4CascadParticle& cpa
   G4int ptype = cparticle.getParticle().type();
   G4int zone = cparticle.getCurrentZone();
   G4double pmass = cparticle.getParticle().getMass();
-  std::vector<G4double> pmom = cparticle.getParticle().getMomentum();
+  const G4CascadeMomentum& pmom = cparticle.getParticle().getMomentum();
   G4double r_in;
   G4double r_out;
 
@@ -822,8 +822,8 @@ void G4BertiniNucleiModel::boundaryTransition(G4CascadParticle& cparticle) {
 
   } else {
    
-    std::vector<G4double> mom = cparticle.getMomentum();
-    std::vector<G4double> pos = cparticle.getPosition();
+    G4CascadeMomentum mom = cparticle.getMomentum();
+    const std::vector<G4double>& pos = cparticle.getPosition();
     G4int type = cparticle.getParticle().type();
     G4double pr = 0.0;
     G4double r = 0.0;
@@ -980,7 +980,7 @@ G4BertiniNucleiModel::initializeCascad(G4InuclNuclei* bullet,
 
 
 	std::vector<std::vector<G4double> > coordinates; /// nucleons coordinates in nuclei rest frame
-	std::vector<std::vector<G4double> > momentums;
+	std::vector<G4CascadeMomentum> momentums;
      
 	if (ab < 3.0) { /// deutron, simplest case
 	  G4double r = 2.214 - 3.4208 * std::log(1.0 - 0.981 * inuclRndm());
@@ -1022,7 +1022,7 @@ G4BertiniNucleiModel::initializeCascad(G4InuclNuclei* bullet,
 	    G4cout << " p nuc " << p << G4endl;
 	  }
 
-	  std::vector<G4double> mom(4);
+	  G4CascadeMomentum mom;
 	  std::pair<G4double, G4double> COS_SIN = randomCOS_SIN();
 	  G4double FI = randomPHI();
 	  G4double P1 = p * COS_SIN.second;
@@ -1227,7 +1227,7 @@ G4BertiniNucleiModel::initializeCascad(G4InuclNuclei* bullet,
 	    G4double p;
 	    G4double u;
 	    G4double x;
-	    std::vector<G4double> mom(4);
+	    G4CascadeMomentum mom;
 	    /// G4bool badp = True;
 	    G4int i(0);
 
@@ -1318,7 +1318,7 @@ G4BertiniNucleiModel::initializeCascad(G4InuclNuclei* bullet,
 	particleIterator ipart;
 
 	for (ipart = raw_particles.begin(); ipart != raw_particles.end(); ipart++) {
-	  std::vector<G4double> mom = 
+	  G4CascadeMomentum mom = 
 	    toTheBulletRestFrame.backToTheLab(ipart->getMomentum());
 
 	  ipart->setMomentum(mom); 
@@ -1326,7 +1326,7 @@ G4BertiniNucleiModel::initializeCascad(G4InuclNuclei* bullet,
 
 	/// fill cascad particles and outgoing particles
 	for (G4int ip = 0; ip < G4int(raw_particles.size()); ip++) {
-	  std::vector<G4double> mom = raw_particles[ip].getMomentum();
+	  const G4CascadeMomentum& mom = raw_particles[ip].getMomentum();
 	  G4double pmod = std::sqrt(mom[1] * mom[1] + mom[2] * mom[2] + mom[3] * mom[3]);
 	  G4double t0 = -(mom[1] * coordinates[ip][0] + mom[2] * coordinates[ip][1] +
 			  mom[3] * coordinates[ip][2]) / pmod;

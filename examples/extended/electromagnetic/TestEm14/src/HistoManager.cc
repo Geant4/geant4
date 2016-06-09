@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HistoManager.cc,v 1.5 2007/11/13 12:13:32 maire Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: HistoManager.cc,v 1.7 2008/09/24 18:53:56 maire Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -53,8 +53,8 @@ HistoManager::HistoManager()
 #endif
  
   fileName[0] = "testem14";
-  fileType    = "hbook";
-  fileOption  = "--noErrors uncompress";  
+  fileType    = "root";
+  fileOption  = "--noErrors export=root uncompress";  
   // histograms
   for (G4int k=0; k<MaxHisto; k++) {
     histo[k] = 0;
@@ -217,7 +217,7 @@ void HistoManager::RemoveHisto(G4int ih)
 
 void HistoManager::PrintHisto(G4int ih)
 {
- if (ih < MaxHisto) ascii[ih] = true;
+ if (ih < MaxHisto) { ascii[ih] = true; ascii[0] = true; }
  else
     G4cout << "---> warning from HistoManager::PrintHisto() : histo " << ih
            << "does not exist" << G4endl;
@@ -230,6 +230,8 @@ void HistoManager::PrintHisto(G4int ih)
 void HistoManager::saveAscii()
 {
 #ifdef G4ANALYSIS_USE
+ 
+ if (!ascii[0]) return;
  
  G4String name = fileName[0] + ".ascii";
  std::ofstream File(name, std::ios::out);

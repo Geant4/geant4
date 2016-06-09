@@ -4,7 +4,10 @@
 
 This directory contains a set of persistency examples.
 
-   P01        ROOT I/O example for storing and retrieving calorimeter hits
+   P01        Root I/O example for storing and retrieving calorimeter hits.
+   P02        Root I/O example for storing and reading geometry objects.
+   P03        Example of detector geometry persistency in ASCII text format.
 
-See the README file in P01 for more detail.
+   gdml       Set of examples showing usage of the GDML plugin module in Geant4.
 
+See the README file inside each example for more detail.

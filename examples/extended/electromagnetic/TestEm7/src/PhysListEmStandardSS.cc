@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysListEmStandardSS.cc,v 1.4 2007/11/07 19:41:32 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: PhysListEmStandardSS.cc,v 1.8 2008/11/16 19:17:39 maire Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
@@ -37,7 +37,7 @@
 #include "G4GammaConversion.hh"
 #include "G4PhotoElectricEffect.hh"
 
-#include "G4MultipleScattering.hh"
+#include "G4CoulombScattering.hh"
 
 #include "G4eIonisation.hh"
 #include "G4eBremsstrahlung.hh"
@@ -49,8 +49,8 @@
 
 #include "G4hIonisation.hh"
 #include "G4ionIonisation.hh"
-#include "G4ionGasIonisation.hh"
-#include "G4CoulombScattering.hh"
+
+#include "G4EmProcessOptions.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -83,44 +83,63 @@ void PhysListEmStandardSS::ConstructProcess()
       
     } else if (particleName == "e-") {
       //electron
-      pmanager->AddProcess(new G4eIonisation,        -1, 1,1);
-      pmanager->AddProcess(new G4eBremsstrahlung,    -1, 2,2);
       pmanager->AddDiscreteProcess(new G4CoulombScattering);      
+      pmanager->AddProcess(new G4eIonisation,        -1, 1, 1);
+      pmanager->AddProcess(new G4eBremsstrahlung,    -1, 2, 2);
 	    
     } else if (particleName == "e+") {
       //positron
-      pmanager->AddProcess(new G4eIonisation,        -1, 1,1);
-      pmanager->AddProcess(new G4eBremsstrahlung,    -1, 2,2);
-      pmanager->AddProcess(new G4eplusAnnihilation,   0,-1,3);
       pmanager->AddDiscreteProcess(new G4CoulombScattering);      
+      pmanager->AddProcess(new G4eIonisation,        -1, 1, 1);
+      pmanager->AddProcess(new G4eBremsstrahlung,    -1, 2, 2);
+      pmanager->AddProcess(new G4eplusAnnihilation,   0,-1, 3);
             
     } else if (particleName == "mu+" || 
                particleName == "mu-"    ) {
-      //muon  
-      pmanager->AddProcess(new G4MuIonisation,       -1, 1,1);
-      pmanager->AddProcess(new G4MuBremsstrahlung,   -1, 2,2);
-      pmanager->AddProcess(new G4MuPairProduction,   -1, 3,3);
-      pmanager->AddDiscreteProcess(new G4CoulombScattering);      
+      //muon
+      pmanager->AddDiscreteProcess(new G4CoulombScattering);        
+      pmanager->AddProcess(new G4MuIonisation,       -1, 1, 1);
+      pmanager->AddProcess(new G4MuBremsstrahlung,   -1, 2, 2);
+      pmanager->AddProcess(new G4MuPairProduction,   -1, 3, 3);
              
-    } else if (particleName == "alpha" || particleName == "He3") {
-      pmanager->AddProcess(new G4ionIonisation,      -1, 1,1);
-      pmanager->AddDiscreteProcess(new G4CoulombScattering);      
-
-    } else if (particleName == "GenericIon" ) { 
-      pmanager->AddProcess(new G4ionGasIonisation,   -1, 1,1);
-      G4CoulombScattering* cs = new G4CoulombScattering();
-      cs->SetBuildTableFlag(false);
-      pmanager->AddDiscreteProcess(cs);
-      
+    } else if (particleName == "alpha" || 
+	       particleName == "He3" ||
+               particleName == "GenericIon") {
+      pmanager->AddDiscreteProcess(new G4CoulombScattering);	       
+      pmanager->AddProcess(new G4ionIonisation,      -1, 1, 1);
      
     } else if ((!particle->IsShortLived()) &&
 	       (particle->GetPDGCharge() != 0.0) && 
 	       (particle->GetParticleName() != "chargedgeantino")) {
       //all others charged particles except geantino
-      pmanager->AddProcess(new G4hIonisation,        -1,1,1);
       pmanager->AddDiscreteProcess(new G4CoulombScattering);      
+      pmanager->AddProcess(new G4hIonisation,        -1, 1, 1);
     }
   }
+  
+  // Em options
+  //
+  // Main options and setting parameters are shown here.
+  // Several of them have default values.
+  //
+  G4EmProcessOptions emOptions;
+  
+  //physics tables
+  //
+  emOptions.SetMinEnergy(100*eV);	//default    
+  emOptions.SetMaxEnergy(100*TeV);	//default  
+  emOptions.SetDEDXBinning(12*20);	//default=12*7  
+  emOptions.SetLambdaBinning(12*20);	//default=12*7
+  emOptions.SetSplineFlag(true);	//default
+      
+  //energy loss
+  //
+  emOptions.SetStepFunction(0.2,50*um);	//default=(0.2, 1*mm)   
+  emOptions.SetLinearLossLimit(1.e-2);	//default
+   
+  //ionization
+  //
+  emOptions.SetSubCutoff(false);	//default    
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

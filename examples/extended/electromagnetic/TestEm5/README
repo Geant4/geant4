@@ -1,4 +1,4 @@
-$Id: README,v 1.21 2007/11/28 12:37:56 maire Exp $
+$Id: README,v 1.25 2008/10/23 14:09:31 maire Exp $
 -----------------------------------------------------
 
      =========================================================
@@ -26,22 +26,34 @@ $Id: README,v 1.21 2007/11/28 12:37:56 maire Exp $
  	
  The default geometry is constructed in DetectorConstruction class, but all the
  parameters can be changed via commands defined in the DetectorMessenger class.
- The parameters of the "World" can be changed, too.
+ The parameters of the "World" can be changed, too. However, if World material
+ is not set to vacuum, the plots 10->43 below may be not pertinent.
  
  2- PHYSICS LIST
-
- The following EM physics lists are available in this example:	 
- - "standard"     standard EM physics (default)
- - "livermore"    low-energy EM physics using Livermore data
- - "penelope"     low-energy EM physics implementing Penelope models
- - "standardSS"   standard EM physics with single Coulomb scattering 
-                  instead of multiple scattering
+ 
+ Physics lists can be local (eg. in this example) or from G4 kernel
+ physics_lists subdirectory.
+     
+ Local physics lists:	 
+ - "standard"	standard EM physics with current 'best' options setting.
+                these options are explicited in PhysListEmStandard
+ - "standardSS" standard EM physics with single Coulomb scattering 
+                instead of multiple scattering			
+ - "livermore"  low-energy EM physics using Livermore data
+ - "penelope"   low-energy EM physics implementing Penelope models
     
- Alternatively, the user may use predefined Geant4 builders:
- - "emstandard"        G4EmStandardPhysics builder
- - "emstandard_opt1"   G4EmStandardPhysics_option1 builder
- - "emstandard_opt2"   G4EmStandardPhysics_option2 builder
- See geant4/source/physics_lists/History for details 
+ From geant4/source/physics_lists/builders:	 
+ - "emstandard"      recommended standard EM physics for LHC
+ - "emstandard_opt1" best CPU performance standard physics for LHC
+ - "emstandard_opt2"     
+ - "emstandard_opt3" 
+    
+ Physics lists and options can be (re)set with UI commands
+    
+ Please, notice that options set through G4EmProcessOPtions are global, eg
+ for all particle types. In G4 builders, it is shown how to set options per
+ particle type.
+
          	
  3- AN EVENT : THE PRIMARY GENERATOR
  
@@ -99,29 +111,30 @@ $Id: README,v 1.21 2007/11/28 12:37:56 maire Exp $
 	3	"energy of gammas at creation (log10(Ekin/MeV))"
 	4       "x_vertex of charged secondaries (all)"
 	5       "x_vertex of charged secondaries (not absorbed)"
-	10	"(transmit, charged) : kinetic energy at exit"
+	10	"(transmit, charged) : kinetic energy at exit of world"
         11	"(transmit, charged) : ener fluence: dE(MeV)/dOmega"	
 	12	"(transmit, charged) : space angle dN/dOmega"
-	13	"(transmit, charged) : projected angle at exit"
-	14	"(transmit, charged) : projected position at exit"
-	15	"(transmit, charged) : radius at exit"	
-	20	"(transmit, neutral) : kinetic energy at exit"
+	13	"(transmit, charged) : projected angle at exit of world"
+	14	"(transmit, charged) : projected position at exit of world"
+	15	"(transmit, charged) : radius at exit of world"	
+	20	"(transmit, neutral) : kinetic energy at exit of world"
 	21	"(transmit, neutral) : ener fluence: dE(MeV)/dOmega"	
 	22	"(transmit, neutral) : space angle dN/dOmega"
-	23	"(transmit, neutral) : projected angle at exit"
-	30	"(reflect , charged) : kinetic energy at exit"
+	23	"(transmit, neutral) : projected angle at exit of world"
+	30	"(reflect , charged) : kinetic energy at exit of world"
 	31	"(reflect , charged) : ener fluence: dE(MeV)/dOmega"	
 	32	"(reflect , charged) : space angle dN/dOmega"
-	33	"(reflect , charged) : projected angle at exit"
-	40	"(reflect , neutral) : kinetic energy at exit"
+	33	"(reflect , charged) : projected angle at exit of world"
+	40	"(reflect , neutral) : kinetic energy at exit of world"
 	41	"(reflect , neutral) : ener fluence: dE(MeV)/dOmega"	
 	42	"(reflect , neutral) : space angle dN/dOmega"
-	43	"(reflect , neutral) : projected angle at exit"
+	43	"(reflect , neutral) : projected angle at exit of world"
 
- The histograms can be viewed using PAW. See below the note on ANAPHE+AIDA.
+ The histograms can be viewed using ROOT or PAW. See below the note on AIDA.
  
- One can control the name of the histograms file with the command:
- /testem/histo/setFileName  name  (default testem5.hbook) 
+ One can control the name and format of the histograms file with the command:
+ /testem/histo/setFileName  name  (default testem5)
+ /testem/histo/setFileType  type  (choice: hbook, root(default), XML)  
    
  It is also possible to print selected histograms on an ascii file:
  /testem/histo/printHisto id
@@ -176,47 +189,8 @@ $Id: README,v 1.21 2007/11/28 12:37:56 maire Exp $
  
   Before compilation of the example it is optimal to clean up old files:
   	gmake histclean
-  	gmake 		    
+  	gmake
+	 		    
   To use histograms, at least one of the AIDA implementations should be 
-  available (see http://aida.freehep.org).
+  available. See InstallAida.txt
   
- 8a - PI 
-
-  A package including AIDA and extended interfaces also using Python is PI, 
-  available from: http://cern.ch/pi
-
-  Once installed PI or PI-Lite in a specified local area $MYPY, it is required 
-  to add the installation path to $PATH, i.e. for example, for release 1.2.1 of 
-  PI:
-  setenv PATH ${PATH}:$MYPI/1.2.1/app/releases/PI/PI_1_2_1/rh73_gcc32/bin
-
-  CERN users can use the PATH to the LCG area on AFS.
-  Before running the example the command should be issued:
-  eval `aida-config --runtime csh`
-
- 8b -  OpenScientist
-
-  OpenScientist is available at http://OpenScientist.lal.in2p3.fr.
-
-  You have to "setup" the OpenScientist AIDA implementation before compiling
-  (then with G4ANALYSIS_USE set) and running your Geant4 application.
-
- On UNIX you setup, with a csh flavoured shell : 
-	csh> source <<OpenScientist install path>/aida-setup.csh 
-        or with a sh flavoured shell : 
-	sh> . <<OpenScientist install path>/aida-setup.sh
- On Windows : 
-	DOS> call <<OpenScientist install path>/aida-setup.bat 
-
-  You can use various file formats for writing (AIDA-XML, hbook, root).
-  These formats are readable by the Lab onx interactive program
-  or the OpenPAW application. See the web pages.
-
-
-  With OpenPAW, on a run.hbook file, one can view the histograms
-  with something like :
-	OS> opaw 
-        opaw> h/file 1 run.hbook  ( or opaw> h/file 1 run.aida or run.root)  
-	opaw> zone 2 2 
-	opaw> h/plot 1 
-	opaw> h/plot 2

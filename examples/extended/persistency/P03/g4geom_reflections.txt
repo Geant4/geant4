@@ -1,0 +1,23 @@
+// Define rotation matrix
+:ROTM RM0 0. 0. 0.
+:ROTM RMREFL_X -1  0. 0. 0. 1. 0. 0. 0. 1.
+
+// Define volumes and place them
+:VOLU world BOX 200. 200. 200. G4_AIR
+
+:VOLU mybox BOX 20. 40. 50. G4_AIR
+:PLACE mybox 1 world RM0 100. 0. 0. 
+:PLACE mybox 2 world RMREFL_X -100. 0. 0. 
+:COLOUR mybox 0. 1. 1.
+
+:VOLU mybox2 BOX 20. 40. 25. G4_AIR
+:PLACE mybox2 1 mybox RM0 0. 0. 25. 
+
+:VOLU repl1 BOX 20. 10. 25. G4_AIR // needed, but only used for visualisation
+:REPL repl1 mybox2 Y 4 20. 0. 
+
+:VOLU mytrd TRD 5. 10. 5. 10. 20. G4_WATER
+:PLACE mytrd 1 mybox RM0 0. 0. -25
+
+:VIS world OFF
+

@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4OpenGLXmRadioButton.cc,v 1.6 2006/06/29 21:19:54 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 //Radio button class. Inherits from G4OpenGLXmVWidgetComponent
 

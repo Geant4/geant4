@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommands.cc,v 1.22 2007/03/27 15:47:32 allison Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4VisCommands.cc,v 1.23 2008/07/27 10:46:23 allison Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 
 // /vis/ top level commands - John Allison  5th February 2001
 
@@ -178,6 +178,15 @@ G4String G4VisCommandReviewKeptEvents::GetCurrentValue (G4UIcommand*)
 
 void G4VisCommandReviewKeptEvents::SetNewValue (G4UIcommand*, G4String newValue)
 {
+  static bool reviewing = false;
+  if (reviewing) {
+    G4cout <<
+      "\"/vis/reviewKeptEvents\" not allowed within an already started review."
+      "\n  No action taken."
+	   << G4endl;
+    return;
+  }
+
   G4String& macroFileName = newValue;
   G4VisManager::Verbosity verbosity = fpVisManager->GetVerbosity();
 
@@ -222,6 +231,7 @@ void G4VisCommandReviewKeptEvents::SetNewValue (G4UIcommand*, G4String newValue)
   UImanager->SetVerboseLevel(newVerbose);
 
   // Event by event refreshing...
+  reviewing  = true;
   G4bool currentRefreshAtEndOfEvent = pScene->GetRefreshAtEndOfEvent();
   pScene->SetRefreshAtEndOfEvent(true);
   if (macroFileName.empty()) {
@@ -285,6 +295,7 @@ void G4VisCommandReviewKeptEvents::SetNewValue (G4UIcommand*, G4String newValue)
     }
   }
   pScene->SetRefreshAtEndOfEvent(currentRefreshAtEndOfEvent);
+  reviewing  = false;
 
   UImanager->SetVerboseLevel(keepVerbose);
 }

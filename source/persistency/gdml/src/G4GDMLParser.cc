@@ -23,4 +23,36 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+//
+// $Id: G4GDMLParser.cc,v 1.13 2008/11/20 15:33:52 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-02 $
+//
+//
+// class G4GDMLParser Implementation
+//
+// -------------------------------------------------------------------------
+
 #include "G4GDMLParser.hh"
+
+G4GDMLParser::G4GDMLParser()
+  : ucode(false)
+{
+  reader = new G4GDMLReadStructure;
+  writer = new G4GDMLWriteStructure;
+  xercesc::XMLPlatformUtils::Initialize();
+}
+
+G4GDMLParser::G4GDMLParser(G4GDMLReadStructure* ext)
+  : ucode(true)
+{
+  reader = ext;
+  writer = new G4GDMLWriteStructure;
+  xercesc::XMLPlatformUtils::Initialize();
+}
+
+G4GDMLParser::~G4GDMLParser()
+{
+  xercesc::XMLPlatformUtils::Terminate();
+  delete writer;
+  if (!ucode) { delete reader; }
+}

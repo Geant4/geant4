@@ -1,0 +1,27 @@
+$Id: History,v 1.3 2008/12/04 08:24:07 gcosmo Exp $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                      Category History file
+                      ---------------------
+This file should be used by G4 developers and category coordinators
+to briefly summarize all major modifications introduced in the code
+and keep track of all category-tags.
+It DOES NOT substitute the  CVS log-message one should put at every
+committal in the CVS repository !
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+December 4th, 2008  Gabriele Cosmo - G02-V09-01-02
+- Updated GDML file sample to point to new GDML schema location.
+
+November 13th, 2008  Gabriele Cosmo - G02-V09-01-01
+- Use "test.gdml" as default GDML file to load.
+
+August 22nd, 2008  Tatiana Nikitina - G02-V09-01-00
+- Created.

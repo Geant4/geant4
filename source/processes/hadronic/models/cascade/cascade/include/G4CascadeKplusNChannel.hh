@@ -26,43 +26,14 @@
 #ifndef G4_CASCADE_KPLUSN_CHANNEL_HH
 #define G4_CASCADE_KPLUSN_CHANNEL_HH
 
-#include "G4CascadeChannel.hh"
+#include "G4CascadeData.hh"
+#include "G4CascadeFunctions.hh"
 
+struct G4CascadeKplusNChannelData {
+  typedef G4CascadeData<2,5,13,22,32,41,115> data_t;
+  static data_t data;
+};
 
-class G4CascadeKplusNChannel : public G4CascadeChannel {
-
-public:
-
-  G4CascadeKplusNChannel();
-  virtual ~G4CascadeKplusNChannel();
-
-  G4double getCrossSection(G4double ke) const;
-  G4int getMultiplicity(G4double ke) const;
-  std::vector<G4int> getOutgoingParticleTypes(G4int mult, G4double ke) const;
-
-private:
-
-  static G4double kpntot[31];
-  static G4double kpnMultiplicities[6][31];
-
-  static const G4int kpnindex[6][2];
-
-  static const G4int kpn2bfs[2][2];
-  static const G4int kpn3bfs[5][3];
-  static const G4int kpn4bfs[13][4];
-  static const G4int kpn5bfs[22][5];
-  static const G4int kpn6bfs[32][6];
-  static const G4int kpn7bfs[41][7];
-
-  static const G4float kpnCrossSections[115][31];
-};        
+typedef G4CascadeFunctions<G4CascadeKplusNChannelData> G4CascadeKplusNChannel;
 
 #endif
-
-
-
-
-
-
-
-

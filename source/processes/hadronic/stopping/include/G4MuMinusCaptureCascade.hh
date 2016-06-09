@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // $Id: G4MuMinusCaptureCascade.hh,v 1.10 2007/07/05 18:19:14 dennis Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 //   G4MuMinusCaptureCascade physics process --------
 //   Vladimir Ivanchenko, April 2000

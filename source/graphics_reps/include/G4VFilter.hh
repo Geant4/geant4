@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // $Id: G4VFilter.hh,v 1.4 2006/08/25 19:39:39 tinslay Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // Abstract filter class.
 //

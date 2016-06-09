@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEmProcess.hh,v 1.43 2007/10/29 08:38:58 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4VEmProcess.hh,v 1.47 2008/07/31 13:01:26 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // -------------------------------------------------------------------
 //
@@ -54,6 +54,7 @@
 // 25-09-07 More accurate handling zero xsect in 
 //          PostStepGetPhysicalInteractionLength (V.Ivanchenko)
 // 27-10-07 Virtual functions moved to source (V.Ivanchenko)
+// 15-07-08 Reorder class members for further multi-thread development (VI)
 //
 // Class Description:
 //
@@ -89,7 +90,7 @@ class G4VEmProcess : public G4VDiscreteProcess
 public:
 
   G4VEmProcess(const G4String& name,
-                     G4ProcessType type = fElectromagnetic);
+	       G4ProcessType type = fElectromagnetic);
 
   virtual ~G4VEmProcess();
 
@@ -122,70 +123,74 @@ public:
 
   G4VParticleChange* PostStepDoIt(const G4Track&, const G4Step&);
 
-  void PreparePhysicsTable(const G4ParticleDefinition&);
   // Initialise for build of tables
+  void PreparePhysicsTable(const G4ParticleDefinition&);
 
-  void BuildPhysicsTable(const G4ParticleDefinition&);
   // Build physics table during initialisation
+  void BuildPhysicsTable(const G4ParticleDefinition&);
 
+  // Store PhysicsTable in a file.
+  // Return false in case of failure at I/O
   G4bool StorePhysicsTable(const G4ParticleDefinition*,
 			   const G4String& directory,
 			   G4bool ascii = false);
-  // Store PhysicsTable in a file.
-  // Return false in case of failure at I/O
 
+  // Retrieve Physics from a file.
+  // (return true if the Physics Table can be build by using file)
+  // (return false if the process has no functionality or in case of failure)
+  // File name should is constructed as processName+particleName and the
+  // should be placed under the directory specifed by the argument.
   G4bool RetrievePhysicsTable(const G4ParticleDefinition*,
 			      const G4String& directory,
 			      G4bool ascii);
-    // Retrieve Physics from a file.
-    // (return true if the Physics Table can be build by using file)
-    // (return false if the process has no functionality or in case of failure)
-    // File name should is constructed as processName+particleName and the
-    // should be placed under the directory specifed by the argument.
 
   //------------------------------------------------------------------------
   // Specific methods for Discrete EM post step simulation 
   //------------------------------------------------------------------------
 
-  inline G4double MicroscopicCrossSection(G4double kineticEnergy,
-					  const G4MaterialCutsCouple* couple);
-  // It returns the cross section of the process for energy/ material
+  // It returns the cross section per volume for energy/ material
+  G4double CrossSectionPerVolume(G4double kineticEnergy,
+				 const G4MaterialCutsCouple* couple);
 
-  inline G4double ComputeCrossSectionPerAtom(G4double kineticEnergy, 
-					     G4double Z, G4double A=0., 
-					     G4double cut=0.0);
-  // It returns the cross section of the process per atom
-
-  inline G4double MeanFreePath(const G4Track& track);
-
+  // implementation of virtual method
   virtual G4double PostStepGetPhysicalInteractionLength(
                              const G4Track& track,
                              G4double   previousStepSize,
                              G4ForceCondition* condition
                             );
 
+  // It returns the cross section of the process per atom
+  inline G4double ComputeCrossSectionPerAtom(G4double kineticEnergy, 
+					     G4double Z, G4double A=0., 
+					     G4double cut=0.0);
+
+  inline G4double MeanFreePath(const G4Track& track);
+
   inline G4VEmModel* SelectModelForMaterial(G4double kinEnergy, 
 					    size_t& idxRegion) const;
 
+  // It returns cross section per volume
   inline G4double GetLambda(G4double& kinEnergy, 
 			    const G4MaterialCutsCouple* couple);
-  // It returns the Lambda of the process
 
   //------------------------------------------------------------------------
   // Specific methods to build and access Physics Tables
   //------------------------------------------------------------------------
 
+  // Binning for lambda table
   inline void SetLambdaBinning(G4int nbins);
   inline G4int LambdaBinning() const;
-  // Binning for lambda table
 
+  // Min kinetic energy for tables
   inline void SetMinKinEnergy(G4double e);
   inline G4double MinKinEnergy() const;
-  // Min kinetic energy for tables
 
+  // Max kinetic energy for tables
   inline void SetMaxKinEnergy(G4double e);
   inline G4double MaxKinEnergy() const;
-  // Max kinetic energy for tables
+
+  inline void SetPolarAngleLimit(G4double a);
+  inline G4double PolarAngleLimit() const;
 
   inline const G4PhysicsTable* LambdaTable() const;
 
@@ -200,20 +205,20 @@ public:
   // Specific methods to set, access, modify models
   //------------------------------------------------------------------------
 
-  inline void AddEmModel(G4int, G4VEmModel*, const G4Region* region = 0);
   // Add EM model coupled for the region
+  inline void AddEmModel(G4int, G4VEmModel*, const G4Region* region = 0);
    
-  inline void SetModel(G4VEmModel*);
   // Assign a model to a process
+  inline void SetModel(G4VEmModel*);
   
-  inline G4VEmModel* Model();
   // return the assigned model
+  inline G4VEmModel* Model();
     
-  inline void UpdateEmModel(const G4String&, G4double, G4double);
   // Define new energy range for the model identified by the name
+  inline void UpdateEmModel(const G4String&, G4double, G4double);
 
   // Access to models
-  inline G4VEmModel* GetModelByIndex(G4int idx = 0);
+  inline G4VEmModel* GetModelByIndex(G4int idx = 0, G4bool ver = false);
 
   //------------------------------------------------------------------------
   // Get/set parameters used for simulation of energy loss
@@ -235,6 +240,8 @@ protected:
 			   G4ForceCondition* condition);
 
   G4PhysicsVector* LambdaPhysicsVector(const G4MaterialCutsCouple*);
+
+  inline G4ParticleChangeForGamma* GetParticleChange();
 
   inline void SetParticle(const G4ParticleDefinition* p);
   
@@ -277,29 +284,22 @@ private:
   G4VEmProcess(G4VEmProcess &);
   G4VEmProcess & operator=(const G4VEmProcess &right);
 
-// =====================================================================
-
-protected:
-
-  G4ParticleChangeForGamma     fParticleChange;
-
-private:
-
-  std::vector<G4DynamicParticle*> secParticles;
+  // ======== Parameters of the class fixed at construction =========
 
   G4EmModelManager*            modelManager;
-  G4VEmModel*                  selectedModel;  
+  const G4ParticleDefinition*  theGamma;
+  const G4ParticleDefinition*  theElectron;
+  const G4ParticleDefinition*  thePositron;
+  const G4ParticleDefinition*  secondaryParticle;
+
+  G4bool                       buildLambdaTable;
+
+  // ======== Parameters of the class fixed at initialisation =======
 
   // tables and vectors
   G4PhysicsTable*              theLambdaTable;
   G4double*                    theEnergyOfCrossSectionMax;
   G4double*                    theCrossSectionMax;
-
-  const G4ParticleDefinition*  particle;
-  const G4ParticleDefinition*  secondaryParticle;
-  const G4ParticleDefinition*  theGamma;
-  const G4ParticleDefinition*  theElectron;
-  const G4ParticleDefinition*  thePositron;
 
   const std::vector<G4double>* theCuts;
   const std::vector<G4double>* theCutsGamma;
@@ -311,6 +311,29 @@ private:
   G4double                     minKinEnergy;
   G4double                     maxKinEnergy;
   G4double                     lambdaFactor;
+  G4double                     polarAngleLimit;
+
+  G4bool                       integral;
+  G4bool                       applyCuts;
+  G4bool                       startFromNull;
+
+  G4int                        nRegions;
+  std::vector<G4Region*>       regions;
+  std::vector<G4bool>          flagsDeexcitation;
+
+  // ======== Cashed values - may be state dependent ================
+
+protected:
+
+  G4ParticleChangeForGamma     fParticleChange;
+
+private:
+
+  std::vector<G4DynamicParticle*> secParticles;
+
+  G4VEmModel*                  selectedModel;  
+
+  const G4ParticleDefinition*  particle;
 
   // cash
   const G4Material*            currentMaterial;
@@ -320,15 +343,6 @@ private:
   G4double                     mfpKinEnergy;
   G4double                     preStepKinEnergy;
   G4double                     preStepLambda;
-
-  G4bool                       integral;
-  G4bool                       buildLambdaTable;
-  G4bool                       applyCuts;
-  G4bool                       startFromNull;
-
-  G4int                        nRegions;
-  std::vector<G4Region*>       regions;
-  std::vector<G4bool>          flagsDeexcitation;
 
 };
 
@@ -357,7 +371,7 @@ inline void G4VEmProcess::InitialiseStep(const G4Track& track)
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 inline G4double G4VEmProcess::GetLambda(G4double& kineticEnergy,
-                                  const G4MaterialCutsCouple* couple)
+					const G4MaterialCutsCouple* couple)
 {
   DefineMaterial(couple);
   return GetCurrentLambda(kineticEnergy);
@@ -488,9 +502,16 @@ inline void G4VEmProcess::SetLambdaFactor(G4double val)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline G4VEmModel* G4VEmProcess::GetModelByIndex(G4int idx)
+inline G4VEmModel* G4VEmProcess::GetModelByIndex(G4int idx, G4bool ver)
 {
-  return modelManager->GetModel(idx);
+  return modelManager->GetModel(idx, ver);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline G4ParticleChangeForGamma* G4VEmProcess::GetParticleChange()
+{
+  return &fParticleChange;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -588,6 +609,22 @@ inline void G4VEmProcess::SetMaxKinEnergy(G4double e)
 inline G4double G4VEmProcess::MaxKinEnergy() const
 {
   return maxKinEnergy;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline void G4VEmProcess::SetPolarAngleLimit(G4double val)
+{
+  if(val < 0.0)     polarAngleLimit = 0.0;
+  else if(val > pi) polarAngleLimit = pi;
+  else              polarAngleLimit = val;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline G4double G4VEmProcess::PolarAngleLimit() const
+{
+  return polarAngleLimit;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

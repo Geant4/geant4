@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4QTauNuclearCrossSection.hh,v 1.5 2006/12/01 10:57:46 mkossov Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4QTauNuclearCrossSection.hh,v 1.6 2008/10/24 19:23:48 dennis Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 //
 // GEANT4 physics class: G4QTauNuclearCrossSection -- header file
@@ -44,7 +44,6 @@
 
 #include "G4ParticleTable.hh"
 #include "G4NucleiProperties.hh"
-#include "G4NucleiPropertiesTable.hh"
 #include <vector>
 #include "Randomize.hh"
 #include "G4MuonPlus.hh"

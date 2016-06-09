@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4WeightCutOffConfigurator.hh,v 1.2 2007/06/01 09:16:33 ahoward Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4WeightCutOffConfigurator.hh,v 1.3 2008/04/21 09:10:28 ahoward Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // ----------------------------------------------------------------------
 // Class G4WeightCutOffConfigurator
@@ -45,7 +45,7 @@
 #include "G4ProcessPlacer.hh"
 
 class G4WeightCutOffProcess;
-class G4VGCellFinder;
+//class G4VGCellFinder;
 class G4VIStore;
 class G4VPhysicalVolume;
 
@@ -60,7 +60,8 @@ public:  // with description
                              G4double wlimit,
                              G4double isource,
                              G4VIStore *istore,
-                             const G4VGCellFinder &aGCellFinder,G4bool paraflag);
+                             //const G4VGCellFinder &aGCellFinder,
+			     G4bool paraflag);
 
   virtual ~G4WeightCutOffConfigurator();
   virtual void Configure(G4VSamplerConfigurator *preConf);

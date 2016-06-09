@@ -23,7 +23,12 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HadrontherapyDetectorConstruction.cc; Version 4.0 May 2005
+//
+// $Id: HadrontherapyDetectorConstruction.cc;
+// Last modified: G.A.P.Cirrone, April 2008;
+//
+// See more at: http://geant4infn.wikispaces.com
+//
 // ----------------------------------------------------------------------------
 //                 GEANT 4 - Hadrontherapy example
 // ----------------------------------------------------------------------------
@@ -50,41 +55,43 @@
 #include "G4Colour.hh"
 #include "G4UserLimits.hh"
 #include "G4VisAttributes.hh"
-#include "HadrontherapyPhantomROGeometry.hh"
+#include "HadrontherapyDetectorROGeometry.hh"
 #include "HadrontherapyDetectorMessenger.hh"
-#include "HadrontherapyPhantomSD.hh"
+#include "HadrontherapyDetectorSD.hh"
 #include "HadrontherapyDetectorConstruction.hh"
 #include "HadrontherapyMaterial.hh"
 #include "HadrontherapyBeamLine.hh"
 #include "HadrontherapyModulator.hh"
 
+/////////////////////////////////////////////////////////////////////////////
 HadrontherapyDetectorConstruction::HadrontherapyDetectorConstruction()
-  : phantomSD(0), phantomROGeometry(0), beamLine(0), modulator(0),
+  : detectorSD(0), detectorROGeometry(0), beamLine(0), modulator(0),
     physicalTreatmentRoom(0),
     patientPhysicalVolume(0), 
-    phantomLogicalVolume(0), 
-    phantomPhysicalVolume(0)
+    detectorLogicalVolume(0), 
+    detectorPhysicalVolume(0)
 {
   // Messenger to change parameters of the geometry
   detectorMessenger = new HadrontherapyDetectorMessenger(this);
 
   material = new HadrontherapyMaterial();
 
-  // Phantom sizes
-  phantomSizeX = 20.*mm;
-  phantomSizeY = 20.*mm;
-  phantomSizeZ = 20.*mm;
+  // Detector sizes
+  detectorSizeX = 20.*mm;
+  detectorSizeY = 20.*mm;
+  detectorSizeZ = 20.*mm;
 
-  // Number of the phantom voxels  
-  numberOfVoxelsAlongX = 200;
-  numberOfVoxelsAlongY = 200;
-  numberOfVoxelsAlongZ = 200;
+  // Number of the detector voxels  
+  numberOfVoxelsAlongX = 400;
+  numberOfVoxelsAlongY = 1;
+  numberOfVoxelsAlongZ = 1;
 }
 
+/////////////////////////////////////////////////////////////////////////////
 HadrontherapyDetectorConstruction::~HadrontherapyDetectorConstruction()
 { 
   delete material;
-  if (phantomROGeometry) delete phantomROGeometry;  
+  if (detectorROGeometry) delete detectorROGeometry;  
   delete detectorMessenger;
 }
 
@@ -95,7 +102,7 @@ G4VPhysicalVolume* HadrontherapyDetectorConstruction::Construct()
   
   // Define the geometry components
   ConstructBeamLine();
-  ConstructPhantom();
+  ConstructDetector();
   
   // Set the sensitive detector where the energy deposit is collected
   ConstructSensitiveDetector();
@@ -103,14 +110,15 @@ G4VPhysicalVolume* HadrontherapyDetectorConstruction::Construct()
   return physicalTreatmentRoom;
 }
 
+/////////////////////////////////////////////////////////////////////////////
 void HadrontherapyDetectorConstruction::ConstructBeamLine()
 { 
   G4Material* air = material -> GetMat("Air") ;
-  G4Material* water = material -> GetMat("Water");
+  G4Material* water = material -> GetMat("G4_WATER");
 
-  // ---------------------
+  // -----------------------------
   // Treatment room - World volume
-  //---------------------
+  //------------------------------
 
   // Treatment room sizes
   const G4double worldX = 400.0 *cm;
@@ -123,9 +131,6 @@ void HadrontherapyDetectorConstruction::ConstructBeamLine()
                                                             air, 
                                                             "logicTreatmentRoom", 
 							    0,0,0);
-
-
-
   physicalTreatmentRoom = new G4PVPlacement(0,
 					    G4ThreeVector(),
 					    "physicalTreatmentRoom", 
@@ -141,22 +146,28 @@ void HadrontherapyDetectorConstruction::ConstructBeamLine()
   beamLine = new HadrontherapyBeamLine(physicalTreatmentRoom);
   beamLine -> HadrontherapyBeamLineSupport();
   beamLine -> HadrontherapyBeamScatteringFoils();
+  beamLine -> HadrontherapyRangeShifter();
   beamLine -> HadrontherapyBeamCollimators();
   beamLine -> HadrontherapyBeamMonitoring();
+  beamLine -> HadrontherapyMOPIDetector();
   beamLine -> HadrontherapyBeamNozzle();
   beamLine -> HadrontherapyBeamFinalCollimator();
 
   modulator = new HadrontherapyModulator();
   modulator -> BuildModulator(physicalTreatmentRoom);
 
-  // Patient - Mother volume of the phantom
+  //----------------------------------------
+  // Patient: 
+  // a water box used to approximate tissues
+  //----------------------------------------
+ 
   G4Box* patient = new G4Box("patient",20 *cm, 20 *cm, 20 *cm);
-
+  
   G4LogicalVolume* patientLogicalVolume = new G4LogicalVolume(patient,
 							      water, 
 							      "patientLog", 0, 0, 0);
-
-  patientPhysicalVolume = new G4PVPlacement(0,G4ThreeVector(0., 0., 0.),
+  
+  patientPhysicalVolume = new G4PVPlacement(0,G4ThreeVector(200.*mm, 0.*mm, 0.*mm),
 					    "patientPhys",
 					    patientLogicalVolume,
 					    physicalTreatmentRoom,
@@ -169,51 +180,50 @@ void HadrontherapyDetectorConstruction::ConstructBeamLine()
   patientLogicalVolume -> SetVisAttributes(redWire); 
 }
 
-void HadrontherapyDetectorConstruction::ConstructPhantom()
+/////////////////////////////////////////////////////////////////////////////
+void HadrontherapyDetectorConstruction::ConstructDetector()
 {
   G4Colour  lightBlue   (0.0, 0.0, .75);
-
-  G4Material* water = material -> GetMat("Water");
-
-  //ComputeVoxelSize();
-
-  //----------------------
-  // Water phantom  
-  //----------------------
-  G4Box* phantom = new G4Box("Phantom",phantomSizeX,phantomSizeY,phantomSizeZ);
-
-  phantomLogicalVolume = new G4LogicalVolume(phantom,
-					     water,
-					     "PhantomLog",
-					     0,0,0);
-
-  // Fixing the max step allowed in the phantom
+  G4Material* water = material -> GetMat("G4_WATER");
+  
+  //-----------
+  // Detector   
+  //-----------
+  
+  G4Box* detector = new G4Box("Detector",detectorSizeX,detectorSizeY,detectorSizeZ);
+  
+  detectorLogicalVolume = new G4LogicalVolume(detector,
+					      water,
+					      "DetectorLog",
+					      0,0,0);
+  
+  // Fixing the max step allowed in the detector
   G4double maxStep = 0.01 *mm;
-  phantomLogicalVolume -> SetUserLimits(new G4UserLimits(maxStep));
-
-  G4double phantomXtranslation = -180.*mm;
-  phantomPhysicalVolume = new G4PVPlacement(0,
-					    G4ThreeVector(phantomXtranslation, 0.0 *mm, 0.0 *mm),
-					    "PhantomPhys",
-					    phantomLogicalVolume,
-					    patientPhysicalVolume,
-					    false,0);
- 
+  detectorLogicalVolume -> SetUserLimits(new G4UserLimits(maxStep));
+  
+  G4double detectorXtranslation = -180.*mm;
+  detectorPhysicalVolume = new G4PVPlacement(0,
+					     G4ThreeVector(detectorXtranslation, 0.0 *mm, 0.0 *mm),
+					     "DetectorPhys",
+					     detectorLogicalVolume,
+					     patientPhysicalVolume,
+					     false,0);
+  
   // Visualisation attributes of the phantom
   G4VisAttributes* simpleBoxVisAttributes = new G4VisAttributes(lightBlue);
   simpleBoxVisAttributes -> SetVisibility(true);
   simpleBoxVisAttributes -> SetForceSolid(true);
-  phantomLogicalVolume -> SetVisAttributes(simpleBoxVisAttributes);
-
+  detectorLogicalVolume -> SetVisAttributes(simpleBoxVisAttributes);
+  
   // **************
   // Cut per Region
   // **************
   
   // A smaller cut is fixed in the phantom to calculate the energy deposit with the
   // required accuracy 
-  G4Region* aRegion = new G4Region("PhantomLog");
-  phantomLogicalVolume -> SetRegion(aRegion);
-  aRegion -> AddRootLogicalVolume(phantomLogicalVolume);
+  G4Region* aRegion = new G4Region("DetectorLog");
+  detectorLogicalVolume -> SetRegion(aRegion);
+  aRegion -> AddRootLogicalVolume(detectorLogicalVolume);
 }
 
 void  HadrontherapyDetectorConstruction::ConstructSensitiveDetector()
@@ -221,26 +231,26 @@ void  HadrontherapyDetectorConstruction::ConstructSensitiveDetector()
   // Sensitive Detector and ReadOut geometry definition
   G4SDManager* sensitiveDetectorManager = G4SDManager::GetSDMpointer();
 
-  G4String sensitiveDetectorName = "Phantom"; 
+  G4String sensitiveDetectorName = "Detector"; 
 
-  if(!phantomSD)
+  if(!detectorSD)
     {
       // The sensitive detector is instantiated
-      phantomSD = new HadrontherapyPhantomSD(sensitiveDetectorName);
+      detectorSD = new HadrontherapyDetectorSD(sensitiveDetectorName);
       
       // The Read Out Geometry is instantiated
-      G4String ROGeometryName = "PhantomROGeometry";
-      phantomROGeometry = new HadrontherapyPhantomROGeometry(ROGeometryName,
-							     phantomSizeX,
-							     phantomSizeY,
-							     phantomSizeZ,
+      G4String ROGeometryName = "DetectorROGeometry";
+      detectorROGeometry = new HadrontherapyDetectorROGeometry(ROGeometryName,
+							     detectorSizeX,
+							     detectorSizeY,
+							     detectorSizeZ,
 							     numberOfVoxelsAlongX,
 							     numberOfVoxelsAlongY,
 							     numberOfVoxelsAlongZ);
-      phantomROGeometry -> BuildROGeometry();
-      phantomSD -> SetROgeometry(phantomROGeometry);
-      sensitiveDetectorManager -> AddNewDetector(phantomSD);
-      phantomLogicalVolume -> SetSensitiveDetector(phantomSD);
+      detectorROGeometry -> BuildROGeometry();
+      detectorSD -> SetROgeometry(detectorROGeometry);
+      sensitiveDetectorManager -> AddNewDetector(detectorSD);
+      detectorLogicalVolume -> SetSensitiveDetector(detectorSD);
     }
 }
 

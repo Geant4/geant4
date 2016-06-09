@@ -23,55 +23,15 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4FinalStateIonisationRudd.cc,v 1.5 2007/11/26 17:27:09 pia Exp $
-// GEANT4 tag $Name: geant4-09-01 $
-// 
-// Contact Author: Sebastien Incerti (incerti@cenbg.in2p3.fr)
-//                 Maria Grazia Pia  (Maria.Grazia.Pia@cern.ch)
-//
-///
-// Reference: TNS Geant4-DNA paper
-// Reference for implementation model: NIM. 155, pp. 145-156, 1978
-//
-// History:
-// -----------
-// Date         Name              Modification
-// 28 Apr 2007  M.G. Pia          Created in compliance with design described in TNS paper
-//    Nov 2007  S. Incerti        Implementation
-// 26 Nov 2007  MGP               Cleaned up std::
-//
-// -------------------------------------------------------------------
-
-// Class description:
-// Reference: TNS Geant4-DNA paper
-// S. Chauvie et al., Geant4 physics processes for microdosimetry simulation:
-// design foundation and implementation of the first set of models,
-// IEEE Trans. Nucl. Sci., vol. 54, no. 6, Dec. 2007.
-// Further documentation available from http://www.ge.infn.it/geant4/dna
-
-// -------------------------------------------------------------------
-
+// $Id: G4FinalStateIonisationRudd.cc,v 1.8 2008/08/20 14:51:48 sincerti Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 
 #include "G4FinalStateIonisationRudd.hh"
-#include "G4Track.hh"
-#include "G4Step.hh"
-#include "G4DynamicParticle.hh"
-#include "Randomize.hh"
 
-#include "G4ParticleTypes.hh"
-#include "G4ParticleDefinition.hh"
-#include "G4Electron.hh"
-#include "G4Proton.hh"
-#include "G4SystemOfUnits.hh"
-#include "G4ParticleMomentum.hh"
-#include "G4DNAGenericIonsManager.hh"
-
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4FinalStateIonisationRudd::G4FinalStateIonisationRudd()
 {
-  name = "IonisationBorn";
-  // Default energy limits (defined for protection against anomalous behaviour only)
   lowEnergyLimitDefault = 100 * eV;
   highEnergyLimitDefault = 100 * MeV;
 
@@ -111,15 +71,15 @@ G4FinalStateIonisationRudd::G4FinalStateIonisationRudd()
   highEnergyLimit[helium] = 10. * MeV;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4FinalStateIonisationRudd::~G4FinalStateIonisationRudd()
-{ }
+{}
 
-
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 const G4FinalStateProduct& G4FinalStateIonisationRudd::GenerateFinalState(const G4Track& track, const G4Step& /* step */)
 {
-  // Clear previous secondaries, energy deposit and particle kill status
   product.Clear();
 
   const G4DynamicParticle* particle = track.GetDynamicParticle();
@@ -131,32 +91,24 @@ const G4FinalStateProduct& G4FinalStateIonisationRudd::GenerateFinalState(const 
 
   const G4String& particleName = particle->GetDefinition()->GetParticleName();
 
-  // Retrieve energy limits for the current particle type
-
   std::map< G4String,G4double,std::less<G4String> >::iterator pos1;
   pos1 = lowEnergyLimit.find(particleName);
 
-  // Lower limit
   if (pos1 != lowEnergyLimit.end())
-    {
-      lowLim = pos1->second;
-    }
+  {
+    lowLim = pos1->second;
+  }
 
-  // Upper limit
   std::map< G4String,G4double,std::less<G4String> >::iterator pos2;
   pos2 = highEnergyLimit.find(particleName);
 
   if (pos2 != highEnergyLimit.end())
-    {
-      highLim = pos2->second;
-    }
-
-  // Verify that the current track is within the energy limits of validity of the cross section model
+  {
+    highLim = pos2->second;
+  }
 
   if (k >= lowLim && k <= highLim)
-    {
-      // Kinetic energy of primary particle
-
+  {
       G4ParticleDefinition* definition = particle->GetDefinition();
       G4ParticleMomentum primaryDirection = particle->GetMomentumDirection();
       G4double particleMass = definition->GetPDGMass();
@@ -185,7 +137,6 @@ const G4FinalStateProduct& G4FinalStateIonisationRudd::GenerateFinalState(const 
 
       G4double deltaTotalMomentum = std::sqrt(secondaryKinetic*(secondaryKinetic + 2.*electron_mass_c2 ));
 
-      // Primary Particle Direction
       G4double finalPx = totalMomentum*primaryDirection.x() - deltaTotalMomentum*deltaDirection.x();
       G4double finalPy = totalMomentum*primaryDirection.y() - deltaTotalMomentum*deltaDirection.y();
       G4double finalPz = totalMomentum*primaryDirection.z() - deltaTotalMomentum*deltaDirection.z();
@@ -199,14 +150,17 @@ const G4FinalStateProduct& G4FinalStateIonisationRudd::GenerateFinalState(const 
 
       G4DynamicParticle* aElectron = new G4DynamicParticle(G4Electron::Electron(),deltaDirection,secondaryKinetic);
       product.AddSecondary(aElectron);
-    }
+  }
 
-  if (k < lowLim) {product.KillPrimaryParticle();product.AddEnergyDeposit(k);}
+  if (k < lowLim) 
+  {  
+    product.KillPrimaryParticle();
+  }
  
   return product;
 }
 
-
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4double G4FinalStateIonisationRudd::RandomizeEjectedElectronEnergy(G4ParticleDefinition* particleDefinition, 
 								    G4double k, 
@@ -219,26 +173,29 @@ G4double G4FinalStateIonisationRudd::RandomizeEjectedElectronEnergy(G4ParticleDe
 
   if (particleDefinition == G4Proton::ProtonDefinition() 
       || particleDefinition == instance->GetIon("hydrogen"))
-	  
-    { 
+  { 
       maximumKineticEnergyTransfer= 4.* (electron_mass_c2 / proton_mass_c2) * k;
-    }
+  }
 
   if (particleDefinition == instance->GetIon("helium") 
       || particleDefinition == instance->GetIon("alpha+")
       || particleDefinition == instance->GetIon("alpha++"))
-    { 
+  { 
       maximumKineticEnergyTransfer= 4.* (0.511 / 3728) * k;
-    }
+  }
 
   G4double crossSectionMaximum = 0.;
+  
   for(G4double value=waterStructure.IonisationEnergy(shell); value<=4.*waterStructure.IonisationEnergy(shell) ; value+=0.1*eV)
-    {
+  {
       G4double differentialCrossSection = DifferentialCrossSection(particleDefinition, k, value, shell);
       if(differentialCrossSection >= crossSectionMaximum) crossSectionMaximum = differentialCrossSection;
-    }
+  }
+  
   G4double secElecKinetic = 0.;
-  do{
+  
+  do
+  {
     secElecKinetic = G4UniformRand() * maximumKineticEnergyTransfer;
   } while(G4UniformRand()*crossSectionMaximum > DifferentialCrossSection(particleDefinition, 
 									 k,
@@ -248,12 +205,14 @@ G4double G4FinalStateIonisationRudd::RandomizeEjectedElectronEnergy(G4ParticleDe
   return(secElecKinetic);
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 
 void G4FinalStateIonisationRudd::RandomizeEjectedElectronDirection(G4ParticleDefinition* particleDefinition, 
 								   G4double k, 
 								   G4double secKinetic, 
-								   G4double cosTheta, 
-								   G4double phi )
+								   G4double & cosTheta, 
+								   G4double & phi )
 {
   G4DNAGenericIonsManager *instance;
   instance = G4DNAGenericIonsManager::Instance();
@@ -262,20 +221,22 @@ void G4FinalStateIonisationRudd::RandomizeEjectedElectronDirection(G4ParticleDef
  
   if (particleDefinition == G4Proton::ProtonDefinition() 
       || particleDefinition == instance->GetIon("hydrogen")) 
-    { 
+  { 
       maxSecKinetic = 4.* (electron_mass_c2 / proton_mass_c2) * k;
-    }
+  }
   
   if (particleDefinition == instance->GetIon("helium") 
       || particleDefinition == instance->GetIon("alpha+")
       || particleDefinition == instance->GetIon("alpha++"))
-    { 
+  { 
       maxSecKinetic = 4.* (0.511 / 3728) * k;
-    }
+  }
   
   phi = twopi * G4UniformRand();
   cosTheta = std::sqrt(secKinetic / maxSecKinetic);
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 
 G4double G4FinalStateIonisationRudd::DifferentialCrossSection(G4ParticleDefinition* particleDefinition, 
@@ -313,7 +274,7 @@ G4double G4FinalStateIonisationRudd::DifferentialCrossSection(G4ParticleDefiniti
   G4double alphaConst ;
 
   if (j == 4) 
-    {
+  {
       //Data For Liquid Water K SHELL from Dingfelder (Protons in Water)
       A1 = 1.25; 
       B1 = 0.5; 
@@ -325,9 +286,9 @@ G4double G4FinalStateIonisationRudd::DifferentialCrossSection(G4ParticleDefiniti
       C2 = 1.00; 
       D2 = 0.00; 
       alphaConst = 0.66;
-    }
+  }
   else 
-    {
+  {
       //Data For Liquid Water from Dingfelder (Protons in Water)
       A1 = 1.02; 
       B1 = 82.0; 
@@ -339,13 +300,10 @@ G4double G4FinalStateIonisationRudd::DifferentialCrossSection(G4ParticleDefiniti
       C2 = 0.60; 
       D2 = 0.04; 
       alphaConst = 0.64;
-    }
+  }
   
   const G4double n = 2.;
   const G4double Gj[5] = {0.99, 1.11, 1.11, 0.52, 1.};
-
-  //const G4double I[5]={12.61*eV, 14.73*eV, 18.55*eV, 32.2*eV, 539.7*eV}; // for water Vapor
-  //const G4double energyConstant[]={10.79*eV, 13.39*eV, 16.05*eV, 32.30*eV, 539.*eV};
 
   G4DNAGenericIonsManager* instance;
   instance = G4DNAGenericIonsManager::Instance();
@@ -358,16 +316,16 @@ G4double G4FinalStateIonisationRudd::DifferentialCrossSection(G4ParticleDefiniti
 
   if (particleDefinition == G4Proton::ProtonDefinition() 
       || particleDefinition == instance->GetIon("hydrogen")) 
-    {
+  {
       tau = (electron_mass_c2/proton_mass_c2) * k ;
-    }
+  }
    
   if ( particleDefinition == instance->GetIon("helium") 
        || particleDefinition == instance->GetIon("alpha+")
        || particleDefinition == instance->GetIon("alpha++")) 
-    {
+  {
       tau = (0.511/3728.) * k ;
-    }
+  }
  
   G4double S = 4.*pi * Bohr_radius*Bohr_radius * n * std::pow((Ry/waterStructure.IonisationEnergy(ionizationLevelIndex)),2);
   G4double v2 = tau / waterStructure.IonisationEnergy(ionizationLevelIndex);
@@ -389,47 +347,45 @@ G4double G4FinalStateIonisationRudd::DifferentialCrossSection(G4ParticleDefiniti
   if (    particleDefinition == G4Proton::ProtonDefinition() 
 	  || particleDefinition == instance->GetIon("hydrogen")
 	  ) 
-    {
+  {
       return(sigma);
-    }
+  }
 
-  // ------------
-  
   if (particleDefinition == instance->GetIon("alpha++") ) 
-    {
+  {
       slaterEffectiveCharge[0]=0.;
       slaterEffectiveCharge[1]=0.;
       slaterEffectiveCharge[2]=0.;
       sCoefficient[0]=0.;
       sCoefficient[1]=0.;
       sCoefficient[2]=0.;
-    }
+  }
 
   if (particleDefinition == instance->GetIon("alpha+") ) 
-    {
+  {
       slaterEffectiveCharge[0]=2.0;
       slaterEffectiveCharge[1]=1.15;
       slaterEffectiveCharge[2]=1.15;
       sCoefficient[0]=0.7;
       sCoefficient[1]=0.15;
       sCoefficient[2]=0.15;
-    }
+  }
 
   if (particleDefinition == instance->GetIon("helium") ) 
-    {
+  {
       slaterEffectiveCharge[0]=1.7;
       slaterEffectiveCharge[1]=1.15;
       slaterEffectiveCharge[2]=1.15;
       sCoefficient[0]=0.5;
       sCoefficient[1]=0.25;
       sCoefficient[2]=0.25;
-    }
+  }
   
   if (    particleDefinition == instance->GetIon("helium") 
 	  || particleDefinition == instance->GetIon("alpha+")
 	  || particleDefinition == instance->GetIon("alpha++")
 	  ) 
-    {
+  {
       sigma = Gj[j] * (S/waterStructure.IonisationEnergy(ionizationLevelIndex)) * ( (F1+w*F2) / ( std::pow((1.+w),3) * ( 1.+std::exp(alphaConst*(w-wc)/v))) );
     
       G4double zEff = particleDefinition->GetPDGCharge() / eplus + particleDefinition->GetLeptonNumber();
@@ -439,10 +395,12 @@ G4double G4FinalStateIonisationRudd::DifferentialCrossSection(G4ParticleDefiniti
 		sCoefficient[2] * S_2p(k, energyTransfer, slaterEffectiveCharge[2], 2.) );
 	   
       return zEff * zEff * sigma ;
-    }  
+  }  
   
   return 0;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4double G4FinalStateIonisationRudd::S_1s(G4double t, 
 					  G4double energyTransferred, 
@@ -458,7 +416,7 @@ G4double G4FinalStateIonisationRudd::S_1s(G4double t,
   return value;
 }
 
-
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4double G4FinalStateIonisationRudd::S_2s(G4double t,
 					  G4double energyTransferred, 
@@ -475,7 +433,7 @@ G4double G4FinalStateIonisationRudd::S_2s(G4double t,
  
 }
 
-
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4double G4FinalStateIonisationRudd::S_2p(G4double t, 
 					  G4double energyTransferred,
@@ -491,7 +449,7 @@ G4double G4FinalStateIonisationRudd::S_2p(G4double t,
   return value;
 }
 
-
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4double G4FinalStateIonisationRudd::R(G4double t,
 				       G4double energyTransferred,
@@ -499,7 +457,6 @@ G4double G4FinalStateIonisationRudd::R(G4double t,
 				       G4double shellNumber) 
 {
   // tElectron = m_electron / m_alpha * t
-  // Hardcoded in Riccardo's implementation; to be corrected
   // Dingfelder, in Chattanooga 2005 proceedings, p 4
 
   G4double tElectron = 0.511/3728. * t;
@@ -508,7 +465,7 @@ G4double G4FinalStateIonisationRudd::R(G4double t,
   return value;
 }
 
-
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4double G4FinalStateIonisationRudd::CorrectionFactor(G4ParticleDefinition* particleDefinition, G4double k) 
 {
@@ -516,17 +473,17 @@ G4double G4FinalStateIonisationRudd::CorrectionFactor(G4ParticleDefinition* part
   instance = G4DNAGenericIonsManager::Instance();
 
   if (particleDefinition == G4Proton::Proton()) 
-    {
+  {
       return(1.);
-    }
+  }
   else 
     if (particleDefinition == instance->GetIon("hydrogen")) 
-      { 
+    { 
 	G4double value = (std::log(k/eV)-4.2)/0.5;
 	return((0.8/(1+std::exp(value))) + 0.9);
-      }
+    }
     else 
-      {    
+    {    
 	return(1.);
-      }
+    }
 }

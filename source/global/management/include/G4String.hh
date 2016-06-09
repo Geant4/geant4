@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4String.hh,v 1.7 2007/11/13 17:35:06 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4String.hh,v 1.10 2008/12/08 14:16:05 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // 
 //---------------------------------------------------------------
@@ -46,6 +46,8 @@
 
 #include <stdio.h>
 #include <string>
+#include <cstring>
+
 #include "G4Types.hh"
 #include <iostream>
 
@@ -113,6 +115,7 @@ public:
   inline G4String ();
   inline G4String ( char );
   inline G4String ( const char * );
+  inline G4String ( const char *, str_size );
   inline G4String ( const G4String& );
   inline G4String ( const G4SubString& );
   inline G4String ( const std::string & );

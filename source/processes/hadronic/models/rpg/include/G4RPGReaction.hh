@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4RPGReaction.hh,v 1.1 2007/07/18 20:51:37 dennis Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4RPGReaction.hh,v 1.3 2008/05/05 21:21:54 dennis Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // Author: D. H. Wright
 // Date:   26 May 2007
@@ -71,9 +71,6 @@ public:  // with description
                               const G4int /*npnb*/,
                               const G4double /*edta*/,
                               const G4int /*ndta*/,
-                              const G4double /*sprob*/,
-                              const G4double /*kineticMinimum*/,
-                              const G4double /*kineticFactor*/,
                               const G4ReactionProduct& /*modifiedOriginal*/,
                               G4int /*PinNucleus*/,
                               G4int /*NinNucleus*/,
@@ -86,6 +83,10 @@ public:  // with description
                               const G4bool constantCrossSection,
                               G4FastVector<G4ReactionProduct,256> &vec,
                               G4int& vecLen);
+    
+  G4double GenerateNBodyEventT(const G4double totalEnergy,
+                               const G4bool constantCrossSection,
+                               std::vector<G4ReactionProduct*>& list);
     
   void NuclearReaction(G4FastVector<G4ReactionProduct,4> &vec,
                        G4int& vecLen,

@@ -13,12 +13,177 @@ code and to keep track of all tags.
      ---------------------------------------------------------------
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
+
+09 December 2008 Alexander Howard (hadr-deex-V09-01-25)
+----------------------------------------------------
+- further increased verbosity in G4Evaporation.cc to try to understand channel
+  probability failure in very rare case
+
+08 December 2008 Alexander Howard (hadr-deex-V09-01-24)
+----------------------------------------------------
+- increased verbosity in G4Evaporation.cc to try to understand channel
+  probability failure in very rare case
+
+27 November 2008 Alexander Howard (hadr-deex-V09-01-23)
+----------------------------------------------------
+- added delete to G4EvaporationChannel.cc to fix memory leak
+ 
+19 November 2008 Dennis Wright (hadr-deex-V09-01-22)
+----------------------------------------------------
+- fixed bug #1028 in fission/G4CompetitiveFission::FissionCharge:
+  trivial change of A to Af in line 343
+ 
+19 November 2008 V.Ivanchenko (hadr-deex-V09-01-21)
+---------------------------------------------------
+- added comments to modifications of MF model
+
+19 November 2008 Alexander Howard (hadr-deex-V09-01-20)
+-----------------------------------------------------
+- Switched OFF FermiBreakUp by default.
+
+19 November 2008 Alexander Howard (hadr-deex-V09-01-19)
+-----------------------------------------------------
+- Fix from JMQ for Zirconium (nu remains always positive in
+  G4NeutronEvaporationProbability.cc)
+
+18 November 2008 Alexander Howard (hadr-deex-V09-01-18)
+-----------------------------------------------------
+- Fix in G4GEMChannel.cc according to T. Koi (anA,aZ) -> (AResidual,ZResidual)
+  for pairing correction in ExEnergy.
+
+05 November 2008 Gabriele Cosmo (hadr-deex-V09-01-17)
+-----------------------------------------------------
+- Fix in evaporation/G4DeuteronEvaporationProbability.cc for compilation
+  error on Windows-VC++; fixed typo in class scope specification for a
+  couple of methods...
+
+05 November 2008 Dennis Wright (hadr-deex-V09-01-16)
+----------------------------------------------------
+- multifragmentation/G4StatMFChannel.cc: fix gcc 4.3 compiler warnings 
+  at lines 94 and 226.  (place parentheses around && in ||)
+
+24 October 2008 Dennis Wright (hadr-deex-V09-01-15)
+---------------------------------------------------
+- replace G4NucleiPropertiesTable::GetBindingEnergy with 
+  G4NucleiProperties::GetBindingEnergy in G4StatMFMacroTriNucleon, 
+  G4StatMFMacroBiNucleon, and G4StatMFMacroTetraNucleon
+
+30 September 2008 A.Howard (hadr-deex-V09-01-14)
+---------------------------------------------------
+Correct tag of the head + trivial fix from JMQ to prevent negative
+cross-sections for incident protons on targets with A < Carbon.
+
+
+19 September 2008 A.Howard (hadr-deex-V09-01-13)
+---------------------------------------------------
+First inclusion of JMQ's recent changes to evaporation and handler.
+Directories touched: evaporation (everywhere), handler (MAC's changes + JMQ
+interface changes), management (G4VEvaporationChannel.hh (interface)), util
+(G4VEmissionProbability.hh (interface)) - MIS-TAGGED - this is closer to ref07
+***********PLEASE IGNORE**********
+
+
+25 July 2008 V.Ivanchenko (hadr-deex-V09-01-12)
+---------------------------------------------------
+Multi-Fragmentation model have been fixed by I.Pshenichnov in collaboration 
+with Alexander Botvina and Igor Mishustin (FIAS, Frankfurt, INR,
+Moscow and Kurchatov Institute, Moscow, pshenich@fias.uni-frankfurt.de)
+
+G4StatMFMacroTemperature - return original algorithm
+G4StatMFMacroMultiplicity - additional checks in solver of equation
+                            for the chemical potential
+G4StatMFMacroCanonical - fixed infinite loop for a fagment with Z=A;
+                         fixed memory leak
+G4StatMFChannel - fixed semi-infine loop
+G4StatMFMacroMultiNucleon - fixed computation of the symmetry energy
+
+24 July 2008 V.Ivanchenko (hadr-deex-V09-01-11)
+---------------------------------------------------
+G4EvaporationProbability - Coulomb barrier upgraded (J. M. Quesada)
+
+12 July 2008 V.Ivanchenko (hadr-deex-V09-01-10)
+---------------------------------------------------
+Integraded fixes in G4EvaporationProbabilities and the tag hadr-deex-V09-01-08,
+OPT=2 is set (J. M. Quesada)
+
+05 June 2008 A.Howard (hadr-deex-V09-01-09)
+---------------------------------------------------
+
+Fixed memory leak in G4ExcitationHandler thanks to Tatsumi Koi.  The fix is on
+top of hadr-deex-V09-01-01, but does not include any of the other subsequent
+developments.  Required for public beta release.
+
+05 June 2008 J. M. Quesada (hadr-deex-V09-01-08)
+---------------------------------------------------
+
+ Bug fixed in OPT=1 (Chatterjee) charged particle cross sections. 
+Unphysical values at very low emission energies have been corrected (set 
+to 0).
+OPT=1 by default ( OPT=2 in previous tag)
+
+
+ 24 May 2008 A.Howard (hadr-deex-V09-01-07) 
+---------------------------------------------------
+
+As hadr-deex-V09-01-06 but with photon_evaporation updated to new interface.
+Should now be stable (co-works with low energy tag emlowen-V09-01-14, I guess) - 
+see hadr-deex-V09-01-01.
+
+ 24 May 2008 A.Howard (hadr-deex-V09-01-06) 
+---------------------------------------------------
+
+As hadr-deex-V09-01-05 but with G4ExcitationHandler.cc put back to correct version
+
+
+ 24 May 2008 A.Howard (hadr-deex-V09-01-05) 
+---------------------------------------------------
+
+Updated to Jose Manuel Quesada's latest version (should be what was intended in
+hadr-deex-V09-01-03).  Does not include Fan Lei's interface change. This is,
+however, still on the HEAD.
+
+ 24 May 2008 A.Howard (hadr-deex-V09-01-04) 
+---------------------------------------------------
+
+Updated to Jose Manuel Quesada's latest version (should be what was intended in hadr-deex-V09-01-03).  Also includes Fan Lei's change
+to the photon_evaporation interface.
+
+
+ 08 May 2008 J. M. Quesada (hadr-deex-V09-01-03) 
+---------------------------------------------------
+
+ Coulomb barrier has been added again. Standard parameterization is used for it. It acts as an additional component of inverse reaction cross sections, making it cero when emission energy drops below it. Physical reason:  reaction cross sections come from fitting to exp. data at energies normally well above the barrier. The strong competition betwen the different channels makes it very sensible to subtle differences in emission probabilities at low emission energies, when little excitation energy is available.   
+
+ 01 May 2008 J. M. Quesada (hadr-deex-V09-01-02) 
+---------------------------------------------------
+- First trial with cvs. 
+New inverse cross sections:
+        OPT=1 Chetterjee's parameterization to reaction cross sections from optical potential global fittings.
+        OPT=2 as OPT=1 but for protons the Wellisch's parameterization for protons is used  (DEFAULT)
+        OPT=3 Kalbach's modifications of Chatterjee's parameterization of cross sections
+        OPT=4 as OPT=3 but for protons the Wellisch's parameterization for protons is used
+
+Coulomb barrier has been suppressed as it enters through inverse cross sections. Also methods related to former Dostrovski's cross sections (alpha , beta and C parameters) have been suppressed.  
+
+
+ 01 May 2008 Fan Lei (hadr-deex-V09-01-01) 
+---------------------------------------------------
+- photon_evaporation
+  G4PhotonEvaporation.cc: Atomic relaxation model is no longer applied following
+  internal electron conversion. Instead the vaccant shell index is passed to 
+  radioactive decay model, where the ARM is applied.  
+
+ 21 March 2008 Dennis Wright (hadr-deex-V09-01-00)
+--------------------------------------------------
+- added parentheses to fix gcc-4.3 compiler warnings in
+  G4StatMFChannel::CheckFragments and ::PlaceFragments
+
  15 November 2007 Alex Howard (hadr-deex-V09-00-06)
 ---------------------------------------------------
 - Added Jose Manuel Quesada's modification to util/src/G4CoulombBarrier.cc in
-  order to the original Dostrovski's formulation as opposed the modified that
-  was giving to low values.
-
+  order to go back to the original Dostrovski's formulation which is described
+  in the Physics Reference Manual.  The previous implementation (from Vicente
+  Lara) was inconsistent and less to an under-estimate of the Coulomb Barrier.
 
 
  15 November 2007 F Lei (hadr-deex-V09-00-05)

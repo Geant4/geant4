@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmCalculator.cc,v 1.37 2007/08/16 15:55:42 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4EmCalculator.cc,v 1.44 2008/08/03 18:47:15 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // -------------------------------------------------------------------
 //
@@ -54,6 +54,7 @@
 // 27.10.2006 Change test energy to access lowEnergy model from 
 //            10 keV to 1 keV (V. Ivanchenko)
 // 15.03.2007 Add ComputeEnergyCutFromRangeCut methods (V.Ivanchenko)
+// 21.04.2008 Updated computations for ions (V.Ivanchenko)
 //
 // Class Description:
 //
@@ -125,6 +126,20 @@ G4double G4EmCalculator::GetDEDX(G4double kinEnergy, const G4ParticleDefinition*
   const G4MaterialCutsCouple* couple = FindCouple(mat, region);
   if(couple && UpdateParticle(p, kinEnergy) ) {
     res = manager->GetDEDX(p, kinEnergy, couple);
+    if(isIon) {
+      G4double eth = 2.0*MeV/massRatio;
+      if(kinEnergy > eth) {
+        G4double x1 = corr->ComputeIonCorrections(p,mat,kinEnergy);
+        G4double x2 = corr->ComputeIonCorrections(p,mat,eth);
+	res += x1 - x2*eth/kinEnergy;
+	/*	
+	G4cout << "### GetDEDX: E= " << kinEnergy << " res= " << res 
+	       << " x1= " << x1 << " x2= " << x2 
+	       << " del= " << x1 - x2*eth/kinEnergy << G4endl;;
+	*/
+      } 
+    }
+
     if(verbose>0) {
       G4cout << "G4EmCalculator::GetDEDX: E(MeV)= " << kinEnergy/MeV
 	     << " DEDX(MeV/mm)= " << res*mm/MeV
@@ -405,31 +420,21 @@ G4double G4EmCalculator::ComputeDEDX(G4double kinEnergy,
       if(baseParticle) {
         res = currentModel->ComputeDEDXPerVolume(
 	      mat, baseParticle, escaled, cut) * chargeSquare;
-        if(verbose > 1)
+        if(verbose > 1) {
           G4cout <<  baseParticle->GetParticleName()
 		 << " Escaled(MeV)= " << escaled;
+	}
       } else {
         res = currentModel->ComputeDEDXPerVolume(mat, p, kinEnergy, cut);
         if(verbose > 1) G4cout <<  " no basePart E(MeV)= " << kinEnergy;
       }
-      if(verbose > 1)
+      if(verbose > 1) {
 	G4cout << " DEDX(MeV/mm)= " << res*mm/MeV
 	       << " DEDX(MeV*cm^2/g)= "
 	       << res*gram/(MeV*cm2*mat->GetDensity())
 	       << G4endl;
-
-      if(isIon) {
-        if(currentModel->HighEnergyLimit() > 100.*MeV)
-          res += corr->HighOrderCorrections(p,mat,kinEnergy);
-	else
-	  res *= corr->EffectiveChargeCorrection(p,mat,kinEnergy);
-	if(verbose > 1)
-	  G4cout << "After Corrections: DEDX(MeV/mm)= " << res*mm/MeV
-		 << " DEDX(MeV*cm^2/g)= " << res*gram/(MeV*cm2*mat->GetDensity())
-		 << G4endl;
       }
 
-      
       // emulate boundary region for different parameterisations
       G4double eth = currentModel->LowEnergyLimit();
       //      G4cout << "massRatio= " << massRatio << " eth= " << eth << G4endl;
@@ -446,15 +451,32 @@ G4double G4EmCalculator::ComputeDEDX(G4double kinEnergy,
 	  res1 = currentModel->ComputeDEDXPerVolume(mat, p, eth, cut);
 	  res0 = loweModel->ComputeDEDXPerVolume(mat, p, eth, cut);
 	}
-	if(verbose > 1)
+	if(verbose > 1) {
 	  G4cout << "At boundary energy(MeV)= " << eth/MeV
 		 << " DEDX(MeV/mm)= " << res1*mm/MeV
 		 << G4endl;
-        if(isIon) res1 += corr->HighOrderCorrections(p,mat,eth/massRatio);
-        //G4cout << "eth= " << eth << " escaled= " << escaled
-	//  << " res0= " << res0 << " res1= "
-        //       << res1 <<  "  q2= " << chargeSquare << G4endl;
+	}
+	/*
+        G4cout << "eth= " << eth << " escaled= " << escaled
+	       << " res0= " << res0 << " res1= "
+               << res1 <<  "  q2= " << chargeSquare << G4endl;
+	*/
         res *= (1.0 + (res0/res1 - 1.0)*eth/escaled);
+
+        if(isIon) {
+	  G4double ethscaled = eth/massRatio;
+	  if(kinEnergy > ethscaled) {
+	    G4double x1 = corr->ComputeIonCorrections(p,mat,kinEnergy);
+	    G4double x2 = corr->ComputeIonCorrections(p,mat,ethscaled);
+	    res += x1 - x2*ethscaled/kinEnergy;
+	  } 
+	
+	  if(verbose > 1) {
+	    G4cout << "After Corrections: DEDX(MeV/mm)= " << res*mm/MeV
+		   << " DEDX(MeV*cm^2/g)= " << res*gram/(MeV*cm2*mat->GetDensity())
+		   << G4endl;
+	  }
+	}
       }
       
       if(verbose > 0) {
@@ -506,8 +528,10 @@ G4double G4EmCalculator::ComputeElectronicDEDX(G4double kinEnergy, const G4Strin
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4EmCalculator::ComputeTotalDEDX(G4double kinEnergy, const G4ParticleDefinition* part,
-					  const G4Material* mat, G4double cut)
+G4double G4EmCalculator::ComputeTotalDEDX(G4double kinEnergy, 
+					  const G4ParticleDefinition* part,
+					  const G4Material* mat, 
+					  G4double cut)
 {
   G4double dedx = ComputeElectronicDEDX(kinEnergy,part,mat,cut);
   if(mass > 700.*MeV) dedx += ComputeNuclearDEDX(kinEnergy,part,mat);
@@ -516,8 +540,10 @@ G4double G4EmCalculator::ComputeTotalDEDX(G4double kinEnergy, const G4ParticleDe
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4EmCalculator::ComputeTotalDEDX(G4double kinEnergy, const G4String& part,
-					  const G4String& mat, G4double cut)
+G4double G4EmCalculator::ComputeTotalDEDX(G4double kinEnergy, 
+					  const G4String& part,
+					  const G4String& mat, 
+					  G4double cut)
 {
   return ComputeTotalDEDX(kinEnergy,FindParticle(part),FindMaterial(mat),cut);
 }
@@ -754,10 +780,12 @@ G4bool G4EmCalculator::UpdateParticle(const G4ParticleDefinition* p,
   }
   if(isIon) {
     chargeSquare =
-     ionEffCharge->EffectiveChargeSquareRatio(p, currentMaterial, kinEnergy);
-    if(currentProcess)
+     ionEffCharge->EffectiveChargeSquareRatio(p, currentMaterial, kinEnergy)
+      * corr->EffectiveChargeCorrection(p,currentMaterial,kinEnergy);
+    if(currentProcess) {
       currentProcess->SetDynamicMassCharge(massRatio,chargeSquare);
-    // G4cout << "massR= " << massRatio << "   q2= " << chargeSquare << G4endl;
+      //G4cout << "NewP: massR= " << massRatio << "   q2= " << chargeSquare << G4endl;
+    }
   }
   return true;
 }

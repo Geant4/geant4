@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4RandomDirection.hh,v 1.3 2006/06/29 19:00:47 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4RandomDirection.hh,v 1.5 2008/03/19 17:00:20 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // 
 // ------------------------------------------------------------
@@ -33,11 +33,16 @@
 // ------------------------------------------------------------
 // Class description:
 //
-// Funtion returning a unit 3-vector homogeneously randomised over 4pi
+// Function returning a unit 3-vector homogeneously randomised over 4pi
 // solid angle. It can be used in any particle scattering methods
 // instead of:
 //   z=R1, x=SQRT(1-R1*R1)*SIN(2*pi*R2), y=SQRT(1-R1*R1)*COS(2*pi*R2)
 // providing more performant results.
+
+// History:
+//    18.03.08 V. Grichine, unit radius sphere surface based algorithm
+//      ~ 2007 M. Kossov, algorithm based on 8 Quadrants technique
+//
 // ------------------------------------------------------------
 #ifndef G4RANDOMDIR_HH
 #define G4RANDOMDIR_HH
@@ -48,40 +53,13 @@
 
 inline G4ThreeVector G4RandomDirection()
 {
-  // Randomization in one of 8 Quadrants (x>0, y>0, z>0)
-  //
-  G4double x=G4UniformRand(), y=G4UniformRand(), z=G4UniformRand();
-  G4double r2= x*x+y*y+z*z;
-  while(r2>1.||r2<.000001)
-  {
-    x = G4UniformRand(); y = G4UniformRand(); z = G4UniformRand();
-    r2=x*x+y*y+z*z;
-  }
-  G4double r=std::sqrt(r2), quad=G4UniformRand();
-
-  if(quad>0.5)
-  {
-    if(quad>0.75)
-    {
-      if(quad>0.875)    return G4ThreeVector(-x/r,-y/r,-z/r);
-      else              return G4ThreeVector(-x/r,-y/r, z/r);
-    }
-    else
-    {
-      if(quad>0.625)    return G4ThreeVector(-x/r, y/r,-z/r);
-      else              return G4ThreeVector(-x/r, y/r, z/r);
-    }
-  }
-  else
-  {
-    if(quad>0.25)
-    {
-      if(quad>0.375)    return G4ThreeVector( x/r,-y/r,-z/r);
-      else              return G4ThreeVector( x/r,-y/r, z/r);
-    }
-    else if(quad>0.125) return G4ThreeVector( x/r, y/r,-z/r);
-  }
-  return                       G4ThreeVector( x/r, y/r, z/r);
+  G4double cosTheta  = 2.*G4UniformRand()-1.;
+  G4double sinTheta2 = 1. - cosTheta*cosTheta;
+  if( sinTheta2 < 0.)  sinTheta2 = 0.;
+  G4double sinTheta  = std::sqrt(sinTheta2); 
+  G4double phi       = twopi*G4UniformRand();
+  return G4ThreeVector(sinTheta*std::cos(phi),
+                       sinTheta*std::sin(phi), cosTheta).unit(); 
 }
 
 #endif  /* G4RANDOMDIR_HH */

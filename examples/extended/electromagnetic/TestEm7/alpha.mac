@@ -1,0 +1,36 @@
+# $Id: alpha.mac,v 1.2 2008/10/24 15:36:24 maire Exp $
+#
+# Macro file for "TestEm7.cc"
+# (can be run in batch, without graphic)
+#
+#
+/control/verbose 2
+/run/verbose 2
+#
+/testem/det/setMat G4_WATER
+/testem/det/setSizeX  10 cm
+/testem/det/setSizeYZ 10 cm
+/testem/det/tallyMat G4_WATER
+#
+#/testem/phys/addPhysics standard
+#/testem/phys/addPhysics  emstandard
+#/testem/phys/addPhysics  emstandard_opt3
+#
+/run/initialize
+#
+/gun/particle alpha
+/gun/energy 400 MeV
+#
+# step limit
+/testem/phys/setCuts 0.5 mm
+#/testem/stepMax 0.5 mm
+#
+/testem/event/printModulo 1000
+#
+/testem/histo/fileName alpha
+/testem/histo/fileType root
+/testem/histo/setHisto 1 100 75 85
+/testem/histo/setHisto 2 100 75 85
+#
+/run/beamOn 1000
+#

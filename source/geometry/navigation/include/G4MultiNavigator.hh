@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4MultiNavigator.hh,v 1.4 2007/05/21 15:36:25 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4MultiNavigator.hh,v 1.5 2008/10/24 14:00:03 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 //
 // class G4MultiNavigator
@@ -112,7 +112,8 @@ class G4MultiNavigator : public G4Navigator
     // along the direction of a computed step.
 
   G4double ComputeSafety(const G4ThreeVector &globalpoint,
-                         const G4double pProposedMaxLength = DBL_MAX);
+                         const G4double pProposedMaxLength = DBL_MAX,
+                         const G4bool keepState = false);
     // Calculate the isotropic distance to the nearest boundary 
     // in any geometry from the specified point in the global coordinate
     // system. The geometry must be closed.

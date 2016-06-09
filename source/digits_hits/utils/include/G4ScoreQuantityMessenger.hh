@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4ScoreQuantityMessenger.hh,v 1.4 2007/11/06 17:17:14 asaim Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // (HISTORY)
 //  03-Sep-2007  T.Aso Command definitions are introduced.

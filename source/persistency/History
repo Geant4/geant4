@@ -15,6 +15,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+23 October, 08  G.Cosmo (persistency-V09-01-00)
+- Added "ascii" module from original implementation by P.Arce (CIEMAT).
+  First release.
+- Coworks with tag "config-V09-01-08".
+
 02 November, 07  G.Cosmo (persistency-V09-00-00)
 - Added G4LIB_BUILD_GDML/G4LIB_USE_GDML flags to trigger compilation through
   the central scripts. Moved setup for XERCESC (includes and libs paths) to

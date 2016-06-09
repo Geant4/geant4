@@ -25,7 +25,7 @@
 //
 //
 // $Id: RE02PSFlatSurfaceFlux.cc,v 1.3 2007/05/18 18:16:28 asaim Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // RE02PSFlatSurfaceFlux
 #include "RE02PSFlatSurfaceFlux.hh"

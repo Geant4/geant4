@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LossTableBuilder.cc,v 1.24 2007/02/16 11:59:35 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4LossTableBuilder.cc,v 1.27 2008/07/22 15:55:15 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // -------------------------------------------------------------------
 //
@@ -63,7 +63,9 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4LossTableBuilder::G4LossTableBuilder() 
-{}
+{
+  splineFlag = true;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -72,8 +74,9 @@ G4LossTableBuilder::~G4LossTableBuilder()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4LossTableBuilder::BuildDEDXTable(G4PhysicsTable* dedxTable,
-                                  const std::vector<G4PhysicsTable*>& list)
+void 
+G4LossTableBuilder::BuildDEDXTable(G4PhysicsTable* dedxTable,
+				   const std::vector<G4PhysicsTable*>& list)
 {
   size_t n_processes = list.size();
   if(1 >= n_processes) return;
@@ -90,6 +93,7 @@ void G4LossTableBuilder::BuildDEDXTable(G4PhysicsTable* dedxTable,
   for (size_t i=0; i<n_vectors; i++) {
 
     pv = new G4PhysicsLogVector(elow, ehigh, nbins);
+    pv->SetSpline(splineFlag);
     for (size_t j=0; j<nbins; j++) {
       G4double dedx = 0.0;
       G4double energy = pv->GetLowEdgeEnergy(j);
@@ -127,6 +131,7 @@ void G4LossTableBuilder::BuildRangeTable(const G4PhysicsTable* dedxTable,
       G4double ehigh = pv->GetLowEdgeEnergy(nbins);
       G4double dedx1  = pv->GetValue(elow, b);
 
+      // protection for specific cases dedx=0
       if(dedx1 == 0.0) {
         for (size_t k=1; k<nbins; k++) {
           bin0++;
@@ -137,39 +142,29 @@ void G4LossTableBuilder::BuildRangeTable(const G4PhysicsTable* dedxTable,
         nbins -= bin0;
       }
 
+      // initialisation of a new vector
       G4PhysicsLogVector* v = new G4PhysicsLogVector(elow, ehigh, nbins);
+      v->SetSpline(splineFlag);
 
+      // assumed dedx proportional to beta
       G4double range  = 2.*elow/dedx1;
-      //G4double range  = elow/dedx1;
       v->PutValue(0,range);
       G4double energy1 = elow;
 
       for (size_t j=1; j<nbins; j++) {
 
         G4double energy2 = pv->GetLowEdgeEnergy(j+bin0);
-        G4double dedx2   = pv->GetValue(energy2, b);
         G4double de      = (energy2 - energy1) * del;
-        G4double energy  = energy1 - de*0.5;
-
-	G4bool   yes     = true;
-        //G4bool   yes     = false;
-        if(dedx1 < DBL_MIN || dedx2 < DBL_MIN) yes = false;   
-
-        G4double fac, f;
-
-        if(yes) fac = std::log(dedx2/dedx1)/std::log(energy2/energy1);
-        else    fac = (dedx2 - dedx1)/(energy2 - energy1);
-
+        G4double energy  = energy2 + de*0.5;
         for (size_t k=0; k<n; k++) {
-          energy += de;
-          if(yes) f = dedx1*std::exp(fac*std::log(energy/energy1));
-          else    f = dedx1 + fac*(energy - energy1);
-          if(f > DBL_MIN) range  += de/f;
-        }
+          energy -= de;
+          dedx1 = pv->GetValue(energy, b);
+          if(dedx1 > 0.0) range += de/dedx1;
+	}
+
 	//	G4cout << "Range i= " <<i << " j= " << j << G4endl;
         v->PutValue(j,range);
         energy1 = energy2;
-        dedx1   = dedx2;
       }
       G4PhysicsTableHelper::SetPhysicsVector(rangeTable, i, v);
     }
@@ -196,16 +191,16 @@ void G4LossTableBuilder::BuildInverseRangeTable(const G4PhysicsTable* rangeTable
       G4double ehigh = pv->GetLowEdgeEnergy(nbins-1);
       G4double rlow  = pv->GetValue(elow, b);
       G4double rhigh = pv->GetValue(ehigh, b);
-
-      rhigh *= std::exp(std::log(rhigh/rlow)/((G4double)(nbins-1)));
-
       
       G4LPhysicsFreeVector* v = new G4LPhysicsFreeVector(nbins,rlow,rhigh);
+      v->SetSpline(splineFlag);
+
       for (size_t j=0; j<nbins; j++) {
 	G4double e  = pv->GetLowEdgeEnergy(j);
 	G4double r  = pv->GetValue(e, b);
         v->PutValues(j,r,e);
       }
+      v->PutValues(nbins,rhigh+rlow,ehigh);
 
       G4PhysicsTableHelper::SetPhysicsVector(invRangeTable, i, v);
     }

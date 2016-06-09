@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4QParentCluster.cc,v 1.25 2006/11/27 10:44:55 mkossov Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 //      ---------------- G4QParentCluster ----------------
 //             by Mikhail Kossov, Sept 1999.

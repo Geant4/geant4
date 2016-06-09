@@ -1,4 +1,4 @@
-$Id: History,v 1.9 2007/09/30 22:33:42 gum Exp $
+$Id: History,v 1.11 2008/11/21 01:24:55 gum Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,13 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+20 November 2008 Peter Gumplinger (LXe-V09-01-01)
+- update code in LXeOpticalPhysics.cc
+
+16 July 2008 Peter Gumplinger (LXe-V09-01-00)
+- add Birks Constant for the LXe scintillator, Polystyrene scintillator
+  modified: LXeDetectorConstruction.cc, LXeOpticalPhysics.cc
 
 30 Sept 2007 Peter Gumplinger (LXe-V09-00-00)
 - adjust to the G4Cerenkov process now being a G4VDiscreteProcess

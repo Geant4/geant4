@@ -6,7 +6,7 @@
 #   - test for constructing/visualizing boolean geoemtries
 # ==================================================================
 from Geant4 import *
-import ExN01pl, ParticleGun
+import g4py.ExN01pl, g4py.ParticleGun
 
 # ==================================================================
 # user actions in python
@@ -96,20 +96,16 @@ myDC= MyDetectorConstruction()
 gRunManager.SetUserInitialization(myDC)
 
 # minimal physics list
-ExN01pl.Construct()
+g4py.ExN01pl.Construct()
 
 # set primary generator action
-ParticleGun.Construct()
+g4py.ParticleGun.Construct()
 
 # initialize
 gRunManager.Initialize()
 
 # visualization
-if(q_raytracer_x):
-  gApplyUICommand("/vis/open RayTracerX")
-else:
-  gApplyUICommand("/vis/open RayTracer")
-
+gApplyUICommand("/vis/open RayTracer")
 gApplyUICommand("/vis/rayTracer/headAngle 40.")
 gApplyUICommand("/vis/rayTracer/eyePosition 100 100 150  cm")
 

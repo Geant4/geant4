@@ -316,6 +316,7 @@ G4double binom(G4int N, G4int M)
   return 1.;
 }
 
+// Initialize factorials and combinatoric coefficients
 void Initialize()
 {
   //static const G4double  sat = 3.03;      // Stirling saturation of Dubna
@@ -447,7 +448,7 @@ G4double DiffElasticCS(G4int hPDG, G4double HadrMom, G4int A, G4double aQ2) // A
   G4double MassN2   = MassN*MassN;
   G4double S        = (MassN+MassN)*HadrEnergy+MassN2+MassH2;// Mondelststam s
   G4double EcmH     = (S-MassN2+MassH2)/2/std::sqrt(S);     // CM energy of a hadron
-  G4double CMMom = std::sqrt(EcmH*EcmH-MassH2);             // CM momentum
+  G4double CMMom    = std::sqrt(EcmH*EcmH-MassH2);          // CM momentum
 
   G4double Stot     = HadrTot*mb2G2;                        // in GeV^-2
   G4double Bhad     = HadrSlope;                            // in GeV^-2
@@ -484,9 +485,9 @@ G4double DiffElasticCS(G4int hPDG, G4double HadrMom, G4int A, G4double aQ2) // A
   G4double Tot1     = 0.;
   for(G4int i=1; i<=A; i++)                          // @@ Make separately for n and p
   {
-    N              *= -Unucl*(A-i+1)*Rho2/i;
+    N              *= -Unucl*(A-i+1)*Rho2/i;         // Includes total cross-section
     G4double N4     = 1.;
-    G4double Prod1  = std::exp(-Q2*R12B/i/4)*R12B/i;
+    G4double Prod1  = std::exp(-Q2*R12B/i/4)*R12B/i; // Includes the slope
     G4double medTot = R12B/i;
     for(G4int l=1; l<=i; l++)
     {
@@ -555,7 +556,8 @@ G4double DiffElasticCS(G4int hPDG, G4double HadrMom, G4int A, G4double aQ2) // A
   G4double Corr0      = Tot00/Tot1;
   ImElA0             *= Corr0;
                         
-  return (ReElA0*ReElA0+(ImElA0+Din1)*(ImElA0+Din1))*CMMom*CMMom*mb2G2/4/pi2;
+  //return (ReElA0*ReElA0+(ImElA0+Din1)*(ImElA0+Din1))*CMMom*CMMom*mb2G2/4/pi2; // ds/do
+  return (ReElA0*ReElA0+(ImElA0+Din1)*(ImElA0+Din1))*mb2G2/(twopi+twopi);
 } // End of DiffElasticCS
 
 G4double CHIPSDiffElCS(G4int hPDG, G4double HadrMom, G4int Z, G4int A, G4double aQ2) // MeV
@@ -563,40 +565,62 @@ G4double CHIPSDiffElCS(G4int hPDG, G4double HadrMom, G4int Z, G4int A, G4double 
   static const G4double eps = 0.000001;                     // Accuracy of calculations
   static const G4double mb2G2 = 2.568;                      // Transform from mb to GeV^-2
   static const G4double piMG  = pi/mb2G2;                   // PiTrans from GeV^-2 to mb
-  G4double hMom       = HadrMom/1000.;                      // Momentum (GeV, inputParam)
+  G4double p          = HadrMom/1000.;                      // Momentum (GeV, inputParam)
+  G4double p2         = p*p;
 		G4double MassH      = G4QPDGCode(hPDG).GetMass()/1000.;   // Hadron Mass in GeV
   G4double MassH2     = MassH*MassH;
-  G4double HadrEnergy = std::sqrt(hMom*hMom+MassH2);        // Tot energy in GeV
+  G4double HadrEnergy = std::sqrt(p2+MassH2);               // Tot energy in GeV
 		//G4cout<<"G4GCS::DiffElasticCS: PGG_proj="<<hPDG<<", A_nuc= "<<A<<G4endl;
-  if(A==2 || A==3) G4Exception("G4GCS: This model does not work for nuclei with A=2, A=3");
-  if(A>252) G4Exception("G4GCS: This nucleus is too heavy for the model !!!");
   //if(HadrEnergy-MassH<1.) G4Exception("Kin energy is too small for the model (T>1 GeV)");
-  CalculateParameters(hPDG, HadrMom);                   
-  CalculateIntegralCS(A, HadrEnergy);
-  CalculateNuclearParameters(A);
+  CalculateParameters(hPDG, HadrMom);                       // ?                   
+  CalculateIntegralCS(A, HadrEnergy);                       // ?
+  CalculateNuclearParameters(A);                            // ?
   G4double Q2 = aQ2/1000/1000;                              // in GeV^2
 		//G4doubleMassN     = A*0.938;                              // @@ This is bad!
 		G4double MassN    = A*0.9315;                             // @@ Atomic Unit is bad too
   if(G4NucleiPropertiesTable::IsInTable(Z,A))
-				MassN=G4NucleiProperties::GetNuclearMass(A,Z)/1000.;    // Geant4 NuclearMass
+				MassN=G4NucleiProperties::GetNuclearMass(A,Z)/1000.;    // Geant4 NuclearMass in GeV
   G4double MassN2   = MassN*MassN;
   G4double S        = (MassN+MassN)*HadrEnergy+MassN2+MassH2;// Mondelststam s
   G4double EcmH     = (S-MassN2+MassH2)/2/std::sqrt(S);     // CM energy of a hadron
   G4double CMMom    = std::sqrt(EcmH*EcmH-MassH2);          // CM momentum
-  G4double Stot     = HadrTot*mb2G2;                        // in GeV^-2
-  G4double Bhad     = HadrSlope;                            // in GeV^-2
-  G4double Asq      = 1+HadrReIm*HadrReIm;                  // |M|^2/(ImM)^2
+  //G4cout<<"P="<<CMMom<<",E="<<HadrEnergy<<",N="<<MassN2<<",h="<<MassH2<<",p="<<p<<G4endl;
+  G4double p3       = p2*p;
+  G4double p4       = p2*p2;
+  G4double sp       = std::sqrt(p);
+  G4double p2s      = p2*sp;
+  G4double ap       = std::log(p);
+  G4double dl       = ap-3.;
+  G4double dl2      = dl*dl;
+  G4double shPPTot  = 2.91/(p2s+.0024)+5.+(32.+.3*dl2+23./p)/(1.+1.3/p4); // SigPP in mb
+  G4double shPNTot  = 12./(p2s+.05*p+.0001/std::sqrt(sp))+.35/p
+                      +(38.+.3*dl2+8./p)/(1.+1.2/p3);       // SigPP in mb
+  G4double hNTot    = (Z*shPPTot+(A-Z)*shPNTot)/A;          // SighN in mb
+  G4double Stot     = hNTot*mb2G2;                          // in GeV^-2
+  G4double shPPSl   = 8.*std::pow(p,.055)/(1.+3.64/p4);     // PPslope in GeV^-2
+  G4double shPNSl   = (7.2+4.32/(p4*p4+.012*p3))/(1.+2.5/p4); // PNslope in GeV^-2
+  G4double Bhad     = (Z*shPPSl+(A-Z)*shPNSl)/A;            // B-slope in GeV^-2
+  G4double hNReIm   = -.55+ap*(.12+ap*.0045);               // Re/Im_hN in no unit
+  G4double Asq      = 1+hNReIm*hNReIm;                      // |M|^2/(ImM)^2
   G4double Rho2     = std::sqrt(Asq);                       // M/ImM
-  G4double R12      = R1*R1;
-  G4double R22      = R2*R2;
+  G4double r1       = 3.9*std::pow(A-1.,.309);             // Positive diffractionalRadius
+  G4double r2       = 2.*std::pow(A,.36);                  // Negative diffraction radius
+  G4double pN       = Pnucl;                                // Dubna value
+  //G4double pN       = .4;                                   // Screaning factor
+  G4double Ae       = Aeff;                                 // Dubna value
+  //G4double Ae       = .75;                                   // Normalization
+  G4double R12      = r1*r1;
+  G4double R22      = r2*r2;
+  G4double R1C      = R12*r1;
+  G4double R2C      = R22*r2;
   G4double R12B     = R12+Bhad+Bhad;                        // Slope is used
   G4double R22B     = R22+Bhad+Bhad;                        // Slope is used
-  G4double Norm     = (R12*R1-Pnucl*R22*R2)*Aeff;           // Some questionable norming
-  G4double R13      = R12*R1/R12B;                          // Slope is used
-  G4double R23      = Pnucl*R22*R2/R22B;                    // Slope is used
+  G4double Norm     = (R1C-pN*R2C)*Ae;                      // ScreanFac & NormFac are used
+  G4double R13      = R1C/R12B;                             // Slope is used
+  G4double R23      = pN*R2C/R22B;                          // Slope & ScreanFact are used
   G4double norFac   = Stot/twopi/Norm;                      // totCS (in GeV^-2) is used
   G4double Unucl    = norFac*R13;
-  G4double SinFi    = HadrReIm/Rho2;
+  G4double SinFi    = hNReIm/Rho2;                          // Real part
   G4double FiH      = std::asin(SinFi);
   G4double N        = -1.;
   G4double N2       = R23/R13;                              // Slope is used
@@ -605,7 +629,7 @@ G4double CHIPSDiffElCS(G4int hPDG, G4double HadrMom, G4int Z, G4int A, G4double 
   G4double Tot1     = 0.;
   for(G4int i=1; i<=A; i++)
   {
-    N              *= -Unucl*(A-i+1)*Rho2/i;
+    N              *= -Unucl*(A-i+1)*Rho2/i;                // TotCS is used
     G4double N4     = 1.;
     G4double Prod1  = std::exp(-Q2*R12B/i/4)*R12B/i;        // Slope is used
     G4double medTot = R12B/i;                               // Slope is used
@@ -630,7 +654,8 @@ G4double CHIPSDiffElCS(G4int hPDG, G4double HadrMom, G4int Z, G4int A, G4double 
   G4double Corr0  = Tot00/Tot1;
   ImElA0         *= Corr0;
                         
-  return (ReElA0*ReElA0+ImElA0*ImElA0)*CMMom*CMMom*mb2G2/4/pi2;
+  //return (ReElA0*ReElA0+ImElA0*ImElA0)*CMMom*CMMom*mb2G2/4/pi2; // ds/do
+  return (ReElA0*ReElA0+ImElA0*ImElA0)*mb2G2/(twopi+twopi);
 } // End of DiffElasticCS
 
 G4double CHIPS_Tb(G4int  A, G4double b)              // T(b) in fm-2
@@ -704,7 +729,7 @@ G4double CoherentDifElasticCS(G4int hPDG, G4double HadrMom, G4int A, G4double aQ
   else if(A==16) r0   = 0.92;
   else if(A==12) r0   = 0.80;
 		else           r0   = 1.16*(1.-1.16/Re2);  // For other nuclei which have not been tested
-  G4double MassN      = mN;                              // A * AtomicUnit(GeV)
+		G4double MassN      = A*0.9315;                             // @@ Atomic Unit is bad too
   G4double MassN2     = MassN*MassN;
   G4double S          = (MassN+MassN)*HadrEnergy+MassN2+MassH2; // Mondelstam S
   G4double EcmH       = (S-MassN2+MassH2)/2/std::sqrt(S);   // Hadron CM Energy
@@ -735,16 +760,16 @@ G4double CoherentDifElasticCS(G4int hPDG, G4double HadrMom, G4int A, G4double aQ
     G4double InExp    = -hTotG2*Integ*stepB/dHS;
     G4double expB     = std::exp(InExp);
     G4double HRIE     = HadrReIm*InExp;
-    ReIntegrand[i]    = (1.-expB*std::cos(HRIE));
-    ImIntegrand[i]    = expB*std::sin(HRIE);
+    ReIntegrand[i]    = (1.-expB*std::cos(HRIE));           // Real part of the amplitude
+    ImIntegrand[i]    = expB*std::sin(HRIE);                // Imaginary part of the amplit
   } 
   InCoh     = 0.;                                           // incohirent (quasi-elastic)
   ValB       = -stepB;
-  for(G4int k=0; k<NptB; k++)
+  for(G4int k=0; k<NptB; k++)                               // Third integration (?)
   {
     ValB              += stepB;
     InCoh             += Thick[k]*ValB*std::exp(-hTotG2*Thick[k]);
-    G4double J0qb      = QJ0(std::sqrt(Q2)*ValB)*ValB;
+    G4double J0qb      = QJ0(std::sqrt(Q2)*ValB)*ValB;      // Bessel0(Q*b)
     ReSum             += J0qb*ReIntegrand[k];
     ImSum             += J0qb*ImIntegrand[k];
   }
@@ -752,7 +777,8 @@ G4double CoherentDifElasticCS(G4int hPDG, G4double HadrMom, G4int A, G4double aQ
   //      <<Q2<<",m="<<mb2G2<<G4endl;
   InCoh *= stepB*hTotG2*hTotG2*(1.+HadrReIm*HadrReIm)*std::exp(-HadrSlope*Q2)/8/mb2G2;
   //G4cout<<"GHAD:RS="<<ReSum<<",IS="<<ImSum<<",CM="<<CMMom<<",st="<<stepB<<G4endl;
-  return (ReSum*ReSum+ImSum*ImSum)*m2G10*CMMom*CMMom*stepB*stepB/twopi;
+  //return (ReSum*ReSum+ImSum*ImSum)*m2G10*CMMom*CMMom*stepB*stepB/twopi; // ds/do
+  return (ReSum*ReSum+ImSum*ImSum)*m2G10*stepB*stepB/12; // ds/dt
 }  
 
 G4double CHIPSDifElasticCS(G4int hPDG, G4double hMom, G4int A, G4int Z, G4double aQ2)
@@ -762,102 +788,117 @@ G4double CHIPSDifElasticCS(G4int hPDG, G4double hMom, G4int A, G4int Z, G4double
   static const G4double mN = .938;                          // Atomic Unit GeV
   static const G4double hc2   = .3893793;                   // Transform from GeV^-2 to mb
   static const G4double mb2G2 = 1./hc2;                     // Transform from mb to GeV^-2
-  //static const G4double mb2G2 = 2.568;                     // Transform from mb to GeV^-2
   static const G4double f22mb = 10;                         // Transform from fermi^2 to mb
   static const G4double f22G2 = f22mb*mb2G2;                // Transform from fm2 to GeV^-2
   static const G4double f2Gm1 = std::sqrt(f22G2);           // Transform from fm to GeV^-1
   G4double Re         = std::pow(A,.33333333);              // A-dep coefficient
-  G4double Lim        = 50.*Re;                             // Integration accuracy limit
+  G4double Lim        = 100*Re;                             // Integration accuracy limit
   G4double Tb[Npb];                                         // Calculated T(b) array
   G4QBesIKJY QI0(BessI0);                                   // I0 Bessel function
   G4QBesIKJY QJ0(BessJ0);                                   // J0 Bessel function
-           hMom       = hMom/1000.;                         // Momentum (GeV, inputParam)
+  G4double p          = hMom/1000.;                         // Momentum (GeV, inputParam)
+  G4double p2         = p*p;
 		G4double MassH      = G4QPDGCode(hPDG).GetMass()/1000.;   // Hadron Mass in GeV
   G4double MassH2     = MassH*MassH;                        // Squared mass of the hadron
-  G4double hEnergy    = std::sqrt(hMom*hMom+MassH2);        // Tot energy in GeV
+  G4double hEnergy    = std::sqrt(p2+MassH2);               // Tot energy in GeV
   G4double Q2         = aQ2/1000000.;                       // -t in GeV
-  G4double MassN      = mN;                                 // AtomicUnit(GeV)[prototype]
+		G4double MassN    = A*0.9315;                             // @@ Atomic Unit is bad too
+  if(G4NucleiPropertiesTable::IsInTable(Z,A))
+				MassN=G4NucleiProperties::GetNuclearMass(A,Z)/1000.;    // Geant4 NuclearMass in GeV
   G4double MassN2     = MassN*MassN;                        // Squared mass of the target
   G4double S          = (MassN+MassN)*hEnergy+MassN2+MassH2;// Mondelstam s
   G4double EcmH       = (S-MassN2+MassH2)/2/std::sqrt(S);   // Hadron CM Energy
   G4double CMMom      = std::sqrt(EcmH*EcmH-MassH2);        // CM momentum (to norm CS)
-  // @@ Temporary only for nucleons
-  //G4cout<<"CHPS:E="<<hEnergy<<",dM="<<2*MassN<<",sN="<<MassN2<<",sH="<<MassH2<<G4endl;
-  G4double shNTot     = 5.2+5.2*std::log(hEnergy)+51*std::pow(hEnergy,-.35); // SighN in mb
-  G4double shNSl      = 5.44+.88*std::log(S);               // B-slope in GeV^-2 
-  G4double shNReIm    = .13*std::log(S/350)*std::pow(S,-.18); // Re/Im_hN in no unit
+  //G4cout<<"2: P="<<CMMom<<",E="<<hEnergy<<",N="<<MassN2<<",h="<<MassH2<<",p="<<p<<G4endl;
+  // The mean value of the total can be used
+  G4double p3         = p2*p;
+  G4double p4         = p2*p2;
+  G4double sp         = std::sqrt(p);
+  G4double p2s        = p2*sp;
+  G4double ap         = std::log(p);
+  G4double dl         = ap-3.;
+  G4double dl2        = dl*dl;
+  G4double shPPTot    = 2.91/(p2s+.0024)+5.+(32.+.3*dl2+23./p)/(1.+1.3/p4); // SigPP in mb
+  G4double shPNTot    = 12./(p2s+.05*p+.0001/std::sqrt(sp))+.35/p
+                        +(38.+.3*dl2+8./p)/(1.+1.2/p3);     // SigPP in mb
+  G4double shNTot     = (Z*shPPTot+(A-Z)*shPNTot)/A;        // SighN in mb
+#ifdef debug
+  G4cout<<"CHIPS:SI,p="<<p<<",n="<<shNTot<<",P="<<shPPTot<<",N="<<shPNTot
+        <<",Z="<<Z<<",A="<<A<<G4endl;
+#endif
+  G4double shPPSl     = 8.*std::pow(p,.055)/(1.+3.64/p4);   // PPslope in GeV^-2
+  G4double shPNSl     = (7.2+4.32/(p4*p4+.012*p3))/(1.+2.5/p4); // PNslope in GeV^-2
+  G4double shNSl      = (Z*shPPSl+(A-Z)*shPNSl)/A;          // B-slope in GeV^-2
+#ifdef debug
+  G4cout<<"CHIPS:SL,n="<<shNSl<<",P="<<shPPSl<<",N="<<shPNSl<<G4endl;
+#endif
+  G4double shNReIm    = -.55+ap*(.12+ap*.0045); // Re/Im_hN in no unit
   //G4cout<<"CHPS: s="<<S<<",T="<<shNTot<<",R="<<shNReIm<<",B="<<shNSl<<G4endl;
   // @@ End of temporary ^^^^^^^
   G4double dHS        = shNSl+shNSl;                        // Working: doubled B-slope
-  //G4double rAfm       = 0.;
-  //if    (A==208) rAfm = 1.125*Re;
-  //else if(A==90) rAfm = 1.12*Re;
-  //else if(A==64) rAfm = 1.1*Re;
-  //else if(A==58) rAfm = 1.09*Re;
-  //else if(A==48) rAfm = 1.07*Re;
-  //else if(A==40) rAfm = 1.15*Re;
-  //else if(A==28) rAfm = 0.93*Re;
-  //else if(A==16) rAfm = 0.92*Re;
-  //else if(A==12) rAfm = 0.80*Re;
-		//else           rAfm = 1.16*(Re-1.16/Re);                  // For other nuclei
-  //G4double stepB      = 2.5*rAfm*f2Gm1/(Npb-1);           // in GeV^-1, step of integral
   G4double stepB      = (Re+Re+2.7)*f2Gm1/(Npb-1);          // in GeV^-1, step of integral
   G4double hTotG2     = shNTot*mb2G2;                       // sigma_hN in GeV^-2
   G4double ReSum      = 0.;                                 // Integration of RePart of Amp
   G4double ImSum      = 0.;                                 // Integration of ImPart of Amp
   G4double ValB       = -stepB;
-  for(G4int i=0; i<Npb; i++)
+  for(G4int i=0; i<Npb; i++)                                // First integration over b
   {
     ValB             += stepB;                              // An incident parameter
-    G4double ValB2    = ValB*ValB;                          // A working value
-    G4double IPH      = ValB/shNSl;                         // A working value
+    G4double ValB2    = ValB*ValB;                          // A working value b^2
+    G4double IPH      = ValB/shNSl;                         // A working value slope
     G4double Integ    = 0.;                                 // Integral over ImpactParam.
     G4double ValS     = 0.;                                 // Prototype of ImpactParameter
-    for(G4int j=1; j<Npb; j++)
+    for(G4int j=1; j<Npb; j++)                              // Second integration over b
     {
       ValS           += stepB; //  back to fm               // Impact parameter GeV^-1
       if(!i) Tb[j]    = CHIPS_Tb(A,ValS/f2Gm1)/f22G2;       // GeV^2, calculate only once
       //if(!i) Tb[j]    = Thickness(A,ValS/f2Gm1,rAfm)/f22G2; // Calculate T(b) only once
-      G4double FunS   = IPH*ValS;                           // Working product 
-      if(FunS > Lim) break;                                 // (?)
-      Integ          += ValS*std::exp(-(ValS*ValS+ValB2)/dHS)*QI0(FunS)*Tb[j];
+      G4double FunS   = IPH*ValS;                           // b1*b2/slope
+      if(FunS > Lim) break;                                 // To avoid NAN
+      Integ          += ValS*std::exp(-(ValS*ValS+ValB2)/dHS)*QI0(FunS)*Tb[j]; // BessI0
     } 
-    G4double InExp    = -hTotG2*Integ*stepB/dHS;            // Working product 
-    G4double expB     = std::exp(InExp);                    // Workung sqrt
+    G4double InExp    = -hTotG2*Integ*stepB/dHS;            // Integrated absorption 
+    G4double expB     = std::exp(InExp);                    // Exponential absorption
     G4double HRIE     = shNReIm*InExp;                      // Phase shift
-    G4double J0qb      = QJ0(std::sqrt(Q2)*ValB)*ValB;
+    G4double J0qb      = QJ0(std::sqrt(Q2)*ValB)*ValB;      // Bessel0(Q*b)
     ReSum             += J0qb*(1.-expB*std::cos(HRIE));
     ImSum             += J0qb*expB*std::sin(HRIE);
   } 
   //G4cout<<"CHPS:RS="<<ReSum<<",IS="<<ImSum<<",CM="<<CMMom<<",st="<<stepB<<G4endl;
   //return (ReSum*ReSum+ImSum*ImSum)*mb2G2*CMMom*CMMom*stepB*stepB/twopi;
-  return (ReSum*ReSum+ImSum*ImSum)*f22G2*CMMom*CMMom*stepB*stepB/twopi;
-}  
+  //return (ReSum*ReSum+ImSum*ImSum)*f22G2*CMMom*CMMom*stepB*stepB/twopi; // ds/do
+  return (ReSum*ReSum+ImSum*ImSum)*f22G2*stepB*stepB/12; // ds/dt
+}
+
+// Separate quasielastic calculation
 G4double CHIPSDifQuasiElasticCS(G4int hPDG, G4double hMom, G4int A, G4int Z, G4double aQ2)
 {//      =================================================================================
   static const G4int Npb      = 500;                        // A#of intergation points
-  //static const G4double mN = .9315;                         // Atomic Unit GeV
-  static const G4double mN = .938;                          // Mass of proton GeV
   static const G4double hc2   = .3893793;                   // Transform from GeV^-2 to mb
   static const G4double mb2G2 = 1./hc2;                     // Transform from mb to GeV^-2
   //static const G4double mb2G2 = 2.568;                     // Transform from mb to GeV^-2
   static const G4double f22mb = 10;                         // Transform from fermi^2 to mb
   static const G4double f22G2 = f22mb*mb2G2;                // Transform from fm2 to GeV^-2
   static const G4double f2Gm1 = std::sqrt(f22G2);           // Transform from fm to GeV^-1
-           hMom       = hMom/1000.;                         // Momentum (GeV, inputParam)
-		G4double MassH      = G4QPDGCode(hPDG).GetMass()/1000.;   // Hadron Mass in GeV
-  G4double MassH2     = MassH*MassH;                        // Squared mass of the hadron
-  G4double hEnergy    = std::sqrt(hMom*hMom+MassH2);        // Tot energy in GeV
+  G4double p          = hMom/1000.;                         // Momentum (GeV, inputParam)
+  G4double p2         = p*p;
   G4double Q2         = aQ2/1000000.;                       // -t in GeV
-  G4double MassN      = mN;                                 // A*AtomicUnit(GeV)[prototype]
-  //if(G4NucleiPropertiesTable::IsInTable(Z,A))
-		//		MassN=G4NucleiProperties::GetNuclearMass(A,Z)/A/1000.;  // Geant4 NuclearMass/A
-  G4double MassN2     = MassN*MassN;                        // Squared mass of the target
-  G4double S          = (MassN+MassN)*hEnergy+MassN2+MassH2;// Mondelstam s
   // @@ Temporary only for nucleons
-  G4double shNTot     = 5.2+5.2*std::log(hEnergy)+51*std::pow(hEnergy,-.35); // SighN in mb
-  G4double shNSl      = 6.44+.88*std::log(S);               // B-slope in GeV^-2 
-  G4double shNReIm    = .13*std::log(S/350)*std::pow(S,-.18); // Re/Im_hN in no unit
+  G4double p3         = p2*p;
+  G4double p4         = p2*p2;
+  G4double sp         = std::sqrt(p);
+  G4double p2s        = p2*sp;
+  G4double ap         = std::log(p);
+  G4double dl         = ap-3.;
+  G4double dl2        = dl*dl;
+  G4double shPPTot    = 2.91/(p2s+.0024)+5.+(32.+.3*dl2+23./p)/(1.+1.3/p4); // SigPP in mb
+  G4double shPNTot    = 12./(p2s+.05*p+.0001/std::sqrt(sp))+.35/p
+                        +(38.+.3*dl2+8./p)/(1.+1.2/p3);     // SigPP in mb
+  G4double shNTot     = (Z*shPPTot+(A-Z)*shPNTot)/A;        // SighN in mb
+  G4double shPPSl     = 8.*std::pow(p,.055)/(1.+3.64/p4);   // PPslope in GeV^-2
+  G4double shPNSl     = (7.2+4.32/(p4*p4+.012*p3))/(1.+2.5/p4); // PNslope in GeV^-2
+  G4double shNSl      = (Z*shPPSl+(A-Z)*shPNSl)/A;          // B-slope in GeV^-2
+  G4double shNReIm    = -.55+ap*(.12+ap*.0045); // Re/Im_hN in no unit
   // @@ End of temporary ^^^^^^^
   G4double Re         = std::pow(A,.33333333);              // A-dep coefficient
   G4double stepB      = (Re+Re+2.7)*f2Gm1/(Npb-1);          // in GeV^-1, step of integral
@@ -1008,10 +1049,10 @@ int main()
   ////                He Be C O  Al Ti Ni Cu  Sn Ta  Pb   U
   //const G4int A[na]={4,9,12,16,27,48,58,64,120,181,207,238}; // A's of target nuclei
   //                 He Al Pb
-  const G4int A[na]={208}; // A's of target nuclei
+  const G4int A[na]={119}; // A's of target nuclei
   //                     p    n  pi+  pi-  K+  K-  antip
   const G4int pdg[np]={2212,2112,211,-211,321,-321,-2212}; // projectiles
-  const G4double mom[nm]={1090.}; // momentum in MeV/c
+  const G4double mom[nm]={120.}; // momentum in MeV/c
 #ifdef integrc
   for(G4int ip=0; ip<np; ip++)
 		{
@@ -1048,7 +1089,7 @@ int main()
   ////                He Be C O  Al Ti Ni Cu  Sn Ta  Pb   U
   //const G4int Z[na]={2,4, 6, 8,13,22,28,29, 50, 73, 82, 92}; // Z's of target nuclei
   //                He Al Pb
-  const G4int Z[na]={82}; // Z's of target nuclei
+  const G4int Z[na]={50}; // Z's of target nuclei
   // Test of differential ellastic cross sections
 		Initialize();
   //for(G4int ip=0; ip<np; ip++)
@@ -1065,7 +1106,7 @@ int main()
         for(G4int it=0; it<nt; it++)
 		      {
           G4double Sig1 = CHIPSDiffElCS(PDG, mom[im], Z[ia], A[ia], t[it]);
-          //G4double Sig1 = DiffElasticCS(PDG, mom[im], A[ia], t[it]);
+          //G4double Sig1 = DiffElasticCS(PDG, mom[im], A[ia], t[it]); //Doesn't work
           G4double Sig2 = CoherentDifElasticCS(PDG, mom[im], A[ia], t[it]);
           G4double Sig3 = CHIPSDifElasticCS(PDG, mom[im], A[ia], Z[ia], t[it]);
           G4double CQEl = CHIPSDifQuasiElasticCS(PDG, mom[im], A[ia], Z[ia], t[it]);

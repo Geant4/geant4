@@ -114,7 +114,7 @@ void exrdmMaterial::AddMaterial (G4String name, G4String formula, G4double densi
   delete[] sname;
 
   G4Material* aMaterial = 0;
-  //  G4cout << name <<" "<< formula << " " << density/(g/cm3) << " " << tem <<" " <<pres << G4endl;
+  G4cout << name <<" "<< formula << " " << density/(g/cm3) << " " << tem <<" " <<pres << G4endl;
  
   if (state == "") {
     aMaterial = new G4Material(name, density, ncomponents);
@@ -236,13 +236,13 @@ void exrdmMaterial::AddMaterial (G4String name, G4String formula, G4double densi
         Element.push_back(aElement);
       } else {
         if (natoms>0) { 
-	  aMaterial->AddElement( G4Element::GetElement(isotopename) , natoms);
+	  aMaterial->AddElement( G4Element::GetElement(isotopename,false) , natoms);
 	} else {
-	  aMaterial->AddElement( G4Element::GetElement(isotopename) , fatoms);
+	  aMaterial->AddElement( G4Element::GetElement(isotopename,false) , fatoms);
 	}
       }      
     } else {
-      if ( G4Element::GetElement(element) == NULL) {
+      if ( G4Element::GetElement(element,false) == NULL) {
         G4Element* aElement = new G4Element(element, element, Z, A[Z-1]*g/mole);
 	if (natoms>0) { 
 	  aMaterial->AddElement(aElement, natoms);
@@ -252,9 +252,9 @@ void exrdmMaterial::AddMaterial (G4String name, G4String formula, G4double densi
         Element.push_back(aElement);
       } else {
 	if (natoms>0) { 
-	  aMaterial->AddElement( G4Element::GetElement(element) , natoms);
+	  aMaterial->AddElement( G4Element::GetElement(element,false) , natoms);
 	} else {
-	  aMaterial->AddElement( G4Element::GetElement(element) , fatoms);
+	  aMaterial->AddElement( G4Element::GetElement(element,false) , fatoms);
 	} 
       }
     }

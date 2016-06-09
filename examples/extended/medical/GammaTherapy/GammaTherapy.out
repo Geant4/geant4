@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: global-V09-00-02    (14-December-2007)
+ Geant4 version Name: global-V09-01-17    (19-December-2008)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -9,59 +9,59 @@
 
 ***** Table : Nb of materials = 6 *****
 
- Material:    G4_Be     density:  1.848 g/cm3   RadL:  35.276 cm   Imean:  63.700 eV 
+ Material:    G4_Be     density:  1.848 g/cm3   RadL:  35.276 cm   Nucl.Int.Length:  39.449 cm   Imean:  63.700 eV 
    --->  Element: Be (Be)   Z =  4.0   N =   9.0   A =   9.01 g/mole
-   --->  Isotope:    Be   Z =  4   N =   9   A =   9.01 g/mole   abundance: 100.00 %  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
+   --->  Isotope:   Be9   Z =  4   N =   9   A =   9.01 g/mole   abundance: 100.00 %  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
- Material:     G4_W     density: 19.300 g/cm3   RadL:   3.504 mm   Imean: 727.000 eV 
+ Material:     G4_W     density: 19.300 g/cm3   RadL:   3.504 mm   Nucl.Int.Length:  10.310 cm   Imean: 727.000 eV 
    --->  Element: W (W)   Z = 74.0   N = 183.9   A = 183.84 g/mole
-   --->  Isotope:     W   Z = 74   N = 180   A = 179.95 g/mole   abundance:   0.12 %
-   --->  Isotope:     W   Z = 74   N = 182   A = 181.95 g/mole   abundance:  26.50 %
-   --->  Isotope:     W   Z = 74   N = 183   A = 182.95 g/mole   abundance:  14.31 %
-   --->  Isotope:     W   Z = 74   N = 184   A = 183.95 g/mole   abundance:  30.64 %
-   --->  Isotope:     W   Z = 74   N = 186   A = 185.95 g/mole   abundance:  28.43 %  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
+   --->  Isotope:  W180   Z = 74   N = 180   A = 179.95 g/mole   abundance:   0.12 %
+   --->  Isotope:  W182   Z = 74   N = 182   A = 181.95 g/mole   abundance:  26.50 %
+   --->  Isotope:  W183   Z = 74   N = 183   A = 182.95 g/mole   abundance:  14.31 %
+   --->  Isotope:  W184   Z = 74   N = 184   A = 183.95 g/mole   abundance:  30.64 %
+   --->  Isotope:  W186   Z = 74   N = 186   A = 185.95 g/mole   abundance:  28.43 %  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
- Material:    G4_He     density:  0.166 mg/cm3  RadL:   5.671 km   Imean:  41.800 eV   temperature: 273.15 K  pressure:   1.00 atm
+ Material:    G4_He     density:  0.166 kg/m3   RadL:   5.671 km   Nucl.Int.Length:   3.343 km   Imean:  41.800 eV   temperature: 273.15 K  pressure:   1.00 atm
    --->  Element: He (He)   Z =  2.0   N =   4.0   A =   4.00 g/mole
-   --->  Isotope:    He   Z =  2   N =   3   A =   3.02 g/mole   abundance:   0.00 %
-   --->  Isotope:    He   Z =  2   N =   4   A =   4.00 g/mole   abundance: 100.00 %  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
+   --->  Isotope:   He3   Z =  2   N =   3   A =   3.02 g/mole   abundance:   0.00 %
+   --->  Isotope:   He4   Z =  2   N =   4   A =   4.00 g/mole   abundance: 100.00 %  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
- Material: G4_WATER H_2O   density:  1.000 g/cm3   RadL:  36.083 cm   Imean:  75.000 eV 
+ Material: G4_WATER H_2O   density:  1.000 g/cm3   RadL:  36.083 cm   Nucl.Int.Length:  75.505 cm   Imean:  75.000 eV 
    --->  Element: H (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole
-   --->  Isotope:     H   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
-   --->  Isotope:     H   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %  ElmMassFraction:  11.19 %  ElmAbundance  66.67 %
+   --->  Isotope:    H1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
+   --->  Isotope:    H2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %  ElmMassFraction:  11.19 %  ElmAbundance  66.67 %
    --->  Element: O (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole
-   --->  Isotope:     O   Z =  8   N =  16   A =  15.99 g/mole   abundance:  99.76 %
-   --->  Isotope:     O   Z =  8   N =  17   A =  17.00 g/mole   abundance:   0.04 %
-   --->  Isotope:     O   Z =  8   N =  18   A =  18.00 g/mole   abundance:   0.20 %  ElmMassFraction:  88.81 %  ElmAbundance  33.33 %
+   --->  Isotope:   O16   Z =  8   N =  16   A =  15.99 g/mole   abundance:  99.76 %
+   --->  Isotope:   O17   Z =  8   N =  17   A =  17.00 g/mole   abundance:   0.04 %
+   --->  Isotope:   O18   Z =  8   N =  18   A =  18.00 g/mole   abundance:   0.20 %  ElmMassFraction:  88.81 %  ElmAbundance  33.33 %
 
- Material:   G4_AIR     density:  1.205 mg/cm3  RadL: 303.921 m    Imean:  85.700 eV   temperature: 273.15 K  pressure:   1.00 atm
+ Material:   G4_AIR     density:  1.205 mg/cm3  RadL: 303.921 m    Nucl.Int.Length: 710.137 m    Imean:  85.700 eV   temperature: 273.15 K  pressure:   1.00 atm
    --->  Element: C (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole
-   --->  Isotope:     C   Z =  6   N =  12   A =  12.00 g/mole   abundance:  98.93 %
-   --->  Isotope:     C   Z =  6   N =  13   A =  13.00 g/mole   abundance:   1.07 %  ElmMassFraction:   0.01 %  ElmAbundance   0.02 %
+   --->  Isotope:   C12   Z =  6   N =  12   A =  12.00 g/mole   abundance:  98.93 %
+   --->  Isotope:   C13   Z =  6   N =  13   A =  13.00 g/mole   abundance:   1.07 %  ElmMassFraction:   0.01 %  ElmAbundance   0.02 %
    --->  Element: N (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole
-   --->  Isotope:     N   Z =  7   N =  14   A =  14.00 g/mole   abundance:  99.63 %
-   --->  Isotope:     N   Z =  7   N =  15   A =  15.00 g/mole   abundance:   0.37 %  ElmMassFraction:  75.53 %  ElmAbundance  78.44 %
+   --->  Isotope:   N14   Z =  7   N =  14   A =  14.00 g/mole   abundance:  99.63 %
+   --->  Isotope:   N15   Z =  7   N =  15   A =  15.00 g/mole   abundance:   0.37 %  ElmMassFraction:  75.53 %  ElmAbundance  78.44 %
    --->  Element: O (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole
-   --->  Isotope:     O   Z =  8   N =  16   A =  15.99 g/mole   abundance:  99.76 %
-   --->  Isotope:     O   Z =  8   N =  17   A =  17.00 g/mole   abundance:   0.04 %
-   --->  Isotope:     O   Z =  8   N =  18   A =  18.00 g/mole   abundance:   0.20 %  ElmMassFraction:  23.18 %  ElmAbundance  21.07 %
+   --->  Isotope:   O16   Z =  8   N =  16   A =  15.99 g/mole   abundance:  99.76 %
+   --->  Isotope:   O17   Z =  8   N =  17   A =  17.00 g/mole   abundance:   0.04 %
+   --->  Isotope:   O18   Z =  8   N =  18   A =  18.00 g/mole   abundance:   0.20 %  ElmMassFraction:  23.18 %  ElmAbundance  21.07 %
    --->  Element: Ar (Ar)   Z = 18.0   N =  40.0   A =  39.95 g/mole
-   --->  Isotope:    Ar   Z = 18   N =  36   A =  35.97 g/mole   abundance:   0.34 %
-   --->  Isotope:    Ar   Z = 18   N =  38   A =  37.96 g/mole   abundance:   0.06 %
-   --->  Isotope:    Ar   Z = 18   N =  40   A =  39.96 g/mole   abundance:  99.60 %  ElmMassFraction:   1.28 %  ElmAbundance   0.47 %
+   --->  Isotope:  Ar36   Z = 18   N =  36   A =  35.97 g/mole   abundance:   0.34 %
+   --->  Isotope:  Ar38   Z = 18   N =  38   A =  37.96 g/mole   abundance:   0.06 %
+   --->  Isotope:  Ar40   Z = 18   N =  40   A =  39.96 g/mole   abundance:  99.60 %  ElmMassFraction:   1.28 %  ElmAbundance   0.47 %
 
- Material: G4_MYLAR     density:  1.400 g/cm3   RadL:  28.536 cm   Imean:  78.700 eV 
+ Material: G4_MYLAR     density:  1.400 g/cm3   RadL:  28.536 cm   Nucl.Int.Length:  55.961 cm   Imean:  78.700 eV 
    --->  Element: H (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole
-   --->  Isotope:     H   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
-   --->  Isotope:     H   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %  ElmMassFraction:   4.20 %  ElmAbundance  36.36 %
+   --->  Isotope:    H1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
+   --->  Isotope:    H2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %  ElmMassFraction:   4.20 %  ElmAbundance  36.36 %
    --->  Element: C (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole
-   --->  Isotope:     C   Z =  6   N =  12   A =  12.00 g/mole   abundance:  98.93 %
-   --->  Isotope:     C   Z =  6   N =  13   A =  13.00 g/mole   abundance:   1.07 %  ElmMassFraction:  62.50 %  ElmAbundance  45.46 %
+   --->  Isotope:   C12   Z =  6   N =  12   A =  12.00 g/mole   abundance:  98.93 %
+   --->  Isotope:   C13   Z =  6   N =  13   A =  13.00 g/mole   abundance:   1.07 %  ElmMassFraction:  62.50 %  ElmAbundance  45.46 %
    --->  Element: O (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole
-   --->  Isotope:     O   Z =  8   N =  16   A =  15.99 g/mole   abundance:  99.76 %
-   --->  Isotope:     O   Z =  8   N =  17   A =  17.00 g/mole   abundance:   0.04 %
-   --->  Isotope:     O   Z =  8   N =  18   A =  18.00 g/mole   abundance:   0.20 %  ElmMassFraction:  33.30 %  ElmAbundance  18.18 %
+   --->  Isotope:   O16   Z =  8   N =  16   A =  15.99 g/mole   abundance:  99.76 %
+   --->  Isotope:   O17   Z =  8   N =  17   A =  17.00 g/mole   abundance:   0.04 %
+   --->  Isotope:   O18   Z =  8   N =  18   A =  18.00 g/mole   abundance:   0.20 %  ElmMassFraction:  33.30 %  ElmAbundance  18.18 %
 
 
 ### PhysicsList Construte Particles
@@ -77,10 +77,10 @@ UI interface is started
 /testem/phys/addPhysics emstandard
 ### PhysicsList Add Physics <emstandard> emBuilderIsRegisted= 0
 PhysicsList::AddPhysicsList <emstandard>
-#/testem/phys/addPhysics emstandard_opt2
-#/testem/phys/addPhysics penelope
-#/testem/phys/addPhysics livermore
-#/testem/phys/addPhysics step_limit
+#/testem/phys/addPhysics      emstandard_opt2
+#/testem/phys/addPhysics       penelope
+#/testem/phys/addPhysics       livermore
+#/testem/phys/addPhysics      step_limit
 #
 /testem/target1Material G4_Be
 New target1 material G4_Be
@@ -89,9 +89,9 @@ New target2 material G4_W
 /testem/target1Z 9 mm
 /testem/target2Z 6 mm
 #
-#/testem/histoName be_w_st.paw
+#/testem/histoName            be_w_st.paw
 #
-#/testem/stepMax 1.0 mm
+#/testem/stepMax               1.0  mm
 #
 /gun/particle e-
 /gun/energy 50.0 MeV
@@ -177,22 +177,22 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=282.86s Real=282.89s Sys=0.01s
+  User=14.76s Real=14.76s Sys=0s
 RunAction: End of run actions are started
 Histo: End of run actions are started
 ========================================================
 Number of events                                  10000
-Average number of e-                         12.17
-Average number of gamma                      20.94
-Average number of e+                         0.751
+Average number of e-                         12.08
+Average number of gamma                      21.04
+Average number of e+                         0.7823
 Average number of neutrons                   0
-Average number of steps in absorber          32.41
-Average number of e- steps in target         18.72
-Average number of g  produced in the target  20.1
-Average number of e- produced in the target  7.12
-Average number of g produced in the phantom  0.5335
-Average number of e- produced in the phantom 2.801
-Total gamma fluence in front of phantom      8.887 MeV 
+Average number of steps in absorber          31.85
+Average number of e- steps in target         18.65
+Average number of g  produced in the target  20.25
+Average number of e- produced in the target  7.163
+Average number of g produced in the phantom  0.5069
+Average number of e- produced in the phantom 2.777
+Total gamma fluence in front of phantom      8.651 MeV 
 ========================================================
 
 

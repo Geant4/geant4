@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // $Id: G4StokesVector.cc,v 1.3 2006/11/17 11:59:03 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // GEANT4 Class file
 //

@@ -23,6 +23,18 @@ ifdef LOAD_IV
   INTYLIBS += $(OIVLIBS)
 endif
 
+########################### Qt ###############################
+# Should be before X11.
+ifdef INC_QT
+  CPPFLAGS += $(QTFLAGS)
+endif
+ifdef LOAD_QT
+  INTYLIBS += $(QTLIBS)
+endif
+ifdef LOAD_GLQT
+  INTYLIBS += $(GLQTLIBS)
+endif
+
 ########################### OpenGL ###############################
 
 ifdef INC_GL
@@ -55,6 +67,7 @@ ifdef LOAD_XAW
   INTYLIBS += $(XAWLIBS)
 endif
 
+
 ifdef INC_X11
   CPPFLAGS += $(X11FLAGS)
 endif
@@ -62,14 +75,6 @@ ifdef LOAD_X11
   INTYLIBS += $(X11LIBS)
 endif
 
-########################### Qt ###################
-
-ifdef INC_QT
-  CPPFLAGS += $(QTFLAGS)
-endif
-ifdef LOAD_QT
-  INTYLIBS += $(QTLIBS)
-endif
 
 ########################### and finally... #######################
 

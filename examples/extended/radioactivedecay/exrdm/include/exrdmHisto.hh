@@ -38,24 +38,25 @@
 #include "globals.hh"
 #include <vector>
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-class exrdmHistoMessenger;
-
-#ifdef G4ANALYSIS_USE_AIDA
+#ifdef G4ANALYSIS_USE
 namespace AIDA {
+ class IAnalysisFactory;
  class ITree;
  class ITuple;
  class IHistogram1D;
 }
 #endif
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 #ifdef G4ANALYSIS_USE_ROOT
+// Root classes
 class TFile;
 class TH1D;
 class TNtuple;
 #endif
 
+class exrdmHistoMessenger;
 
 class exrdmHisto
 {
@@ -91,7 +92,7 @@ public:
 
   void fillTuple(G4int, G4int, G4double);
   // Fill nTuple at a given col with a double
-  void fillTuple(G4int, const G4String&, G4String);
+  void fillTuple(G4int, const G4String&, G4String&);
   // Fill nTuple parameter with a string
 
   void fillTuple(G4int, const G4String&, G4bool);
@@ -114,10 +115,10 @@ private:
   G4int    nTuple;
   G4int    verbose;
   G4int    defaultAct;
-
-#ifdef G4ANALYSIS_USE_AIDA
+#ifdef G4ANALYSIS_USE
   std::vector<AIDA::IHistogram1D*> histo;
   std::vector<AIDA::ITuple*>   ntup;
+  AIDA::IAnalysisFactory* aida;
   AIDA::ITree*    tree;
 #endif
 

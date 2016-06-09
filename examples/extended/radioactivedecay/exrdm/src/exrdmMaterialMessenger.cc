@@ -129,7 +129,7 @@ void exrdmMaterialMessenger::SetNewValue (G4UIcommand* command,G4String newValue
     }
     //    G4cout<< "stat = " <<state<< "tem = " << tem<< " pre = " << pres << G4endl;
     //     tick *= G4UIcommand::ValueOf(unt);
-    materialsManager->AddMaterial(material,formula,den,state,tem,pres);
+    materialsManager->AddMaterial(material,formula,den*g/cm3,state,tem,pres);
   }
 }
 ////////////////////////////////////////////////////////////////////////////////

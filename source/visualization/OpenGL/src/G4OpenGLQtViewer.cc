@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLQtViewer.cc,v 1.7 2007/11/15 18:24:28 lgarnier Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4OpenGLQtViewer.cc,v 1.30 2008/11/06 13:43:44 lgarnier Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // 
 // G4OpenGLQtViewer : Class to provide Qt specific
@@ -45,13 +45,15 @@
 #include "G4Normal3D.hh"
 #include "G4Scene.hh"
 #include "G4OpenGLQtExportDialog.hh"
-
+#include "G4OpenGLQtMovieDialog.hh"
+#include "G4UnitsTable.hh"
 #include "G4Qt.hh"
-#include "G4UIsession.hh"
 #include "G4UImanager.hh"
-#include <qapplication.h>
+#include "G4UIcommandTree.hh"
 #include <qlayout.h>
 #include <qdialog.h>
+#include <qprocess.h>
+#include <qapplication.h>
 
 #if QT_VERSION >= 0x040000
 #include <qmenu.h>
@@ -63,9 +65,11 @@
 #include <qimage.h>
 #endif
 
+#include <qapplication.h>
 #include <qmessagebox.h>
 #include <qfiledialog.h>
 #include <qprinter.h>
+#include <qdatetime.h>
 #include <qpainter.h>
 #include <qgl.h> // include <qglwidget.h>
 #include <qdialog.h>
@@ -81,78 +85,40 @@ void G4OpenGLQtViewer::SetView (
 //////////////////////////////////////////////////////////////////////////////
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!//
 {
-#ifdef GEANT4_QT_DEBUG
-  printf("G4OpenGLQtViewer::SetView ++++++++++++++++++++\n");
-#endif
-  //   if(!fHDC) return;
-  //   if(!fHGLRC) return;
-  //   ::wglMakeCurrent(fHDC,fHGLRC);
-  //  fWindow->makeCurrent();
   G4OpenGLViewer::SetView ();
-#ifdef GEANT4_QT_DEBUG
-  printf("G4OpenGLQtViewer::SetView --------------------\n");
-#endif
 }
 
-
-
-//////////////////////////////////////////////////////////////////////////////
 /**
-   Implementation of virtual method of G4VViewer
-*/
-void G4OpenGLQtViewer::ShowView (
-) 
-//////////////////////////////////////////////////////////////////////////////
-//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!//
+ * Set the viewport of the scene
+ */
+void G4OpenGLQtViewer::setupViewport(int aWidth, int aHeight)
 {
-#ifdef GEANT4_QT_DEBUG
-  printf("G4OpenGLQtViewer::ShowView  +++++++++++++++++++++\n");
-#endif
-  glFlush ();
-  if (!GLWindow) {
-    G4cerr << "Visualization window not defined, please choose one before" << G4endl;
-  } else {
-#if QT_VERSION < 0x040000
-    GLWindow->setActiveWindow();
-#else
-    GLWindow->activateWindow();
-#endif
-#ifdef GEANT4_QT_DEBUG
-    printf("G4OpenGLQtViewer::ShowView -----------------------\n");
-#endif
-  }
-  //   // Empty the Windows message queue :
-  //   MSG event;
-  //   while ( ::PeekMessage(&event, NULL, 0, 0, PM_REMOVE) ) {
-  //     ::TranslateMessage(&event);
-  //     ::DispatchMessage (&event);
-  //   }
+  int side = aWidth;
+  if (aHeight < aWidth) side = aHeight;
+  glViewport((aWidth - side) / 2, (aHeight - side) / 2, side, side);
+  
+  glMatrixMode(GL_PROJECTION);
+  glLoadIdentity();
+  glOrtho(-0.5, +0.5, +0.5, -0.5, 4.0, 15.0);
+  glMatrixMode(GL_MODELVIEW);
 }
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-void G4OpenGLQtViewer::CreateGLQtContext (
-) 
-//////////////////////////////////////////////////////////////////////////////
-//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!//
-{
-#ifdef GEANT4_QT_DEBUG
-  printf("G4OpenGLQtViewer::CreateGLQtContext \n");
-#endif
-}
+
 
 
 //////////////////////////////////////////////////////////////////////////////
 void G4OpenGLQtViewer::CreateMainWindow (
  QGLWidget* glWidget
+ ,QString name
 ) 
 //////////////////////////////////////////////////////////////////////////////
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!//
 {
 
   if(fWindow) return; //Done.
-#ifdef GEANT4_QT_DEBUG
+#ifdef G4DEBUG
   printf("G4OpenGLQtViewer::CreateMainWindow glWidget\n");
 #endif
 
@@ -168,16 +134,15 @@ void G4OpenGLQtViewer::CreateMainWindow (
     // look for the main window
     bool found = false;
 #if QT_VERSION < 0x040000
+    // theses lines does nothing exept this one "GLWindow = new QDialog(0..."
+    // but if I comment them, it doesn't work...
     QWidgetList  *list = QApplication::allWidgets();
     QWidgetListIt it( *list );         // iterate over the widgets
     QWidget * widget;
     while ( (widget=it.current()) != 0 ) {  // for each widget...
       ++it;
       if ((found== false) && (widget->inherits("QMainWindow"))) {
-#ifdef GEANT4_QT_DEBUG
-        printf("G4OpenGLQtViewer::CreateMainWindow case Qapp exist\n");
-#endif
-        GLWindow = new QDialog(widget,0,FALSE,Qt::WStyle_Title | Qt::WStyle_SysMenu | Qt::WStyle_MinMax );
+        GLWindow = new QDialog(0,0,FALSE,Qt::WStyle_Title | Qt::WStyle_SysMenu | Qt::WStyle_MinMax );
         found = true;
       }
     }
@@ -185,53 +150,54 @@ void G4OpenGLQtViewer::CreateMainWindow (
 #else
     foreach (QWidget *widget, QApplication::allWidgets()) {
       if ((found== false) && (widget->inherits("QMainWindow"))) {
-#ifdef GEANT4_QT_DEBUG
-        printf("G4OpenGLQtViewer::CreateMainWindow case Qapp exist\n");
-#endif
-        GLWindow = new QDialog(widget,Qt::WindowTitleHint | Qt::WindowSystemMenuHint | Qt::WindowMinMaxButtonsHint);
+        GLWindow = new QDialog(0,Qt::WindowTitleHint | Qt::WindowSystemMenuHint | Qt::WindowMinMaxButtonsHint);
         found = true;
       }
     }
 #endif
 
+#if QT_VERSION < 0x040000
+    glWidget->reparent(GLWindow,0,QPoint(0,0));  
+#else
+    glWidget->setParent(GLWindow);  
+#endif
+
     if (found==false) {
-#ifdef GEANT4_QT_DEBUG
+#ifdef G4DEBUG
       printf("G4OpenGLQtViewer::CreateMainWindow case Qapp exist, but not found\n");
 #endif
       GLWindow = new QDialog();
     }
   } else {
-#ifdef GEANT4_QT_DEBUG
+#ifdef G4DEBUG
     printf("G4OpenGLQtViewer::CreateMainWindow case Qapp exist\n");
 #endif
     GLWindow = new QDialog();
   }
 
-#if QT_VERSION < 0x040000
   QHBoxLayout *mainLayout = new QHBoxLayout(GLWindow);
-#else
-  QHBoxLayout *mainLayout = new QHBoxLayout;
-#endif
 
   mainLayout->addWidget(fWindow);
 
 #if QT_VERSION < 0x040000
-  GLWindow->setCaption( tr( "QGl Viewer" ));
+  GLWindow->setCaption(name );
 #else
   GLWindow->setLayout(mainLayout);
-  GLWindow->setWindowTitle(tr("QGl Viewer"));
+  GLWindow->setWindowTitle( name);
 #endif
-  GLWindow->resize(300, 300);
+  GLWindow->resize(fVP.GetWindowSizeHintX(), fVP.GetWindowSizeHintY());
   GLWindow->move(900,300);
   GLWindow->show();
   
   // delete the pointer if close this
   //  GLWindow->setAttribute(Qt::WA_DeleteOnClose);
 
-  QObject ::connect(GLWindow, 
-                    SIGNAL(rejected()),
-                    this, 
-                    SLOT(dialogClosed()));
+#if QT_VERSION >= 0x040000
+//   QObject ::connect(GLWindow, 
+//                     SIGNAL(rejected()),
+//                     this, 
+//                     SLOT(dialogClosed()));
+#endif
 
   WinSize_x = 400;
   WinSize_y = 400;
@@ -241,7 +207,7 @@ void G4OpenGLQtViewer::CreateMainWindow (
     WinSize_y = fVP.GetWindowSizeHintY ();
 
   if(!fWindow) return;
-#ifdef GEANT4_QT_DEBUG
+#ifdef G4DEBUG
   printf("G4OpenGLQtViewer::CreateMainWindow glWidget END\n");
 #endif
 
@@ -250,12 +216,13 @@ void G4OpenGLQtViewer::CreateMainWindow (
 
 }
 
+#if QT_VERSION >= 0x040000
 /**  Close the dialog and set the pointer to NULL
  */
-void G4OpenGLQtViewer::dialogClosed() {
-  GLWindow = NULL;
-}
-
+// void G4OpenGLQtViewer::dialogClosed() {
+//   //  GLWindow = NULL;
+// }
+#endif
 
 //////////////////////////////////////////////////////////////////////////////
 G4OpenGLQtViewer::G4OpenGLQtViewer (
@@ -264,11 +231,46 @@ G4OpenGLQtViewer::G4OpenGLQtViewer (
   :G4VViewer (scene, -1)
   ,G4OpenGLViewer (scene)
   ,fWindow(0)
+  ,fRecordFrameNumber(0)
+  ,fRotationAngleX(0)
+  ,fRotationAngleY(0)
+  ,fDeltaRotationAngleX(0)
+  ,fDeltaRotationAngleY(0)
   ,fContextMenu(0)
-  ,fMouseAction(true)
+  ,fMouseAction(STYLE1)
+  ,fDeltaRotation(1)
+  ,fDeltaSceneTranslation(0.01)
+  ,fDeltaDepth(0.01)
+  ,fDeltaZoom(0.05)
+  ,fDeltaMove(0.05)
+  ,fHoldKeyEvent(false)
+  ,fHoldMoveEvent(false)
+  ,fHoldRotateEvent(false)
+  ,fAutoMove(false)
+  ,fEncoderPath("")
+  ,fTempFolderPath("")
+  ,fMovieTempFolderPath("")
+  ,fSaveFileName("")
+  ,fParameterFileName("mpeg_encode_parameter_file.par")
+  ,fMovieParametersDialog(NULL)
+  ,fRecordingStep(WAIT)
+  ,fProcess(NULL)
+  ,fLaunchSpinDelay(100)
 {
-#ifdef GEANT4_QT_DEBUG
-  printf("G4OpenGLQtViewer::G4OpenGLQtViewer \n");
+
+  // launch Qt if not
+  G4Qt::getInstance ();
+
+  fLastPos3 = QPoint(-1,-1);    
+  fLastPos2 = QPoint(-1,-1);    
+  fLastPos1 = QPoint(-1,-1);    
+  
+  initMovieParameters();
+
+  fLastEventTime = new QTime();
+
+#ifdef G4DEBUG
+  printf("G4OpenGLQtViewer::G4OpenGLQtViewer END\n");
 #endif
 }
 
@@ -278,10 +280,11 @@ G4OpenGLQtViewer::~G4OpenGLQtViewer (
 //////////////////////////////////////////////////////////////////////////////
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!//
 {
-#ifdef GEANT4_QT_DEBUG
-  printf("G4OpenGLQtViewer::~G4OpenGLQtViewer \n");
+#if QT_VERSION < 0x040000
+  G4cout <<removeTempFolder().ascii() <<G4endl;
+#else
+  G4cout <<removeTempFolder().toStdString().c_str() <<G4endl;
 #endif
-  delete fContextMenu;
 }
 
 
@@ -295,30 +298,95 @@ void G4OpenGLQtViewer::createPopupMenu()    {
 #else
   fContextMenu = new QMenu("All");
 #endif
-  Q_CHECK_PTR( fContextMenu );
 
 #if QT_VERSION < 0x040000
-  // === Mouse menu ===
   QPopupMenu *mMouseAction = new QPopupMenu( fContextMenu );
-  Q_CHECK_PTR( mMouseAction );
+  fContextMenu->insertItem("&Mouse actions",mMouseAction);
+#if QT_VERSION < 0x030200
+  fRotateAction =  new QAction("&Rotate","&Rotate",CTRL+Key_R,mMouseAction,0,true);
+  fMoveAction =  new QAction("&Move","&Move",CTRL+Key_M,mMouseAction,0,true);
+  fPickAction =  new QAction("&Pick","&Pick",CTRL+Key_P,mMouseAction,0,true);
+  QAction * shortcutsAction =  new QAction("&Show shortcuts","&Show shortcuts",CTRL+Key_S,mMouseAction,0,true);
+#else
+  fRotateAction =  new QAction("&Rotate",CTRL+Key_R,mMouseAction);
+  fMoveAction =  new QAction("&Move",CTRL+Key_M,mMouseAction);
+  fPickAction =  new QAction("&Pick",CTRL+Key_P,mMouseAction);
+  QAction *shortcutsAction =  new QAction("&Show shortcuts",CTRL+Key_S,mMouseAction);
+#endif
+  fRotateAction->addTo(mMouseAction);
+  fMoveAction->addTo(mMouseAction);
+  fPickAction->addTo(mMouseAction);
+  shortcutsAction->addTo(mMouseAction);
 
-  QAction *rotate = new QAction("&Rotate scene",CTRL+Key_N,mMouseAction);
-  QAction *move =  new QAction("&Move scene",CTRL+Key_M,mMouseAction);
-  rotate->addTo(mMouseAction);
-  move->addTo(mMouseAction);
+  fRotateAction->setToggleAction(true);
+  fMoveAction->setToggleAction(true);
+  fPickAction->setToggleAction(true);
+  shortcutsAction->setToggleAction(true);
 
-  fContextMenu->insertItem( "&Mouse action", mMouseAction);
+  fRotateAction->setOn(true);
+  fMoveAction->setOn(false);
+  fPickAction->setOn(false);
+  shortcutsAction->setOn(false);
+
+
+  QObject ::connect(fRotateAction, 
+                    SIGNAL(activated()),
+                    this,
+                    SLOT(actionMouseRotate()));
+
+  QObject ::connect(fMoveAction, 
+                    SIGNAL(activated()),
+                    this,
+                    SLOT(actionMouseMove()));
+
+  QObject ::connect(fPickAction, 
+                    SIGNAL(activated()),
+                    this,
+                    SLOT(actionMousePick()));
+
+  QObject ::connect(shortcutsAction, 
+                    SIGNAL(activated()),
+                    this,
+                    SLOT(showShortcuts()));
 
 #else
-  // === Mouse menu ===
-  QMenu *mMouseAction = fContextMenu->addMenu("&Mouse action");
+  QMenu *mMouseAction = fContextMenu->addMenu("&Mouse actions");
 
-  QAction *rotate = mMouseAction->addAction("&Rotate scene");
-  QAction *move = mMouseAction->addAction("&Move scene");
+  fRotateAction = mMouseAction->addAction("Rotate");
+  fMoveAction = mMouseAction->addAction("Move");
+  fPickAction = mMouseAction->addAction("Pick");
+  QAction *shortcutsAction = mMouseAction->addAction("Show shortcuts");
+
+  fRotateAction->setCheckable(true);
+  fMoveAction->setCheckable(false);
+  fPickAction->setCheckable(false);
+  shortcutsAction->setCheckable(false);
+
+  fRotateAction->setChecked(true);
+  fMoveAction->setChecked(false);
+  fPickAction->setChecked(false);
+  shortcutsAction->setChecked(false);
+
+  QObject ::connect(fRotateAction, 
+                    SIGNAL(triggered(bool)),
+                    this, 
+                    SLOT(actionMouseRotate()));
+
+  QObject ::connect(fMoveAction, 
+                    SIGNAL(triggered(bool)),
+                    this, 
+                    SLOT(actionMouseMove()));
+
+  QObject ::connect(fPickAction, 
+                    SIGNAL(triggered(bool)),
+                    this, 
+                    SLOT(actionMousePick()));
+
+  QObject ::connect(shortcutsAction, 
+                    SIGNAL(triggered(bool)),
+                    this, 
+                    SLOT(showShortcuts()));
 #endif
-
-  // INIT mMouse
-  createRadioAction(rotate,move,SLOT(toggleMouseAction(bool)),1);
 
 #if QT_VERSION < 0x040000
   // === Style Menu ===
@@ -326,23 +394,50 @@ void G4OpenGLQtViewer::createPopupMenu()    {
 
   QPopupMenu *mRepresentation = new QPopupMenu(fContextMenu);
 
+  QPopupMenu *mProjection = new QPopupMenu(fContextMenu);
+
+#if QT_VERSION < 0x030200
+  QAction *polyhedron = new QAction("&Polyhedron","&Polyhedron",CTRL+Key_P,mRepresentation,0,true);
+  QAction *nurbs = new QAction("&NURBS","&NURBS",CTRL+Key_N,mRepresentation,0,true);
+
+  QAction *ortho = new QAction("&Orthographic","&Orthographic",CTRL+Key_O,mProjection,0,true);
+  QAction *perspective = new QAction("&Perspective","&Perspective",CTRL+Key_P,mProjection,0,true);
+#else
   QAction *polyhedron = new QAction("&Polyhedron",CTRL+Key_P,mRepresentation);
   QAction *nurbs = new QAction("&NURBS",CTRL+Key_N,mRepresentation);
+
+  QAction *ortho = new QAction("&Orthographic",CTRL+Key_O,mProjection);
+  QAction *perspective = new QAction("&Perspective",CTRL+Key_P,mProjection);
+  polyhedron->setToggleAction(true);
+  nurbs->setToggleAction(true);
+  ortho->setToggleAction(true);
+  perspective->setToggleAction(true);
+#endif
   polyhedron->addTo(mRepresentation);
   nurbs->addTo(mRepresentation);
 
+  ortho->addTo(mProjection);
+  perspective->addTo(mProjection);
+
   mStyle->insertItem("&Representation",mRepresentation);
+  mStyle->insertItem("&Projection",mProjection);
   fContextMenu->insertItem("&Style",mStyle);
+
 
 #else
   // === Style Menu ===
   QMenu *mStyle = fContextMenu->addMenu("&Style");
 
   QMenu *mRepresentation = mStyle->addMenu("&Representation");
+  QMenu *mProjection = mStyle->addMenu("&Projection");
   QAction *polyhedron = mRepresentation->addAction("Polyhedron");
   QAction *nurbs = mRepresentation->addAction("NURBS");
+
+  QAction *ortho = mProjection->addAction("Orthographic");
+  QAction *perspective = mProjection->addAction("Persepective");
 #endif
-  // INIT mStyle
+
+  // INIT mRepresentation
   G4ViewParameters::RepStyle style;
   style = fVP.GetRepStyle();
   if (style == G4ViewParameters::polyhedron) {
@@ -353,29 +448,39 @@ void G4OpenGLQtViewer::createPopupMenu()    {
     mRepresentation->clear();
   }
 
+  // INIT mProjection
+  if (fVP.GetFieldHalfAngle() == 0) {
+    createRadioAction(ortho, perspective,SLOT(toggleProjection(bool)),1);
+  } else {
+    createRadioAction(ortho, perspective,SLOT(toggleProjection(bool)),2);
+  }
 
 #if QT_VERSION < 0x040000
   // === Drawing Menu ===
   QPopupMenu *mDrawing = new QPopupMenu(fContextMenu);
   fContextMenu->insertItem("&Drawing",mDrawing);
 
-  fDrawingWireframe = new QPopupMenu(mDrawing);
-  mDrawing->insertItem("&Wireframe",fDrawingWireframe);
+#if QT_VERSION < 0x030200
+  fDrawingWireframe = new QAction("&Wireframe","&Wireframe",CTRL+Key_W,mDrawing,0,true);
+  fDrawingLineRemoval = new QAction("&Hidden line removal","&Hidden line removal",CTRL+Key_L,mDrawing,0,true);
+  fDrawingSurfaceRemoval = new QAction("&Hidden surface removal","&Hidden surface removal",CTRL+Key_S,mDrawing,0,true);
+  fDrawingLineSurfaceRemoval = new QAction("&Hidden line and surface removal","&Hidden line and surface removal",CTRL+Key_R,mDrawing,0,true);
+#else
+  fDrawingWireframe = new QAction("&Wireframe",CTRL+Key_W,mDrawing);
+  fDrawingLineRemoval = new QAction("&Hidden line removal",CTRL+Key_L,mDrawing);
+  fDrawingSurfaceRemoval = new QAction("&Hidden surface removal",CTRL+Key_S,mDrawing);
+  fDrawingLineSurfaceRemoval = new QAction("&Hidden line and surface removal",CTRL+Key_R,mDrawing);
+#endif
+  fDrawingWireframe->setToggleAction(true);
+  fDrawingLineRemoval->setToggleAction(true);
+  fDrawingSurfaceRemoval->setToggleAction(true);
+  fDrawingLineSurfaceRemoval->setToggleAction(true);
 
-  mDrawing->setCheckable(true);
-  fDrawingWireframe->setCheckable(true);
+  fDrawingWireframe->addTo(mDrawing);
+  fDrawingLineRemoval->addTo(mDrawing);
+  fDrawingSurfaceRemoval->addTo(mDrawing);
+  fDrawingLineSurfaceRemoval->addTo(mDrawing);
 
-  fDrawingLineRemoval = new QPopupMenu(mDrawing);
-  mDrawing->insertItem("&Hidden line removal",fDrawingLineRemoval);
-  fDrawingLineRemoval->setCheckable(true);
-
-  fDrawingSurfaceRemoval = new QPopupMenu(mDrawing);
-  mDrawing->insertItem("&Hidden surface removal",fDrawingSurfaceRemoval);
-  fDrawingSurfaceRemoval->setCheckable(true);
-
-  fDrawingLineSurfaceRemoval = new QPopupMenu(mDrawing);
-  mDrawing->insertItem("&Hidden line and surface removal",fDrawingLineSurfaceRemoval);
-  fDrawingLineSurfaceRemoval->setCheckable(true);
 
 #else
   // === Drawing Menu ===
@@ -399,16 +504,32 @@ void G4OpenGLQtViewer::createPopupMenu()    {
   
 #if QT_VERSION < 0x040000
   if (d_style == G4ViewParameters::wireframe) {
-    fDrawingWireframe->setItemChecked(0,true);
+    fDrawingWireframe->setOn(true);
   } else if (d_style == G4ViewParameters::hlr) {
-    fDrawingLineRemoval->setItemChecked(0,true);
+    fDrawingLineRemoval->setOn(true);
   } else if (d_style == G4ViewParameters::hsr) {
-    fDrawingSurfaceRemoval->setItemChecked(0,true);
+    fDrawingSurfaceRemoval->setOn(true);
   } else if (d_style == G4ViewParameters::hlhsr) {
-    fDrawingLineSurfaceRemoval->setItemChecked(0,true);
+    fDrawingLineSurfaceRemoval->setOn(true);
   } else {
     mDrawing->clear();
   }
+  QObject ::connect(fDrawingWireframe, 
+                    SIGNAL(activated()),
+                    this, 
+                    SLOT(actionDrawingWireframe()));
+  QObject ::connect(fDrawingLineRemoval, 
+                    SIGNAL(activated()),
+                    this, 
+                    SLOT(actionDrawingLineRemoval()));
+  QObject ::connect(fDrawingSurfaceRemoval, 
+                    SIGNAL(activated()),
+                    this, 
+                    SLOT(actionDrawingSurfaceRemoval()));
+  QObject ::connect(fDrawingLineSurfaceRemoval, 
+                    SIGNAL(activated()),
+                    this, 
+                    SLOT(actionDrawingLineSurfaceRemoval()));
 #else
   if (d_style == G4ViewParameters::wireframe) {
     fDrawingWireframe->setChecked(true);
@@ -421,8 +542,6 @@ void G4OpenGLQtViewer::createPopupMenu()    {
   } else {
     mDrawing->clear();
   }
-#endif
-
   QObject ::connect(fDrawingWireframe, 
                     SIGNAL(triggered(bool)),
                     this, 
@@ -439,14 +558,23 @@ void G4OpenGLQtViewer::createPopupMenu()    {
                     SIGNAL(triggered(bool)),
                     this, 
                     SLOT(actionDrawingLineSurfaceRemoval()));
+#endif
+
 
 
 #if QT_VERSION < 0x040000
   QPopupMenu *mBackground = new QPopupMenu(mStyle);
   mStyle->insertItem("&Background color",mBackground);
 
+#if QT_VERSION < 0x030200
+  QAction *white = new QAction("&White","&White",CTRL+Key_W,mBackground,0,true);
+  QAction *black =  new QAction("&Black","&Black",CTRL+Key_B,mBackground,0,true);
+#else
   QAction *white = new QAction("&White",CTRL+Key_W,mBackground);
   QAction *black =  new QAction("&Black",CTRL+Key_B,mBackground);
+  white->setToggleAction(true);
+  black->setToggleAction(true);
+#endif
   white->addTo(mBackground);
   black->addTo(mBackground);
 
@@ -470,33 +598,49 @@ void G4OpenGLQtViewer::createPopupMenu()    {
   QPopupMenu *mActions = new QPopupMenu(fContextMenu);
   fContextMenu->insertItem("&Actions",mActions);
 
-  QAction *controlPanels = new QAction("&Control panels",CTRL+Key_C,mActions);
-  QAction *exitG4 =  new QAction("&Exit to G4Vis >",CTRL+Key_E,mActions);
+#if QT_VERSION < 0x030200
+  QAction *createEPS =  new QAction("&Save as ...","&Save as ...",CTRL+Key_S,mActions,0,true);
+#else
   QAction *createEPS =  new QAction("&Save as ...",CTRL+Key_S,mActions);
-  controlPanels->addTo(mActions);
-  exitG4->addTo(mActions);
+#endif
   createEPS->addTo(mActions);
+  QObject ::connect(createEPS, 
+                    SIGNAL(activated()),
+                    this,
+                    SLOT(actionSaveImage()));
 
 #else
   // === Action Menu ===
   QMenu *mActions = fContextMenu->addMenu("&Actions");
-  QAction *controlPanels = mActions->addAction("Control panels");
-  QAction *exitG4 = mActions->addAction("Exit to G4Vis >");
   QAction *createEPS = mActions->addAction("Save as ...");
-#endif
-
-  QObject ::connect(controlPanels, 
-                    SIGNAL(triggered()),
-                    this, 
-                    SLOT(actionControlPanels()));
-  QObject ::connect(exitG4, 
-                    SIGNAL(triggered()),
-                    this, 
-                    SLOT(actionExitG4()));
   QObject ::connect(createEPS, 
                     SIGNAL(triggered()),
                     this,
-                    SLOT(actionCreateEPS()));
+                    SLOT(actionSaveImage()));
+#endif
+
+#if QT_VERSION < 0x040000
+#if QT_VERSION < 0x030200
+  QAction *movieParameters =  new QAction("&Make Movie...","&Make movie ...",CTRL+Key_M,mActions,0,true);
+#else
+  QAction *movieParameters =  new QAction("&Make Movie...",CTRL+Key_M,mActions);
+#endif
+  movieParameters->addTo(mActions);
+  QObject ::connect(movieParameters, 
+                    SIGNAL(activated()),
+                    this,
+                    SLOT(actionMovieParameters()));
+
+#else
+  // === Action Menu ===
+  QAction *movieParameters = mActions->addAction("Movie parameters...");
+  QObject ::connect(movieParameters, 
+                    SIGNAL(triggered()),
+                    this,
+                    SLOT(actionMovieParameters()));
+#endif
+
+
 
 
 #if QT_VERSION < 0x040000
@@ -507,8 +651,15 @@ void G4OpenGLQtViewer::createPopupMenu()    {
   QPopupMenu *mTransparency = new QPopupMenu(mSpecial);
   mSpecial->insertItem("Transparency",mTransparency);
 
+#if QT_VERSION < 0x030200
+  QAction *transparencyOn = new QAction("&On","&On",CTRL+Key_O,mTransparency,0,true);
+  QAction *transparencyOff = new QAction("&Off","&Off",CTRL+Key_F,mTransparency,0,true);
+#else
   QAction *transparencyOn = new QAction("&On",CTRL+Key_O,mTransparency);
   QAction *transparencyOff = new QAction("&Off",CTRL+Key_F,mTransparency);
+  transparencyOn->setToggleAction(true);
+  transparencyOff->setToggleAction(true);
+#endif
   transparencyOn->addTo(mTransparency);
   transparencyOff->addTo(mTransparency);
 
@@ -533,8 +684,15 @@ void G4OpenGLQtViewer::createPopupMenu()    {
   QPopupMenu *mAntialiasing = new QPopupMenu(mSpecial);
   mSpecial->insertItem("Antialiasing",mAntialiasing);
 
+#if QT_VERSION < 0x030200
+  QAction *antialiasingOn = new QAction("&On","&On",CTRL+Key_O,mAntialiasing,0,true);
+  QAction *antialiasingOff = new QAction("&Off","&Off",CTRL+Key_F,mAntialiasing,0,true);
+#else
   QAction *antialiasingOn = new QAction("&On",CTRL+Key_O,mAntialiasing);
   QAction *antialiasingOff = new QAction("&Off",CTRL+Key_F,mAntialiasing);
+  antialiasingOn->setToggleAction(true);
+  antialiasingOff->setToggleAction(true);
+#endif
   antialiasingOn->addTo(mAntialiasing);
   antialiasingOff->addTo(mAntialiasing);
 
@@ -556,8 +714,15 @@ void G4OpenGLQtViewer::createPopupMenu()    {
   QPopupMenu *mHaloing = new QPopupMenu(mSpecial);
   mSpecial->insertItem("Haloing",mHaloing);
 
+#if QT_VERSION < 0x030200
+  QAction *haloingOn = new QAction("&On","&On",CTRL+Key_O,mHaloing,0,true);
+  QAction *haloingOff = new QAction("&Off","&Off",CTRL+Key_F,mHaloing,0,true);
+#else
   QAction *haloingOn = new QAction("&On",CTRL+Key_O,mHaloing);
   QAction *haloingOff = new QAction("&Off",CTRL+Key_F,mHaloing);
+  haloingOn->setToggleAction(true);
+  haloingOff->setToggleAction(true);
+#endif
   haloingOn->addTo(mHaloing);
   haloingOff->addTo(mHaloing);
 #else
@@ -577,8 +742,15 @@ void G4OpenGLQtViewer::createPopupMenu()    {
   QPopupMenu *mAux = new QPopupMenu(mSpecial);
   mSpecial->insertItem("Auxiliairy edges",mAux);
 
+#if QT_VERSION < 0x030200
+  QAction *auxOn = new QAction("&On","&On",CTRL+Key_O,mAux,0,true);
+  QAction *auxOff = new QAction("&Off","&Off",CTRL+Key_F,mAux,0,true);
+#else
   QAction *auxOn = new QAction("&On",CTRL+Key_O,mAux);
   QAction *auxOff = new QAction("&Off",CTRL+Key_F,mAux);
+  auxOn->setToggleAction(true);
+  auxOff->setToggleAction(true);
+#endif
   auxOn->addTo(mAux);
   auxOff->addTo(mAux);
 
@@ -594,24 +766,47 @@ void G4OpenGLQtViewer::createPopupMenu()    {
   }
 
 
+
 #if QT_VERSION < 0x040000
   QPopupMenu *mFullScreen = new QPopupMenu(mSpecial);
   mSpecial->insertItem("Full screen",mFullScreen);
 
-  QAction *fullOn = new QAction("&On",CTRL+Key_O,mFullScreen);
-  QAction *fullOff = new QAction("&Off",CTRL+Key_F,mFullScreen);
-  fullOn->addTo(mFullScreen);
-  fullOff->addTo(mFullScreen);
+#if QT_VERSION < 0x030200
+  fFullScreenOn = new QAction("&On","&On",CTRL+Key_O,mFullScreen,0,true);
+  fFullScreenOff = new QAction("&Off","&Off",CTRL+Key_F,mFullScreen,0,true);
 #else
-  QMenu *mFullScreen = mSpecial->addMenu("Full screen");
-  QAction *fullOn = mFullScreen->addAction("On");
-  QAction *fullOff = mFullScreen->addAction("Off");
+  fFullScreenOn = new QAction("&On",CTRL+Key_O,mFullScreen);
+  fFullScreenOff = new QAction("&Off",CTRL+Key_F,mFullScreen);
+  fFullScreenOn->setToggleAction(true);
+  fFullScreenOff->setToggleAction(true);
 #endif
-  createRadioAction(fullOn,fullOff,SLOT(toggleFullScreen(bool)),2);
+  fFullScreenOn->addTo(mFullScreen);
+  fFullScreenOff->addTo(mFullScreen);
+#else
+  QMenu *mFullScreen = mSpecial->addMenu("&Full screen");
+  fFullScreenOn = mFullScreen->addAction("On");
+  fFullScreenOff = mFullScreen->addAction("Off");
+#endif
+  createRadioAction(fFullScreenOn,fFullScreenOff,SLOT(toggleFullScreen(bool)),2);
 
 }
 
-void G4OpenGLQtViewer::manageContextMenuEvent(QContextMenuEvent *e)
+
+void G4OpenGLQtViewer::G4resizeGL(
+ int aWidth
+,int aHeight)
+{  
+  setupViewport(aWidth,aHeight);
+  
+  if (((WinSize_x != (G4int)aWidth)) || (WinSize_y != (G4int) aHeight)) {
+    hasToRepaint =true;
+  }
+  WinSize_x = (G4int) aWidth;
+  WinSize_y = (G4int) aHeight;
+}
+
+
+void G4OpenGLQtViewer::G4manageContextMenuEvent(QContextMenuEvent *e)
 {
   if (!GLWindow) {
     G4cerr << "Visualization window not defined, please choose one before" << G4endl;
@@ -643,17 +838,19 @@ void G4OpenGLQtViewer::createRadioAction(QAction *action1,QAction *action2, cons
 
   if (action1->parent()->inherits("QPopupMenu")){
     ((QPopupMenu*)action1->parent())->setCheckable(true);
+    ((QPopupMenu*)action2->parent())->setCheckable(true);
   }
-  ((QPopupMenu*)action1->parent())->setItemChecked(0,true);
-  ((QPopupMenu*)action1->parent())->setItemChecked(1,true);
+  action1->setOn(false);
+   action2->setOn(false);
 
   if (nCheck ==1)
-    ((QPopupMenu*)action1->parent())->setItemChecked(0,true);
+    action1->setOn(true);
   else
-    ((QPopupMenu*)action1->parent())->setItemChecked(1,true);
+    action2->setOn(true);
    
-  QObject ::connect(action1, SIGNAL(triggered(bool)),action2, SLOT(toggle()));
-  QObject ::connect(action2, SIGNAL(triggered(bool)),action1, SLOT(toggle()));
+  //FIXME : Should not work on Qt3
+  QObject ::connect(action1, SIGNAL(activated()),action2, SLOT(toggle()));
+  QObject ::connect(action2, SIGNAL(activated()),action1, SLOT(toggle()));
 
   QObject ::connect(action1, SIGNAL(toggled(bool)),this, method.c_str());
 }
@@ -676,6 +873,30 @@ void G4OpenGLQtViewer::createRadioAction(QAction *action1,QAction *action2, cons
 
 }
 #endif
+
+/**
+   Slot activate when mouseAction->rotate menu is set 
+ */
+void G4OpenGLQtViewer::actionMouseRotate() {
+  emit toggleMouseAction(STYLE1);
+}
+
+
+/**
+   Slot activate when mouseAction->rotate menu is set 
+ */
+void G4OpenGLQtViewer::actionMouseMove() {
+  emit toggleMouseAction(STYLE2);
+}
+
+
+/**
+   Slot activate when mouseAction->zoom menu is set 
+ */
+void G4OpenGLQtViewer::actionMousePick() {
+  emit toggleMouseAction(STYLE3);
+}
+
 
 /**
    Slot activate when drawing->wireframe menu is set 
@@ -707,6 +928,98 @@ void G4OpenGLQtViewer::actionDrawingLineSurfaceRemoval() {
 
 
 /**
+   Slot activated when mouse action is toggle
+   @param aAction : STYLE1, STYLE2, STYLE3
+ */
+void G4OpenGLQtViewer::toggleMouseAction(mouseActions aAction) {
+  
+  if ((aAction == STYLE1) || //initialize all
+      (aAction == STYLE2) ||
+      (aAction == STYLE3))  {
+#if QT_VERSION < 0x040000
+    fRotateAction->setOn (false);
+    fMoveAction->setOn (false);
+    fPickAction->setOn (false);
+#else
+    fRotateAction->setChecked (false);
+    fMoveAction->setChecked (false);
+    fPickAction->setChecked (false);
+#endif
+    fVP.SetPicking(false);
+    fMouseAction = aAction;
+  }
+  // rotate
+  if (aAction == STYLE1) {  // rotate
+    showShortcuts();
+#if QT_VERSION < 0x040000
+    fRotateAction->setOn (true);
+#else
+    fRotateAction->setChecked (true);
+#endif
+  } else  if (aAction == STYLE2) { //move
+#if QT_VERSION < 0x040000
+    fMoveAction->setOn (true);
+#else
+    fMoveAction->setChecked (true);
+#endif
+  } else  if (aAction == STYLE3) { //pick
+#if QT_VERSION < 0x040000
+    fPickAction->setOn (true);
+#else
+    fPickAction->setChecked (true);
+#endif
+    fVP.SetPicking(true);
+  }
+}
+
+/**
+   Show shortcuts for this mouse action
+ */
+void G4OpenGLQtViewer::showShortcuts() {
+  if (fMouseAction == STYLE1) {  // rotate
+    G4cout << "Click and move mouse to rotate volume " << G4endl;
+    G4cout << "Press left/right arrows to move volume left/right" << G4endl;
+    G4cout << "Press up/down arrows to move volume up/down" << G4endl;
+    G4cout << "Press ALT+up/down arrows to move volume toward/forward" << G4endl;
+    G4cout << "Press SHIFT+left/right arrows to rotate volume left/right" << G4endl;
+    G4cout << "Press SHIFT+up/down arrows to rotate volume up/down" << G4endl;
+    G4cout << "Press ALT+/- to slow/speed auto rotation/move" << G4endl;
+    G4cout << "In video mode : " << G4endl;
+    G4cout << " Press SPACE to Start/Pause video recording " << G4endl;
+    G4cout << " Press RETURN to Stop video recording " << G4endl;
+  } else  if (fMouseAction == STYLE2) { //move
+    G4cout << "Move camera point of view with mouse" << G4endl;
+    G4cout << "Press left/right arrows to move volume left/right" << G4endl;
+    G4cout << "Press up/down arrows to move volume up/down" << G4endl;
+    G4cout << "Press ALT+up/down arrows to move volume toward/forward" << G4endl;
+    G4cout << "Press SHIFT+left/right arrows to rotate volume left/right" << G4endl;
+    G4cout << "Press SHIFT+up/down arrows to rotate volume up/down" << G4endl;
+    G4cout << "Press +/- to zoom into volume" << G4endl;
+    G4cout << "Press ALT+/- to slow/speed auto rotation/move" << G4endl;
+    G4cout << "In video mode : " << G4endl;
+    G4cout << " Press SPACE to Start/Pause video recording " << G4endl;
+    G4cout << " Press RETURN to Stop video recording " << G4endl;
+  } else  if (fMouseAction == STYLE3) { //pick
+    G4cout << "Click and pick " << G4endl;
+  } else {
+    G4cout << "Move camera point of view with mouse" << G4endl;
+    G4cout << "Press left/right arrows to move volume left/right" << G4endl;
+    G4cout << "Press up/down arrows to move volume up/down" << G4endl;
+    G4cout << "Press ALT+up/down arrows to move volume toward/forward" << G4endl;
+    G4cout << "Press SHIFT+left/right arrows to rotate volume left/right" << G4endl;
+    G4cout << "Press SHIFT+up/down arrows to rotate volume up/down" << G4endl;
+    G4cout << "Press +/- to zoom into volume" << G4endl;
+    G4cout << "Press ALT+/- to slow/speed auto rotation/move" << G4endl;
+    G4cout << "In video mode : " << G4endl;
+    G4cout << " Press SPACE to Start/Pause video recording " << G4endl;
+    G4cout << " Press RETURN to Stop video recording " << G4endl;
+  }
+
+}
+
+
+
+/**
    Slot activated when drawing menu is toggle
    Warning : When G4OpenGLStoredQtViewer::DrawView() method call,
    KernelVisitDecision () will be call and will set the fNeedKernelVisit
@@ -721,61 +1034,51 @@ void G4OpenGLQtViewer::toggleDrawingAction(int aAction) {
   G4ViewParameters::DrawingStyle d_style;
   
 
-  if (aAction ==1) {
+  // initialize
+  if ((aAction >0) && (aAction <5)) {
 #if QT_VERSION < 0x040000
-    fDrawingWireframe->setItemChecked (0,true);
-    fDrawingLineRemoval->setItemChecked (0,false);
-    fDrawingSurfaceRemoval->setItemChecked (0,false);
-    fDrawingLineSurfaceRemoval->setItemChecked (0,false);
+    fDrawingWireframe->setOn(false);
+    fDrawingLineRemoval->setOn(false);
+    fDrawingSurfaceRemoval->setOn(false);
+    fDrawingLineSurfaceRemoval->setOn(false);
 #else
-    fDrawingWireframe->setChecked (true);
+    fDrawingWireframe->setChecked (false);
     fDrawingLineRemoval->setChecked (false);
     fDrawingSurfaceRemoval->setChecked (false);
     fDrawingLineSurfaceRemoval->setChecked (false);
+#endif
+  }
+  if (aAction ==1) {
+#if QT_VERSION < 0x040000
+    fDrawingWireframe->setOn(true);
+#else
+    fDrawingWireframe->setChecked (true);
 #endif
 
     d_style = G4ViewParameters::wireframe;
 
   } else  if (aAction ==2) {
 #if QT_VERSION < 0x040000
-    fDrawingWireframe->setItemChecked (0,false);
-    fDrawingLineRemoval->setItemChecked (0,true);
-    fDrawingSurfaceRemoval->setItemChecked (0,false);
-    fDrawingLineSurfaceRemoval->setItemChecked (0,false);
+    fDrawingLineRemoval->setOn(true);
 #else
-    fDrawingWireframe->setChecked (false);
     fDrawingLineRemoval->setChecked (true);
-    fDrawingSurfaceRemoval->setChecked (false);
-    fDrawingLineSurfaceRemoval->setChecked (false);
 #endif
 
     d_style = G4ViewParameters::hlr;
 
   } else  if (aAction ==3) {
 #if QT_VERSION < 0x040000
-    fDrawingWireframe->setItemChecked (0,false);
-    fDrawingLineRemoval->setItemChecked (0,false);
-    fDrawingSurfaceRemoval->setItemChecked (0,true);
-    fDrawingLineSurfaceRemoval->setItemChecked (0,false);
+    fDrawingSurfaceRemoval->setOn(true);
 #else
-    fDrawingWireframe->setChecked (false);
-    fDrawingLineRemoval->setChecked (false);
     fDrawingSurfaceRemoval->setChecked (true);
-    fDrawingLineSurfaceRemoval->setChecked (false);
 #endif
 
     d_style = G4ViewParameters::hsr;
 
   } else  if (aAction ==4) {
 #if QT_VERSION < 0x040000
-    fDrawingWireframe->setItemChecked (0,false);
-    fDrawingLineRemoval->setItemChecked (0,false);
-    fDrawingSurfaceRemoval->setItemChecked (0,false);
-    fDrawingLineSurfaceRemoval->setItemChecked (0,true);
+    fDrawingLineSurfaceRemoval->setOn(true);
 #else
-    fDrawingWireframe->setChecked (false);
-    fDrawingLineRemoval->setChecked (false);
-    fDrawingSurfaceRemoval->setChecked (false);
     fDrawingLineSurfaceRemoval->setChecked (true);
 #endif
     d_style = G4ViewParameters::hlhsr;
@@ -783,9 +1086,6 @@ void G4OpenGLQtViewer::toggleDrawingAction(int aAction) {
   fVP.SetDrawingStyle(d_style);
 
   updateQWidget();
-#ifdef GEANT4_QT_DEBUG
-  printf("G4OpenGLQtViewer::toggleDrawingAction\n");
-#endif
 }
 
 
@@ -809,14 +1109,71 @@ void G4OpenGLQtViewer::toggleRepresentation(bool check) {
   }
   fVP.SetRepStyle (style);
 
-#ifdef GEANT4_QT_DEBUG
-  printf("G4OpenGLQtViewer::toggleRepresentation 3%d\n",check);
-#endif
   updateQWidget();
-#ifdef GEANT4_QT_DEBUG
-  printf("G4OpenGLQtViewer::toggleRepresentation 4%d\n",check);
-#endif
 }
+
+/**
+   SLOT Activate by a click on the projection menu
+   Warning : When G4OpenGLStoredQtViewer::DrawView() method call,
+   KernelVisitDecision () will be call and will set the fNeedKernelVisit
+   to 1. See G4XXXStoredViewer::CompareForKernelVisit for explanations.
+   It will cause a redraw of the view
+   @param check : 1 orthographic, 2 perspective
+   @see G4OpenGLStoredQtViewer::DrawView
+   @see G4XXXStoredViewer::CompareForKernelVisit
+*/
+void G4OpenGLQtViewer::toggleProjection(bool check) {
+
+  if (check == 1) {
+    fVP.SetFieldHalfAngle (0);
+  } else {
+
+    // look for the default parameter hidden in G4UIcommand parameters
+    G4UImanager* UI = G4UImanager::GetUIpointer();
+    if(UI==NULL)
+      return;
+    G4UIcommandTree * treeTop = UI->GetTree();
+
+    // find command
+    G4UIcommand* command = treeTop->FindPath("/vis/viewer/set/projection");
+    if (!command)
+      return;
+
+    // find param
+    G4UIparameter * angleParam = NULL;
+    for(G4int i=0;  i<command->GetParameterEntries(); i++)
+    {
+      if( command->GetParameter(i)->GetParameterName() == "field-half-angle" ) {
+        angleParam = command->GetParameter(i);
+      }
+    }
+    if (!angleParam)
+      return;
+
+    // find unit
+    G4UIparameter * unitParam = NULL;
+    for(G4int i=0;  i<command->GetParameterEntries(); i++)
+    {
+      if( command->GetParameter(i)->GetParameterName() == "unit" ) {
+        unitParam = command->GetParameter(i);
+      }
+    }
+    if (!unitParam)
+      return;
+
+    G4double defaultValue = command->ConvertToDouble(angleParam->GetDefaultValue())
+                            * G4UnitDefinition::GetValueOf(unitParam->GetDefaultValue()); 
+    if (defaultValue > 89.5 || defaultValue <= 0.0) {
+      G4cerr << "Field half angle should be 0 < angle <= 89.5 degrees. Check your default Field half angle parameter";
+    } else {
+      G4cout << "Perspective view has been set to default value. Field half angle="<<angleParam->GetDefaultValue() <<" " << G4endl;
+      fVP.SetFieldHalfAngle (defaultValue);
+      SetView ();
+    }
+  }  
+  updateQWidget();
+}
+
 
 /**
    SLOT Activate by a click on the background menu
@@ -873,9 +1230,6 @@ void G4OpenGLQtViewer::toggleAntialiasing(bool check) {
   }
 
   updateQWidget();
-#ifdef GEANT4_QT_DEBUG
-  printf("G4OpenGLQtViewer::toggleRepresentation %d\n",check);
-#endif
 }
 
 /**
@@ -892,9 +1246,6 @@ void G4OpenGLQtViewer::toggleHaloing(bool check) {
 
   updateQWidget();
 
-#ifdef GEANT4_QT_DEBUG
-  printf("G4OpenGLQtViewer::toggleRepresentation %d\n",check);
-#endif
 }
 
 /**
@@ -910,53 +1261,51 @@ void G4OpenGLQtViewer::toggleAux(bool check) {
   SetNeedKernelVisit (true);
   updateQWidget();
 
-#ifdef GEANT4_QT_DEBUG
-  printf("G4OpenGLQtViewer::toggleRepresentation %d\n",check);
-#endif
 }
 
 /**
    SLOT Activate by a click on the full screen menu
-@param check : 1 , 0
 */
 void G4OpenGLQtViewer::toggleFullScreen(bool check) {
-  GLWindow->setWindowState(GLWindow->windowState() ^ Qt::WindowFullScreen);
-
-#ifdef GEANT4_QT_DEBUG
-  printf("G4OpenGLQtViewer::toggleRepresentation %d\n",check);
+  if (check != GLWindow->isFullScreen()) { //toggle
+#if QT_VERSION >= 0x030200
+    GLWindow->setWindowState(GLWindow->windowState() ^ Qt::WindowFullScreen);
+#else
+    G4cerr << "This version of Qt could not do fullScreen. Resizing the widget is the only solution available." << G4endl;
 #endif
-}
-
-/**
-   SLOT Activate by a click on the mouse action menu
-   @param check : 1 , 0
-*/
-void G4OpenGLQtViewer::toggleMouseAction(bool check) {
-  if (check) { // rotate scene
-    fMouseAction = true;
-  } else { // move scene
-    fMouseAction = false;
   }
-
-#ifdef GEANT4_QT_DEBUG
-  printf("G4OpenGLQtViewer::toggleRepresentation %d\n",check);
-#endif
 }
 
 
-void G4OpenGLQtViewer::actionControlPanels() {
-#ifdef GEANT4_QT_DEBUG
-  printf("G4OpenGLQtViewer::actionControlPanels \n");
+void G4OpenGLQtViewer::savePPMToTemp() {
+  if (fMovieTempFolderPath == "") {
+    return;
+  }
+  QString fileName ="Test"+QString::number(fRecordFrameNumber)+".ppm";
+  QString filePath =fMovieTempFolderPath+fileName;
+
+  QImage image;
+  image = fWindow->grabFrameBuffer();
+  bool res = false;
+  
+#if QT_VERSION < 0x040000
+  res = image.save(filePath,"PPM");
+#else
+  res = image.save(filePath,0);
 #endif
+  if (res == false) { 
+    resetRecording();
+    setRecordingInfos("Can't save tmp file "+filePath);
+    return;
+  }
+  
+  setRecordingInfos("File "+fileName+" saved");
+  fRecordFrameNumber++;
 }
 
-void G4OpenGLQtViewer::actionExitG4() {
-#ifdef GEANT4_QT_DEBUG
-  printf("G4OpenGLQtViewer::actionExitG4() \n");
-#endif
-}
 
-void G4OpenGLQtViewer::actionCreateEPS() {
+
+void G4OpenGLQtViewer::actionSaveImage() {
   QString filters;
 #if QT_VERSION < 0x040000
   QStrList listFormat=QImageIO::outputFormats();
@@ -974,94 +1323,128 @@ void G4OpenGLQtViewer::actionCreateEPS() {
   filters += "eps;;";
   filters += "ps;;";
   filters += "pdf";
-  QString* selectedFilter = new QString();
+  QString* selectedFormat = new QString();
 #if QT_VERSION < 0x040000
   QString nomFich =  QFileDialog::getSaveFileName ( ".",
                                                     filters,
                                                     GLWindow,
                                                     "Save file dialog",
                                                     tr("Save as ..."),
-                                                    selectedFilter ); 
+                                                    selectedFormat ); 
 #else
   QString nomFich =  QFileDialog::getSaveFileName ( GLWindow,
                                                     tr("Save as ..."),
                                                     ".",
                                                     filters,
-                                                    selectedFilter ); 
+                                                    selectedFormat ); 
 #endif
   // bmp jpg jpeg png ppm xbm xpm
   if (nomFich == "") {
     return;
   }
 #if QT_VERSION < 0x040000
-  nomFich += "."+selectedFilter->lower();
-#ifdef GEANT4_QT_DEBUG
-  printf("G4OpenGLQtViewer::name %s\n",nomFich.ascii());
-#endif
+  nomFich += "."+QString(selectedFormat->ascii());
+  QString format = selectedFormat->lower();
 #else
-  nomFich += "."+selectedFilter->toLower();
-#ifdef GEANT4_QT_DEBUG
-  printf("G4OpenGLQtViewer::name %s\n",nomFich.toStdString().c_str());
+  nomFich += "."+QString(selectedFormat->toStdString().c_str());
+  QString format = selectedFormat->toLower();
 #endif
-#endif
-  G4OpenGLQtExportDialog* exportDialog= new G4OpenGLQtExportDialog(GLWindow,nomFich,fWindow->height(),fWindow->width());
+  G4OpenGLQtExportDialog* exportDialog= new G4OpenGLQtExportDialog(GLWindow,format,fWindow->height(),fWindow->width());
   if(  exportDialog->exec()) {
 
     QImage image;
-    //    if ((exportDialog->getWidth() !=fWindow->width()) ||
-    //        (exportDialog->getHeight() !=fWindow->height())) {
+    bool res = false;
+    if ((exportDialog->getWidth() !=fWindow->width()) ||
+        (exportDialog->getHeight() !=fWindow->height())) {
+      if (format != QString("eps")) {
+      G4cerr << "Export->Change Size : This function is not implemented, to export in another size, please resize your frame to what you need" << G4endl;
       
-      //      rescaleImage(exportDialog->getWidth(),exportDialog->getHeight());// re-scale image
-#ifdef GEANT4_QT_DEBUG
-      printf("rescaling\n");
-#endif
-      QGLWidget* glResized = fWindow;
-      fWindow->renderPixmap (exportDialog->getWidth()*2,exportDialog->getHeight()*2 ).save("/Users/laurentgarnier/Desktop/zzz.jpg","jpg");
-      QPixmap * pixmap = new QPixmap(fWindow->renderPixmap (exportDialog->getWidth(),exportDialog->getHeight() )) ;
-      //      image = pixmap.toImage();
+      //    rescaleImage(exportDialog->getWidth(),exportDialog->getHeight());// re-scale image
+      //      QGLWidget* glResized = fWindow;
+
+      // FIXME :
+      // L.Garnier : I've try to implement change size function, but the problem is 
+      // the renderPixmap function call the QGLWidget to resize and it doesn't draw
+      // the content of this widget... It only draw the background.
+
+      //      fWindow->renderPixmap (exportDialog->getWidth()*2,exportDialog->getHeight()*2,true );
+
+      //      QPixmap pixmap = fWindow->renderPixmap ();
+      
+      //      image = pixmap->toImage();
       //      glResized->resize(exportDialog->getWidth()*2,exportDialog->getHeight()*2);
-#ifdef GEANT4_QT_DEBUG
-      printf("rescaling after\n");
-#endif
       //      image = glResized->grabFrameBuffer();
-      
-      //    } else {
-      // image = fWindow->grabFrameBuffer();
-      //  }    
-    // jpeg format
-    if (nomFich.endsWith(".jpg") || 
-        nomFich.endsWith(".jpeg")) {
-      // grabFrameBuffer() :: Returns an image of the frame buffer. If withAlpha is true the alpha channel is included.
-      image.save(nomFich,0,exportDialog->getSliderValue());
-#ifdef GEANT4_QT_DEBUG
-      printf("saving jpeg quality : %d\n",exportDialog->getSliderValue());
-#endif
-    } else if (nomFich.endsWith(".eps")) {
-      generateEPS(nomFich,exportDialog->getNbColor(),image);
-    } else if (nomFich.endsWith(".ps") ||nomFich.endsWith(".pdf")) {
-      generatePS_PDF(nomFich,exportDialog->getNbColor(),image);
-    } else if (nomFich.endsWith(".tif") ||
-               nomFich.endsWith(".tiff") ||
-               nomFich.endsWith(".jpg") ||
-               nomFich.endsWith(".png") ||
-               nomFich.endsWith(".bmp") ||
-               nomFich.endsWith(".xpm")) {
-      image.save(nomFich,0,exportDialog->getSliderValue());
-#ifdef GEANT4_QT_DEBUG
-      printf("saving ELSE\n");
+      }      
+    } else {
+      image = fWindow->grabFrameBuffer();
+    }    
+    if (format == QString("eps")) {
+      if (exportDialog->getVectorEPS()) {
+        res = generateVectorEPS(nomFich,exportDialog->getWidth(),exportDialog->getHeight(),image);
+      } else {
+        res = generateEPS(nomFich,exportDialog->getNbColor(),image);
+      }
+    } else if ((format == "ps") || (format == "pdf")) {
+      res = generatePS_PDF(nomFich,exportDialog->getNbColor(),image);
+    } else if ((format == "tif") ||
+               (format == "tiff") ||
+               (format == "jpg") ||
+               (format == "jpeg") ||
+               (format == "png") ||
+               (format == "pbm") ||
+               (format == "pgm") ||
+               (format == "ppm") ||
+               (format == "bmp") ||
+               (format == "xbm") ||
+               (format == "xpm")) {
+#if QT_VERSION < 0x040000
+      res = image.save(nomFich,selectedFormat->ascii(),exportDialog->getSliderValue());
+#else
+      res = image.save(nomFich,0,exportDialog->getSliderValue());
 #endif
     } else {
       G4cerr << "This version of G4UI Could not generate the selected format" << G4endl;
+    }
+    if (res == false) {
+#if QT_VERSION < 0x040000
+      G4cerr << "Error while saving file... "<<nomFich.ascii()<<"" << G4endl;
+#else
+      G4cerr << "Error while saving file... "<<nomFich.toStdString().c_str()<< G4endl;
+#endif
+    } else {
+#if QT_VERSION < 0x040000
+      G4cout << "File "<<nomFich.ascii()<<" has been saved " << G4endl;
+#else
+      G4cout << "File "<<nomFich.toStdString().c_str()<<" has been saved " << G4endl;
+#endif
     }
     
   } else { // cancel selected
     return;
   }
   
-#ifdef GEANT4_QT_DEBUG
-  printf("G4OpenGLQtViewer::actionCreateEPS() \n");
-#endif
 }
+
+
+void G4OpenGLQtViewer::actionMovieParameters() {
+  showMovieParametersDialog();
+}
+
+
+void G4OpenGLQtViewer::showMovieParametersDialog() {
+  if (!fMovieParametersDialog) {
+    fMovieParametersDialog= new G4OpenGLQtMovieDialog(this,GLWindow);
+    displayRecordingStatus();
+    fMovieParametersDialog->checkEncoderSwParameters();
+    fMovieParametersDialog->checkSaveFileNameParameters();
+    fMovieParametersDialog->checkTempFolderParameters();
+    if (getEncoderPath() == "") {
+      setRecordingInfos("mpeg_encode is needed to encode in video format. It is available here: http://bmrc.berkeley.edu/frame/research/mpeg/");
+    }
+  }
+  fMovieParametersDialog->show();
+}
+
 
 /*
 // http://www.google.com/codesearch?hl=en&q=+jpg+Qt+quality+QDialog+show:FZkUoth8oiw:TONpW2mR-_c:tyTfrKMO-xI&sa=N&cd=2&ct=rc&cs_p=http://soft.proindependent.com/src/qtiplot-0.8.9.zip&cs_f=qtiplot-0.8.9/qtiplot/src/application.cpp#a0
@@ -1081,128 +1464,283 @@ void Graph::exportToSVG(const QString& fname)
 
 
 
+void G4OpenGLQtViewer::FinishView()
+{
+   glFlush ();
+   fWindow->swapBuffers ();
+}
 
 /**
    Save the current mouse press point
    @param p mouse click point
 */
-void G4OpenGLQtViewer::G4MousePressEvent(QPoint p)
+void G4OpenGLQtViewer::G4MousePressEvent(QMouseEvent *event)
 {
-  lastPos = p;
+#if QT_VERSION < 0x040000
+  if ((event->button() & Qt::LeftButton)
+      && !((event->state() & Qt::ShiftButton)
+           || (event->state() & Qt::ControlButton)
+           || (event->state() & Qt::AltButton)
+           || (event->state() & Qt::MetaButton))) {
+#else
+  if ((event->buttons() & Qt::LeftButton)
+      && !((event->modifiers() & Qt::ShiftModifier)
+           || (event->modifiers() & Qt::ControlModifier)
+           || (event->modifiers() & Qt::AltModifier)
+           || (event->modifiers() & Qt::MetaModifier))) {
+#endif
+    fWindow->setMouseTracking(true);
+    fAutoMove = false; // stop automove
+    fLastPos1 = event->pos();
+    fLastPos2 = fLastPos1;
+    fLastPos3 = fLastPos2;
+    fLastEventTime->start();
+    if (fMouseAction == STYLE3){  // pick
+      Pick(event->pos().x(),event->pos().y());
+    }
+  }
 }
+
+/**
+*/
+void G4OpenGLQtViewer::G4MouseReleaseEvent()
+{
+  fSpinningDelay = fLastEventTime->elapsed();
+  QPoint delta = (fLastPos3-fLastPos1);
+  if ((delta.x() == 0) && (delta.y() == 0)) {
+    return;
+  }
+  if (fSpinningDelay < fLaunchSpinDelay ) {
+    fAutoMove = true;
+    QTime lastMoveTime;
+    lastMoveTime.start();
+    // try to addapt speed move/rotate looking to drawing speed
+    int cycles = 4;
+    while (fAutoMove) {
+      //      if ( lastMoveTime.elapsed() > (fSpinningDelay / (cycles/2))) {
+        if (fMouseAction == STYLE1) {  // rotate
+          rotateQtScene(((float)delta.x())/cycles,((float)delta.y())/cycles);
+        } else if (fMouseAction == STYLE2) {  // move
+          moveScene(-((float)delta.x())/cycles,-((float)delta.y())/cycles,0,true);
+        }
+        lastMoveTime.start();
+        cycles = 1 ;
+      ((QApplication*)G4Qt::getInstance ())->processEvents();
+      cycles ++ ;
+    }
+  }
+  fWindow->setMouseTracking(false);
+
+}
+
+
+void G4OpenGLQtViewer::G4MouseDoubleClickEvent()
+{
+  fWindow->setMouseTracking(true);
+}
+
 
 /**
    @param pos_x mouse x position
    @param pos_y mouse y position
    @param mButtons mouse button active
+   @param mAutoMove true: apply this move till another evnt came, false :one time move
 */
 
-#if QT_VERSION < 0x040000
-void G4OpenGLQtViewer::G4MouseMoveEvent(int pos_x, int pos_y,Qt::ButtonState mButtons)
-#else
-void G4OpenGLQtViewer::G4MouseMoveEvent(int pos_x, int pos_y,Qt::MouseButtons mButtons)
-#endif
+void G4OpenGLQtViewer::G4MouseMoveEvent(QMouseEvent *event)
 {
-  int dx = pos_x - lastPos.x();
-  int dy = pos_y - lastPos.y();
   
-  if (fMouseAction) {  // rotate
-    if (mButtons & Qt::LeftButton) {
-      //phi spin stuff here
-      
-      G4Vector3D vp = fVP.GetViewpointDirection ().unit ();
-      G4Vector3D up = fVP.GetUpVector ().unit ();
-      
-      G4Vector3D yprime = (up.cross(vp)).unit();
-      G4Vector3D zprime = (vp.cross(yprime)).unit();
-      
-      G4double delta_alpha;
-      G4double delta_theta;
-      
-      if (fVP.GetLightsMoveWithCamera()) {
-        delta_alpha = dy;
-        delta_theta = -dx;
-      } else {
-        delta_alpha = -dy;
-        delta_theta = dx;
-      }    
-
-      delta_alpha *= deg;
-      delta_theta *= deg;
-
-      G4Vector3D new_vp = std::cos(delta_alpha) * vp + std::sin(delta_alpha) * zprime;
-      
-      G4Vector3D new_up;
-      if (fVP.GetLightsMoveWithCamera()) {
-        new_up = (new_vp.cross(yprime)).unit();
-        fVP.SetUpVector(new_up);
-      } else {
-        new_up = up;
-      }
-      ////////////////
-      // Rotates by fixed azimuthal angle delta_theta.
-
-      G4double cosalpha = new_up.dot (new_vp.unit());
-      G4double sinalpha = std::sqrt (1. - std::pow (cosalpha, 2));
-      yprime = (new_up.cross (new_vp.unit())).unit ();
-      G4Vector3D xprime = yprime.cross (new_up);
-      // Projection of vp on plane perpendicular to up...
-      G4Vector3D a1 = sinalpha * xprime;
-      // Required new projection...
-      G4Vector3D a2 =
-        sinalpha * (std::cos (delta_theta) * xprime + std::sin (delta_theta) * yprime);
-      // Required Increment vector...
-      G4Vector3D delta = a2 - a1;
-      // So new viewpoint is...
-      G4Vector3D viewPoint = new_vp.unit() + delta;
-
-      fVP.SetViewAndLights (viewPoint);
-      updateQWidget();
-      
-    } else if (mButtons & Qt::RightButton) {
-      // NEVER DONE BECAUSE OF MOUSE MENU
-#ifdef GEANT4_QT_DEBUG
-      //       printf("G4OpenGLQtViewer::mouseMoveEvent Right \n");
+#if QT_VERSION < 0x040000
+  Qt::ButtonState mButtons = event->state();
+#else
+  Qt::MouseButtons mButtons = event->buttons();
 #endif
-      //       setXRotation(xRot + dy/2);
-      //       setZRotation(zRot + dx/2);
-      //       updateQWidget();
-    }
-  } else {  // move
 
-    float dx = pos_x - lastPos.x();
-    float dy = pos_y - lastPos.y();
-    
-    G4Point3D stp
-      = GetSceneHandler()->GetScene()->GetStandardTargetPoint();
-    
-    G4Point3D tp = stp + fVP.GetCurrentTargetPoint ();
-    
-    const G4Vector3D& upVector = fVP.GetUpVector ();
-    const G4Vector3D& vpVector = fVP.GetViewpointDirection ();
-    
-    G4Vector3D unitRight = (upVector.cross (vpVector)).unit();
-    G4Vector3D unitUp    = (vpVector.cross (unitRight)).unit();
-    
-    tp += -dx * unitRight + dy * unitUp;
-    fVP.SetCurrentTargetPoint (tp - stp);
-    
-    updateQWidget();
+  if (fAutoMove) {
+    return;
   }
-  lastPos = QPoint(pos_x, pos_y);
+
+  fLastPos3 = fLastPos2;
+  fLastPos2 = fLastPos1;
+  fLastPos1 = QPoint(event->x(), event->y());
+
+  int deltaX = fLastPos2.x()-fLastPos1.x();
+  int deltaY = fLastPos2.y()-fLastPos1.y();
+
+  if (fMouseAction == STYLE1) {  // rotate
+    if (mButtons & Qt::LeftButton) {
+      rotateQtScene(deltaX,deltaY);
+    }
+  } else if (fMouseAction == STYLE2) {  // move
+    if (mButtons & Qt::LeftButton) {
+      moveScene(-deltaX,-deltaY,0,true);
+    }
+  }
+
+  fLastEventTime->start();
 }
 
+
+/**
+   Move the scene of dx, dy, dz values.
+   @param dx delta mouse x position
+   @param dy delta mouse y position
+   @param mouseMove : true if even comes from a mouse move, false if even comes from key action
+*/
+
+void G4OpenGLQtViewer::moveScene(float dx,float dy, float dz,bool mouseMove)
+{
+  if (fHoldMoveEvent)
+    return;
+  fHoldMoveEvent = true;
+
+  G4double coefTrans = 0;
+  GLdouble coefDepth = 0;
+  if(mouseMove) {
+    coefTrans = ((G4double)getSceneNearWidth())/((G4double)WinSize_x);
+    if (WinSize_y <WinSize_x) {
+      coefTrans = ((G4double)getSceneNearWidth())/((G4double)WinSize_y);
+    }
+  } else {
+    coefTrans = getSceneNearWidth()*fDeltaSceneTranslation;
+    coefDepth = getSceneDepth()*fDeltaDepth;
+  }
+  fVP.IncrementPan(-dx*coefTrans,dy*coefTrans,dz*coefDepth);
+  emit moveX(-dx*coefTrans);
+  emit moveY(dy*coefTrans);
+  emit moveZ(dz*coefTrans);
+  
+  updateQWidget();
+  if (fAutoMove)
+    ((QApplication*)G4Qt::getInstance ())->processEvents();
+  
+  fHoldMoveEvent = false;
+}
+
+
+/**
+   @param dx delta mouse x position
+   @param dy delta mouse y position
+*/
+
+void G4OpenGLQtViewer::rotateQtScene(float dx, float dy)
+{
+  if (fHoldRotateEvent)
+    return;
+  fHoldRotateEvent = true;
+  
+  if( dx != 0) {
+    rotateScene(dx,0,fDeltaRotation);
+    emit rotateTheta(dx);
+  }
+  if( dy != 0) {
+    rotateScene(0,dy,fDeltaRotation);
+    emit rotatePhi(dy);
+  }
+  updateQWidget();
+  
+  fHoldRotateEvent = false;
+}
+
+/**
+   @param dx delta mouse x position
+   @param dy delta mouse y position
+*/
+
+void G4OpenGLQtViewer::rotateQtCamera(float dx, float dy)
+{
+  if (fHoldRotateEvent)
+    return;
+  fHoldRotateEvent = true;
+
+  rotateScene(dx,dy,fDeltaRotation);
+  emit rotateTheta(dx);
+  emit rotatePhi(dy);
+  updateQWidget();
+  
+  fHoldRotateEvent = false;
+}
+
+
+
+
+/** This is the benning of a rescale function. It does nothing for the moment
+    @param aWidth : new width
+    @param aHeight : new height
+*/
 void G4OpenGLQtViewer::rescaleImage(
  int aWidth
 ,int aHeight
 ){
-#ifdef GEANT4_QT_DEBUG
-  printf("should rescale \n");
-#endif
+  //  GLfloat* feedback_buffer;
+  //  GLint returned;
+  //  FILE* file;
+  
+//   feedback_buffer = new GLfloat[size];
+//   glFeedbackBuffer (size, GL_3D_COLOR, feedback_buffer);
+//   glRenderMode (GL_FEEDBACK);
+  
+//   glViewport (0, 0, aWidth, aHeight);
+//   DrawView();
+//   returned = glRenderMode (GL_RENDER);
+
 }
 
 /**
-   Generate Postscript form image
+   Generate Vectorial Encapsulated Postscript form image
+   @param aFilename : name of file
+   @param aInColor : numbers of colors : 1->BW 2->RGB 3->RGB+Alpha
+   @param aImage : Image to print
+*/
+bool G4OpenGLQtViewer::generateVectorEPS (
+ QString aFilename
+,int aWidth
+,int aHeight
+,QImage aImage
+)
+{
+  // Print vectored PostScript
+  
+  G4int size = 5000000;
+
+  GLfloat* feedback_buffer;
+  GLint returned;
+  FILE* file;
+  
+  feedback_buffer = new GLfloat[size];
+  glFeedbackBuffer (size, GL_3D_COLOR, feedback_buffer);
+  glRenderMode (GL_FEEDBACK);
+  
+  int side = aWidth;
+  if (aHeight < aWidth) side = aHeight;
+  glViewport((aWidth - side) / 2, (aHeight - side) / 2, side, side);
+  DrawView();
+
+  returned = glRenderMode (GL_RENDER);
+  
+  
+#if QT_VERSION < 0x040000
+  file = fopen (aFilename.ascii(), "w");
+#else
+  file = fopen (aFilename.toStdString().c_str(), "w");
+#endif
+  if (file) {
+    spewWireframeEPS (file, returned, feedback_buffer, "rendereps");
+  } else {
+#if QT_VERSION < 0x040000
+    G4cerr << "Could not open "<< aFilename.ascii() << G4endl;
+#else
+    G4cerr << "Could not open "<< aFilename.toStdString().c_str() << G4endl;
+#endif
+  }
+  
+  delete[] feedback_buffer;
+
+  return true;
+}
+
+/**
+   Generate Encapsulated Postscript form image
    @param aFilename : name of file
    @param aInColor : numbers of colors : 1->BW 2->RGB 3->RGB+Alpha
    @param aImage : Image to print
@@ -1214,22 +1752,10 @@ bool G4OpenGLQtViewer::generateEPS (
 )
 {
   // FIXME
-#ifdef GEANT4_QT_DEBUG
-  printf("saving EPS\n");
-#endif
 
   FILE* fp;
 
-  if ((!aImage.isGrayscale ()) &&(aInColor ==1 )) {
-#if QT_VERSION < 0x040000
-    aImage.convertDepth(1,Qt::MonoOnly);
-#else
-    aImage.convertToFormat ( aImage.format(), Qt::MonoOnly);
-#endif
-  }
-  const uchar * pixels = aImage.bits ();
-    
-  if (pixels == NULL)
+  if (aImage.bits () == NULL)
     return false;
   
 #if QT_VERSION < 0x040000
@@ -1290,28 +1816,12 @@ bool G4OpenGLQtViewer::generateEPS (
     size = size*3;
   
   int i = 0;
-  if (depth == 1) {
-    //  To be implemented
-    //    QImage::Endian bitOrder = aImage.bitOrder();
-    /*    for(int y=0; y < height; y++) {
-      const uchar * s = aImage.scanLine(y);
-      for(int x=0; x < width; x++) {
-        // need to copy bit for bit...
-        bool b = (bitOrder == QImage::LittleEndian) ?
-          (*(s + (x >> 3)) >> (x & 7)) & 1 :
-          (*(s + (x >> 3)) << (x & 7)) & 0x80 ;
-        if (b)
-          pixel[i >> 3] ^= (0x80 >> (i & 7));
-        i++;
-      }
-      // we need to align to 8 bit here
-      i = (i+7) & 0xffffff8;
-    }
-    */
-  } else if (depth == 8) {
-#ifdef GEANT4_QT_DEBUG
-    printf("has 8 bit\n");
-#endif
+  //  if ( aInColor ==1 ) {
+  // FIXME : L. Garnier. For the moment 10 dec 2007, I could not find a way
+  // to save correctly grayscale Image. I mean that color or grayscale image
+  // have the same file save size !
+  
+  /* } else*/ if (depth == 8) {
     for(int y=height-1; y >=0 ; y--) {
       const uchar * s = aImage.scanLine(y);
       for(int x=0; x <width; x++) {
@@ -1331,11 +1841,9 @@ bool G4OpenGLQtViewer::generateEPS (
     }
   } else {
 #if QT_VERSION < 0x040000
-  G4cerr << "GenerateEPS:: No alpha channel image with Qt3. This is only supported with Qt4" << G4endl;
+    bool alpha = aImage.hasAlphaBuffer();
 #else
     bool alpha = aImage.hasAlphaChannel();
-#ifdef GEANT4_QT_DEBUG
-    printf("has else %d alpha %d\n",depth,alpha);
 #endif
     for(int y=height-1; y >=0 ; y--) {
       QRgb * s = (QRgb*)(aImage.scanLine(y));
@@ -1356,7 +1864,6 @@ bool G4OpenGLQtViewer::generateEPS (
       }
       fprintf (fp, "\n");
     } 
-#endif
 
   }
 
@@ -1378,6 +1885,7 @@ bool G4OpenGLQtViewer::generatePS_PDF (
 ,QImage aImage
 )
 {
+
 #if QT_VERSION < 0x040000
 #ifdef Q_WS_MAC || Q_WS_X11
   QPrinter printer;
@@ -1406,11 +1914,18 @@ bool G4OpenGLQtViewer::generatePS_PDF (
 #else
   QPrinter printer;
   //  printer.setPageSize(pageSize);
-  if (aInColor == 1) {
-    printer.setColorMode(QPrinter::GrayScale);
-  } else {
-    printer.setColorMode(QPrinter::Color);
+
+  // FIXME : L. Garnier 4/12/07
+  // This is not working, it does nothing. Image is staying in color mode
+  // So I have desactivate the B/W button in GUI
+  if ((!aImage.isGrayscale ()) &&(aInColor ==1 )) {
+#if QT_VERSION < 0x040000
+    aImage = aImage.convertDepth(1,Qt::MonoOnly);
+#else
+    aImage = aImage.convertToFormat ( aImage.format(), Qt::MonoOnly);
+#endif
   }
+
 
   if (aFilename.endsWith(".ps")) {
 #if QT_VERSION > 0x040200
@@ -1426,16 +1941,924 @@ bool G4OpenGLQtViewer::generatePS_PDF (
 #endif
   //  printer.setFullPage ( true);
   QPainter paint(&printer);
-  paint.drawImage (0,0,aImage );
+  paint.drawImage (0,0,aImage);
   paint.end();
 #endif
   return true;
 }
 
+
+void G4OpenGLQtViewer::G4wheelEvent (QWheelEvent * event) 
+{
+  fVP.SetZoomFactor(fVP.GetZoomFactor()+(fVP.GetZoomFactor()*(event->delta())/1200)); 
+  updateQWidget();
+}
+
+
+void G4OpenGLQtViewer::G4keyPressEvent (QKeyEvent * event) 
+{
+  if (fHoldKeyEvent)
+    return;
+
+  fHoldKeyEvent = true;
+
+#if QT_VERSION < 0x040000
+  if ((event->key() == Qt::Key_Down) && (event->state() & Qt::AltButton )) { // go backward
+#else
+  if ((event->key() == Qt::Key_Down) && (event->modifiers() & Qt::AltModifier )) { // go backward
+#endif
+    
+    moveScene(0,0,1,false);
+  }
+#if QT_VERSION < 0x040000
+  else if ((event->key() == Qt::Key_Up) && (event->state() & Qt::AltButton)) { // go forward
+#else
+  else if ((event->key() == Qt::Key_Up) && (event->modifiers() & Qt::AltModifier)) { // go forward
+#endif
+    moveScene(0,0,-1,false);
+  }
+#if QT_VERSION < 0x040000
+  if ((event->key() == Qt::Key_Down) && (event->state() & Qt::ShiftButton)) { // rotate phi
+#else
+  if ((event->key() == Qt::Key_Down) && (event->modifiers() & Qt::ShiftModifier)) { // rotate phi
+#endif
+    rotateQtCamera(0,-1);
+  }
+#if QT_VERSION < 0x040000
+  else if ((event->key() == Qt::Key_Up) && (event->state() & Qt::ShiftButton)) { // rotate phi
+#else
+  else if ((event->key() == Qt::Key_Up) && (event->modifiers() & Qt::ShiftModifier)) { // rotate phi
+#endif
+    rotateQtCamera(0,1);
+  }
+#if QT_VERSION < 0x040000
+  if ((event->key() == Qt::Key_Left) && (event->state() & Qt::ShiftButton)) { // rotate theta
+#else
+  if ((event->key() == Qt::Key_Left) && (event->modifiers() & Qt::ShiftModifier)) { // rotate theta
+#endif
+    rotateQtCamera(1,0);
+  }
+#if QT_VERSION < 0x040000
+  else if ((event->key() == Qt::Key_Right) && (event->state() & Qt::ShiftButton)) { // rotate theta
+#else
+  else if ((event->key() == Qt::Key_Right) && (event->modifiers() & Qt::ShiftModifier)) { // rotate theta
+#endif
+    rotateQtCamera(-1,0);
+  }
+
+#if QT_VERSION < 0x040000
+  if ((event->state() & Qt::AltButton)) {
+#else
+  if ((event->modifiers() & Qt::AltModifier)) {
+#endif
+    if (event->key() == Qt::Key_Plus) {
+      fDeltaRotation = fDeltaRotation/0.7;
+    }
+    else if (event->key() == Qt::Key_Minus) {
+      fDeltaRotation = fDeltaRotation*0.7;
+    }
+  } else {
+    if (event->key() == Qt::Key_Plus) {
+      fVP.SetZoomFactor(fVP.GetZoomFactor()*(1+fDeltaZoom)); 
+      updateQWidget();
+    }
+    else if (event->key() == Qt::Key_Minus) {
+      fVP.SetZoomFactor(fVP.GetZoomFactor()*(1-fDeltaZoom)); 
+      updateQWidget();
+    }
+  }
+  
+  
+  if (event->key() == Qt::Key_Escape) { // escaped from full screen
+#if QT_VERSION >= 0x030200
+      toggleFullScreen(false);
+#endif
+  }
+  // several case here : If return is pressed, in every case -> display the movie parameters dialog
+  // If one parameter is wrong -> put it in red (only save filenam could be wrong..)
+  // If encoder not found-> does nothing.Only display a message in status box
+  // If all ok-> generate parameter file
+  // If ok -> put encoder button enabled
+ 
+  if ((event->key() == Qt::Key_Return) || (event->key() == Qt::Key_Enter)){ // end of video
+   stopVideo();
+  }
+  if (event->key() == Qt::Key_Space){ // start/pause of video
+   startPauseVideo();
+  }
+
+  // with no modifiers
+#if QT_VERSION < 0x040000
+  if (event->state() == Qt::NoButton) {
+#else
+  if ((event->modifiers() == Qt::NoModifier) || (event->modifiers() == Qt::KeypadModifier )) {
+#endif
+    if (event->key() == Qt::Key_Down) { // go down
+      moveScene(0,1,0,false);
+    }
+    else if (event->key() == Qt::Key_Up) {  // go up
+      moveScene(0,-1,0,false);
+    }
+    if (event->key() == Qt::Key_Left) { // go left
+      moveScene(-1,0,0,false);
+    }
+    else if (event->key() == Qt::Key_Right) { // go right
+      moveScene(1,0,0,false);
+    }
+  }
+  fHoldKeyEvent = false;
+}
+  
+
+/** Stop the video. Check all parameters and enable encoder button if all is ok.
+*/
+void G4OpenGLQtViewer::stopVideo() {
+
+ // if encoder parameter is wrong, display parameters dialog and return
+  if (!fMovieParametersDialog) {
+    showMovieParametersDialog();
+  }
+  setRecordingStatus(STOP);
+
+  if (fRecordFrameNumber >0) {
+    // check parameters if they were modified (Re APPLY them...)
+    if (!(fMovieParametersDialog->checkEncoderSwParameters())) {
+      setRecordingStatus(BAD_ENCODER);
+    }  else if (!(fMovieParametersDialog->checkSaveFileNameParameters())) {
+      setRecordingStatus(BAD_OUTPUT);
+    }
+  } else {
+    resetRecording();
+    setRecordingInfos("No frame to encode.");
+  }
+}
+
+/** Stop the video. Check all parameters and enable encoder button if all is ok.
+*/
+void G4OpenGLQtViewer::saveVideo() {
+
+  // if encoder parameter is wrong, display parameters dialog and return
+  if (!fMovieParametersDialog) {
+    showMovieParametersDialog();
+  }
+
+  fMovieParametersDialog->checkEncoderSwParameters();
+  fMovieParametersDialog->checkSaveFileNameParameters();
+  
+  if (fRecordingStep == STOP) {
+    setRecordingStatus(SAVE);
+    generateMpegEncoderParameters();
+    encodeVideo();
+  }
+}
+
+
+/** Start/Pause the video..
+*/
+void G4OpenGLQtViewer::startPauseVideo() {
+   
+  // first time, if temp parameter is wrong, display parameters dialog and return
+
+  if (( fRecordingStep == WAIT)) {
+    if ( fRecordFrameNumber == 0) {
+      if (getTempFolderPath() == "") { // BAD_OUTPUT
+        showMovieParametersDialog();
+        setRecordingInfos("You should specified the temp folder in order to make movie");
+        return;
+      } else  {
+        // remove temp folder if it was create
+        QString tmp = removeTempFolder();
+        if (tmp !="") {
+          setRecordingInfos(tmp);
+          return;
+        }
+        tmp = createTempFolder();
+        if (tmp != "") {
+          setRecordingInfos("Can't create temp folder."+tmp);
+          return;
+        }
+      }
+    }
+  }
+  if ((fRecordingStep == WAIT)) {
+    setRecordingStatus(START); 
+  } else if (fRecordingStep == START) {
+    setRecordingStatus(PAUSE);
+  } else if (fRecordingStep == PAUSE) {
+    setRecordingStatus(CONTINUE);
+  } else if (fRecordingStep == CONTINUE) {
+    setRecordingStatus(PAUSE);
+  }
+}
+
+void G4OpenGLQtViewer::setRecordingStatus(RECORDING_STEP step) {
+
+  fRecordingStep = step;
+  displayRecordingStatus();
+}
+
+
+void G4OpenGLQtViewer::displayRecordingStatus() {
+  
+  QString txtStatus = "";
+  if (fRecordingStep == WAIT) {
+    txtStatus  = "Waiting to start...";
+    fRecordFrameNumber = 0; // reset the frame number
+  } else if (fRecordingStep == START) {
+    txtStatus  = "Start Recording...";
+  } else if (fRecordingStep == PAUSE) {
+    txtStatus  = "Pause Recording...";
+  } else if (fRecordingStep == CONTINUE) {
+    txtStatus  = "Continue Recording...";
+  } else if (fRecordingStep == STOP) {
+    txtStatus  = "Stop Recording...";
+  } else if (fRecordingStep == READY_TO_ENCODE) {
+    txtStatus  = "Ready to Encode...";
+  } else if (fRecordingStep == ENCODING) {
+    txtStatus  = "Encoding...";
+  } else if (fRecordingStep == FAILED) {
+    txtStatus  = "Failed to encode...";
+  } else if ((fRecordingStep == BAD_ENCODER)
+         || (fRecordingStep == BAD_OUTPUT)
+             || (fRecordingStep == BAD_TMP)) {
+    txtStatus  = "Correct above errors first";
+  } else if (fRecordingStep == SUCCESS) {
+    txtStatus  = "File encoded successfully";
+  } else {
+  }
+
+  if (fMovieParametersDialog) {
+    fMovieParametersDialog->setRecordingStatus(txtStatus);
+  } else {
+#if QT_VERSION < 0x040000
+    G4cout << txtStatus.ascii() << G4endl;
+#else
+    G4cout << txtStatus.toStdString().c_str() << G4endl;
+#endif
+  }
+  setRecordingInfos("");
+}
+
+
+void G4OpenGLQtViewer::setRecordingInfos(QString txt) {
+  if (fMovieParametersDialog) {
+    fMovieParametersDialog->setRecordingInfos(txt);
+  } else {
+#if QT_VERSION < 0x040000
+    G4cout << txt.ascii() << G4endl;
+#else
+    G4cout << txt.toStdString().c_str() << G4endl;
+#endif
+  }
+}
+
+/** Init the movie parameters. Temp dir and encoder path
+*/
+void G4OpenGLQtViewer::initMovieParameters() {
+  //init encoder
+  
+   //look for encoderPath
+     fProcess = new QProcess();
+     
+#if QT_VERSION < 0x040000
+     QObject ::connect(fProcess,SIGNAL(processExited ()),
+		       this,SLOT(processLookForFinished()));
+     fProcess->setCommunication(QProcess::DupStderr);
+     fProcess->setArguments(QStringList("which mpeg_encode"));
+     fProcess->start();
+#else
+     QObject ::connect(fProcess,SIGNAL(finished ( int)),
+		       this,SLOT(processLookForFinished()));
+     fProcess->setReadChannelMode(QProcess::MergedChannels);
+     fProcess->start ("which mpeg_encode");
+#endif
+  
+}
+
+/** @return encoder path or "" if it does not exist
+ */
+QString G4OpenGLQtViewer::getEncoderPath() {
+  return fEncoderPath;
+}
+ 
+
+/**
+ * set the new encoder path
+ * @return "" if correct. The error otherwise
+*/
+QString G4OpenGLQtViewer::setEncoderPath(QString path) {
+  if (path == "") {
+    return "File does not exist";
+  }
+
+#if QT_VERSION < 0x040000
+  path =  QDir::cleanDirPath(path);
+#else
+  path =  QDir::cleanPath(path);
+#endif
+  QFileInfo *f = new QFileInfo(path);
+  if (!f->exists()) {
+    return "File does not exist";
+  } else if (f->isDir()) {
+    return "This is a directory";
+  } else if (!f->isExecutable()) {
+    return "File exist but is not executable";
+  } else if (!f->isFile()) {
+    return "This is not a file";
+  }
+  fEncoderPath = path;
+
+  if ((fRecordingStep == BAD_ENCODER)) {
+    setRecordingStatus(STOP);
+  } 
+  return "";
+}
+
+
+bool G4OpenGLQtViewer::isRecording(){
+  if ((fRecordingStep == START) || (fRecordingStep == CONTINUE)) {
+    return true;
+  }
+  return false;
+}
+
+bool G4OpenGLQtViewer::isPaused(){
+  if (fRecordingStep == PAUSE) {
+    return true;
+  }
+  return false;
+}
+
+bool G4OpenGLQtViewer::isEncoding(){
+  if (fRecordingStep == ENCODING) {
+    return true;
+  }
+  return false;
+}
+
+bool G4OpenGLQtViewer::isWaiting(){
+  if (fRecordingStep == WAIT) {
+    return true;
+  }
+  return false;
+}
+
+bool G4OpenGLQtViewer::isStopped(){
+  if (fRecordingStep == STOP) {
+    return true;
+  }
+  return false;
+}
+
+bool G4OpenGLQtViewer::isFailed(){
+  if (fRecordingStep == FAILED) {
+    return true;
+  }
+  return false;
+}
+
+bool G4OpenGLQtViewer::isSuccess(){
+  if (fRecordingStep == SUCCESS) {
+    return true;
+  }
+  return false;
+}
+
+bool G4OpenGLQtViewer::isBadEncoder(){
+  if (fRecordingStep == BAD_ENCODER) {
+    return true;
+  }
+  return false;
+}
+bool G4OpenGLQtViewer::isBadTmp(){
+  if (fRecordingStep == BAD_TMP) {
+    return true;
+  }
+  return false;
+}
+bool G4OpenGLQtViewer::isBadOutput(){
+  if (fRecordingStep == BAD_OUTPUT) {
+    return true;
+  }
+  return false;
+}
+
+void G4OpenGLQtViewer::setBadEncoder(){
+  fRecordingStep = BAD_ENCODER;
+  displayRecordingStatus();
+}
+void G4OpenGLQtViewer::setBadTmp(){
+  fRecordingStep = BAD_TMP;
+  displayRecordingStatus();
+}
+void G4OpenGLQtViewer::setBadOutput(){
+  fRecordingStep = BAD_OUTPUT;
+  displayRecordingStatus();
+}
+
+void G4OpenGLQtViewer::setWaiting(){
+  fRecordingStep = WAIT;
+  displayRecordingStatus();
+}
+
+
+bool G4OpenGLQtViewer::isReadyToEncode(){
+  if (fRecordingStep == READY_TO_ENCODE) {
+    return true;
+  }
+  return false;
+}
+
+void G4OpenGLQtViewer::resetRecording() {
+    setRecordingStatus(WAIT);
+}
+
+/**
+ * set the temp folder path
+ * @return "" if correct. The error otherwise
+*/
+QString G4OpenGLQtViewer::setTempFolderPath(QString path) {
+
+  if (path == "") {
+    return "Path does not exist";
+  }
+#if QT_VERSION < 0x040000
+  path =  QDir::cleanDirPath(path);
+#else
+  path =  QDir::cleanPath(path);
+#endif
+  QFileInfo *d = new QFileInfo(path);
+  if (!d->exists()) {
+    return "Path does not exist";
+  } else if (!d->isDir()) {
+    return "This is not a directory";
+  } else if (!d->isReadable()) {
+    return path +" is read protected";
+  } else if (!d->isWritable()) {
+    return path +" is write protected";
+  }
+  
+  if ((fRecordingStep == BAD_TMP)) {
+    setRecordingStatus(WAIT); 
+  }
+  fTempFolderPath = path;
+  return "";
+}
+
+/** @return the temp folder path or "" if it does not exist
+ */
+QString G4OpenGLQtViewer::getTempFolderPath() {
+  return fTempFolderPath;
+}
+ 
+/**
+ * set the save file name path
+ * @return "" if correct. The error otherwise
+*/
+QString G4OpenGLQtViewer::setSaveFileName(QString path) {
+
+  if (path == "") {
+    return "Path does not exist";
+  }
+  
+  QFileInfo *file = new QFileInfo(path);
+  QDir dir = file->dir();
+#if QT_VERSION < 0x040000
+  path =  QDir::cleanDirPath(path);
+#else
+  path =  QDir::cleanPath(path);
+#endif
+  if (file->exists()) {
+    return "File already exist, please choose a new one";
+  } else if (!dir.exists()) {
+    return "Dir does not exist";
+  } else if (!dir.isReadable()) {
+    return path +" is read protected";
+  }
+  
+  if ((fRecordingStep == BAD_OUTPUT)) {
+    setRecordingStatus(STOP); 
+  }
+  fSaveFileName = path;
+  return "";
+}
+
+/** @return the save file path
+ */
+QString G4OpenGLQtViewer::getSaveFileName() {
+  return fSaveFileName ;
+}
+
+/** Create a Qt_temp folder in the temp folder given
+* The temp folder will be like this /tmp/QtMovie_12-02-2008_12_12_58/
+* @return "" if success. Error message if not.
+*/
+QString G4OpenGLQtViewer::createTempFolder() {
+  fMovieTempFolderPath = "";
+  //check
+  QString tmp = setTempFolderPath(fTempFolderPath);
+  if (tmp != "") {
+    return tmp;
+  }
+#if QT_VERSION < 0x040000
+  QString sep = QChar(QDir::separator());
+#else
+  QString sep = QString(QDir::separator());
+#endif
+  QString path = sep+"QtMovie_"+QDateTime::currentDateTime ().toString("dd-MM-yyyy_hh-mm-ss")+sep; 
+#if QT_VERSION < 0x040000
+  QDir *d = new QDir(QDir::cleanDirPath(fTempFolderPath));
+#else
+  QDir *d = new QDir(QDir::cleanPath(fTempFolderPath));
+#endif
+  // check if it is already present
+  if (d->exists(path)) {
+    return "Folder "+path+" already exists.Please remove it first";
+  }
+  if (d->mkdir(fTempFolderPath+path)) {
+    fMovieTempFolderPath = fTempFolderPath+path;
+    return "";
+  } else {
+    return "Can't create "+fTempFolderPath+path;
+  }
+  return "-";
+}
+
+/** Remove the Qt_temp folder in the temp folder
+*/
+QString G4OpenGLQtViewer::removeTempFolder() {
+	// remove files in Qt_temp folder
+  if (fMovieTempFolderPath == "") {
+    return "";
+  }
+#if QT_VERSION < 0x040000
+  QDir *d = new QDir(QDir::cleanDirPath(fMovieTempFolderPath));
+#else
+  QDir *d = new QDir(QDir::cleanPath(fMovieTempFolderPath));
+#endif
+  if (!d->exists()) {
+    return "";  // already remove
+  }
+
+  d->setFilter( QDir::Files );
+  QStringList subDirList = d->entryList();
+  int res = true;
+  QString error = "";
+  for (QStringList::ConstIterator it = subDirList.begin() ;(it != subDirList.end()) ; it++) {
+    const QString currentFile = *it;
+      if (!d->remove(currentFile)) {
+        res = false;
+        QString file = fMovieTempFolderPath+currentFile;
+        error +="Removing file failed : "+file;
+      } else {
+      }
+  }
+  if (res) {
+    if (d->rmdir(fMovieTempFolderPath)) {
+      fMovieTempFolderPath = "";
+      return "";
+    } else {
+      return "Dir "+fMovieTempFolderPath+" should be empty, but could not remove it";
+    }
+
+  }
+  return "Could not remove "+fMovieTempFolderPath+" because of the following errors :"+error;
+}
+
+
+
+bool G4OpenGLQtViewer::hasPendingEvents () {
+  return ((QApplication*)G4Qt::getInstance ())->hasPendingEvents ();
+}
+
+bool G4OpenGLQtViewer::generateMpegEncoderParameters () {
+
+		// save the parameter file
+  FILE* fp;
+#if QT_VERSION < 0x040000
+  fp = fopen (QString(fMovieTempFolderPath+fParameterFileName).ascii(), "w");
+#else
+  fp = fopen (QString(fMovieTempFolderPath+fParameterFileName).toStdString().c_str(), "w");
 #endif
 
-/*
+  if (fp == NULL) {
+    setRecordingInfos("Generation of parameter file failed");
+    return false;
+  }
 
+  fprintf (fp,"# parameter file template with lots of comments to assist you\n");
+  fprintf (fp,"#\n");
+  fprintf (fp,"# you can use this as a template, copying it to a separate file then modifying\n");
+  fprintf (fp,"# the copy\n");
+  fprintf (fp,"#\n");
+  fprintf (fp,"#\n");
+  fprintf (fp,"# any line beginning with '#' is a comment\n");
+  fprintf (fp,"#\n");
+  fprintf (fp,"# no line should be longer than 255 characters\n");
+  fprintf (fp,"#\n");
+  fprintf (fp,"#\n");
+  fprintf (fp,"# general format of each line is:\n");
+  fprintf (fp,"#	  \n");
+  fprintf (fp,"#\n");
+  fprintf (fp,"# lines can generally be in any order\n");
+  fprintf (fp,"#\n");
+  fprintf (fp,"# an exception is the option 'INPUT' which must be followed by input\n");
+  fprintf (fp,"# files in the order in which they must appear, followed by 'END_INPUT'\n");
+  fprintf (fp,"#\n");
+  fprintf (fp,"# Also, if you use the `command` method of generating input file names,\n");
+  fprintf (fp,"# the command will only be executed in the INPUT_DIR if INPUT_DIR preceeds\n");
+  fprintf (fp,"# the INPUT parameter.\n");
+  fprintf (fp,"#\n");
+  fprintf (fp,"#  MUST be in UPPER CASE\n");
+  fprintf (fp,"#\n");
+  fprintf (fp,"\n");
+  fprintf (fp,"# Pattern affects speed, quality and compression. See the User's Guide\n");
+  fprintf (fp,"# for more info.\n");
+  fprintf (fp,"\n");
+  fprintf (fp,"PATTERN		IBBPBBPBBPBBPBBP\n");
+#if QT_VERSION < 0x040000
+  fprintf (fp,"OUTPUT		%s\n",getSaveFileName().ascii());
+#else
+  fprintf (fp,"OUTPUT		%s\n",getSaveFileName().toStdString().c_str());
+#endif
+  fprintf (fp,"\n");
+  fprintf (fp,"# mpeg_encode really only accepts 3 different file formats, but using a\n");
+  fprintf (fp,"# conversion statement it can effectively handle ANY file format\n");
+  fprintf (fp,"#\n");
+  fprintf (fp,"# You must specify the type of the input files.  The choices are:\n");
+  fprintf (fp,"#    YUV, PPM, JMOVIE, Y, JPEG, PNM\n");
+  fprintf (fp,"#	(must be upper case)\n");
+  fprintf (fp,"#\n");
+  fprintf (fp,"BASE_FILE_FORMAT	PPM\n");
+  fprintf (fp,"\n");
+  fprintf (fp,"#\n");
+  fprintf (fp,"# if YUV format (or using parallel version), must provide width and height\n");
+  fprintf (fp,"# YUV_SIZE	widthxheight\n");
+  fprintf (fp,"# this option is ignored if BASE_FILE_FORMAT is not YUV and you're running\n");
+  fprintf (fp,"# on just one machine\n");
+  fprintf (fp,"#\n");
+  fprintf (fp,"YUV_SIZE	352x240\n");
+  fprintf (fp,"\n");
+  fprintf (fp,"# If you are using YUV, there are different supported file formats.\n");
+  fprintf (fp,"# EYUV or UCB are the same as previous versions of this encoder.\n");
+  fprintf (fp,"# (All the Y's, then U's then V's, in 4:2:0 subsampling.)\n");
+  fprintf (fp,"# Other formats, such as Abekas, Phillips, or a general format are\n");
+  fprintf (fp,"# permissible, the general format is a string of Y's, U's, and V's\n");
+  fprintf (fp,"# to specify the file order.\n");
+  fprintf (fp,"\n");
+  fprintf (fp,"INPUT_FORMAT UCB\n");
+  fprintf (fp,"\n");
+  fprintf (fp,"# the conversion statement\n");
+  fprintf (fp,"#\n");
+  fprintf (fp,"# Each occurrence of '*' will be replaced by the input file\n");
+  fprintf (fp,"#\n");
+  fprintf (fp,"# e.g., if you have a bunch of GIF files, then this might be:\n");
+  fprintf (fp,"#	INPUT_CONVERT	giftoppm *\n");
+  fprintf (fp,"#\n");
+  fprintf (fp,"# e.g., if you have a bunch of files like a.Y a.U a.V, etc., then:\n");
+  fprintf (fp,"#	INPUT_CONVERT	cat *.Y *.U *.V\n");
+  fprintf (fp,"#\n");
+  fprintf (fp,"# e.g., if you are grabbing from laser disc you might have something like\n");
+  fprintf (fp,"#	INPUT_CONVERT	goto frame *; grabppm\n");
+  fprintf (fp,"# 'INPUT_CONVERT *' means the files are already in the base file format\n");
+  fprintf (fp,"#\n");
+  fprintf (fp,"INPUT_CONVERT	* \n");
+  fprintf (fp,"\n");
+  fprintf (fp,"# number of frames in a GOP.\n");
+  fprintf (fp,"#\n");
+  fprintf (fp,"# since each GOP must have at least one I-frame, the encoder will find the\n");
+  fprintf (fp,"# the first I-frame after GOP_SIZE frames to start the next GOP\n");
+  fprintf (fp,"#\n");
+  fprintf (fp,"# later, will add more flexible GOP signalling\n");
+  fprintf (fp,"#\n");
+  fprintf (fp,"GOP_SIZE	16\n");
+  fprintf (fp,"\n");
+  fprintf (fp,"# number of slices in a frame\n");
+  fprintf (fp,"#\n");
+  fprintf (fp,"# 1 is a good number.  another possibility is the number of macroblock rows\n");
+  fprintf (fp,"# (which is the height divided by 16)\n");
+  fprintf (fp,"#\n");
+  fprintf (fp,"SLICES_PER_FRAME	1\n");
+  fprintf (fp,"\n");
+  fprintf (fp,"# directory to get all input files from (makes this file easier to read)\n");
+#if QT_VERSION < 0x040000
+  fprintf (fp,"INPUT_DIR	%s\n",fMovieTempFolderPath.ascii());
+#else
+  fprintf (fp,"INPUT_DIR	%s\n",fMovieTempFolderPath.toStdString().c_str());
+#endif
+  fprintf (fp,"\n");
+  fprintf (fp,"# There are a bunch of ways to specify the input files.\n");
+  fprintf (fp,"# from a simple one-per-line listing, to the following \n");
+  fprintf (fp,"# way of numbering them.  See the manual for more information.\n");
+  fprintf (fp,"INPUT\n");
+  fprintf (fp,"# '*' is replaced by the numbers 01, 02, 03, 04\n");
+  fprintf (fp,"# if I instead do [01-11], it would be 01, 02, ..., 09, 10, 11\n");
+  fprintf (fp,"# if I instead do [1-11], it would be 1, 2, 3, ..., 9, 10, 11\n");
+  fprintf (fp,"# if I instead do [1-11+3], it would be 1, 4, 7, 10\n");
+  fprintf (fp,"# the program assumes none of your input files has a name ending in ']'\n");
+  fprintf (fp,"# if you do, too bad!!!\n");
+  fprintf (fp,"#\n");
+  fprintf (fp,"#\n");
+  fprintf (fp,"Test*.ppm	[0-%d]\n",fRecordFrameNumber-1);
+  fprintf (fp,"# can have more files here if you want...there is no limit on the number\n");
+  fprintf (fp,"# of files\n");
+  fprintf (fp,"END_INPUT\n");
+  fprintf (fp,"\n");
+  fprintf (fp,"\n");
+  fprintf (fp,"\n");
+  fprintf (fp,"# Many of the remaining options have to do with the motion search and qscale\n");
+  fprintf (fp,"\n");
+  fprintf (fp,"# FULL or HALF -- must be upper case\n");
+  fprintf (fp,"# Should be FULL for computer generated images\n");
+  fprintf (fp,"PIXEL		FULL\n");
+  fprintf (fp,"\n");
+  fprintf (fp,"# means +/- this many pixels for both P and B frame searches\n");
+  fprintf (fp,"# specify two numbers if you wish to serc different ranges in the two.\n");
+  fprintf (fp,"RANGE		10\n");
+  fprintf (fp,"\n");
+  fprintf (fp,"# The two search algorithm parameters below mostly affect speed,\n");
+  fprintf (fp,"# with some affect on compression and almost none on quality.\n");
+  fprintf (fp,"\n");
+  fprintf (fp,"# this must be one of {EXHAUSTIVE, SUBSAMPLE, LOGARITHMIC}\n");
+  fprintf (fp,"PSEARCH_ALG	LOGARITHMIC\n");
+  fprintf (fp,"\n");
+  fprintf (fp,"# this must be one of {SIMPLE, CROSS2, EXHAUSTIVE}\n");
+  fprintf (fp,"#\n");
+  fprintf (fp,"# note that EXHAUSTIVE is really, really, really slow\n");
+  fprintf (fp,"#\n");
+  fprintf (fp,"BSEARCH_ALG	SIMPLE\n");
+  fprintf (fp,"\n");
+  fprintf (fp,"#\n");
+  fprintf (fp,"# these specify the q-scale for I, P, and B frames\n");
+  fprintf (fp,"# (values must be between 1 and 31)\n");
+  fprintf (fp,"# These are the Qscale values for the entire frame in variable bit-rate\n");
+  fprintf (fp,"# mode, and starting points (but not important) for constant bit rate\n");
+  fprintf (fp,"#\n");
+  fprintf (fp,"\n");
+  fprintf (fp,"# Qscale (Quantization scale) affects quality and compression,\n");
+  fprintf (fp,"# but has very little effect on speed.\n");
+  fprintf (fp,"\n");
+  fprintf (fp,"IQSCALE		4\n");
+  fprintf (fp,"PQSCALE		5\n");
+  fprintf (fp,"BQSCALE		12\n");
+  fprintf (fp,"\n");
+  fprintf (fp,"# this must be ORIGINAL or DECODED\n");
+  fprintf (fp,"REFERENCE_FRAME	ORIGINAL\n");
+  fprintf (fp,"\n");
+  fprintf (fp,"# for parallel parameters see parallel.param in the exmaples subdirectory\n");
+  fprintf (fp,"\n");
+  fprintf (fp,"# if you want constant bit-rate mode, specify it as follows (number is bits/sec):\n");
+  fprintf (fp,"#BIT_RATE  1000000\n");
+  fprintf (fp,"\n");
+  fprintf (fp,"# To specify the buffer size (327680 is default, measused in bits, for 16bit words)\n");
+  fprintf (fp,"BUFFER_SIZE 327680\n");
+  fprintf (fp,"\n");
+  fprintf (fp,"# The frame rate is the number of frames/second (legal values:\n");
+  fprintf (fp,"# 23.976, 24, 25, 29.97, 30, 50 ,59.94, 60\n");
+  fprintf (fp,"FRAME_RATE 30\n");
+  fprintf (fp,"\n");
+  fprintf (fp,"# There are many more options, see the users manual for examples....\n");
+  fprintf (fp,"# ASPECT_RATIO, USER_DATA, GAMMA, IQTABLE, etc.\n");
+  fprintf (fp,"\n");
+  fprintf (fp,"\n");
+  fclose (fp);
+
+  setRecordingInfos("Parameter file "+fParameterFileName+" generated in "+fMovieTempFolderPath);
+  setRecordingStatus(READY_TO_ENCODE);
+  return true;
+}
+
+void G4OpenGLQtViewer::encodeVideo()
+{
+  if ((getEncoderPath() != "") && (getSaveFileName() != "")) {
+    setRecordingStatus(ENCODING);
+    
+#if QT_VERSION < 0x040000
+    QStringList args = QStringList(fEncoderPath);
+    args.push_back(fMovieTempFolderPath+fParameterFileName);
+    fProcess = new QProcess(args);
+    QObject ::connect(fProcess,SIGNAL(processExited ()),
+                      this,SLOT(processEncodeFinished()));
+    QObject ::connect(fProcess,SIGNAL(readyReadStdout ()),
+                      this,SLOT(processEncodeStdout()));
+    fProcess->setCommunication(QProcess::DupStderr);
+    fProcess->launch("");
+#else
+    fProcess = new QProcess();
+#if QT_VERSION > 0x040100
+    QObject ::connect(fProcess,SIGNAL(finished ( int,QProcess::ExitStatus)),
+                      this,SLOT(processEncodeFinished()));
+    QObject ::connect(fProcess,SIGNAL(readyReadStandardOutput ()),
+                      this,SLOT(processEncodeStdout()));
+#else
+    QObject ::connect(fProcess,SIGNAL(finished ( int)),
+                      this,SLOT(processEncodeFinished()));
+    QObject ::connect(fProcess,SIGNAL(readyReadStandardOutput ()),
+                      this,SLOT(processEncodeStdout()));
+#endif
+    fProcess->setReadChannelMode(QProcess::MergedChannels);
+    fProcess->start (fEncoderPath, QStringList(fMovieTempFolderPath+fParameterFileName));
+#endif
+  }
+}
+
+
+// FIXME : does not work on Qt3
+void G4OpenGLQtViewer::processEncodeStdout()
+{
+#if QT_VERSION > 0x040000
+  QString tmp = fProcess->readAllStandardOutput ().data();
+  int start = tmp.lastIndexOf("ESTIMATED TIME");
+  tmp = tmp.mid(start,tmp.indexOf("\n",start)-start);
+#else
+  QString tmp = fProcess->readStdout ().data();
+  int start = tmp.findRev("ESTIMATED TIME");
+  tmp = tmp.mid(start,tmp.find("\n",start)-start);
+#endif
+  setRecordingInfos(tmp);
+}
+
+
+void G4OpenGLQtViewer::processEncodeFinished()
+{
+
+  QString txt = "";
+  txt = getProcessErrorMsg();
+  if (txt == "") {
+    setRecordingStatus(SUCCESS);
+  } else {
+    setRecordingStatus(FAILED);
+  }
+  //  setRecordingInfos(txt+removeTempFolder());
+}
+
+
+void G4OpenGLQtViewer::processLookForFinished() 
+ {
+
+  QString txt = getProcessErrorMsg();
+  if (txt != "") {
+    fEncoderPath = "";
+  } else {
+#if QT_VERSION > 0x040000
+    fEncoderPath = QString(fProcess->readAllStandardOutput ().data()).trimmed();
+#else
+    fEncoderPath = QString(fProcess->readStdout ().data()).simplifyWhiteSpace();
+#endif
+    // if not found, return "not found"
+    if (fEncoderPath.contains(" ")) {
+      fEncoderPath = "";
+    } else if (!fEncoderPath.contains("mpeg_encode")) {
+      fEncoderPath = "";
+    }
+    setEncoderPath(fEncoderPath);
+  }
+  // init temp folder
+#if QT_VERSION > 0x040000
+  setTempFolderPath(QDir::temp ().absolutePath ());
+#else
+  // Let's have a try
+  setTempFolderPath("/tmp/");
+#endif
+}
+
+
+QString G4OpenGLQtViewer::getProcessErrorMsg()
+{
+  QString txt = "";
+#if QT_VERSION < 0x040000
+  if (!fProcess->normalExit ()) {
+    txt = "Exist status "+ fProcess->exitStatus ();
+  }
+#else
+  if (fProcess->exitCode() != 0) {
+    switch (fProcess->error()) {
+    case QProcess::FailedToStart:
+      txt = "The process failed to start. Either the invoked program is missing, or you may have insufficient permissions to invoke the program.\n";
+      break;
+    case QProcess::Crashed:
+      txt = "The process crashed some time after starting successfully.\n";
+      break;
+    case QProcess::Timedout:
+      txt = "The last waitFor...() function timed out. The state of QProcess is unchanged, and you can try calling waitFor...() again.\n";
+      break;
+    case QProcess::WriteError:
+      txt = "An error occurred when attempting to write to the process. For example, the process may not be running, or it may have closed its input channel.\n";
+      break;
+    case QProcess::ReadError:
+      txt = "An error occurred when attempting to read from the process. For example, the process may not be running.\n";
+      break;
+    case QProcess::UnknownError:
+      txt = "An unknown error occurred. This is the default return value of error().\n";
+      break;
+    }
+  }
+#endif
+   return txt;
+}
+
+/*
+  
 void MultiLayer::exportToSVG(const QString& fname)
 {
   QPicture picture;
@@ -1457,3 +2880,4 @@ void MultiLayer::exportToSVG(const QString& fname)
   picture.save(fname, "svg");
 }
 */
+#endif

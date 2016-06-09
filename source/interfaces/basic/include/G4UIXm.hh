@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIXm.hh,v 1.13 2006/06/29 19:09:33 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4UIXm.hh,v 1.14 2008/11/14 16:21:42 lgarnier Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 #ifndef G4UIXm_h
 #define G4UIXm_h 
@@ -93,7 +93,7 @@ private:
 private:
   Widget form,shell,command,menuBar,text;
   std::map<Widget,G4String, std::less<Widget> > commands;
-  static void commandEnteredCallback(Widget,XtPointer,XtPointer);
+  static void CommandEnteredCallback(Widget,XtPointer,XtPointer);
   static void keyHandler(Widget,XtPointer,XEvent*,Boolean*);
   G4bool fHelp;
   G4int fHelpChoice;

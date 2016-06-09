@@ -1,4 +1,4 @@
-$Id: History,v 1.118 2007/12/04 17:28:31 flei Exp $
+$Id: History,v 1.120 2008/09/02 09:56:49 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,14 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+September 02, 2008, G.Cosmo (event-V09-01-01)
+- Removed some redundant semicolons in G4SPSAngDistribution header...
+
+June 02, 2008, F. Lei (event-V09-01-00)
+- Cleared gcc 4.3 compilation warning (src/G4SPSEneDistribution.cc:1155)
+- Added a few Get methods to G4SPSAngDistribution (bug #1013)
+
 December 4, 2007, F. Lei (event-V09-00-03)
 - Fixed the problem in bug report #988
 

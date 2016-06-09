@@ -488,7 +488,7 @@ void DMXPhysicsList::ConstructOp()
 #include "G4LEDeuteronInelastic.hh"
 #include "G4LETritonInelastic.hh"
 #include "G4LEAlphaInelastic.hh"
-
+#include "G4HadronCaptureProcess.hh"
 // High-energy Models: >20 GeV
 #include "G4HEPionPlusInelastic.hh"
 #include "G4HEPionMinusInelastic.hh"

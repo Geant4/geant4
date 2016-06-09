@@ -23,13 +23,13 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HadrontherapyPhisicsListMessenger.hh; May 2005
+// $Id: HadrontherapyPhisicsListMessenger.hh; Nov 2008
 // ----------------------------------------------------------------------------
 //                 GEANT 4 - Hadrontherapy example
 // ----------------------------------------------------------------------------
 // Code developed by:
 //
-// G.A.P. Cirrone(a)*, F. Di Rosa(a), S. Guatelli(b), G. Russo(a)
+// G.A.P. Cirrone(a)*, F. Di Rosa(a), S. Guatelli(b), G. Russo(a), M.P. Russo
 // 
 // (a) Laboratori Nazionali del Sud 
 //     of the National Institute for Nuclear Physics, Catania, Italy
@@ -67,6 +67,7 @@ private:
   HadrontherapyPhysicsList* physicsList;   
   G4UIdirectory* listDir;
   G4UIcmdWithAString* physicsListCmd;
+  G4UIcmdWithAString* packageListCmd;
 };
 
 #endif

@@ -1,4 +1,4 @@
-$Id: History,v 1.1 2007/04/24 10:32:59 gunter Exp $
+$Id: History,v 1.5 2008/12/09 10:43:47 vuzhinsk Exp $
 -------------------------------------------------------------------
 
        ==========================================================
@@ -14,8 +14,32 @@ code and to keep track of all tags.
      ---------------------------------------------------------------
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
+9 December 08, V. Uzhinsky (hadr-string-diff-V09-01-04)
+- Improvement of delete operators in FTF
+
+5 December 08, V. Uzhinsky (hadr-string-diff-V09-01-03)
+- Some objects did not erase in FTFModel desructor. These lead to memory 
+  leak.
 
 
+2 June 08, G.Folger 		(hadr-string-diff-V09-01-02)
+-  on branch geant4-09-01-patches_branch, fix compilation warning for unused 
+     variables in G4FTFModel.cc
+     
+
+
+??????????????????????????????      (hadr-string-diff-V09-01-01)
+
+31 March 2008 V. Uzhinsky           Tag : hadr-string-diff-V09-01-00
+- G4FTFParameters.cc and G4FTFParameters.hh were copied from G4FTFCrossSection
+  corresponding files.
+- New files - G4ElasticHNScattering have been added. They implement elastic 
+  scattering of hadron in intra-nuclear collisions in FTF model.
+- The corresponding changes have been done in G4FTFModel.cc and 
+  G4FTFParticipants.cc
+
+  
 24 Apr 2007 Gunter Folger  (hadr-string-diff-V08-02-00)
 -  merge in change done by ftf development.
 - Created History file.
+

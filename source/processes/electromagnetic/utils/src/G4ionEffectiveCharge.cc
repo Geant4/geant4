@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ionEffectiveCharge.cc,v 1.17 2007/09/27 17:08:58 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4ionEffectiveCharge.cc,v 1.24 2008/12/18 13:01:46 gunter Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // -------------------------------------------------------------------
 //
@@ -53,19 +53,24 @@
 
 #include "G4ionEffectiveCharge.hh"
 #include "G4UnitsTable.hh"
-#include "G4ParticleDefinition.hh"
 #include "G4Material.hh"
+#include "G4NistManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4ionEffectiveCharge::G4ionEffectiveCharge()
 {
   chargeCorrection = 1.0;
-  energyHighLimit  = 10.0*MeV;
+  energyHighLimit  = 20.0*MeV;
   energyLowLimit   = 1.0*keV;
   energyBohr       = 25.*keV;
   massFactor       = amu_c2/(proton_mass_c2*keV);
-  minCharge        = 0.1;
+  minCharge        = 1.0;
+  lastPart         = 0;
+  lastMat          = 0;
+  lastKinEnergy    = 0.0;
+  effCharge        = eplus;
+  nist = G4NistManager::Instance();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -77,13 +82,21 @@ G4ionEffectiveCharge::~G4ionEffectiveCharge()
 
 G4double G4ionEffectiveCharge::EffectiveCharge(const G4ParticleDefinition* p,
                                                const G4Material* material,
-			                             G4double kineticEnergy)
+					       G4double kineticEnergy)
 {
+  if(p == lastPart && material == lastMat && kineticEnergy == lastKinEnergy)
+    return effCharge;
+
+  lastPart      = p;
+  lastMat       = material;
+  lastKinEnergy = kineticEnergy;
+
   G4double mass   = p->GetPDGMass();
   G4double charge = p->GetPDGCharge();
   G4double Zi     = charge/eplus;
 
   chargeCorrection = 1.0;
+  effCharge = charge;
 
   // The aproximation of ion effective charge from:
   // J.F.Ziegler, J.P. Biersack, U. Littmark
@@ -93,15 +106,14 @@ G4double G4ionEffectiveCharge::EffectiveCharge(const G4ParticleDefinition* p,
   G4double reducedEnergy = kineticEnergy * proton_mass_c2/mass ;
   if( reducedEnergy > Zi*energyHighLimit || Zi < 1.5 || !material) return charge;
 
-  static G4double c[6] = {0.2865,  0.1266, -0.001429,
-                          0.02402,-0.01135, 0.001475} ;
-
   G4double z    = material->GetIonisation()->GetZeffective();
-  reducedEnergy = std::max(reducedEnergy,energyLowLimit);
-  G4double q;
+  //  reducedEnergy = std::max(reducedEnergy,energyLowLimit);
 
   // Helium ion case
   if( Zi < 2.5 ) {
+
+    static G4double c[6] = {0.2865,  0.1266, -0.001429,
+			    0.02402,-0.01135, 0.001475} ;
 
     G4double Q = std::max(0.0,std::log(reducedEnergy*massFactor));
     G4double x = c[0];
@@ -119,23 +131,25 @@ G4double G4ionEffectiveCharge::EffectiveCharge(const G4ParticleDefinition* p,
     G4double tt = ( 0.007 + 0.00005 * z );
     if(tq2 < 0.2) tt *= (1.0 - tq2 + 0.5*tq2*tq2);
     else          tt *= std::exp(-tq2);
-    q = (1.0 + tt) * std::sqrt(ex);
+
+    effCharge = charge*(1.0 + tt) * std::sqrt(ex);
 
     // Heavy ion case
   } else {
     
-    G4double z23  = std::pow(z, 0.666666);
-    G4double zi13 = std::pow(Zi, 0.333333);
+    G4double y;
+    //    = nist->GetZ13(z);
+    //G4double z23  = y*y;
+    G4double zi13 = nist->GetZ13(Zi);
     G4double zi23 = zi13*zi13;
-    G4double e = std::max(reducedEnergy,energyBohr/z23);
+    //    G4double e = std::max(reducedEnergy,energyBohr/z23);
+    //G4double e = reducedEnergy;
 
     // v1 is ion velocity in vF unit
     G4double eF   = material->GetIonisation()->GetFermiEnergy();
-    G4double v1sq = e/eF;
+    G4double v1sq = reducedEnergy/eF;
     G4double vFsq = eF/energyBohr;
-    G4double vF   = std::sqrt(vFsq);
-
-    G4double y ;
+    G4double vF   = std::sqrt(eF/energyBohr);
 
     // Faster than Fermi velocity
     if ( v1sq > 1.0 ) {
@@ -143,18 +157,33 @@ G4double G4ionEffectiveCharge::EffectiveCharge(const G4ParticleDefinition* p,
 
       // Slower than Fermi velocity
     } else {
-      y = 0.6923 * vF * (1.0 + 0.666666*v1sq + v1sq*v1sq/15.0) / zi23 ;
+      y = 0.692308 * vF * (1.0 + 0.666666*v1sq + v1sq*v1sq/15.0) / zi23 ;
     }
 
+    G4double q;
     G4double y3 = std::pow(y, 0.3) ;
-    //    G4cout << "y= " << y << " y3= " << y3 << " v1= " << v1 << " vF= " << vF << G4endl; 
+    // G4cout<<"y= "<<y<<" y3= "<<y3<<" v1= "<<v1<<" vF= "<<vF<<G4endl; 
     q = 1.0 - std::exp( 0.803*y3 - 1.3167*y3*y3 - 0.38157*y - 0.008983*y*y ) ;
+    
+    //y *= 0.77;
+    //y *= (0.75 + 0.52/Zi);
 
-    //    q = 1.0 - std::exp(-0.95*std::sqrt(reducedEnergy/energyBohr)/zi23);
+    //if( y < 0.2 ) q = y*(1.0 - 0.5*y);
+    //else          q = 1.0 - std::exp(-y);
 
     G4double qmin = minCharge/Zi;
-
     if(q < qmin) q = qmin;
+  
+    effCharge = q*charge;
+
+    /*
+    G4double x1 = 1.0*effCharge*(1.0 - 0.132*std::log(y))/(y*std::sqrt(z));
+    G4double x2 = 0.1*effCharge*effCharge*energyBohr/reducedEnergy;
+
+    chargeCorrection = 1.0 + x1 - x2;
+
+    G4cout << "x1= "<<x1<<" x2= "<< x2<<" corr= "<<chargeCorrection<<G4endl;
+    */
     
     G4double tq = 7.6 - std::log(reducedEnergy/keV);
     G4double tq2= tq*tq;
@@ -169,7 +198,7 @@ G4double G4ionEffectiveCharge::EffectiveCharge(const G4ParticleDefinition* p,
     // Nucl. Inst. & Meth. in Phys. Res. B35 (1988) 215-228.
 
     G4double lambda = 10.0 * vF / (zi13 * (6.0 + q));
-    if(q < 0.2) lambda *= (1.0 - 0.666666*q - 0.444444*q*q);
+    if(q < 0.2) lambda *= (1.0 - 0.66666667*q - q*q/9.0);
     else        lambda *= std::pow(1.0-q, 0.666666);
 
     G4double lambda2 = lambda*lambda;
@@ -179,11 +208,12 @@ G4double G4ionEffectiveCharge::EffectiveCharge(const G4ParticleDefinition* p,
     else              xx *= std::log(1.0 + lambda2); 
 
     chargeCorrection = sq * (1.0 + xx);
+    
   }
   //  G4cout << "G4ionEffectiveCharge: charge= " << charge << " q= " << q 
   //         << " chargeCor= " << chargeCorrection 
   //	   << " e(MeV)= " << kineticEnergy/MeV << G4endl;
-  return q*charge;
+  return effCharge;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

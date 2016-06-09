@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLViewer.cc,v 1.34 2007/05/24 18:27:13 allison Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4OpenGLViewer.cc,v 1.41 2008/10/24 13:49:19 lgarnier Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // 
 // Andrew Walkden  27th March 1996
@@ -89,8 +89,8 @@ background (G4Colour(0.,0.,0.)),
 transparency_enabled (true),
 antialiasing_enabled (false),
 haloing_enabled (false),
-fStartTime(-G4OPENGL_DBL_MAX),
-fEndTime(G4OPENGL_DBL_MAX),
+fStartTime(-DBL_MAX),
+fEndTime(DBL_MAX),
 fFadeFactor(0.),
 fDisplayHeadTime(false),
 fDisplayHeadTimeX(-0.9),
@@ -147,7 +147,12 @@ void G4OpenGLViewer::ClearView () {
 }
 
 void G4OpenGLViewer::SetView () {
-  
+
+  if (!fSceneHandler.GetScene()) {
+    G4cerr << "G4OpenGLStoredQtViewer: Creating a Viewer without a scene is not allowed. \nPlease use /vis/scene/create before /vis/open/.... "
+	   << G4endl;
+    return;
+  }
   // Calculates view representation based on extent of object being
   // viewed and (initial) viewpoint.  (Note: it can change later due
   // to user interaction via visualization system's GUI.)
@@ -371,18 +376,16 @@ void G4OpenGLViewer::print() {
   // Print vectored PostScript
   
   G4int size = 5000000;
-
-  GLfloat* feedback_buffer;
-  GLint returned;
-  FILE* file;
-  
-  feedback_buffer = new GLfloat[size];
+  GLfloat* feedback_buffer = new GLfloat[size];
   glFeedbackBuffer (size, GL_3D_COLOR, feedback_buffer);
   glRenderMode (GL_FEEDBACK);
   
   DrawView();
+
+  GLint returned;
   returned = glRenderMode (GL_RENDER);
   
+  FILE* file;
   if (print_string) {
     file = fopen (print_string, "w");
     if (file) {
@@ -723,6 +726,45 @@ extern "C" {
   }
 }
 
+GLdouble G4OpenGLViewer::getSceneNearWidth()
+{
+  const G4Point3D targetPoint
+    = fSceneHandler.GetScene()->GetStandardTargetPoint()
+    + fVP.GetCurrentTargetPoint ();
+  G4double radius = fSceneHandler.GetScene()->GetExtent().GetExtentRadius();
+  if(radius<=0.) radius = 1.;
+  const G4double cameraDistance = fVP.GetCameraDistance (radius);
+  const GLdouble pnear   = fVP.GetNearDistance (cameraDistance, radius);
+  return 2 * fVP.GetFrontHalfHeight (pnear, radius);
+}
+
+GLdouble G4OpenGLViewer::getSceneFarWidth()
+{
+  const G4Point3D targetPoint
+    = fSceneHandler.GetScene()->GetStandardTargetPoint()
+    + fVP.GetCurrentTargetPoint ();
+  G4double radius = fSceneHandler.GetScene()->GetExtent().GetExtentRadius();
+  if(radius<=0.) radius = 1.;
+  const G4double cameraDistance = fVP.GetCameraDistance (radius);
+  const GLdouble pnear   = fVP.GetNearDistance (cameraDistance, radius);
+  const GLdouble pfar    = fVP.GetFarDistance  (cameraDistance, pnear, radius);
+  return 2 * fVP.GetFrontHalfHeight (pfar, radius);
+}
+
+
+GLdouble G4OpenGLViewer::getSceneDepth()
+{
+  const G4Point3D targetPoint
+    = fSceneHandler.GetScene()->GetStandardTargetPoint()
+    + fVP.GetCurrentTargetPoint ();
+  G4double radius = fSceneHandler.GetScene()->GetExtent().GetExtentRadius();
+  if(radius<=0.) radius = 1.;
+  const G4double cameraDistance = fVP.GetCameraDistance (radius);
+  const GLdouble pnear   = fVP.GetNearDistance (cameraDistance, radius);
+  return fVP.GetFarDistance  (cameraDistance, pnear, radius)- pnear;
+}
+
+
 void G4OpenGLViewer::spewSortedFeedback(FILE * file, GLint size, GLfloat * buffer)
 {
   int token;
@@ -837,6 +879,95 @@ void G4OpenGLViewer::spewSortedFeedback(FILE * file, GLint size, GLfloat * buffe
   }
 
   free(prims);
+}
+
+void G4OpenGLViewer::rotateScene(G4double dx, G4double dy,G4double deltaRotation)
+{
+
+  G4Vector3D vp;
+  G4Vector3D up;
+  
+  G4Vector3D xprime;
+  G4Vector3D yprime;
+  G4Vector3D zprime;
+  
+  G4double delta_alpha;
+  G4double delta_theta;
+  
+  G4Vector3D new_vp;
+  G4Vector3D new_up;
+  
+  G4double cosalpha;
+  G4double sinalpha;
+  
+  G4Vector3D a1;
+  G4Vector3D a2;
+  G4Vector3D delta;
+  G4Vector3D viewPoint;
+
+    
+  //phi spin stuff here
+  
+  vp = fVP.GetViewpointDirection ().unit ();
+  up = fVP.GetUpVector ().unit ();
+  
+  yprime = (up.cross(vp)).unit();
+  zprime = (vp.cross(yprime)).unit();
+  
+  if (fVP.GetLightsMoveWithCamera()) {
+    delta_alpha = dy * deltaRotation;
+    delta_theta = -dx * deltaRotation;
+  } else {
+    delta_alpha = -dy * deltaRotation;
+    delta_theta = dx * deltaRotation;
+  }    
+  
+  delta_alpha *= deg;
+  delta_theta *= deg;
+  
+  new_vp = std::cos(delta_alpha) * vp + std::sin(delta_alpha) * zprime;
+  
+  // to avoid z rotation flipping
+  // to allow more than 360° rotation
+
+  const G4Point3D targetPoint
+    = fSceneHandler.GetScene()->GetStandardTargetPoint()
+    + fVP.GetCurrentTargetPoint ();
+  G4double radius = fSceneHandler.GetScene()->GetExtent().GetExtentRadius();
+  if(radius<=0.) radius = 1.;
+  const G4double cameraDistance = fVP.GetCameraDistance (radius);
+  const G4Point3D cameraPosition =
+    targetPoint + cameraDistance * fVP.GetViewpointDirection().unit();
+
+  if (fVP.GetLightsMoveWithCamera()) {
+    new_up = (new_vp.cross(yprime)).unit();
+    if (new_vp.z()*vp.z() <0) {
+      new_up.set(new_up.x(),-new_up.y(),new_up.z());
+    }
+  } else {
+    new_up = up;
+    if (new_vp.z()*vp.z() <0) {
+      new_up.set(new_up.x(),-new_up.y(),new_up.z());
+    }
+  }
+  fVP.SetUpVector(new_up);
+  ////////////////
+  // Rotates by fixed azimuthal angle delta_theta.
+  
+  cosalpha = new_up.dot (new_vp.unit());
+  sinalpha = std::sqrt (1. - std::pow (cosalpha, 2));
+  yprime = (new_up.cross (new_vp.unit())).unit ();
+  xprime = yprime.cross (new_up);
+  // Projection of vp on plane perpendicular to up...
+  a1 = sinalpha * xprime;
+  // Required new projection...
+  a2 = sinalpha * (std::cos (delta_theta) * xprime + std::sin (delta_theta) * yprime);
+  // Required Increment vector...
+  delta = a2 - a1;
+  // So new viewpoint is...
+  viewPoint = new_vp.unit() + delta;
+  
+  fVP.SetViewAndLights (viewPoint);
 }
 
 #endif

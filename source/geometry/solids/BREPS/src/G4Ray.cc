@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Ray.cc,v 1.11 2006/06/29 18:42:35 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4Ray.cc,v 1.12 2008/07/08 10:00:58 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -54,9 +54,9 @@ G4Ray::~G4Ray()
 const G4Plane& G4Ray::GetPlane(G4int number_of_plane) const
 {
   if(number_of_plane==1)
-    return plane2;
+    { return plane2; }
   else
-    return plane1;
+    { return plane1; }
 }
 
 
@@ -74,13 +74,13 @@ void G4Ray::CreatePlanes()
   G4Vector3D invdir = G4Vector3D( PINFINITY );
   
   if(!NearZero(RayDir.x(), SQRT_SMALL_FASTF)) 
-    invdir.setX(1.0 / RayDir.x());
+    { invdir.setX(1.0 / RayDir.x()); }
     
   if(!NearZero(RayDir.y(), SQRT_SMALL_FASTF)) 
-    invdir.setY(1.0 / RayDir.y());
+    { invdir.setY(1.0 / RayDir.y()); }
     
   if(!NearZero(RayDir.z(), SQRT_SMALL_FASTF)) 
-    invdir.setZ(1.0 / RayDir.z());
+    { invdir.setZ(1.0 / RayDir.z()); }
 
   MatVecOrtho(dir1, RayDir);
   
@@ -101,8 +101,9 @@ void G4Ray::MatVecOrtho(register G4Vector3D &out,
   register G4double f;
   G4int             i_Which;
 
-  if(NearZero(in.x(), 0.0001) && NearZero(in.y(), 0.0001) &&
-     NearZero(in.z(), 0.0001) )  
+  if( NearZero(in.x(), 0.0001)
+   && NearZero(in.y(), 0.0001)
+   && NearZero(in.z(), 0.0001) )  
   {
     Vsetall( out, 0 );
     return;
@@ -119,43 +120,54 @@ void G4Ray::MatVecOrtho(register G4Vector3D &out,
   }
   
   if( std::fabs(in.z()) < f )
+  {
     i_Which=2;
+  }
   
   if(!i_Which)
+  {
     f = std::sqrt((in.y())*(in.y())+(in.z())*(in.z()));    // hypot(in.y(),in.z())
+  }
   else
+  {
     if(i_Which==1)
+    {
       f = std::sqrt((in.z())*(in.z())+(in.x())*(in.x()));  // hypot(in.z(),in.x())
+    }
     else
+    {
       f = std::sqrt((in.x())*(in.x())+(in.y())*(in.y()));  // hypot(in.x(),in.y())
-  
-    if( NearZero( f, SMALL ) )
-    {
-      Vsetall( out, 0 );
-      return;
     }
+  }
+  if( NearZero( f, SMALL ) )
+  {
+    Vsetall( out, 0 );
+    return;
+  }
     
-    f = 1.0/f;
+  f = 1.0/f;
     
-    if(!i_Which)
+  if(!i_Which)
+  {
+    out.setX(0.0);
+    out.setY(-in.z()*f);
+    out.setZ( in.y()*f);
+  }
+  else
+  {
+    if(i_Which==1)
     {
-      out.setX(0.0);
-      out.setY(-in.z()*f);
-      out.setZ( in.y()*f);
+      out.setY(0.0);
+      out.setZ(-in.x()*f);
+      out.setX( in.y()*f);
     }
     else
-      if(i_Which==1)
-      {
-	out.setY(0.0);
-	out.setZ(-in.x()*f);
-	out.setX( in.y()*f);
-      }
-      else
-      {
-	out.setZ(0.0);
-	out.setX(-in.z()*f);
-	out.setY( in.y()*f);
-      }
+    {
+      out.setZ(0.0);
+      out.setX(-in.z()*f);
+      out.setY( in.y()*f);
+    }
+  }
 } 
 
 
@@ -220,7 +232,9 @@ G4int G4Ray::CalcPlane3Pts(G4Plane &plane1,
   //	Ensure unit length Normal 
   mag = Magnitude(plane1);
   if( mag  <= SQRT_SMALL_FASTF )
+  {
     return(-1);//	 FAIL 
+  }
   
   mag = 1/mag;
   
@@ -239,8 +253,8 @@ void G4Ray::RayCheck()
   // Check that the ray has a G4Vector3D...
   if (dir==G4Vector3D(0, 0, 0)) 
   {
-    G4cout << "\nZero direction given. Exiting...\n";
-    exit(1);
+    G4Exception("G4Ray::RayCheck()", "InvalidInput", FatalException,
+                "Invalid zero direction given !");
   }
 
   // Make sure that the vector is unit length

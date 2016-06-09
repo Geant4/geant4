@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4WeightWindowProcess.cc,v 1.3 2007/06/01 09:16:34 ahoward Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4WeightWindowProcess.cc,v 1.4 2008/04/21 09:10:29 ahoward Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file

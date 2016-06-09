@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VProcess.hh,v 1.24 2007/10/02 08:23:20 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4VProcess.hh,v 1.25 2007/11/15 04:09:58 kurasige Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // 
 // ------------------------------------------------------------
@@ -52,6 +52,7 @@
 //   Modify Store/RetrievePhysicsTable methods 9 Mar. 2001   H.Kurashige
 //   Added PreparePhysicsTable  20 Aug. 2004 H.Kurashige
 //   Added isXXXXDoItIsEnabled   2 Oct. 2007 H.Kurashige
+//   Added ProcessSubType   15 Nov. 2007 H.Kurashige
 
 #ifndef G4VProcess_h 
 #define G4VProcess_h 1
@@ -260,6 +261,12 @@ class G4VProcess
       void SetProcessType(G4ProcessType );
       //  Set the process type.
 
+      G4int GetProcessSubType() const;
+      //  Returns the process sub type.
+
+      void SetProcessSubType(G4int );
+      //  Set the process sub type.
+
       static const G4String& GetProcessTypeName(G4ProcessType );
       //  Returns the process type name
 
@@ -328,6 +335,9 @@ class G4VProcess
       G4ProcessType theProcessType;
       //  The type of the process
 
+      G4int theProcessSubType;
+      //  The sub type of the process
+
       G4double thePILfactor;
       // factor for PhysicsInteractionLength 
       // which is passed to G4SteppingManager
@@ -376,6 +386,18 @@ inline
  void G4VProcess::SetProcessType(G4ProcessType aType)
 {
   theProcessType = aType;
+}
+
+inline
+ G4int G4VProcess::GetProcessSubType() const
+{
+  return theProcessSubType;
+}
+
+inline
+ void G4VProcess::SetProcessSubType(G4int value)
+{
+ theProcessSubType = value;
 }
 
 inline  void G4VProcess::SetVerboseLevel(G4int value)

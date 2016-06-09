@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // $Id: G4TrajectoryOriginVolumeFilter.cc,v 1.3 2006/08/25 19:44:14 tinslay Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // Filter trajectories according to volume name. Only registered 
 // volumes will pass the filter.

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VCSGfaceted.hh,v 1.13 2006/10/20 13:45:20 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4VCSGfaceted.hh,v 1.17 2008/05/15 13:45:15 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // 
 // --------------------------------------------------------------------
@@ -125,6 +125,10 @@ class G4VCSGfaceted : public G4VSolid
 
     virtual G4double DistanceTo( const G4ThreeVector &p,
                                  const G4bool outgoing ) const;
+
+    G4ThreeVector GetPointOnSurfaceGeneric()const;
+      // Returns a random point located on the surface of the solid 
+      // in case of generic Polycone or generic Polyhedra.
 
     void CopyStuff( const G4VCSGfaceted &source );
     void DeleteStuff();

@@ -12,6 +12,63 @@ code and to keep track of all tags.
      ---------------------------------------------------------------
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
+
+20-November-2008 Tatsumi Koi (hadr-qmd-V09-01-08)
+- Add Update 
+	include/G4QMDMeanField.hh
+	src/G4QMDMeanField.cc
+- Add "hit" flag and related methods
+	include/G4QMDParticipant.hh  
+- Add Erase and Insert Participant methods
+	include/G4QMDSystem.hh  
+	src/G4QMDSystem.cc
+- Add deltaT in signature of CalKinematicsOfBinaryCollisions
+  Add several required updating of Mean Filed 
+  Modify handling of absorption case 
+	include/G4QMDCollision.hh  
+	src/G4QMDCollision.cc  
+- Add deltaT in signature of CalKinematicsOfBinaryCollisions
+	src/G4QMDReaction.cc  
+
+07-November-2008 Tatsumi Koi (hadr-qmd-V09-01-07)
+- Add UnUseGEM and UseFRAG 
+  Fix bug in neucleon projectile
+	include/G4QMDReaction.hh
+	src/G4QMDReaction.cc  
+- Migrate to particles-V09-01-09 
+	src/G4QMDNucleus.cc  
+
+27-Oct-2008 Tatsumi Koi (hadr-qmd-V09-01-06)
+- Migrate to particles-V09-01-09 by T. Koi
+  Z,A to A,Z for functions of NucleiProperties 
+	src/G4QMDGroundStateNucleus.cc  
+	src/G4QMDNucleus.cc  
+
+24-Oct-2008 Tatsumi Koi (hadr-qmd-V09-01-05)
+- Migrate to particles-V09-01-09 by T. Koi
+	src/G4QMDGroundStateNucleus.cc  
+	src/G4QMDNucleus.cc  
+
+12-Jun-2008 Tatsumi Koi (hadr-qmd-V09-01-04)
+- Delete unnecessary dependency and unused functions
+  Change criterion of reaction by T. Koi
+	include/G4QMDReaction.hh
+	src/G4QMDReaction.cc  
+
+06-Jun-2008 Tatsumi Koi (hadr-qmd-V09-01-03)
+- Fix memory leaks by T. Koi 
+	include/G4QMDSystem.hh  
+	src/G4QMDReaction.cc  
+
+03-Jun-2008 Tatsumi Koi (hadr-qmd-V09-01-02)
+- Fix memory leaks by T. Koi 
+	src/G4QMDReaction.cc  
+	src/G4QMDCollision.cc  
+
+05-May-2008 Tatsumi Koi (hadr-qmd-V09-01-01)
+- Fixed and changed sampling method of impact parameter
+	src/G4QMDReaction.cc  
+
 26-Nov-2007 Tatsumi Koi (hadr-qmd-V09-00-05)
 - Fix of typo which introduced at (hadr-qmd-V09-00-04)
 	src/G4QMDNucleus.cc  

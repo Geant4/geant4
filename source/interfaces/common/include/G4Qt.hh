@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Qt.hh,v 1.2 2007/11/08 17:00:09 lgarnier Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4Qt.hh,v 1.4 2008/11/06 10:06:33 lgarnier Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 //  To unify Qt event treatment between 
 // G4/interfaces Qt sessions and G4/visualizations Qt drivers.
@@ -58,6 +58,8 @@ public:
 private:
   G4Qt (int,char**,char*);                     
   static G4Qt* instance; // Pointer to single instance.
+  int    argn;
+  char** args;
 };
 
 #endif //HAS_QT

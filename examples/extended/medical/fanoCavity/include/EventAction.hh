@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // $Id: EventAction.hh,v 1.3 2007/10/29 17:09:53 maire Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

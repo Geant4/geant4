@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4ProjectileDiffractiveChannel.cc,v 1.2 2007/11/15 16:07:42 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 
 // Author : Gunter Folger Nov 2007

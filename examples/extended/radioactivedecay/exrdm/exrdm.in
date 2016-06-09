@@ -1,4 +1,4 @@
-/control/saveHistory
+#/control/saveHistory
 /exrdm/phys/SelectPhysics QGSP_BIC_HP
 #/exrdm/phys/SelectPhysics Hadron
 #/geometry/material/add NaI Na-I 3.67
@@ -19,7 +19,7 @@
 /gps/particle proton
 /gps/energy 1 GeV
 /tracking/verbose 0
-/run/beamOn 10
+/run/beamOn 1000
 
 
 

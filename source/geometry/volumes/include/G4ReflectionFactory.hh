@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ReflectionFactory.hh,v 1.3 2006/06/29 18:57:39 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4ReflectionFactory.hh,v 1.4 2008/11/13 09:33:20 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // 
 // class G4ReflectionFactory
@@ -151,7 +151,7 @@ class G4ReflectionFactory
       // Sets/gets verbosity level.
 
     void     SetVolumesNameExtension(const G4String& nameExtension);
-    G4String GetVolumesNameExtension() const;
+    const G4String& GetVolumesNameExtension() const;
       // Returns the name extension for the reflected solids
       // and logical volumes.
 

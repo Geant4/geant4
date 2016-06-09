@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: ExN02PhysicsList.hh,v 1.11 2006/06/29 17:47:40 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: ExN02PhysicsList.hh,v 1.12 2008/09/22 16:41:20 maire Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -63,6 +63,7 @@ class ExN02PhysicsList: public G4VUserPhysicsList
   // these methods Construct physics processes and register them
     void ConstructGeneral();
     void ConstructEM();
+    void AddStepMax();
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

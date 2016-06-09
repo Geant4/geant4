@@ -1,4 +1,4 @@
-$Id: History,v 1.3 2007/04/24 10:37:10 gunter Exp $
+$Id: History,v 1.4 2008/04/01 08:20:25 vuzhinsk Exp $
 -------------------------------------------------------------------
 
        ==========================================================
@@ -24,3 +24,8 @@ code and to keep track of all tags.
    - Debug output in G4VPartonStringModel checking E-p conservation of string
      model
 
+31-March-2008 V. Uzhinsky               Tag : had-partonstring-mgt-V09-01-00
+  - G4FTFCrossSection.cc and G4FTFCrossSection.hh were re-named into
+    G4FTFParameters.cc and .hh, and moved to diffraction directory.
+    The corresponding class was re-named too. All of these characterize 
+    the content of the files more exactly.

@@ -25,7 +25,7 @@
 //
 //
 // $Id: F02CalorHit.cc,v 1.4 2006/06/29 17:17:50 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // 
 

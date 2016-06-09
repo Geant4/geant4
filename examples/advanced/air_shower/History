@@ -1,4 +1,4 @@
-$Id: History,v 1.14 2007/09/30 23:05:58 gum Exp $
+$Id: History,v 1.20 2008/12/10 18:07:33 cirrone Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -7,6 +7,26 @@ $Id: History,v 1.14 2007/09/30 23:05:58 gum Exp $
 
                            History file
                            ------------
+10.12.2008 -- G.A.P.Cirrone, Tag: air_shower-V09-01-05
+              Updated README file;
+03.07.2008 -- B. Tomé;  Tag air_shower-V09-01-04
+              Access to private data members of UltraDetectorConstruction through Get functions.
+
+03.07.2008 -- B. Tomé;  Tag air_shower-V09-01-03
+              Adjusted range of optical properties tables in UltraDetectorConstruction;
+              Added check of optical photon energy in UltraPrimaryGeneratorAction;
+              Cerenkov process attached to all applicable particles;
+              Modified Visualisation.mac and UltraMacro.mac files
+              
+26.06.2008 -- G.A.P.Cirrone; Tag air_shower-V09-01-02
+              Corrected a parameter in the UltraDetectorConstruction to remove a segmentation
+	      due to a non correct definition of the refraction index of the Quartz.
+
+15.06.2008 -- G.A.P.Cirrone; Tag: air_shower-V09-01-01
+              Removed no more necessary AIDA commands from GNUmakefile
+
+11.06.2008 -- G.A.P.Cirrone air_shower-V09-01-00
+              Solved a compilation error in the Analysis Manager 
 
 30.09.2007 -- P.Gumplinger - air_shower-V09-00-00
            -- adjust to the G4Cerenkov process now being a G4VDiscreteProcess
@@ -37,7 +57,7 @@ $Id: History,v 1.14 2007/09/30 23:05:58 gum Exp $
 06.06.2005 -- G.Cosmo - air_shower-V07-00-00
            -- Corrected usage of <strstream> in RunActionMessenger.
            -- Corrected call to Visualisation.mac from Ultra.cc.
-              - Changed viewer to OGLSX in Visualisation.mac.
+           -- Changed viewer to OGLSX in Visualisation.mac.
 
 03.05.2005 -- J.Allison
            -- Replaced vis manager with G4VisExecutive.

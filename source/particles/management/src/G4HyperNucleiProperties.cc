@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HyperNucleiProperties.cc,v 1.3 2007/12/10 16:30:47 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4HyperNucleiProperties.cc,v 1.4 2008/10/22 12:35:46 kurasige Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 // 
 // ------------------------------------------------------------
 //	GEANT 4 class header file 
@@ -100,8 +100,6 @@ G4double G4HyperNucleiProperties::GetNuclearMass(G4int A, G4int Z, G4int L)
 
 G4double G4HyperNucleiProperties::GetAtomicMass(G4int A, G4int Z, G4int L)
 {
-  if (L==0) return G4NucleiProperties::GetAtomicMass(A,Z);
-
   if (A < 1 || Z < 0 || Z > A-L || L > A || L <0 ) {
 #ifdef G4VERBOSE
     if (G4ParticleTable::GetParticleTable()->GetVerboseLevel()>0) {

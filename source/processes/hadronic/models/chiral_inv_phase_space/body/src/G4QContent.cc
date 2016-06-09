@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4QContent.cc,v 1.43 2006/11/27 10:44:53 mkossov Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4QContent.cc,v 1.44 2008/03/20 20:11:37 dennis Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 //      ---------------- G4QContent ----------------
 //             by Mikhail Kossov, Sept 1999.
@@ -1159,8 +1159,10 @@ G4int G4QContent::GetSPDGCode() const
       G4int mI=nU-nAU-nD+nAD;
       //if     (abs(mI)>3||mS>3||(b>0&&s<-1)||(b<0&&s>1)) return  0;
       //else if(abs(mI)>2||mS>2||(b>0&&s< 0)||(b<0&&s>0)) return 10;
-      if     (b>0&&s==-1||b<0&&s==1) return 10;
-      else if(abs(mI)>2||mS>2||b>0&&s< 0||b<0&&s>0) return GetZNSPDGCode();
+      if ( (b > 0 && s == -1) || (b < 0 && s == 1) ) return 10;
+      else if (abs(mI) > 2 || mS > 2 
+                           || (b > 0 && s < 0) 
+                           || (b < 0 && s > 0)) return GetZNSPDGCode();
       else if(mU>=mS&&mD>=mS&&mU+mD+mS==3*b)     // Possible Unary Nuclear Cluster
 	     {
         G4int mZ=(mU+mD-mS-mS+3*mI)/6;
@@ -1319,8 +1321,9 @@ G4int G4QContent::NOfCombinations(const G4QContent& rhs) const
   G4int mAS=rhs.GetAS();
   G4int mN=mD+mU+mS-mAD-mAU-mAS;
   ////////////G4int PDG=abs(GetSPDGCode());
-  if(((nD<mD||nAD<mAD)&&!(mD-mAD)||(nU<mU||nAU<mAU)&&!(mU-mAU)||
-      (nS<mS||nAS<mAS)&&!(mS-mAS))&&!mN) return 1;
+  if (( ((nD < mD || nAD < mAD) && !(mD-mAD)) || 
+        ((nU < mU || nAU < mAU) && !(mU-mAU)) ||
+        ((nS < mS || nAS < mAS) && !(mS-mAS)) ) && !mN) return 1;
   if(mD>0)
   {
     int j=nD;

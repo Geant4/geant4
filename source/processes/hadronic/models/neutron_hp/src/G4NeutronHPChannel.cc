@@ -29,6 +29,7 @@
 //
 // 070523 bug fix for G4FPE_DEBUG on by A. Howard ( and T. Koi)
 // 071031 bug fix T. Koi on behalf of A. Howard 
+// 081203 bug fix in Register method by T. Koi
 //
 #include "G4NeutronHPChannel.hh"
 #include "G4NeutronHPFinalState.hh"
@@ -67,10 +68,16 @@
   {
     registerCount++;
     G4int Z = G4lrint(theElement->GetZ());
+
+    Z = Z-registerCount;
+    if ( registerCount > 5 ) throw G4HadronicException(__FILE__, __LINE__, "Channel: Do not know what to do with this material"); // for Elastic, Capture, Fission case 
+    if ( Z < 1 ) return false; 
+/*
     if(registerCount<5)
     {
       Z = Z-registerCount;
     }
+*/
     //if(Z=theElement->GetZ()-5) throw G4HadronicException(__FILE__, __LINE__, "Channel: Do not know what to do with this material");
     // Bug fix by TK on behalf of AH
     if ( Z <=theElement->GetZ()-5 ) throw G4HadronicException(__FILE__, __LINE__, "Channel: Do not know what to do with this material");
@@ -83,6 +90,7 @@
     theIsotopeWiseData = new G4NeutronHPIsoData [niso];
     delete [] active;
     active = new G4bool[niso];
+
     delete [] theFinalStates;
     theFinalStates = new G4NeutronHPFinalState * [niso];
     delete theChannelData;

@@ -45,50 +45,25 @@
 // G4CrossSectionDataSet/DataStore class design.
 // 29-JUN-98 FWJ: default data set G4HadronCrossSections
 // design re-done JPW 2003.
+// 01-SEP-2008 V.Ivanchenko: use methods from the base class
 
 
 #include "G4HadronElasticProcess.hh"
+#include "G4HadronElasticDataSet.hh"
  
-G4HadronElasticProcess::
-G4HadronElasticProcess(const G4String& processName) : 
-      G4HadronicProcess(processName)
+G4HadronElasticProcess::G4HadronElasticProcess(const G4String& processName) : 
+  G4HadronicProcess(processName)
 {
-  AddDataSet(new G4HadronElasticDataSet);
+  SetProcessSubType(fHadronElastic);
+  AddDataSet(new G4HadronElasticDataSet());
 }
 
 G4HadronElasticProcess::~G4HadronElasticProcess()
 {
 }
  
-
-void G4HadronElasticProcess::
-BuildPhysicsTable(const G4ParticleDefinition& aParticleType)
-{
-   if (!G4HadronicProcess::GetCrossSectionDataStore()) {
-      return;
-   }
-   G4HadronicProcess::GetCrossSectionDataStore()->BuildPhysicsTable(aParticleType);
-}
-
-
-G4double G4HadronElasticProcess::
-GetMicroscopicCrossSection(
-      const G4DynamicParticle* aParticle, const G4Element* anElement, G4double aTemp)
-{
-   // gives the microscopic cross section in GEANT4 internal units
-   if (!G4HadronicProcess::GetCrossSectionDataStore()) {
-      G4Exception("G4HadronElasticProcess", "007", FatalException,
-                  "no cross section data Store");
-      return DBL_MIN;
-   }
-   return G4HadronicProcess::GetCrossSectionDataStore()
-          ->GetCrossSection(aParticle, anElement, aTemp);
-}
-
-
-G4bool
-G4HadronElasticProcess::
-IsApplicable(const G4ParticleDefinition& aParticleType)
+G4bool 
+G4HadronElasticProcess::IsApplicable(const G4ParticleDefinition& aParticleType)
 {
    return (aParticleType == *(G4PionPlus::PionPlus()) ||
            aParticleType == *(G4PionZero::PionZero()) ||
@@ -120,15 +95,3 @@ IsApplicable(const G4ParticleDefinition& aParticleType)
            aParticleType == *(G4AntiOmegaMinus::AntiOmegaMinus()));
 }
 
-
-void 
-G4HadronElasticProcess::
-DumpPhysicsTable(const G4ParticleDefinition& aParticleType)
-{
-   if (!G4HadronicProcess::GetCrossSectionDataStore()) {
-      G4Exception("G4HadronElasticProcess", "111", JustWarning, "G4HadronElasticProcess: no cross section data set");
-      return;
-   }
-
-   G4HadronicProcess::GetCrossSectionDataStore()->DumpPhysicsTable(aParticleType);
-}

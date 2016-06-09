@@ -70,6 +70,10 @@ class G4ExcitedString
 
       int operator!=(const G4ExcitedString &right) const;
 
+      G4double GetTimeOfCreation() const;               // Uzhi 15.05.08
+
+      void  SetTimeOfCreation(G4double aTime);          // Uzhi 15.05.08
+
       const G4ThreeVector & GetPosition() const;
 
       void SetPosition(const G4ThreeVector &aPosition); 
@@ -106,6 +110,7 @@ class G4ExcitedString
   private:
 
       G4int    theDirection;  // must be 1 or -1 (PROJECTILE or TARGET)
+      G4double theTimeOfCreation;                   // Uzhi 15.05.08
       G4ThreeVector thePosition;
       G4PartonVector thePartons;  // would like initial capacity for 3 Partons.
       G4KineticTrack* theTrack;
@@ -122,6 +127,18 @@ inline
 int G4ExcitedString::operator!=(const G4ExcitedString &right) const
 {
 	return this != &right;
+}
+
+inline
+G4double G4ExcitedString::GetTimeOfCreation() const      // Uzhi 15.05.08
+{
+	return theTimeOfCreation;
+}
+
+inline
+void G4ExcitedString::SetTimeOfCreation(G4double aTime)  // Uzhi 15.05.08
+{
+	theTimeOfCreation=aTime;                         // Uzhi 15.05.08
 }
 
 inline

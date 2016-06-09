@@ -23,15 +23,15 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: pyG4EmCalculator.cc,v 1.6 2007/05/28 03:11:20 kmura Exp $
-// $Name: geant4-09-01 $
+// $Id: pyG4EmCalculator.cc,v 1.7 2008/03/13 07:32:18 kmura Exp $
+// $Name: geant4-09-02 $
 // ====================================================================
 //   pyG4EmCalculator.cc
 //
 //                                         2006 Q
 // ====================================================================
 #include <boost/python.hpp>
-#include "pyG4Version.hh"
+#include "G4Version.hh"
 #include "G4EmCalculator.hh"
 #include "G4Region.hh"
 #include "G4Material.hh"

@@ -25,7 +25,7 @@
 //
 //
 // $Id: MCTruthTrackInformation.cc,v 1.1 2006/11/22 14:51:30 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 //
 // --------------------------------------------------------------

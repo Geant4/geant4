@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4FragmentingString.hh,v 1.3 2006/06/29 20:54:44 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4FragmentingString.hh,v 1.4 2007/12/20 15:38:06 vuzhinsk Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 
 #ifndef G4FragmentingString_h
@@ -57,7 +57,9 @@ class G4FragmentingString
       G4FragmentingString(const G4FragmentingString &old,
 			  G4ParticleDefinition * newdecay,
 			  const G4LorentzVector *momentum);
-
+      G4FragmentingString(const G4FragmentingString &old,      // Uzhi
+			  G4ParticleDefinition * newdecay);    // Uzhi
+			  
       ~G4FragmentingString();
 
       int operator==(const G4FragmentingString &right) const;
@@ -76,7 +78,7 @@ class G4FragmentingString
    
       G4double Mass() const;
       G4double Mass2() const;
-      
+      G4double MassT2() const;
       
       G4ParticleDefinition* GetLeftParton(void) const;
       G4ParticleDefinition* GetRightParton(void) const;

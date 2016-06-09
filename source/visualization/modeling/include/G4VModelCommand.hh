@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // $Id: G4VModelCommand.hh,v 1.4 2006/09/11 21:22:02 tinslay Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// GEANT4 tag $Name: geant4-09-02 $
 // 
 // Jane Tinslay, John Allison, Joseph Perl November 2005
 //

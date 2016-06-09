@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicsLnVector.hh,v 1.12 2006/06/29 19:02:23 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4PhysicsLnVector.hh,v 1.13 2008/09/22 11:37:09 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // 
 //--------------------------------------------------------------------
@@ -68,6 +68,10 @@ class G4PhysicsLnVector : public G4PhysicsVector
 
     ~G4PhysicsLnVector();
       // Destructor.
+
+    G4PhysicsLnVector(const G4PhysicsLnVector&);
+    G4PhysicsLnVector& operator=(const G4PhysicsLnVector&);
+      // Copy constructor and assignment operator.
 
     G4bool Retrieve(std::ifstream& fIn, G4bool ascii);
       // To retrieve persistent data from file stream.

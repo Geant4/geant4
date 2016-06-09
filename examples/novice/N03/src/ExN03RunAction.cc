@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: ExN03RunAction.cc,v 1.18 2006/06/29 17:49:11 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: ExN03RunAction.cc,v 1.19 2008/01/17 17:31:32 maire Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -54,7 +54,7 @@ void ExN03RunAction::BeginOfRunAction(const G4Run* aRun)
 
   //inform the runManager to save random number seed
   G4RunManager::GetRunManager()->SetRandomNumberStore(true);
-  
+    
   //initialize cumulative quantities
   //
   sumEAbs = sum2EAbs =sumEGap = sum2EGap = 0.;
@@ -116,7 +116,7 @@ void ExN03RunAction::EndOfRunAction(const G4Run* aRun)
      << "\n mean trackLength in Gap      : " << G4BestUnit(sumLGap,"Length")
      << " +- "                               << G4BestUnit(rmsLGap,"Length")
      << "\n------------------------------------------------------------\n"
-     << G4endl;   
+     << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

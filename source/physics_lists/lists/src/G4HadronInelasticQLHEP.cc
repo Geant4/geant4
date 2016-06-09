@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronInelasticQLHEP.cc,v 1.1 2006/10/31 11:35:10 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4HadronInelasticQLHEP.cc,v 1.2 2008/05/19 10:21:34 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 //---------------------------------------------------------------------------
 //
@@ -113,15 +113,12 @@
 #include "G4HEXiMinusInelastic.hh"
 #include "G4HEXiZeroInelastic.hh"
 
-#include "G4HadronProcessStore.hh"
-
 G4HadronInelasticQLHEP::G4HadronInelasticQLHEP(const G4String& name, 
     G4int ver, G4bool qgs, G4bool bert, G4bool bic, G4bool hp)
   : G4VPhysicsConstructor(name), verbose(ver), qgsFlag(qgs), 
     bertFlag(bert), bicFlag(bic), hpFlag(hp), wasActivated(false)
 {
   if(verbose > 1) G4cout << "### HadronInelasticQLHEP" << G4endl;
-  store = G4HadronProcessStore::Instance();
   theCascade = 0;
   theQGStringDecay = 0;
   theQGStringModel = 0;
@@ -329,7 +326,6 @@ void G4HadronInelasticQLHEP::ConstructProcess()
 	       << " added for " << pname << G4endl;
     }
   }
-  store->Dump(verbose);
 }
 
 void G4HadronInelasticQLHEP::AddLEP(G4ParticleDefinition* particle,
@@ -421,7 +417,6 @@ void G4HadronInelasticQLHEP::Register(G4ParticleDefinition* p,
 				      const G4String& m)
 {
   hp->RegisterMe(hi);
-  store->Register(hp,p,hi,m);
   if(verbose > 1)
     G4cout << "### QLHEP: Register new model " << m 
 	   << " for " << p->GetParticleName() << " and " 

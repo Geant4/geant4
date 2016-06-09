@@ -23,20 +23,25 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HadrontherapyIonLowEZiegler1985.cc; May 2005
+//
+// $Id: EMHadronIonLowEZiegler1985.cc; 
+// Last modified: A.Lechner (anton.lechner@cern.ch), August 2008;
+//
+// See more at: http://geant4infn.wikispaces.com
+//
 // ----------------------------------------------------------------------------
 //                 GEANT 4 - Hadrontherapy example
 // ----------------------------------------------------------------------------
 // Code developed by:
 //
-// G.A.P. Cirrone(a)*, G. Candiano, F. Di Rosa(a), S. Guatelli(b), G. Russo(a)
+// G.A.P. Cirrone(a)*, F. Di Rosa(a), S. Guatelli(b), G. Russo(a)
 // 
 // (a) Laboratori Nazionali del Sud 
-//     of the National Institute for Nuclear Physics, Catania, Italy
-// (b) National Institute for Nuclear Physics Section of Genova, genova, Italy
+//     of the INFN, Catania, Italy
+// (b) INFN Section of Genova, Genova, Italy
 // 
 // * cirrone@lns.infn.it
-// --------------------------------------------------------------
+// ----------------------------------------------------------------------------
 
 #include "EMHadronIonLowEZiegler1985.hh"
 #include "G4ProcessManager.hh"
@@ -74,10 +79,6 @@ void EMHadronIonLowEZiegler1985::ConstructProcess()
   // *** Charged Hadrons and Ions ***
   // ********************************
 
-  G4VProcess* hadronIonMultipleScatProcess = new G4MultipleScattering(); 
-	  
-  G4StepLimiter* hadronIonStepLimiter = new G4StepLimiter();
-
   theParticleIterator -> reset();
 
   while( (*theParticleIterator)() )
@@ -96,10 +97,13 @@ void EMHadronIonLowEZiegler1985::ConstructProcess()
 	  if((!particle -> IsShortLived()) &&
 	     (particle -> GetParticleName() != "chargedgeantino"))
 	    {	  
+              G4MultipleScattering* hadronIonMultipleScatProcess = new G4MultipleScattering(); 
               G4hLowEnergyIonisation* hadronIonIonisationProcess = new G4hLowEnergyIonisation();
               hadronIonIonisationProcess -> SetElectronicStoppingPowerModel(particle, "Ziegler1985p");
               hadronIonIonisationProcess -> SetNuclearStoppingPowerModel("Ziegler1985");
               hadronIonIonisationProcess -> SetNuclearStoppingOn();
+
+              G4StepLimiter* hadronIonStepLimiter = new G4StepLimiter();
 
               processManager -> AddProcess(hadronIonMultipleScatProcess, -1, 1, 1);   
 	      processManager -> AddProcess(hadronIonIonisationProcess, -1, 2, 2);

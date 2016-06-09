@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NistElementBuilder.cc,v 1.16 2007/07/28 15:58:03 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4NistElementBuilder.cc,v 1.22 2008/08/11 11:53:11 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // -------------------------------------------------------------------
 //
@@ -57,6 +57,8 @@
 
 #include "G4NistElementBuilder.hh"
 #include "G4Element.hh"
+#include <sstream>
+
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -76,8 +78,17 @@ G4NistElementBuilder::~G4NistElementBuilder()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+G4int G4NistElementBuilder::GetZ(const G4String& name)
+{
+  G4int Z = maxNumElements;
+  do {Z--;} while( Z>0 && elmSymbol[Z] != name);
+  return Z;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 G4Element* G4NistElementBuilder::FindOrBuildElement(const G4String& symb,
-                                                          G4bool buildIsotopes)
+						    G4bool buildIsotopes)
 {
   if(first) {
     if(verbose > 0) {
@@ -139,8 +150,15 @@ G4Element* G4NistElementBuilder::BuildElement(G4int Z, G4bool buildIsotopes)
     G4Isotope* ist;
     for (G4int i=0; i<nc; i++) {
        if (relAbundance[idx + i] > 0.0) {
-         ist = new G4Isotope(elmSymbol[Z],Z, n0 + i,
-	                     massIsotopes[idx + i]*gram/mole);
+	 std::ostringstream os; 
+	 os << elmSymbol[Z] << n0 + i;
+         ist = new G4Isotope(os.str(), Z, n0 + i, 
+			     GetAtomicMass(Z, n0 + i)*g/(mole*amu_c2));
+	 /*
+	 G4cout << " Z= " << Z << " N= " << n0 + i
+		<< " miso(amu)= " <<  GetIsotopeMass(Z, n0 + i)/amu_c2
+		<< " matom(amu)= " << GetAtomicMass(Z, n0 + i)/amu_c2 << G4endl;
+	 */
 	 iso.push_back(ist);
        }
     }
@@ -192,7 +210,7 @@ void G4NistElementBuilder::PrintElement(G4int Z)
       for(j=0; j<nc; j++) {G4cout << n0 + j << "  ";}
       G4cout << G4endl;
       G4cout << "          mass(amu): ";
-      for(j=0; j<nc; j++) {G4cout << massIsotopes[idx + j] << " ";}
+      for(j=0; j<nc; j++) {G4cout << GetAtomicMass(i, n0 + j) << " ";}
       G4cout << G4endl;
       G4cout << "     abanbance: ";
       for(j=0; j<nc; j++) {G4cout << relAbundance[idx + j] << " ";}
@@ -231,14 +249,15 @@ void G4NistElementBuilder::AddElement(const G4String& name, G4int Z, G4int nc,
   G4double ww = 0.0;
   G4double www;
   size_t nm = nc;
-  //  G4double delm = G4double(Z)*electron_mass_c2/amu_c2;
 
   for(size_t i=0; i<nm; i++) {
     www = 0.01*(&W)[i];
-    massIsotopes[index] = (&A)[i]; // - delm;
-    sigMass[index]      = (&sA)[i];
+    // mass of the isotope in G4 units
+    massIsotopes[index] = (&A)[i]*amu_c2 - Z*electron_mass_c2 + bindingEnergy[Z]; 
+    sigMass[index]      = (&sA)[i]*amu_c2;
     relAbundance[index] = www;
 
+    // computation of mean atomic mass of the element in atomic units
     atomicMass[Z] += www*(&A)[i];
     ww += www;
     index++;
@@ -257,6 +276,15 @@ void G4NistElementBuilder::AddElement(const G4String& name, G4int Z, G4int nc,
 
 void G4NistElementBuilder::Initialise()
 {
+  // Parameterisation from D.Lunney,J.M.Pearson,C.Thibault, 
+  // Rev.Mod.Phys. 75 (2003) 1021 
+  bindingEnergy[0] = 0.0;
+  for(G4int i=1; i<maxNumElements; i++) {
+    G4double Z = G4double(i);
+    bindingEnergy[i] = (14.4381*std::pow(Z,2.39) + 1.55468e-6*std::pow(Z,5.35))*eV;
+  }
+
+  // NIST data
   index    = 0;
    
   // Z = 1 ---------------------------------------------------------------------
@@ -265,6 +293,11 @@ void G4NistElementBuilder::Initialise()
   
   double HA[6] = 
   {1.00783, 2.0141, 3.01605, 4.02783, 5.03954, 6.04494};
+
+  // Garantee consistence with G4 masses
+  HA[0] = (proton_mass_c2 + electron_mass_c2 - bindingEnergy[1])/amu_c2; 
+  HA[1] = (1.875613*GeV   + electron_mass_c2 - bindingEnergy[1])/amu_c2; 
+  HA[2] = (2.80925*GeV    + electron_mass_c2 - bindingEnergy[1])/amu_c2; 
   
   double HS[6] = 
   {4, 4, 11, 12, 102, 28};
@@ -280,6 +313,10 @@ void G4NistElementBuilder::Initialise()
   
   double HeA[8] = 
   {3.01603, 4.0026, 5.01222, 6.01889, 7.02803, 8.03392, 9.04382, 10.0524};
+
+  // Garantee consistence with G4 masses
+  HeA[0] = (2.80923*GeV  + 2.0*electron_mass_c2 - bindingEnergy[2])/amu_c2; 
+  HeA[1] = (3.727417*GeV + 2.0*electron_mass_c2 - bindingEnergy[2])/amu_c2; 
   
   double HeS[8] = 
   {9, 10, 50, 11, 30, 8, 70, 80};

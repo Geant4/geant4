@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIQt.hh,v 1.7 2007/11/15 18:53:59 lgarnier Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4UIQt.hh,v 1.15 2008/11/06 10:06:33 lgarnier Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 #ifndef G4UIQt_h
 #define G4UIQt_h 
@@ -38,6 +38,7 @@
 #include "G4VInteractiveSession.hh"
 
 #include <qobject.h>
+#include <qmap.h>
 
 class QMainWindow;
 class QLineEdit;
@@ -56,8 +57,8 @@ class QDialog;
 
 // Class description :
 //
-//  G4UIQt : class to handle a Motif interactive session.
-// G4UIQt is the Motif version of G4UIterminal.
+//  G4UIQt : class to handle a Qt interactive session.
+// G4UIQt is the Qt version of G4UIterminal.
 //
 //  A command box is at disposal for entering/recalling Geant4 commands.
 //  A menubar could be customized through the AddMenu, AddButton methods.
@@ -106,6 +107,12 @@ private:
   void SecondaryLoop(G4String); // a VIRER
   void TerminalHelp(G4String);
 #if QT_VERSION < 0x040000
+  QListView * CreateHelpTree();
+#else
+  QTreeWidget * CreateHelpTree();
+#endif
+
+#if QT_VERSION < 0x040000
   void CreateChildTree(QListViewItem*,G4UIcommandTree*);
   QListViewItem* FindTreeItem(QListViewItem *,const QString&);
 #else
@@ -118,6 +125,9 @@ private:
   G4bool GetHelpChoice(G4int&) ;// have to be implemeted because we heritate from G4VBasicShell
   void ExitHelp();// have to be implemeted because we heritate from G4VBasicShell
   bool eventFilter(QObject*,QEvent*);
+  void ActivateCommand(G4String);
+  QMap<int,QString> LookForHelpStringInChildTree(G4UIcommandTree *,const QString&);
+
 
 private:
 
@@ -138,7 +148,8 @@ private:
   QTreeWidget *fHelpTreeWidget;
 #endif
   QDialog *fHelpDialog;
-
+  QLineEdit *helpLine;
+ 
 signals : 
   void myClicked(const QString &text);
 
@@ -148,13 +159,10 @@ private slots :
   void CommandEnteredCallback();
   void ButtonCallback(const QString&);
   void HelpTreeClicCallback();
-#if QT_VERSION < 0x040000
-  void HelpTreeDoubleClicCallback( QListViewItem*, int);
-#else
-  void HelpTreeDoubleClicCallback( QTreeWidgetItem*, int);
-#endif
+  void HelpTreeDoubleClicCallback();
   void ShowHelpCallback();
   void CommandHistoryCallback();
+  void lookForHelpStringCallback();
 };
 
 #endif

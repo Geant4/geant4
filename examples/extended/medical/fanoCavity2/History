@@ -1,4 +1,4 @@
-$Id: History,v 1.4 2007/11/12 18:19:30 maire Exp $
+$Id: History,v 1.12 2008/11/16 12:30:43 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,31 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+     
+16-11-08 mma (fano2-V09-01-06)
+- Em options: 20bins/decade  LinLossLimit=default=0.01
+     
+01-11-08 mma (fano2-V09-01-05)
+- PhysicsList : add comments for Em options
+     
+26-10-08 mma (fano2-V09-01-04)
+- PhysicsList : modified Em options
+     
+28-09-08 mma (fano2-V09-01-03)
+- HistoManager : root format by default
+
+11-06-08 V.Ivant (fano2-V09-01-02)
+- Remove AIDA from GNUmakefile
+     
+07-05-08 mma (fano2-V09-01-01)
+- README : update Aida informations     
+     
+ 11-04-08 mma
+- HistoManager::Scale() : suppress warning
+    
+04-04-08 mma(fano2-V09-01-00)
+- PhysicsList : replace G4MultipleScattering by new G4eMultipleScattering
+  --> allows to use MscUrbanModel2
      
 12-11-07 mma (fano2-V09-00-01) 
 - HistoManager/HistoMessenger : print selected histos on ascii file

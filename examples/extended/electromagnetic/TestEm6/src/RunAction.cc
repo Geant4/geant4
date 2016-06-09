@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RunAction.cc,v 1.12 2006/06/29 16:57:20 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: RunAction.cc,v 1.13 2008/09/18 16:42:07 maire Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -58,9 +58,9 @@ RunAction::RunAction()
    // Creating a tree mapped to an hbook file.
    G4bool readOnly  = false;
    G4bool createNew = true;
-   G4String options = "--noErrors uncompress";
-   tree = tf->create("testem6.hbook","hbook",readOnly,createNew,options);
-   //tree = tf->create("testem6.root", "root",readOnly,createNew,options);
+   G4String options = "--noErrors export=root uncompress";
+   //tree = tf->create("testem6.hbook","hbook",readOnly,createNew,options);
+   tree = tf->create("testem6.root", "root",readOnly,createNew,options);
    //tree = tf->create("testem6.XML" ,"XML"  ,readOnly,createNew,options);
    delete tf;
    

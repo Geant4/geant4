@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4HitsModel.hh,v 1.10 2006/11/02 11:57:31 allison Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // 
 // John Allison  26th August 1998.

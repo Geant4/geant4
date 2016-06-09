@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLQtExportDialog.hh,v 1.3 2007/11/09 15:03:21 lgarnier Exp $
+// $Id: G4OpenGLQtExportDialog.hh,v 1.6 2008/10/15 10:16:17 lgarnier Exp $
 // GEANT4 tag $Name: 
 //
 // 
@@ -35,6 +35,7 @@
 #define G4OPENGLQTEXPORTDIALOG_HH
 
 #include <qdialog.h>
+#include <qobject.h>
 
 class QButtonGroup;
 class QPushButton;
@@ -45,21 +46,25 @@ class QComboBox;
 class QLabel;
 class QLineEdit;
 
+#if QT_VERSION >= 0x040000
+class QGroupBox;
+#endif
+
 /** The G4OpenGLQtExportDialog class provide a Dialog displaying differents options
-  for each file format
- */
+    for each file format
+*/
 class G4OpenGLQtExportDialog : public QDialog
 {
   Q_OBJECT
 
-public:
+ public:
   /** Construct a G4OpenGLQtExportDialog
       @param parent : parent widget
-      @param name : name of the saved file with extention
+      @param format : format of save file in lower case
       @param height : height of the original file
       @param width : width of the original file
   */
-  G4OpenGLQtExportDialog(QWidget* parent, QString name, int height =0, int width=0);
+  G4OpenGLQtExportDialog(QWidget* parent, QString format, int height =0, int width=0);
 
   /** Destroys G4OpenGLQtExportDialog */
   ~G4OpenGLQtExportDialog();
@@ -67,24 +72,34 @@ public:
   /** @return the value of the slider if format has a slider widget, instead return -1 */
   int getSliderValue();
 
-  /** return the new width for file if format has a width widget, instead return -1 */
+  /** return the new width for file if format has a width widget, instead return 
+      the original value */
   int getWidth();
 
-  /** return the new height for file if format has a height widget, instead return -1 */
+  /** return the new height for file if format has a height widget, instead return
+      the original value  */
   int getHeight();
 
   /** return the value of the transparency if format has a transparency, instead return -1 */
-  bool getTransparency();
+  int getTransparency();
 
   /** return the numbers of colors in the picture if format has a BW/Color widget, instead return -1 */
   int getNbColor();
 
-public slots:
+  /** return if vector EPS is checked, if button does'nt exist, return 0 */
+  bool getVectorEPS();
 
-/** Called by a clic on modify/original size button.This will 
-    invert buttons and hide/unhide size
-*/
-  void changeSizeBox(bool);  
+	    public slots:
+
+	    /** Called by a clic on modify/original size button.This will 
+		invert buttons and hide/unhide size
+	    */
+	    void changeSizeBox();  
+
+  /** Called by a clic on vectorEPS check box.If vectorEPS checkBox is checked,
+      it will enable change size buttons. Else it will disable them.
+  */
+  void changeVectorEPS();
 
   /** Called by changing value in height lineEdit. If ratio is keep, will also change the width
    */
@@ -94,13 +109,18 @@ public slots:
    */
   void textHeightChanged(const QString &); 
 
-private:
+ private:
   QString f_name, f_type, f_dir;
   QLabel* qualityLabel;
   bool expAll;
   QPushButton* buttonOk;
   QPushButton* buttonCancel;
-  QCheckBox* transparencyEPS,*boxTransparency;
+
+#if QT_VERSION >= 0x040000
+  QGroupBox * sizeGroupBox;
+#endif
+
+  QCheckBox* transparencyEPS,*boxTransparency,*vectorEPSCheckBox;
   QCheckBox* ratioCheckBox;
   QSlider * qualitySlider;
   QLabel *formatLabel;
@@ -110,7 +130,7 @@ private:
   QWidget* heightWidget,* widthWidget;
   int originalWidth;
   int originalHeight;
-
+  bool isChangingSize;
 };
 
 #endif

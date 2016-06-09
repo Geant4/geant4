@@ -23,18 +23,14 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: pyG4RayTracerX.cc,v 1.5 2006/06/29 15:36:44 gunter Exp $
-// $Name: geant4-09-01 $
+// $Id: pyG4RayTracerX.cc,v 1.6 2008/03/13 07:32:18 kmura Exp $
+// $Name: geant4-09-02 $
 // ====================================================================
 //   pyG4RayTracerX.cc
 //
 //                                         2005 Q
 // ====================================================================
 #ifdef G4VIS_USE_RAYTRACERX
-
-#include "pyG4Version.hh"
-
-#if G4VERSION_NUMBER >= 800
 
 #include <boost/python.hpp>
 #include "G4RayTracerX.hh"
@@ -51,5 +47,4 @@ void export_G4RayTracerX()
     ;
 }
 
-#endif
 #endif

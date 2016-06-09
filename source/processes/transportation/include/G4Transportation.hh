@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Transportation.hh,v 1.16 2007/11/08 17:59:38 japost Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4Transportation.hh,v 1.17 2007/11/09 15:39:20 japost Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // 
 // ------------------------------------------------------------
@@ -54,6 +54,7 @@
 #include "G4Track.hh"
 #include "G4Step.hh"
 #include "G4ParticleChangeForTransport.hh"
+class G4SafetyHelper; 
 
 class G4Transportation : public G4VProcess 
 {
@@ -203,6 +204,8 @@ class G4Transportation : public G4VProcess
   // Whether to avoid calling G4Navigator for short step ( < safety)
   //   If using it, the safety estimate for endpoint will likely be smaller.
      G4bool   fShortStepOptimisation; 
+
+     G4SafetyHelper* fpSafetyHelper;  // To pass it the safety value obtained
 
   // Verbosity 
      G4int    fVerboseLevel;

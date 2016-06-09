@@ -31,14 +31,14 @@
 
 using namespace G4InuclSpecialFunctions;
 
-class G4Fissioner : public G4Collider {
+class G4Fissioner {
 
 public:
 
   G4Fissioner();
 
-  virtual G4CollisionOutput collide(G4InuclParticle* bullet,
-				    G4InuclParticle* target);
+  G4CollisionOutput collide(G4InuclParticle* bullet,
+			    G4InuclParticle* target);
 
 private: 
 G4int verboseLevel;

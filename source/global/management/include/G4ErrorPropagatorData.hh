@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4ErrorPropagatorData.hh,v 1.3 2007/06/08 10:33:47 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 //
 // --------------------------------------------------------------------

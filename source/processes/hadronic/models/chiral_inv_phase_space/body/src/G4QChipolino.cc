@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4QChipolino.cc,v 1.32 2006/11/27 10:44:53 mkossov Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4QChipolino.cc,v 1.34 2008/03/31 20:29:33 dennis Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 //      ---------------- G4QChipolino ----------------
 //             by Mikhail Kossov, Sept 1999.
@@ -49,7 +49,9 @@ G4QChipolino::G4QChipolino(G4QContent& QCont)
   G4int tban=abs(3*ban);
   G4int tot=QCont.GetTot();   // Initial total number of quarks in QC
   G4int tod=tot%2;            // tot is even - meson or dibaryon-nucleus
-  if(!tod&&(tot<4||ban&&tot<tban)||tod&&tot<tban+2) QCont.IncQAQ(1,0.); // Add quark-pair
+  if ( (!tod && (tot < 4 || (ban && tot < tban) ) ) || (tod && tot < tban+2) ) 
+    QCont.IncQAQ(1,0.); // Add quark-pair
+
   G4QContent rQC=QCont;       // Copy for possible reduction ("annihilation" of q-qbar pairs)
   tot=rQC.GetTot();           // New total number of quarks in QC  (temporary)
   if   (tot%2)rQC.DecQAQ(-tban-2); // Reduce pairs, keep only 5 quarks  (baryon case)

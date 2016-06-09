@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ErrorPropagationNavigator.cc,v 1.1 2007/05/16 12:49:18 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4ErrorPropagationNavigator.cc,v 1.2 2008/10/24 14:00:03 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 //
 // --------------------------------------------------------------------
@@ -125,9 +125,11 @@ ComputeStep ( const G4ThreeVector &pGlobalPoint,
 
 G4double G4ErrorPropagationNavigator::
 ComputeSafety( const G4ThreeVector &pGlobalpoint,
-               const G4double pMaxLength )
+               const G4double pMaxLength,
+               const G4bool keepState )
 {
-  G4double newSafety = G4Navigator::ComputeSafety(pGlobalpoint, pMaxLength);
+  G4double newSafety = G4Navigator::ComputeSafety(pGlobalpoint,
+                                                  pMaxLength, keepState);
 
   G4ErrorPropagatorData *g4edata
     = G4ErrorPropagatorData::GetErrorPropagatorData();

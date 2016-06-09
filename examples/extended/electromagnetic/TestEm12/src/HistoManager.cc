@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HistoManager.cc,v 1.6 2007/11/09 17:35:06 maire Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: HistoManager.cc,v 1.11 2008/09/23 20:48:12 maire Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -53,8 +53,8 @@ HistoManager::HistoManager()
 #endif 
  
   fileName[0] = "testem12";
-  fileType    = "hbook";
-  fileOption  = "--noErrors uncompress";  
+  fileType    = "root";
+  fileOption  = "--noErrors export=root uncompress";  
   // histograms
   for (G4int k=0; k<MaxHisto; k++) {
     histo[k] = 0;
@@ -223,7 +223,7 @@ void HistoManager::Scale(G4int ih, G4double fac)
 {
  if (ih > MaxHisto) {
     G4cout << "---> warning from HistoManager::RemoveHisto() : histo " << ih
-           << "does not exist" << G4endl;
+           << "does not exist  (fac = " << fac << ")"  << G4endl;
     return;
   }
 #ifdef G4ANALYSIS_USE
@@ -235,7 +235,7 @@ void HistoManager::Scale(G4int ih, G4double fac)
 
 void HistoManager::PrintHisto(G4int ih)
 {
- if (ih < MaxHisto) ascii[ih] = true;
+ if (ih < MaxHisto) { ascii[ih] = true; ascii[0] = true; }
  else
     G4cout << "---> warning from HistoManager::PrintHisto() : histo " << ih
            << "does not exist" << G4endl;
@@ -248,7 +248,9 @@ void HistoManager::PrintHisto(G4int ih)
 void HistoManager::saveAscii()
 {
 #ifdef G4ANALYSIS_USE
- 
+
+ if (!ascii[0] ) return;
+  
  G4String name = fileName[0] + ".ascii";
  std::ofstream File(name, std::ios::out);
  File.setf( std::ios::scientific, std::ios::floatfield );
@@ -261,7 +263,8 @@ void HistoManager::saveAscii()
      
       for (G4int iBin=0; iBin<Nbins[ih]; iBin++) {
          File << "  " << iBin << "\t" 
-              << histo[ih]->binMean(iBin) << "\t"
+              << 0.5*(histo[ih]->axis().binLowerEdge(iBin) +
+	              histo[ih]->axis().binUpperEdge(iBin)) << "\t"	      
 	      << histo[ih]->binHeight(iBin) 
 	      << G4endl;
       } 

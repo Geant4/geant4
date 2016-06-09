@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicalVolumeStore.cc,v 1.19 2007/04/10 10:13:50 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4PhysicalVolumeStore.cc,v 1.20 2008/07/10 09:41:20 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // G4PhysicalVolumeStore
 //
@@ -72,7 +72,7 @@ G4PhysicalVolumeStore::~G4PhysicalVolumeStore()
 // Delete all elements from the store
 // ***************************************************************************
 //
-void G4PhysicalVolumeStore::Clean(G4bool notifyLV)
+void G4PhysicalVolumeStore::Clean()
 {
   // Do nothing if geometry is closed
   //
@@ -96,14 +96,6 @@ void G4PhysicalVolumeStore::Clean(G4bool notifyLV)
 #ifdef G4GEOMETRY_VOXELDEBUG
   G4cout << "Deleting Physical Volumes ... ";
 #endif
-
-  if (notifyLV)
-  {
-    for(pos=store->begin(); pos!=store->end(); pos++)
-    {
-      if (*pos) { (*pos)->GetLogicalVolume()->ClearDaughters(); }
-    }
-  }
 
   for(pos=store->begin(); pos!=store->end(); pos++)
   {

@@ -1,4 +1,4 @@
-$Id: History,v 1.284 2007/11/26 17:27:09 pia Exp $
+$Id: History,v 1.329 2008/12/12 08:50:59 sincerti Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,255 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+12.12.2008   S. Incerti, tag emlowen-V09-01-45
+             Upgrade to G4LogLogInterpolation_revision1c.cc
+
+009.12.2008  S. Incerti, tag emlowen-V09-01-44
+             Added protection to G4FinalStateElasticChampion.cc for angular treatment of XS at 180*deg
+
+09.12.2008   S. Incerti, tag emlowen-V09-01-43
+             Contains G4PenelopeBremsstrahlungContinuous.hh/.cc from Luciano
+             Contains G4LogLogInterpolation_revision1b.cc
+
+09.12.2008   S. Incerti, tag emlowen-V09-01-42
+             Upgrade to G4LogLogInterpolation_revision1b.cc
+
+09.12.2008   S. Incerti, tag emlowen-V09-01-41
+             Return to original G4LogLogInterpolation.cc/.hh class
+             from tag emlowen-V09-01-20
+
+08.12.2008   S. Incerti, tag emlowen-V09-01-40
+             Added protection in G4LogLogInterpolation.cc class
+             against null energy and cross section values
+
+06.12.2008   S. Incerti, tag emlowen-V09-01-39
+             Added vector initialization and EOF protection in G4FinalStateElasticChampion.cc
+             Added EOF protection in G4FinalStateIonisationBorn.cc
+
+06.12.2008   S. Incerti, tag emlowen-V09-01-38
+             Updated G4LogLogInterpolation class (hh and cc) provided by
+             Nicolas Karakatsanis (updated revision 1)
+
+05.12.2008   S. Incerti, tag emlowen-V09-01-37
+             Updated G4LogLogInterpolation class (hh and cc) provided by
+             Nicolas Karakatsanis (revision 1)
+
+05.12.2008   S. Incerti, tag emlowen-V09-01-36
+             Updated low energy limits of Geant4-DNA e- models (Brenner-Zaider and Champion's
+             elastic scattering and Emfietzoglou's excitation) 
+
+05.12.2008   S. Incerti, tag emlowen-V09-01-35
+             Added protection in G4FinalStateIonisationBorn.cc causing run-time error (valgrind with test20)
+
+04.12.2008   L. Pandola, tag emlowen-V09-01-34
+             Correction for G4PenelopeComptonModel: now the cross section table 
+             calculated by the model corresponds to the original FORTRAN-Penelope. 
+             The difference was only for compounds materials and below 1 keV, so 
+             irrelevant for virtually all applications.
+             First inclusion of G4PenelopeIonisationModel. 
+
+24.11.2008   G. Cosmo, tag emlowen-V09-01-33
+             Fixed compilation errors on gcc-4.3.2:
+             o added required names for struct types (and using G4 prefix);
+             o correctly initialise cached iterators (cannot be an integer!).
+
+21.11.2008   A. Lechner, tag emlowen-V09-01-32
+             added and tagged new stopping power model for ions, which by default
+             uses ICRU 73 data tables. Following files are concerned:
+             G4IonParametrisedLossModel.hh
+             G4IonParametrisedLossModel.icc
+             G4IonParametrisedLossModel.cc
+             G4IonParametrisedLossTable.hh
+             G4IonParametrisedLossTable.icc
+
+06.11.2008   S. Incerti, tag emlowen-V09-01-31
+             corrected bug in computation of diff cross section maximum in
+             G4FinalStateElasticBrennerZaider.cc
+
+30.10.2008   S. Incerti, tag emlowen-V09-01-30
+             added & tagged new photon models compatible with standard EM design :
+             
+             -- Penelope models are provided by L. Pandola :
+             G4PenelopeComptonModel.hh and .cc
+             G4PenelopeGammaConversionModel.hh and .cc
+             G4PenelopePhotoElectricModel.hh and .cc
+             G4PenelopeRayleighModel.hh and .cc
+             
+             -- Livermore models are provided by S. Incerti : 
+             G4LivermoreComptonModel.hh and .cc
+             G4LivermoreGammaConversionModel.hh and .cc
+             G4LivermorePhotoElectricModel.hh and .cc
+             G4LivermorePolarizedComptonModel.hh and .cc
+             G4LivermorePolarizedRayleighModel.hh and .cc
+             G4LivermoreRayleighModel.hh and .cc
+
+29.10.2008   S. Incerti, tag emlowen-V09-01-29
+             - improved generation of scattering angle in G4FinalStateElasticChampion.cc
+
+30.09.2008   S. Incerti, tag emlowen-V09-01-28
+             - removed G4cout in G4LowEnergyCompton.cc (bug report #1026)
+
+20.08.2008   S. Incerti, tag emlowen-V09-01-27
+             - added KillParticle in G4FinalStateElasticChampion.cc below low energy limit
+             - modified condition on low energy limit in G4CrossSectionElasticChampion.cc and G4FinalStateElasticChampion.cc
+ 
+20.08.2008   S. Incerti, tag emlowen-V09-01-26
+             - removed AddEnergyDeposit below low energy limit in G4FinalStateElasticBrennerZaider.cc (bug, thanks to Marion Bug)
+             - removed AddEnergyDeposit below low energy limit in G4FinalStateExcitationEmfietzoglou.cc (idem)
+             - removed AddEnergyDeposit below low energy limit in G4FinalStateIonisationRudd.cc (idem)
+             - decreased low energy limit for e- to 12.61 eV in G4CrossSectionIonisationBorn.cc (from sigma_ionisation_e_born.dat table in $G4LEDATA/dna) instead of 25 eV
+             - decreased low energy limit for e- to 12.61 eV in G4FinalStateIonisationBorn.cc (from sigma_ionisation_e_born.dat table in $G4LEDATA/dna) instead of 25 eV
+
+16.07.2008   S. Incerti, tag emlowen-V09-01-25
+             added preliminary process for positronium production
+             from C. Champion's model
+             G4CrossSectionPsCreationChampion.hh and .cc
+             G4CrossSectionPsCreationChampionPartial.hh and .cc
+             G4FinalStatePsCreationChampion.hh and .cc
+             and updated G4DNAGenericIonsManager.cc
+             *** Will work only from version 6.2 of G4EMLOW data
+
+15.07.2008   S. Incerti, tag emlowen-V09-01-24
+             added new elastic scattering process for electrons
+             (Geant4 DNA) from C. Champion's model
+             G4CrossSectionElasticChampion.hh and .cc
+             G4FinalStateElasticChampion.hh and .cc
+             *** Will work only from version 6.2 of G4EMLOW data
+
+14.07.2008   S. Incerti, tag emlowen-V09-01-23
+             cleaned and updated energy limits of the following 
+             25 files (Geant4 DNA)
+
+-G4CrossSectionChargeDecrease.hh and .cc
+-G4CrossSectionChargeDecreasePartial.hh and .cc
+-G4CrossSectionChargeIncrease.hh and .cc
+-G4CrossSectionChargeIncreasePartial.hh and .cc
+-G4CrossSectionElasticScreenedRutherfordHE.hh and .cc
+-G4CrossSectionElasticScreenedRutherfordLE.hh and .cc
+-G4CrossSectionExcitationBorn.hh and .cc
+-G4CrossSectionExcitationBornPartial.hh and .cc
+-G4CrossSectionExcitationEmfietzoglou.hh and .cc
+-G4CrossSectionExcitationEmfietzoglouPartial.hh and .cc
+-G4CrossSectionExcitationMillerGreen.hh and .cc
+-G4CrossSectionExcitationMillerGreenPartial.hh and .cc
+-G4CrossSectionIonisationBorn.hh and .cc
+-G4CrossSectionIonisationBornPartial.hh and .cc
+-G4CrossSectionIonisationRudd.hh and .cc
+-G4CrossSectionIonisationRuddPartial.hh and .cc
+-G4FinalStateChargeDecrease.hh and .cc
+-G4FinalStateChargeIncrease.hh and .cc
+-G4FinalStateElasticBrennerZaider.hh and .cc
+-G4FinalStateElasticScreenedRutherford.hh and .cc
+-G4FinalStateExcitationBorn.hh and .cc
+-G4FinalStateExcitationEmfietzoglou.hh and .cc
+-G4FinalStateExcitationMillerGreen.hh and .cc
+-G4FinalStateIonisationBorn.hh and .cc
+-G4FinalStateIonisationRudd.hh and .cc
+
+30.06.2008   S. Incerti, tag emlowen-V09-01-22
+             corrected wrong upper energy limit for :
+             - hydrogen in G4CrossSectionIonisationRudd 
+             - proton in G4ChargeDecrease
+
+27.06.2008   S. Incerti, tag emlowen-V09-01-21
+             - added two new classes for electron elastic scattering
+             G4CrossSectionElasticScreenedRutherfordLE.cc and .hh below 200 eV
+             G4CrossSectionElasticScreenedRutherfordHE.cc and .hh above 200 eV
+             that should replace the G4CrossSectionElasticScreenedRutherfordHE class
+             - raised lower energy limit of G4CrossSectionExcitationEmfietzoglou.cc up to 10 eV
+
+27.06.2008   S. Incerti, tag emlowen-VO9-01-20
+             - added protection against negative log argument in G4LogLogInterpolation.cc
+             - added protection against energies above 200 eV in G4FinalStateElasticBrennerZaider.cc
+             - removed verbose in G4CrossSectionChargeTransferExp.cc and in G4CrossSectionExcitationBorn.cc
+
+26.06.2208   S. Incerti, tag emlowen-V09-01-19
+             Added protection against FPE in G4hShellCrossSectionDoubleExp.cc
+
+20.06.2008   S. Incerti, tag emlowen-V09-01-18
+             Added 4 protections against FPE in G4hLowEnergyLoss.cc
+
+11.06.2008   S. Incerti, tag emlowen-V09-01-17
+             - added missing & for cosTheta and phi variables in G4FinalStateIonisationRudd.hh and .cc
+             which were causing wrong angular distributions (bug fix)
+             - removed annoying PrintData in G4CrossSectionExcitationBornPartial.cc
+
+02.06.2008   S. Incerti, tag emlowen-V09-01-16
+             Removed while(1) statement in G4FinalStateIonisationBorn.cc
+             fixing compilation warning.
+             Restored headers for G4PaulKCrossSection, G4OrlicLCrossSection
+             and G4ecpssrCrossSection which were lost.
+
+01.06.2008   F.Lei, tag emlowen-V09-01-15
+	     Correction to the corrupted G4Augerdata.cc, and this tag is on top
+	     of emlowen-V09-01-12! as emlowen-V09-01-13 is internal and incomplete.  
+  
+22.05.2008   F.Lei, tag emlowen-V09-01-14
+	     Load the the complete Auger dataset on initialization	
+
+06.05.2008   H.Ben Abdelouahed, tag emlowen-V09-01-12, emlowen-V09-01-13
+             Semi-Empirical model implementation for L-SubShells-Cross-Section
+             with protons projectiles
+
+02.05.2008   MGP, tag emlowen-V09-01-11
+             Added Doppler broadening in G4LowEnergyComptonPolarized 
+             (Francesco Longo), same model as in G4LowEnergyCompton
+             Added PIXE cross section, L shells, for protons in 
+             G4OrlicLCrossSection (Haifa Ben Abdelwahed)
+             Corrected compilation warnings as in message by
+             G. Cosmo on 29/4/2008
+
+24.04.2008   MGP, tag emlowen-V09-01-10
+             Fix in Doppler broadening of G4LowEnergyCompton
+             Attempts to fix floating point exceptions in 
+             G4FinalStateElasticBrennerZaider and G4hLowEnergyLoss
+
+22.04.2008   H.Ben Abdelouahed, tag emlowen-V09-01-09
+             ECPSSR model implementation for K-Shell-Cross-Section
+             with protons and alpha projectiles
+ 
+18.03.2008   G.Cosmo, tag emlowen-V09-01-08
+             Fixed compilation error in G4CrossSectionChargeTransferExp.cc
+             for missing inclusion of <sstream>, detected on SUN-CC.
+
+25.03.2008   MGP, tag emlowen-V09-01-07
+             New charge transfer process by incident protons 
+             (two cross section and one final state policy classes)
+
+17.03.2008   MGP, tag emlowen-V09-01-06
+             Doppler broadening added to G4LowEnergyCompton
+             based on Y. Namito, S. Ban and H. Hirayama,
+             NIM A 349, pp. 489-494, 1994
+
+10.03.2008   MGP, tag emlowen-V09-01-05
+             Developments for Doppler broadening concerning data management
+
+10.03.2008   MGP, tag emlowen-V09-01-04
+             Fixes to *DataSet files for better readability of the code
+             Extensions to G4ShellData to deal with shell data relevant to 
+             Doppler broadening simulation
+ 
+07.03.2008   MGP, tag emlowen-V09-01-03
+             Reverted to G4hLowEnergyIonisation.cc and G4hLowEnergyLoss.cc
+             as in emlowen-V09-01-01
+
+07.03.2008   MGP, tag emlowen-V09-01-02
+             Operation for convenience of configuration management:
+             updated G4hLowEnergyIonisation.cc and G4hLowEnergyLoss.cc
+             to the head; the modifications to these two classes
+             were an attempt to address a PRS report by A. Howard,
+             but they proved ineffective and caused other problems;
+             a tag including them is made to facilitate later retrieve
+
+06.03.2008   MGP, tag emlowen-V09-01-01
+             Restored readability of *DataSet* classes regards the
+             indentation of the code
+
+21.02.2008   MGP, tag emlowen-V09-01-00
+             Bug fix in G4AtomicTransitionManager concerning
+             total radiative and non radiative probabilities
+             (fix provided by A. Mantero)
 
 26.11.2007   MGP, tag emlowen-V09-00-28
              Cleaned up std:: in G4FinalStateIonisationBorn/Rudd

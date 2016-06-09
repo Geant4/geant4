@@ -1,4 +1,4 @@
-/* $Id: liblist.c,v 1.19 2007/07/18 14:21:15 gcosmo Exp $ */
+/* $Id: liblist.c,v 1.21 2008/05/20 13:33:34 gunter Exp $ */
 
 /*
 Given a "libname.map" file on standard input and a list or directory
@@ -199,8 +199,18 @@ int main (int argc, char** argv) {
   while (!feof(stdin))
     {
       /* Get library name... */
-      gets(buffer);
+      fgets(buffer,BUFSIZE,stdin);
       if(feof(stdin)) break;
+      if (strlen(buffer) >= BUFSIZE-1)
+      {
+         fprintf(stderr,
+	   " Internal ERROR: BUFSIZE too small to read library name map file\n");
+	 exit(1);
+      }
+	       /* discarded trailing \n, as gets() was doing */
+      if ( buffer[strlen(buffer)-1] == '\n') 
+        {   buffer[strlen(buffer)-1]='\0'; }  
+
       ptr=strtok(buffer,":\n");
 
       /* Check for duplicate names... */
@@ -251,7 +261,17 @@ int main (int argc, char** argv) {
       if(!optm)
         {
           /* Get directory name... */
-          gets(buffer);
+          fgets(buffer,BUFSIZE,stdin);
+	  if (strlen(buffer) >= BUFSIZE-1)
+	  {
+             fprintf(stderr,
+	       " Internal ERROR: BUFSIZE too small to read directory name\n");
+	     exit(1);
+	  }
+	       /* discarded trailing \n, as gets() was doing */
+          if ( buffer[strlen(buffer)-1] == '\n') 
+             {   buffer[strlen(buffer)-1]='\0'; }  
+
           ptr=strtok(buffer,"/");
           if(!ptr)
 	    {

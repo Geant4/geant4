@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VVisManager.hh,v 1.13 2006/09/12 18:29:31 tinslay Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4VVisManager.hh,v 1.14 2008/01/04 22:20:59 allison Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 // John Allison 19/Oct/1996.
 // 
 // Class Description:
@@ -134,10 +134,29 @@ public: // With description
     const G4Transform3D& objectTransformation = G4Transform3D()) = 0;
 
   ///////////////////////////////////////////////////////////////////////
-  // For 2D methods, the x,y coordinates are intrepreted as screen
+  // For 2D methods, the x,y coordinates are interpreted as screen
   // coordinates, -1 < x,y < 1.  The z-coordinate is ignored.
 
-  virtual void Draw2D (const G4Text&) = 0;
+  virtual void Draw2D (const G4Circle&,
+    const G4Transform3D& objectTransformation = G4Transform3D()) = 0;
+
+  virtual void Draw2D (const G4NURBS&,
+    const G4Transform3D& objectTransformation = G4Transform3D()) = 0;
+
+  virtual void Draw2D (const G4Polyhedron&,
+    const G4Transform3D& objectTransformation = G4Transform3D()) = 0;
+
+  virtual void Draw2D (const G4Polyline&,
+    const G4Transform3D& objectTransformation = G4Transform3D()) = 0;
+
+  virtual void Draw2D (const G4Polymarker&,
+    const G4Transform3D& objectTransformation = G4Transform3D()) = 0;
+
+  virtual void Draw2D (const G4Square&,
+    const G4Transform3D& objectTransformation = G4Transform3D()) = 0;
+
+  virtual void Draw2D (const G4Text&,
+    const G4Transform3D& objectTransformation = G4Transform3D()) = 0;
 
   ///////////////////////////////////////////////////////////////////////
   // Draw methods for Geant4 Objects as if they were Visualization

@@ -1,4 +1,4 @@
-# $Id: run01.mac,v 1.17 2006/10/31 12:53:48 maire Exp $
+# $Id: run01.mac,v 1.18 2008/04/04 14:24:51 maire Exp $
 #
 # Macro file for "exampleN03.cc" 
 # (can be run in batch, without graphic)
@@ -10,7 +10,7 @@
 #
 /testem/phys/addPhysics  standard
 #
-/testem/phys/setCuts 0.1 um
+/testem/phys/setCuts 100 um
 #
 /run/initialize
 #

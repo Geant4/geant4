@@ -25,7 +25,7 @@
 //
 //
 // $Id: PhysicsListMessenger.cc,v 1.4 2006/08/11 14:38:11 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 //
 /////////////////////////////////////////////////////////////////////////

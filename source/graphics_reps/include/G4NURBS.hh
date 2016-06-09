@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4NURBS.hh,v 1.10 2006/06/29 19:05:28 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// GEANT4 tag $Name: geant4-09-02 $
 // 
 // Olivier Crumeyrolle  12 September 1996
 

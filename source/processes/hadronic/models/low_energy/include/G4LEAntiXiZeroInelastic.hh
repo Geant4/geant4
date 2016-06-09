@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4LEAntiXiZeroInelastic.hh,v 1.11 2007/02/24 06:43:02 dennis Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// GEANT4 tag $Name: geant4-09-02 $
 //
  // Hadronic Process: Low Energy AntiXiZero Inelastic Process
  // J.L. Chuma, TRIUMF, 19-Feb-1997

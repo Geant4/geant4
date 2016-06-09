@@ -14,6 +14,42 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+22-Oct-2008 Dennis Wright (hadr-stopping-V09-01-05)
+---------------------------------------------------
+- replace G4NucleiPropertiesTable::GetBindingEnergy() with 
+  G4NucleiProperties::GetBindingEnergy() in 
+  G4KaonMinusAbsorptionAtRest.cc and G4PiMinusStopAbsorption.cc
+- replace G4NucleiPropertiesTable::GetAtomicMass with
+  G4NucleiProperties::GetNuclearMass in G4StopTheoDeexcitation.cc
+
+02-Oct-2008 Dennis Wright (hadr-stopping-V09-01-04)
+---------------------------------------------------
+- replace integers with corresponding process type enum values
+
+01-Sep-2008 Vladimir Ivantchenko (hadr-stopping-V09-01-03)
+----------------------------------------------------------
+G4MuonMinusCaptureAtRest - added registration in the 
+       G4HadronicprocessStore and PrintInfo by adding
+       PreparePhysicsTable and BuildPhysicsTable methods
+GNUmakefile - add includes
+
+08-Jul-2008 Dennis Wright (hadr-stopping-V09-01-02)
+---------------------------------------------------
+- set process sub-type to 15 for 
+  G4AntiNeutronAnnihilationAtRest, G4AntiProtonAnnihilationAtRest,
+  G4KaonMinusAbsorption, G4KaonMinusAbsorptionAtRest,
+  G4MuonMinusCaptureAtRest, G4NeutronCaptureAtRest,
+  G4PiMinusAbsorptionAtRest, G4PionMinusAbsorptionAtRest
+
+05-May-2007 Vladimir Ivantchenko (hadr-stopping-V09-01-01)
+----------------------------------------------------------
+- G4MuMinusCaptureCascade - fixed NaN value in bound muon decay
+
+28-Mar-2008 Dennis Wright (hadr-stopping-V09-01-00)
+---------------------------------------------------
+G4NeutronCaptureAtRest::AtomAs - add () around && within || to 
+  fix gcc-4.3 compiler warning
+
 19-Nov-2007 Vladimir Ivantchenko (hadr-stopping-V09-00-05)
 ----------------------------------------------------------
 G4MuonMinusCaptureAtRest - move back 

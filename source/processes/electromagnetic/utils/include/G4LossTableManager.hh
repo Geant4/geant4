@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LossTableManager.hh,v 1.48 2007/11/07 18:38:49 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4LossTableManager.hh,v 1.53 2008/07/15 16:56:38 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 //
 // -------------------------------------------------------------------
@@ -76,7 +76,6 @@
 #ifndef G4LossTableManager_h
 #define G4LossTableManager_h 1
 
-
 #include <map>
 #include <vector>
 #include "globals.hh"
@@ -90,6 +89,7 @@ class G4ParticleDefinition;
 class G4VMultipleScattering;
 class G4VEmProcess;
 class G4EmCorrections;
+class G4EmSaturation;
 class G4LossTableBuilder;
 
 class G4LossTableManager
@@ -152,6 +152,14 @@ public:
 
   void DeRegister(G4VEmProcess* p);
 
+  void Register(G4VEmModel* p);
+
+  void DeRegister(G4VEmModel* p);
+
+  void Register(G4VEmFluctuationModel* p);
+
+  void DeRegister(G4VEmFluctuationModel* p);
+
   void EnergyLossProcessIsInitialised(const G4ParticleDefinition* aParticle, 
 				      G4VEnergyLossProcess* p);
   
@@ -194,6 +202,8 @@ public:
 
   void SetLPMFlag(G4bool val);
 
+  void SetSplineFlag(G4bool val);
+
   void SetLinearLossLimit(G4double val);
 
   void SetBremsstrahlungTh(G4double val);
@@ -206,6 +216,8 @@ public:
 
   G4bool LPMFlag() const;
 
+  G4bool SplineFlag() const;
+
   G4double BremsstrahlungTh() const;
 
   const std::vector<G4VEnergyLossProcess*>& GetEnergyLossProcessVector();
@@ -216,7 +228,9 @@ public:
 
   inline G4VEnergyLossProcess* GetEnergyLossProcess(const G4ParticleDefinition*);
 
-  inline G4EmCorrections* EmCorrections();
+  G4EmCorrections* EmCorrections();
+
+  G4EmSaturation* EmSaturation();
 
 private:
 
@@ -250,6 +264,8 @@ private:
   std::vector<G4PhysicsTable*> inv_range_vector;
   std::vector<G4VMultipleScattering*> msc_vector;
   std::vector<G4VEmProcess*> emp_vector;
+  std::vector<G4VEmModel*> mod_vector;
+  std::vector<G4VEmFluctuationModel*> fmod_vector;
 
   // cash
   G4VEnergyLossProcess* currentLoss;
@@ -273,6 +289,7 @@ private:
   G4bool maxEnergyForMuonsActive;
   G4bool stepFunctionActive;
   G4bool flagLPM;
+  G4bool splineFlag;
 
   G4double minSubRange;
   G4double maxRangeVariation;
@@ -285,6 +302,8 @@ private:
   G4LossTableBuilder*         tableBuilder;
   G4EnergyLossMessenger*      theMessenger;
   G4EmCorrections*            emCorrections;
+  G4EmSaturation*             emSaturation;
+
   const G4ParticleDefinition* firstParticle;
   G4int verbose;
 
@@ -413,13 +432,6 @@ inline G4VEnergyLossProcess* G4LossTableManager::GetEnergyLossProcess(
     }
   }
   return currentLoss;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-inline G4EmCorrections* G4LossTableManager::EmCorrections() 
-{
-  return emCorrections;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

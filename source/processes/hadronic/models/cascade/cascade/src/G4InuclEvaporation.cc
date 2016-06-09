@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4InuclEvaporation.cc,v 1.6 2007/05/25 04:16:21 miheikki Exp $
+// $Id: G4InuclEvaporation.cc,v 1.8 2008/10/24 20:49:07 dennis Exp $
 //
 #include <numeric>
 #include "G4IonTable.hh"
@@ -98,7 +98,7 @@ G4FragmentVector * G4InuclEvaporation::BreakItUp(const G4Fragment &theNucleus) {
 
   G4double A = theNucleus.GetA();
   G4double Z = theNucleus.GetZ();
-  G4double mTar  = G4NucleiProperties::GetAtomicMass(A, Z); // Mass of the target nucleus
+  G4double mTar  = G4NucleiProperties::GetNuclearMass(A, Z); // Mass of the target nucleus
   G4LorentzVector tmp =theNucleus.GetMomentum();
 
   G4ThreeVector momentum = tmp.vect();
@@ -106,7 +106,7 @@ G4FragmentVector * G4InuclEvaporation::BreakItUp(const G4Fragment &theNucleus) {
   G4double exitationE = theNucleus.GetExcitationEnergy();
 
   // Move to CMS frame, save initial velocity of the nucleus to boostToLab vector.
-  //   G4ThreeVector boostToLab( ( 1/G4NucleiProperties::GetAtomicMass( A, Z ) ) * momentum ); 
+  //   G4ThreeVector boostToLab( ( 1/G4NucleiProperties::GetNuclearMass( A, Z ) ) * momentum ); 
   G4InuclNuclei* tempNuc = new G4InuclNuclei(A, Z);
   G4double mass=tempNuc->getMass()*1000;
   G4ThreeVector boostToLab( ( 1/mass) * momentum ); 
@@ -122,7 +122,7 @@ G4FragmentVector * G4InuclEvaporation::BreakItUp(const G4Fragment &theNucleus) {
 
   G4InuclNuclei* nucleus = new G4InuclNuclei(A, Z);
   nucleus->setExitationEnergy(exitationE/1000);
-  std::vector<G4double> tmom(4, 0.0);
+  G4CascadeMomentum tmom;
   nucleus->setMomentum(tmom);
   nucleus->setEnergy();
 
@@ -156,7 +156,7 @@ G4FragmentVector * G4InuclEvaporation::BreakItUp(const G4Fragment &theNucleus) {
 	//       	ipart->printParticle();
       }
 
-      std::vector<G4double> mom = ipart->getMomentum();
+      const G4CascadeMomentum& mom = ipart->getMomentum();
       eTot   += std::sqrt(mom[0]*1000 * mom[0]*1000);
 
       ekin = ipart->getKineticEnergy()*1000;
@@ -200,7 +200,7 @@ G4FragmentVector * G4InuclEvaporation::BreakItUp(const G4Fragment &theNucleus) {
 
       ekin = ifrag->getKineticEnergy()*1000;
       emas = ifrag->getMass()*1000;
-      std::vector<G4double> mom = ifrag->getMomentum();
+      const G4CascadeMomentum& mom = ifrag->getMomentum();
       eTot  += std::sqrt(mom[0]*1000 * mom[0]*1000);
 
       G4ThreeVector aMom(mom[1]*1000, mom[2]*1000, mom[3]*1000);

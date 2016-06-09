@@ -1,4 +1,4 @@
-$Id: History,v 1.17 2007/11/15 16:10:09 vnivanch Exp $
+$Id: History,v 1.26 2008/12/05 09:57:30 flei Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,44 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+05/12/2008 F.Lei (exrdm-V09-01-04)
+- exrdmAnalysisManager.cc, exrdmSteppingAction.cc
+   - better G4ANALYSIS_USE and G4ANALYSIS_USE_ROOT logic 
+- GNUMakefile
+
+04/12/2008 F.Lei (exrdm-V09-01-03)
+- exrdmHisto: delete hfileROOT in save();
+- exrdmAnalysisManager.cc, exrdmSteppingAction.cc
+   - used || login between G4ANALYSIS_USE and G4ANALYSIS_USE_ROOT
+- Updated README, macro/f24.mac
+
+04/12/2008 G.Barrand
+- exrdmAnalyisManager : dispose() : cstor, dstor private.
+- exrdmHisto : revisit the AIDA sector, mainly creation/deletion of things.
+  Now the program holds in case of multiple /run/beamOn.
+  NOTE : someone should do the same with the ROOT sector...
+  I have let a //FIXME in exrdmHisto::~exrdmHisto and ~exrdmAnalysisManager().
+- EventAction, RunAction : have some #ifdef G4VIS_USE to be able to
+  disconnect properly the G4/vis.
+
+02/12/2008 F.Lei (exrdm-V09-01-02)
+- exrdmHisto,exrdmHistoMessenger & exrdmAnalysisManager: updated the usage 
+  of AIDA analysis package.
+  
+August 10th, 2008 V.Ivanchenko (exrdm-V09-01-01)
+--------------------------------------------------
+- exdrmMatarialMessenger - fix units of density
+- exdrmPhysicsList - fix definition of cuts; simplify logic
+                     of setting of hadronic physics;
+                     remove double instantiation of radioactive decay
+- removed compillation warnings in several places
+- replace flag G4ANALYSIS_USE_AIDA by G4ANALYSIS_USE
+- remove AIDA setup from GNUmakefile (use one from central scripts)
+
+01 May 2008, Fan Lei (exrdm-V09-01-00)
+--------------------------------------------------
+- Removed "," from the Ntuple header definition
+- All energy depositions are collected, apart from that of the primary track.  
 
 November 15th, 2007 V.Ivanchenko (exrdm-V09-00-02)
 --------------------------------------------------

@@ -1,0 +1,16 @@
+<!-- this is a file defining materials in split.gdml -->
+<!-- it is _not_ a standalone GDML file -->
+
+ <materials>
+  <element Z="7" formula="N" name="Nitrogen_163505440" >
+   <atom value="14.01" />
+  </element>
+  <element Z="8" formula="O" name="Oxygen_163503528" >
+   <atom value="16" />
+  </element>
+  <material formula=" " name="Air_163514448" >
+   <D value="0.0012899999999999999" />
+   <fraction n="0.70000000000000007" ref="Nitrogen_163505440" />
+   <fraction n="0.29999999999999999" ref="Oxygen_163503528" />
+  </material>
+ </materials>

@@ -1,40 +1,58 @@
 
-     =========================================================
- 		  Geant4 - Hadrontherapy example
-     =========================================================
+	     =========================================================
+ 		      	    Geant4 - Hadrontherapy example
+     	     =========================================================
+
 
                                 README file
-                          ----------------------
+                           ----------------------
 
-                                   AUTHORS 
 
-G.A.P. CIRRONE(a *), G.CUTTONE(a), F. DI ROSA(a), G.RUSSO(a)
-a. Laboratori Nazionali del Sud - Istituto Nazionale di Fisica Nucleare
-   95123 Catania, Italy
+Last revsion: G.A.P.Cirrone, November 2008;
+
+
+                                    ACTUAL AUTHORS 
+
+G.A.P. CIRRONE(*), G.CUTTONE, F. DI ROSA, F.ROMANO, G.RUSSO
+M.RUSSO
+
+Laboratori Nazionali del Sud - Istituto Nazionale di Fisica Nucleare
+95123 Catania, Italy
 * e-mail:cirrone@lns.infn.it
 
-M.G. PIA(b)
-b. Istituto Nazionale di Fisica Nucleare, Sezione di Genova Via Dodecaneso, 33
-   16146, Genova, Italy
+S.Guatelli
+Istituto Nazionale di Fisica Nucleare, Sezione di Genova Via Dodecaneso, 33
+16146, Genova, Italy
 
 A. LECHNER (c)
-c. CERN, Switzerland
+CERN, Switzerland
+
+                                   PAST AUTHORS
+
+M.G. PIA
+Istituto Nazionale di Fisica Nucleare, Sezione di Genova Via Dodecaneso, 33
+16146, Genova, Italy
+
 
 More informations on the Hadrontherapy example can be found in the 
-Hadrontherapy Documentation available at http://www.ge.infn.it/geant4/examples/
+Hadrontherapy Documentation available at http://geant4infn.wikispaces.com/HadrontherapyExample.
 
 Alternatevely send an e-mail to cirrone@lns.infn.it.
 
 
----->0. INTRODUCTION.                                                    
+----> 0. INTRODUCTION.                                                    
                                                                        
-The hadrontherapy example simulates a hadron therapy beam line. 
+The hadrontherapy example simulates an hadron-therapy beam line. 
 In particular the example models the specific proton therapy beam line
 installed at Laboratori Nazionali del Sud (INFN) in Catania, Sicily (Italy).
 For more information on the proton therapy center of Catania
 or/and proton/hadron therapy in general, please visit the
 pages:
 http://www.lns.infn.it/catanaweb/catana/ 
+
+Moreover, since the Release of December 2008, with this example is also possible the 
+simulation of carbon ion beams as the correct physic models are inserted with the
+builted-in physic list denominated "QGSP_BIC".
 
 ---->1. GEOMETRY SET-UP.
  
@@ -62,7 +80,112 @@ The elements simulated are:
    The use of  the water phantom is required by the international protocol
    on the measure of dose in the case of proton and ion beams (IAEA 398, 2000).
 
----->2. EXPERIMENTAL SET-UP.      
+
+-------> 2. PHYSICS
+
+A particular care is addressed to the simulation of the physic processes.
+
+The User (since the December 2009 release) has the possibility to choice between two main
+approaches to insert the physic models: 
+
+Approach 1. The User can individually and selectively define all the models via macro command;
+            
+Approach 2. The User can choice a "built-in" physic package containing all the needed 
+            models for the transport of proton and ion in the typical hadron-therapy range. 
+            This second approach make the definition of the physic models simpler.  
+            Developers strongly suggest the use of this second approach for Users are not
+            specifically interested in the test of a specific physic model. Moreover they
+            also suggest to send them results of comparison and report problems. This will
+            permit the improvment of the overall quality of the implemented physic.
+
+-------------------------------------  Approach 1  ----------------------------- 
+
+With this apprach, at moment, inelastic models can be swiched-on only for neutrons
+and protons. The activation of inelastic nucleus-nucleus models will be provided in 
+the next release.
+
+** Both electromagnetic and hadronic physic processes can be activated for 
+   the particles of the experimental set-up.
+   The different physics models can be activated by the user interactively via commands
+   that can be inserted in the macro files
+
+** Examples of activation are provided in the numerous macro files starting
+   with the string "physics":
+
+** All possible physics options are summarized in the file 
+   physicsAllOptions.mac.
+
+** Different options concerning electromagnetic interactions of protons
+   and neutrons can be tested with the files: 
+   physicsElectromagneticStandard.mac
+   
+   physicsElectromagneticICRU49.mac
+   physicsElectromagneticZiegler77.mac
+   physicsElectromagneticZiegler85.mac
+
+** Different options concerning hadronic interactions of protons and
+   neutrons can be tested with the files: 
+
+   physicsHadronicBertini.mac
+   physicsHadronicBinary.mac
+   physicsHadronicLEP.mac
+   physicsHadronicPrecompound.mac
+
+NOTE: Apart from the different models for protons and neutrons, a user
+can also select among several interaction models for particles like
+electrons or photons. All possible options are listed in the file
+physicsAllOptions.mac.
+
+----------------------------------------------------------
+SUGGESTED PHYSIC FOR PROTON BEAMS IN THE RANGE 0 - 400 MeV
+----------------------------------------------------------
+
+Developers of hadrontehrapy suggest to the Users want follow the Approach 1, the use of 
+the following physic configuration for the
+various processes (command must be inserted in a .mac file):
+
+Electromagnetic processes:
+/physics/addPhysics EM-Photon-EPDL (or) /physics/addPhysics EM-Photon-Standard
+/physics/addPhysics EM-Electron-EEDL (or) /physics/addPhysics EM-Electron-Standard
+/physics/addPhysics EM-HadronIon-LowE (or) /physics/addPhysics EM-HadronIon-Standard
+/physics/addPhysics EM-Positron-Standard
+/physics/addPhysics EM-Muon-Standard
+
+Hadronic elastic processes:
+/physics/addPhysics HadronicEl-HadronIon-UElastic
+
+Hadronic inelastic processes:
+/physics/addPhysics HadronicInel-ProtonNeutron-Prec  
+
+-------------------------------------  Approach 2  ----------------------------- 
+We developed this approach in order to semplify the choice of the physic models to 
+be used in the application.
+**  With this approach the user must only insert a command line in his/her .mac file
+    (using the /physics/addPackage PACKAGE_NAME).
+    This permits to switch-on an already build physic package.
+
+** Various packages are already present in the Geant4 tree: they are in the directory:
+   geant4/source/physics_lists/lists/include
+
+** In this case hadronic inelastic models are directly activated for every particle.
+
+------------------------------------------------------------------
+SUGGESTED PHYSIC FOR PROTON AND ION BEAMS IN THE RANGE 0 - 400 MeV
+------------------------------------------------------------------
+Developers of Hadrontherapy suggest the use of the "QGSP_BIC" package for the correct simulation 
+of proton and ion transposrt in the typical hadrontherapy energy range. This package 
+can be inserted with one simple command in the .mac file:
+/physics/addPackage QGSP_BIC
+
+An example of macro file for the use of Approach 2 is: packageQGSP_BIC.mac 
+
+
+Developers are improving the quality of the packages and validation results will be soon provided 
+in a dedicated web page
+
+
+
+------->2. EXPERIMENTAL SET-UP.      
                                       
 The application simulates the proton therapy beam line
 installed at Laboratori Nazionali del Sud.
@@ -84,6 +207,9 @@ for a radiotherapeutic treatment.
 ** The MONITOR CHAMBERS: very thin ionisation chamber that permit the 
    dose monitoring during the patient irradiation;
 
+** The MOPI detector: microstrips, air free detector utilised for the check of the beam symmetry
+   during the treatment
+
 ** The PATIENT COLLIMATOR: a brass, tumour-shaped collimator able to 
    confine the proton irradiation field in order to irradiate just the tumour mass
    in the trasverse direction;
@@ -91,7 +217,7 @@ for a radiotherapeutic treatment.
 The user has the possibility to vary, via messenger, almost all the geometrical 
 characteristics of the beam line elements (i.e. their position along the beam line, 
 their thickness, etc.). More details on the available user messengers can be 
-found in the Hadronterapy Documentation (http://www.ge.infn.it/geant4/examples/).
+found in the Hadronterapy Documentation (http://geant4infn.wikispaces.com/HadrontherapyExample).
 
 At the end of the beam line, a typical water phantom is reproduced.
 A user-defined region of the phantom is divided (via the ROGeomtry class) in 
@@ -103,18 +229,18 @@ G4ANALYSIS_USE variable is defined).
 The default sizes of the active voxelized region are 40x40x40 mm corresponding
 to a matric of 80x80x80 cubic voxels each with a lateral dimension of 0.5 mm. 
 
----->3. SET-UP 
+------->3. SET-UP 
                                                                         
 - a standard Geant4 example GNUmakefile is provided                     
 
 setup with:                                                             
-compiler = gcc-3.2.3
+compiler = gcc-3.4.6
 G4SYSTEM = linux-g++                                                    
 
 The following section reports the necessary environment variables 
 necessary for the run of Hadrontherapy.                     
 
----->3.1  ENVIROMENT VARIABLES
+------->3.1  ENVIROMENT VARIABLES
 
  - G4SYSTEM = Linux-g++
 
@@ -132,6 +258,8 @@ necessary for the run of Hadrontherapy.
 
  - G4RADIOACTIVEDATA      points to the libraries for radio-active decay 
                           hadronic processes;
+
+ - G4ABLADATA             points to the library of the INCL/ABLA hadronic model;
  
  - G4LEDATA               points to the low energy electromagnetic libraries
 
@@ -150,10 +278,10 @@ The defaultMacro.mac is executed
 The primary particle beam parameter are:
 Radiation:                proton beam;
 Energy distribution:      gaussian;
-Mean energy:              63.4 MeV;
+Mean energy:              64.0 MeV;
 Energy spread:            300 keV;
 Beam spot size:           1 mm;
-Beam angular spread:      0.057 deg;
+Beam angular spread:      0.0 deg;
 
 The modulator wheel can be rotated via the messenger:
 
@@ -170,44 +298,14 @@ Modulator wheel can be omitted setting its material air.
 run $G4WORKDIR/bin/Linux-g++/Hadrontherapy visualisationMacro.mac
 to visualise the experimental set-up with OpenGL
 
----->5. PHYSICS
-
-Both electromagnetic and hadronic physic processes are activated for 
-the particles of the experimental set-up.
-Different physics models can be activated by the user interactively.
-
-Examples of activation are provided in the macro files starting
-with the string "physics":
-
-All possible physics options are summarized in the file 
-physicsAllOptions.mac.
-
-Different options concerning electromagnetic interactions of protons
-and neutrons can be tested with the files: 
-physicsElectromagneticICRU49.mac
-physicsElectromagneticZiegler77.mac
-physicsElectromagneticZiegler85.mac
-
-Different options concerning hadronic interactions of protons and
-neutrons can be tested with the files: 
-physicsHadronicBertini.mac
-physicsHadronicBinary.mac
-physicsHadronicLEP.mac
-physicsHadronicPrecompound.mac
-
-NOTE: Apart from the different models for protons and neutrons, a user
-can also select among several interaction models for particles like
-electrons or photons. All possible options are listed in the file
-physicsAllOptions.mac.
-
 ---->6. SIMULATION OUTPUT                                    
 
-The output is an .hbk file (hadrontherapy.hbk) produced 
+The output is an .hbk file and a .root files. The files are  produced 
 if the variable G4ANALYSIS_USE is set to 1 and the analysis tool (AIDA
 interface) correctly installed.
-The file contains an histogram and an n-tuple.
-The histogram contains the Bragg curve: energy deposited 
-by the proton beam (in MeV) versus the depth in water (in mm). 
+The file contains  histograms and n-tuples.
+The histograms contain the Bragg curves: energy deposited 
+versus the depth in water (in mm) for the primary beam as well as all the secondaries produced. 
 The n-tuple contains the total 3D energy deposit in the phantom; the information
 is energy deposit in each voxel with respect to the position of the voxel.
 
@@ -216,14 +314,18 @@ Setup for analysis: AIDA 3.2.1
 Users can download the analysis tools from:  
 http://aida.freehep.org/
 
-Note that the same information can be stored in any different format.
-Please contact cirrone@lns.infn.it if you want store the information in 
-a different format.
+Note that the same information can be stored in different format, 
+like .root or .xml using the same AIDA interface.
+Alternatively users that are more confident with ASCII format, can derive
+their table with energy deposited in each voxel working inside the 
+HadrontherapyMatrix.
+
+Please contact cirrone@lns.infn.it for more details.
 
 ---------------------------------------------------------------------------
 
 for comments, advices, doubts and questions please contact: 
-cirrone@lns.infn.it, giorgiorusso@lns.infn.it
+cirrone@lns.infn.it
 
-last modified: A. Lechner, 16/11/2007
+last modified: G.A.P. Cirrone, 20/11/2008
 

@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QGluonString.hh,v 1.1 2006/10/30 10:33:38 mkossov Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4QGluonString.hh,v 1.2 2008/10/02 21:10:07 dennis Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 //      ---------------- G4QGluonString header ----------------
 //                 by Mikhail Kossov, October 2006.
@@ -61,6 +61,7 @@
 #include "G4NucleiPropertiesTable.hh"
 #include "G4ThreeVector.hh"
 #include "G4LorentzVector.hh"
+#include "G4HadronicProcessType.hh"
 
 // CHIPS Headers
 #include "G4QEnvironment.hh"

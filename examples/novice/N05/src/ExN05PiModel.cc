@@ -25,7 +25,7 @@
 //
 //
 // $Id: ExN05PiModel.cc,v 1.7 2006/06/29 17:53:34 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 #include "ExN05PiModel.hh"
 

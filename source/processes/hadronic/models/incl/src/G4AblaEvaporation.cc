@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4AblaEvaporation.cc,v 1.3 2007/10/11 08:20:08 gcosmo Exp $
+// $Id: G4AblaEvaporation.cc,v 1.4 2008/10/24 21:07:40 dennis Exp $
 //
 #include <numeric>
 // #include "G4IonTable.hh"
@@ -120,7 +120,7 @@ G4FragmentVector * G4AblaEvaporation::BreakItUp(const G4Fragment &theNucleus) {
   
   G4double nucleusA = theNucleus.GetA();
   G4double nucleusZ = theNucleus.GetZ();
-  G4double nucleusMass = G4NucleiProperties::GetAtomicMass(nucleusA, nucleusZ);
+  G4double nucleusMass = G4NucleiProperties::GetNuclearMass(nucleusA, nucleusZ);
   G4double excitationEnergy = theNucleus.GetExcitationEnergy();
   G4double angularMomentum = 0.0; // Don't know how to get this quantity... From Geant4???
 
@@ -146,7 +146,7 @@ G4FragmentVector * G4AblaEvaporation::BreakItUp(const G4Fragment &theNucleus) {
     return theResult;
   }
 
-  //  G4double mTar  = G4NucleiProperties::GetAtomicMass(A, Z); // Mass of the target nucleus
+  //  G4double mTar  = G4NucleiProperties::GetNuclearMass(A, Z); // Mass of the target nucleus
   varntp->exini = exitationE;
 
   G4int particleI, n = 0;

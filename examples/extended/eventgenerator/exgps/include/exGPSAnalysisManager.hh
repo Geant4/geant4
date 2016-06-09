@@ -30,13 +30,15 @@
 
 #include "globals.hh"
 
-using namespace AIDA;
+namespace AIDA {
 
-class AIDA::IAnalysisFactory;
-class AIDA::ITree;
-class AIDA::IHistogramFactory;
-class AIDA::ITupleFactory;
-class AIDA::IPlotter;
+class IAnalysisFactory;
+class ITree;
+class IPlotter;
+class IHistogram1D;
+class IHistogram2D;
+class ITuple;
+}
 
 class exGPSAnalysisMessenger;
 
@@ -47,16 +49,11 @@ class exGPSAnalysisManager
 
 private:
   exGPSAnalysisManager ();
+  virtual ~exGPSAnalysisManager ();
 
 public:
-  virtual ~exGPSAnalysisManager ();
   static exGPSAnalysisManager* getInstance ();
   static void dispose();
-
-  IHistogramFactory* getHistogramFactory();
-  ITupleFactory* getTupleFactory();
-  IPlotter* createPlotter();
-
 
 public:
   void BeginOfRun();
@@ -79,23 +76,20 @@ private:
   G4String fileName;
   G4String fileType;
 
-  IAnalysisFactory* analysisFactory;
-  IHistogramFactory* hFactory;
-  ITupleFactory* tFactory;
-  ITree* tree;
+  AIDA::IAnalysisFactory* analysisFactory;
+  AIDA::ITree* tree;
+  AIDA::IPlotter* plotter;
 
   G4double minpos, maxpos;
   G4double mineng, maxeng;
 
-  IHistogram1D* enerHisto;
-  IHistogram2D* posiXY;
-  IHistogram2D* posiXZ;
-  IHistogram2D* posiYZ;
-  IHistogram2D* anglCTP;
-  IHistogram2D* anglTP;
-  ITuple* tuple;
-
-  IPlotter* plotter;
+  AIDA::IHistogram1D* enerHisto;
+  AIDA::IHistogram2D* posiXY;
+  AIDA::IHistogram2D* posiXZ;
+  AIDA::IHistogram2D* posiYZ;
+  AIDA::IHistogram2D* anglCTP;
+  AIDA::IHistogram2D* anglTP;
+  AIDA::ITuple* tuple;
 
   exGPSAnalysisMessenger* analysisMessenger;
 

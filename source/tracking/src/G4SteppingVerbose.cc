@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4SteppingVerbose.cc,v 1.23 2006/07/14 14:13:57 tsasaki Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 //---------------------------------------------------------------
 //

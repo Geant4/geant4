@@ -1,4 +1,4 @@
-$Id: History,v 1.32 2007/11/25 19:37:33 kmura Exp $
+$Id: History,v 1.45 2008/12/04 10:30:04 kmura Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -13,6 +13,50 @@ Geant4Py is a Geant4-Python bridge.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+3  December 2008 K.Murakami (tagged)
+ - modified for the 9.2 releaase.
+ * G4Material, G4Isotope, G4Element
+
+30 November 2008 K.Murakami
+ - GDML is merged to G4GDML package (g4gdml->gdml)
+   add write functionality
+
+30 June 2008 K. Murakami
+ - brushup python scripts (accroding with PEP-8)
+ - emcalculator.py : move to site-modules
+ - add G4CrossSectionHandler
+ - EZgeom package is moved to geometry/ezgeom
+
+25 June 2008 K. Murakami
+ - configure : fix a wrong incdir variable.
+ - config/sys/linux.gmk, linuxx8664gcc : 
+               add -fpermissive compile option for gcc 4.3
+
+12 June 2008 K. Murakami (1.6.1)
+ - configure : fix echo -n problem, add --with-extra-dir flag
+ - tools/g4autobuild : add treatment of XERCESCROOT
+ - tools/g4pack : fix echo -n problem
+ 
+4 June 2008 K. Murakami
+ - add G4AtomicShells
+ - update configure script (compatible with Debian/Ubuntsu sh)
+ - cleanup config/*.gmk
+ - configire: improve search for python include path
+
+27 May 2008 K.Murakami
+ - add some random engines
+
+22 May 2008 K.Murakami
+ - fix typo in G4VModularPhysicsList
+
+13 March 2008 K.Murakami (1.6.0)
+ - use G4Version.hh directly, instead pyG4Version.hh
+ - configure script updated
+
+28 February 2008 K.Murakami
+ - fix pyPhysicsList.cc compilation error
+ - fix pyG4GDMLParser.cc compilation error
+ - G4GDML is automatically detected by configure script
 
 26 November 2007 K.Murakami
  - add G4 GDML module support

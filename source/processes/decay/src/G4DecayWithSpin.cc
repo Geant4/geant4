@@ -28,6 +28,7 @@
 //
 //      History:
 //      17 August 2004  P. Gumplinger, T. MacPhail
+//      11 April  2008  Kamil Sedlak (PSI), Toni Shiroka (PSI)
 // ------------------------------------------------------------
 //
 #include "G4DecayWithSpin.hh"
@@ -46,7 +47,12 @@
 
 #include "G4Transform3D.hh"
 
-G4DecayWithSpin::G4DecayWithSpin(const G4String& processName):G4Decay(processName){}
+G4DecayWithSpin::G4DecayWithSpin(const G4String& processName):G4Decay(processName)
+{
+  // set Process Sub Type   
+  SetProcessSubType(static_cast<int>(DECAY_WithSpin));
+
+}
 
 G4DecayWithSpin::~G4DecayWithSpin(){}
 
@@ -96,7 +102,7 @@ G4VParticleChange* G4DecayWithSpin::DecayIt(const G4Track& aTrack, const G4Step&
     const G4Field* field = NULL;
     if(fieldMgr)field = fieldMgr->GetDetectorField();
 
-    if (field && !(fieldMgr->DoesFieldChangeEnergy())) {
+    if (field) {
 
        G4double point[4];
        point[0] = (aStep.GetPostStepPoint()->GetPosition())[0];
@@ -104,12 +110,14 @@ G4VParticleChange* G4DecayWithSpin::DecayIt(const G4Track& aTrack, const G4Step&
        point[2] = (aStep.GetPostStepPoint()->GetPosition())[2];
        point[3] = aTrack.GetGlobalTime();
 
-       G4double fieldValue[3];
+       G4double fieldValue[6];
        field -> GetFieldValue(point,fieldValue);
 
        G4ThreeVector B(fieldValue[0],fieldValue[1],fieldValue[2]);
 
-       parent_polarization = Spin_Precession(aStep,B,fRemainderLifeTime);
+       // Call the spin precession only for non-zero mag. field
+       if (B.mag2() > 0.) parent_polarization = 
+                                 Spin_Precession(aStep,B,fRemainderLifeTime);
 
     }
   }

@@ -1,0 +1,53 @@
+#================================================
+#     Macro file for hadr01
+#     06.06.2006 V.Ivanchneko
+#================================================
+/control/verbose 1
+/run/verbose 1
+/tracking/verbose 0
+#
+/testhadr/TargetMat        G4_Al 
+/testhadr/TargetRadius     1  cm
+/testhadr/TargetLength     10 cm
+/testhadr/PrintModulo      10
+#
+/run/initialize
+#
+/gun/particle proton
+/gun/energy 100. MeV
+/testhadr/HistoType  root
+/testhadr/HistoName  p_al
+/testhadr/verbose 1
+/process/eLoss/verbose 0
+/run/beamOn 0
+#
+/testhadr/targetElm  Pb
+/testhadr/HistoName  p_pb
+/run/beamOn 0
+/testhadr/targetElm  Fe
+/testhadr/HistoName  p_fe
+/run/beamOn 0
+/testhadr/targetElm  C
+/testhadr/HistoName  p_c
+/run/beamOn 0
+/testhadr/targetElm  H
+/testhadr/HistoName  p_h
+/run/beamOn 0
+#
+/testhadr/particle   neutron
+/testhadr/HistoName  n_h
+/run/beamOn 0
+/testhadr/targetElm  Pb
+/testhadr/HistoName  n_pb
+/run/beamOn 0
+/testhadr/targetElm  Fe
+/testhadr/HistoName  n_fe
+/run/beamOn 0
+/testhadr/targetElm  C
+/testhadr/HistoName  n_c
+/run/beamOn 0
+/testhadr/verbose 1
+/testhadr/targetElm  Al
+/testhadr/HistoName  n_al
+/run/beamOn 0
+#

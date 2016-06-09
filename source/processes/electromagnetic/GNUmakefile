@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.6 2006/09/21 21:35:20 vnivanch Exp $
+# $Id: GNUmakefile,v 1.7 2008/11/14 19:54:40 gcosmo Exp $
 # ------------------------------------------------------------------
 # GNUmakefile for electromagnetic library.  Gabriele Cosmo, 18/9/96.
 # ------------------------------------------------------------------
@@ -7,8 +7,8 @@ MAKEFLAGS= --no-print-directory
 
 name := G4electromagnetic
 
-SUBDIRS = muons standard utils xrays lowenergy highenergy polarisation
-SUBLIBS = G4muons G4emstandard G4emutils G4xrays G4emlowenergy G4emhighenergy G4polar
+SUBDIRS = muons standard utils xrays lowenergy highenergy adjoint polarisation
+SUBLIBS = G4muons G4emstandard G4emutils G4xrays G4emlowenergy G4emhighenergy G4emadjoint G4polar
 
 ifndef G4INSTALL
   G4INSTALL = ../../..

@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4RichTrajectory.cc,v 1.6 2006/10/16 13:43:43 allison Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // ---------------------------------------------------------------
 //

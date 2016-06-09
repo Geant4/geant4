@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: pymodG4materials.cc,v 1.5 2007/05/28 03:11:20 kmura Exp $
-// $Name: geant4-09-01 $
+// $Id: pymodG4materials.cc,v 1.7 2008/12/04 08:55:25 kmura Exp $
+// $Name: geant4-09-02 $
 // ====================================================================
 //   pymodG4materials.cc [Geant4Py module]
 //
@@ -41,7 +41,10 @@ void export_G4Material();
 void export_G4MaterialTable();
 void export_G4Element();
 void export_G4ElementTable();
+void export_G4ElementVector();
+void export_G4Isotope();
 void export_G4NistManager();
+void export_G4AtomicShells();
 
 BOOST_PYTHON_MODULE(G4materials)
 {
@@ -49,6 +52,9 @@ BOOST_PYTHON_MODULE(G4materials)
   export_G4MaterialTable();
   export_G4Element();
   export_G4ElementTable();
+  export_G4ElementVector();
+  export_G4Isotope();
   export_G4NistManager();
+  export_G4AtomicShells();
 }
 

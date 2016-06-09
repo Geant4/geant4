@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4IonFluctuations.hh,v 1.3 2007/09/27 13:53:11 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4IonFluctuations.hh,v 1.8 2008/10/22 16:04:33 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // -------------------------------------------------------------------
 //
@@ -40,6 +40,7 @@
 // Modifications: 
 //
 // 16-10-03 Changed interface to Initialisation (V.Ivanchenko)
+// 01-06-08 Added initialisation of effective charge prestep (V.Ivanchenko)
 //
 // Class Description:
 //
@@ -53,6 +54,8 @@
 
 
 #include "G4VEmFluctuationModel.hh"
+#include "G4ParticleDefinition.hh"
+#include "G4UniversalFluctuation.hh"
 
 class G4IonFluctuations : public G4VEmFluctuationModel
 {
@@ -63,37 +66,44 @@ public:
 
   virtual ~G4IonFluctuations();
 
+  // Sample fluctuations
   G4double SampleFluctuations(const G4Material*,
                               const G4DynamicParticle*,
-                                    G4double&,
-                                    G4double&,
-                                    G4double&);
+			      G4double& tmax,
+			      G4double& length,
+			      G4double& meanLoss);
 
-  G4double Dispersion(    const G4Material*,
-                          const G4DynamicParticle*,
- 				G4double&,
-                                G4double&);
+  // Compute dispertion 
+  G4double Dispersion(const G4Material*,
+		      const G4DynamicParticle*,
+		      G4double& tmax,
+		      G4double& length);
 
+  // Initialisation prerun
   void InitialiseMe(const G4ParticleDefinition*);
+
+  // Initialisation prestep
+  inline void SetParticleAndCharge(const G4ParticleDefinition*, G4double q2);
 
 private:
 
-  G4double CoeffitientA(G4double&);
-  G4double CoeffitientB(const G4Material*, G4double&);
-  G4double RelativisticFactor(const G4Material*, G4double&);
+  G4double Factor(const G4Material*, G4double Zeff);
+  G4double RelativisticFactor(const G4Material*, G4double Zeff);
 
   // hide assignment operator
   G4IonFluctuations & operator=(const  G4IonFluctuations &right);
   G4IonFluctuations(const  G4IonFluctuations&);
 
+  G4UniversalFluctuation      uniFluct;
   const G4ParticleDefinition* particle;
 
   G4double particleMass;
   G4double charge;
   G4double chargeSquare;
-  G4double chargeSqRatio;
+  G4double effChargeSquare;
 
   // data members to speed up the fluctuation calculation
+  G4double parameter;
   G4double minNumberInteractionsBohr;
   G4double theBohrBeta2;
   G4double minFraction;
@@ -103,6 +113,22 @@ private:
   G4double kineticEnergy;
   G4double beta2;
 };
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline
+void G4IonFluctuations::SetParticleAndCharge(const G4ParticleDefinition* part,
+					     G4double q2)
+{
+  if(part != particle) {
+    particle       = part;
+    particleMass   = part->GetPDGMass();
+    charge         = part->GetPDGCharge()/eplus;
+    chargeSquare   = charge*charge;
+  }
+  effChargeSquare  = q2;
+  uniFluct.SetParticleAndCharge(part, q2);
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

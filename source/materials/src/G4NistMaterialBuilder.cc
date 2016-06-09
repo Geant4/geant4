@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NistMaterialBuilder.cc,v 1.17 2007/10/28 18:10:28 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4NistMaterialBuilder.cc,v 1.19 2008/04/28 08:51:29 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 //
 // -------------------------------------------------------------------
@@ -204,18 +204,21 @@ G4Material* G4NistMaterialBuilder::ConstructNewMaterial(
 				      G4double temp,  
 				      G4double pressure)
 {
-  G4int Z;
   G4int nm = elm.size();
-  if (nm == 1) {
-    Z = G4int((elmBuilder->FindOrBuildElement(elm[0]))->GetZ());
-    AddMaterial(name,dens,Z);
-  }
-  else if (nm > 1) {
-    AddMaterial(name,dens,0,0.0,nm,state,temp,pressure);
-    for (G4int i=0; i<nm; i++) {
-      Z = G4int((elmBuilder->FindOrBuildElement(elm[i]))->GetZ());
-      AddElementByAtomCount(Z, nbAtoms[i]);
-    }
+  if(nm == 0) { 
+    G4cout << "G4NistMaterialBuilder::ConstructNewMaterial:"
+           << "  WARNING: empty list of elements for " << name
+	   << G4endl;
+    return 0;
+  } 
+
+  // add parameters of material into internal vectors
+  // density in g/cm3, mean ionisation potential is not defined
+  AddMaterial(name,dens*cm3/g,0,0.,nm,state,temp,pressure);
+
+  for (G4int i=0; i<nm; i++) {
+    G4int Z = G4int((elmBuilder->FindOrBuildElement(elm[i]))->GetZ());
+    AddElementByAtomCount(Z, nbAtoms[i]);
   }
 
   return BuildMaterial(name, isotopes);
@@ -233,24 +236,21 @@ G4Material* G4NistMaterialBuilder::ConstructNewMaterial(
 				      G4double temp,  
 				      G4double pressure)
 {
-  G4int Z;
   G4int nm = elm.size();
   if(nm == 0) { 
     G4cout << "G4NistMaterialBuilder::ConstructNewMaterial:"
-           << "  WARNING: empty list of elements"
+           << "  WARNING: empty list of elements for " << name
 	   << G4endl;
     return 0;
   } 
-  if (nm == 1) {
-    Z = G4int((elmBuilder->FindOrBuildElement(elm[0]))->GetZ());
-    AddMaterial(name,dens,Z);
 
-  } else {
-    AddMaterial(name,dens,0,0.0,nm,state,temp,pressure);
-    for (G4int i=0; i<nm; i++) {
-      Z = G4int((elmBuilder->FindOrBuildElement(elm[i]))->GetZ());
-      AddElementByWeightFraction(Z, w[i]);
-    }
+  // add parameters of material into internal vectors
+  // density in g/cm3, mean ionisation potential is not defined
+  AddMaterial(name,dens*cm3/g,0,0.,nm,state,temp,pressure);
+
+  for (G4int i=0; i<nm; i++) {
+    G4int Z = G4int((elmBuilder->FindOrBuildElement(elm[i]))->GetZ());
+    AddElementByWeightFraction(Z, w[i]);
   }
   
   return BuildMaterial(name, isotopes);    
@@ -425,11 +425,17 @@ void G4NistMaterialBuilder::AddMaterial(const G4String& nameMat, G4double dens,
 					G4int ncomp, G4State state, 
 					G4double temp, G4double pres)
 {
+  // add parameters of material into internal vectors
+  // density in g/cm3, mean ionisation potential in eV
+
   if (nCurrent != 0) {
-    G4cout
-    << "WARNING: G4NistMaterialBuilder::AddMaterial problem: previous mixture "
-    << nMaterials << " " << names[nMaterials] << " is not yet complete!"
-    << G4endl;
+    G4cout << "WARNING: G4NistMaterialBuilder::AddMaterial problem: previous "
+	   << "mixture " << nMaterials << " " << names[nMaterials] 
+	   << " is not yet complete!"
+	   << G4endl;
+    G4cout << "         New material " << nameMat << " will not be added" 
+	   << G4endl;
+    return;
   }
 
   // density in g/cm3, mean ionisation potential in eV

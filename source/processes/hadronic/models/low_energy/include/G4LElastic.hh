@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4LElastic.hh,v 1.12 2007/02/26 19:05:01 dennis Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 //
 // G4 Model: Low energy elastic scattering -- header file

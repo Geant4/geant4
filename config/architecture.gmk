@@ -1,4 +1,4 @@
-# $Id: architecture.gmk,v 1.114 2007/12/11 13:20:29 gcosmo Exp $
+# $Id: architecture.gmk,v 1.118 2008/12/17 13:36:23 gcosmo Exp $
 # ------------------------------------------------------------------------
 #       GEANT 4 - Architecture configuration script for GNU Make
 #
@@ -15,9 +15,9 @@
 #
 #          Linux-g++   Linux (Red Hat Enterprise/SCL4), gcc-3.4.6 (default)
 #
-#          SUN-CC      SunOS 5.8, CC 5.5
+#          Darwin-g++  MacOSX 10.5, gcc-4.0.1
 #
-#          WIN32-VC    Windows/XP and Microsoft Visual C++ 8.0
+#          WIN32-VC    Windows/XP and Microsoft Visual C++ 9.0
 #                      Adding CYGWIN32 tools
 # -------------------------------------------------------------------------
 
@@ -269,9 +269,9 @@ ifneq ($(G4LIB_BUILD_GDML),)
   endif
   ifndef GDMLLIBS
     ifneq (,$(findstring WIN32-VC,$(G4SYSTEM)))
-      GDMLLIBS := $(LIB_PATH)$(XERCESCROOT)/lib xerces-depdom_2.lib xerces-c_2.lib
+      GDMLLIBS := $(LIB_PATH)$(XERCESCROOT)/lib xerces-c.lib
     else
-      GDMLLIBS := -L$(XERCESCROOT)/lib -lxerces-depdom -lxerces-c
+      GDMLLIBS := -L$(XERCESCROOT)/lib -lxerces-c
     endif
   endif
   CPPFLAGS  += $(GDMLFLAGS)
@@ -307,6 +307,18 @@ CAT := cat
 # Default sed used with source/GNUmakefile.  Changed for WIN32.
 #
 SED := sed
+
+# Default find used with source/GNUmakefile.  Changed for WIN32.
+#
+FIND := find
+
+# Default sort used with source/GNUmakefile.  Changed for WIN32.
+#
+SORT := sort
+
+# Default touch used with source/GNUmakefile.  Changed for WIN32.
+#
+TOUCH := touch
 
 # Include architecture dependent setups...
 #

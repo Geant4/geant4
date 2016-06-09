@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4HEPlot.hh,v 1.9 2006/06/29 20:29:37 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 //
 // G4 Gheisha friend class G4HEPlot  -- header file

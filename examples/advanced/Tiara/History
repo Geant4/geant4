@@ -1,6 +1,6 @@
-# $Id: History,v 1.31 2006/11/20 12:44:40 ahoward Exp $
+# $Id: History,v 1.32 2008/06/14 16:56:59 cirrone Exp $
 # -------------------------------------------------------------------
-# GEANT4 tag $Name: geant4-09-01 $
+# GEANT4 tag $Name: geant4-09-02 $
 # -------------------------------------------------------------------
 
      =========================================================
@@ -18,6 +18,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+June 14th, 2006, G.A.P.Cirrone (Tiara-V09-01-00)
+- fixed compilation errors
 
 November 20th, 2006, A. Howard
 - removed hadronic_list.gmk from GNUmakefile to accommodate new reference 

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 /// $Id: G4TrajectoryFilterFactories.hh,v 1.4 2006/09/12 18:53:03 tinslay Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 //
 // Trajectory filter model factories creating filters

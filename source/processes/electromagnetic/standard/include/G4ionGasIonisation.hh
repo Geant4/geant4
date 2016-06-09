@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ionGasIonisation.hh,v 1.2 2007/08/13 06:13:30 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4ionGasIonisation.hh,v 1.4 2008/09/12 16:26:34 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // -------------------------------------------------------------------
 //
@@ -54,8 +54,6 @@
 
 #include "G4ionIonisation.hh"
 
-class G4Material;
-
 class G4ionGasIonisation : public G4ionIonisation
 {
 public:
@@ -64,47 +62,11 @@ public:
 
   virtual ~G4ionGasIonisation();
 
-  virtual void PrintInfo();
-
-protected:
-
-  // Initialise process before run
-  virtual void InitialiseEnergyLossProcess(
-				   const G4ParticleDefinition*,
-                                   const G4ParticleDefinition*);
-
-  // Initialise dynamic charge before step
-  virtual void InitialiseMassCharge(const G4Track&);
-
-  // Apply correction after step and modify dynamic charge
-  virtual void CorrectionsAlongStep(
-                           const G4MaterialCutsCouple*,
-                           const G4DynamicParticle*,
-                                 G4double& eloss,
-                                 G4double& length);
-
 private:
-
-  // Sample change of charge of the projectile ion
-  G4double SampleChargeAfterStep(G4double qeff, G4double xeff);
 
   // hide assignment operator
   G4ionGasIonisation & operator=(const G4ionGasIonisation &right);
   G4ionGasIonisation(const G4ionGasIonisation&);
-
-  const G4ParticleDefinition* currParticle;
-  const G4ParticleDefinition* baseParticle;
-
-  G4double                    basePartMass;
-  G4double                    currMassRatio;
-  G4double                    atomXS;
-  G4double                    preStepKinEnergy;
-
-  G4int                       currentIonZ;
-  G4int                       ionZ;
-
-  G4bool                      initialised;
-
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

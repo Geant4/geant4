@@ -6,4 +6,7 @@
 /vis/drawVolume
 /vis/scene/endOfEventAction accumulate
 /tracking/storeTrajectory 1
+#
+# Flush visualization
+#/vis/viewer/update
 

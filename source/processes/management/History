@@ -1,4 +1,4 @@
-$Id: History,v 1.51.2.1 2007/12/12 10:09:04 gcosmo Exp $
+$Id: History,v 1.58 2008/06/23 08:58:40 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,9 +17,26 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+- Jun. 23, 2008   G.Cosmo (procman-V09-01-03)
+- Fixed un-necessary double deletion/creation of vector in
+  G4ProcessVector::operator=()
+
+- Mar. 20, 2008   H.Kurashige (procman-V09-01-02)
+- revert changes in G4processmanager::StartTracking
+
+- Mar. 14, 2008   H.Kurashige (procman-V09-01-01)
+- fix warning message of g++
+- Change order of invocation of processes in G4processmanager::StartTracking 
+
+- Dec. 15, 2007   H.Kurashige (procman-V09-01-00)
+- fixed a bug of invoking ResetNumberOfInteractionLengthLeft 
+  at the zero length step  
+- allow zero mean free path for PostStepDoIt
+- add ProcessSubType to G4VProcess
+
 - Dec. 12, 2007   G.Cosmo (procman-V09-00-05a)
 - Moved inline definitions of virtual methods in G4WrapperProcess to
-  .cc file.
+  .cc file. Included in tag "procman-V09-00-".
 
 - Nov. 28, 2007   H.Kurashige (procman-V09-00-05)
 - Fix a bug SetProcessOrderingToSecond method of G4ProcessManager.

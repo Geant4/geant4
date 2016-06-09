@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredQtViewer.hh,v 1.3 2007/11/09 15:03:21 lgarnier Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4OpenGLStoredQtViewer.hh,v 1.7 2008/11/06 13:43:44 lgarnier Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // 
 // Class G4OpenGLStoredQtViewer : a class derived from
@@ -43,6 +43,7 @@
 #include <qgl.h>  // include qglwidget
 
 class QMouseEvent;
+class QWheelEvent;
 class QContextMenuEvent;
 
 class G4OpenGLStoredSceneHandler;
@@ -57,20 +58,23 @@ public:
   void Initialise ();
   void initializeGL ();
   void DrawView ();
-  void FinishView ();
   void resizeGL(int width,int height);
   void paintGL();
   void updateQWidget();
+  void ShowView ();
 
 protected:
+  void wheelEvent(QWheelEvent *event);
   void mousePressEvent(QMouseEvent *event);
   void mouseMoveEvent(QMouseEvent *event);
+  void mouseDoubleClickEvent(QMouseEvent *event);
+  void mouseReleaseEvent(QMouseEvent *event);
   void contextMenuEvent(QContextMenuEvent *e);
+  void keyPressEvent (QKeyEvent * event); 
+private:
+  void ComputeView ();
 
-private : 
-  bool hasToRepaint;
-  bool readyToPaint;
-  int nbPaint;
+  //  QImage glBufferImage;
 };
 
 #endif

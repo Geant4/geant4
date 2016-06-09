@@ -1,4 +1,4 @@
-# $Id: mumsc.mac,v 1.8 2007/07/31 16:51:29 maire Exp $
+# $Id: mumsc.mac,v 1.16 2008/11/16 18:56:58 maire Exp $
 #
 # macro file for TestEm5.cc
 #
@@ -13,20 +13,20 @@
 /testem/det/setWorldX   1 m
 /testem/det/setWorldYZ  1 m
 #
-/testem/phys/setCuts 0.1 mm
+/testem/phys/setCuts 1 mm
 #
 /run/initialize
 #
 /testem/gun/setDefault
 /gun/particle mu+
-/gun/energy 50 GeV
+/gun/energy 100 GeV
 #
-/testem/histo/setFileName mumsc
+/testem/histo/setFileName mumsc/9.1ref07
 /testem/histo/setFileType hbook
-/testem/histo/setHisto 13  200  -20.0  +20.0 mrad	#projected angle
-/testem/histo/setHisto 14  200  -10.0  +10.0 mm		#projected deviation  
+/testem/histo/setHisto 14  100 -5.0  +5.0 mm		#x-position at exit  
+/testem/histo/setHisto 15  100  0.  +10.0 mm		#radius at exit  
 #
 /testem/stack/killSecondaries
 #
-/testem/event/printModulo 1000
-/run/beamOn 10000
+/testem/event/printModulo 4000
+/run/beamOn 40000

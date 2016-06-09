@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: History,v 1.11 2007/09/30 23:00:40 gum Exp $
+$Id: History,v 1.13 2008/11/24 14:34:11 cirrone Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -8,6 +8,12 @@ $Id: History,v 1.11 2007/09/30 23:00:40 gum Exp $
 
                       Category History file
                       ---------------------
+
+23.11.2008 - G.A.P.Cirrone; Tag: Rich-V09-01-01
+             Fixed compilation errors on the file RichTbEventAction
+
+14.06.2008 - G.A.P.Cirrone (Rich-V09-01-00)
+             Fixed compilation errors and removed warnigs
 
 30.09.2007 - P.Gumplinger (Rich-V09-00-00)
              adjust to the G4Cerenkov process now being a G4VDiscreteProcess

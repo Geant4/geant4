@@ -25,7 +25,7 @@
 //
 //
 // $Id: RE01RegionInformation.hh,v 1.2 2006/06/29 17:43:08 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 
 #ifndef RE01RegionInformation_H

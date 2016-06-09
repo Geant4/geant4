@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4NistMessenger.hh,v 1.4 2007/05/02 10:48:52 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // File name:     G4NistMessenger
 //

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLViewer.hh,v 1.21 2007/11/10 14:50:01 allison Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4OpenGLViewer.hh,v 1.23 2008/06/20 13:55:06 lgarnier Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // 
 // Andrew Walkden  27th March 1996
@@ -66,12 +66,16 @@ protected:
   void Pick(GLdouble x, GLdouble y);
   virtual void CreateFontLists () {}
   virtual void print();
+  void rotateScene (G4double dx, G4double dy,G4double delta);
 //////////////////////////////Vectored PostScript production functions///
   void printBuffer(GLint, GLfloat*);
   GLfloat* spewPrimitiveEPS (FILE*, GLfloat*);
   void spewSortedFeedback (FILE*, GLint, GLfloat*);
   void spewWireframeEPS (FILE*, GLint, GLfloat*, const char*);
   void print3DcolorVertex(GLint, GLint*, GLfloat*);
+  GLdouble getSceneNearWidth();
+  GLdouble getSceneFarWidth();
+  GLdouble getSceneDepth();
   G4float                           pointSize;
   char                              print_string[50];
   G4bool                            print_colour;

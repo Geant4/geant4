@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// GEANT4 tag $Name: geant4-09-01 $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 //
 // GEANT4 physics class: G4PhotoNuclearCrossSection -- header file
@@ -36,13 +36,10 @@
 #define G4PhotoNuclearCrossSection_h 1
 
 #include "G4VCrossSectionDataSet.hh"
-/////////#include "G4HadronCrossSections.hh"
 #include "G4DynamicParticle.hh"
 #include "G4Element.hh"
-//#include "G4QPDGCode.hh"
 #include "G4ParticleTable.hh"
 #include "G4NucleiProperties.hh"
-#include "G4NucleiPropertiesTable.hh"
 #include <vector>
 
 class G4PhotoNuclearCrossSection : public G4VCrossSectionDataSet
@@ -50,7 +47,7 @@ class G4PhotoNuclearCrossSection : public G4VCrossSectionDataSet
 public:
 
   G4PhotoNuclearCrossSection();
- ~G4PhotoNuclearCrossSection();
+  virtual ~G4PhotoNuclearCrossSection();
 
 
   G4bool IsApplicable(const G4DynamicParticle* particle, const G4Element* )
@@ -81,7 +78,6 @@ public:
 
 private:
   G4int    GetFunctions(G4double a, G4double* y, G4double* z);
-  //G4double LinearFit(G4double X, G4int N, const G4double* XN, const G4double* YN);
   G4double EquLinearFit(G4double X, G4int N,const G4double X0,const G4double XD, const G4double* Y);
   G4double ThresholdEnergy(G4int Z, G4int N);
 
@@ -99,56 +95,6 @@ private:
   static std::vector <G4double*> GDR;   // Vector of pointers to the GDRPhotonuclearCrossSection
   static std::vector <G4double*> HEN;   // Vector of pointers to the HighEnPhotonuclearCrossSect
 
-  //G4HadronCrossSections* theHadronCrossSections;
 };
-
-// Gives the threshold energy for different nuclei (min of p- and n-threshold)
-inline G4double G4PhotoNuclearCrossSection::ThresholdEnergy(G4int Z, G4int N)
-{
-  // CHIPS - Direct GEANT
-  //static const G4double mNeut = G4QPDGCode(2112).GetMass();
-  //static const G4double mProt = G4QPDGCode(2212).GetMass();
-  static const G4double mNeut = G4NucleiProperties::GetNuclearMass(1,0);
-  static const G4double mProt = G4NucleiProperties::GetNuclearMass(1,1);
-  // ---------
-  static const G4double infEn = 9.e27;
-
-  G4int A=Z+N;
-  if(A<1) return infEn;
-  else if(A==1) return 134.9766; // Pi0 threshold for the nucleon
-  // CHIPS - Direct GEANT
-  //G4double mT= G4QPDGCode(111).GetNuclMass(Z,N,0);
-  G4double mT= 0.;
-  if(G4NucleiPropertiesTable::IsInTable(Z,A)) mT=G4NucleiProperties::GetNuclearMass(A,Z);
-  else
-  {
-    G4cerr<<"G4PhotoNucCrossSect.hh::ThreshEn:Z="<<Z<<",A="<<A<<" element isn't in G4NucPr"<<G4endl;
-    return 0.;                // If it is not in the Table of Stable Nuclei, then the Threshold=inf
-  }
-  // ---------
-  G4double mP= infEn;
-  //if(Z) mP= G4QPDGCode(111).GetNuclMass(Z-1,N,0);
-
-  if(Z && G4NucleiPropertiesTable::IsInTable(Z-1,A-1))
-  {
-    mP = G4NucleiProperties::GetNuclearMass(A-1,Z-1);
-  }
-  else
-  {
-    G4cerr << "G4PhotoNucCrossSect.hh::ThrEn:Z=" << Z-1 << ",A=" 
-           << A-1 << " element isn't in G4NucP" << G4endl;
-  }
-  G4double mN= infEn;
-  //if(N) mN= G4QPDGCode(111).GetNuclMass(Z,N-1,0);
-  if(N&&G4NucleiPropertiesTable::IsInTable(Z,A-1)) mN=G4NucleiProperties::GetNuclearMass(A-1,Z);
-  else
-  {
-    G4cerr<<"G4PhotoNucCrossSect.hh::ThreshEn:Z="<<Z<<",A="<<A-1<<" element isn't in G4NuP"<<G4endl;
-  }
-  G4double dP= mP+mProt-mT;
-  G4double dN= mN+mNeut-mT;
-  if(dP<dN)dN=dP;
-  return dN;
-}
 
 #endif

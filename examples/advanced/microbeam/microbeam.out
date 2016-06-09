@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: global-V09-00-02    (14-December-2007)
+ Geant4 version Name: global-V09-01-17    (19-December-2008)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -19,6 +19,8 @@ Current available graphics systems are:
   RayTracer (RayTracer)
   VRML1FILE (VRML1FILE)
   VRML2FILE (VRML2FILE)
+  OpenGLImmediateX (OGLIX)
+  OpenGLStoredX (OGLSX)
 
 Registering model factories...
 
@@ -40,81 +42,81 @@ Registered filter factories:
 
 ***** Table : Nb of materials = 16 *****
 
- Material:   Vacuum     density:  0.000 mg/cm3  RadL: 204727576.737 pc   Imean:  21.800 eV   temperature: 273.15 K  pressure:   1.00 atm
+ Material:   Vacuum     density:  0.000 kg/m3   RadL: 204727512.315 pc   Nucl.Int.Length: 113804112.800 pc   Imean:  21.800 eV   temperature: 273.15 K  pressure:   1.00 atm
    --->  Element: Vacuum ( )   Z =  1.0   N =   1.0   A =   1.01 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
- Material:      H2O     density:  1.000 g/cm3   RadL:  36.092 cm   Imean:  70.893 eV 
+ Material:      H2O     density:  1.000 g/cm3   RadL:  36.092 cm   Nucl.Int.Length:  75.416 cm   Imean:  70.893 eV 
    --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole  ElmMassFraction:  11.21 %  ElmAbundance  66.67 %
    --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:  88.79 %  ElmAbundance  33.33 %
 
- Material:      Air     density:  1.290 mg/cm3  RadL: 285.161 m    Imean:  85.684 eV   temperature: 293.16 K  pressure:   1.00 atm
+ Material:      Air     density:  1.290 mg/cm3  RadL: 285.161 m    Nucl.Int.Length: 662.680 m    Imean:  85.684 eV   temperature: 293.16 K  pressure:   1.00 atm
    --->  Element: Nitrogen (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole  ElmMassFraction:  70.00 %  ElmAbundance  72.71 %
    --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:  30.00 %  ElmAbundance  27.29 %
 
- Material:    LPAir     density:  0.000 mg/cm3  RadL: 56273252.573 km   Imean:  87.308 eV   temperature: 293.16 K  pressure:   1.00 atm
+ Material:    LPAir     density:  0.000 kg/m3   RadL: 56273234.858 km   Nucl.Int.Length: 135377105.890 km   Imean:  87.308 eV   temperature: 293.16 K  pressure:   1.00 atm
    --->  Element: Nitrogen (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole  ElmMassFraction:  71.50 %  ElmAbundance  75.57 %
    --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:  25.00 %  ElmAbundance  23.14 %
    --->  Element: Argon (Ar)   Z = 18.0   N =  39.9   A =  39.95 g/mole  ElmMassFraction:   3.50 %  ElmAbundance   1.30 %
 
- Material:       Pl     density: 21.400 g/cm3   RadL:   3.058 mm   Imean: 787.800 eV 
+ Material:       Pl     density: 21.400 g/cm3   RadL:   3.058 mm   Nucl.Int.Length:   9.486 cm   Imean: 787.800 eV 
    --->  Element: Pl ( )   Z = 78.0   N = 195.1   A = 195.09 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
- Material:   Butane     density:  0.026 mg/cm3  RadL:  17.729 km   Imean:  53.612 eV   temperature: 293.16 K  pressure:   0.01 atm
+ Material:   Butane     density:  0.026 kg/m3   RadL:  17.729 km   Nucl.Int.Length:  25.686 km   Imean:  53.612 eV   temperature: 293.16 K  pressure:   0.01 atm
    --->  Element: Carbon (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole  ElmMassFraction:  82.63 %  ElmAbundance  28.57 %
    --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole  ElmMassFraction:  17.37 %  ElmAbundance  71.43 %
 
- Material: Polyprop     density: 900.000 mg/cm3  RadL:  49.764 cm   Imean:  56.713 eV 
+ Material: Polyprop     density: 900.000 mg/cm3  RadL:  49.764 cm   Nucl.Int.Length:  75.179 cm   Imean:  56.713 eV 
    --->  Element: Carbon (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole  ElmMassFraction:  85.60 %  ElmAbundance  33.33 %
    --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole  ElmMassFraction:  14.40 %  ElmAbundance  66.67 %
 
- Material:    Si3N4     density:  3.440 g/cm3   RadL:   7.644 cm   Imean: 128.542 eV 
+ Material:    Si3N4     density:  3.440 g/cm3   RadL:   7.644 cm   Nucl.Int.Length:  28.008 cm   Imean: 128.542 eV 
    --->  Element: Silicon (Si)   Z = 14.0   N =  28.1   A =  28.09 g/mole  ElmMassFraction:  60.06 %  ElmAbundance  42.86 %
    --->  Element: Nitrogen (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole  ElmMassFraction:  39.94 %  ElmAbundance  57.14 %
 
- Material:     SiO2     density:  2.500 g/cm3   RadL:  10.819 cm   Imean: 126.007 eV 
+ Material:     SiO2     density:  2.500 g/cm3   RadL:  10.819 cm   Nucl.Int.Length:  38.343 cm   Imean: 126.007 eV 
    --->  Element: Silicon (Si)   Z = 14.0   N =  28.1   A =  28.09 g/mole  ElmMassFraction:  46.74 %  ElmAbundance  33.33 %
    --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:  53.26 %  ElmAbundance  66.67 %
 
- Material:   Laiton     density:  8.500 g/cm3   RadL:   1.487 cm   Imean: 325.993 eV 
+ Material:   Laiton     density:  8.500 g/cm3   RadL:   1.487 cm   Nucl.Int.Length:  16.512 cm   Imean: 325.993 eV 
    --->  Element: Cuivre (Cu)   Z = 29.0   N =  63.5   A =  63.55 g/mole  ElmMassFraction:  49.28 %  ElmAbundance  50.00 %
    --->  Element: Zinc (Zn)   Z = 30.0   N =  65.4   A =  65.41 g/mole  ElmMassFraction:  50.72 %  ElmAbundance  50.00 %
 
- Material: Cytoplasm1     density:  1.000 g/cm3   RadL:  48.413 cm   Imean:  31.293 eV 
+ Material: Cytoplasm1     density:  1.000 g/cm3   RadL:  48.413 cm   Nucl.Int.Length:  46.131 cm   Imean:  31.293 eV 
    --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole  ElmMassFraction:  59.60 %  ElmAbundance  95.53 %
    --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:  24.24 %  ElmAbundance   2.45 %
    --->  Element: Carbon (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole  ElmMassFraction:  11.11 %  ElmAbundance   1.50 %
    --->  Element: Nitrogen (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole  ElmMassFraction:   4.04 %  ElmAbundance   0.47 %
    --->  Element: Phosphorus (P)   Z = 15.0   N =  31.0   A =  30.97 g/mole  ElmMassFraction:   1.01 %  ElmAbundance   0.05 %
 
- Material: Cytoplasm2     density: 10.000 g/cm3   RadL:   3.619 cm   Imean:  71.338 eV 
+ Material: Cytoplasm2     density: 10.000 g/cm3   RadL:   3.619 cm   Nucl.Int.Length:   7.563 cm   Imean:  71.338 eV 
    --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole  ElmMassFraction:  10.64 %  ElmAbundance  64.80 %
    --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:  74.50 %  ElmAbundance  28.64 %
    --->  Element: Carbon (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole  ElmMassFraction:   9.04 %  ElmAbundance   4.63 %
    --->  Element: Nitrogen (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole  ElmMassFraction:   3.21 %  ElmAbundance   1.41 %
    --->  Element: Phosphorus (P)   Z = 15.0   N =  31.0   A =  30.97 g/mole  ElmMassFraction:   2.61 %  ElmAbundance   0.52 %
 
- Material: Cytoplasm3     density:  1.000 g/cm3   RadL:  48.413 cm   Imean:  31.293 eV 
+ Material: Cytoplasm3     density:  1.000 g/cm3   RadL:  48.413 cm   Nucl.Int.Length:  46.131 cm   Imean:  31.293 eV 
    --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole  ElmMassFraction:  59.60 %  ElmAbundance  95.53 %
    --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:  24.24 %  ElmAbundance   2.45 %
    --->  Element: Carbon (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole  ElmMassFraction:  11.11 %  ElmAbundance   1.50 %
    --->  Element: Nitrogen (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole  ElmMassFraction:   4.04 %  ElmAbundance   0.47 %
    --->  Element: Phosphorus (P)   Z = 15.0   N =  31.0   A =  30.97 g/mole  ElmMassFraction:   1.01 %  ElmAbundance   0.05 %
 
- Material: Nucleus1     density:  1.000 g/cm3   RadL:  36.185 cm   Imean:  71.338 eV 
+ Material: Nucleus1     density:  1.000 g/cm3   RadL:  36.185 cm   Nucl.Int.Length:  75.626 cm   Imean:  71.338 eV 
    --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole  ElmMassFraction:  10.64 %  ElmAbundance  64.80 %
    --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:  74.50 %  ElmAbundance  28.64 %
    --->  Element: Carbon (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole  ElmMassFraction:   9.04 %  ElmAbundance   4.63 %
    --->  Element: Nitrogen (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole  ElmMassFraction:   3.21 %  ElmAbundance   1.41 %
    --->  Element: Phosphorus (P)   Z = 15.0   N =  31.0   A =  30.97 g/mole  ElmMassFraction:   2.61 %  ElmAbundance   0.52 %
 
- Material: Nucleus2     density:  1.100 g/cm3   RadL:  32.896 cm   Imean:  71.338 eV 
+ Material: Nucleus2     density:  1.100 g/cm3   RadL:  32.896 cm   Nucl.Int.Length:  68.751 cm   Imean:  71.338 eV 
    --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole  ElmMassFraction:  10.64 %  ElmAbundance  64.80 %
    --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:  74.50 %  ElmAbundance  28.64 %
    --->  Element: Carbon (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole  ElmMassFraction:   9.04 %  ElmAbundance   4.63 %
    --->  Element: Nitrogen (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole  ElmMassFraction:   3.21 %  ElmAbundance   1.41 %
    --->  Element: Phosphorus (P)   Z = 15.0   N =  31.0   A =  30.97 g/mole  ElmMassFraction:   2.61 %  ElmAbundance   0.52 %
 
- Material: Nucleus3     density:  1.000 g/cm3   RadL:  36.185 cm   Imean:  71.338 eV 
+ Material: Nucleus3     density:  1.000 g/cm3   RadL:  36.185 cm   Nucl.Int.Length:  75.626 cm   Imean:  71.338 eV 
    --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole  ElmMassFraction:  10.64 %  ElmAbundance  64.80 %
    --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:  74.50 %  ElmAbundance  28.64 %
    --->  Element: Carbon (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole  ElmMassFraction:   9.04 %  ElmAbundance   4.63 %
@@ -124,22 +126,106 @@ Registered filter factories:
 
  ==========> The phantom contains 53480 voxels 
 
-Thank you for using G4BinaryCascade. 
 MicrobeamPhysicsList::SetCuts:CutLength : 10 nm 
 
-msc:  Model variant of multiple scattering for e-
-      Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      LateralDisplacementFlag=  1   Skin= 0
-      Boundary/stepping algorithm is active with RangeFactor= 0.02  Step limit type 1
-G4AugerData for Element no. 6 are loaded
-G4AugerData for Element no. 7 are loaded
-G4AugerData for Element no. 8 are loaded
-G4AugerData for Element no. 14 are loaded
-G4AugerData for Element no. 15 are loaded
-G4AugerData for Element no. 18 are loaded
-G4AugerData for Element no. 29 are loaded
-G4AugerData for Element no. 30 are loaded
-G4AugerData for Element no. 78 are loaded
+msc:   for e-    SubType= 10
+      Lambda tables from 100 eV  to 100 TeV in 84 bins, spline: 1
+      RangeFactor= 0.02, step limit type: 1, lateralDisplacement: 1, skin= 3, geomFactor= 2.5
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+         UrbanMscUni :     Emin=          0 eV         Emax=   100 TeV
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
 AugerTransitionTable complete
 
 IONI:  Total cross sections from EEDL database.
@@ -154,27 +240,31 @@ LowEnBrem:  Total cross sections from EEDL database.
       At present it can be used for electrons in the energy range [250eV,100GeV].
       The process must work with G4LowEnergyIonisation.
 
-eIoni:   tables are built for  e+
-      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
-      Lambda tables from threshold to 100 TeV in 120 bins.
-      Delta cross sections and sampling from MollerBhabha model
-      Good description from 1 KeV to 100 GeV.
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1
+eIoni:   for  e+    SubType= 2
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV in 84 bins, spline: 1
+      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+        MollerBhabha :     Emin=          0 eV         Emax=   100 TeV
 
-eBrem:   tables are built for  e+
-      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
-      Lambda tables from threshold to 100 TeV in 120 bins.
-      Total cross sections and sampling from StandBrem model (based on the EEDL data library) 
-      Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV. LPM flag 1
+eBrem:   for  e+    SubType= 3
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV in 84 bins, spline: 1
+      LPM flag: 1 for E > 1 GeV
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               eBrem :     Emin=          0 eV         Emax=   1 GeV
+            eBremRel :     Emin=          1 GeV        Emax=   100 TeV
 
-annihil:       Sampling according eplus2gg model
-      tables are built for  e+
-      Lambda tables from 100 eV  to 100 TeV in 120 bins.
+annihil:   for  e+    SubType= 5
+      Lambda tables from 100 eV  to 100 TeV in 84 bins, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            eplus2gg :     Emin=          0 eV         Emax=   100 TeV
 
-msc:  Model variant of multiple scattering for proton
-      Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      LateralDisplacementFlag=  1   Skin= 0
-      Boundary/stepping algorithm is active with RangeFactor= 0.2  Step limit type 0
+msc:   for proton    SubType= 10
+      Lambda tables from 100 eV  to 100 TeV in 84 bins, spline: 1
+      RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 1, skin= 3
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+       UrbanMscUni90 :     Emin=          0 eV         Emax=   100 TeV
 
 hLowEIoni:    Knock-on electron cross sections . 
         Good description above the mean excitation energy.
@@ -188,9 +278,13 @@ hLowEIoni:    Knock-on electron cross sections .
         Parametrization of the Barkas effect is switched on.
         Nuclear stopping power model is ICRU_R49
 
-msc:  Model variant of multiple scattering for GenericIon
-      LateralDisplacementFlag=  0   Skin= 0
-      Boundary/stepping algorithm is active with RangeFactor= 0.2  Step limit type 1
+msc:   for GenericIon    SubType= 10
+      RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 0, skin= 3
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+       UrbanMscUni90 :     Emin=          0 eV         Emax=   100 TeV
+============================================================================================
+             HADRONIC PROCESSES SUMMARY (verbose level 1)
+============================================================================================
 
 hLowEIoni:    Knock-on electron cross sections . 
         Good description above the mean excitation energy.
@@ -204,10 +298,11 @@ hLowEIoni:    Knock-on electron cross sections .
         Parametrization of the Barkas effect is switched on.
         Nuclear stopping power model is ICRU_R49
 
-msc:  Model variant of multiple scattering for pi-
-      Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      LateralDisplacementFlag=  1   Skin= 0
-      Boundary/stepping algorithm is active with RangeFactor= 0.2  Step limit type 0
+msc:   for pi-    SubType= 10
+      Lambda tables from 100 eV  to 100 TeV in 84 bins, spline: 1
+      RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 1, skin= 3
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+       UrbanMscUni90 :     Emin=          0 eV         Emax=   100 TeV
 
 ========= Table of registered couples ==============================
 
@@ -323,38 +418,40 @@ WARNING: G4VisManager::IsValidView(): Attempt to draw when no graphics system
    ===> Sorry, the incident alpha particle has missed the targeted cell !
 
 -> Event # 4 generated 
-   ===> Sorry, the incident alpha particle has missed the targeted cell !
+   ===> The incident alpha particle has reached the targeted cell :
+   -----> total absorbed dose within Nucleus   is (Gy) = 0.41476425528526
+   -----> total absorbed dose within Cytoplasm is (Gy) = 0.0074367276392877
 
 -> Event # 5 generated 
    ===> The incident alpha particle has reached the targeted cell :
-   -----> total absorbed dose within Nucleus   is (Gy) = 0.32025772
-   -----> total absorbed dose within Cytoplasm is (Gy) = 0.031617269
+   -----> total absorbed dose within Nucleus   is (Gy) = 0.64402061700821
+   -----> total absorbed dose within Cytoplasm is (Gy) = 0.014025576412678
 
 -> Event # 6 generated 
    ===> The incident alpha particle has reached the targeted cell :
-   -----> total absorbed dose within Nucleus   is (Gy) = 0.32341093
-   -----> total absorbed dose within Cytoplasm is (Gy) = 0.036113653
+   -----> total absorbed dose within Nucleus   is (Gy) = 0.34616070985794
+   -----> total absorbed dose within Cytoplasm is (Gy) = 0.055149801075459
 
 -> Event # 7 generated 
-   ===> The incident alpha particle has reached the targeted cell :
-   -----> total absorbed dose within Nucleus   is (Gy) = 0.26556093
-   -----> total absorbed dose within Cytoplasm is (Gy) = 0.050062224
+   ===> Sorry, the incident alpha particle has missed the targeted cell !
 
 -> Event # 8 generated 
    ===> The incident alpha particle has reached the targeted cell :
-   -----> total absorbed dose within Nucleus   is (Gy) = 0.32553893
-   -----> total absorbed dose within Cytoplasm is (Gy) = 0.061953552
+   -----> total absorbed dose within Nucleus   is (Gy) = 0.3083418905735
+   -----> total absorbed dose within Cytoplasm is (Gy) = 0.093122653663158
 
 -> Event # 9 generated 
-   ===> Sorry, the incident alpha particle has missed the targeted cell !
+   ===> The incident alpha particle has reached the targeted cell :
+   -----> total absorbed dose within Nucleus   is (Gy) = 0.6314080953598
+   -----> total absorbed dose within Cytoplasm is (Gy) = 0.029831433668733
 
 -> Event # 10 generated 
    ===> The incident alpha particle has reached the targeted cell :
-   -----> total absorbed dose within Nucleus   is (Gy) = 0.6130144
-   -----> total absorbed dose within Cytoplasm is (Gy) = 0.027280906
+   -----> total absorbed dose within Nucleus   is (Gy) = 0.30018749833107
+   -----> total absorbed dose within Cytoplasm is (Gy) = 0.096404448151588
 
 ERROR: G4VisCommandsViewerUpdate::SetNewValue: no current viewer.
--> Total number of particles detected by the gas detector : 5
+-> Total number of particles detected by the gas detector : 6
 
 Graphics systems deleted.
 Visualization Manager deleting...

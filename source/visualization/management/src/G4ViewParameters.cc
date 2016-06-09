@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ViewParameters.cc,v 1.29 2007/04/03 13:33:16 allison Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4ViewParameters.cc,v 1.31 2008/04/04 13:48:53 allison Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // 
 // John Allison  19th July 1996
@@ -232,9 +232,13 @@ void G4ViewParameters::SetPan (G4double right, G4double up) {
 }
 
 void G4ViewParameters::IncrementPan (G4double right, G4double up) {
+  IncrementPan (right,up, 0);
+}
+
+void G4ViewParameters::IncrementPan (G4double right, G4double up, G4double distance) {
   G4Vector3D unitRight = (fUpVector.cross (fViewpointDirection)).unit();
   G4Vector3D unitUp    = (fViewpointDirection.cross (unitRight)).unit();
-  fCurrentTargetPoint += right * unitRight + up * unitUp;
+  fCurrentTargetPoint += right * unitRight + up * unitUp + distance * fViewpointDirection;
 }
 
 void G4ViewParameters::PrintDifferences (const G4ViewParameters& v) const {
@@ -508,8 +512,8 @@ G4bool G4ViewParameters::operator != (const G4ViewParameters& v) const {
   }
 
   if (IsExplode() &&
-      (fExplodeFactor != v.fExplodeFactor) ||
-      (fExplodeCentre != v.fExplodeCentre)) return true;
+      ((fExplodeFactor != v.fExplodeFactor) ||
+       (fExplodeCentre != v.fExplodeCentre))) return true;
 
   return false;
 }

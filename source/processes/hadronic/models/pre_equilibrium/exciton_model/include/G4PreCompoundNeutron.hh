@@ -24,10 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PreCompoundNeutron.hh,v 1.7 2007/10/01 10:42:00 ahoward Exp $
-// GEANT4 tag $Name: geant4-09-01 $
-//
-// by V. Lara
+//J. M. Quesada (July  08) 
 
 
 #ifndef G4PreCompoundNeutron_h
@@ -38,7 +35,6 @@
 #include "G4Neutron.hh"
 #include "G4PreCompoundParameters.hh"
 #include "Randomize.hh"
-
 #include "G4NeutronCoulombBarrier.hh"
 
 
@@ -46,7 +42,7 @@ class G4PreCompoundNeutron : public G4PreCompoundNucleon
 {
 public:
   // default constructor
-  G4PreCompoundNeutron() : G4PreCompoundNucleon(1,0,&theNeutronCoulomBarrier,"Neutron") {}
+  G4PreCompoundNeutron() : G4PreCompoundNucleon(1,0,&theNeutronCoulombBarrier,"Neutron") {}
 
   // copy constructor
   G4PreCompoundNeutron(const G4PreCompoundNeutron &right): G4PreCompoundNucleon(right) {}
@@ -67,50 +63,38 @@ public:
   { return G4PreCompoundNucleon::operator!=(right);}
 
 
-  G4ReactionProduct * GetReactionProduct() const
-  {
-    G4ReactionProduct * theReactionProduct = 
-      new G4ReactionProduct(G4Neutron::NeutronDefinition());
-    theReactionProduct->SetMomentum(GetMomentum().vect());
-    theReactionProduct->SetTotalEnergy(GetMomentum().e());
-#ifdef PRECOMPOUND_TEST
-    theReactionProduct->SetCreatorModel("G4PrecompoundModel");
-#endif
-    return theReactionProduct;
-  }
+  G4ReactionProduct * GetReactionProduct() const;
   
 private:
 
-// added Rj method according to literature and JMQ - formula from Jose Quesada
-  virtual G4double GetRj(const G4int NumberParticles, const G4int NumberCharged)
-  {
-    G4double rj = 1.0;
-    if(NumberParticles != 0) rj = static_cast<G4double>(NumberParticles - NumberCharged)/static_cast<G4double>(NumberParticles);
-    return rj;
-  }
+  virtual G4double GetRj(const G4int NumberParticles, const G4int NumberCharged); 
+
+  virtual G4double CrossSection(const  G4double K); 
 
 
-  virtual G4double GetAlpha()
-  {
-    return 0.76+2.2/std::pow(GetRestA(),1.0/3.0);
-  }
-  
-  virtual G4double GetBeta() 
-  {
-    return (2.12/std::pow(GetRestA(),2.0/3.0)-0.05)*MeV/GetAlpha();
-  }
-  
-  virtual G4bool IsItPossible(const G4Fragment& aFragment)
-  {
-    return ((aFragment.GetNumberOfParticles()-aFragment.GetNumberOfCharged()) >= 1);  
-  }
-  
+  G4double GetOpt0(const G4double K);
+  G4double GetOpt12(const G4double K);
+  G4double GetOpt34(const G4double K);
 
-private:
   
-  G4NeutronCoulombBarrier theNeutronCoulomBarrier;
+  G4double GetAlpha();
+  
+  G4double GetBeta();
+  
+//data members
 
+      G4NeutronCoulombBarrier theNeutronCoulombBarrier;
+      G4double ResidualA;
+      G4double ResidualZ; 
+      G4double theA;
+      G4double theZ;
+      G4double ResidualAthrd;
+      G4double FragmentA;
+      G4double FragmentAthrd;
+
+ 
 };
 
+ 
 #endif
 

@@ -1,4 +1,4 @@
-$Id: History,v 1.142 2007/11/27 18:32:16 japost Exp $
+$Id: History,v 1.151 2008/11/26 13:03:28 japost Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,56 +16,94 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+November 26th, 2008, J.Apostolakis  transport-V09-01-03
+----------------------------------
+- G4CoupledTransportation:
+  o Fix: initialise new data member (in constructor) - found by STT
 
-Nov  27th, 2007, J.Apostolakis  transport-V09-00-05a 
-------------------------------
-G4CoupledTransportation
-- Added updating of particle-looping flag (was commented out.)
+November 21st, 2008, J.Apostolakis  transport-V09-01-02
+----------------------------------
+- G4Transportation & G4CoupledTransportation:
+  o Performance improvement/correction
+     Avoid to compute safety at end of step for neutral particles
 
-Nov   8th, 2007, J.Apostolakis  transport-V09-00-05
-------------------------------
-G4Transportation:
-- Create new method (and class member) for flag on Short StepOptimisation.
-  * When it is true, the optimisation is 'on' steps shorter than the
-     safety will not call G4Navigator - so long as the particle goes straight
-     ie it is not charged or there is no field.
-  * Retained the default value as 'off' - as since changed in 
-     transport-V09-00-02 following Alex's suggestion.
+November 21st, 2008, J.Apostolakis  transport-V09-01-01
+----------------------------------
 
-Nov   8th, 2007, J.Apostolakis  transport-V09-00-04
-------------------------------
-G4Transportation (AlongStepGPIL)
-- Moved the call to ConfigureForTrack before the check whether 
+- G4Transportation & G4CoupledTransportation:
+  o Push value & origin of safety to SafetyHelper
+     only when its value comes from ComputeSafety
+
+January 17th, 2008, J.Apostolakis  transport-V09-01-00
+---------------------------------
+- G4Transportation & G4CoupledTransportation:
+  o Clear state of all Chord Finders using G4FieldManagerStore.
+- Syncronised with files on the HEAD.
+- Requires co-working tag "field-V09-01-00" (or "field-V09-00-03").
+  Functionality corresponding to tag "transport-V09-00-52".
+
+November 27th, 2007, J.Apostolakis  transport-V09-00-08
+----------------------------------
+- G4CoupledTransportation
+  o Added updating of particle-looping flag (was commented out.).
+
+November 10th, 2007, J.Apostolakis  transport-V09-00-07
+----------------------------------
+- G4Transportation:
+  o Put back the default for short step optimisation to 'on'.
+
+November 9th, 2007, J.Apostolakis  transport-V09-00-06
+---------------------------------
+- G4Transportation:
+  o Update the SafetyHelper using the safety calculated by Navigator.
+
+November 27th, 2007, J.Apostolakis  transport-V09-00-05a 
+----------------------------------
+- G4CoupledTransportation
+  o Added updating of particle-looping flag (was commented out.)
+- Also called "transport-V09-00-51" to make it canonical.
+
+November 8th, 2007, J.Apostolakis  transport-V09-00-05
+---------------------------------
+- G4Transportation:
+  o Created new method (and class member) for flag on Short StepOptimisation.
+    * When it is true, the optimisation is 'on' steps shorter than the
+      safety will not call G4Navigator - so long as the particle goes straight
+      ie it is not charged or there is no field.
+    * Retained the default value as 'off' - as since changed in 
+      transport-V09-00-02 following Alex's suggestion.
+
+November 8th, 2007, J.Apostolakis  transport-V09-00-04
+---------------------------------
+- G4Transportation (AlongStepGPIL):
+  o Moved the call to ConfigureForTrack before the check whether 
     fieldMgr has 0 field ptr, in order to enable it to be called 
     even if the field manager points to a zero field.
+    Needed to enable a user to switch a global field on (off was possible),
+    as a track goes between volume (or regions) of a setup.   
+    [ Response to request of Atlas/ZM. ] 
+    Note: this ordering already existed in G4CoupledTransportation.
 
-  Needed to enable a user to switch a global field on (off was possible), as a
-  track goes between volume (or regions) of a setup.   
-				[ Response to request of Atlas/ZM. ] 
-
-  Note: this ordering already existed in G4CoupledTransportation.
-
-
-Oct  12th, 2007, J.Apostolakis  transport-V09-00-03
-------------------------------
-G4CoupledTransportation
-- Improves condition for flag that regulates Relocating when only 
+October 12th, 2007, J.Apostolakis  transport-V09-00-03
+---------------------------------
+- G4CoupledTransportation:
+  o Improves condition for flag that regulates Relocating when only 
     any geometry (including a parallel geometry) limits the step.  
     New PathFinder method required.
-  -> Requires and co-works with tag geomnav-V09-00-03
+- Requires and co-works with tag geomnav-V09-00-03
 
-Oct   4th, 2007, J.Apostolakis  transport-V09-00-02
-------------------------------
-G4CoupledTransportation
-- First fix for problem in condition for Relocating when only a parallel 
+October 4th, 2007, J.Apostolakis  transport-V09-00-02
+--------------------------------
+- G4CoupledTransportation:
+  o First fix for problem in condition for Relocating when only a parallel 
     geometry limited the step.  
-- Change of condition for recalculation safety (from Alex Howard) used,
+  o Change of condition for recalculation safety (from Alex Howard) used,
     as currently it improves stability.
 
-Sept 25th, 2007, J.Apostolakis  transport-V09-00-01
-------------------------------
-G4Transportation
-- Modification to disable 'optimisation' in G4Navigator for small linear
+September 25th, 2007, J.Apostolakis  transport-V09-00-01
+-----------------------------------
+- G4Transportation:
+  Modification to disable 'optimisation' in G4Navigator for small linear
   step  (ie when a track does less than the safety).
     * Relevant only if there is no field, or the particle is neutral
     * Temporary measure (in current form) to improve comparison
@@ -74,7 +112,7 @@ G4Transportation
 July 12th, 2007, J.Apostolakis  transport-V09-00-00
 ------------------------------
 - Retagged to enable testing of new developments 
-     (which were not included in release 9.0)
+  (which were not included in release 9.0)
 
 June  6th, 2007, G.Cosmo        transport-V08-03-14
 -----------------------

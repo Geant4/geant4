@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eeToHadronsMultiModel.cc,v 1.4 2007/05/23 08:50:41 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4eeToHadronsMultiModel.cc,v 1.6 2008/07/11 17:49:11 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // -------------------------------------------------------------------
 //
@@ -33,7 +33,7 @@
 //
 // File name:     G4eeToHadronsMultiModel
 //
-// Author:        Vladimir Ivanchenko on base of Michel Maire code
+// Author:        Vladimir Ivanchenko 
 //
 // Creation date: 02.08.2004
 //
@@ -50,7 +50,12 @@
 
 #include "G4eeToHadronsMultiModel.hh"
 #include "G4eeToTwoPiModel.hh"
+#include "G4eeTo3PiModel.hh"
+#include "G4eeToPGammaModel.hh"
+#include "G4ee2KNeutralModel.hh"
+#include "G4ee2KChargedModel.hh"
 #include "G4eeCrossSections.hh"
+#include "G4Vee2hadrons.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -79,33 +84,116 @@ G4eeToHadronsMultiModel::~G4eeToHadronsMultiModel()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4eeToHadronsMultiModel::Initialise(const G4ParticleDefinition* p, const G4DataVector& v)
+void G4eeToHadronsMultiModel::Initialise(const G4ParticleDefinition*, 
+					 const G4DataVector&)
 {
   if(!isInitialised) {
     isInitialised = true;
 
-    thKineticEnergy = DBL_MAX;
-    maxKineticEnergy = HighEnergyLimit();
+    thKineticEnergy  = DBL_MAX;
+    maxKineticEnergy = 1.2*GeV;
 
     cross = new G4eeCrossSections();
-    G4eeToHadronsModel* model = 
-      new G4eeToHadronsModel(new G4eeToTwoPiModel(cross), verbose);
-    models.push_back(model);
-    model->SetHighEnergyLimit(maxKineticEnergy);
-    model->Initialise(p, v);
-    G4double emin = model->LowEnergyLimit();
-    if(emin < thKineticEnergy) thKineticEnergy = emin;
-    ekinMin.push_back(emin);
-    ekinMax.push_back(model->HighEnergyLimit());
-    ekinPeak.push_back(model->PeakEnergy());
-    cumSum.push_back(0.0);
-    nModels = 1;
 
-    if(pParticleChange)
+    G4eeToTwoPiModel* m2pi = new G4eeToTwoPiModel(cross);
+    m2pi->SetHighEnergy(maxKineticEnergy);
+    AddEEModel(m2pi);
+
+    G4eeTo3PiModel* m3pi1 = new G4eeTo3PiModel(cross);
+    m3pi1->SetHighEnergy(0.95*GeV);
+    AddEEModel(m3pi1);
+
+    G4eeTo3PiModel* m3pi2 = new G4eeTo3PiModel(cross);
+    m3pi2->SetLowEnergy(0.95*GeV);
+    m3pi2->SetHighEnergy(maxKineticEnergy);
+    AddEEModel(m3pi2);
+
+    G4ee2KChargedModel* m2kc = new G4ee2KChargedModel(cross);
+    m2kc->SetHighEnergy(maxKineticEnergy);
+    AddEEModel(m2kc);
+
+    G4ee2KNeutralModel* m2kn = new G4ee2KNeutralModel(cross);
+    m2kn->SetHighEnergy(maxKineticEnergy);
+    AddEEModel(m2kn);
+
+    G4eeToPGammaModel* mpg1 = new G4eeToPGammaModel(cross,"pi0");
+    mpg1->SetLowEnergy(0.7*GeV);
+    mpg1->SetHighEnergy(maxKineticEnergy);
+    AddEEModel(mpg1);
+
+    G4eeToPGammaModel* mpg2 = new G4eeToPGammaModel(cross,"eta");
+    mpg2->SetLowEnergy(0.7*GeV);
+    mpg2->SetHighEnergy(maxKineticEnergy);
+    AddEEModel(mpg2);
+
+    nModels = models.size();
+
+    if(pParticleChange) {
       fParticleChange =
 	reinterpret_cast<G4ParticleChangeForGamma*>(pParticleChange);
-    else
+    } else {
       fParticleChange = new G4ParticleChangeForGamma();
+    }
+  }
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4eeToHadronsMultiModel::AddEEModel(G4Vee2hadrons* mod)
+{
+  G4eeToHadronsModel* model = new G4eeToHadronsModel(mod, verbose);
+  model->SetLowEnergyLimit(LowEnergyLimit());
+  model->SetHighEnergyLimit(HighEnergyLimit());
+  models.push_back(model);
+  G4double elow = mod->ThresholdEnergy();
+  ekinMin.push_back(elow);
+  if(thKineticEnergy > elow) thKineticEnergy = elow;
+  ekinMax.push_back(mod->HighEnergy());
+  ekinPeak.push_back(mod->PeakEnergy());
+  cumSum.push_back(0.0);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4double G4eeToHadronsMultiModel::CrossSectionPerVolume(
+				      const G4Material* mat,
+				      const G4ParticleDefinition* p,
+				      G4double kineticEnergy,
+				      G4double, G4double)
+{
+  return mat->GetElectronDensity()*
+    ComputeCrossSectionPerElectron(p, kineticEnergy);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4double G4eeToHadronsMultiModel::ComputeCrossSectionPerAtom(
+                                      const G4ParticleDefinition* p,
+				      G4double kineticEnergy,
+				      G4double Z, G4double,
+				      G4double, G4double)
+{
+  return Z*ComputeCrossSectionPerElectron(p, kineticEnergy);
+}
+
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4eeToHadronsMultiModel::SampleSecondaries(std::vector<G4DynamicParticle*>* newp,
+						const G4MaterialCutsCouple* couple,
+						const G4DynamicParticle* dp,
+						G4double, G4double)
+{
+  G4double kinEnergy = dp->GetKineticEnergy();
+  if (kinEnergy > thKineticEnergy) {
+    G4double q = cumSum[nModels-1]*G4UniformRand();
+    for(G4int i=0; i<nModels; i++) {
+      if(q <= cumSum[i]) {
+        (models[i])->SampleSecondaries(newp, couple,dp);
+	if(newp->size() > 0) fParticleChange->ProposeTrackStatus(fStopAndKill);
+	break;
+      }
+    }
   }
 }
 
@@ -114,8 +202,12 @@ void G4eeToHadronsMultiModel::Initialise(const G4ParticleDefinition* p, const G4
 void G4eeToHadronsMultiModel::PrintInfo()
 {
   if(verbose > 0) {
-    G4cout << "      e+ annihilation into hadrons active above "
-           << thKineticEnergy/GeV << " GeV"
+    G4double e1 = 0.5*thKineticEnergy*thKineticEnergy/electron_mass_c2 
+      - 2.0*electron_mass_c2; 
+    G4double e2 = 0.5*maxKineticEnergy*maxKineticEnergy/electron_mass_c2 
+      - 2.0*electron_mass_c2; 
+    G4cout << "      e+ annihilation into hadrons active from "
+           << e1/GeV << " GeV to " << e2/GeV << " GeV"
            << G4endl;
   }
 }
@@ -127,8 +219,8 @@ void G4eeToHadronsMultiModel::SetCrossSecFactor(G4double fac)
   if(fac > 1.0) {
     csFactor = fac;
     if(verbose > 0)
-      G4cout << "### G4eeToHadronsMultiModel: The cross section for G4eeToHadronsMultiModel is  "
-             << "increased by the Factor= " << csFactor << G4endl;
+      G4cout << "### G4eeToHadronsMultiModel: The cross section for G4eeToHadronsMultiModel "
+             << " is increased by the Factor= " << csFactor << G4endl;
   }
 }
 

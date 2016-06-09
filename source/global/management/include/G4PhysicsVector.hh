@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicsVector.hh,v 1.14 2006/06/29 19:02:38 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4PhysicsVector.hh,v 1.18 2008/09/22 08:26:33 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // 
 //---------------------------------------------------------------
@@ -47,9 +47,9 @@
 //    27 Apr. 1996, K.Amako : Cache mechanism added
 //    01 Jul. 1996, K.Amako : Now GetValue not virtual
 //    21 Sep. 1996, K.Amako : Added [] and () operators
-//    11 Nov. 2000, H.Kurashige : use STL vector for dataVector and binVector
-//    18 Jan. 2001, H.Kurashige : removed ptrNextTable
-//    09 Mar. 2001, H.Kurashige : added G4PhysicsVectorType & Store/Retrieve()
+//    11 Nov. 2000, H.Kurashige : Use STL vector for dataVector and binVector
+//    09 Mar. 2001, H.Kurashige : Added G4PhysicsVectorType & Store/Retrieve()
+//    02 Apr. 2008, A.Bagulya : Added SplineInterpolation() and SetSpline()
 //
 //---------------------------------------------------------------
 
@@ -62,13 +62,13 @@
 #include <iostream>
 #include <fstream>
 
-#include  "G4PhysicsVectorType.hh"
+#include "G4PhysicsVectorType.hh"
 
 class G4PhysicsVector 
 {
   public:  
 
-    G4PhysicsVector();
+    G4PhysicsVector(G4bool spline = false);
          // constructor  
          // This class is an abstract class with pure virtual method of
          // virtual size_t FindBinLocation(G4double theEnergy) const
@@ -128,6 +128,9 @@ class G4PhysicsVector
 
     inline G4PhysicsVectorType GetType() const;
          // Get physics vector type
+  
+    inline void SetSpline(G4bool);
+         // Activate/deactivate Spline interpolation.
 
     virtual G4bool Store(std::ofstream& fOut, G4bool ascii=false);
     virtual G4bool Retrieve(std::ifstream& fIn, G4bool ascii=false);
@@ -137,11 +140,14 @@ class G4PhysicsVector
 
   protected:
 
-    inline G4double LinearInterpolation(G4double theEnergy, size_t theLocBin);
-         // Linear interpolation function
-
     virtual size_t FindBinLocation(G4double theEnergy) const=0;
          // Find the bin# in which theEnergy belongs - pure virtual function
+
+    void DeleteData();
+    void CopyData(const G4PhysicsVector& vec);
+         // Internal methods for allowing copy of objects
+
+  protected:
 
     typedef std::vector<G4double> G4PVDataVector;
 
@@ -160,7 +166,20 @@ class G4PhysicsVector
 
   private:
 
-    G4String comment;
+    inline G4double LinearInterpolation();
+         // Linear interpolation function
+    inline G4double SplineInterpolation();
+         // Spline interpolation function
+
+    inline void Interpolation();
+
+    void FillSecondDerivatives();
+      // Initialise second derivatives for spline
+
+    G4double*  secDerivative;
+
+    G4String   comment;
+    G4bool     useSpline;
 };
 
 #include "G4PhysicsVector.icc"

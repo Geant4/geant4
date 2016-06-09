@@ -23,7 +23,14 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// by V. Lara
+//J. M. Quesada (August 2008).  
+//Based  on previous work by V. Lara
+//
+// Modif (03 September 2008) by J. M. Quesada for external choice of inverse 
+// cross section option (default OPTxs=2)
+// JMQ (06 September 2008) Also external choice has been added for
+// superimposed Coulomb barrier (if useSICB=true, default false) 
+
 
 #ifndef G4PreCompoundFragment_h
 #define G4PreCompoundFragment_h 1
@@ -61,7 +68,7 @@ public:
 public:
   
   // Initialization method
-  void Initialize(const G4Fragment & aFragment);
+//  void Initialize(const G4Fragment & aFragment);
     
   // ================================================
   // Methods for calculating the emission probability
@@ -83,7 +90,8 @@ protected:
 
   virtual G4double 
   ProbabilityDistributionFunction(const G4double K, 
-				  const G4Fragment & aFragment) = 0;  
+				  const G4Fragment & aFragment) = 0; 
+
 };
 
 #endif

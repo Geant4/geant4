@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Tubs.icc,v 1.7 2006/10/19 15:33:37 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4Tubs.icc,v 1.11 2008/11/06 10:55:40 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // --------------------------------------------------------------------
 // GEANT 4 inline definitions file
@@ -65,49 +65,81 @@ G4double G4Tubs::GetDeltaPhiAngle () const
   return fDPhi;
 }
 
+inline 
+void G4Tubs::Initialize()
+{
+  fCubicVolume = 0.;
+  fSurfaceArea = 0.;
+  fpPolyhedron = 0;
+}
+
+inline 
+void G4Tubs::InitializeTrigonometry()
+{
+  G4double hDPhi = 0.5*fDPhi;                       // half delta phi
+  G4double cPhi  = fSPhi + hDPhi; 
+  G4double ePhi  = fSPhi + fDPhi;
+
+  sinCPhi    = std::sin(cPhi);
+  cosCPhi    = std::cos(cPhi);
+  cosHDPhiIT = std::cos(hDPhi - 0.5*kAngTolerance); // inner/outer tol half dphi
+  cosHDPhiOT = std::cos(hDPhi + 0.5*kAngTolerance);
+  sinSPhi = std::sin(fSPhi);
+  cosSPhi = std::cos(fSPhi);
+  sinEPhi = std::sin(ePhi);
+  cosEPhi = std::cos(ePhi);
+}
+
 inline
 void G4Tubs::SetInnerRadius (G4double newRMin)
 {
   fRMin= newRMin;
-  fCubicVolume= 0.;
-  fSurfaceArea= 0.;
-  fpPolyhedron = 0;
+  Initialize();
 }
 
 inline
 void G4Tubs::SetOuterRadius (G4double newRMax)
 {
   fRMax= newRMax;
-  fCubicVolume= 0.;
-  fSurfaceArea= 0.;
-  fpPolyhedron = 0;
+  Initialize();
 }
 
 inline
 void G4Tubs::SetZHalfLength (G4double newDz)
 {
   fDz= newDz;
-  fCubicVolume= 0.;
-  fSurfaceArea= 0.;
-  fpPolyhedron = 0;
+  Initialize();
 }
 
 inline
 void G4Tubs::SetStartPhiAngle (G4double newSPhi)
 {
   fSPhi= newSPhi;
-  fCubicVolume= 0.;
-  fSurfaceArea= 0.;
-  fpPolyhedron = 0;
+  Initialize();
+  InitializeTrigonometry();
 }
 
 inline
 void G4Tubs::SetDeltaPhiAngle (G4double newDPhi)
 {
+  if ( newDPhi >= twopi-kAngTolerance*0.5 )
+  {
+    fPhiFullTube = true;
+  }
+  else if ( newDPhi > 0 )
+  {
+    fPhiFullTube = false;
+  }
+  else
+  {
+     G4cerr << "ERROR - G4Tubs()::SetDeltaPhiAngle() : " << GetName() << G4endl
+            << "        Negative delta-Phi ! - " << newDPhi << G4endl;
+     G4Exception("G4Tubs::SetDeltaPhiAngle()", "InvalidSetup",
+                  FatalException, "Invalid dphi.");
+  }
   fDPhi= newDPhi;
-  fCubicVolume= 0.;
-  fSurfaceArea= 0.;
-  fpPolyhedron = 0;
+  Initialize();
+  InitializeTrigonometry();
 }
 
 //  Older names for access functions
@@ -157,7 +189,7 @@ G4double G4Tubs::GetSurfaceArea()
   else
   {
     fSurfaceArea = fDPhi*(fRMin+fRMax)*(2*fDz+fRMax-fRMin);
-    if (fDPhi < twopi)
+    if (!fPhiFullTube)
     {
       fSurfaceArea = fSurfaceArea + 4*fDz*(fRMax-fRMin);
     }

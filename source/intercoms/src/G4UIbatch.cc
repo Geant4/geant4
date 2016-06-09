@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UIbatch.cc,v 1.16 2007/08/10 09:46:10 kmura Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4UIbatch.cc,v 1.17 2008/11/21 10:54:16 kmura Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // ====================================================================
 //   G4UIbatch.cc
@@ -44,8 +44,16 @@ static void Tokenize(const G4String& str, std::vector<G4String>& tokens)
   str_size pos = str.find_first_of(delimiter, pos0);
   
   while (pos != G4String::npos || pos0 != G4String::npos) {
-    tokens.push_back(str.substr(pos0, pos-pos0));
+    if (str[pos0] == '\"') {
+      pos = str.find_first_of("\"", pos0+1);
+      if(pos != G4String::npos) pos++;
+    }
+    if (str[pos0] == '\'') {
+      pos = str.find_first_of("\'", pos0+1);
+      if(pos != G4String::npos) pos++;
+    }
 
+    tokens.push_back(str.substr(pos0, pos-pos0));
     pos0 = str.find_first_not_of(delimiter, pos);
     pos = str.find_first_of(delimiter, pos0);
   }
@@ -109,11 +117,16 @@ G4String G4UIbatch::ReadCommand()
     // skip null line if single line
     if(!qcontinued && cmdline.size()==0) continue;
 
+    // '#' is treated as echoing something
+    if(cmdline[(size_t)0]=='#') return cmdline;
+
     // tokenize...
     std::vector<G4String> tokens;
     Tokenize(cmdline, tokens);
     qcontinued= false;
     for (G4int i=0; i< G4int(tokens.size()); i++) {
+      // string after '#" is ignored
+      if(tokens[i][(size_t)0] == '#' ) break;
       // '\' or '_' is treated as continued line.
       if(tokens[i] == '\\' || tokens[i] == '_' ) {
         qcontinued= true;
@@ -128,7 +141,7 @@ G4String G4UIbatch::ReadCommand()
       cmdtotal+= " ";
     }
 
-    if(qcontinued) continue; // read` the next line
+    if(qcontinued) continue; // read the next line
 
     if(cmdtotal.size() != 0) break;
     if(macroStream.eof()) break;
@@ -137,22 +150,12 @@ G4String G4UIbatch::ReadCommand()
   // strip again
   cmdtotal= cmdtotal.strip(G4String::both);
 
-  // '#' is treated as echoing something
-  if(cmdtotal[(size_t)0]=='#') return cmdtotal;
-
-  // normally something after # is treated just as comment and ignored
-  str_size ic= cmdtotal.find_first_of('#');
-  if(ic != G4String::npos) {
-    cmdtotal= cmdtotal(0, ic);
-  }
-
   // finally,
   if(macroStream.eof() && cmdtotal.size()==0) {
     return "exit";
   }
 
   return cmdtotal;
-
 }
 
 

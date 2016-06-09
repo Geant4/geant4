@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Track.icc,v 1.15 2007/10/02 00:46:21 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4Track.icc,v 1.16 2008/10/24 08:22:20 kurasige Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 //-----------------------------------------------------------------
 // Definitions of inline functions
@@ -246,10 +246,10 @@
    inline void G4Track::SetVertexKineticEnergy(const G4double aValue)
    { fVtxKineticEnergy = aValue; }
 
-   inline  G4LogicalVolume* G4Track::GetLogicalVolumeAtVertex() const
+   inline  const G4LogicalVolume* G4Track::GetLogicalVolumeAtVertex() const
    { return fpLVAtVertex; } 
 
-   inline void G4Track::SetLogicalVolumeAtVertex(G4LogicalVolume* aValue)
+   inline void G4Track::SetLogicalVolumeAtVertex(const G4LogicalVolume* aValue)
    { fpLVAtVertex = aValue; }
 
    inline const G4VProcess* G4Track::GetCreatorProcess() const
@@ -258,7 +258,7 @@
      // by the event generator, i.e. the primary track.If it is not
      // 0, it points to the process which created this track.
 
-   inline void G4Track::SetCreatorProcess(G4VProcess* aValue)
+   inline void G4Track::SetCreatorProcess(const G4VProcess* aValue)
    { fpCreatorProcess = aValue; }
 
 // flag for "Below Threshold"

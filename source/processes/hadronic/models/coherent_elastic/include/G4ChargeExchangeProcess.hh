@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ChargeExchangeProcess.hh,v 1.2 2006/06/29 20:08:57 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4ChargeExchangeProcess.hh,v 1.3 2008/11/20 12:35:19 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 //
 // Geant4 Hadron Elastic Charge Exchange Process -- header file
@@ -47,7 +47,6 @@
 #include "G4HadronicProcess.hh"
 #include "G4Nucleus.hh"
 
-class G4VQCrossSection;
 class G4ParticleDefinition;
 class G4CrossSectionDataStore;
 class G4PhysicsLinearVector;
@@ -56,12 +55,9 @@ class G4ChargeExchangeProcess : public G4HadronicProcess
 {
 public:
 
-  G4ChargeExchangeProcess(const G4String& procName = "chargeExc");
+  G4ChargeExchangeProcess(const G4String& procName = "chargeExchange");
 
   virtual ~G4ChargeExchangeProcess();
-
-  virtual G4VParticleChange* PostStepDoIt(const G4Track& aTrack,
-					  const G4Step& aStep);
 
   virtual G4bool IsApplicable(const G4ParticleDefinition& aParticleType);
 
@@ -69,17 +65,11 @@ public:
 
   virtual void DumpPhysicsTable(const G4ParticleDefinition& aParticleType);
 
-  virtual G4double GetMeanFreePath(const G4Track&, G4double, G4ForceCondition*);
-
   virtual G4double GetMicroscopicCrossSection(const G4DynamicParticle* aParticle,
 					      const G4Element* anElement,
 					      G4double aTemp);
 
-  void SetQElasticCrossSection(G4VQCrossSection*);
-
 private:
-
-  G4VQCrossSection*           qCManager;
 
   const G4ParticleDefinition* theParticle;
 
@@ -114,11 +104,8 @@ private:
   const G4ParticleDefinition* theHe3;
 
   G4CrossSectionDataStore* store;
-  G4Nucleus                targetNucleus;
   G4PhysicsLinearVector*   factors;
 
-  G4double        xsec[40];
-  G4double        cross;
   G4double        thEnergy;
 
   G4int    pPDG;

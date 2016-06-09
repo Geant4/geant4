@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4PSNofStep.hh,v 1.2 2007/08/29 06:36:41 taso Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 
 #ifndef G4PSNofStep_h

@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4ParticleGunMessenger.hh,v 1.10 2007/10/02 00:45:17 asaim Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // 
 

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredSceneHandler.cc,v 1.34 2007/04/04 16:50:27 allison Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4OpenGLStoredSceneHandler.cc,v 1.39 2008/11/06 13:43:44 lgarnier Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // 
 // Andrew Walkden  10th February 1997
@@ -54,13 +54,31 @@
 #include "G4Polyhedron.hh"
 #include "G4AttHolder.hh"
 
-G4OpenGLStoredSceneHandler::G4OpenGLStoredSceneHandler (G4VGraphicsSystem& system,
-					  const G4String& name):
+G4OpenGLStoredSceneHandler::PO::PO
+(G4int id,
+ const G4Transform3D& tr):
+  fDisplayListId(id),
+  fTransform(tr),
+  fPickName(0)
+{}
+
+G4OpenGLStoredSceneHandler::TO::TO
+(G4int id,
+ const G4Transform3D& tr):
+  fDisplayListId(id),
+  fTransform(tr),
+  fPickName(0),
+  fStartTime(-DBL_MAX),
+  fEndTime(DBL_MAX)
+{}
+
+G4OpenGLStoredSceneHandler::G4OpenGLStoredSceneHandler
+(G4VGraphicsSystem& system,
+ const G4String& name):
 G4OpenGLSceneHandler (system, fSceneIdCount++, name),
 fMemoryForDisplayLists (true),
 fAddPrimitivePreambleNestingDepth (0),
-fTopPODL (0),
-fProcessing2D (false)
+fTopPODL (0)
 {}
 
 G4OpenGLStoredSceneHandler::~G4OpenGLStoredSceneHandler ()
@@ -85,7 +103,7 @@ void G4OpenGLStoredSceneHandler::AddPrimitivePreamble(const G4Visible& visible)
 
   if (fMemoryForDisplayLists) {
     fDisplayListId = glGenLists (1);
-    if (!fDisplayListId) {  // Could pre-allocate?
+    if (glGetError() == GL_OUT_OF_MEMORY) {  // Could pre-allocate?
       G4cout <<
 	"********************* WARNING! ********************"
 	"\nUnable to allocate any more display lists in OpenGL."
@@ -133,10 +151,13 @@ void G4OpenGLStoredSceneHandler::AddPrimitivePreamble(const G4Visible& visible)
     glMatrixMode (GL_PROJECTION);
     glPushMatrix();
     glLoadIdentity();
-    glOrtho (-1., 1., -1., 1., -G4OPENGL_DBL_MAX, G4OPENGL_DBL_MAX);
+    glOrtho (-1., 1., -1., 1., -G4OPENGL_FLT_BIG, G4OPENGL_FLT_BIG);
     glMatrixMode (GL_MODELVIEW);
     glPushMatrix();
     glLoadIdentity();
+    G4OpenGLTransform3D oglt (*fpObjectTransformation);
+    glMultMatrixd (oglt.GetGLMatrix ());
+    glColor3d (c.GetRed (), c.GetGreen (), c.GetBlue ());
   }
 }
 
@@ -150,8 +171,21 @@ void G4OpenGLStoredSceneHandler::AddPrimitivePostamble()
     glPopMatrix();
   }
 
+  //  if ((glGetError() == GL_TABLE_TOO_LARGE) || (glGetError() == GL_OUT_OF_MEMORY)) {  // Could close?
+  if (glGetError() == GL_OUT_OF_MEMORY) {  // Could close?
+    G4cout <<
+      "ERROR: G4OpenGLStoredSceneHandler::EndModeling: Failure to allocate"
+      "  display List for fTopPODL - try OpenGL Immediated mode."
+           << G4endl;
+  }
   if (fMemoryForDisplayLists) {
     glEndList();
+    if (glGetError() == GL_OUT_OF_MEMORY) {  // Could close?
+      G4cout <<
+        "ERROR: G4OpenGLStoredSceneHandler::EndModeling: Failure to allocate"
+        "  display List for fTopPODL - try OpenGL Immediated mode."
+             << G4endl;
+    }
   }
   if (fReadyForTransients || !fMemoryForDisplayLists) {
     glPopMatrix();
@@ -238,15 +272,14 @@ void G4OpenGLStoredSceneHandler::EndPrimitives ()
   G4OpenGLSceneHandler::EndPrimitives ();
 }
 
-void G4OpenGLStoredSceneHandler::BeginPrimitives2D()
+void G4OpenGLStoredSceneHandler::BeginPrimitives2D
+(const G4Transform3D& objectTransformation)
 {
-  G4OpenGLSceneHandler::BeginPrimitives2D();
-  fProcessing2D = true;
+  G4OpenGLSceneHandler::BeginPrimitives2D(objectTransformation);
 }
 
 void G4OpenGLStoredSceneHandler::EndPrimitives2D ()
 {
-  fProcessing2D = false;
   G4OpenGLSceneHandler::EndPrimitives2D ();
 }
 
@@ -262,7 +295,7 @@ void G4OpenGLStoredSceneHandler::BeginModeling () {
 void G4OpenGLStoredSceneHandler::EndModeling () {
   // Make a List which calls the other lists.
   fTopPODL = glGenLists (1);
-  if (!fTopPODL) {
+  if (glGetError() == GL_OUT_OF_MEMORY) {  // Could pre-allocate?
     G4cout <<
       "ERROR: G4OpenGLStoredSceneHandler::EndModeling: Failure to allocate"
       "  display List for fTopPODL - try OpenGL Immediated mode."
@@ -280,6 +313,12 @@ void G4OpenGLStoredSceneHandler::EndModeling () {
       }
     }
     glEndList ();
+    if (glGetError() == GL_OUT_OF_MEMORY) {  // Could close?
+      G4cout <<
+        "ERROR: G4OpenGLStoredSceneHandler::EndModeling: Failure to allocate"
+        "  display List for fTopPODL - try OpenGL Immediated mode."
+             << G4endl;
+    }
   }
 
   G4VSceneHandler::EndModeling ();

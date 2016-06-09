@@ -24,65 +24,11 @@
 // ********************************************************************
 //
 //
-// $Id: G4VPreCompoundNucleon.hh,v 1.4 2007/07/23 09:56:40 ahoward Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4VPreCompoundNucleon.hh,v 1.8 2008/09/22 10:18:36 ahoward Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // by V. Lara
+//J.M. Quesada (Apr. 2008) DUMMY abstract base class for nucleons. 
+// Not ihherited by anything
+// Suppressed
 
-#ifndef G4VPreCompoundNucleon_h
-#define G4VPreCompoundNucleon_h 1
-
-#include "G4VPreCompoundFragment.hh"
-#include "G4VCoulombBarrier.hh"
-
-
-class G4VPreCompoundNucleon : public G4VPreCompoundFragment
-{
-protected:
-  // default constructor
-  G4VPreCompoundNucleon() {}
-
-public:
-
-  // copy constructor
-  G4VPreCompoundNucleon(const G4VPreCompoundNucleon &right): 
-    G4VPreCompoundFragment(right) {}
-
-  // constructor  
-  G4VPreCompoundNucleon(const G4double anA, 
-			const G4double aZ, 
-			G4VCoulombBarrier* aCoulombBarrier,
-			const G4String & aName): 
-    G4VPreCompoundFragment(anA,aZ,aCoulombBarrier,aName) {}
-
-  virtual ~G4VPreCompoundNucleon() {}
-
-  // operators  
-  const G4VPreCompoundNucleon & 
-  operator=(const G4VPreCompoundNucleon &right) {
-    if (&right != this) this->G4VPreCompoundFragment::operator=(right);
-    return *this;
-  }
-
-  G4bool operator==(const G4VPreCompoundNucleon &right) const 
-  { return G4VPreCompoundFragment::operator==(right);}
-    
-  G4bool operator!=(const G4VPreCompoundNucleon &right) const 
-  { return G4VPreCompoundFragment::operator!=(right);}
-    
-  virtual G4double ProbabilityDistributionFunction(const G4double eKin,
-						   const G4Fragment& aFragment);
-
-    
-protected:
-
-// added Rj method according to literature and JMQ
-  virtual G4double GetRj(const G4int NumberParticles, const G4int NumberCharged) = 0;
-  virtual G4double GetAlpha() = 0;
-  virtual G4double GetBeta() = 0;
-  virtual G4bool IsItPossible(const G4Fragment&) = 0; 
-    
-    
-};
-
-#endif

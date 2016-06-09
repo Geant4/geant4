@@ -29,6 +29,8 @@
 //
 // 070618 fix memory leaking by T. Koi
 // 071002 enable cross section dump by T. Koi
+// 081024 G4NucleiPropertiesTable:: to G4NucleiProperties::
+// 081124 Protect invalid read which caused run time errors by T. Koi
 
 #include "G4NeutronHPFissionData.hh"
 #include "G4Neutron.hh"
@@ -109,6 +111,13 @@ void G4NeutronHPFissionData::DumpPhysicsTable(const G4ParticleDefinition& aP)
 
       G4cout << (*theElementTable)[i]->GetName() << G4endl;
 
+      if ( (*((*theCrossSections)(i))).GetVectorLength() == 0 ) 
+      {
+         G4cout << "The cross-section data of the fission of this element is not available." << G4endl; 
+         G4cout << G4endl; 
+         continue;
+      }
+
       G4int ie = 0;
 
       for ( ie = 0 ; ie < 130 ; ie++ )
@@ -129,7 +138,7 @@ void G4NeutronHPFissionData::DumpPhysicsTable(const G4ParticleDefinition& aP)
   //G4cout << "G4NeutronHPFissionData::DumpPhysicsTable still to be implemented"<<G4endl;
 }
 
-#include "G4NucleiPropertiesTable.hh"
+#include "G4NucleiProperties.hh"
 
 G4double G4NeutronHPFissionData::
 GetCrossSection(const G4DynamicParticle* aP, const G4Element*anE, G4double aT)
@@ -151,7 +160,7 @@ GetCrossSection(const G4DynamicParticle* aP, const G4Element*anE, G4double aT)
   G4double theA = anE->GetN();
   G4double theZ = anE->GetZ();
   G4double eleMass; 
-  eleMass = ( G4NucleiPropertiesTable::GetNuclearMass(static_cast<G4int>(theZ+eps), static_cast<G4int>(theA+eps))
+  eleMass = ( G4NucleiProperties::GetNuclearMass( static_cast<G4int>(theA+eps) , static_cast<G4int>(theZ+eps) )
 	     ) / G4Neutron::Neutron()->GetPDGMass();
   
   G4ReactionProduct boosted;

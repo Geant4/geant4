@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QCoherentChargeExchange.hh,v 1.4 2007/08/09 13:04:37 mkossov Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4QCoherentChargeExchange.hh,v 1.5 2008/10/02 21:10:07 dennis Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 //      ---------------- G4QCoherentChargeExchange header ----------------
 //                 by Mikhail Kossov, December 2003.
@@ -55,6 +55,7 @@
 #include "G4NucleiPropertiesTable.hh"
 #include "G4ThreeVector.hh"
 #include "G4LorentzVector.hh"
+#include "G4HadronicProcessType.hh"
 
 // CHIPS Headers
 #include "G4QuasiFreeRatios.hh"

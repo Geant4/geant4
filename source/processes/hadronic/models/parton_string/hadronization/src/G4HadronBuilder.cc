@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4HadronBuilder.cc,v 1.6 2006/06/29 20:55:01 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4HadronBuilder.cc,v 1.7 2008/04/25 14:20:14 vuzhinsk Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // -----------------------------------------------------------------------------
 //      GEANT 4 class implementation file

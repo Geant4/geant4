@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Positron.cc,v 1.13 2007/03/15 06:53:58 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4Positron.cc,v 1.16 2008/11/13 08:23:12 kurasige Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // 
 // ----------------------------------------------------------------------
@@ -63,19 +63,22 @@ G4Positron* G4Positron::Definition()
   //               type    lepton number  baryon number   PDG encoding
   //             stable         lifetime    decay table
   //             shortlived      subType    anti_encoding
+  // use constants in CLHEP
+  //  static const double electron_mass_c2 = 0.51099906 * MeV;
+
    anInstance = new G4ParticleDefinition(
-                 name,  0.51099906*MeV,       0.0*MeV,    +1.*eplus, 
-		    1,               0,             0,          
-		    0,               0,             0,             
-	     "lepton",              -1,             0,          -11,
-		 true,            -1.0,          NULL,
-                false,             "e"
+                name, electron_mass_c2,       0.0*MeV,    +1.*eplus, 
+		   1,                0,             0,          
+		   0,                0,             0,             
+	    "lepton",               -1,             0,          -11,
+		true,             -1.0,          NULL,
+               false,              "e"
               );
  
     // Bohr Magnetron
-   G4double muB =  0.5*eplus*hbar_Planck/(0.51099906*MeV/c_squared) ;
+   G4double muB =  0.5*eplus*hbar_Planck/(electron_mass_c2/c_squared) ;
    
-   anInstance->SetPDGMagneticMoment( muB * 1.0011596521859 );
+   anInstance->SetPDGMagneticMoment( muB * 2.* 1.0011596521859 );
 
   }
   theInstance = reinterpret_cast<G4Positron*>(anInstance);

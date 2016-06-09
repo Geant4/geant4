@@ -2,10 +2,12 @@
 # ------ MacOS-X ------
 #                                 MacOS 10.3 gcc-3.3
 #                                 MacOS 10.4 gcc-4.0
+#                                 MacOS 10.5 gcc-4.0
 #
 # Original author: Helmut Burkhardt - CERN
 #       Revisions: Guy Barrand - LAL
 #                  Gabriele Cosmo - CERN
+#                  Laurent Garnier - LAL
 #
 ifeq ($(G4SYSTEM),Darwin-g++)
   CXX       := g++
@@ -46,19 +48,6 @@ ifeq ($(G4SYSTEM),Darwin-g++)
     XMLIBS    := -L/sw/lib -lXm -lXpm
 #   XMLIBS    := -L/usr/X11R6/lib -lXm -lXpm   ##### some installations.
   endif
-  ifndef QTHOME
-    QTHOME  := /sw
-  endif
-  ifndef QTFLAGS
-    QTFLAGS   := -I$(QTHOME)/include/Qt -I$(QTHOME)/include
-    MOC       := $(QTHOME)/bin/moc
-  endif
-  ifndef QTLIBS
-    QT3LIBS    := -L$(QTHOME)/lib -lqt-mt -lqui
-    QT4LIBS    := -F$(QTHOME)/lib -framework QtCore -framework QtGui
-    QT4LIBS    += -framework QtOpenGL -framework QtSql -framework QtXml
-    QTLIBS     := $(shell test -f $(QTHOME)/lib/Qt3Support.framework/Qt3Support && echo $(QT4LIBS) || echo $(QT3LIBS))
-  endif
   ifndef XAWFLAGS
     XAWFLAGS   := -I/sw/include
 #   XAWFLAGS   := -I/usr/X11R6/include         ##### some installations.
@@ -74,19 +63,79 @@ ifeq ($(G4SYSTEM),Darwin-g++)
     OGLFLAGS  := -I$(OGLHOME)/include 
   endif
   ifndef OGLLIBS
-    OGLLIBS   := -L$(OGLHOME)/lib -lGLU -lGL
+    ifeq ($(shell uname -r | sed 's/\([0-9]*\).[0-9]*.[0-9]*/\1/'),9)
+      # the following lines are for building on MacOSX 10.5 "Leopard"
+      OGLLIBS   := $(shell test -f /System/Library/Frameworks/OpenGL.framework/Versions/A/Libraries/libGL.dylib && echo "-L/usr/X11R6/lib -lGLU -lGL -Wl,-dylib_file,/System/Library/Frameworks/OpenGL.framework/Versions/A/Libraries/libGL.dylib:/System/Library/Frameworks/OpenGL.framework/Versions/A/Libraries/libGL.dylib")
+    else
+      OGLLIBS   := -L$(OGLHOME)/lib -lGLU -lGL
+    endif
   endif
+
+# ---- QT Setup block -------------------------------------------------------
+  ifndef QTHOME
+    QTHOME   := $(shell test -f /Library/Frameworks/Qt3Support.framework/Qt3Support && echo  "/Library/Frameworks" || echo "/sw")
+  endif
+  ifndef QTMOC
+   ifeq ($(QTHOME),/Library/Frameworks)
+     QTMOC      := /usr/bin/moc
+   else
+     QTMOC      := $(QTHOME)/bin/moc
+   endif
+  endif
+
+  QT_VERSION := $(shell $(QTMOC) 2>&1 -v | sed 's/.* .Qt \([0-9]\)\..*/\1/' )
+
+  ifndef QTFLAGS
+    ifeq ($(QT_VERSION),4)
+      QTFLAGS   := -I $(QTHOME)/QtCore.framework/Headers 
+      QTFLAGS   += -I $(QTHOME)/QtGui.framework/Headers 
+      QTFLAGS   += -I $(QTHOME)/QtOpenGL.framework/Headers 
+    else
+      QTFLAGS   := -I $(QTHOME)/include/Qt -I$(QTHOME)/include
+    endif
+  endif
+  ifndef QTLIBPATH
+    ifeq ($(QT_VERSION),3)
+      QTLIBPATH   := $(shell test -d $(QTHOME)/lib/qt3/lib && echo "/lib/qt3/lib" || echo "/lib" )
+    else
+      QTLIBPATH  := -F$(QTHOME)
+    endif
+  endif
+  ifndef QTLIBS
+    ifeq ($(QT_VERSION),3)
+      QTLIBS   := -L$(QTHOME)$(QTLIBPATH)
+      QT3_MT  := $(shell ls  $(QTHOME)$(QTLIBPATH)/libqt-mt.* 2>/dev/null | wc -l )
+      ifneq ($(QT3_MT),0)
+        QTLIBS  += -lqt-mt
+      else
+        QTLIBS  += -lqt
+      endif
+      QTLIBS   += -lqui
+    else
+      QTLIBS    :=  -framework QtCore -framework QtGui
+    endif
+  endif
+  ifndef GLQTLIBS
+    ifeq ($(QT_VERSION),3)
+        # already done in QTLIBS
+        #      GLQTLIBS    := $(QTLIBS)
+    else
+      GLQTLIBS    := -F$(QTHOME) -framework QtCore -framework QtGui
+      GLQTLIBS    += -framework QtOpenGL
+    endif
+  endif
+#----------------------------------------------------------------------------
 
   define build-granular-shared-lib
     @libdir=`(cd $(@D);/bin/pwd)`; \
      cd $(G4TMPDIR); \
-     g++ -dynamiclib -single_module -undefined dynamic_lookup \
+     $(CXX)  -dynamiclib -single_module  -lgcov -undefined dynamic_lookup \
          -o $$libdir/$(@F) $(INTYLIBS) *.o
   endef
   define build-global-shared-lib
     @libdir=`(cd $(@D);/bin/pwd)`; \
      cd $(G4TMP)/$(G4SYSTEM); \
-     g++ -dynamiclib -single_module -undefined dynamic_lookup \
+     $(CXX)  -dynamiclib -single_module  -lgcov -undefined dynamic_lookup \
          -o $$libdir/$(@F) $(INTYLIBS) $(foreach dir,$(SUBLIBS),$(dir)/*.o);
   endef
 

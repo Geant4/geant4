@@ -13,6 +13,23 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+09 July 2008 Dennis Wright (radioactive_decay-V09-01-02)
+- replace exit() with G4Exception in G4RadioactiveDecay and G4NuclearDecayChannel
+
+17 June 2008 Fan Lei (radioactive_decay-V09-01-01)
+- GRIsotopeTable.cc
+	i) change default verbosity level to 1
+	ii) correct use G4cout instead of G4cerr  
+
+01 May 2008 Fan Lei (radioactive_decay-V09-01-00)
+- G4NuclearDecayChannel.cc
+	i) ARM is no longer applied in photon-evaporation for IT mode and 
+	is now applied at the end in DecayIt() 
+	ii) use the correct shell index in appling ARM and switch on Auger 
+	electron production
+        iii) check the residual kinetic energy after ARM and add it to the atom
+
 21 June 2007 Fan Lei (radioactive_decay-V08-03-00)
 - Minor changes to remove compilation warnings on Windows
    src\G4RIsotopeTable.cc(204): warning C4804:

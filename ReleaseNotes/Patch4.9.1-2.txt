@@ -1,0 +1,203 @@
+
+                 Geant4 9.1 - patch-02 Release Notes
+                 -----------------------------------
+
+                                                            9 May 2008
+
+List of fixes included in this public patch since the public release 9.1.p01:
+
+  o Configuration:
+    -------------
+    + Fixed in liblist.c use of gets() by adopting safer fgets().
+    + Linux-icc.gmk: updated setup to make use of icc-10.1 and ifort-10.1;
+      changed compilation option "-mp" to more performant "-fp_model precise".
+    + Linux-g++.gmk: Replaced g77 with gfortran compiler.
+
+  o Environments:
+    ------------
+    + Fixed compilation problems.
+    + Make direct usage of tags in G4Version header.
+
+  o Geometry:
+    --------
+    + Cleared compilation warnings detected on gcc-4.3.0.
+    + magneticfield:
+      o Fixed 'unused' non-initialized values of dydx in classes
+        G4EqMagElectricField and G4EqEMFieldWithSpin.
+    + management:
+      o Added missing protected copy-contructor and assignment operator
+        for G4VSolid.
+      o Added Shrink() and Reserve() methods to G4SmartVoxelNode to be used
+        for debugging studies.
+    + navigation:
+      o G4PathFinder: commented out warning and exception in ComputeStep()
+        for steps smaller than minimum threshold.
+    + solids/CSG:
+      o G4Cons: added protection against NaN in GetPointOnSurface() in the
+        case the check is run for Rmax1==Rmax2.
+      o G4Trap: corrections for arithmetic operations in 8-point constructor.
+        Addressing problem report #934.
+    + solids/specific:
+      o G4ExtrudedSolid: bug fix in MakeFacets() to fill 'fTriangles' also
+        in case of polygon with 3 or 4 vertices, as they are needed for
+        Inside(p). Fix in Inside(p) for correctly handling the case of
+        points located on the edges of triangles which are not the outline
+        edges of the polygon.
+      o G4TessellatedSolid: fixed bug in copy-constructor and internal method
+        CopyObjects() for cloning of facets. Fix in DistanceToOut(p,v,..) to
+        compute normal only if specified by flag in input.
+      o G4Polyhedra: fixed problem of out-of-bound access to vectors in
+        method GetPointOnSurface().
+      o G4IntersectingVone: added protection against NaN in LineHitsCone1()
+        in case of configurations where a conic section becomes a tube.
+        Added kCarTolerance in definition of "low" and "high" cone limits
+        in R and in Z in order to protect against numerical errors; this
+        fixes cases of DistanceToIn(p,v) returning 'kInfinity' when p+t*v
+        cross intersection between two cones.
+      o G4EllipticalCone: removed some debug printouts.
+      o G4Hype: refined polyhedron representation for correct visualization
+        of the shape.
+
+  o Global:
+    ------
+    + Introduced inclusion of <cstring> and <climits> in G4String.hh and
+      templates.hh respectively for porting on gcc-4.3.0 compiler.
+    + Cleared compilation warnings detected on gcc-4.3.0
+    + Removed useless specification of units in implementation of
+      G4GeometryTolerance::SetSurfaceTolerance().
+    + Changed date for patch-02 to release 9.1.
+
+  o Graphics Representations:
+    ------------------------
+    + Added G4Hype representation to HepPolyhedron and G4Polyhedron.
+    + Added inclusion of <cstdlib> in HepPolyhedron.cc for porting on
+      gcc-4.3.0 compiler.
+
+  o Materials:
+    ---------
+    + G4NistMaterialBuilder: using correct dimension for the density for
+      ConstructNewMaterial() methods.
+    + G4Material: improved printout in error conditions by specifying the
+      name of the material affected.
+
+  o Particles:
+    ---------
+    + G4ParticleTable: fixed implementation of methods Remove() and
+      RemoveAllParticles() so that particle definition objects are properly
+      deleted when invoking these methods between runs. It's user's
+      responsibility to delete dynamically instantiated particle objects.
+      Added method DeleteAllParticles() to remove and delete all particles
+      in the list. Addressing problem report #1007.
+    + Fixed bugs in G4Iontable::Remove() and G4ShortLivedTable::Remove().
+
+  o Physics Lists:
+    -------------
+    + Fixed deletion using uninitialized pointers in FTF-BIC, for classes
+      HadronPhysicsFTF_BIC, G4FTFBinaryNeutronBuilder and G4LEPNeutronBuilder.
+
+  o Electromagnetic Processes:
+    -------------------------
+    + Standard:
+      o G4UrbanMscModel90, G4UrbanMscModel: fixed asymmetry of lateral
+        displacement.
+      o G4ionIonisation: adopt 'linLossLimit' 0.15 as it was originally in 9.1.
+      o G4IonFluctuations: fixed discontinuity of width correction factor 
+        for small velocities and added a protection to its value 
+        (factor>1), which fixes very long alpha events.
+    + Utils:
+      o G4EmCorrections: set finite size correction to zero (provides flat
+        distribution of vertex detector response for high energy hadrons).
+      o G4ionEffectiveCharge: minor change of numerical constants to provide
+        continuous change of charge versus energy.
+
+  o Hadronic Processes:
+    ------------------
+    + Cleared most compilation warnings detected on gcc-4.3.0.
+    + cross_sections:
+      o G4NeutronInelasticCrossSection: fixed bug which used to return zero
+        cross section for 3He.
+      o G4TripathiLightCrossSection: fixed bug in method IsApplicable() to
+        use GetN() instead of GetA() for target.
+      o Added capability to use element-based cross section data
+        sets if no isotope-based ones are available. This is required to
+        get the HP neutron code to work within the cross section framework
+        introduced in version 9.0. Added internal method to class
+        G4CrossSectionDataStore.
+    + models/cascade:
+      o Added Coulomb barrier in G4EquilibriumEvaporator.
+      o Changed pp, nn total cross section parameterization in class
+        G4CascadSpecialFunctions to more closely reflect the PDG values;
+        fixed cross section bug responsible for returning low or zero total
+        cross sections for pi-p, pi+n, np, and pi0 interactions.
+    + models/chiral_inv_phase_space:
+      o Modified G4QElasticCrossSection to fix problem with quasi-elastic.
+        When run together with elastic, the parameters to sample T were not
+        updated, this fix is to always update these.
+      o Fixed case of exceeded boundary bounds in G4QCollision.
+      o Check on tolerance is replaced by check on exact equality for fixing
+        event reproducibility.
+    + models/coherent_elastic:
+      o G4HadronElastic: added extra protection against precision lost
+        when projectile almost lost kinetic energy; set 'lowestEnergyLimit'
+        to be 1.e-6*eV (was 0.0).
+        Added extra protection: if sampled t out of the physics range then
+        no scattering.
+      o G4UHadronElasticProcess: call to G4QElasticCrossSection with option
+        "false", so parameters for sampling of scattering are precalculated.
+    + models/neutron_hp:
+      o Fix against cases of division by zero.
+      o Fixed erroneous condition in G4NeutronHPContAngularPar.
+      o To increase performance, checking point of "neglecting doppler
+        broadening" flag is changed from GetCrossSection() method to
+        BuildPhysicsTable().
+    + models/theo_high_energy:
+      o Added missing Fermi momentum to quasi elastic scattering.
+    + stopping:
+      o G4MuMinusCaptureCascade: fixed case of NaN value in bound muon decay.
+
+  o Generic Processes:
+    -----------------
+    + Decay:
+      o Added protection to properly handle shortlived particles with finite
+        pre-assigned proper time.
+    + Management:
+      o Fixed bug related to invoking ResetNumberOfInteractionLengthLeft()
+        at the zero length step
+      o Allow zero mean free path for PostStepDoIt().
+    + Parameterisation:
+      o Cleared compilation warnings detected on gcc-4.3.0.
+
+  o Run:
+    ---
+    + Added G4Transportation to shortlived particles in G4VUserPhysicsList
+      in order to fix problem of non-assigned process for shortlived particle
+      decay detected in CMS.
+
+  o Examples:
+    --------
+    + advanced/underground_physics:
+      o Fixed mis-sized arrays 'ring_phys_gas' and 'ring_phys_liq';
+        both were less than the utilized size.
+    + extended/field/field02:
+      o Fixed setup to correctly handle electric field.
+    + extended/field/field04:
+      o Fix to avoid error for invalid rotation specification
+        in F04DetectorConstruction::stringToRotationMatrix().
+
+
+ ----------------------------------------------------------------------------
+
+                             Technical Notes
+                             --------------- 
+
+  o  This patch should be applied on top of release 9.1
+  o  Technical notes distributed for release 9.1 are also applicable and
+     valid for this patch.
+
+The code and rebuilt binary libraries for release 9.1 are available
+through our "Download" Web page:
+   http://cern.ch/geant4/support/download.shtml
+
+Please refer to the Geant4 User Documentation:
+   http://cern.ch/geant4/support/userdocuments.shtml
+for further information about using Geant4.

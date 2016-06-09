@@ -1,9 +1,9 @@
 #
 /vis/scene/create
-/vis/sceneHandler/create OGLIX
+/vis/sceneHandler/create VRML2FILE
 /vis/viewer/create
 /vis/drawVolume
-/vis/viewer/viewpointThetaPhi 30 30
+#/vis/viewer/viewpointThetaPhi 30 30
 #/vis/viewer/update
 /vis/scene/endOfEventAction accumulate
 /tracking/storeTrajectory 1

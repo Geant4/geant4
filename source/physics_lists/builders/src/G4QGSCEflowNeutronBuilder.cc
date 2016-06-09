@@ -32,7 +32,7 @@ G4QGSCEflowNeutronBuilder::
 G4QGSCEflowNeutronBuilder(G4bool quasiElastic) 
 {
   theMin = 8*GeV;
-  theModel = new G4TheoFSGenerator;
+  theModel = new G4TheoFSGenerator("QGSCElow");
 
   theStringModel= new G4QGSModel< G4QGSParticipants >;
   theStringDecay = new G4ExcitedStringDecay(new G4QGSMFragmentation);

@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BetheBlochModel.hh,v 1.9 2007/05/22 17:34:36 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4BetheBlochModel.hh,v 1.16 2008/10/22 16:00:57 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // -------------------------------------------------------------------
 //
@@ -44,9 +44,11 @@
 // 13-02-03 Add name (V.Ivanchenko)
 // 12-11-03 Fix for GenericIons (V.Ivanchenko)
 // 24-03-05 Add G4EmCorrections (V.Ivanchenko)
-// 11-04-05 Major optimisation of internal interfaces (V.Ivantchenko)
+// 11-04-05 Major optimisation of internal interfaces (V.Ivanchenko)
 // 11-04-04 Move MaxSecondaryEnergy to models (V.Ivanchenko)
 // 11-02-06 ComputeCrossSectionPerElectron, ComputeCrossSectionPerAtom (mma)
+// 12-08-08 Added methods GetParticleCharge, GetChargeSquareRatio, 
+//          CorrectionsAlongStep needed for ions(V.Ivanchenko)
 
 //
 // Class Description:
@@ -64,6 +66,8 @@
 
 class G4EmCorrections;
 class G4ParticleChangeForLoss;
+class G4NistManager;
+
 
 class G4BetheBlochModel : public G4VEmModel
 {
@@ -104,6 +108,20 @@ public:
 					G4double kineticEnergy,
 					G4double cutEnergy);
 
+  virtual G4double GetChargeSquareRatio(const G4ParticleDefinition* p,
+					const G4Material* mat,
+					G4double kineticEnergy);
+
+  virtual G4double GetParticleCharge(const G4ParticleDefinition* p,
+				     const G4Material* mat,
+				     G4double kineticEnergy);
+
+  virtual void CorrectionsAlongStep(const G4MaterialCutsCouple*,
+				    const G4DynamicParticle*,
+				    G4double& eloss,
+				    G4double& niel,
+				    G4double length);
+
   virtual void SampleSecondaries(std::vector<G4DynamicParticle*>*,
 				 const G4MaterialCutsCouple*,
 				 const G4DynamicParticle*,
@@ -124,19 +142,25 @@ private:
   G4BetheBlochModel(const  G4BetheBlochModel&);
 
   const G4ParticleDefinition* particle;
+  const G4Material*           currentMaterial;
   G4ParticleDefinition*       theElectron;
   G4EmCorrections*            corr;
   G4ParticleChangeForLoss*    fParticleChange;
+  G4NistManager*              nist;
 
   G4double mass;
   G4double tlimit;
   G4double spin;
+  G4double magMoment2;
   G4double chargeSquare;
   G4double ratio;
+  G4double formfact;
   G4double twoln10;
   G4double bg2lim;
   G4double taulim;
+  G4double corrFactor;
   G4bool   isIon;
+  G4bool   isInitialised;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -150,21 +174,6 @@ inline G4double G4BetheBlochModel::MaxSecondaryEnergy(
   G4double tmax = 2.0*electron_mass_c2*tau*(tau + 2.) /
                   (1. + 2.0*(tau + 1.)*ratio + ratio*ratio);
   return std::min(tmax,tlimit);
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline void G4BetheBlochModel::SetParticle(const G4ParticleDefinition* p)
-{
-  if(particle != p) {
-    particle = p;
-    mass = particle->GetPDGMass();
-    spin = particle->GetPDGSpin();
-    G4double q = particle->GetPDGCharge()/eplus;
-    chargeSquare = q*q;
-    ratio = electron_mass_c2/mass;
-    if(mass > 120.*MeV) tlimit = 51.2*GeV*std::pow(proton_mass_c2/mass,0.66667);
-  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

@@ -49,7 +49,7 @@ public:
     exitationEnergy = 0.0; 
   };
 
-  G4InuclNuclei(const std::vector<G4double>& mom, 
+  G4InuclNuclei(const G4CascadeMomentum& mom, 
 		G4double a, 
 		G4double z)
     : G4InuclParticle(mom),
@@ -67,7 +67,7 @@ public:
     Z(z) { 
 
     setNucleiMass();
-    std::vector<G4double> mom(4, 0.0);
+    G4CascadeMomentum mom;
     mom[0] = ekin + nucleiMass;
     mom[3] = std::sqrt(mom[0] * mom[0] - nucleiMass * nucleiMass);
     G4InuclParticle::setMomentum(mom);
@@ -151,8 +151,7 @@ public:
     G4cout << " A " << A << " Z " << Z << " mass " << nucleiMass << 
       " Eex (MeV) " << exitationEnergy << G4endl;
 
-    if(momentum.size() == 4)         
-      G4cout << " Px " << momentum[1] << " Py " << momentum[2] << " Pz " <<  
+    G4cout << " Px " << momentum[1] << " Py " << momentum[2] << " Pz " <<  
 	momentum[3] <<  " E " << momentum[0] << G4endl;
   };
 

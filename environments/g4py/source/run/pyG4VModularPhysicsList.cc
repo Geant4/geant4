@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: pyG4VModularPhysicsList.cc,v 1.3 2006/06/29 15:35:21 gunter Exp $
-// $Name: geant4-09-01 $
+// $Id: pyG4VModularPhysicsList.cc,v 1.4 2008/05/22 09:27:25 kmura Exp $
+// $Name: geant4-09-02 $
 // ====================================================================
 //   pyG4VModularPhysicsList.cc
 //
@@ -74,7 +74,7 @@ void export_G4VModularPhysicsList()
     .def("ConstructParticle",  &G4VModularPhysicsList::ConstructParticle)
     .def("ConstructProcess",   &G4VModularPhysicsList::ConstructProcess)
     // ---
-    .def("RegisterPhysis",     &G4VModularPhysicsList::RegisterPhysics)
+    .def("RegisterPhysics",     &G4VModularPhysicsList::RegisterPhysics)
     .def("GetPhysics",         f1_GetPhysics,
          return_value_policy<reference_existing_object>())
     .def("GetPhysics",         f2_GetPhysics,

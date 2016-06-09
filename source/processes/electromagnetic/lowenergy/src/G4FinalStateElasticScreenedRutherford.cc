@@ -23,78 +23,37 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4FinalStateElasticScreenedRutherford.cc,v 1.2 2007/10/12 23:10:33 pia Exp $
-// GEANT4 tag $Name: geant4-09-01 $
-// 
-// Contact Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
-//
-// Reference: TNS Geant4-DNA paper
-// Reference for implementation model: NIM. 155, pp. 145-156, 1978
-
-// History:
-// -----------
-// Date         Name              Modification
-// 28 Apr 2007  M.G. Pia          Created in compliance with design described in TNS paper
-//
-// -------------------------------------------------------------------
-
-// Class description:
-// Reference: TNS Geant4-DNA paper
-// S. Chauvie et al., Geant4 physics processes for microdosimetry simulation:
-// design foundation and implementation of the first set of models,
-// IEEE Trans. Nucl. Sci., vol. 54, no. 6, Dec. 2007.
-// Further documentation available from http://www.ge.infn.it/geant4/dna
-
-// -------------------------------------------------------------------
-
+// $Id: G4FinalStateElasticScreenedRutherford.cc,v 1.4 2008/07/14 20:47:34 sincerti Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 
 #include "G4FinalStateElasticScreenedRutherford.hh"
-#include "G4Track.hh"
-#include "G4Step.hh"
-#include "G4DynamicParticle.hh"
-#include "Randomize.hh"
 
-#include "G4ParticleTypes.hh"
-#include "G4ParticleDefinition.hh"
-#include "G4Electron.hh"
-#include "G4SystemOfUnits.hh"
-#include "G4ParticleMomentum.hh"
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4FinalStateElasticScreenedRutherford::G4FinalStateElasticScreenedRutherford()
 {
-  // These data members will be used in the next implementation iteration, 
-  // when the enriched PhysicsModel policy is implemented
-  name = "FinalStateElasticScreenedRutherford";
-  lowEnergyLimit = 7.4 * eV;
+  lowEnergyLimit = 200 * eV;
   highEnergyLimit = 10 * MeV;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4FinalStateElasticScreenedRutherford::~G4FinalStateElasticScreenedRutherford()
-{ 
-  // empty
-  // G4DynamicParticle objects produced are owned by client
-}
+{}
  
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-const G4FinalStateProduct& G4FinalStateElasticScreenedRutherford::GenerateFinalState(const G4Track& track, const G4Step& step)
+const G4FinalStateProduct& G4FinalStateElasticScreenedRutherford::GenerateFinalState(const G4Track& track, const G4Step& )
 {
-  // Clear previous secondaries, energy deposit and particle kill status
   product.Clear();
 
-  // Kinetic energy of primary particle
   G4double k = track.GetDynamicParticle()->GetKineticEnergy();
 
-  // Assume material = water; H2O number of electrons
-  // ---- MGP ---- To be generalized later
   const G4int z = 10; 
 
   G4double cosTheta = RandomizeCosTheta(k, z);
   
   G4double phi = 2. * pi * G4UniformRand();
-
-  // G4cout << "cosTheta in GenerateFinalState = " << cosTheta << ", phi = " << phi << G4endl;
 
   G4ThreeVector zVers = track.GetDynamicParticle()->GetMomentumDirection();
   G4ThreeVector xVers = zVers.orthogonal();
@@ -105,22 +64,14 @@ const G4FinalStateProduct& G4FinalStateElasticScreenedRutherford::GenerateFinalS
   xDir *= std::cos(phi);
   yDir *= std::sin(phi);
 
-  // G4cout << "xDir, yDir = " << xDir <<", " << yDir << G4endl;
-
-  // G4ThreeVector zPrimeVers((xDir*xVers + yDir*yVers + cosTheta*zVers).unit());
   G4ThreeVector zPrimeVers((xDir*xVers + yDir*yVers + cosTheta*zVers));
 
-  // G4cout << "zPrimeVers = (" << zPrimeVers.x() << ", "<< zPrimeVers.y() << ", "<< zPrimeVers.z() << ") " << G4endl;
-
-  //  product.ModifyPrimaryParticle(zPrimeVers.x(),zPrimeVers.y(),zPrimeVers.z(),k);
   product.ModifyPrimaryParticle(zPrimeVers,k);
-
-  //  this->aParticleChange.ProposeEnergy(k);
-  //  this->aParticleChange.ProposeMomentumDirection(zPrimeVers);
-  //  this->aParticleChange.SetNumberOfSecondaries(0);
 
   return product;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4double G4FinalStateElasticScreenedRutherford::RandomizeCosTheta(G4double k, G4int z) const
 {
@@ -143,15 +94,17 @@ G4double G4FinalStateElasticScreenedRutherford::RandomizeCosTheta(G4double k, G4
  G4double fCosTheta;
 
  do 
-   { 
-     cosTheta = 2. * G4UniformRand() - 1.;
-     fCosTheta = (1 + 2.*n - cosTheta);
-     fCosTheta = oneOverMax / (fCosTheta*fCosTheta);
-   }
+ { 
+   cosTheta = 2. * G4UniformRand() - 1.;
+   fCosTheta = (1 + 2.*n - cosTheta);
+   fCosTheta = oneOverMax / (fCosTheta*fCosTheta);
+ }
  while (fCosTheta < G4UniformRand());
  
  return cosTheta;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4double G4FinalStateElasticScreenedRutherford::ScreeningFactor(G4double k, G4int z) const
 {
@@ -179,14 +132,12 @@ G4double G4FinalStateElasticScreenedRutherford::ScreeningFactor(G4double k, G4in
   
   G4double result = 0.;
   if (denominator != 0.) 
-    {
-      result = numerator / denominator;
-    }
+  {
+    result = numerator / denominator;
+  }
   else
-    {
-      // Throw an exception
-      G4Exception("G4FinalStateElasticScreenedRutherford::ScreeningFactor - denominator = 0");
-    }
+  {
+    G4Exception("G4FinalStateElasticScreenedRutherford::ScreeningFactor - denominator = 0");
+  }
   return result;
-
 }

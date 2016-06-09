@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4mplIonisation.cc,v 1.5 2007/05/31 11:13:31 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4mplIonisation.cc,v 1.7 2008/10/16 14:29:48 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // -------------------------------------------------------------------
 //
@@ -63,6 +63,8 @@ G4mplIonisation::G4mplIonisation(G4double mCharge, const G4String& name)
   if(magneticCharge == 0.0) magneticCharge = eplus*0.5/fine_structure_const;
 
   SetVerboseLevel(0);
+  SetProcessSubType(fIonisation);
+  SetStepFunction(0.2, 1*mm);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -81,11 +83,9 @@ void G4mplIonisation::InitialiseEnergyLossProcess(const G4ParticleDefinition*,
   SetSecondaryParticle(G4Electron::Electron());
 
   G4mplIonisationModel* ion  = new G4mplIonisationModel(magneticCharge,"PAI");
-  ion->SetLowEnergyLimit(0.1*keV);
-  ion->SetHighEnergyLimit(100.*TeV);
+  ion->SetLowEnergyLimit(MinKinEnergy());
+  ion->SetHighEnergyLimit(MaxKinEnergy());
   AddEmModel(0,ion,ion);
-
-  SetStepFunction(0.2, 1*mm);
 
   isInitialised = true;
 }

@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4VisCommandsSceneAdd.cc,v 1.73 2007/11/16 20:29:04 perl Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// GEANT4 tag $Name: geant4-09-02 $
 // /vis/scene commands - John Allison  9th August 1998
 
 #include "G4VisCommandsSceneAdd.hh"

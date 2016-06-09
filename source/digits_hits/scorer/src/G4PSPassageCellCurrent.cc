@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4PSPassageCellCurrent.cc,v 1.1 2007/08/14 21:30:46 taso Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // G4PSPassageCellCurrent
 #include "G4PSPassageCellCurrent.hh"

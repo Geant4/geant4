@@ -1,4 +1,4 @@
-# $Id: module.gmk,v 1.3 2007/11/25 19:38:03 kmura Exp $
+# $Id: module.gmk,v 1.5 2008/12/01 06:48:57 kmura Exp $
 # ===========================================================
 #   Script for building a Boost-Python module 
 # ===========================================================
@@ -32,7 +32,7 @@ ifneq ($(Q_BOOST_LIBDIR), /usr/lib)
   endif
 endif
 
-LOPT  += -l$(Q_BOOST_PYTHON_LIB)
+LOPT  += -lboost_python
 
 # Xerces-C ...
 ifdef Q_XERCESC_INCDIR
@@ -56,10 +56,6 @@ CXXFLAGS += $(INCFLAGS)
 
 ifdef COMPILE_G4PY
   CXXFLAGS += $(G4PY_INCFLAGS)
-  # Geant4 version
-  ifdef Q_G4_VERSION
-    CXXFLAGS += -DG4VERSION_NUMBER=$(Q_G4_VERSION)
-  endif
   LOPT += $(G4PY_LOPT)
 endif
 

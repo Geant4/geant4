@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MuBetheBlochModel.cc,v 1.23 2007/05/22 17:35:58 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4MuBetheBlochModel.cc,v 1.24 2008/03/25 12:31:04 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // -------------------------------------------------------------------
 //
@@ -274,7 +274,7 @@ G4double G4MuBetheBlochModel::ComputeDEDXPerVolume(const G4Material* material,
   dedx *= twopi_mc2_rcl2*eDensity/beta2;
 
   //High order corrections
-  dedx += corr->HighOrderCorrections(p,material,kineticEnergy);
+  dedx += corr->HighOrderCorrections(p,material,kineticEnergy,cutEnergy);
 
   return dedx;
 }

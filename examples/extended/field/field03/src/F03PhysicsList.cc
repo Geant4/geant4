@@ -25,7 +25,7 @@
 //
 //
 // $Id: F03PhysicsList.cc,v 1.11 2007/05/23 13:39:16 tnikitin Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// GEANT4 tag $Name: geant4-09-02 $
 // 
 
 #include "G4Timer.hh"

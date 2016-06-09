@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4EllipticalCone.hh,v 1.11 2007/08/20 15:21:40 tnikitin Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4EllipticalCone.hh,v 1.12 2008/11/21 09:26:22 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 //
 // --------------------------------------------------------------------
@@ -95,6 +95,9 @@ class G4EllipticalCone : public G4VSolid
     // Access functions
     //
     inline G4double GetSemiAxisMax () const;
+    inline G4double GetSemiAxisX () const;
+    inline G4double GetSemiAxisY () const;
+    inline G4double GetZMax() const;
     inline G4double GetZTopCut() const;
     inline void SetSemiAxis (G4double x, G4double y, G4double z);
     inline void SetZCut (G4double newzTopCut);

@@ -35,6 +35,9 @@
 #include "G4OpBoundaryProcess.hh"
 #include "G4OpWLS.hh"
 
+#include "G4LossTableManager.hh"
+#include "G4EmSaturation.hh"
+
 LXeOpticalPhysics::LXeOpticalPhysics(const G4String& name)
   :  G4VPhysicsConstructor(name)
 {
@@ -60,28 +63,38 @@ void LXeOpticalPhysics::ConstructParticle()
 
 void LXeOpticalPhysics::ConstructProcess()
 {
-  theScintProcess = new G4Scintillation();
-  theCerenkovProcess=new G4Cerenkov();
   theAbsorptionProcess=new G4OpAbsorption();
   theRayleighScattering=new G4OpRayleigh();
-  theBoundaryProcess=new G4OpBoundaryProcess();
-  theWLSProcess=new G4OpWLS();
 
+  theBoundaryProcess=new G4OpBoundaryProcess();
+  theBoundaryProcess->SetModel(unified);
+
+  theWLSProcess=new G4OpWLS();
   theWLSProcess->UseTimeProfile("delta");
-//theWLSProcess->UseTimeProfile("exponential");
+//  theWLSProcess->UseTimeProfile("exponential");
 
   G4ProcessManager * pManager = 0;
   
   pManager = G4OpticalPhoton::OpticalPhoton()->GetProcessManager();
   pManager->AddDiscreteProcess(theAbsorptionProcess);
   pManager->AddDiscreteProcess(theRayleighScattering);
-  theBoundaryProcess->SetModel(unified);
   pManager->AddDiscreteProcess(theBoundaryProcess);
   pManager->AddDiscreteProcess(theWLSProcess);
-  
+
+  theScintProcess = new G4Scintillation();  
   theScintProcess->SetScintillationYieldFactor(1.);
   theScintProcess->SetScintillationExcitationRatio(0.0);
   theScintProcess->SetTrackSecondariesFirst(true);
+
+  // Use Birks Correction in the Scintillation process
+
+  G4EmSaturation* emSaturation = G4LossTableManager::Instance()->EmSaturation();
+  theScintProcess->AddSaturation(emSaturation);
+
+  theCerenkovProcess=new G4Cerenkov();
+  theCerenkovProcess->SetMaxNumPhotonsPerStep(100);
+  theCerenkovProcess->SetMaxBetaChangePerStep(10.0);
+  theCerenkovProcess->SetTrackSecondariesFirst(true);
 
   theParticleIterator->reset();
   while( (*theParticleIterator)() ){

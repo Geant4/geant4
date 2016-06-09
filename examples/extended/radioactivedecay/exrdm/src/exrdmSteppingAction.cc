@@ -45,10 +45,20 @@ exrdmSteppingAction::~exrdmSteppingAction()
 
 void exrdmSteppingAction::UserSteppingAction(const G4Step* fStep) 
 {
-#ifdef G4ANALYSIS_USE
   G4Track* fTrack = fStep->GetTrack();
   G4int StepNo = fTrack->GetCurrentStepNumber();
   if(StepNo >= 10000) fTrack->SetTrackStatus(fStopAndKill);
+
+#ifdef G4ANALYSIS_USE 
+#define COLLECT
+#endif
+#ifdef G4ANALYSIS_USE_ROOT
+#ifndef COLLECT
+#define COLLECT
+#endif
+#endif
+
+#ifdef COLLECT
   if (StepNo == 1) {
     if ( (fTrack->GetDefinition()->GetParticleType() == "nucleus") && 
 	 !( fTrack->GetDefinition()->GetPDGStable()) && 
@@ -79,9 +89,9 @@ void exrdmSteppingAction::UserSteppingAction(const G4Step* fStep)
       }
     }
   }
-  // energy deposition: collect energy deposited by decay products only
+  // energy deposition
   if (fTrack->GetTrackID() != 1 ) {
-    if (fTrack->GetCreatorProcess()->GetProcessName() == "RadioactiveDecay") {	
+    //    if (fTrack->GetCreatorProcess()->GetProcessName() == "RadioactiveDecay") {	
       if (fStep->GetTotalEnergyDeposit() ) {
 	G4double time = fStep->GetPreStepPoint()->GetGlobalTime() ;
 	// - fStep->GetPreStepPoint()->GetLocalTime(); 
@@ -91,9 +101,9 @@ void exrdmSteppingAction::UserSteppingAction(const G4Step* fStep)
 	if (fStep->GetPreStepPoint()->GetPhysicalVolume()->GetName() == "Detector") edep = -edep;
 	exrdmAnalysisManager::getInstance()->AddEnergy(edep,weight,time);
       }
-    }
+      //    }
   }
-#endif  
+#endif 
 }
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

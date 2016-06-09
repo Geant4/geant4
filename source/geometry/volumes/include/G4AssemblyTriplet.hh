@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4AssemblyTriplet.hh,v 1.3 2007/11/16 16:20:25 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // 
 // Class G4AssemblyTriplet

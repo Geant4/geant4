@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEmFluctuationModel.cc,v 1.2 2006/06/29 19:55:15 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4VEmFluctuationModel.cc,v 1.3 2008/07/15 16:56:39 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // -------------------------------------------------------------------
 //
@@ -48,16 +48,20 @@
 //
 
 #include "G4VEmFluctuationModel.hh"
-
+#include "G4LossTableManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4VEmFluctuationModel::G4VEmFluctuationModel(const G4String& nam)
   : name(nam) 
-{}
+{
+  G4LossTableManager::Instance()->Register(this);
+}
 
 G4VEmFluctuationModel::~G4VEmFluctuationModel() 
-{}
+{
+  G4LossTableManager::Instance()->DeRegister(this);
+}
 
 

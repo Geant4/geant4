@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4RPGReaction.cc,v 1.1 2007/07/18 21:04:21 dennis Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4RPGReaction.cc,v 1.4 2008/05/05 21:21:55 dennis Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 
 #include "G4RPGReaction.hh"
@@ -57,15 +57,12 @@ AddBlackTrackParticles(const G4double epnb,            // GeV
                        const G4int npnb,
                        const G4double edta,            // GeV
                        const G4int ndta,
-                       const G4double sprob,
-                       const G4double kineticMinimum,  // GeV
-                       const G4double kineticFactor,   // GeV
-                       const G4ReactionProduct &modifiedOriginal,
+                       const G4ReactionProduct& modifiedOriginal,
                        G4int PinNucleus,
                        G4int NinNucleus,
-                       const G4Nucleus &targetNucleus,
-                       G4FastVector<G4ReactionProduct,256> &vec,
-                       G4int &vecLen )
+                       const G4Nucleus& targetNucleus,
+                       G4FastVector<G4ReactionProduct,256>& vec,
+                       G4int& vecLen)
 {
   // derived from original FORTRAN code in GENXPT and TWOCLU by H. Fesefeldt
   //
@@ -73,303 +70,315 @@ AddBlackTrackParticles(const G4double epnb,            // GeV
   // ndta is the number of deuterons, tritons, and alphas produced
   // epnb is the kinetic energy available for proton/neutron black track particles
   // edta is the kinetic energy available for deuteron/triton/alpha particles
-  //
-    
-  G4ParticleDefinition *aProton = G4Proton::Proton();
-  G4ParticleDefinition *aNeutron = G4Neutron::Neutron();
-  G4ParticleDefinition *aDeuteron = G4Deuteron::Deuteron();
-  G4ParticleDefinition *aTriton = G4Triton::Triton();
-  G4ParticleDefinition *anAlpha = G4Alpha::Alpha();
-    
-    const G4double ekOriginal = modifiedOriginal.GetKineticEnergy()/MeV;
-    const G4double atomicWeight = targetNucleus.GetN();
-    const G4double atomicNumber = targetNucleus.GetZ();
-    
-    const G4double ika1 = 3.6;
-    const G4double ika2 = 35.56;
-    const G4double ika3 = 6.45;
-    
-    G4int i;
-    G4double pp;
-    G4double kinCreated = 0;
-    G4double cfa = 0.025*((atomicWeight-1.0)/120.0) * std::exp(-(atomicWeight-1.0)/120.0);
 
-    // First add protons and neutrons to final state
+  G4ParticleDefinition* aProton = G4Proton::Proton();
+  G4ParticleDefinition* aNeutron = G4Neutron::Neutron();
+  G4ParticleDefinition* aDeuteron = G4Deuteron::Deuteron();
+  G4ParticleDefinition* aTriton = G4Triton::Triton();
+  G4ParticleDefinition* anAlpha = G4Alpha::Alpha();
+    
+  const G4double ekOriginal = modifiedOriginal.GetKineticEnergy()/MeV;
+  const G4double atomicWeight = targetNucleus.GetN();
+  const G4double atomicNumber = targetNucleus.GetZ();
+    
+  const G4double ika1 = 3.6;
+  const G4double ika2 = 35.56;
+  const G4double ika3 = 6.45;
+    
+  G4int i;
+  G4double pp;
+  G4double kinetic = 0;
+  G4double kinCreated = 0;
+  //  G4double cfa = 0.025*((atomicWeight-1.0)/120.0) * std::exp(-(atomicWeight-1.0)/120.0);
+  G4double remainingE = 0;
 
-    if (npnb > 0)
+  // First add protons and neutrons to final state
+  if (npnb > 0) {
+    //    G4double backwardKinetic = 0.0;
+    G4int local_npnb = npnb;
+    // DHW: does not conserve energy  for (i = 0; i < npnb; ++i) if (G4UniformRand() < sprob) local_npnb--;
+    local_npnb = std::min(PinNucleus + NinNucleus , local_npnb);
+    G4double local_epnb = epnb;
+    if (ndta == 0) local_epnb += edta;   // Retrieve unused kinetic energy
+    //    G4double ekin = local_epnb/std::max(1,local_npnb);
+
+    remainingE = local_epnb;
+    for (i = 0; i < local_npnb; ++i)
     {
-      G4double backwardKinetic = 0.0;
-      G4int local_npnb = npnb;
-      for( i=0; i<npnb; ++i ) if( G4UniformRand() < sprob ) local_npnb--;
-      G4double local_epnb = epnb;
-      if (ndta == 0) local_epnb += edta;   // Retrieve unused kinetic energy
-      G4double ekin = local_epnb/std::max(1,local_npnb);
-      
-      for( i=0; i<local_npnb; ++i )
-      {
-        G4ReactionProduct * p1 = new G4ReactionProduct();
-	if( backwardKinetic > local_epnb )
-	{
-          delete p1;
-          break;    
-        }
-	G4double ran = G4UniformRand();
-	G4double kinetic = -ekin*std::log(ran) - cfa*(1.0+0.5*normal());
-	if( kinetic < 0.0 )kinetic = -0.010*std::log(ran);
-        backwardKinetic += kinetic;
-	if( backwardKinetic > local_epnb )
-           kinetic = std::max( kineticMinimum, local_epnb-(backwardKinetic-kinetic) );
+      G4ReactionProduct* p1 = new G4ReactionProduct();
+      //      if( backwardKinetic > local_epnb ) {
+      //        delete p1;
+      //        break;    
+      //      }
 
-        if (G4UniformRand() > (1.0-atomicNumber/atomicWeight)) {
+      //      G4double ran = G4UniformRand();
+      //      G4double kinetic = -ekin*std::log(ran) - cfa*(1.0+0.5*normal());
+      //      if( kinetic < 0.0 )kinetic = -0.010*std::log(ran);
+      //      backwardKinetic += kinetic;
+      //      if( backwardKinetic > local_epnb )
+      // kinetic = std::max( kineticMinimum, local_epnb-(backwardKinetic-kinetic) );
 
-	  // Boil off a proton if there are any left, otherwise a neutron
+      if (G4UniformRand() > (1.0-atomicNumber/atomicWeight)) {
 
-          if (PinNucleus > 0) {
-            p1->SetDefinition( aProton );
-            PinNucleus--;
-	  } else if (NinNucleus > 0) {
-            p1->SetDefinition( aNeutron );
-            NinNucleus--;
-	  } else {
-            delete p1;
-            break;     // no nucleons left in nucleus
-	  }
+	// Boil off a proton if there are any left, otherwise a neutron
+
+        if (PinNucleus > 0) {
+          p1->SetDefinition( aProton );
+          PinNucleus--;
 	} else {
+          p1->SetDefinition( aNeutron );
+          NinNucleus--;
+	  //        } else {
+	  //          delete p1;
+	  //          break;     // no nucleons left in nucleus
+        }
+      } else {
 
-	  // Boil off a neutron if there are any left, otherwise a proton
+	// Boil off a neutron if there are any left, otherwise a proton
 
-          if (NinNucleus > 0) {
-            p1->SetDefinition( aNeutron );
-            NinNucleus--;
-	  } else if (PinNucleus > 0) {
-            p1->SetDefinition( aProton );
-            PinNucleus--;
-	  } else {
-            delete p1;
-            break;     // no nucleons left in nucleus
-	  }
-	}
-
-        vec.SetElement( vecLen, p1 );
-        G4double cost = G4UniformRand() * 2.0 - 1.0;
-        G4double sint = std::sqrt(std::fabs(1.0-cost*cost));
-        G4double phi = twopi * G4UniformRand();
-        vec[vecLen]->SetNewlyAdded( true );
-        vec[vecLen]->SetKineticEnergy( kinetic*GeV );
-	kinCreated+=kinetic;
-        pp = vec[vecLen]->GetTotalMomentum()/MeV;
-        vec[vecLen]->SetMomentum( pp*sint*std::sin(phi)*MeV,
-                                    pp*sint*std::cos(phi)*MeV,
-                                    pp*cost*MeV );
-	vecLen++;
-	// DEBUGGING --> DumpFrames::DumpFrame(vec, vecLen);
+        if (NinNucleus > 0) {
+          p1->SetDefinition( aNeutron );
+          NinNucleus--;
+	} else {
+          p1->SetDefinition( aProton );
+          PinNucleus--;
+	  //        } else {
+	  //          delete p1;
+	  //          break;     // no nucleons left in nucleus
+        }
       }
 
-      if (NinNucleus > 0) {
-        if( (atomicWeight >= 10.0) && (ekOriginal <= 2.0*GeV) )
+      if (i < local_npnb - 1) {
+        kinetic = remainingE*G4UniformRand();
+        remainingE -= kinetic;
+      } else {
+        kinetic = remainingE;
+      }
+
+      vec.SetElement( vecLen, p1 );
+      G4double cost = G4UniformRand() * 2.0 - 1.0;
+      G4double sint = std::sqrt(std::fabs(1.0-cost*cost));
+      G4double phi = twopi * G4UniformRand();
+      vec[vecLen]->SetNewlyAdded( true );
+      vec[vecLen]->SetKineticEnergy( kinetic*GeV );
+      kinCreated+=kinetic;
+      pp = vec[vecLen]->GetTotalMomentum();
+      vec[vecLen]->SetMomentum(pp*sint*std::sin(phi),
+                               pp*sint*std::cos(phi),
+                               pp*cost );
+      vecLen++;
+    }
+
+    if (NinNucleus > 0) {
+      if( (atomicWeight >= 10.0) && (ekOriginal <= 2.0*GeV) )
+      {
+        G4double ekw = ekOriginal/GeV;
+        G4int ika, kk = 0;
+        if( ekw > 1.0 )ekw *= ekw;
+        ekw = std::max( 0.1, ekw );
+        ika = G4int(ika1*std::exp((atomicNumber*atomicNumber/
+                                           atomicWeight-ika2)/ika3)/ekw);
+        if( ika > 0 )
         {
-          G4double ekw = ekOriginal/GeV;
-          G4int ika, kk = 0;
-          if( ekw > 1.0 )ekw *= ekw;
-          ekw = std::max( 0.1, ekw );
-          ika = G4int(ika1*std::exp((atomicNumber*atomicNumber/
-                                             atomicWeight-ika2)/ika3)/ekw);
-          if( ika > 0 )
+          for( i=(vecLen-1); i>=0; --i )
           {
-            for( i=(vecLen-1); i>=0; --i )
+            if( (vec[i]->GetDefinition() == aProton) && vec[i]->GetNewlyAdded() )
             {
-              if( (vec[i]->GetDefinition() == aProton) && vec[i]->GetNewlyAdded() )
-              {
-                vec[i]->SetDefinitionAndUpdateE( aNeutron );  // modified 22-Oct-97
-                PinNucleus++;
-                NinNucleus--;
-                if( ++kk > ika )break;
-              }
+              vec[i]->SetDefinitionAndUpdateE( aNeutron );  // modified 22-Oct-97
+              PinNucleus++;
+              NinNucleus--;
+              if( ++kk > ika )break;
             }
           }
         }
-      } // if (NinNucleus >0)
-    } // if (npnb > 0)
+      }
+    } // if (NinNucleus >0)
+  } // if (npnb > 0)
 
-    //  Next try to add deuterons, tritons and alphas to final state
+  //  Next try to add deuterons, tritons and alphas to final state
 
-    if (ndta > 0)
-    {
-      G4double backwardKinetic = 0.0;
-      G4int local_ndta=ndta;
-      // DHW      for( i=0; i<ndta; ++i )if( G4UniformRand() < sprob )local_ndta--;
-      G4double local_edta = edta;
-      if (npnb == 0) local_edta += epnb;  // Retrieve unused kinetic energy
-      G4double ekin = local_edta/std::max(1,local_ndta);
+  G4double ran = 0;
+  if (ndta > 0) {
+    //    G4double backwardKinetic = 0.0;
+    G4int local_ndta=ndta;
+    // DHW: does not conserve energy  for (i = 0; i < ndta; ++i) if (G4UniformRand() < sprob) local_ndta--;
+    G4double local_edta = edta;
+    if (npnb == 0) local_edta += epnb;  // Retrieve unused kinetic energy
+    //    G4double ekin = local_edta/std::max(1,local_ndta);
 
-      for( i=0; i<local_ndta; ++i )
-      {
-        G4ReactionProduct *p2 = new G4ReactionProduct();
-        if( backwardKinetic > local_edta )
-        {
+    remainingE = local_edta;
+    for (i = 0; i < local_ndta; ++i) {
+      G4ReactionProduct* p2 = new G4ReactionProduct();
+      //        if( backwardKinetic > local_edta ) {
+      //          delete p2;
+      //          break;
+      //        }
+
+      //	G4double ran = G4UniformRand();
+      //	G4double kinetic = -ekin*std::log(ran)-cfa*(1.+0.5*normal());
+      //	if( kinetic < 0.0 )kinetic = kineticFactor*std::log(ran);
+      //        backwardKinetic += kinetic;
+      //        if( backwardKinetic > local_edta )kinetic = local_edta-(backwardKinetic-kinetic);
+      //        if( kinetic < 0.0 )kinetic = kineticMinimum;
+
+      ran = G4UniformRand();
+      if (ran < 0.60) {
+        if (PinNucleus > 0 && NinNucleus > 0) {
+          p2->SetDefinition( aDeuteron );
+          PinNucleus--;
+          NinNucleus--;
+        } else if (NinNucleus > 0) {
+          p2->SetDefinition( aNeutron );
+          NinNucleus--;
+        } else if (PinNucleus > 0) {
+          p2->SetDefinition( aProton );
+          PinNucleus--;
+        } else {
           delete p2;
           break;
         }
-	G4double ran = G4UniformRand();
-	G4double kinetic = -ekin*std::log(ran)-cfa*(1.+0.5*normal());
-	if( kinetic < 0.0 )kinetic = kineticFactor*std::log(ran);
-        backwardKinetic += kinetic;
-        if( backwardKinetic > local_edta )kinetic = local_edta-(backwardKinetic-kinetic);
-        if( kinetic < 0.0 )kinetic = kineticMinimum;
-        G4double cost = 2.0*G4UniformRand() - 1.0;
-        G4double sint = std::sqrt(std::max(0.0,(1.0-cost*cost)));
-        G4double phi = twopi*G4UniformRand();
-        ran = G4UniformRand();
-        if (ran < 0.60) {
-          if (PinNucleus > 0 && NinNucleus > 0) {
-            p2->SetDefinition( aDeuteron );
-            PinNucleus--;
-            NinNucleus--;
-          } else if (NinNucleus > 0) {
-            p2->SetDefinition( aNeutron );
-            NinNucleus--;
-          } else if (PinNucleus > 0) {
-            p2->SetDefinition( aProton );
-            PinNucleus--;
-	  } else {
-            delete p2;
-            break;
-	  }
-	} else if (ran < 0.90) {
-          if (PinNucleus > 0 && NinNucleus > 1) {
-            p2->SetDefinition( aTriton );
-            PinNucleus--;
-            NinNucleus -= 2;
-          } else if (PinNucleus > 0 && NinNucleus > 0) {
-            p2->SetDefinition( aDeuteron );
-            PinNucleus--;
-            NinNucleus--;
-          } else if (NinNucleus > 0) {
-            p2->SetDefinition( aNeutron );
-            NinNucleus--;
-          } else if (PinNucleus > 0) {
-            p2->SetDefinition( aProton );
-            PinNucleus--;
-	  } else {
-            delete p2;
-            break;
-	  }
-	} else {
-          if (PinNucleus > 1 && NinNucleus > 1) {
-            p2->SetDefinition( anAlpha );
-            PinNucleus -= 2;
-            NinNucleus -= 2;
-	  } else if (PinNucleus > 0 && NinNucleus > 1) {
-            p2->SetDefinition( aTriton );
-            PinNucleus--;
-            NinNucleus -= 2;
-          } else if (PinNucleus > 0 && NinNucleus > 0) {
-            p2->SetDefinition( aDeuteron );
-            PinNucleus--;
-            NinNucleus--;
-          } else if (NinNucleus > 0) {
-            p2->SetDefinition( aNeutron );
-            NinNucleus--;
-          } else if (PinNucleus > 0) {
-            p2->SetDefinition( aProton );
-            PinNucleus--;
-	  } else {
-            delete p2;
-            break;
-	  }
-	}
-
-        vec.SetElement( vecLen, p2 );
-        vec[vecLen]->SetNewlyAdded( true );
-        vec[vecLen]->SetKineticEnergy( kinetic*GeV );
-	kinCreated+=kinetic;
-        pp = vec[vecLen]->GetTotalMomentum()/MeV;
-        vec[vecLen++]->SetMomentum( pp*sint*std::sin(phi)*MeV,
-                                    pp*sint*std::cos(phi)*MeV,
-                                    pp*cost*MeV );
-      // DEBUGGING --> DumpFrames::DumpFrame(vec, vecLen);
+      } else if (ran < 0.90) {
+        if (PinNucleus > 0 && NinNucleus > 1) {
+          p2->SetDefinition( aTriton );
+          PinNucleus--;
+          NinNucleus -= 2;
+        } else if (PinNucleus > 0 && NinNucleus > 0) {
+          p2->SetDefinition( aDeuteron );
+          PinNucleus--;
+          NinNucleus--;
+        } else if (NinNucleus > 0) {
+          p2->SetDefinition( aNeutron );
+          NinNucleus--;
+        } else if (PinNucleus > 0) {
+          p2->SetDefinition( aProton );
+          PinNucleus--;
+        } else {
+          delete p2;
+          break;
+        }
+      } else {
+        if (PinNucleus > 1 && NinNucleus > 1) {
+          p2->SetDefinition( anAlpha );
+          PinNucleus -= 2;
+          NinNucleus -= 2;
+	} else if (PinNucleus > 0 && NinNucleus > 1) {
+          p2->SetDefinition( aTriton );
+          PinNucleus--;
+          NinNucleus -= 2;
+        } else if (PinNucleus > 0 && NinNucleus > 0) {
+          p2->SetDefinition( aDeuteron );
+          PinNucleus--;
+          NinNucleus--;
+        } else if (NinNucleus > 0) {
+          p2->SetDefinition( aNeutron );
+          NinNucleus--;
+        } else if (PinNucleus > 0) {
+          p2->SetDefinition( aProton );
+          PinNucleus--;
+        } else {
+          delete p2;
+          break;
+        }
       }
-    } // if (ndta > 0)
 
-  //    G4double delta = epnb+edta - kinCreated;
+      if (i < local_ndta - 1) {
+        kinetic = remainingE*G4UniformRand();
+        remainingE -= kinetic;
+      } else {
+        kinetic = remainingE;
+      }
+
+      vec.SetElement( vecLen, p2 );
+      G4double cost = 2.0*G4UniformRand() - 1.0;
+      G4double sint = std::sqrt(std::max(0.0,(1.0-cost*cost)));
+      G4double phi = twopi*G4UniformRand();
+      vec[vecLen]->SetNewlyAdded( true );
+      vec[vecLen]->SetKineticEnergy( kinetic*GeV );
+      kinCreated+=kinetic;
+
+      pp = vec[vecLen]->GetTotalMomentum();
+      vec[vecLen]->SetMomentum( pp*sint*std::sin(phi),
+                                pp*sint*std::cos(phi),
+                                pp*cost );
+      vecLen++;
+    }
+  } // if (ndta > 0)
 }
 
  
-G4double G4RPGReaction::GenerateNBodyEvent(
-  const G4double totalEnergy,                // MeV
-  const G4bool constantCrossSection,
-  G4FastVector<G4ReactionProduct,256> &vec,
-  G4int &vecLen )
+G4double 
+G4RPGReaction::GenerateNBodyEvent(const G4double totalEnergy,       // MeV
+                                  const G4bool constantCrossSection,
+                                  G4FastVector<G4ReactionProduct,256>& vec,
+                                  G4int &vecLen)
 {
-    G4int i;
-    const G4double expxu =  82.;           // upper bound for arg. of exp
-    const G4double expxl = -expxu;         // lower bound for arg. of exp
-    if( vecLen < 2 )
-    {
-      G4cerr << "*** Error in G4RPGReaction::GenerateNBodyEvent" << G4endl;
-      G4cerr << "    number of particles < 2" << G4endl;
-      G4cerr << "totalEnergy = " << totalEnergy << "MeV, vecLen = " << vecLen << G4endl;
-      return -1.0;
-    }
-    G4double mass[18];    // mass of each particle
-    G4double energy[18];  // total energy of each particle
-    G4double pcm[3][18];           // pcm is an array with 3 rows and vecLen columns
+  G4int i;
+  const G4double expxu =  82.;           // upper bound for arg. of exp
+  const G4double expxl = -expxu;         // lower bound for arg. of exp
+
+  if (vecLen < 2) {
+    G4cerr << "*** Error in G4RPGReaction::GenerateNBodyEvent" << G4endl;
+    G4cerr << "    number of particles < 2" << G4endl;
+    G4cerr << "totalEnergy = " << totalEnergy << "MeV, vecLen = " << vecLen << G4endl;
+    return -1.0;
+  }
+
+  G4double mass[18];    // mass of each particle
+  G4double energy[18];  // total energy of each particle
+  G4double pcm[3][18];           // pcm is an array with 3 rows and vecLen columns
     
-    G4double totalMass = 0.0;
-    G4double extraMass = 0;
-    G4double sm[18];
+  G4double totalMass = 0.0;
+  G4double extraMass = 0;
+  G4double sm[18];
     
-    for( i=0; i<vecLen; ++i )
-    {
-      mass[i] = vec[i]->GetMass()/GeV;
-      if(vec[i]->GetSide() == -2) extraMass+=vec[i]->GetMass()/GeV;
-      vec[i]->SetMomentum( 0.0, 0.0, 0.0 );
-      pcm[0][i] = 0.0;      // x-momentum of i-th particle
-      pcm[1][i] = 0.0;      // y-momentum of i-th particle
-      pcm[2][i] = 0.0;      // z-momentum of i-th particle
-      energy[i] = mass[i];  // total energy of i-th particle
-      totalMass += mass[i];
-      sm[i] = totalMass;
-    }
-    G4double totalE = totalEnergy/GeV;
-    if( totalMass > totalE )
-    {
-      //G4cerr << "*** Error in G4RPGReaction::GenerateNBodyEvent" << G4endl;
-      //G4cerr << "    total mass (" << totalMass*GeV << "MeV) > total energy ("
-      //     << totalEnergy << "MeV)" << G4endl;
-      totalE = totalMass;
-      return -1.0;
-    }
-    G4double kineticEnergy = totalE - totalMass;
-    G4double emm[18];
-    //G4double *emm = new G4double [vecLen];
-    emm[0] = mass[0];
-    emm[vecLen-1] = totalE;
-    if( vecLen > 2 )          // the random numbers are sorted
-    {
-      G4double ran[18];
-      for( i=0; i<vecLen; ++i )ran[i] = G4UniformRand();
-      for( i=0; i<vecLen-2; ++i )
-      {
-        for( G4int j=vecLen-2; j>i; --j )
-        {
-          if( ran[i] > ran[j] )
-          {
-            G4double temp = ran[i];
-            ran[i] = ran[j];
-            ran[j] = temp;
-          }
+  for (i=0; i<vecLen; ++i) {
+    mass[i] = vec[i]->GetMass()/GeV;
+    if(vec[i]->GetSide() == -2) extraMass+=vec[i]->GetMass()/GeV;
+    vec[i]->SetMomentum( 0.0, 0.0, 0.0 );
+    pcm[0][i] = 0.0;      // x-momentum of i-th particle
+    pcm[1][i] = 0.0;      // y-momentum of i-th particle
+    pcm[2][i] = 0.0;      // z-momentum of i-th particle
+    energy[i] = mass[i];  // total energy of i-th particle
+    totalMass += mass[i];
+    sm[i] = totalMass;
+  }
+
+  G4double totalE = totalEnergy/GeV;
+  if (totalMass > totalE) {
+    //G4cerr << "*** Error in G4RPGReaction::GenerateNBodyEvent" << G4endl;
+    //G4cerr << "    total mass (" << totalMass*GeV << "MeV) > total energy ("
+    //     << totalEnergy << "MeV)" << G4endl;
+    totalE = totalMass;
+    return -1.0;
+  }
+
+  G4double kineticEnergy = totalE - totalMass;
+  G4double emm[18];
+  emm[0] = mass[0];
+  emm[vecLen-1] = totalE;
+
+  if (vecLen > 2) {          // the random numbers are sorted
+    G4double ran[18];
+    for( i=0; i<vecLen; ++i )ran[i] = G4UniformRand();
+    for (i=0; i<vecLen-2; ++i) {
+      for (G4int j=vecLen-2; j>i; --j) {
+        if (ran[i] > ran[j]) {
+          G4double temp = ran[i];
+          ran[i] = ran[j];
+          ran[j] = temp;
         }
       }
-      for( i=1; i<vecLen-1; ++i )emm[i] = ran[i-1]*kineticEnergy + sm[i];
     }
-    //   Weight is the sum of logarithms of terms instead of the product of terms
-    G4bool lzero = true;    
-    G4double wtmax = 0.0;
-    if( constantCrossSection )     // this is KGENEV=1 in PHASP
-    {
-      G4double emmax = kineticEnergy + mass[0];
-      G4double emmin = 0.0;
+    for( i=1; i<vecLen-1; ++i )emm[i] = ran[i-1]*kineticEnergy + sm[i];
+  }
+
+  // Weight is the sum of logarithms of terms instead of the product of terms
+
+  G4bool lzero = true;    
+  G4double wtmax = 0.0;
+  if (constantCrossSection) {
+    G4double emmax = kineticEnergy + mass[0];
+    G4double emmin = 0.0;
       for( i=1; i<vecLen; ++i )
       {
         emmin += mass[i-1];
@@ -393,19 +402,20 @@ G4double G4RPGReaction::GenerateNBodyEvent(
         wtmax = -wtmax;
       else
         wtmax = expxu;
-    }
-    else
-    {
+  } else {
       //   ffq(n) = pi*(2*pi)^(n-2)/(n-2)!
       const G4double ffq[18] = { 0., 3.141592, 19.73921, 62.01255, 129.8788, 204.0131,
                                  256.3704, 268.4705, 240.9780, 189.2637,
                                  132.1308,  83.0202,  47.4210,  24.8295,
                                  12.0006,   5.3858,   2.2560,   0.8859 };
       wtmax = std::log( std::pow( kineticEnergy, vecLen-2 ) * ffq[vecLen-1] / totalE );
-    }
-    lzero = true;
-    G4double pd[50];
-    //G4double *pd = new G4double [vecLen-1];
+  }
+
+  // Calculate momenta for secondaries 
+
+  lzero = true;
+  G4double pd[50];
+
     for( i=0; i<vecLen-1; ++i )
     {
       pd[i] = 0.0;
@@ -474,16 +484,201 @@ G4double G4RPGReaction::GenerateNBodyEvent(
         }
       }
     }
-    for( i=0; i<vecLen; ++i )
+
+  for (i=0; i<vecLen; ++i) {
+    vec[i]->SetMomentum( pcm[0][i]*GeV, pcm[1][i]*GeV, pcm[2][i]*GeV );
+    vec[i]->SetTotalEnergy( energy[i]*GeV );
+  }
+
+  return weight;
+}
+
+ 
+G4double 
+G4RPGReaction::GenerateNBodyEventT(const G4double totalEnergy,
+                                   const G4bool constantCrossSection,
+                                   std::vector<G4ReactionProduct*>& tempList)
+{
+  G4int i;
+  const G4double expxu =  82.;           // upper bound for arg. of exp
+  const G4double expxl = -expxu;         // lower bound for arg. of exp
+  G4int listLen = tempList.size();
+
+  if (listLen < 2) {
+    G4cerr << "*** Error in G4RPGReaction::GenerateNBodyEvent" << G4endl;
+    G4cerr << "    number of particles < 2" << G4endl;
+    G4cerr << "totalEnergy = " << totalEnergy << "MeV, listLen = " << listLen << G4endl;
+    return -1.0;
+  }
+
+  G4double mass[18];    // mass of each particle
+  G4double energy[18];  // total energy of each particle
+  G4double pcm[3][18];           // pcm is an array with 3 rows and listLen columns
+    
+  G4double totalMass = 0.0;
+  G4double extraMass = 0;
+  G4double sm[18];
+    
+  for (i=0; i<listLen; ++i) {
+    mass[i] = tempList[i]->GetMass()/GeV;
+    if(tempList[i]->GetSide() == -2) extraMass+=tempList[i]->GetMass()/GeV;
+    tempList[i]->SetMomentum( 0.0, 0.0, 0.0 );
+    pcm[0][i] = 0.0;      // x-momentum of i-th particle
+    pcm[1][i] = 0.0;      // y-momentum of i-th particle
+    pcm[2][i] = 0.0;      // z-momentum of i-th particle
+    energy[i] = mass[i];  // total energy of i-th particle
+    totalMass += mass[i];
+    sm[i] = totalMass;
+  }
+
+  G4double totalE = totalEnergy/GeV;
+  if (totalMass > totalE) {
+    totalE = totalMass;
+    return -1.0;
+  }
+
+  G4double kineticEnergy = totalE - totalMass;
+  G4double emm[18];
+  emm[0] = mass[0];
+  emm[listLen-1] = totalE;
+
+  if (listLen > 2) {          // the random numbers are sorted
+    G4double ran[18];
+    for( i=0; i<listLen; ++i )ran[i] = G4UniformRand();
+    for (i=0; i<listLen-2; ++i) {
+      for (G4int j=listLen-2; j>i; --j) {
+        if (ran[i] > ran[j]) {
+          G4double temp = ran[i];
+          ran[i] = ran[j];
+          ran[j] = temp;
+        }
+      }
+    }
+    for( i=1; i<listLen-1; ++i )emm[i] = ran[i-1]*kineticEnergy + sm[i];
+  }
+
+  // Weight is the sum of logarithms of terms instead of the product of terms
+
+  G4bool lzero = true;    
+  G4double wtmax = 0.0;
+  if (constantCrossSection) {
+    G4double emmax = kineticEnergy + mass[0];
+    G4double emmin = 0.0;
+      for( i=1; i<listLen; ++i )
+      {
+        emmin += mass[i-1];
+        emmax += mass[i];
+        G4double wtfc = 0.0;
+        if( emmax*emmax > 0.0 )
+        {
+          G4double arg = emmax*emmax
+            + (emmin*emmin-mass[i]*mass[i])*(emmin*emmin-mass[i]*mass[i])/(emmax*emmax)
+            - 2.0*(emmin*emmin+mass[i]*mass[i]);
+          if( arg > 0.0 )wtfc = 0.5*std::sqrt( arg );
+        }
+        if( wtfc == 0.0 )
+        {
+          lzero = false;
+          break;
+        }
+        wtmax += std::log( wtfc );
+      }
+      if( lzero )
+        wtmax = -wtmax;
+      else
+        wtmax = expxu;
+  } else {
+      //   ffq(n) = pi*(2*pi)^(n-2)/(n-2)!
+      const G4double ffq[18] = { 0., 3.141592, 19.73921, 62.01255, 129.8788, 204.0131,
+                                 256.3704, 268.4705, 240.9780, 189.2637,
+                                 132.1308,  83.0202,  47.4210,  24.8295,
+                                 12.0006,   5.3858,   2.2560,   0.8859 };
+      wtmax = std::log( std::pow( kineticEnergy, listLen-2 ) * ffq[listLen-1] / totalE );
+  }
+
+  // Calculate momenta for secondaries 
+
+  lzero = true;
+  G4double pd[50];
+
+    for( i=0; i<listLen-1; ++i )
     {
-      vec[i]->SetMomentum( pcm[0][i]*GeV, pcm[1][i]*GeV, pcm[2][i]*GeV );
-      vec[i]->SetTotalEnergy( energy[i]*GeV );
+      pd[i] = 0.0;
+      if( emm[i+1]*emm[i+1] > 0.0 )
+      {
+        G4double arg = emm[i+1]*emm[i+1]
+          + (emm[i]*emm[i]-mass[i+1]*mass[i+1])*(emm[i]*emm[i]-mass[i+1]*mass[i+1])
+            /(emm[i+1]*emm[i+1])
+          - 2.0*(emm[i]*emm[i]+mass[i+1]*mass[i+1]);
+        if( arg > 0.0 )pd[i] = 0.5*std::sqrt( arg );
+      }
+      if( pd[i] <= 0.0 )    //  changed from  ==  on 02 April 98
+        lzero = false;
+      else
+        wtmax += std::log( pd[i] );
+    }
+    G4double weight = 0.0;           // weight is returned by GenerateNBodyEvent
+    if( lzero )weight = std::exp( std::max(std::min(wtmax,expxu),expxl) );
+    
+    G4double bang, cb, sb, s0, s1, s2, c, s, esys, a, b, gama, beta;
+    pcm[0][0] = 0.0;
+    pcm[1][0] = pd[0];
+    pcm[2][0] = 0.0;
+    for( i=1; i<listLen; ++i )
+    {
+      pcm[0][i] = 0.0;
+      pcm[1][i] = -pd[i-1];
+      pcm[2][i] = 0.0;
+      bang = twopi*G4UniformRand();
+      cb = std::cos(bang);
+      sb = std::sin(bang);
+      c = 2.0*G4UniformRand() - 1.0;
+      s = std::sqrt( std::fabs( 1.0-c*c ) );
+      if( i < listLen-1 )
+      {
+        esys = std::sqrt(pd[i]*pd[i] + emm[i]*emm[i]);
+        beta = pd[i]/esys;
+        gama = esys/emm[i];
+        for( G4int j=0; j<=i; ++j )
+        {
+          s0 = pcm[0][j];
+          s1 = pcm[1][j];
+          s2 = pcm[2][j];
+          energy[j] = std::sqrt( s0*s0 + s1*s1 + s2*s2 + mass[j]*mass[j] );
+          a = s0*c - s1*s;                           //  rotation
+          pcm[1][j] = s0*s + s1*c;
+          b = pcm[2][j];
+          pcm[0][j] = a*cb - b*sb;
+          pcm[2][j] = a*sb + b*cb;
+          pcm[1][j] = gama*(pcm[1][j] + beta*energy[j]);
+        }
+      }
+      else
+      {
+        for( G4int j=0; j<=i; ++j )
+        {
+          s0 = pcm[0][j];
+          s1 = pcm[1][j];
+          s2 = pcm[2][j];
+          energy[j] = std::sqrt( s0*s0 + s1*s1 + s2*s2 + mass[j]*mass[j] );
+          a = s0*c - s1*s;                           //  rotation
+          pcm[1][j] = s0*s + s1*c;
+          b = pcm[2][j];
+          pcm[0][j] = a*cb - b*sb;
+          pcm[2][j] = a*sb + b*cb;
+        }
+      }
     }
 
-      // DEBUGGING --> DumpFrames::DumpFrame(vec, vecLen);
-    return weight;
+  for (i=0; i<listLen; ++i) {
+    tempList[i]->SetMomentum(pcm[0][i]*GeV, pcm[1][i]*GeV, pcm[2][i]*GeV);
+    tempList[i]->SetTotalEnergy(energy[i]*GeV);
   }
- 
+
+  return weight;
+}
+
+
 G4double G4RPGReaction::normal()
 {
   G4double ran = -6.0;
@@ -492,126 +687,62 @@ G4double G4RPGReaction::normal()
 }
 
  
-/*
-G4int G4RPGReaction::Poisson( G4double x )
+void G4RPGReaction::Defs1(const G4ReactionProduct& modifiedOriginal,
+                          G4ReactionProduct& currentParticle,
+                          G4ReactionProduct& targetParticle,
+                          G4FastVector<G4ReactionProduct,256>& vec,
+                          G4int& vecLen)
 {
-  G4int iran;
-  G4double ran;
-     
-  if( x > 9.9 )    // use normal distribution with sigma^2 = <x>
-    iran = static_cast<G4int>(std::max( 0.0, x+normal()*std::sqrt(x) ) );
-  else {
-    G4int mm = G4int(5.0*x);
-    if( mm <= 0 )   // for very small x try iran=1,2,3
-    {
-      G4double p1 = x*std::exp(-x);
-      G4double p2 = x*p1/2.0;
-      G4double p3 = x*p2/3.0;
-      ran = G4UniformRand();
-      if( ran < p3 )
-        iran = 3;
-      else if( ran < p2 )  // this is original Geisha, it should be ran < p2+p3
-        iran = 2;
-      else if( ran < p1 )  // should be ran < p1+p2+p3
-        iran = 1;
-      else
-        iran = 0;
-    }
+  // Rotate final state particle momenta by initial particle direction
+
+  const G4double pjx = modifiedOriginal.GetMomentum().x()/MeV;
+  const G4double pjy = modifiedOriginal.GetMomentum().y()/MeV;
+  const G4double pjz = modifiedOriginal.GetMomentum().z()/MeV;
+  const G4double p = modifiedOriginal.GetMomentum().mag()/MeV;
+
+  if (pjx*pjx+pjy*pjy > 0.0) {
+    G4double cost, sint, ph, cosp, sinp, pix, piy, piz;
+    cost = pjz/p;
+    sint = std::sqrt(std::abs((1.0-cost)*(1.0+cost)));
+    if( pjy < 0.0 )
+      ph = 3*halfpi;
     else
-    {
-      iran = 0;
-      G4double r = std::exp(-x);
-      ran = G4UniformRand();
-      if( ran > r )
-      {
-        G4double rrr;
-        G4double rr = r;
-        for( G4int i=1; i<=mm; ++i )
-        {
-          iran++;
-          if( i > 5 )   // Stirling's formula for large numbers
-            rrr = std::exp(i*std::log(x)-(i+0.5)*std::log((G4double)i)+i-0.9189385);
-          else
-            rrr = std::pow(x,i)/Factorial(i);
-          rr += r*rrr;
-          if( ran <= rr )break;
-        }
-      }
+      ph = halfpi;
+    if( std::abs( pjx ) > 0.001*MeV )ph = std::atan2(pjy,pjx);
+    cosp = std::cos(ph);
+    sinp = std::sin(ph);
+    pix = currentParticle.GetMomentum().x()/MeV;
+    piy = currentParticle.GetMomentum().y()/MeV;
+    piz = currentParticle.GetMomentum().z()/MeV;
+    currentParticle.SetMomentum((cost*cosp*pix - sinp*piy + sint*cosp*piz)*MeV,
+                                (cost*sinp*pix + cosp*piy + sint*sinp*piz)*MeV,
+                                (-sint*pix + cost*piz)*MeV);
+    pix = targetParticle.GetMomentum().x()/MeV;
+    piy = targetParticle.GetMomentum().y()/MeV;
+    piz = targetParticle.GetMomentum().z()/MeV;
+    targetParticle.SetMomentum((cost*cosp*pix - sinp*piy + sint*cosp*piz)*MeV,
+                               (cost*sinp*pix + cosp*piy + sint*sinp*piz)*MeV,
+                               (-sint*pix + cost*piz)*MeV);
+
+    for (G4int i=0; i<vecLen; ++i) {
+      pix = vec[i]->GetMomentum().x()/MeV;
+      piy = vec[i]->GetMomentum().y()/MeV;
+      piz = vec[i]->GetMomentum().z()/MeV;
+      vec[i]->SetMomentum((cost*cosp*pix - sinp*piy + sint*cosp*piz)*MeV,
+                          (cost*sinp*pix + cosp*piy + sint*sinp*piz)*MeV,
+                          (-sint*pix + cost*piz)*MeV);
+    }
+
+  } else {
+    if (pjz < 0.0) {
+      currentParticle.SetMomentum( -currentParticle.GetMomentum().z() );
+      targetParticle.SetMomentum( -targetParticle.GetMomentum().z() );
+      for (G4int i=0; i<vecLen; ++i) vec[i]->SetMomentum( -vec[i]->GetMomentum().z() );
     }
   }
-  return iran;
 }
-*/
- 
-// G4int G4RPGReaction::Factorial( G4int n )
-// {
-//  G4int m = std::min(n,10);
-//  G4int result = 1;
-//  if( m <= 1 )return result;
-//  for( G4int i=2; i<=m; ++i )result *= i;
-//  return result;
-// }
 
- 
- void G4RPGReaction::Defs1(
-   const G4ReactionProduct &modifiedOriginal,
-   G4ReactionProduct &currentParticle,
-   G4ReactionProduct &targetParticle,
-   G4FastVector<G4ReactionProduct,256> &vec,
-   G4int &vecLen )
-  {
-    // Rotate final state particle momenta by initial particle direction
 
-    const G4double pjx = modifiedOriginal.GetMomentum().x()/MeV;
-    const G4double pjy = modifiedOriginal.GetMomentum().y()/MeV;
-    const G4double pjz = modifiedOriginal.GetMomentum().z()/MeV;
-    const G4double p = modifiedOriginal.GetMomentum().mag()/MeV;
-    if( pjx*pjx+pjy*pjy > 0.0 )
-    {
-      G4double cost, sint, ph, cosp, sinp, pix, piy, piz;
-      cost = pjz/p;
-      sint = std::sqrt(std::abs((1.0-cost)*(1.0+cost)));
-      if( pjy < 0.0 )
-        ph = 3*halfpi;
-      else
-        ph = halfpi;
-      if( std::abs( pjx ) > 0.001*MeV )ph = std::atan2(pjy,pjx);
-      cosp = std::cos(ph);
-      sinp = std::sin(ph);
-      pix = currentParticle.GetMomentum().x()/MeV;
-      piy = currentParticle.GetMomentum().y()/MeV;
-      piz = currentParticle.GetMomentum().z()/MeV;
-      currentParticle.SetMomentum((cost*cosp*pix - sinp*piy + sint*cosp*piz)*MeV,
-                                  (cost*sinp*pix + cosp*piy + sint*sinp*piz)*MeV,
-                                  (-sint*pix + cost*piz)*MeV);
-      pix = targetParticle.GetMomentum().x()/MeV;
-      piy = targetParticle.GetMomentum().y()/MeV;
-      piz = targetParticle.GetMomentum().z()/MeV;
-      targetParticle.SetMomentum((cost*cosp*pix - sinp*piy + sint*cosp*piz)*MeV,
-                                 (cost*sinp*pix + cosp*piy + sint*sinp*piz)*MeV,
-                                 (-sint*pix + cost*piz)*MeV);
-      for( G4int i=0; i<vecLen; ++i )
-      {
-        pix = vec[i]->GetMomentum().x()/MeV;
-        piy = vec[i]->GetMomentum().y()/MeV;
-        piz = vec[i]->GetMomentum().z()/MeV;
-        vec[i]->SetMomentum((cost*cosp*pix - sinp*piy + sint*cosp*piz)*MeV,
-                            (cost*sinp*pix + cosp*piy + sint*sinp*piz)*MeV,
-                            (-sint*pix + cost*piz)*MeV);
-      }
-    }
-    else
-    {
-      if( pjz < 0.0 )
-      {
-        currentParticle.SetMomentum( -currentParticle.GetMomentum().z() );
-        targetParticle.SetMomentum( -targetParticle.GetMomentum().z() );
-        for( G4int i=0; i<vecLen; ++i )
-          vec[i]->SetMomentum( -vec[i]->GetMomentum().z() );
-      }
-    }
-  }
- 
  void G4RPGReaction::Rotate(
   const G4double numberofFinalStateNucleons,
   const G4ThreeVector &temp,

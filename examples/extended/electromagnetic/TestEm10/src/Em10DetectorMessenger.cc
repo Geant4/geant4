@@ -25,7 +25,7 @@
 //
 //
 // $Id: Em10DetectorMessenger.cc,v 1.11 2006/06/29 16:38:38 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // 
 

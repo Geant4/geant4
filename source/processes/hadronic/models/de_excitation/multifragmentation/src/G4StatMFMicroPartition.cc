@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4StatMFMicroPartition.cc,v 1.7 2006/06/29 20:25:31 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4StatMFMicroPartition.cc,v 1.8 2008/07/25 11:20:47 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // by V. Lara
 // --------------------------------------------------------------------

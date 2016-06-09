@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4StatMF.cc,v 1.5 2006/06/29 20:24:43 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4StatMF.cc,v 1.6 2008/07/25 11:20:47 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara
@@ -105,13 +105,14 @@ G4FragmentVector * G4StatMF::BreakItUp(const G4Fragment &theFragment)
   theMicrocanonicalEnsemble = new G4StatMFMicroCanonical(theFragment);
 
   G4int Iterations = 0;
+  G4int IterationsLimit = 100000;
   G4double Temperature = 0.0;
   
   G4bool FirstTime = true;
   G4StatMFChannel * theChannel = 0;
-
+ 
   G4bool ChannelOk;
-  do {  // Try to de-excite as much as 10 times
+  do {  // Try to de-excite as much as IterationLimit permits
     do {
       
       G4double theMeanMult = theMicrocanonicalEnsemble->GetMeanMultiplicity();
@@ -136,7 +137,8 @@ G4FragmentVector * G4StatMF::BreakItUp(const G4Fragment &theFragment)
 	theChannel = theMacrocanonicalEnsemble->ChooseAandZ(theFragment);
       }
       
-      if (!(ChannelOk = theChannel->CheckFragments())) delete theChannel; 
+      ChannelOk = theChannel->CheckFragments();
+      if (!ChannelOk) delete theChannel; 
       
     } while (!ChannelOk);
     
@@ -155,15 +157,24 @@ G4FragmentVector * G4StatMF::BreakItUp(const G4Fragment &theFragment)
     //--------------------------------------
     
     // Find temperature of breaking channel.
-    Temperature = _theEnsemble->GetMeanTemperature(); // Initial value for Temperature 
-    
+    Temperature = _theEnsemble->GetMeanTemperature(); // Initial guess for Temperature 
+ 
     if (FindTemperatureOfBreakingChannel(theFragment,theChannel,Temperature)) break;
-    
-  } while (Iterations++ < 10);
+ 
+    // Do not forget to delete this unusable channel, for which we failed to find the temperature,
+    // otherwise for very proton-reach nuclei it would lead to memory leak due to large 
+    // number of iterations. N.B. "theChannel" is created in G4StatMFMacroCanonical::ChooseZ()
+
+    // G4cout << " Iteration # " << Iterations << " Mean Temperature = " << Temperature << G4endl;    
+
+    delete theChannel;    
+
+  } while (Iterations++ < IterationsLimit );
   
-  
-  // If Iterations >= 10 means that we couldn't solve for temperature
-  if (Iterations >= 10) 
+ 
+
+  // If Iterations >= IterationsLimit means that we couldn't solve for temperature
+  if (Iterations >= IterationsLimit) 
     throw G4HadronicException(__FILE__, __LINE__, "G4StatMF::BreakItUp: Was not possible to solve for temperature of breaking channel");
   
   

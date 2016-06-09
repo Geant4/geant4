@@ -24,6 +24,9 @@
 // ********************************************************************
 //
 // 070606 fix with Valgrind by T. Koi
+// 080409 Fix div0 error with G4FPE by T. Koi
+// 080811 Comment out unused method SetBlocked and SetBuffered
+//        Add required cleaning up in CleanUp by T. Koi
 //
 #ifndef G4NeutronHPVector_h
 #define G4NeutronHPVector_h 1
@@ -251,6 +254,9 @@ class G4NeutronHPVector
     theManager.CleanUp();
     maxValue = -DBL_MAX;
     theHash.Clear();
+//080811 TK DB 
+    delete[] theIntegral;
+    theIntegral = NULL;
   }
 
   // merges the vectors active and passive into *this
@@ -264,14 +270,17 @@ class G4NeutronHPVector
     {
       if(active->GetEnergy(a) <= passive->GetEnergy(p))
       {
-        G4double xa  = active->GetEnergy(a);
+        G4double xa = active->GetEnergy(a);
         G4double yy = active->GetXsec(a);
         SetData(m, xa, yy);
         theManager.AppendScheme(m, active->GetScheme(a));
         m++;
         a++;
         G4double xp = passive->GetEnergy(p);
-        if( std::abs(std::abs(xp-xa)/xa)<0.001 ) p++;
+
+//080409 TKDB 
+        //if( std::abs(std::abs(xp-xa)/xa)<0.001 ) p++;
+        if ( !( xa == 0 ) && std::abs(std::abs(xp-xa)/xa)<0.001 ) p++;
       } else {
         tmp = active; 
         t=a;
@@ -486,6 +495,7 @@ class G4NeutronHPVector
     return result;
   }
   
+/*
   void Block(G4double aX)
   {
     theBlocked.push_back(aX);
@@ -495,12 +505,13 @@ class G4NeutronHPVector
   {
     theBuffered.push_back(aX);
   }
+*/
   
   std::vector<G4double> GetBlocked() {return theBlocked;}
   std::vector<G4double> GetBuffered() {return theBuffered;}
   
-  void SetBlocked(const std::vector<G4double> &aBlocked) {theBlocked = aBlocked;}
-  void SetBuffered(const std::vector<G4double> &aBuffer) {theBuffered = aBuffer;}
+//  void SetBlocked(const std::vector<G4double> &aBlocked) {theBlocked = aBlocked;}
+//  void SetBuffered(const std::vector<G4double> &aBuffer) {theBuffered = aBuffer;}
 
   G4double Get15percentBorder();
   G4double Get50percentBorder();

@@ -25,7 +25,7 @@
 //
 //
 // $Id: RE03PrimaryGeneratorAction.hh,v 1.1 2007/11/13 19:55:43 asaim Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 
 #ifndef RE03PrimaryGeneratorAction_h

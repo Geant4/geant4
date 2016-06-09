@@ -1,4 +1,4 @@
-$Id: 00README,v 1.9 2007/11/25 19:37:24 kmura Exp $
+$Id: 00README,v 1.11 2008/12/03 07:47:59 kmura Exp $
 ==========================================================================
 Geant4Py
 
@@ -17,8 +17,8 @@ Python
   - only 2.x is tested.
 
 Geant4
-  - 7.0 or later
-  - should be built in "global" and "shared" libraries.
+  - 8.0 or later
+  - should be built in "GLOBAL" and "SHARED" libraries.
   - All header files should be collected into $(G4INSTALL)/include
     by "make includes"
 
@@ -27,16 +27,13 @@ CLHEP
   - should be built in shared library.
   - Building shared objects is supported since version 1.9.
 
-BOOST-Python
-  - version 1.32 or later
-
 (Optional)
 ROOT
 
 Before Starting:
 ----------------
 In dafault situation, Geant4 creates and uses "granular static libraries".
-But, the Python interface requires "global shared library".
+But, the Python interface requires "GLOBAL SHARED library".
 If you donot build your Geant4 libraries in global shared mode, 
 you have to recreate your instance additionally.
 
@@ -48,10 +45,7 @@ How to Install:
 ---------------
 There is a configuraton script for building the package.
 
-# ./configure --help 
-
-shows help message;
-
+# ./configure --help
 `configure' configures Geant4Py to adapt to many kinds of systems.
 
 Usage:  ./configure SYSTEM [OPTION]... [VAR=VALUE]...
@@ -63,22 +57,18 @@ Options:
 
 Installation directories:
   --prefix=PREFIX           Installation prefix  [./]
-  --libdir=DIR              Python modules installaion dir [PREFIX/lib]
-  --incdir=DIR              Header installaion dir [PREFIX/include]
+  --libdir=DIR              Python modules dir [PREFIX/lib]
 
 Fine tuning of the library path:
   --with-g4-incdir=DIR      Geant4 header dir [$G4INCLUDE]
   --with-g4-libdir=DIR      Geant4 library dir [$G4LIB/$G4SYSTEM]
-  --with-g4-version=NUM     Geant4 version (700/701/710/711)
-                            Not required after ver.8.0
-
   --with-clhep-incdir=DIR   CLHEP header dir [$CLHEP_INCLUDE_DIR]
   --with-clhep-libdir=DIR   CLHEP library dir [$CLHEP_LIB_DIR]
   --with-clhep-lib=LIB      library name of libCLHEP.so [CLHEP|$CLHEP_LIB]
 
-  --with-python-incdir=DIR  Python header dir [/usr/include/python],
+  --with-python-incdir=DIR  Python header dir [/usr/include/python(2.#)],
                             (location of pyconfig.h)
-  --with-python-libdir=DIR  Python library dir [/usr/lib]
+  --with-python-libdir=DIR  Python library dir [/usr/lib(64)]
 
   --with-boost-incdir=DIR   BOOST-C++ header dir [/usr/include],
                             (location of boost/)
@@ -87,35 +77,36 @@ Fine tuning of the library path:
 
   --with-package-dir=DIR    Geant4 Package dir
 
-  --with-gdml-incdir=DIR    GDML header dir
-  --with-gdml-libdir=DIR    GDML library dir
+  --with-extra-dir=DIR      Install path for extra packages [/usr/local]
 
   --with-xercesc-incdir=DIR Xerces-C header dir [/usr/include]
-  --with-xercesc-libdir=DIR Xerces-C library dir [/usr/lib]
+  --with-xercesc-libdir=DIR Xerces-C library dir [/usr/lib(64)]
 
 Enable/disable options: prefix with either --enable- or --disable-
-  openglx      OpenGL support     [auto]
+  openglx      OpenGLX support    [auto]
   openglxm     OpenGLXm support   [disable, $G4VIS_USE_OPENGLXM]
   raytracerx   RayTracerX support [disable, $G4VIS_USE_RAYTRACERX]
-  g4gdml       GDML support (G4 module) [disable]
-  gdml         GDML support (external, experimental) [disable]
-               also specifying inc/lib directories
 
 Supported Architectures:
-  linux           for Linux gcc 3.x and 4.x
+  linux           for Linux gcc 3.x and 4.x (32bit)
+  linux64         for Linux gcc 3.x and 4.x (64bit, alias to linuxx8664gcc)
   linuxx8664gcc   for AMD Opteron and Intel EM64T Linux gcc 3.x and 4.x
-  macosx          for MacOS X with gcc 
-
+  macosx          for MacOSX with gcc (Tiger/Leopard and Xcode)
 
 You can specify all parameters adopting your environment.
 
-For example, 
-# ./configure linux 
+For example,
+# ./configure linux64  (miserable)
   --with-g4-incdir=/opt/heplib/Geant4/geant4.8.1/include 
   --with-g4-libdir=/opt/heplib/Geant4/geant4.8.1/slib/Linux-g++ 
   --with-clhep-incdir=/opt/heplib/CLHEP/2.0.2.2/include 
   --with-clhep-libdir=/opt/heplib/CLHEP/2.0.2.2/lib 
   --with-clhep-lib=CLHEP-2.0.2.2
+
+# ./configure linux64  (smart)
+  --with-package-dir=/opt/heplib/Geant4/packages/9.1.2
+
+# ./confugre linux64 (intelligent or haphazard ?)
 
 The configuration script will create config/config.gmk, which describes 
 your envrionment.
@@ -143,7 +134,7 @@ Some libraries paths are already specified via "-rpath" linker option,
 so these paths do not have to be added to "LD_LIBRARY_PATH".
  * Geant4
  * CLHEP
- * Boost
+ * boost-python library
  * $(INSTALL_PATH)/lib
  * $(G4PY_EXLIB_LIBDIR) specified in a module makefile.
 
@@ -152,25 +143,25 @@ You can import Geant4Py modules in Python just like
 
 >>> import Geant4
 
-or
-
->>> from Geant4 import *
-
-
 Notes:
 -----
 1) >> IMPORTANT <<
-All users' libraries should be build in shared libaries.
+All users' libraries should be build in SHARED libaries.
 
 2) Development Environment:
-OS:             SuSE Linux 10.3 (x86-64)
-g++ :           4.2.1
-Python:         2.5.1
+OS:             SuSE Linux 11.0 (x86-64)
+g++ :           4.3.1
+Python:         2.5.2
 CLHEP:          1.9.3.2 / 2.0.3.2
-BOOST-Python:   1.33.1
-ROOT:           5.16/00
+ROOT:           5.20/00
+
+3) Tested environment:
+  Linux 32/64-bit
+  SuSE 11.0 10.3
+  SL3.4 SL4.5 SL5.1
+  Ubuntu 8.0.4
+  MacOSX 10.5 (Leopard)
 
 Have A Fun!!
 
 Koichi Murakami <Koichi.Murakami@kek.jp>
-

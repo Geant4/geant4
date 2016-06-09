@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4VUIshell.cc,v 1.10 2007/06/14 05:44:58 kmura Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 
 #include "G4UImanager.hh"

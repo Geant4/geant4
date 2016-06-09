@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4DummyFinalState.cc,v 1.2 2007/10/15 08:36:35 pia Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// GEANT4 tag $Name: geant4-09-02 $
 // 
 // Contact Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
 //

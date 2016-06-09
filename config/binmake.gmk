@@ -1,4 +1,4 @@
-# $Id: binmake.gmk,v 1.135 2007/11/22 14:08:10 gcosmo Exp $
+# $Id: binmake.gmk,v 1.139 2008/12/03 13:35:36 gcosmo Exp $
 # ----------------------------------------------------------
 # Script defining rules and paths for making binaries.
 #    First implementation: Gabriele Cosmo, 25/06/1998.
@@ -53,6 +53,7 @@ ifndef INCFLAGS
               -I$(G4BASE)/materials/include \
               -I$(G4BASE)/parameterisations/gflash/include \
               -I$(G4BASE)/particles/management/include \
+              -I$(G4BASE)/particles/adjoint/include \
               -I$(G4BASE)/particles/bosons/include \
               -I$(G4BASE)/particles/leptons/include \
               -I$(G4BASE)/particles/hadrons/barions/include \
@@ -69,6 +70,7 @@ ifndef INCFLAGS
               -I$(G4BASE)/processes/optical/include \
               -I$(G4BASE)/processes/transportation/include \
               -I$(G4BASE)/processes/parameterisation/include \
+              -I$(G4BASE)/processes/electromagnetic/adjoint/include \
               -I$(G4BASE)/processes/electromagnetic/standard/include \
               -I$(G4BASE)/processes/electromagnetic/muons/include \
               -I$(G4BASE)/processes/electromagnetic/utils/include \
@@ -143,6 +145,7 @@ ifndef INCFLAGS
               -I$(G4BASE)/digits_hits/digits/include \
               -I$(G4BASE)/digits_hits/scorer/include \
               -I$(G4BASE)/digits_hits/utils/include \
+              -I$(G4BASE)/persistency/ascii/include \
               -I$(G4BASE)/persistency/gdml/include \
               -I$(G4BASE)/persistency/mctruth/include \
               -I$(G4BASE)/readout/include \
@@ -367,7 +370,7 @@ $(G4TMPDIR)/exe/obj.last: lib $(objects)
 else
 $(G4TMPDIR)/exe/obj.last: $(objects)
 endif
-	@touch $@
+	@$(TOUCH) $@
 
 # Make the $(G4TARGET).$(TARGOBJEXT) file.
 $(G4TMPDIR)/exe/$(G4TARGET).$(TARGOBJEXT) : $(G4TARGET).cc

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // $Id: G4PolarizedPEEffectCrossSection.hh,v 1.1 2007/11/01 17:29:09 schaelic Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // GEANT4 Class file
 //

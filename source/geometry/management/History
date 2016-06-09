@@ -1,4 +1,4 @@
-$Id: History,v 1.121 2007/10/24 14:12:33 gcosmo Exp $
+$Id: History,v 1.131 2008/09/23 13:10:55 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,55 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+September 23, 2008  G. Cosmo               geommng-V09-01-08
+- G4VSolid: explicitely reserve memory for polygon vectors in clipping
+  algorithm to help reducing memory footprint. Courtesy of P.Elmer, CMS.
+
+September 10, 2008  G. Cosmo               geommng-V09-01-07
+- G4VSolid: promote copy-constructor and assignment operator to public
+  to cope with specific use-case in ATLAS (see problem report #1023).
+
+July 15, 2008  G.Cosmo                     geommng-V09-01-06
+- G4Region: re-introduced protection for setting of root-region flag to the
+  world volume in method RemoveRootLogicalVolume(), to cover case of explicit
+  deletion of stores in the user application for dynamic geometries setups.
+
+July 10, 2008  G.Cosmo                     geommng-V09-01-05
+- G4LogicalVolume, G4LogicalVolumeStore: modified logic for the deletion
+  of the root-region volumes, adding locking mechanism and automatically
+  de-registering the world default root-region.
+  Simplified Clean() method in the store, by removing unused and unnecessary
+  flag for logical-volumes notification.
+- Reinstated update of materials in G4Region::RemoveRootLogicalVolume()
+  to correct handling individual removal of root-region volumes and restore
+  proper setup state.
+
+May 16, 2008  G.Cosmo                      geommng-V09-01-04
+- G4Region: changed condition inside ScanVolumeTree() to check for the
+  existence of a valid material-scanner pointer to apply the material scan
+  instead of using the flag for nested structures.
+- G4GeometryManager: do not apply optimisation on the current volume if it
+  has been defined as a regular structure.
+- Addresses problem report #990 on suggestions by M.Mendenhall.
+
+March 13, 2008  G.Cosmo                    geommng-V09-01-03
+- Cleared compilation warnings in G4GeometryManager on gcc-4.3.0 for
+  ambiguous use of parentheses in condition statements.
+
+February 20, 2008  I.Hrivnacova            geommng-V09-01-02
+- Implemented missing protected copy-contructor and assignment operator
+  for G4VSolid.
+
+January 24, 2008  G.Cosmo                  geommng-V09-01-01
+- Added Shrink() method to G4SmartVoxelNode to shrink memory allocated
+  for the buffer of slices; to be used for studying ways of reducing memory
+  waste when building nodes in G4SmartVoxelHeader for large geometry setups.
+
+January 14, 2008  G.Cosmo                  geommng-V09-01-00
+- Added Reserve() method to G4SmartVoxelNode to reserve memory allocated
+  for the buffer of slices; to be used for studying ways of reducing memory
+  waste when building nodes in G4SmartVoxelHeader for large geometry setups.
 
 October 24, 2007  G.Cosmo                  geommng-V09-00-01
 - Fixed typo in forcing minimum number of points in method

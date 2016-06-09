@@ -1,5 +1,5 @@
-$Id: History,v 1.72 2007/07/02 14:26:38 vnivanch Exp $
--------------------------------------------------------------------
+$Id: History,v 1.82 2008/11/16 18:07:52 maire Exp $
+----------------------------------------------------
 
      =========================================================
      Geant4 - an Object-Oriented Toolkit for Simulation in HEP
@@ -14,6 +14,33 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+     
+16-11-08 mma (testem2-V09-01-08)
+- Em options: 20bins/decade  LinLossLimit=default=0.01
+     
+31-10-08 mma (testem2-V09-01-07)
+- Use G4hMultipleScattering for muons and protons
+- Modify EM options 
+     
+23-10-08 mma (testem2-V09-01-06)
+- update PhysListEmStandard and README
+     
+13-09-08 mma (testem2-V09-01-05)
+- RunAction : change default histograms format 
+
+12-06-08 mma (testem2-V09-01-04)
+- Remove AIDA from GNUmakefile 
+     
+05-05-08 mma (testem2-V09-01-03)
+- PhysListEmStandard : add spline option for physics tables
+- README : update Aida informations
+      
+04-04-08 mma (testem2-V09-01-02)
+- PhysicsList : add emstandard_opt3
+- PhysListEmStandard : add G4eMultipleScattering; complete EmOptions
+     
+09-01-08 mma (testem2-V09-01-00)
+- new subdirectory egs4, with results from pdg. Replace run04.mac
 
 02-07-07  V.Ivant (testem2-V09-00-00)
 12-06-07  V.Ivant (testem2-V08-03-03)

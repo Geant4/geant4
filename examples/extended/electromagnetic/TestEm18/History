@@ -1,4 +1,4 @@
-$Id: History,v 1.4 2007/11/20 14:15:18 maire Exp $
+$Id: History,v 1.9 2008/09/26 20:26:01 maire Exp $
 ----------------------------------------------------
 
      =========================================================
@@ -14,7 +14,23 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+24-09-08 mma (testem18-V09-01-04)
+- HistoManager : root as default format 
+
+12-06-08 mma (testem18-V09-01-03)
+- Remove AIDA from GNUmakefile 
      
+07-05-08 mma (testem18-V09-01-02)
+- PhysicsList : add spline option for physics tables
+- README : update Aida informations
+     
+07-04-08 mma (testem18-V09-01-01)
+- HistoManager::saveAscii() : redefinition of binEdge     
+     
+08-01-08 mma (testem18-V09-01-00) 
+- HistoManager : ascii[0] = flag to control creation of .ascii file
+      
  20-nov-07 mma (testem18-V09-00-01) 
 - PhysicsList : more EmOptions
      

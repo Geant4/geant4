@@ -23,13 +23,13 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HadrontherapyPhisicsListMessenger.cc; May 2005
+// $Id: HadrontherapyPhisicsListMessenger.cc; Nov 2008
 // ----------------------------------------------------------------------------
 //                 GEANT 4 - Hadrontherapy example
 // ----------------------------------------------------------------------------
 // Code developed by:
 //
-// G.A.P. Cirrone(a)*, F. Di Rosa(a), S. Guatelli(b), G. Russo(a)
+// G.A.P. Cirrone(a)*, F. Di Rosa(a), S. Guatelli(b), G. Russo(a), M.P. Russo
 // 
 // (a) Laboratori Nazionali del Sud 
 //     of the National Institute for Nuclear Physics, Catania, Italy
@@ -56,18 +56,26 @@ HadrontherapyPhysicsListMessenger::HadrontherapyPhysicsListMessenger(Hadronthera
  physicsListCmd->SetGuidance("Add chunks of PhysicsList.");
  physicsListCmd->SetParameterName("physList",false);
  physicsListCmd->AvailableForStates(G4State_PreInit);
+
+ packageListCmd = new G4UIcmdWithAString("/physics/addPackage",this);
+ packageListCmd->SetGuidance("Add physics package.");
+ packageListCmd->SetParameterName("package",false);
+ packageListCmd->AvailableForStates(G4State_PreInit);
 }
 
 HadrontherapyPhysicsListMessenger::~HadrontherapyPhysicsListMessenger()
 {
   delete physicsListCmd;
   delete listDir;
+  delete packageListCmd;
 }
 
 void HadrontherapyPhysicsListMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
 {
  if (command == physicsListCmd)
-    { physicsList->AddPhysicsList(newValue);} 
+   { physicsList->AddPhysicsList(newValue);}
+ else if (command == packageListCmd)
+   { physicsList->AddPackage(newValue);}
 }
 
 

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicsLogVector.cc,v 1.13 2006/06/29 19:04:17 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4PhysicsLogVector.cc,v 1.21 2008/09/22 08:26:33 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // 
 // --------------------------------------------------------------
@@ -39,20 +39,21 @@
 //    01 Jul. 1996, K.Amako : Hidden bin from the user introduced
 //    26 Sep. 1996, K.Amako : Constructor with only 'bin size' added
 //    11 Nov. 2000, H.Kurashige : use STL vector for dataVector and binVector
-//    9  Mar. 2001, H.Kurashige : add PhysicsVector type and Retrieve
+//    9  Mar. 2001, H.Kurashige : added PhysicsVector type and Retrieve
+//    05 Sep. 2008, V.Ivanchenko : added protections for zero-length vector
 //
 // --------------------------------------------------------------
 
 #include "G4PhysicsLogVector.hh"
 
 G4PhysicsLogVector::G4PhysicsLogVector()
-  : dBin(0.), baseBin(0.)
+  : G4PhysicsVector(), dBin(0.), baseBin(0.)
 { 
   type = T_G4PhysicsLogVector;
 }
 
 G4PhysicsLogVector::G4PhysicsLogVector(size_t theNbin)
-  : dBin(0.), baseBin(0.)
+  : G4PhysicsVector(), dBin(0.), baseBin(0.)
 {
   type = T_G4PhysicsLogVector;
 
@@ -63,13 +64,6 @@ G4PhysicsLogVector::G4PhysicsLogVector(size_t theNbin)
 
   numberOfBin = theNbin;
 
-  edgeMin = 0.;
-  edgeMax = 0.;
-
-  lastBin = INT_MAX;
-  lastEnergy = -DBL_MAX;
-  lastValue = DBL_MAX;
- 
   for (size_t i=0; i<=numberOfBin; i++)
   {
      binVector.push_back(0.0);
@@ -79,7 +73,7 @@ G4PhysicsLogVector::G4PhysicsLogVector(size_t theNbin)
 
 G4PhysicsLogVector::G4PhysicsLogVector(G4double theEmin, 
                                        G4double theEmax, size_t theNbin)
-  : dBin(std::log10(theEmax/theEmin)/theNbin),
+  : G4PhysicsVector(), dBin(std::log10(theEmax/theEmin)/theNbin),
     baseBin(std::log10(theEmin)/dBin)
 {
   type = T_G4PhysicsLogVector;
@@ -96,16 +90,13 @@ G4PhysicsLogVector::G4PhysicsLogVector(G4double theEmin,
     binVector.push_back(std::pow(10., std::log10(theEmin)+i*dBin));
     dataVector.push_back(0.0);
   }
-
   edgeMin = binVector[0];
   edgeMax = binVector[numberOfBin-1];
-
-  lastBin = INT_MAX;
-  lastEnergy = -DBL_MAX;
-  lastValue = DBL_MAX;
 }  
 
-G4PhysicsLogVector::~G4PhysicsLogVector(){}
+G4PhysicsLogVector::~G4PhysicsLogVector()
+{
+}
 
 G4bool G4PhysicsLogVector::Retrieve(std::ifstream& fIn, G4bool ascii)
 {
@@ -117,4 +108,26 @@ G4bool G4PhysicsLogVector::Retrieve(std::ifstream& fIn, G4bool ascii)
     baseBin = std::log10(theEmin)/dBin;
   }
   return success;
+}
+
+G4PhysicsLogVector::G4PhysicsLogVector(const G4PhysicsLogVector& right)
+  : G4PhysicsVector(right)
+{
+  dBin = right.dBin;
+  baseBin = right.baseBin;
+}
+
+G4PhysicsLogVector& 
+G4PhysicsLogVector::operator=(const G4PhysicsLogVector& right)
+{
+  // Check assignment to self
+  //
+  if(this == &right) { return *this; }
+
+  DeleteData();
+  CopyData(right);
+
+  dBin    = right.dBin;
+  baseBin = right.baseBin;
+  return *this;
 }

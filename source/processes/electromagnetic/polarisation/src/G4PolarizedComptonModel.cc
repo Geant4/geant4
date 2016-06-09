@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4PolarizedComptonModel.cc,v 1.4 2007/05/23 08:52:20 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // -------------------------------------------------------------------
 //

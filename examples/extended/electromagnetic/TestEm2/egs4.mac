@@ -1,0 +1,34 @@
+# $Id: egs4.mac,v 1.4 2008/10/31 16:39:28 maire Exp $
+#
+# Macro file for "TestEm2.cc" 
+# (can be run in batch, without graphic)
+#
+# Fe L = 20 radl  R = 5 radl; electron 30 GeV
+#
+# EGS4 simulation: Particle Data Group - Phys.Rev.D 50-3 - August94
+#
+/control/verbose 2
+/run/verbose 2
+#
+/testem/det/setMat Iron
+/testem/det/setLbin 40 0.5
+/testem/det/setRbin 50 0.1
+#
+/testem/phys/addPhysics  emstandard
+#
+/testem/phys/setCuts 0.7 mm
+#
+# histogram file
+/testem/histo/setFileName egs4/9.1ref09
+/testem/histo/setFileType root
+#
+/run/initialize
+#
+/gun/particle e-
+/gun/energy 30 GeV
+#
+/testem/event/printModulo 100
+#
+/run/beamOn 1000
+
+

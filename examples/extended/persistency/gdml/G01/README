@@ -1,0 +1,46 @@
+$Id: README,v 1.3 2008/12/04 08:20:06 gcosmo Exp $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                          GDML read/write
+                          ---------------
+
+This example demonstrates the usage of the GDML reader and writer. It allows
+to export geometry descriptions in an application independent format (GDML,
+Geometry Description Markup Language).
+The GDML files can be then used to interchange geometries between different
+applications and users.
+
+The detector construction consists of a call to GDMLProcessor which parses a
+GDML file and returns the pointer to the world volume. The user can also write
+her/his own GDML file and use it as the primary input format for her/his Geant4
+application.
+
+Several simple GDML files are provided:
+- axes.gdml,   showing loading and orientation of Cartesian axes;
+- solids.gdml, list of all supported solids with placement; 
+- scale.gdml,  a simple diamond structure made of extruded solids;
+- divisionvol.gdml, a divided box;
+- parameterized.gdml, a parameterised box;
+- pTube.gdml, a parameterised tube;
+- auxiliary.gdml, showing association of volume with auxiliary information;
+- etc...
+
+HOW TO BUILD THE EXAMPLE ?
+
+- You need to have built the persistency/gdml plugin module by having
+  set G4LIB_BUILD_GDML variable in your environment.
+  It is also required you specify the path where the XercesC XML parser
+  package is installed in your system, through the variable XERCESCROOT.
+
+- Compile and link to generate the executable:
+ 	      % gmake
+
+- Execute the application:
+ 	      % load_gdml [GDML-file].gdml
+  Note: if you are using dynamic libraries, you should add and
+        $XERCESCROOT/lib paths to the LD_LIBRARY_PATH directory (or
+        equivalent on your system).

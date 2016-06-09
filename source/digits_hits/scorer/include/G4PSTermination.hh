@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4PSTermination.hh,v 1.2 2007/12/10 16:29:35 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 
 #ifndef G4PSTermination_h

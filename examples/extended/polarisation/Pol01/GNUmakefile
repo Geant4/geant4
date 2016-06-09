@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.2 2006/10/02 16:25:55 vnivanch Exp $
+# $Id: GNUmakefile,v 1.4 2008/06/11 17:17:54 schaelic Exp $
 # --------------------------------------------------------------
 # GNUmakefile for examples module.  Gabriele Cosmo, 06/04/98.
 # --------------------------------------------------------------
@@ -16,11 +16,6 @@ all: lib bin
 
 include $(G4INSTALL)/config/binmake.gmk
 
-ifdef G4ANALYSIS_USE
-  # for the aida-config command see the README file
-  CPPFLAGS += `aida-config --include`
-  LDLIBS  += `aida-config --lib`  
-
 plots:	plotResults.class
 	@echo calling JAIDA ...
 	java -cp .:$(CLASSPATH) plotResults pol01.aida
@@ -28,4 +23,3 @@ plots:	plotResults.class
 plotResults.class: plotResults.java
 	@echo compiling $<
 	javac $<
-endif

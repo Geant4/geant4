@@ -24,12 +24,14 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPElementData.hh,v 1.9 2006/06/29 20:47:27 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4NeutronHPElementData.hh,v 1.10 2008/05/20 21:24:28 tkoi Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
  // Hadronic Process: Very Low Energy Neutron X-Sections
  // original by H.P. Wellisch, TRIUMF, 14-Feb-97
  // Builds and has the Cross-section data for one material.
+//
+// 080520 Delete unnecessary dependencies by T. Koi
  
 #ifndef G4NeutronHPElementData_h
 #define G4NeutronHPElementData_h 1
@@ -38,9 +40,11 @@
 #include "G4NeutronHPVector.hh"
 #include "G4Material.hh"
 #include "G4HadronCrossSections.hh"
-#include "G4NeutronInelasticProcess.hh"
-#include "G4HadronFissionProcess.hh"
-#include "G4HadronCaptureProcess.hh"
+#include "G4ReactionProduct.hh"
+#include "G4Nucleus.hh"
+//#include "G4NeutronInelasticProcess.hh"
+//#include "G4HadronFissionProcess.hh"
+//#include "G4HadronCaptureProcess.hh"
 #include "G4NeutronHPElasticData.hh"
 #include "G4NeutronHPFissionData.hh"
 #include "G4NeutronHPCaptureData.hh"

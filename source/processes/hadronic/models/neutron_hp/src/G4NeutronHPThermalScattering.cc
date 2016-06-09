@@ -38,6 +38,7 @@
 
 
 // 070625 Fix memory leaking at destructor by T. Koi 
+// 081201 Fix memory leaking at destructor by T. Koi 
 
 #include "G4NeutronHPThermalScattering.hh"
 #include "G4Neutron.hh"
@@ -102,9 +103,7 @@ G4NeutronHPThermalScattering::G4NeutronHPThermalScattering()
 G4NeutronHPThermalScattering::~G4NeutronHPThermalScattering()
 {
 
-   { // separate name scope of it 
-   std::map < G4int , std::map < G4double , std::vector < E_isoAng* >* >* >::iterator it;
-   for ( it = incoherentFSs.begin() ; it != incoherentFSs.end() ; it++ )
+   for ( std::map < G4int , std::map < G4double , std::vector < E_isoAng* >* >* >::iterator it = incoherentFSs.begin() ; it != incoherentFSs.end() ; it++ )
    {
       std::map < G4double , std::vector < E_isoAng* >* >::iterator itt;
       for ( itt = it->second->begin() ; itt != it->second->end() ; itt++ )
@@ -118,11 +117,8 @@ G4NeutronHPThermalScattering::~G4NeutronHPThermalScattering()
       }
       delete it->second;
    }
-   }
 
-   {
-   std::map < G4int , std::map < G4double , std::vector < std::pair< G4double , G4double >* >* >* >::iterator it;
-   for ( it = coherentFSs.begin() ; it != coherentFSs.end() ; it++ )
+   for ( std::map < G4int , std::map < G4double , std::vector < std::pair< G4double , G4double >* >* >* >::iterator it = coherentFSs.begin() ; it != coherentFSs.end() ; it++ )
    {
       std::map < G4double , std::vector < std::pair< G4double , G4double >* >* >::iterator itt;
       for ( itt = it->second->begin() ; itt != it->second->end() ; itt++ )
@@ -136,11 +132,8 @@ G4NeutronHPThermalScattering::~G4NeutronHPThermalScattering()
       }
       delete it->second;
    }
-   }
 
-   {
-   std::map < G4int ,  std::map < G4double , std::vector < E_P_E_isoAng* >* >* >::iterator it;
-   for ( it = inelasticFSs.begin() ; it != inelasticFSs.end() ; it++ )
+   for ( std::map < G4int ,  std::map < G4double , std::vector < E_P_E_isoAng* >* >* >::iterator it = inelasticFSs.begin() ; it != inelasticFSs.end() ; it++ )
    {
       std::map < G4double , std::vector < E_P_E_isoAng* >* >::iterator itt;
       for ( itt = it->second->begin() ; itt != it->second->end() ; itt++ )
@@ -159,8 +152,8 @@ G4NeutronHPThermalScattering::~G4NeutronHPThermalScattering()
       }
       delete it->second;
    }
-   }
 
+   delete theHPElastic;
    delete theXSection;
 }
 

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4LogicalVolume.cc,v 1.32 2006/11/30 10:39:28 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4LogicalVolume.cc,v 1.33 2008/07/10 09:40:09 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // 
 // class G4LogicalVolume Implementation
@@ -62,8 +62,8 @@ G4LogicalVolume::G4LogicalVolume( G4VSolid* pSolid,
                                   G4UserLimits* pULimits,
                                   G4bool optimise )
  : fDaughters(0,(G4VPhysicalVolume*)0), fFieldManager(pFieldMgr),
-   fVoxel(0), fOptimise(optimise), fRootRegion(false), fSmartless(2.),
-   fMass(0.), fVisAttributes(0), fRegion(0), fCutsCouple(0)
+   fVoxel(0), fOptimise(optimise), fRootRegion(false), fLock(false),
+   fSmartless(2.), fMass(0.), fVisAttributes(0), fRegion(0), fCutsCouple(0)
 {
   SetSolid(pSolid);
   SetMaterial(pMaterial);
@@ -84,7 +84,7 @@ G4LogicalVolume::G4LogicalVolume( G4VSolid* pSolid,
 G4LogicalVolume::G4LogicalVolume( __void__& )
  : fDaughters(0,(G4VPhysicalVolume*)0), fFieldManager(0),
    fMaterial(0), fName(""), fSensitiveDetector(0), fSolid(0), fUserLimits(0),
-   fVoxel(0), fOptimise(true), fRootRegion(false), fSmartless(2.),
+   fVoxel(0), fOptimise(true), fRootRegion(false), fLock(false), fSmartless(2.),
    fMass(0.), fVisAttributes(0), fRegion(0), fCutsCouple(0), fBiasWeight(0.)
 {
   // Add to store
@@ -99,11 +99,10 @@ G4LogicalVolume::G4LogicalVolume( __void__& )
 //
 G4LogicalVolume::~G4LogicalVolume()
 {
-  // Avoid de-registration of root region if treating the first world volume
-  //
-  if( (fRootRegion) && (this != (*G4LogicalVolumeStore::GetInstance())[0]) )
-    { fRegion->RemoveRootLogicalVolume(this); }
-
+  if (!fLock && fRootRegion)  // De-register root region first if not locked
+  {                           // and flagged as root logical-volume
+    fRegion->RemoveRootLogicalVolume(this, true);
+  }
   G4LogicalVolumeStore::DeRegister(this);
 }
 

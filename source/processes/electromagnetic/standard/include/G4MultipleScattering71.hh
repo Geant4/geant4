@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MultipleScattering71.hh,v 1.5 2007/05/22 17:34:36 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4MultipleScattering71.hh,v 1.6 2008/07/16 11:27:41 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 //
 //------------- G4MultipleScattering71 physics process --------------------------
@@ -57,8 +57,8 @@
 //
 //------------------------------------------------------------------------------
 //
-// $Id: G4MultipleScattering71.hh,v 1.5 2007/05/22 17:34:36 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4MultipleScattering71.hh,v 1.6 2008/07/16 11:27:41 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 
 // class description
 //
@@ -175,33 +175,6 @@ private:        // data members
 inline G4bool G4MultipleScattering71::IsApplicable (const G4ParticleDefinition& p)
 {
   return (p.GetPDGCharge() != 0.0 && !p.IsShortLived());
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline G4double G4MultipleScattering71::GetContinuousStepLimit(
-                                          const G4Track& track,
-                                                G4double,
-                                                G4double currentMinimalStep,
-                                                G4double&)
-{
-  DefineMaterial(track.GetMaterialCutsCouple());
-  const G4MaterialCutsCouple* couple = CurrentMaterialCutsCouple();
-  G4double e = track.GetKineticEnergy();
-  model = dynamic_cast<G4MscModel71*>(SelectModel(e));
-  const G4ParticleDefinition* p = track.GetDefinition();
-  G4double lambda0 = GetLambda(p, e);
-  range =  G4LossTableManager::Instance()->GetRangeFromRestricteDEDX(p,e,couple);
-  if(range < currentMinimalStep) currentMinimalStep = range;
-  truePathLength = TruePathLengthLimit(track,lambda0,currentMinimalStep);
-  //  G4cout << "StepLimit: tpl= " << truePathLength << " lambda0= "
-  //       << lambda0 << " range= " << currentRange
-  //       << " currentMinStep= " << currentMinimalStep << G4endl;
-  if (truePathLength < currentMinimalStep) valueGPILSelectionMSC = CandidateForSelection;
-  geomPathLength = model->GeomPathLength(LambdaTable(),couple,
-           p,e,lambda0,range,truePathLength);
-  if(geomPathLength > lambda0) geomPathLength = lambda0;
-  return geomPathLength;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

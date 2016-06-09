@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MultipleScattering.cc,v 1.70 2007/10/29 08:57:19 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4MultipleScattering.cc,v 1.75 2008/10/15 17:53:44 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // -----------------------------------------------------------------------------
 //
@@ -120,6 +120,7 @@
 // 23-11-06 skin = 1 by default for e+-, 0 for other particles (VI)
 // 12-02-07 skin can be changed via UI command, default skin=1 (VI)
 // 24-04-07 default skin=0 (temporal protection) (VI)
+// 11-03-08 use G4VMscModel interface (VI)
 //
 // -----------------------------------------------------------------------------
 //
@@ -129,6 +130,7 @@
 #include "G4MultipleScattering.hh"
 #include "G4UrbanMscModel.hh"
 #include "G4MscStepLimitType.hh"
+#include "G4UrbanMscModel.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -137,11 +139,7 @@ using namespace std;
 G4MultipleScattering::G4MultipleScattering(const G4String& processName)
   : G4VMultipleScattering(processName)
 {
-  dtrl              = 0.05;
-  lambdalimit       = 1.*mm;
-  
-  samplez           = false ; 
-  isInitialized     = false;  
+  isInitialized = false;  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -177,16 +175,16 @@ void G4MultipleScattering::InitialiseProcess(const G4ParticleDefinition* p)
     SetStepLimitType(fMinimal);
     SetLateralDisplasmentFlag(false);
     SetBuildLambdaTable(false);
-    SetSkin(0.0);
-    SetRangeFactor(0.2);
   }
 
   // initialisation of parameters - defaults for particles other
   // than ions can be overwritten by users
-  mscUrban = new G4UrbanMscModel(RangeFactor(),dtrl,lambdalimit,
-                                 GeomFactor(),Skin(),
-                                 samplez,StepLimitType());
+  mscUrban = new G4UrbanMscModel();
+  mscUrban->SetStepLimitType(StepLimitType());
   mscUrban->SetLateralDisplasmentFlag(LateralDisplasmentFlag());
+  mscUrban->SetSkin(Skin());
+  mscUrban->SetRangeFactor(RangeFactor());
+  mscUrban->SetGeomFactor(GeomFactor());
 
   AddEmModel(1,mscUrban);
   isInitialized = true;
@@ -203,9 +201,11 @@ void G4MultipleScattering::InitialiseProcess(const G4ParticleDefinition* p)
 
 void G4MultipleScattering::PrintInfo()
 {
-  G4cout << "      Boundary/stepping algorithm is active with RangeFactor= "
-	 << RangeFactor()
-	 << "  Step limit type " << StepLimitType()
+  G4cout << "      RangeFactor= " << RangeFactor()
+	 << ", step limit type: " << StepLimitType()
+         << ", lateralDisplacement: " << LateralDisplasmentFlag()
+	 << ", skin= " << Skin()  
+	 << ", geomFactor= " << GeomFactor()  
 	 << G4endl;
 }
 

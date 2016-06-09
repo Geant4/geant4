@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4SubtractionSolid.cc,v 1.31 2007/10/23 14:42:31 grichine Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // Implementation of methods for the class G4IntersectionSolid
 //

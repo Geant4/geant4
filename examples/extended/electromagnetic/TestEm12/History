@@ -1,4 +1,4 @@
-$Id: History,v 1.15 2007/11/09 17:35:06 maire Exp $
+$Id: History,v 1.28 2008/11/16 21:46:54 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,43 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+     
+16-11-08 mma (testem12-V09-01-08)
+- Em options: 20bins/decade  LinLossLimit=default=0.01
+     
+29-10-08 mma (testem12-V09-01-07)
+- update PhysListEmStandard : options and hMultipleScattering for muon
+    
+26-10-08 mma (testem12-V09-01-06)
+- update PhysListEmStandard and README
+     
+23-09-08 mma (testem12-V09-01-05)
+- HistoManager : root format by default 
+
+12-06-08 mma (testem12-V09-01-04)
+- Remove AIDA from GNUmakefile 
+     
+07-05-08 mma (testem12-V09-01-03)
+- README : update Aida informations
+     
+11-04-08 mma
+- HistoManager::Scale() : suppress warning
+     
+07-04-08 mma (testem12-V09-01-02)
+- PhysListEmStandard : replace G4MultipleScattering by G4eMultipleScattering;
+- HistoManager::saveAscii() : redefinition of binEdge
+     
+24-01-08 mma (testem12-V09-01-01) 
+- update macro berger.mac : setCuts 2um (=1keV)
+
+14-01-08 jja (testem12-V09-01-00) 
+- add macro berger/berger.C
+
+10-01-08 jean jacquemier
+- new subdirectory berger/data 
+     
+07-12-07 mma
+- add macro berger.mac
      
 09-11-07 mma (testem12-V09-00-01) 
 - HistoManager/HistoMessenger : print selected histos on ascii file

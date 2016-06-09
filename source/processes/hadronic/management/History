@@ -14,6 +14,83 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+01 December 2008 Dennis Wright (hadr-man-V09-01-10)
+---------------------------------------------------
+- G4HadronicProcess - make MeanFreePath() public again.  In future 
+  make it protected again, but make a public method which calls it.
+
+21 November 2008 Dennis Wright (hadr-man-V09-01-09)
+---------------------------------------------------
+- G4HadronicProcess - remove again method SetDispatch for major release
+
+22 October 2008 Vladimir Ivanchenko (hadr-man-V09-01-08)
+------------------------------------------------------
+- G4HadronicProcessStore - use G4HadronicProcessType enumerator
+- G4HadronicProcess - returned back obsolete method SetDispatch for minor release
+
+02 October 2008 Dennis Wright (hadr-man-V09-01-07)
+--------------------------------------------------
+- create new hadronic process subtype enum G4HadronicProcessType:
+    enum G4HadronicProcessType
+    {
+      fHadronElastic =   111,
+      fHadronInelastic = 121,
+      fCapture =         131,
+      fFission =         141,
+      fHadronAtRest =    151,
+      fChargeExchange =  161
+    };
+
+- G4HadronicProcess.hh - add enum to identify process subtypes
+
+- G4HadronInelasticProcess.cc - change process sub-type from 12 to fHadronInelastic
+
+04 August 2008 Vladimir Ivanchenko (hadr-man-V09-01-06)
+------------------------------------------------------
+- G4HadronicProcessStore - improve cout 
+- G4HadronicProcess - cleanup: use method SampleZandA to select an isotope
+                               do not use home-made NanCheck
+                               do not check environment variables run-time
+                               directly fill G4HadronicWhiteBoard
+                               implement PostStepDoIt and DumpPhysicsTable
+                               methods
+- G4HadronInelasticProcess - use methods of the base class
+                          
+04 August 2008 Vladimir Ivanchenko (hadr-man-V09-01-05)
+------------------------------------------------------
+- G4HadronicProcessStore - use sub-types to access cross sections,
+                           add proceses following only G4VProcess interface   
+
+08 July 2008 Dennis Wright (hadr-man-V09-01-04)
+-----------------------------------------------
+- set process sub-type to 12 for G4HadronInelasticProcess
+
+09 June 2008 Dennis Wright (hadr-man-V09-01-03)
+-----------------------------------------------
+- G4HadronicProcess.cc - turn off error in case of fStopButAlive, but leave 
+  it in place for fStopAndKill, fKillTrackAndSecondaries and fPostponeToNextEvent
+
+05 June 2008 Vladimir Ivanchenko (hadr-man-V09-01-02)
+----------------------------------------------------
+- G4HadronicProcessStore - comment out destructor
+
+19 May 2008 Vladimir Ivanchenko (hadr-man-V09-01-01)
+----------------------------------------------------
+- G4HadronicProcessStore - new singleton to keep pointers to all
+                      hadronic processes
+- G4HadronicProcess - added PreparPhysicsTable and BuildPhysicsTable
+                      methods, added registration in G4HadronicProcessStore
+
+
+19 May 2008 Vladimir Ivanchenko (hadr-man-V09-01-00)
+----------------------------------------------------
+- G4HadronicProcess - cleanup of the header (add comments, move
+                      methods for isotope production to the src, make
+                      GetMeanFreePath protected, remove duplication
+                      of PostStepDoIt), add default implementation of 
+                      GetMicroscopicCrossSection, comment out check
+                      IfApplicable in MeanFreePath
+
 15 October 2007 Dennis Wright (hadr-man-V09-00-00)
 --------------------------------------------------
 - G4HadronicProcess::FillTotalResult: T. Koi's fix of bug #967 - replaced

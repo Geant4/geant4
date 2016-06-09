@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4AttDefStore.hh,v 1.11 2007/04/03 13:58:07 allison Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// GEANT4 tag $Name: geant4-09-02 $
 
 #ifndef G4ATTDEFSTORE_HH
 #define G4ATTDEFSTORE_HH

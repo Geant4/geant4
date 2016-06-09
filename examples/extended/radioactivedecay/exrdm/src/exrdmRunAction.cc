@@ -57,12 +57,14 @@ void exrdmRunAction::BeginOfRunAction(const G4Run* aRun)
   if ( RunN % 1000 == 0 ) 
     G4cout << "### Run : " << RunN << G4endl;
 
+#ifdef G4VIS_USE
   if (G4VVisManager::GetConcreteInstance())
     {
       G4UImanager* UI = G4UImanager::GetUIpointer(); 
       UI->ApplyCommand("/vis/clear/view");
       UI->ApplyCommand("/vis/draw/current");
     } 
+#endif
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -73,8 +75,10 @@ void exrdmRunAction::EndOfRunAction(const G4Run* )
   exrdmAnalysisManager* analysis = exrdmAnalysisManager::getInstance();
   analysis->EndOfRun();
  
+#ifdef G4VIS_USE
   if (G4VVisManager::GetConcreteInstance())
     G4UImanager::GetUIpointer()->ApplyCommand("/vis/show/view");
+#endif
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

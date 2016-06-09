@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Polyhedron.hh,v 1.19 2007/07/18 14:00:02 tnikitin Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4Polyhedron.hh,v 1.21 2008/04/14 08:50:23 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 
 #ifndef G4POLYHEDRON_HH
 #define G4POLYHEDRON_HH
@@ -229,8 +229,15 @@ public:
 class G4PolyhedronParaboloid: public G4Polyhedron {
  public:
   G4PolyhedronParaboloid(G4double r1, G4double r2, G4double dz,
-                        G4double sPhi, G4double dPhi);
+                         G4double sPhi, G4double dPhi);
   virtual ~G4PolyhedronParaboloid ();
+};
+
+class G4PolyhedronHype: public G4Polyhedron {
+ public:
+  G4PolyhedronHype(G4double r1, G4double r2, G4double tan1,
+                   G4double tan2, G4double halfZ);
+  virtual ~G4PolyhedronHype ();
 };
 
 class G4PolyhedronEllipsoid : public G4Polyhedron {

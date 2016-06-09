@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: global-V09-00-02    (14-December-2007)
+ Geant4 version Name: global-V09-01-17    (19-December-2008)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -47,8 +47,8 @@ DoIt Vector:
 The initial PostStep Vectors: 
 GPIL Vector: 
    Decay
-   HadronCapture
-   HadronFission
+   nCapture
+   nFission
    inelastic
    HadronElastic
    Transportation
@@ -56,8 +56,8 @@ DoIt Vector:
    Transportation
    HadronElastic
    inelastic
-   HadronFission
-   HadronCapture
+   nFission
+   nCapture
    Decay
   The final AlongStep Vectors: 
 GPIL Vector: 
@@ -69,8 +69,8 @@ DoIt Vector:
 The final PostStep Vectors: 
 GPIL Vector: 
    Decay
-   HadronCapture
-   HadronFission
+   nCapture
+   nFission
    inelastic
    HadronElastic
    ImportanceProcess
@@ -80,144 +80,235 @@ DoIt Vector:
    ImportanceProcess
    HadronElastic
    inelastic
-   HadronFission
-   HadronCapture
+   nFission
+   nCapture
    Decay
 ================================================
  configure preconf 
 
-conv:  Total cross sections has a good parametrisation from 1.5 MeV to 100 GeV for all Z;
-      sampling secondary e+e- according Bethe-Heitler model
-      tables are built for  gamma
-      Lambda tables from 1.022 MeV to 100 GeV in 100 bins.
+conv:   for  gamma    SubType= 14
+      Lambda tables from 1.022 MeV to 100 TeV in 84 bins, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+       Bethe-Heitler :     Emin=          0 eV         Emax=   100 TeV
 
-compt:  Total cross sections has a good parametrisation from 10 KeV to (100/Z) GeV
-      Sampling according Klein-Nishina model
-      tables are built for  gamma
-      Lambda tables from 100 eV  to 100 GeV in 90 bins.
+compt:   for  gamma    SubType= 13
+      Lambda tables from 100 eV  to 100 TeV in 84 bins, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+       Klein-Nishina :     Emin=          0 eV         Emax=   100 TeV
 
-phot:  Total cross sections from Sandia parametrisation. 
-      Sampling according PhotoElectric model
+phot:   for  gamma    SubType= 12
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+       PhotoElectric :     Emin=          0 eV         Emax=   100 TeV
 
-msc:  Model variant of multiple scattering for e-
-      Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      LateralDisplacementFlag=  1   Skin= 0
-      Boundary/stepping algorithm is active with RangeFactor= 0.02  Step limit type 1
+msc:   for e-    SubType= 10
+      Lambda tables from 100 eV  to 100 TeV in 84 bins, spline: 1
+      RangeFactor= 0.02, step limit type: 1, lateralDisplacement: 1, skin= 3, geomFactor= 2.5
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+         UrbanMscUni :     Emin=          0 eV         Emax=   100 TeV
 
-eIoni:   tables are built for  e-
-      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
-      Lambda tables from threshold to 100 TeV in 120 bins.
-      Delta cross sections and sampling from MollerBhabha model
-      Good description from 1 KeV to 100 GeV.
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1
+eIoni:   for  e-    SubType= 2
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV in 84 bins, spline: 1
+      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+        MollerBhabha :     Emin=          0 eV         Emax=   100 TeV
 
-eBrem:   tables are built for  e-
-      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
-      Lambda tables from threshold to 100 TeV in 120 bins.
-      Total cross sections and sampling from StandBrem model (based on the EEDL data library) 
-      Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV. LPM flag 1
+eBrem:   for  e-    SubType= 3
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV in 84 bins, spline: 1
+      LPM flag: 1 for E > 1 GeV
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               eBrem :     Emin=          0 eV         Emax=   1 GeV
+            eBremRel :     Emin=          1 GeV        Emax=   100 TeV
 
-eIoni:   tables are built for  e+
-      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
-      Lambda tables from threshold to 100 TeV in 120 bins.
-      Delta cross sections and sampling from MollerBhabha model
-      Good description from 1 KeV to 100 GeV.
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1
+eIoni:   for  e+    SubType= 2
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV in 84 bins, spline: 1
+      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+        MollerBhabha :     Emin=          0 eV         Emax=   100 TeV
 
-eBrem:   tables are built for  e+
-      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
-      Lambda tables from threshold to 100 TeV in 120 bins.
-      Total cross sections and sampling from StandBrem model (based on the EEDL data library) 
-      Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV. LPM flag 1
+eBrem:   for  e+    SubType= 3
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV in 84 bins, spline: 1
+      LPM flag: 1 for E > 1 GeV
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               eBrem :     Emin=          0 eV         Emax=   1 GeV
+            eBremRel :     Emin=          1 GeV        Emax=   100 TeV
 
-annihil:       Sampling according eplus2gg model
-      tables are built for  e+
-      Lambda tables from 100 eV  to 100 TeV in 120 bins.
+annihil:   for  e+    SubType= 5
+      Lambda tables from 100 eV  to 100 TeV in 84 bins, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            eplus2gg :     Emin=          0 eV         Emax=   100 TeV
 
-msc:  Model variant of multiple scattering for proton
-      Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      LateralDisplacementFlag=  1   Skin= 0
-      Boundary/stepping algorithm is active with RangeFactor= 0.02  Step limit type 1
+msc:   for proton    SubType= 10
+      Lambda tables from 100 eV  to 100 TeV in 84 bins, spline: 1
+      RangeFactor= 0.02, step limit type: 1, lateralDisplacement: 1, skin= 3, geomFactor= 2.5
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+         UrbanMscUni :     Emin=          0 eV         Emax=   100 TeV
 
-hIoni:   tables are built for  proton
-      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
-      Lambda tables from threshold to 100 TeV in 120 bins.
-      Scaling relation is used from proton dE/dx and range.
-      Delta cross sections and sampling from BetheBloch model for scaled energy > 2 MeV
-      Parametrisation from Bragg for protons below.
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1
+hIoni:   for  proton    SubType= 2
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV in 84 bins, spline: 1
+      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      NuclearStopping= 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               Bragg :     Emin=          0 eV         Emax=   2 MeV
+          BetheBloch :     Emin=          2 MeV        Emax=   100 TeV
 
-msc:  Model variant of multiple scattering for GenericIon
-      LateralDisplacementFlag=  0   Skin= 0
-      Boundary/stepping algorithm is active with RangeFactor= 0.2  Step limit type 1
+msc:   for GenericIon    SubType= 10
+      RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 0, skin= 3, geomFactor= 2.5
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+         UrbanMscUni :     Emin=          0 eV         Emax=   100 TeV
 
-hIoni:   tables are built for  anti_proton
-      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
-      Lambda tables from threshold to 100 TeV in 120 bins.
-      Scaling relation is used from proton dE/dx and range.
-      Delta cross sections and sampling from BetheBloch model for scaled energy > 2 MeV
-      Parametrisation from Bragg for protons below.
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1
+hIoni:   for  anti_proton    SubType= 2
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV in 84 bins, spline: 1
+      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      NuclearStopping= 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               Bragg :     Emin=          0 eV         Emax=   2 MeV
+          BetheBloch :     Emin=          2 MeV        Emax=   100 TeV
 
-msc:  Model variant of multiple scattering for mu+
-      Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      LateralDisplacementFlag=  1   Skin= 0
-      Boundary/stepping algorithm is active with RangeFactor= 0.02  Step limit type 1
+hIoni:   for  kaon+    SubType= 2
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV in 84 bins, spline: 1
+      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      NuclearStopping= 0
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               Bragg :     Emin=          0 eV         Emax=   1.05231 MeV
+          BetheBloch :     Emin=    1.05231 MeV        Emax=   100 TeV
 
-muIoni:   tables are built for  mu+
-      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
-      Lambda tables from threshold to 100 TeV in 120 bins.
-      Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
-      radiative corrections for E > 1 GeV
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1
+hIoni:   for  kaon-    SubType= 2
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV in 84 bins, spline: 1
+      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      NuclearStopping= 0
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               Bragg :     Emin=          0 eV         Emax=   1.05231 MeV
+          BetheBloch :     Emin=    1.05231 MeV        Emax=   100 TeV
 
-muBrems:   tables are built for  mu+
-      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
-      Lambda tables from threshold to 100 TeV in 120 bins.
-      Parametrised model 
+msc:   for mu+    SubType= 10
+      Lambda tables from 100 eV  to 100 TeV in 84 bins, spline: 1
+      RangeFactor= 0.02, step limit type: 1, lateralDisplacement: 1, skin= 3, geomFactor= 2.5
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+         UrbanMscUni :     Emin=          0 eV         Emax=   100 TeV
 
-muPairProd:   tables are built for  mu+
-      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
-      Lambda tables from threshold to 100 TeV in 120 bins.
-      Parametrised model 
+muIoni:   for  mu+    SubType= 2
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV in 84 bins, spline: 1
+      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               Bragg :     Emin=          0 eV         Emax=   200 keV
+          BetheBloch :     Emin=        200 keV        Emax=   1 GeV
+        MuBetheBloch :     Emin=          1 GeV        Emax=   100 TeV
 
-muIoni:   tables are built for  mu-
-      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
-      Lambda tables from threshold to 100 TeV in 120 bins.
-      Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
-      radiative corrections for E > 1 GeV
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1
+muBrems:   for  mu+    SubType= 3
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV in 84 bins, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+              MuBrem :     Emin=          0 eV         Emax=   100 TeV
 
-muBrems:   tables are built for  mu-
-      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
-      Lambda tables from threshold to 100 TeV in 120 bins.
-      Parametrised model 
+muPairProd:   for  mu+    SubType= 4
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV in 84 bins, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+          muPairProd :     Emin=          0 eV         Emax=   100 TeV
 
-muPairProd:   tables are built for  mu-
-      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
-      Lambda tables from threshold to 100 TeV in 120 bins.
-      Parametrised model 
+muIoni:   for  mu-    SubType= 2
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV in 84 bins, spline: 1
+      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               Bragg :     Emin=          0 eV         Emax=   200 keV
+          BetheBloch :     Emin=        200 keV        Emax=   1 GeV
+        MuBetheBloch :     Emin=          1 GeV        Emax=   100 TeV
 
-hIoni:   tables are built for  pi+
-      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
-      Lambda tables from threshold to 100 TeV in 120 bins.
-      Scaling relation is used from proton dE/dx and range.
-      Delta cross sections and sampling from BetheBloch model for scaled energy > 0.297504 MeV
-      Parametrisation from Bragg for protons below.
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1
+muBrems:   for  mu-    SubType= 3
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV in 84 bins, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+              MuBrem :     Emin=          0 eV         Emax=   100 TeV
 
-msc:  Model variant of multiple scattering for pi-
-      Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      LateralDisplacementFlag=  1   Skin= 0
-      Boundary/stepping algorithm is active with RangeFactor= 0.02  Step limit type 1
+muPairProd:   for  mu-    SubType= 4
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV in 84 bins, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+          muPairProd :     Emin=          0 eV         Emax=   100 TeV
 
-hIoni:   tables are built for  pi-
-      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
-      Lambda tables from threshold to 100 TeV in 120 bins.
-      Scaling relation is used from proton dE/dx and range.
-      Delta cross sections and sampling from BetheBloch model for scaled energy > 0.297504 MeV
-      Parametrisation from Bragg for protons below.
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1
+hIoni:   for  pi+    SubType= 2
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV in 84 bins, spline: 1
+      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      NuclearStopping= 0
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               Bragg :     Emin=          0 eV         Emax=   297.504 keV
+          BetheBloch :     Emin=    297.504 keV        Emax=   100 TeV
+
+msc:   for pi-    SubType= 10
+      Lambda tables from 100 eV  to 100 TeV in 84 bins, spline: 1
+      RangeFactor= 0.02, step limit type: 1, lateralDisplacement: 1, skin= 3, geomFactor= 2.5
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+         UrbanMscUni :     Emin=          0 eV         Emax=   100 TeV
+
+hIoni:   for  pi-    SubType= 2
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV in 84 bins, spline: 1
+      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      NuclearStopping= 0
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               Bragg :     Emin=          0 eV         Emax=   297.504 keV
+          BetheBloch :     Emin=    297.504 keV        Emax=   100 TeV
+============================================================================================
+             HADRONIC PROCESSES SUMMARY (verbose level 1)
+
+                     Hadronic Processes for <anti_neutron>
+       HadronElastic  Models:                G4LElastic: Emin(GeV)=     0  Emax(GeV)= 1.79769e+305
+           inelastic  Models:  G4LEAntiNeutronInelastic: Emin(GeV)=     0  Emax(GeV)= 25
+                                        TheoFSGenerator: Emin(GeV)=    19  Emax(GeV)= 100000
+
+                     Hadronic Processes for <anti_proton>
+       HadronElastic  Models:                G4LElastic: Emin(GeV)=     0  Emax(GeV)= 1.79769e+305
+           inelastic  Models:   G4LEAntiProtonInelastic: Emin(GeV)=     0  Emax(GeV)= 25
+                                        TheoFSGenerator: Emin(GeV)=    19  Emax(GeV)= 100000
+
+                     Hadronic Processes for <kaon+>
+       HadronElastic  Models:                G4LElastic: Emin(GeV)=     0  Emax(GeV)= 1.79769e+305
+           inelastic  Models:     G4LEKaonPlusInelastic: Emin(GeV)=     0  Emax(GeV)= 25
+                                        TheoFSGenerator: Emin(GeV)=    19  Emax(GeV)= 100000
+
+                     Hadronic Processes for <kaon->
+       HadronElastic  Models:                G4LElastic: Emin(GeV)=     0  Emax(GeV)= 1.79769e+305
+           inelastic  Models:    G4LEKaonMinusInelastic: Emin(GeV)=     0  Emax(GeV)= 25
+                                        TheoFSGenerator: Emin(GeV)=    19  Emax(GeV)= 100000
+
+                     Hadronic Processes for <lambda>
+       HadronElastic  Models:                G4LElastic: Emin(GeV)=     0  Emax(GeV)= 1.79769e+305
+           inelastic  Models:       G4LELambdaInelastic: Emin(GeV)=     0  Emax(GeV)= 25
+                                        TheoFSGenerator: Emin(GeV)=    19  Emax(GeV)= 100000
+
+                     Hadronic Processes for <neutron>
+       HadronElastic  Models:                G4LElastic: Emin(GeV)=     0  Emax(GeV)= 1.79769e+305
+           inelastic  Models:      G4LENeutronInelastic: Emin(GeV)=     0  Emax(GeV)= 55
+                                        TheoFSGenerator: Emin(GeV)=    19  Emax(GeV)= 100000
+            nFission  Models:                G4LFission: Emin(GeV)=     0  Emax(GeV)= 1.79769e+305
+            nCapture  Models:                G4LCapture: Emin(GeV)=     0  Emax(GeV)= 1.79769e+305
+
+                     Hadronic Processes for <pi+>
+       HadronElastic  Models:                G4LElastic: Emin(GeV)=     0  Emax(GeV)= 1.79769e+305
+           inelastic  Models:     G4LEPionPlusInelastic: Emin(GeV)=     0  Emax(GeV)= 55
+                                        TheoFSGenerator: Emin(GeV)=    19  Emax(GeV)= 100000
+
+                     Hadronic Processes for <pi->
+       HadronElastic  Models:                G4LElastic: Emin(GeV)=     0  Emax(GeV)= 1.79769e+305
+           inelastic  Models:    G4LEPionMinusInelastic: Emin(GeV)=     0  Emax(GeV)= 55
+                                        TheoFSGenerator: Emin(GeV)=    19  Emax(GeV)= 100000
+
+                     Hadronic Processes for <proton>
+       HadronElastic  Models:                G4LElastic: Emin(GeV)=     0  Emax(GeV)= 1.79769e+305
+           inelastic  Models:       G4LEProtonInelastic: Emin(GeV)=     0  Emax(GeV)= 55
+                                        TheoFSGenerator: Emin(GeV)=    19  Emax(GeV)= 100000
+============================================================================================
 ++ ConcreteSD/Collisions id 0
 ++ ConcreteSD/CollWeight id 1
 ++ ConcreteSD/Population id 2
@@ -233,26 +324,26 @@ hIoni:   tables are built for  pi-
  Number of event processed : 100
 =============================================================
         Volume |   Tr.Entering |    Population |    Collisions |      Coll*WGT |     NumWGTedE |    FluxWGTedE |     Av.Tr.WGT |            SL |           SLW |         SLW_v |          SLWE |        SLWE_v |
-       cell_00 |            15 |           115 |             0 |             0 |     6.1693238 |      7.188295 |             1 |      2532.137 |      2532.137 |      78.12431 |     18201.747 |     481.97417 |
-       cell_01 |           110 |           136 |           144 |           144 |     7.5216138 |     8.7754593 |             1 |     11872.863 |     11872.863 |     334.63119 |     104189.82 |     2516.9666 |
-       cell_02 |            74 |           196 |           217 |         108.5 |     8.1052514 |     8.7570374 |           0.5 |     17778.519 |     8889.2597 |     233.54288 |     77843.579 |     1892.9237 |
-       cell_03 |            91 |           210 |           207 |         51.75 |     7.5922639 |     8.5918388 |          0.25 |     19594.449 |     4898.6122 |     135.58275 |     42088.086 |       1029.38 |
-       cell_04 |           117 |           279 |           378 |         47.25 |     6.2266601 |     7.7116445 |         0.125 |     30673.893 |     3834.2366 |     121.13123 |     29568.269 |       754.243 |
-       cell_05 |           133 |           318 |           437 |       27.3125 |     5.7489132 |     7.5024664 |        0.0625 |      32642.28 |     2040.1425 |     68.533945 |     15306.101 |      393.9957 |
-       cell_06 |           151 |           333 |           480 |            15 |     5.1433918 |     7.0956906 |       0.03125 |     36018.114 |     1125.5661 |     40.777795 |     7986.6686 |     209.73618 |
-       cell_07 |           177 |           412 |           636 |        9.9375 |   0.066616337 |      6.705372 |      0.015625 |     46841.617 |     731.90027 |     1965.7765 |     4907.6636 |     130.95283 |
-       cell_08 |           197 |           449 |           704 |           5.5 |     3.6435456 |     6.1452679 |     0.0078125 |     50071.975 |     391.18731 |      18.16726 |     2403.9508 |      66.19324 |
-       cell_09 |           224 |           510 |           876 |      3.421875 |     3.8825485 |     5.8797423 |    0.00390625 |     55829.968 |     218.08581 |     9.3342389 |     1282.2884 |     36.240635 |
-       cell_10 |           246 |           533 |           881 |     1.7207031 |     3.8256521 |     5.9375623 |   0.001953125 |     57222.209 |     111.76213 |     4.8739454 |     663.59459 |     18.646019 |
-       cell_11 |           255 |           569 |           955 |    0.93261719 |      3.750962 |     5.6920465 |  0.0009765625 |     61230.795 |     59.795698 |     2.6064336 |     340.35989 |     9.7766332 |
-       cell_12 |           301 |           647 |          1113 |    0.54345703 |    0.40008235 |      5.086439 | 0.00048828125 |      70839.28 |     34.589492 |     13.215827 |     175.93734 |     5.2874193 |
-       cell_13 |           353 |           789 |          1557 |    0.38012695 |     3.1708067 |     4.7100104 | 0.00024414062 |     92751.696 |     22.644457 |     1.0519334 |     106.65563 |     3.3354775 |
-       cell_14 |           387 |           823 |          1653 |    0.20178223 |      2.997233 |     4.4191157 | 0.00012207031 |     99295.668 |     12.121053 |     0.5754521 |     53.564337 |      1.724764 |
-       cell_15 |           421 |           920 |          1933 |    0.11798096 |    0.16704108 |     4.1903824 | 6.1035156e-05 |     109936.62 |     6.7099985 |     5.5391092 |      28.11746 |    0.92525875 |
-       cell_16 |           466 |          1001 |          1987 |   0.060638428 |     2.7742618 |     4.1818373 | 3.0517578e-05 |     115154.22 |     3.5142278 |    0.17524981 |     14.695929 |    0.48618886 |
-       cell_17 |           527 |          1160 |          2312 |    0.03527832 |    0.12747609 |     4.0136176 | 1.5258789e-05 |     131119.17 |     2.0007197 |      2.118756 |     8.0301238 |    0.27009073 |
-       cell_18 |           538 |          1264 |          2527 |    0.01927948 |     2.4519093 |     3.9615137 | 7.6293945e-06 |     143738.51 |     1.0966378 |   0.060193964 |     4.3443456 |    0.14759014 |
-       cell_19 |           596 |           596 |             0 |             0 |     2.7600991 |     4.1615587 | 7.6293945e-06 |     85856.912 |    0.65503626 |   0.032889241 |     2.7259719 |   0.090777566 |
+       cell_00 |            12 |           111 |             0 |             0 |     7.7390745 |     7.8676282 |             1 |     1902.4571 |     1902.4571 |     49.978273 |     14967.825 |     386.78558 |
+       cell_01 |           103 |           129 |           149 |           149 |     8.5162045 |     9.2082485 |             1 |     10615.073 |     10615.073 |     272.92091 |     97746.228 |     2324.2502 |
+       cell_02 |            63 |           141 |           143 |          71.5 |     7.9215965 |     8.7686651 |           0.5 |     12120.386 |     6060.1931 |     162.61681 |     53139.804 |     1288.1848 |
+       cell_03 |            79 |           186 |           207 |         51.75 |     6.1607967 |     8.1172317 |          0.25 |     18025.523 |     4506.3808 |     148.60556 |     36579.337 |     915.52865 |
+       cell_04 |            79 |           200 |           215 |        26.875 |     7.2407644 |     8.3350403 |         0.125 |      17564.44 |      2195.555 |      62.54555 |      18300.04 |     452.87759 |
+       cell_05 |            90 |           216 |           251 |       15.6875 |     6.4237711 |     7.9852611 |        0.0625 |     19634.115 |     1227.1322 |     38.213674 |     9798.9708 |     245.47589 |
+       cell_06 |           102 |           241 |           292 |         9.125 |    0.11088256 |     7.5930755 |       0.03125 |     24134.594 |     754.20607 |     1322.1253 |     5726.7436 |     146.60063 |
+       cell_07 |           123 |           282 |           446 |       6.96875 |     4.8352888 |     6.5128054 |      0.015625 |      32792.58 |     512.38405 |     18.901817 |     3337.0576 |     91.395743 |
+       cell_08 |           144 |           314 |           506 |      3.953125 |   0.018415579 |     6.2954969 |     0.0078125 |     34704.351 |     271.12774 |     2552.8752 |     1706.8839 |     47.012675 |
+       cell_09 |           161 |           352 |           543 |     2.1210938 |     4.8521271 |     6.4543587 |    0.00390625 |     39050.799 |     152.54219 |     5.5826764 |     984.56198 |     27.087856 |
+       cell_10 |           186 |           413 |           678 |     1.3242188 |   0.026340916 |     5.9871798 |   0.001953125 |     44048.592 |     86.032406 |     553.10066 |     515.09149 |     14.569178 |
+       cell_11 |           215 |           473 |           805 |    0.78613281 |     3.7860558 |     5.6395613 |  0.0009765625 |     52303.057 |     51.077204 |     2.2097225 |     288.05302 |     8.3661328 |
+       cell_12 |           243 |           562 |           942 |    0.45996094 |     3.6855467 |     5.4421388 | 0.00048828125 |     61448.955 |     30.004373 |     1.3093033 |     163.28796 |     4.8254986 |
+       cell_13 |           271 |           602 |          1107 |    0.27026367 |     3.4052236 |     5.1499337 | 0.00024414062 |     73851.298 |     18.030102 |    0.82568795 |     92.853829 |     2.8116521 |
+       cell_14 |           290 |           643 |          1052 |    0.12841797 |    0.12228306 |     5.2683346 | 0.00012207031 |     73188.678 |     8.9341648 |      11.61074 |     47.068169 |     1.4197968 |
+       cell_15 |           330 |           737 |          1310 |   0.079956055 |     3.5834084 |     5.0921917 | 6.1035156e-05 |     86477.579 |     5.2781726 |    0.23040911 |     26.877466 |    0.82564993 |
+       cell_16 |           385 |           857 |          1578 |   0.048156738 |     3.3790419 |     4.9504383 | 3.0517578e-05 |     96480.476 |     2.9443505 |    0.13418936 |     14.575825 |    0.45343147 |
+       cell_17 |           435 |           971 |          1763 |   0.026901245 |   0.069920778 |     4.7094667 | 1.5258789e-05 |     110437.94 |     1.6851492 |     3.6193554 |     7.9361539 |    0.25306814 |
+       cell_18 |           427 |          1018 |          1709 |   0.013038635 |   0.052763528 |     4.7525768 | 7.6293945e-06 |     114019.78 |     0.8699019 |      2.492791 |     4.1342756 |    0.13152845 |
+       cell_19 |           466 |           466 |             0 |             0 |      3.099839 |     5.0232184 | 7.6293945e-06 |     67360.846 |    0.51392247 |    0.02577776 |     2.5815448 |   0.079906906 |
 =============================================
 === G4ProcessPlacer::RemoveProcess: for: neutron
   ProcessName: ImportanceProcess, will be removed!
@@ -266,8 +357,8 @@ DoIt Vector:
   The initial PostStep Vectors: 
 GPIL Vector: 
    Decay
-   HadronCapture
-   HadronFission
+   nCapture
+   nFission
    inelastic
    HadronElastic
    ImportanceProcess
@@ -277,8 +368,8 @@ DoIt Vector:
    ImportanceProcess
    HadronElastic
    inelastic
-   HadronFission
-   HadronCapture
+   nFission
+   nCapture
    Decay
   The final AlongStep Vectors: 
 GPIL Vector: 
@@ -288,8 +379,8 @@ DoIt Vector:
   The final PostStep Vectors: 
 GPIL Vector: 
    Decay
-   HadronCapture
-   HadronFission
+   nCapture
+   nFission
    inelastic
    HadronElastic
    Transportation
@@ -297,7 +388,7 @@ DoIt Vector:
    Transportation
    HadronElastic
    inelastic
-   HadronFission
-   HadronCapture
+   nFission
+   nCapture
    Decay
 ================================================

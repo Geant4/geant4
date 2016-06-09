@@ -5,14 +5,15 @@
 # Plotting photon cross sections and stopping power
 # ==================================================================
 from Geant4 import *
-import ExN03pl
+import g4py.ExN03pl
+import g4py.emcalculator
 import EmPlot
 
 # initialize
 EmPlot.Configure()
 
 # user physics list
-ExN03pl.Construct()
+g4py.ExN03pl.Construct()
 
 # target material
 material= "G4_Pb"
@@ -30,7 +31,7 @@ for n in range(-3, 4):
 
 
 # calculate cross sections
-xsection_list= CalculatePhotonCrossSection(material, elist, 1)
+xsection_list= g4py.emcalculator.CalculatePhotonCrossSection(material, elist, 1)
 xlist_tot=[]
 xlist_comp=[]
 xlist_pe=[]

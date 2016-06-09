@@ -1,0 +1,167 @@
+//
+// ********************************************************************
+// * License and Disclaimer                                           *
+// *                                                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
+// *                                                                  *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
+// ********************************************************************
+//
+//
+// $Id: G4VIntersectionLocator.icc,v 1.3 2008/11/14 18:26:35 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-02 $
+//
+//
+// Class G4VIntersectionLocator inline methods
+//
+// 27.10.07 - John Apostolakis, Tatiana Nikitina
+// ---------------------------------------------------------------------------
+
+inline G4double G4VIntersectionLocator::GetDeltaIntersectionFor()
+{
+  return fiDeltaIntersection;
+} 
+
+inline G4double G4VIntersectionLocator::GetEpsilonStepFor()
+{
+  return fiEpsilonStep;
+}
+
+inline G4Navigator* G4VIntersectionLocator::GetNavigatorFor()
+{
+  return fiNavigator;
+}
+
+inline G4ChordFinder* G4VIntersectionLocator::GetChordFinderFor()
+{
+  return fiChordFinder;
+}
+
+inline G4int G4VIntersectionLocator::GetVerboseFor()
+{
+  return fVerboseLevel;
+}
+
+inline G4bool G4VIntersectionLocator::GetAdjustementOfFoundIntersection()
+{
+  return fUseNormalCorrection;
+}
+
+inline void G4VIntersectionLocator::
+AddAdjustementOfFoundIntersection(G4bool UseCorrection )
+{
+  fUseNormalCorrection=UseCorrection;
+}
+
+inline void G4VIntersectionLocator::SetEpsilonStepFor( G4double EpsilonStep )
+{
+  fiEpsilonStep=EpsilonStep;
+}
+
+inline void G4VIntersectionLocator::
+SetDeltaIntersectionFor( G4double deltaIntersection )
+{
+  fiDeltaIntersection=deltaIntersection;
+}
+
+inline void G4VIntersectionLocator::SetNavigatorFor( G4Navigator *fNavigator )
+{
+  fiNavigator=fNavigator;
+}
+
+inline void G4VIntersectionLocator::SetChordFinderFor(G4ChordFinder *fCFinder )
+{
+  fiChordFinder=fCFinder;
+}
+
+inline void G4VIntersectionLocator::SetSafetyParametersFor(G4bool UseSafety )
+{
+  fiUseSafety=UseSafety;
+}
+
+inline void G4VIntersectionLocator::SetVerboseFor(G4int fVerbose)
+{
+  fVerboseLevel=fVerbose;
+}
+
+inline G4bool
+G4VIntersectionLocator::IntersectChord( G4ThreeVector  StartPointA, 
+                                        G4ThreeVector  EndPointB,
+                                        G4double      &NewSafety,
+                                        G4double      &fPreviousSafety,
+                                        G4ThreeVector &fPreviousSftOrigin,
+                                        G4double      &LinearStepLength,
+                                        G4ThreeVector &IntersectionPoint )
+{
+  // Calculate the direction and length of the chord AB
+
+  G4ThreeVector  ChordAB_Vector = EndPointB - StartPointA;
+  G4double       ChordAB_Length = ChordAB_Vector.mag();  // Magnitude (norm)
+  G4ThreeVector  ChordAB_Dir =    ChordAB_Vector.unit();
+  G4bool intersects;
+  G4ThreeVector OriginShift = StartPointA -  fPreviousSftOrigin ;
+  G4double      MagSqShift  = OriginShift.mag2() ;
+  G4double      currentSafety;
+  G4bool        doCallNav= false;
+
+  if( MagSqShift >= sqr(fPreviousSafety) )
+  {
+    currentSafety = 0.0 ;
+  }
+  else
+  {
+    currentSafety = fPreviousSafety - std::sqrt(MagSqShift) ;
+  }
+
+  if( fiUseSafety && (ChordAB_Length <= currentSafety) )
+  {
+    // The Step is guaranteed to be taken
+
+    LinearStepLength = ChordAB_Length;
+    intersects = false;
+    NewSafety= currentSafety;
+  }
+  else
+  {
+    doCallNav= true; 
+      // Check whether any volumes are encountered by the chord AB
+
+    LinearStepLength = GetNavigatorFor()->ComputeStep( StartPointA,
+                                 ChordAB_Dir, ChordAB_Length, NewSafety );
+    intersects = (LinearStepLength <= ChordAB_Length); 
+
+       // G4Navigator contracts to return k_infinity if len==asked
+       // and it did not find a surface boundary at that length
+
+    LinearStepLength = std::min( LinearStepLength, ChordAB_Length);
+
+    // Save the last calculated safety!
+
+    fPreviousSftOrigin = StartPointA;
+    fPreviousSafety= NewSafety;
+
+    if( intersects )
+    {
+       // Intersection Point of chord AB and either volume A's surface 
+       //                                or a daughter volume's surface ..
+       IntersectionPoint = StartPointA + LinearStepLength * ChordAB_Dir;
+    }
+  }
+  return intersects;
+}

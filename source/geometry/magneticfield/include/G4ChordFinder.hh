@@ -24,21 +24,20 @@
 // ********************************************************************
 //
 //
-// $Id: G4ChordFinder.hh,v 1.17 2006/06/29 18:21:02 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4ChordFinder.hh,v 1.21 2008/10/29 14:17:42 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // 
-// class G4ChordFinder
+// Class G4ChordFinder
 //
-// Class description:
+// class description:
 //
 // A class that provides RK integration of motion ODE  (as does g4magtr)
 // and also has a method that returns an Approximate point on the curve 
 // near to a (chord) point.
 
 // History:
-// - 25.02.97 John Apostolakis,  design and implementation 
-// - 05.03.97 V. Grichine , makeup to G4 'standard'
+// - 25.02.97 - John Apostolakis - Design and implementation 
 // -------------------------------------------------------------------
 
 #ifndef G4CHORDFINDER_HH
@@ -62,7 +61,6 @@ class G4ChordFinder
       
       virtual ~G4ChordFinder();
 
-
       G4double    AdvanceChordLimited( G4FieldTrack& yCurrent,
                                        G4double stepInitial,
                                        G4double epsStep_Relative,
@@ -71,11 +69,23 @@ class G4ChordFinder
         // Uses ODE solver's driver to find the endpoint that satisfies 
         // the chord criterion: that d_chord < delta_chord
         // -> Returns Length of Step taken.
+     
+      G4FieldTrack ApproxCurvePointS( const G4FieldTrack&  curveAPointVelocity,
+                                      const G4FieldTrack&  curveBPointVelocity,
+                                      const G4FieldTrack&  ApproxCurveV,
+                                      const G4ThreeVector& currentEPoint,
+                                      const G4ThreeVector& currentFPoint,
+                                      const G4ThreeVector& PointG,
+                                            G4bool first,  G4double epsStep);
+ 
+      G4FieldTrack ApproxCurvePointV( const G4FieldTrack&  curveAPointVelocity,
+                                      const G4FieldTrack&  curveBPointVelocity,
+                                      const G4ThreeVector& currentEPoint,
+                                            G4double       epsStep);
 
-      G4FieldTrack ApproxCurvePointV(const  G4FieldTrack&  curveAPointVelocity,
-                                     const  G4FieldTrack&  curveBPointVelocity,
-                                     const  G4ThreeVector& currentEPoint,
-                                            G4double      epsStep);
+      inline G4double InvParabolic( const G4double xa, const G4double ya,
+                                    const G4double xb, const G4double yb,
+                                    const G4double xc, const G4double yc );
 
       inline G4double  GetDeltaChord() const;
       inline void      SetDeltaChord(G4double newval);
@@ -100,7 +110,29 @@ class G4ChordFinder
       virtual void   PrintStatistics(); 
         // A report with the above -- and possibly other stats
       inline G4int SetVerbose( G4int newvalue=1); 
-       // Set verbosity and return old value
+        // Set verbosity and return old value
+
+      void SetFractions_Last_Next( G4double fractLast= 0.90, 
+                                   G4double fractNext= 0.95 ); 
+        // Parameters for  performance ... change with great care
+
+      inline void SetFirstFraction(G4double fractFirst);
+        // Parameter for  performance ... change with great care
+
+   public:  // without description
+
+      void     TestChordPrint( G4int    noTrials, 
+                               G4int    lastStepTrial, 
+                               G4double dChordStep, 
+                               G4double nextStepTrial );
+
+        //   Printing for monitoring ...
+ 
+      inline   G4double GetFirstFraction();         // Originally 0.999
+      inline   G4double GetFractionLast();          // Originally 1.000
+      inline   G4double GetFractionNextEstimate();  // Originally 0.980
+      inline   G4double GetMultipleRadius();        // No original value
+        //  Parameters for adapting performance ... use with great care
 
    protected:   // .........................................................
 
@@ -114,7 +146,7 @@ class G4ChordFinder
                         G4double dChordStep,     // Current dchord estimate
                         G4double& stepEstimate_Unconstrained ) ;  
       
-      virtual G4double FindNextChord( const  G4FieldTrack  yStart,
+      virtual G4double FindNextChord( const  G4FieldTrack& yStart,
                               G4double     stepMax,
                               G4FieldTrack& yEnd,
                               G4double&    dyErr,      //  Error of endpoint 
@@ -128,28 +160,7 @@ class G4ChordFinder
                                 G4double  stepTrial, 
                                 G4double  oldStepTrial, 
                                 G4double  dChordStep);
-  public:  // no description 
-      void     TestChordPrint( G4int    noTrials, 
-                               G4int    lastStepTrial, 
-                               G4double dChordStep, 
-                               G4double nextStepTrial );
-        //   Printing for monitoring ...
- 
-      inline   G4double GetFirstFraction();         // Originally 0.999
-      inline   G4double GetFractionLast();          // Originally 1.000
-      inline   G4double GetFractionNextEstimate();  // Originally 0.980
-      inline   G4double GetMultipleRadius();        // No original value
-       //  Parameters for adapting performance ... use with great care
 
-   public:  // with description 
-      void     SetFractions_Last_Next( G4double fractLast= 0.90, 
-				       G4double fractNext= 0.95 ); 
-      //  Parameters for  performance ... change with great care
-
-      inline   void     SetFirstFraction(G4double fractFirst);
-      //  Parameter for  performance ... change with great care
-
-   protected:
       inline G4double GetLastStepEstimateUnc(); 
       inline void     SetLastStepEstimateUnc( G4double stepEst ); 
 
@@ -160,15 +171,18 @@ class G4ChordFinder
         // Private copy constructor and assignment operator.
 
    private:  // ............................................................
-                                            // G4int    nOK, nBAD;
+                                          // G4int    nOK, nBAD;
       G4MagInt_Driver* fIntgrDriver;
 
       const G4double fDefaultDeltaChord;  // SET in G4ChordFinder.cc = 0.25 mm
 
-      G4double fDeltaChord;                        //  Maximum miss distance 
+      G4double fDeltaChord;               //  Maximum miss distance 
 
-      G4double    fLastStepEstimate_Unconstrained; //  State information for efficiency
+      G4double    fLastStepEstimate_Unconstrained;
+        //  State information for efficiency
+
       //  Variables used in construction/destruction
+
       G4bool fAllocatedStepper;
       G4EquationOfMotion* fEquation; 
       G4MagIntegratorStepper* fDriversStepper; 

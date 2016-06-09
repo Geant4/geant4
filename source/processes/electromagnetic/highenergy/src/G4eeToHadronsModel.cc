@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eeToHadronsModel.cc,v 1.8 2007/05/22 17:37:30 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4eeToHadronsModel.cc,v 1.9 2008/07/10 18:06:39 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // -------------------------------------------------------------------
 //
@@ -64,18 +64,17 @@
 
 using namespace std;
 
-G4eeToHadronsModel::G4eeToHadronsModel(const G4Vee2hadrons* m,
-				             G4int ver,
+G4eeToHadronsModel::G4eeToHadronsModel(G4Vee2hadrons* m, G4int ver,
                                        const G4String& nam)
   : G4VEmModel(nam),
-  model(m),
-  crossPerElectron(0),
-  crossBornPerElectron(0),
-  isInitialised(false),
-  nbins(100),
-  verbose(ver)
+    model(m),
+    crossPerElectron(0),
+    crossBornPerElectron(0),
+    isInitialised(false),
+    nbins(100),
+    verbose(ver)
 {
-  theGamma      = G4Gamma::Gamma();
+  theGamma = G4Gamma::Gamma();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -95,16 +94,39 @@ void G4eeToHadronsModel::Initialise(const G4ParticleDefinition*,
   if(isInitialised) return;
   isInitialised  = true;
 
+  // Lab system
   highKinEnergy = HighEnergyLimit();
   lowKinEnergy  = LowEnergyLimit();
 
-  emin  = model->ThresholdEnergy();
-  emax = 2.0*electron_mass_c2*sqrt(1.0 + 0.5*highKinEnergy/electron_mass_c2);
-  if(emin > emax) emin = emax;
+  // CM system
+  emin  = model->LowEnergy();
+  emax  = model->HighEnergy();
 
-  lowKinEnergy  = 0.5*emin*emin/electron_mass_c2 - 2.0*electron_mass_c2;
+  G4double emin0 = 
+    2.0*electron_mass_c2*sqrt(1.0 + 0.5*lowKinEnergy/electron_mass_c2);
+  G4double emax0 = 
+    2.0*electron_mass_c2*sqrt(1.0 + 0.5*highKinEnergy/electron_mass_c2);
 
-  epeak = min(model->PeakEnergy(), emax);
+  // recompute low energy
+  if(emin0 > emax) {
+    emin0 = emax;
+    model->SetLowEnergy(emin0);
+  }
+  if(emin > emin0) {
+    emin0 = emin;
+    lowKinEnergy  = 0.5*emin*emin/electron_mass_c2 - 2.0*electron_mass_c2;
+    SetLowEnergyLimit(lowKinEnergy);
+  }
+
+  // recompute high energy
+  if(emax < emax0) {
+    emax0 = emax;
+    highKinEnergy = 0.5*emax*emax/electron_mass_c2 - 2.0*electron_mass_c2;
+    SetHighEnergyLimit(highKinEnergy);
+  }
+
+  // peak energy
+  epeak = std::min(model->PeakEnergy(), emax);
   peakKinEnergy  = 0.5*epeak*epeak/electron_mass_c2 - 2.0*electron_mass_c2;
 
   if(verbose>0) {
@@ -147,6 +169,29 @@ void G4eeToHadronsModel::Initialise(const G4ParticleDefinition*,
 	     << G4endl;
     }
   }
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4double G4eeToHadronsModel::CrossSectionPerVolume(
+				      const G4Material* mat,
+				      const G4ParticleDefinition* p,
+				      G4double kineticEnergy,
+				      G4double, G4double)
+{
+  return mat->GetElectronDensity()*
+    ComputeCrossSectionPerElectron(p, kineticEnergy);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4double G4eeToHadronsModel::ComputeCrossSectionPerAtom(
+                                      const G4ParticleDefinition* p,
+				      G4double kineticEnergy,
+				      G4double Z, G4double,
+				      G4double, G4double)
+{
+  return Z*ComputeCrossSectionPerElectron(p, kineticEnergy);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

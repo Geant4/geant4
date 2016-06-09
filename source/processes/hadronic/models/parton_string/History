@@ -13,6 +13,27 @@ code and to keep track of all tags.
      ---------------------------------------------------------------
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
+23 June 2008 V. Uzhinsky (hadr-prtn-V09-01-02)
+   G4QGSMFragmentation.cc and G4LundStringFragmentation.cc were
+   decoupled at calculation of formation time due to adding methods
+   and member in G4VLongitudinalStringDecay class for manipulation
+   with string tension.
+
+   Memory leak was erased in G4QGSMFragmentation.cc and 
+   G4VLongitudinalStringDecay.cc thank to Gunter.
+
+18 June 2008 V. Uzhinsky (hadr-prtn-V09-01-01)
+   Changes in G4ExcitedString class were tagged. They are needed for
+   operation of FTF.
+
+13 June 2008 V. Uzhinsky    (hadr-prtn-V09-01-00)
+----------------------------------------------- 
+1. String fragmentation was revised, and parameters were tuned.
+2. FTF parameters were tuned for proton-proton interaction
+3. FTF parameters for pion-nucleon interactions were determined very rouhgly
+4. Quiasi-elastic hadron-nucleus scattering was implemented in FTF
+5. Formation time was implemented in FTF, and string tension was tuned
+
 
 25 May 2007 G.Folger       (hadr-prtn-V08-02-02)
 -----------------------------------------------
@@ -52,3 +73,12 @@ code and to keep track of all tags.
    (tag had-hadronization-V07-01-00)
 
 - D. Wright created History file for parton_string directory
+
+31 March 2008 V. Uzhinsky (hadr-string-diff-V09-01-00)
+--------------------------------------------------------
+
+- Elastic hadron intra-nuclear nucleon scattering was inserted in
+  FTF model. This allows to simulate quasi-elastic and multi-particles
+  production together.
+- Small re-orangement of FTF model was done. G4FTFCrossSection modules
+  were re-named into G4FTFParameters and moved to /diffraction

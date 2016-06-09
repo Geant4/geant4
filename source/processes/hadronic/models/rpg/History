@@ -14,6 +14,37 @@ code and to keep track of all tags.
    * Please list in reverse chronological order (last date on top)
    ---------------------------------------------------------------
 
+ 9 June 2008 - Dennis Wright (hadr-rpg-V09-01-03)
+-------------------------------------------------
+Remove unused variable ekIncident in G4RPGFragmentation.cc and 
+G4RPGTwoCluster.cc
+
+ 5 May 2008 - Dennis Wright (hadr-rpg-V09-01-02)
+------------------------------------------------
+Fixed gcc-4.3 compiler warnings for unused variables in 
+G4RPGNeutronInelastic.hh, cc
+G4RPGPiMinusInelastic.hh, cc
+G4RPGPiPlusInelastic.hh, cc
+G4RPGProtonInelastic.hh, cc
+G4RPGReaction.hh, cc
+G4RPGFragmentation.cc
+G4RPGTwoBody.cc
+G4RPGTwoCluster.cc
+
+21 March 2008 - Dennis Wright (hadr-rpg-V09-01-01)
+--------------------------------------------------
+Fixed gcc-4.3 compiler warning in G4RPGInelastic.cc
+
+21 February 2008 - Dennis Wright (hadr-rpg-V09-01-00)
+-----------------------------------------------------
+G4RPGInelastic: remove Rotate method, fix K0 ID problem
+G4RPGFragmentation: fix energy non-conservation
+G4RPGReaction.cc: add GenerateNBodyEventT method, fix energy non-conservation 
+                  in AddBlackTrackParticles
+G4RPGProtonInelastic.cc, G4RPGNeutronInelastic.cc, G4RPGPiPlusInelastic.cc,
+  G4RPGPiMinusInelastic.cc: remove quasi-elastic flag, remove MeV units
+
+
 5 December 2007 - Dennis Wright (hadr-rpg-V09-00-02)
 ----------------------------------------------------
 Fixed array bound violation in G4RPGFragmentation.cc (pseudoParticle[7]).

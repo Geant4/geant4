@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // $Id: SteppingVerbose.hh,v 1.2 2006/06/29 16:40:06 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

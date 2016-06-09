@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4RunMessenger.cc,v 1.31 2007/11/16 22:37:43 asaim Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 
 #include "G4RunMessenger.hh"

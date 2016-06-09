@@ -61,45 +61,42 @@ void strucf(int A, double x, double Q2, double& f2, double& xf3, double& fL)
   }
   else
   {
-		  double r=0.;
-    double max=1.;
-    double H=1.22;
-    if(A==1)                   // Proton
-		  {
-      r=std::sqrt(Q2/1.66);
-      max=.5;
-    }
-    else if(A<13)              // Light nuclei
-		  {
-      double f=Q2/4.62;
-      r=f*f;
-      max=.3;
-      if(A>2) H=1.;
-    }
-    else if(A>0)               // Heavy nuclei
-		  {
-      double f=Q2/3.4;
-      double ff=f*f;
-      r=ff*ff;
-      max=.5;
-      H=1.;
-    }
-    else G4cout<<"strucf: A="<<A<<" <= 0"<< G4endl;
+		  //double r=0.;
+    double min=.077;             // Delta(0)
+				double max=.47;              // Hard Pomeron
+    //double H=1.22;
+    if(Q2<=0.) G4cout<<"strucf: Q2="<<Q2<<" <= 0"<< G4endl;
+    double Q=std::sqrt(Q2);
+    //if(A==1)                   // Proton
+		  //{
+    //  r=std::sqrt(Q2/1.66);
+    //  max=.5;
+    //}
+    //else if(A<13)              // Light nuclei
+		  //{
+    //  double f=Q2/4.62;
+    //  r=f*f;
+    //  max=.3;
+    //  if(A>2) H=1.;
+    //}
+    //else if(A>0)               // Heavy nuclei
+		  //{
+    //  double f=Q2/3.4;
+    //  double ff=f*f;
+    //  r=ff*ff;
+    //  max=.5;
+    //  H=1.;
+    //}
+    //else G4cout<<"strucf: A="<<A<<" <= 0"<< G4endl;
     //
     N=3.+.3581*std::log(1.+Q2/.04); // a#of partons in the nonperturbative phase space
-    Del=(1.+r)/(12.5+r/max);
-    double S=std::pow(1.+.6/Q2,-1.-Del);
-    D=H*S*(1.-.5*S);
+    Del=min+(max-min)/(1.+5./Q);
+    D=0.68*std::pow(1.+.145/Q2,-1.-Del); // 0.68=1-0.34, m2=.145 GeV2
     V=3*(1.-D)*(N-1.);
-    double cc=Q2/.08;
-    double cc2=cc*cc;
-    //double C=(1.+cc2)/(1.+cc2/.24);              // Weak?
-    double C=(1.+cc2)/(1.+cc2/.24)/(1.+Q2/21.6); // EM
-    double c3=C+C+C;
+    double c3=.75;                       // 3*0.25
     double uu=std::exp(lGam(N-Del)-lGam(N-1.)-lGam(1.-Del))/N;
     U2=(c3+N-3.)*uu;
     U3=c3*uu;
-    //UU=uu+uu+uu; // @@
     mA  = A;
     mQ2 = Q2;
     mN  = N;
@@ -124,7 +121,7 @@ void strucf(int A, double x, double Q2, double& f2, double& xf3, double& fL)
   //}
   //else
   xf3= U3*pp+dir;
-  fL = per/4.;
+  fL = per/5.;                             // 20%
   return;
 }
 
@@ -156,7 +153,7 @@ int main()
   const double pif=3.14159265*4;// 4pi
   const double sik=GF2*hc2/pif; // precalculated coefficient
   //const double mpi=.1349766;    // pi0 meson mass in GeV
-  const double mpi=.13957018;   // charged pi meson mass in GeV
+  //const double mpi=.13957018;   // charged pi meson mass in GeV
   //const double mpi2=mpi*mpi;    // m_pi^2 in GeV^2
   //const double me=.00051099892; // electron mass in GeV
   //const double me2=me*me;       // m_e^2 in GeV^2
@@ -167,12 +164,12 @@ int main()
   //const double mtau=1.777;      // tau meson mass in GeV
   //const double mtau2=mtau*mtau; // m_tau^2 in GeV^2
   //const double hmtau2=mtau2/2;  // .5*m_e^2 in GeV^2
-  //const double mp=.93827203;    // proton mass in GeV
-  //const double mn=.93956536;    // neutron mass in GeV
+  const double mp=.93827203;    // proton mass in GeV
+  const double mn=.93956536;    // neutron mass in GeV
   //const double md=1.87561282;   // deuteron mass in GeV
-  const double MN=.931494043;   // Nucleon mass (inside nucleus, atomic mass unit, GeV)
-  //const double MN=(mn+mp)/2;    // Nucleon mass (mean free) in GeV
-  //const double MD=1.232;        // proton mass in GeV
+  //const double MN=.931494043;   // Nucleon mass (inside nucleus, atomic mass unit, GeV)
+  const double MN=(mn+mp)/2;    // Nucleon mass (mean free) in GeV
+  const double MD=1.232;        // proton mass in GeV
   //const double mp2=mp*mp;       // m_p^2 in GeV^2
   const double MN2=MN*MN;       // M_N^2 in GeV^2
   const double dMN=MN+MN;       // 2*M_N in GeV
@@ -183,7 +180,8 @@ int main()
   //const double EminTau=mmu+mmu2/dMN; // Threshold for muon production
   //
   //const double mc=.3;           // parameter of W>M+mc cut for Quasi-Elastic/Delta
-  const double mc=mpi;          // parameter of W>M+mc cut for Quasi-Elastic/Delta
+  const double mc=std::sqrt((MN*MN+MD*MD)/2)-MN; // Squared mean between N and \Delta
+  //const double mc=mpi;          // parameter of W>M+mc cut for Quasi-Elastic/Delta
   const double mcV=(dMN+mc)*mc; // constant of W>M+mc cut for Quasi-Elastic
   //std::ofstream fileNuMuX("NuMuXQ2.out", std::ios::out);
   //fileNuMuX.setf( std::ios::scientific, std::ios::floatfield );
@@ -197,8 +195,8 @@ int main()
   double f[5];                    // A working array
   int    A=12;                    // Neucleus for which calculations should be done
   double lEnuMin=0;               // LogLog of Minimum energy of neutrino
-  double lEnuMax=std::log(1.+std::log(300./EminMu)); // LogLog of Maximum energy of neutrino
-  int    nE=31;
+  double lEnuMax=std::log(1.+std::log(300./EminMu)); // LogLog of MaximumEnergy of neutrino
+  int    nE=49;                   // Number of points
   double dlE=(lEnuMax-lEnuMin)/nE;
   lEnuMin+=dlE/10;
   lEnuMax+=dlE/5;
@@ -240,14 +238,14 @@ int main()
         double Q2M=Q2+MW2;
         double dik=MW4/Q2M/Q2M;
         double qmc=Q2+mcV;
-        double lXQES=std::log((std::sqrt(qmc*qmc+Q2*fMN2)-qmc)/dMN2); // Quasielastic boundary
+        double lXQES=std::log((std::sqrt(qmc*qmc+Q2*fMN2)-qmc)/dMN2);//QuasielasticBoundary
         //double lXQES=log(Q2/(Q2+mcV)); // Quasielastic boundary (W=MN+m_c)
         //double xN=Q2/dME;
         double xN=Q2/MN/(Emu+std::sqrt(Emu2+Q2));
         //double lXmin=log(xN/ymax);
         double lXmin=std::log(xN);
         // ****** QE ********
-        //if(lXQES>lXmin) lXmin=lXQES;   // A cut which leaves only QES
+        if(lXQES>lXmin) lXmin=lXQES;   // A cut which leaves only QES >>>>>>>>>>>>>>>>
         // *** End of QE^^^^^
         double lXmax=0.;               // QES is in DIS
         //double lXmax=lXQES;          // Cut off quasielastic
@@ -261,8 +259,9 @@ int main()
           for(double lX=lXmin+dlX/2; lX<lXmax; lX+=dlX)
 				      {
             getFun(A, lX, Q2, f);
-            DISxint+=f[0]+f[0]+xN*(f[1]+f[1]+xN*f[3]); // neutrino
-            //DISxint+=f[0]+f[0]+xN*(f[2]+f[2]+xN*f[4]); // anti-neutrino
+            // ***** Neutrino/Antineutrino switch ******>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+            //DISxint+=f[0]+f[0]+xN*(f[1]+f[1]+xN*f[3]); // neutrino
+            DISxint+=f[0]+f[0]+xN*(f[2]+f[2]+xN*f[4]); // anti-neutrino
             //G4cout<<f[0]<<","<<f[1]<<","<<f[2]<<","<<f[3]<<","<<f[4]<<G4endl;
           }
           DISxint*=dlX;
@@ -278,7 +277,10 @@ int main()
     }
     //===== tot/qe choice ====
     DIStsig*=sik/Enu;
-    G4cout<<"***total*** E="<<Enu<<",sig/E="<<DIStsig<<G4endl;
+    //G4cout<<"***total-neutrino*** E="<<Enu<<" ,sig/E="<<DIStsig<<G4endl;
+    G4cout<<"***total-antineutrino*** E="<<Enu<<" ,sig/E="<<DIStsig<<G4endl;
+    //G4cout<<"***quasiel-nu*** E="<<Enu<<" ,sig/E="<<DIStsig<<G4endl;
+    //G4cout<<"***quasiel-antinu*** E="<<Enu<<" ,sig/E="<<DIStsig<<G4endl;
     //...................
     //DIStsig*=sik;
     //G4cout<<"***qelas*** E="<<Enu<<",sig="<<DIStsig<<G4endl;

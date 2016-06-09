@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QCaptureAtRest.hh,v 1.3 2007/02/09 09:33:28 mkossov Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4QCaptureAtRest.hh,v 1.6 2008/10/02 21:10:07 dennis Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 //      ---------------- G4QCaptureAtRest header ----------------
 //                 by Mikhail Kossov, December 2003.
@@ -93,6 +93,7 @@
 #include "Randomize.hh"
 #include "G4ThreeVector.hh"
 #include "G4LorentzVector.hh"
+#include "G4HadronicProcessType.hh"
 
 // CHIPS Headers
 #include "G4QEnvironment.hh"
@@ -117,9 +118,13 @@ public:
   G4QCaptureAtRest(const G4String& processName ="CHIPSNuclearAbsorptionAtRest");
 
   // Destructor
-  ~G4QCaptureAtRest();
+  virtual ~G4QCaptureAtRest();
 
-  G4bool IsApplicable(const G4ParticleDefinition& particle);
+  virtual G4bool IsApplicable(const G4ParticleDefinition& particle);
+
+  virtual void PreparePhysicsTable(const G4ParticleDefinition&);
+
+  virtual void BuildPhysicsTable(const G4ParticleDefinition&);
 
   G4VParticleChange* AtRestDoIt(const G4Track& aTrack, const G4Step& aStep); 
 

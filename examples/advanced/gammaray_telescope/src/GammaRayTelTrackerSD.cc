@@ -24,8 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: GammaRayTelTrackerSD.cc,v 1.9 2006/06/29 15:57:13 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file
 //      CERN Geneva Switzerland
@@ -96,13 +94,13 @@ void GammaRayTelTrackerSD::Initialize(G4HCofThisEvent*)
 
 G4bool GammaRayTelTrackerSD::ProcessHits(G4Step* aStep,G4TouchableHistory* ROhist)
 { 
-
+   
   G4double edep = aStep->GetTotalEnergyDeposit();
   if ((edep/keV == 0.)) return false;      
   
   G4int StripTotal = Detector->GetNbOfTKRStrips();
   G4int TileTotal  = Detector->GetNbOfTKRTiles();  
-  
+
   // This TouchableHistory is used to obtain the physical volume
   // of the hit
   G4TouchableHistory* theTouchable
@@ -122,11 +120,13 @@ G4bool GammaRayTelTrackerSD::ProcessHits(G4Step* aStep,G4TouchableHistory* ROhis
   G4int StripNumber = 0;
   G4VPhysicalVolume* strip = 0;
   strip = ROhist->GetVolume();
-  G4String StripName = strip->GetName();
-  StripNumber= strip->GetCopyNo();  
 
-  ROhist->MoveUpHistory();
-  G4VPhysicalVolume* tile = ROhist->GetVolume(); 
+  //  if (strip){
+    G4String StripName = strip->GetName();
+    StripNumber= strip->GetCopyNo();  
+    //  }
+  //  ROhist->MoveUpHistory();
+  G4VPhysicalVolume* tile = ROhist->GetVolume(1); 
   G4int TileNumber = tile->GetCopyNo();  
   G4String TileName = tile->GetName();   
   

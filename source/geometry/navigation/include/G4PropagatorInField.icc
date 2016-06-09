@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PropagatorInField.icc,v 1.10 2006/11/13 17:34:08 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4PropagatorInField.icc,v 1.13 2008/10/29 14:31:55 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // 
 // ------------------------------------------------------------------------
@@ -145,7 +145,6 @@ G4int G4PropagatorInField::GetVerboseLevel() const
 {
   return fVerboseLevel;
 }
-
 inline
 G4int G4PropagatorInField::Verbose() const     // Obsolete
 {
@@ -267,3 +266,31 @@ G4Navigator* G4PropagatorInField::GetNavigatorForPropagating()
 {
   return fNavigator;
 } 
+
+inline 
+void G4PropagatorInField::
+SetIntersectionLocator( G4VIntersectionLocator *pIntLoc )
+{
+  if(pIntLoc)  { fIntersectionLocator= pIntLoc; }
+}
+
+inline
+G4VIntersectionLocator* G4PropagatorInField::GetIntersectionLocator()
+{
+  return fIntersectionLocator;
+} 
+
+inline
+G4bool G4PropagatorInField::IntersectChord( G4ThreeVector  StartPointA, 
+                                            G4ThreeVector  EndPointB,
+                                            G4double      &NewSafety,
+                                            G4double      &LinearStepLength,
+                                            G4ThreeVector &IntersectionPoint )
+{
+  // Calculate the direction and length of the chord AB
+  //
+  return fIntersectionLocator
+         ->IntersectChord(StartPointA,EndPointB,NewSafety,
+                          fPreviousSafety,fPreviousSftOrigin,
+                          LinearStepLength,IntersectionPoint);
+}

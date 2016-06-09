@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSolid.cc,v 1.35 2007/10/24 14:09:27 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4VSolid.cc,v 1.39 2008/09/23 13:07:41 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // class G4VSolid
 //
@@ -70,6 +70,19 @@ G4VSolid::G4VSolid(const G4String& name)
 
 //////////////////////////////////////////////////////////////////////////
 //
+// Copy constructor
+//
+
+G4VSolid::G4VSolid(const G4VSolid& rhs)
+  : kCarTolerance(rhs.kCarTolerance), fshapeName(rhs.fshapeName)
+{
+    // Register to store
+    //
+    G4SolidStore::GetInstance()->Register(this);
+}
+
+//////////////////////////////////////////////////////////////////////////
+//
 // Fake default constructor - sets only member data and allocates memory
 //                            for usage restricted to object persistency.
 //
@@ -90,6 +103,24 @@ G4VSolid::~G4VSolid()
 {
     G4SolidStore::GetInstance()->DeRegister(this);
 }
+
+//////////////////////////////////////////////////////////////////////////
+//
+// Assignment operator
+
+G4VSolid& G4VSolid::operator = (const G4VSolid& rhs) 
+{
+   // Check assignment to self
+   //
+   if (this == &rhs)  { return *this; }
+
+   // Copy data
+   //
+   kCarTolerance = rhs.kCarTolerance;
+   fshapeName = rhs.fshapeName;
+
+   return *this;
+}  
 
 //////////////////////////////////////////////////////////////////////////
 //
@@ -149,6 +180,7 @@ void G4VSolid::ClipCrossSection(       G4ThreeVectorList* pVertices,
 {
 
   G4ThreeVectorList polygon;
+  polygon.reserve(4);
   polygon.push_back((*pVertices)[pSectionIndex]);
   polygon.push_back((*pVertices)[pSectionIndex+1]);
   polygon.push_back((*pVertices)[pSectionIndex+2]);
@@ -178,6 +210,7 @@ void G4VSolid::ClipBetweenSections(      G4ThreeVectorList* pVertices,
                                          G4double& pMin, G4double& pMax) const
 {
   G4ThreeVectorList polygon;
+  polygon.reserve(4);
   polygon.push_back((*pVertices)[pSectionIndex]);
   polygon.push_back((*pVertices)[pSectionIndex+4]);
   polygon.push_back((*pVertices)[pSectionIndex+5]);

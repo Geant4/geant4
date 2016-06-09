@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4LogicalSkinSurface.hh,v 1.15 2007/10/12 20:08:28 gum Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4LogicalSkinSurface.hh,v 1.17 2008/08/19 15:31:52 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // class G4LogicalSkinSurface
 //

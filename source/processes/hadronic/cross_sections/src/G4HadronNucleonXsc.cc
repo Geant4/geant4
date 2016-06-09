@@ -915,11 +915,11 @@ G4HadronNucleonXsc::GetHadronNucleonXscMK(const G4DynamicParticle* aParticle,
     kf = true;
     if( G4UniformRand() > .5 ) kfl = false;
   }
-  if     ( PDG == 2212 && F || PDG == 2112 && !F ) I = 0; // pp/nn
-  else if( PDG == 2112 && F || PDG == 2212 && !F ) I = 1; // np/pn
+  if     ( (PDG == 2212 && F) || (PDG == 2112 && !F) ) I = 0; // pp/nn
+  else if( (PDG == 2112 && F) || (PDG == 2212 && !F) ) I = 1; // np/pn
 
-  else if( PDG == -211 && F || PDG == 211  && !F ) I = 2; // pimp/pipn
-  else if( PDG == 211  && F || PDG ==-211  && !F ) I = 3; // pipp/pimn
+  else if( (PDG == -211 && F) || (PDG == 211  && !F) ) I = 2; // pimp/pipn
+  else if( (PDG == 211  && F) || (PDG ==-211  && !F) ) I = 3; // pipp/pimn
 
   else if( PDG == -321 || PDG == -311 || ( kf && !kfl ) ) I = 4; // KmN/K0N
   else if( PDG == 321  || PDG == 311  || ( kf && kfl  ) ) I = 5; // KpN/aK0N

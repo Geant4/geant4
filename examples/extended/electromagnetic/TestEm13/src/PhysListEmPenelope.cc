@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: PhysListEmPenelope.cc,v 1.3 2006/06/29 16:44:36 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: PhysListEmPenelope.cc,v 1.4 2008/06/11 22:44:24 maire Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 

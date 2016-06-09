@@ -450,3 +450,32 @@ void DicomDetectorConstruction::ConstructPatientContainer()
 
 }
 
+
+#include "G4SDManager.hh"
+#include "G4MultiFunctionalDetector.hh"
+#include "G4PSDoseDeposit_RegNav.hh"
+
+//-------------------------------------------------------------
+void DicomDetectorConstruction::SetScorer(G4LogicalVolume* voxel_logic)
+{
+
+  G4SDManager* SDman = G4SDManager::GetSDMpointer();
+  //
+  // Sensitive Detector Name
+  G4String concreteSDname = "PatientSD";
+
+  //------------------------
+  // MultiFunctionalDetector
+  //------------------------
+  //
+  // Define MultiFunctionalDetector with name.
+  G4MultiFunctionalDetector* MFDet = new G4MultiFunctionalDetector(concreteSDname);
+  SDman->AddNewDetector( MFDet );                 // Register SD to SDManager
+
+  voxel_logic->SetSensitiveDetector(MFDet);
+
+  G4PSDoseDeposit_RegNav*   scorer = new G4PSDoseDeposit_RegNav("DoseDeposit");  
+  MFDet->RegisterPrimitive(scorer);
+
+}
+

@@ -24,45 +24,38 @@
 // ********************************************************************
 //
 //
-// $Id: G4GammaNuclearReaction.hh,v 1.13 2006/06/29 20:07:48 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4GammaNuclearReaction.hh,v 1.14 2008/09/01 17:30:42 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 //
 // GEANT4 physics class: G4GammaNuclearReaction -- header file
 // Created: J.P. Wellisch, 2000/08/18 
 // The last update: J.P. Wellisch, Thu Jun  6 2002.
+// 01.09.2008 V.Ivanchenko move inline to source and define interaction name
 //
+
 #ifndef G4GammaNuclearReaction_h
-#define G4GammaNuclearReaction_h
+#define G4GammaNuclearReaction_h 1
 
 #include "globals.hh"
 #include "G4HadronicInteraction.hh"
 #include "G4ChiralInvariantPhaseSpace.hh"
-#include "G4Gamma.hh"
 
 class G4GammaNuclearReaction : public G4HadronicInteraction
 {
-  public: 
-    virtual ~G4GammaNuclearReaction()
-    {
-    }
+public: 
+
+  G4GammaNuclearReaction();
+
+  virtual ~G4GammaNuclearReaction();
     
-    virtual G4HadFinalState* ApplyYourself(const G4HadProjectile& aTrack, 
-    G4Nucleus& aTargetNucleus);
+  virtual G4HadFinalState* ApplyYourself(const G4HadProjectile& aTrack, 
+					 G4Nucleus& aTargetNucleus);
 
-  private:
-    G4ChiralInvariantPhaseSpace theModel;
+private:
+
+  G4ChiralInvariantPhaseSpace theModel;
+
 };
-
-inline
-G4HadFinalState * G4GammaNuclearReaction::
-ApplyYourself(const G4HadProjectile& aTrack, G4Nucleus& aTargetNucleus)
-{
-  if(aTrack.GetDefinition() != G4Gamma::GammaDefinition())
-  {
-    throw G4HadronicException(__FILE__, __LINE__, "Called G4GammaNuclearReaction for particle other than gamma");
-  }
-  return theModel.ApplyYourself(aTrack, aTargetNucleus);
-}
 
 #endif

@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NistMaterialBuilder.hh,v 1.12 2007/10/30 10:05:52 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4NistMaterialBuilder.hh,v 1.13 2008/04/28 08:51:29 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 
 #ifndef G4NistMaterialBuilder_h
 #define G4NistMaterialBuilder_h 1
@@ -107,12 +107,26 @@ public:
 				      G4double temp, G4double pres, 
 				      G4bool isotopes=true);
 
+  // verbosity level defined by G4NistManager
+  //
   void SetVerbose(G4int val);
+
+  // cout predefined materials:
+  // "simple" - only pure materials in basic state (Z = 1, ..., 98)
+  // "compound" - NIST compounds
+  // "hep" - HEP materials and compounds
+  // "all" - all
+  //
   void ListMaterials(const G4String&);
+
+  // cout lists of predefined materials
+  //
   void ListNistSimpleMaterials();
   void ListNistCompoundMaterials();
   void ListHepMaterials();
 
+  // access to the list of names of Geant4 predefined materials
+  //
   const std::vector<G4String>& GetMaterialNames() const;
 
 private:
@@ -122,6 +136,9 @@ private:
   void NistCompoundMaterials();
   void HepAndNuclearMaterials();
 
+  // add parameters of material from NIST DB to internal vectors
+  // density in g/cm3, mean ionisation potential in eV
+  // 
   void AddMaterial(const G4String& nameMat, G4double dens, G4int Z=0,
                          G4double pot=0.0, G4int ncomp=1,
                          G4State=kStateSolid,

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4IntersectingCone.cc,v 1.8 2006/06/29 18:48:38 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4IntersectingCone.cc,v 1.12 2008/04/28 08:59:47 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // 
 // --------------------------------------------------------------------
@@ -39,13 +39,18 @@
 // --------------------------------------------------------------------
 
 #include "G4IntersectingCone.hh"
+#include "G4GeometryTolerance.hh"
 
 //
 // Constructor
 //
 G4IntersectingCone::G4IntersectingCone( const G4double r[2],
                                         const G4double z[2] )
-{  
+{ 
+
+
+  half_kCarTolerance = 0.5 * G4GeometryTolerance::GetInstance()
+                             ->GetSurfaceTolerance(); 
   //
   // What type of cone are we?
   //
@@ -61,26 +66,25 @@ G4IntersectingCone::G4IntersectingCone( const G4double r[2],
     B = (z[1]-z[0])/(r[1]-r[0]);      // disk like
     A = 0.5*( z[1]+z[0] - B*(r[1]+r[0]) );
   }
-
   //
   // Calculate extent
   //
   if (r[0] < r[1])
   {
-    rLo = r[0]; rHi = r[1];
+    rLo = r[0]-half_kCarTolerance; rHi = r[1]+half_kCarTolerance;
   }
   else
   {
-    rLo = r[1]; rHi = r[0];
+    rLo = r[1]-half_kCarTolerance; rHi = r[0]+half_kCarTolerance;
   }
   
   if (z[0] < z[1])
   {
-    zLo = z[0]; zHi = z[1];
+    zLo = z[0]-half_kCarTolerance; zHi = z[1]+half_kCarTolerance;
   }
   else
   {
-    zLo = z[1]; zHi = z[0];
+    zLo = z[1]-half_kCarTolerance; zHi = z[0]+half_kCarTolerance;
   }
 }
 
@@ -220,8 +224,8 @@ G4int G4IntersectingCone::LineHitsCone1( const G4ThreeVector &p,
   G4double c = x0*x0 + y0*y0 - sqr(A + B*z0);
   
   G4double radical = b*b - 4*a*c;
-  
-  if (radical < -1E-6*std::fabs(b)) return 0;    // No solution
+ 
+  if (radical < -1E-6*std::fabs(b))  { return 0; }    // No solution
   
   if (radical < 1E-6*std::fabs(b))
   {
@@ -229,11 +233,12 @@ G4int G4IntersectingCone::LineHitsCone1( const G4ThreeVector &p,
     // The radical is roughly zero: check for special, very rare, cases
     //
     if (std::fabs(a) > 1/kInfinity)
-    {
-      if ( std::fabs(x0*ty - y0*tx) < std::fabs(1E-6/B))
       {
-        *s1 = -0.5*b/a;
-        return 1;
+      if(B==0.) { return 0; }
+      if ( std::fabs(x0*ty - y0*tx) < std::fabs(1E-6/B) )
+      {
+         *s1 = -0.5*b/a;
+         return 1;
       }
       return 0;
     }
@@ -249,7 +254,7 @@ G4int G4IntersectingCone::LineHitsCone1( const G4ThreeVector &p,
     sa = q/a;
     sb = c/q;
     if (sa < sb) { *s1 = sa; *s2 = sb; } else { *s1 = sb; *s2 = sa; }
-    if (A + B*(z0+(*s1)*tz) < 0) return 0;
+    if (A + B*(z0+(*s1)*tz) < 0)  { return 0; }
     return 2;
   }
   else if (a < -1/kInfinity)
@@ -267,7 +272,7 @@ G4int G4IntersectingCone::LineHitsCone1( const G4ThreeVector &p,
   else
   {
     *s1 = -c/b;
-    if (A + B*(z0+(*s1)*tz) < 0) return 0;
+    if (A + B*(z0+(*s1)*tz) < 0)  { return 0; }
     return 1;
   }
 }
@@ -304,12 +309,12 @@ G4int G4IntersectingCone::LineHitsCone2( const G4ThreeVector &p,
   G4double x0 = p.x(), y0 = p.y(), z0 = p.z();
   G4double tx = v.x(), ty = v.y(), tz = v.z();
   
-  //
+  
   // Special case which might not be so rare: B = 0 (precisely)
   //
   if (B==0)
   {
-    if (std::fabs(tz) < 1/kInfinity) return 0;
+    if (std::fabs(tz) < 1/kInfinity)  { return 0; }
     
     *s1 = (A-z0)/tz;
     return 1;
@@ -322,8 +327,8 @@ G4int G4IntersectingCone::LineHitsCone2( const G4ThreeVector &p,
   G4double c = sqr(z0-A) - B2*( x0*x0 + y0*y0 );
   
   G4double radical = b*b - 4*a*c;
-  
-  if (radical < -1E-6*std::fabs(b)) return 0;    // No solution
+ 
+  if (radical < -1E-6*std::fabs(b)) { return 0; }   // No solution
   
   if (radical < 1E-6*std::fabs(b))
   {
@@ -332,7 +337,7 @@ G4int G4IntersectingCone::LineHitsCone2( const G4ThreeVector &p,
     //
     if (std::fabs(a) > 1/kInfinity)
     {
-      if ( std::fabs(x0*ty - y0*tx) < std::fabs(1E-6/B))
+      if ( std::fabs(x0*ty - y0*tx) < std::fabs(1E-6/B) )
       {
         *s1 = -0.5*b/a;
         return 1;
@@ -351,7 +356,7 @@ G4int G4IntersectingCone::LineHitsCone2( const G4ThreeVector &p,
     sa = q/a;
     sb = c/q;
     if (sa < sb) { *s1 = sa; *s2 = sb; } else { *s1 = sb; *s2 = sa; }
-    if ((z0 + (*s1)*tz  - A)/B < 0) return 0;
+    if ((z0 + (*s1)*tz  - A)/B < 0)  { return 0; }
     return 2;
   }
   else if (a > 1/kInfinity)
@@ -369,7 +374,7 @@ G4int G4IntersectingCone::LineHitsCone2( const G4ThreeVector &p,
   else
   {
     *s1 = -c/b;
-    if ((z0 + (*s1)*tz  - A)/B < 0) return 0;
+    if ((z0 + (*s1)*tz  - A)/B < 0)  { return 0; }
     return 1;
   }
 }

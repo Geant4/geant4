@@ -1,4 +1,4 @@
-$Id: History,v 1.44 2007/11/13 14:44:26 vnivanch Exp $
+$Id: History,v 1.57 2008/11/16 21:01:10 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -13,8 +13,48 @@ track of all tags.
 
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
-
      ----------------------------------------------------------
+     
+16-11-08 mma (testem9-V09-01-09)
+- Em options: 20bins/decade  LinLossLimit=default=0.01
+
+16-10-08 V.Ivant (testem9-V09-01-08)
+- Removed temporary builders PhysListEmStandardLPM and 
+PhysListEmStandardIG
+
+24-09-08 V.Ivant (testem9-V09-01-07)
+- added control on number of events with Edep < 80%
+- use double for number of steps instead of integer
+     
+22-09-08 mma
+- histo.cc : root format by default
+
+22-08-08 V.Ivant (testem9-V09-01-06)
+- added computation of ratios E9/E25
+- PhysList with relativistic LPM model is done on top of PhysList
+  option1 
+
+11-08-08 V.Ivant (testem9-V09-01-05)
+- added computation of ratios E1/E9 and E1/E25
+- added PhysLists with relativistic LPM model 
+- updated macro
+
+12-06-08 mma (testem9-V09-01-04)
+- Remove AIDA from GNUmakefile 
+     
+07-05-08 mma (testem9-V09-01-03)
+- PhysListEmStandard : add spline option for physics tables
+- README : update Aida informations
+     
+08-04-08 mma (testem9-V09-01-02)
+- PhysListEmStandard : replace G4MultipleScattering by G4eMultipleScattering. 
+                       Complete EmOptions
+
+07-04-08 V.Ivant (testem9-V09-01-01)
+- fixed problem of geometry/cut modification between runs 
+
+18-03-08 V.Ivant (testem9-V09-01-00)
+- added G4EmStandardPhyiscs_option3
 
 13-11-07 V.Ivant (testem9-V09-00-00)
 - added PhysListEmStandardIG experimental PhysList

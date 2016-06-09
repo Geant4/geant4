@@ -26,6 +26,15 @@
 // neutron_hp -- source file
 // J.P. Wellisch, Nov-1996
 // A prototype of the low energy neutron transport model.
+//
+// 080718 As for secondary photons, if its mean value has a value of integer, 
+//        then a sampling of multiplicity that based on Poisson Distribution 
+//        is not carried out and the mean is used as a multiplicity.
+//        modified by T. Koi.
+// 080721 Using ClearHistories() methodl for limiting the sum of secondary energies
+//        modified by T. Koi.
+// 080901 bug fix of too many secnodaries production in nd reactinos by T. Koi
+//
 #include "G4NeutronHPProduct.hh" 
 #include "G4Poisson.hh"
 #include "G4Proton.hh"
@@ -37,7 +46,19 @@ G4ReactionProductVector * G4NeutronHPProduct::Sample(G4double anEnergy)
   G4double mean = theYield.GetY(anEnergy);
   G4int multi;
   multi = G4int(mean+0.0001);
-  if(theMassCode==0) multi = G4Poisson(mean); // @@@@gammas. please X-check this
+  //if(theMassCode==0) multi = G4Poisson(mean); // @@@@gammas. please X-check this
+  //080718
+  if ( theMassCode == 0 )
+  { 
+     if ( G4int ( mean ) == mean )
+     {
+        multi = (G4int) mean;
+     }
+     else
+     {
+        multi = G4Poisson ( mean ); 
+     }
+  }
   theDist->SetTarget(theTarget);
   theDist->SetNeutron(theNeutron);
   G4int i;
@@ -45,6 +66,7 @@ G4ReactionProductVector * G4NeutronHPProduct::Sample(G4double anEnergy)
 //                  - theActualStateQValue;
   theCurrentMultiplicity = static_cast<G4int>(mean);
   G4ReactionProduct * tmp;
+  theDist->ClearHistories();
   for(i=0;i<multi;i++)
   {
     tmp = theDist->Sample(anEnergy, theMassCode, theMass);
@@ -55,11 +77,14 @@ G4ReactionProductVector * G4NeutronHPProduct::Sample(G4double anEnergy)
     tmp = theDist->Sample(anEnergy, theMassCode, theMass);
     delete  tmp;
   }
+/*
+//080901 TK Comment out, too many secondaries are produced in deuteron reactions
   if(theTarget->GetMass()<2*GeV) // @@@ take care of residuals in all cases
   {
     tmp = theDist->Sample(anEnergy, theMassCode, theMass);
     tmp->SetDefinition(G4Proton::Proton());
     if(tmp != 0) { result->push_back(tmp); }
   }
+*/
   return result;
 }

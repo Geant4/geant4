@@ -1,4 +1,4 @@
-# $Id: dedx1.mac,v 1.4 2006/03/28 15:03:08 maire Exp $
+# $Id: dedx1.mac,v 1.5 2008/03/17 18:22:00 maire Exp $
 #
 # macro file for TestEm5.cc
 #
@@ -7,13 +7,11 @@
 /control/verbose 2
 /run/verbose 2
 #
-/testem/det/setAbsMat Silicon   
-/testem/det/setAbsThick 1 mm  
-/testem/det/setAbsYZ    1 mm
+/testem/det/setAbsMat Air   
+/testem/det/setAbsThick 1 cm  
+/testem/det/setAbsYZ    1 cm
 #
 /testem/phys/addPhysics standard
-###/testem/phys/addPhysics livermore
-###/testem/phys/addPhysics penelope
 #
 /testem/phys/setCuts 1 km
 #    
@@ -23,8 +21,8 @@
 /process/eLoss/fluct false
 #
 /testem/gun/setDefault
-/gun/particle e- 
-/gun/energy 1 MeV
+/gun/particle proton 
+/gun/energy 10 MeV
 #
 /tracking/verbose 1
 #

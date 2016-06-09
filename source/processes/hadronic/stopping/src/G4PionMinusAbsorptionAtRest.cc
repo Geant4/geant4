@@ -55,7 +55,7 @@ G4PionMinusAbsorptionAtRest::G4PionMinusAbsorptionAtRest(const G4String& process
   if (verboseLevel>0) {
     G4cout << GetProcessName() << " is created "<< G4endl;
   }
-
+  SetProcessSubType(fHadronAtRest);
   pv   = new G4GHEKinematicsVector [MAX_SECONDARIES+1];
   eve  = new G4GHEKinematicsVector [MAX_SECONDARIES];
   gkin = new G4GHEKinematicsVector [MAX_SECONDARIES];

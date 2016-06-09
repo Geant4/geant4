@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpAbsorption.cc,v 1.7 2006/06/29 21:08:50 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4OpAbsorption.cc,v 1.9 2008/10/24 19:52:28 gum Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 ////////////////////////////////////////////////////////////////////////
 // Optical Photon Absorption Class Implementation
@@ -51,6 +51,8 @@
 ////////////////////////////////////////////////////////////////////////
 
 #include "G4ios.hh"
+#include "G4OpProcessSubType.hh"
+
 #include "G4OpAbsorption.hh"
 
 /////////////////////////
@@ -75,6 +77,8 @@ G4OpAbsorption::G4OpAbsorption(const G4String& processName, G4ProcessType type)
         if (verboseLevel>0) {
            G4cout << GetProcessName() << " is created " << G4endl;
         }
+
+        SetProcessSubType(fOpAbsorption);
 }
 
 // G4OpAbsorption::G4OpAbsorption(const G4OpAbsorpton &right)

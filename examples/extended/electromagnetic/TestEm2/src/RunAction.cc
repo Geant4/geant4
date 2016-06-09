@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RunAction.cc,v 1.21 2006/06/29 16:50:47 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: RunAction.cc,v 1.23 2008/09/13 12:16:18 maire Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -86,7 +86,7 @@ RunAction::RunAction(DetectorConstruction* det, PrimaryGeneratorAction* kin)
 #endif
     
   histoName[0] = "testem2";
-  histoType    = "hbook";  
+  histoType    = "root";
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -111,7 +111,7 @@ void RunAction::bookHisto()
   histoName[1] = histoName[0] + "." + histoType;  
   G4bool readOnly  = false;
   G4bool createNew = true;
-  G4String options = "--noErrors uncompress";
+  G4String options = "--noErrors export=root uncompress";
   AIDA::ITreeFactory* tf  = af->createTreeFactory();  
   tree = tf->create(histoName[1], histoType, readOnly, createNew, options);
   delete tf;

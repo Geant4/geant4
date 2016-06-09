@@ -23,67 +23,34 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4FinalStateChargeIncrease.cc,v 1.2 2007/11/09 20:11:04 pia Exp $
-// GEANT4 tag $Name: geant4-09-01 $
-// 
-// Contact Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
-//
-// Reference: TNS Geant4-DNA paper
-// Reference for implementation model: NIM. 155, pp. 145-156, 1978
-
-// History:
-// -----------
-// Date         Name              Modification
-// 28 Apr 2007  M.G. Pia          Created in compliance with design described in TNS paper
-//
-// -------------------------------------------------------------------
-
-// Class description:
-// Reference: TNS Geant4-DNA paper
-// S. Chauvie et al., Geant4 physics processes for microdosimetry simulation:
-// design foundation and implementation of the first set of models,
-// IEEE Trans. Nucl. Sci., vol. 54, no. 6, Dec. 2007.
-// Further documentation available from http://www.ge.infn.it/geant4/dna
-
-// -------------------------------------------------------------------
-
+// $Id: G4FinalStateChargeIncrease.cc,v 1.3 2008/07/14 20:47:34 sincerti Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 
 #include "G4FinalStateChargeIncrease.hh"
-#include "G4Track.hh"
-#include "G4Step.hh"
-#include "G4DynamicParticle.hh"
-#include "Randomize.hh"
-#include "G4Electron.hh"
-#include "G4ParticleTypes.hh"
-#include "G4ParticleDefinition.hh"
-#include "G4SystemOfUnits.hh"
-#include "G4ParticleMomentum.hh"
-#include "G4DNAGenericIonsManager.hh"
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4FinalStateChargeIncrease::G4FinalStateChargeIncrease()
 {
-  name = "ChargeIncrease";
   lowEnergyLimit = 1 * keV;
   highEnergyLimit = 10 * MeV;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4FinalStateChargeIncrease::~G4FinalStateChargeIncrease()
 {}
  
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 const G4FinalStateProduct& G4FinalStateChargeIncrease::GenerateFinalState(const G4Track& track, const G4Step& /* step */)
 {
-  // Clear previous secondaries, energy deposit and particle kill status
   product.Clear();
 
-  // Primary particle
   product.KillPrimaryParticle();
   product.AddEnergyDeposit(0.);
   G4ParticleDefinition* definition = track.GetDefinition();
  
-  // Secondaries
   G4double inK = track.GetDynamicParticle()->GetKineticEnergy();
   
   G4int finalStateIndex = cross.RandomSelect(inK,definition);
@@ -99,10 +66,10 @@ const G4FinalStateProduct& G4FinalStateChargeIncrease::GenerateFinalState(const 
   else electronK = inK*electron_mass_c2/(3728*MeV);
   
   if (outK<0)
-    {
-      G4String message;
-      message="G4FinalStateChargeIncrease - Final kinetic energy is below 0! Process ";
-    }
+  {
+    G4String message;
+    message="G4FinalStateChargeIncrease - Final kinetic energy is below 0! Process ";
+  }
   
   product.AddSecondary(new G4DynamicParticle(OutgoingParticleDefinition(definition,finalStateIndex), 
 					     track.GetDynamicParticle()->GetMomentumDirection(), 
@@ -111,15 +78,16 @@ const G4FinalStateProduct& G4FinalStateChargeIncrease::GenerateFinalState(const 
   n = n - 1;
   
   while (n>0)
-    {
-      n--;
-   
-      product.AddSecondary
+  {
+    n--;
+    product.AddSecondary
 	(new G4DynamicParticle(G4Electron::Electron(), track.GetDynamicParticle()->GetMomentumDirection(), electronK));
-    }
+  }
         
   return product;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4int G4FinalStateChargeIncrease::NumberOfFinalStates(G4ParticleDefinition* particleDefinition, 
 						      G4int finalStateIndex )
@@ -131,12 +99,13 @@ G4int G4FinalStateChargeIncrease::NumberOfFinalStates(G4ParticleDefinition* part
   if (particleDefinition == instance->GetIon("alpha+")) return 2;
   
   if (particleDefinition == instance->GetIon("helium")) 
-    {    if (finalStateIndex==0) return 2;
-    return 3;
-    }
+  {    if (finalStateIndex==0) return 2;
+       return 3;
+  }
   return 0;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4ParticleDefinition*  G4FinalStateChargeIncrease::OutgoingParticleDefinition (G4ParticleDefinition* particleDefinition, 
 									       G4int finalStateIndex) 
@@ -162,22 +131,20 @@ G4double G4FinalStateChargeIncrease::IncomingParticleBindingEnergyConstant(G4Par
   if(particleDefinition == instance->GetIon("hydrogen")) return 13.6*eV;
   
   if(particleDefinition == instance->GetIon("alpha+"))
-    {
+  {
       // Binding energy for    He+ -> He++ + e-    54.509 eV
       // Binding energy for    He  -> He+  + e-    24.587 eV
       return 54.509*eV;
-    }
+  }
    
   if(particleDefinition == instance->GetIon("helium"))
-    {
+  {
       // Binding energy for    He+ -> He++ + e-    54.509 eV
       // Binding energy for    He  -> He+  + e-    24.587 eV
 
       if (finalStateIndex==0) return 24.587*eV;
       return (54.509 + 24.587)*eV;
-    }  
+  }  
 
   return 0;
 }
-
-

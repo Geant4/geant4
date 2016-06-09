@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4WaterIonisationStructure.hh,v 1.1 2007/11/08 20:38:40 pia Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// GEANT4 tag $Name: geant4-09-02 $
 // 
 // Contact Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
 //

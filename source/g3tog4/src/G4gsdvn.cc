@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4gsdvn.cc,v 1.10 2006/06/29 18:13:57 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // by I.Hrivnacova, V.Berejnoi, 29 Oct 99
 

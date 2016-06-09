@@ -25,7 +25,7 @@
 //
 //
 // The lust update: M.V. Kossov, CERN/ITEP(Moscow) 17-June-02
-// GEANT4 tag $Name: geant4-09-01 $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 //
 // G4 Physics class: G4QPhotonNuclearCrossSection for gamma+A cross sections
@@ -124,7 +124,8 @@ G4double G4QPhotonNuclearCrossSection::GetCrossSection(G4bool fCS, G4double pMom
         }
         lastP  =colP [i];                // Last Momentum  (A-dependent)
         lastCS =colCS[i];                // Last CrossSect (A-dependent)
-        if(std::fabs(lastP/pMom-1.)<tolerance)
+	//        if(std::fabs(lastP/pMom-1.)<tolerance) // VI do not use tolerance
+        if(lastP == pMom)
         {
 #ifdef pdebug
           G4cout<<"G4QPhCS::GetCS:P="<<pMom<<",CS="<<lastCS*millibarn<<G4endl;
@@ -213,7 +214,8 @@ G4double G4QPhotonNuclearCrossSection::GetCrossSection(G4bool fCS, G4double pMom
 #endif
     return 0.;                         // Momentum is below the Threshold Value -> CS=0
   }
-  else if(std::fabs(lastP/pMom-1.)<tolerance)
+  //  else if(std::fabs(lastP/pMom-1.)<tolerance) // VI (do not use tolerance)
+  else if(lastP == pMom)
   {
 #ifdef pdebug
     G4cout<<"G4QPhCS::GetCS:OldCur P="<<pMom<<"="<<pMom<<", CS="<<lastCS*millibarn<<G4endl;
@@ -259,18 +261,18 @@ G4double G4QPhotonNuclearCrossSection::ThresholdEnergy(G4int Z, G4int N, G4int)
   // CHIPS - Direct GEANT
   //G4double mT= G4QPDGCode(111).GetNuclMass(Z,N,0);
   G4double mT= 0.;
-  if(G4NucleiPropertiesTable::IsInTable(Z,A))
-                                            mT=G4NucleiProperties::GetNuclearMass(A,Z)/MeV;
+  if(G4NucleiProperties::IsInStableTable(A,Z))
+                           mT = G4NucleiProperties::GetNuclearMass(A,Z)/MeV;
   G4double mP= infEn;
-  if(Z&&G4NucleiPropertiesTable::IsInTable(Z-1,A-1))
-     	    mP=G4NucleiProperties::GetNuclearMass(A-1.,Z-1.)/MeV; // ResNucMass for a proton
+  if(Z&&G4NucleiProperties::IsInStableTable(A-1,Z-1))
+     	    mP = G4NucleiProperties::GetNuclearMass(A-1.,Z-1.)/MeV; // ResNucMass for a proton
 
   G4double mN= infEn;
-  if(N&&G4NucleiPropertiesTable::IsInTable(Z-0,A-1))
-    	    mN=G4NucleiProperties::GetNuclearMass(A-1.,Z-0.)/MeV;  // ResNucMass for a neutron
+  if(N&&G4NucleiProperties::IsInStableTable(A-1,Z))
+    	    mN = G4NucleiProperties::GetNuclearMass(A-1.,Z)/MeV;  // ResNucMass for a neutron
 
   G4double mA= infEn;
-  if(N>1&&Z>1&&G4NucleiPropertiesTable::IsInTable(Z-2,A-4))
+  if(N>1&&Z>1&&G4NucleiProperties::IsInStableTable(A-4,Z-2))
      	    mA=G4NucleiProperties::GetNuclearMass(A-4.,Z-2.)/MeV; // ResNucMass for an alpha
 
   G4double dP= mP +mProt - mT;

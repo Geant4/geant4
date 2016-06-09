@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLImmediateQt.cc,v 1.2 2007/11/15 18:24:28 lgarnier Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4OpenGLImmediateQt.cc,v 1.4 2008/10/24 13:49:19 lgarnier Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // 
 // OpenGLImmediateQt graphics system factory.
@@ -42,7 +42,7 @@
 
 G4OpenGLImmediateQt::G4OpenGLImmediateQt ():
   G4VGraphicsSystem ("OpenGLImmediateQt",
-		     "OGLIQT",
+		     "OGLIQt",
 		     G4VisFeaturesOfOpenGLIQt (),
 		     G4VGraphicsSystem::threeD)
 {
@@ -57,7 +57,7 @@ G4VSceneHandler* G4OpenGLImmediateQt::CreateSceneHandler
 
 G4VViewer* G4OpenGLImmediateQt::CreateViewer
 (G4VSceneHandler& scene, const G4String& name) {
-#ifdef GEANT4_QT_DEBUG
+#ifdef G4DEBUG
   printf("G4OpenGLImmediateQt::CreateViewer \n");
 #endif
   G4VViewer* pView =
@@ -77,7 +77,7 @@ G4VViewer* G4OpenGLImmediateQt::CreateViewer
     G4cerr << "G4OpenGLImmediateQt::CreateViewer: null pointer on"
       " new G4OpenGLImmediateQtViewer." << G4endl;
   }
-#ifdef GEANT4_QT_DEBUG
+#ifdef G4DEBUG
   printf("G4OpenGLImmediateQt::CreateViewer END \n");
 #endif
    return pView;

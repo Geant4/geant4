@@ -52,7 +52,7 @@ Histo::Histo()
 {
   verbose    = 0;
   histName   = "testem9";
-  histType   = "hbook";
+  histType   = "root";
   nHisto     = 0;
   defaultAct = 1;
   tupleName  = "tuple9";
@@ -92,8 +92,9 @@ void Histo::book()
   // Creating a tree mapped to a new hbook file.
 
   G4String nam = histName + "." + histType;
-
-  tree = tf->create(nam,histType,false,true,"uncompress");
+  G4String options  = "--noErrors export=root uncompress";
+  
+  tree = tf->create(nam,histType,false,true,options);
   delete tf;
   if(tree) {
     G4cout << "Tree store  : " << tree->storeName() << G4endl;
@@ -106,8 +107,11 @@ void Histo::book()
 
   // Creating an 1-dimensional histograms in the root directory of the tree
   for(G4int i=0; i<nHisto; i++) {
-    if(active[i]) 
-      histo[i] = hf->createHistogram1D(ids[i], titles[i], bins[i], xmin[i], xmax[i]);
+    if(active[i]) {
+      G4String ss = ids[i];
+      if(histType == "root") ss = "h" + ids[i];
+      histo[i] = hf->createHistogram1D(ss, titles[i], bins[i], xmin[i], xmax[i]);
+    }
   }
   delete hf;
   // Creating a tuple factory, whose tuples will be handled by the tree

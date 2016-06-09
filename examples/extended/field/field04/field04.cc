@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: field04.cc,v 1.7 2007/11/02 10:53:41 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: field04.cc,v 1.8 2008/07/03 20:31:30 gum Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 //
 // --------------------------------------------------------------
@@ -77,8 +77,13 @@ int main(int argc,char** argv)
 
   G4int seed = 0;
   if (argc  > 2) seed = atoi(argv[argc-1]);
+  if (seed == 0) seed = time(0);
 
+  // Choose the Random engine
+
+  CLHEP::HepRandom::setTheEngine(new CLHEP::RanecuEngine);
   CLHEP::HepRandom::setTheSeed(seed);
+  CLHEP::HepRandom::showEngineStatus();
 
 #ifndef WIN32
   G4int c = 0;
@@ -104,10 +109,6 @@ int main(int argc,char** argv)
   }
 #endif
 
-  // Choose the Random engine
-
-  CLHEP::HepRandom::setTheEngine(new CLHEP::RanecuEngine);
-  
   // My Verbose output class
 
   G4VSteppingVerbose::SetInstance(new F04SteppingVerbose);

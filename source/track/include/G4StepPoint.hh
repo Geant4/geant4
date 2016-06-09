@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4StepPoint.hh,v 1.18 2007/03/11 07:19:06 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4StepPoint.hh,v 1.19 2008/10/24 08:22:20 kurasige Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 //
 //---------------------------------------------------------------
@@ -156,7 +156,7 @@ class G4StepPoint
   inline const G4VProcess* GetProcessDefinedStep() const;
      // If the pointer is 0, this means the Step is defined
      // by the user defined limit in the current volume.
-  inline void SetProcessDefinedStep(G4VProcess* aValue);
+  inline void SetProcessDefinedStep(const G4VProcess* aValue);
 
   
   inline G4double GetMass() const;
@@ -205,7 +205,7 @@ class G4StepPoint
    G4ThreeVector fPolarization;
    G4StepStatus fStepStatus;
       // DoIt type which defined the current Step.
-   G4VProcess* fpProcessDefinedStep;
+   const G4VProcess* fpProcessDefinedStep;
       // Process which defined the current Step.
    G4double fMass;
       // Dynamical mass of the particle

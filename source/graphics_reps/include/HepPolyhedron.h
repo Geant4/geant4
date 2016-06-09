@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: HepPolyhedron.h,v 1.22 2007/07/18 13:57:04 tnikitin Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: HepPolyhedron.h,v 1.24 2008/04/14 08:50:23 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 //
 // Class Description:
@@ -363,28 +363,32 @@ class HepPolyhedron {
                        const double xyz[][3], const int faces[][4]);
 };
 
-class HepPolyhedronTrd2 : public HepPolyhedron {
+class HepPolyhedronTrd2 : public HepPolyhedron
+{
  public:
   HepPolyhedronTrd2(double Dx1, double Dx2,
                     double Dy1, double Dy2, double Dz);
   virtual ~HepPolyhedronTrd2();
 };
 
-class HepPolyhedronTrd1 : public HepPolyhedronTrd2 {
+class HepPolyhedronTrd1 : public HepPolyhedronTrd2
+{
  public:
   HepPolyhedronTrd1(double Dx1, double Dx2,
                     double Dy, double Dz);
   virtual ~HepPolyhedronTrd1();
 };
 
-class HepPolyhedronBox : public HepPolyhedronTrd2 {
+class HepPolyhedronBox : public HepPolyhedronTrd2
+{
  public:
   HepPolyhedronBox(double Dx, double Dy, double Dz);
   virtual ~HepPolyhedronBox();
 };
 
-class HepPolyhedronTrap : public HepPolyhedron {
-public:
+class HepPolyhedronTrap : public HepPolyhedron
+{
+ public:
   HepPolyhedronTrap(double Dz, double Theta, double Phi,
                     double Dy1,
                     double Dx1, double Dx2, double Alp1,
@@ -393,8 +397,9 @@ public:
   virtual ~HepPolyhedronTrap();
 };
 
-class HepPolyhedronPara : public HepPolyhedronTrap {
-public:
+class HepPolyhedronPara : public HepPolyhedronTrap
+{
+ public:
   HepPolyhedronPara(double Dx, double Dy, double Dz,
                     double Alpha, double Theta, double Phi);
   virtual ~HepPolyhedronPara();
@@ -402,45 +407,61 @@ public:
 
 class HepPolyhedronParaboloid : public HepPolyhedron
 {
-public:
+ public:
   HepPolyhedronParaboloid(double r1,
-                                                   double r2,
-                                                   double dz,
-                                                   double Phi1,
-                                                   double Dphi);
+                          double r2,
+                          double dz,
+                          double Phi1,
+                          double Dphi);
   virtual ~HepPolyhedronParaboloid();
 };
 
-class HepPolyhedronCons : public HepPolyhedron {
-public:
+class HepPolyhedronHype : public HepPolyhedron
+{
+ public:
+  HepPolyhedronHype(double r1,
+                    double r2,
+                    double tan1,
+                    double tan2,
+                    double halfZ);
+  virtual ~HepPolyhedronHype();
+};
+
+class HepPolyhedronCons : public HepPolyhedron
+{
+ public:
   HepPolyhedronCons(double Rmn1, double Rmx1, 
                     double Rmn2, double Rmx2, double Dz,
                     double Phi1, double Dphi); 
   virtual ~HepPolyhedronCons();
 };
 
-class HepPolyhedronCone : public HepPolyhedronCons {
-public:
+class HepPolyhedronCone : public HepPolyhedronCons
+{
+ public:
   HepPolyhedronCone(double Rmn1, double Rmx1, 
                     double Rmn2, double Rmx2, double Dz);
   virtual ~HepPolyhedronCone();
 };
 
-class HepPolyhedronTubs : public HepPolyhedronCons {
-public:
+class HepPolyhedronTubs : public HepPolyhedronCons
+{
+ public:
   HepPolyhedronTubs(double Rmin, double Rmax, double Dz, 
                     double Phi1, double Dphi);
   virtual ~HepPolyhedronTubs();
 };
 
-class HepPolyhedronTube : public HepPolyhedronCons {
-public:
+class HepPolyhedronTube : public HepPolyhedronCons
+{
+ public:
   HepPolyhedronTube (double Rmin, double Rmax, double Dz);
   virtual ~HepPolyhedronTube();
 };
 
-class HepPolyhedronPgon : public HepPolyhedron {
-public:
+class HepPolyhedronPgon : public HepPolyhedron
+{
+ public:
   HepPolyhedronPgon(double phi, double dphi, int npdv, int nz,
                     const double *z,
                     const double *rmin,
@@ -448,8 +469,9 @@ public:
   virtual ~HepPolyhedronPgon();
 };
 
-class HepPolyhedronPcon : public HepPolyhedronPgon {
-public:
+class HepPolyhedronPcon : public HepPolyhedronPgon
+{
+ public:
   HepPolyhedronPcon(double phi, double dphi, int nz,
                     const double *z,
                     const double *rmin,
@@ -457,30 +479,34 @@ public:
   virtual ~HepPolyhedronPcon();
 };
 
-class HepPolyhedronSphere : public HepPolyhedron {
-public:
+class HepPolyhedronSphere : public HepPolyhedron
+{
+ public:
   HepPolyhedronSphere(double rmin, double rmax,
                       double phi, double dphi,
                       double the, double dthe);
   virtual ~HepPolyhedronSphere();
 };
 
-class HepPolyhedronTorus : public HepPolyhedron {
-public:
+class HepPolyhedronTorus : public HepPolyhedron
+{
+ public:
   HepPolyhedronTorus(double rmin, double rmax, double rtor,
-                    double phi, double dphi);
+                     double phi, double dphi);
   virtual ~HepPolyhedronTorus();
 };
 
-class HepPolyhedronEllipsoid : public HepPolyhedron {
-public:
+class HepPolyhedronEllipsoid : public HepPolyhedron
+{
+ public:
   HepPolyhedronEllipsoid(double dx, double dy, double dz, 
                          double zcut1, double zcut2);
   virtual ~HepPolyhedronEllipsoid();
 };
 
-class HepPolyhedronEllipticalCone : public HepPolyhedron {
-public:
+class HepPolyhedronEllipticalCone : public HepPolyhedron
+{
+ public:
   HepPolyhedronEllipticalCone(double dx, double dy, double z,
                               double zcut1);
   virtual ~HepPolyhedronEllipticalCone();

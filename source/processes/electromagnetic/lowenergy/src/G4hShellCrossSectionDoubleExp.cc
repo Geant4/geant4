@@ -40,8 +40,8 @@
 // Class Description: 
 // Empiric Model for shell cross sections in proton ionisation
 // -------------------------------------------------------------------
-// $Id: G4hShellCrossSectionDoubleExp.cc,v 1.8 2006/06/29 19:42:35 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4hShellCrossSectionDoubleExp.cc,v 1.9 2008/06/26 18:19:10 sincerti Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 
 #include "globals.hh"
 #include <vector>
@@ -186,9 +186,15 @@ std::vector<G4double> G4hShellCrossSectionDoubleExp::Probabilities(
   deltaEnergy = 0.0;
   
   std::vector<G4double> kProbability;//(0);
-  kProbability.push_back(GetCrossSectionDoubleExp(Z,incidentEnergy)/atomTotalCrossSection);
-  // ---- MGP ---- Next line corrected to kProbability[0] instead of [1], which is not initialized!
-  kProbability.push_back(1 - kProbability[0]);
+  
+  
+  if (atomTotalCrossSection!=0.) // SI - 26 june 2008
+  
+  { 
+    kProbability.push_back(GetCrossSectionDoubleExp(Z,incidentEnergy)/atomTotalCrossSection);
+    // ---- MGP ---- Next line corrected to kProbability[0] instead of [1], which is not initialized!
+    kProbability.push_back(1 - kProbability[0]);
+  }
 
   return kProbability;
 }

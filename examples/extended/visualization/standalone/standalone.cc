@@ -25,7 +25,7 @@
 //
 //
 // $Id: standalone.cc,v 1.2 2006/06/29 17:45:53 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// GEANT4 tag $Name: geant4-09-02 $
 
 #include "globals.hh"
 #include "G4VisExecutive.hh"

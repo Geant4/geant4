@@ -25,7 +25,7 @@
 //
 //
 // $Id: ExN03SteppingVerbose.hh,v 1.1 2007/05/26 00:18:28 tkoi Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

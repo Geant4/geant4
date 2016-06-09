@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4RPGPiPlusInelastic.hh,v 1.1 2007/07/18 20:51:37 dennis Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4RPGPiPlusInelastic.hh,v 1.3 2008/05/05 21:21:54 dennis Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // Author: D. H. Wright
 // Date:   26 May 2007
@@ -37,35 +37,31 @@
 // Final state production model for pi+ inelastic scattering
 // using the re-parameterized Gheisha model
 
-#include "G4RPGInelastic.hh"
+#include "G4RPGPionInelastic.hh"
  
- class G4RPGPiPlusInelastic : public G4RPGInelastic
+ class G4RPGPiPlusInelastic : public G4RPGPionInelastic
  {
  public:
     
-    G4RPGPiPlusInelastic() : G4RPGInelastic("G4RPGPiPlusInelastic")
-    {
-      SetMinEnergy( 0.0 );
-      SetMaxEnergy( 55.*GeV );
-    }
+   G4RPGPiPlusInelastic() : G4RPGPionInelastic("RPGPiPlusInelastic")
+   {}
     
-    ~G4RPGPiPlusInelastic() { }
+   ~G4RPGPiPlusInelastic() 
+   {}
     
-    G4HadFinalState * ApplyYourself(const G4HadProjectile &aTrack,
-                                      G4Nucleus &targetNucleus );
+   G4HadFinalState* ApplyYourself(const G4HadProjectile& aTrack,
+                                        G4Nucleus& targetNucleus);
     
  private:
     
-    void Cascade(                               // derived from CASPIP
-      G4FastVector<G4ReactionProduct,256> &vec,
-      G4int &vecLen,
-      const G4HadProjectile *originalIncident,
-      G4ReactionProduct &currentParticle,
-      G4ReactionProduct &targetParticle,
-      G4bool &incidentHasChanged, 
-      G4bool &targetHasChanged,
-      G4bool &quasiElastic );
-    
+   void InitialCollision(
+     G4FastVector<G4ReactionProduct,256>& vec,
+     G4int& vecLen,
+     G4ReactionProduct& currentParticle,
+     G4ReactionProduct& targetParticle,
+     G4bool& incidentHasChanged, 
+     G4bool& targetHasChanged);
+
  };
 #endif
  

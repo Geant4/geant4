@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4StackingMessenger.cc,v 1.5 2006/06/29 18:10:23 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // --------------------------------------------------------------------
 

@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CoulombScatteringModel.hh,v 1.11 2007/10/09 08:16:29 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4CoulombScatteringModel.hh,v 1.15 2008/07/31 13:11:34 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // -------------------------------------------------------------------
 //
@@ -43,6 +43,7 @@
 // 08.08.06 V.Ivanchenko build internal table in ekin scale, introduce faclim
 // 19.10.06 V.Ivanchenko use inheritance from G4eCoulombScatteringModel
 // 09.10.07 V.Ivanchenko reorganized methods, add cut dependence in scattering off e- 
+// 09.06.08 V.Ivanchenko SelectIsotope is moved to the base class
 //
 // Class Description:
 //
@@ -63,17 +64,12 @@
 #include "G4eCoulombScatteringModel.hh"
 #include "globals.hh"
 
-class G4ParticleTable;
-class G4NistManager;
-
 class G4CoulombScatteringModel : public G4eCoulombScatteringModel
 {
 
 public:
 
-  G4CoulombScatteringModel(G4double thetaMin = 0.0, G4double thetaMax = pi,
-			   G4bool build = false, G4double tlim = TeV*TeV,
-			   const G4String& nam = "CoulombScattering");
+  G4CoulombScatteringModel(const G4String& nam = "CoulombScattering");
  
   virtual ~G4CoulombScatteringModel();
 
@@ -93,14 +89,10 @@ public:
 
 private:
 
-  G4double SelectIsotope(const G4Element*);
-
   // hide assignment operator
   G4CoulombScatteringModel & operator=(const G4CoulombScatteringModel &right);
   G4CoulombScatteringModel(const  G4CoulombScatteringModel&);
 
-  G4ParticleTable*            theParticleTable; 
-  const G4NistManager*        theMatManager;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

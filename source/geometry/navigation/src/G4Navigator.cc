@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Navigator.cc,v 1.37 2007/10/18 14:18:36 gcosmo Exp $
+// $Id: G4Navigator.cc,v 1.38 2008/10/24 14:00:03 gcosmo Exp $
 // GEANT4 tag $ Name:  $
 // 
 // class G4Navigator Implementation
@@ -1213,7 +1213,8 @@ G4ThreeVector G4Navigator::GetLocalExitNormal( G4bool* valid )
 // ********************************************************************
 //
 G4double G4Navigator::ComputeSafety( const G4ThreeVector &pGlobalpoint,
-                                     const G4double pMaxLength)
+                                     const G4double pMaxLength,
+                                     const G4bool keepState)
 {
   G4double newSafety = 0.0;
 
@@ -1234,6 +1235,8 @@ G4double G4Navigator::ComputeSafety( const G4ThreeVector &pGlobalpoint,
     }
   }
 #endif
+
+  if (keepState)  { SetSavedState(); }
 
   G4double distEndpointSq = (pGlobalpoint-fStepEndPoint).mag2(); 
   G4bool   stayedOnEndpoint  = distEndpointSq < kCarTolerance*kCarTolerance; 
@@ -1320,6 +1323,8 @@ G4double G4Navigator::ComputeSafety( const G4ThreeVector &pGlobalpoint,
   //
   fPreviousSftOrigin = pGlobalpoint;
   fPreviousSafety = newSafety; 
+
+  if (keepState)  { RestoreSavedState(); }
 
 #ifdef G4DEBUG_NAVIGATION
   if( fVerbose > 1 )

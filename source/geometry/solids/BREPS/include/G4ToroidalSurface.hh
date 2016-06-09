@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4ToroidalSurface.hh,v 1.7 2006/06/29 18:41:01 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // ----------------------------------------------------------------------
 // Class G4ToroidalSurface

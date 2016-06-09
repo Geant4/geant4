@@ -32,12 +32,12 @@
 /gps/ion 9 24 0  0
 #
 # complete chain decays
-/histo/fileName f24c.aida
+/histo/fileName f24c
 /run/beamOn 1000
 #
 # complete chain decays in VR mode
 /grdm/analogueMC 0
-/histo/fileName f24c-b.aida
+/histo/fileName f24c-b
 /run/beamOn 1000
 #
 # No daughter decays in analogue MC mode

@@ -1,0 +1,23 @@
+// Define a parameter for later use
+:P Z_HALF_LENGTH 2.5*cm
+
+// Define materials
+:ELEM Hydrogen H 1. 1.
+:ELEM Oxygen O 8 16.
+:MIXT Water 1. 2
+      Hydrogen   2./18.
+      Oxygen     16./18.
+
+// Define rotation matrix
+:ROTM R00 0. 0. 0.  // unit matrix
+
+// Define volumes and place them
+:VOLU world BOX 100. 100. 100. G4_AIR
+
+:VOLU "my box" BOX  50. 50. 50. G4_AIR
+:PLACE "my box" 1 world R00 0. 0. $Z_HALF_LENGTH
+
+:VOLU Chamber BOX 5.*cm 5.*cm $Z_HALF_LENGTH Water
+:PLACE Chamber 1 "my box" R00 0. 0. -$Z_HALF_LENGTH
+:PLACE Chamber 2 "my box" R00 0. 0. $Z_HALF_LENGTH
+

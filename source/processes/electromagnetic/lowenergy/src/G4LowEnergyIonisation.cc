@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LowEnergyIonisation.cc,v 1.102 2006/06/29 19:40:19 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4LowEnergyIonisation.cc,v 1.103 2008/05/02 19:23:38 pia Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 // 
 // --------------------------------------------------------------
 //
@@ -662,8 +662,8 @@ G4LowEnergyIonisation::DeexciteAtom(const G4MaterialCutsCouple* couple,
 	          e = aSecondary->GetKineticEnergy();
 	          type = aSecondary->GetDefinition();
 	          if ( eTot + e <= eLoss &&
-	             (type == G4Gamma::Gamma() && e>cutForPhotons ) ||
-	             (type == G4Electron::Electron() && e>cutForElectrons)) {
+	             ((type == G4Gamma::Gamma() && e>cutForPhotons ) ||
+	             (type == G4Electron::Electron() && e>cutForElectrons))) {
 
 			  eTot += e;
                           partVector->push_back(aSecondary);

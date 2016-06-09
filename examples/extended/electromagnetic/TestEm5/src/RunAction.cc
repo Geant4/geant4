@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RunAction.cc,v 1.25 2007/11/21 17:41:19 maire Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: RunAction.cc,v 1.27 2008/01/14 13:21:19 maire Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -265,7 +265,22 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   }
 
   G4cout.precision(prec);
-
+  
+  // normalize histograms
+  //
+  G4int ih = 1;
+  G4double binWidth = histoManager->GetBinWidth(ih);
+  G4double unit     = histoManager->GetHistoUnit(ih);  
+  G4double fac = unit/(TotNbofEvents*binWidth);
+  histoManager->Scale(ih,fac);
+    
+  ih = 10;
+  binWidth = histoManager->GetBinWidth(ih);
+  unit     = histoManager->GetHistoUnit(ih);  
+  fac = unit/(TotNbofEvents*binWidth);
+  histoManager->Scale(ih,fac);
+    
+  // save histograms
   histoManager->save();
 
   // show Rndm status

@@ -58,6 +58,11 @@ public:
   // Definition of the first scattering foil, 
   // of the Kapton window, of the stopper 
 
+  void HadrontherapyRangeShifter();
+  // This defines the "range shifter". Is is a slab
+  // (usually of PMMA" acting as energy degrader
+  // of primary beam
+  
   void HadrontherapyBeamCollimators();
   // Definition of the first collimator, of the range shifter, 
   // of the second collimator, of the first and second 
@@ -66,6 +71,9 @@ public:
   void HadrontherapyBeamMonitoring();
   // Definition of three monitor chambers
 
+  void HadrontherapyMOPIDetector();
+  // Construct the MOPI on-line detector 
+  
   void HadrontherapyBeamNozzle();
   // Definition of the beam noozle
 
@@ -103,7 +111,47 @@ public:
   // of the range shifter
 
 private:
-  G4VPhysicalVolume* physiBeamLineSupport; 
+
+  G4double vacuumZoneXSize;
+  G4double vacuumZoneYSize;
+  G4double vacuumZoneZSize;
+  G4double vacuumZoneXPosition;
+  
+  G4double firstScatteringFoilXSize;
+  G4double firstScatteringFoilYSize;
+  G4double firstScatteringFoilZSize;
+  G4double firstScatteringFoilXPosition;
+
+  G4double kaptonWindowXSize;
+  G4double kaptonWindowYSize;
+  G4double kaptonWindowZSize;
+  G4double kaptonWindowXPosition;
+
+  G4double innerRadiusStopper;
+  G4double heightStopper;
+  G4double startAngleStopper;
+  G4double spanningAngleStopper;
+  G4double stopperXPosition;
+  G4double stopperYPosition;
+  G4double stopperZPosition;
+  G4double outerRadiusStopper;
+
+  G4double secondScatteringFoilXSize;
+  G4double secondScatteringFoilYSize;
+  G4double secondScatteringFoilZSize;
+  G4double secondScatteringFoilXPosition;
+  G4double secondScatteringFoilYPosition;
+  G4double secondScatteringFoilZPosition;
+
+  G4double rangeShifterXSize;
+  G4double rangeShifterYSize;
+  G4double rangeShifterZSize;
+  G4double rangeShifterXPosition;
+  G4double rangeShifterYPosition;
+  G4double rangeShifterZPosition;
+
+
+G4VPhysicalVolume* physiBeamLineSupport; 
   G4VPhysicalVolume* physiBeamLineCover; 
   G4VPhysicalVolume* physiBeamLineCover2;
   G4Box* firstScatteringFoil;
@@ -120,10 +168,115 @@ private:
   G4VPhysicalVolume* physiRangeShifterBox;
   G4VPhysicalVolume* physiSecondCollimator;
   G4VPhysicalVolume* physiHoleSecondCollimator; 
-  G4VPhysicalVolume* physiFirstCollimatorModulatorBox;
+
+ G4VPhysicalVolume* physiFirstCollimatorModulatorBox;
   G4VPhysicalVolume* physiHoleFirstCollimatorModulatorBox; 
+ 
   G4VPhysicalVolume* physiSecondCollimatorModulatorBox;
   G4VPhysicalVolume* physiHoleSecondCollimatorModulatorBox;
+
+  // MOPI Detector
+  // Mother volume
+  G4VPhysicalVolume* physiMOPIMotherVolume;
+  G4LogicalVolume* logicMOPIMotherVolume;
+  G4Box* solidMOPIMotherVolume;
+  G4Material* MOPIMotherVolumeMaterial; 
+
+  G4double MOPIMotherVolumeXSize;
+  G4double MOPIMotherVolumeYSize;
+  G4double MOPIMotherVolumeZSize;
+  G4double MOPIMotherVolumeXPosition;
+  G4double MOPIMotherVolumeYPosition;
+  G4double MOPIMotherVolumeZPosition;
+
+  // First Kapton layer
+  G4double MOPIFirstKaptonLayerXSize;
+  G4double MOPIFirstKaptonLayerYSize;
+  G4double MOPIFirstKaptonLayerZSize;
+  G4double MOPIFirstKaptonLayerXPosition;
+  G4double MOPIFirstKaptonLayerYPosition;
+  G4double MOPIFirstKaptonLayerZPosition;
+  G4Box* solidMOPIFirstKaptonLayer;
+  G4LogicalVolume* logicMOPIFirstKaptonLayer;
+  G4VPhysicalVolume* physiMOPIFirstKaptonLayer;
+
+  // First Aluminum layer
+  G4double MOPIFirstAluminumLayerXSize;
+  G4double MOPIFirstAluminumLayerYSize;
+  G4double MOPIFirstAluminumLayerZSize;
+  G4double MOPIFirstAluminumLayerXPosition;
+  G4double MOPIFirstAluminumLayerYPosition;
+  G4double MOPIFirstAluminumLayerZPosition;
+  G4Box* solidMOPIFirstAluminumLayer;
+  G4LogicalVolume* logicMOPIFirstAluminumLayer;
+  G4VPhysicalVolume* physiMOPIFirstAluminumLayer;
+
+  // First Air Gap
+  G4double MOPIFirstAirGapXSize;
+  G4double MOPIFirstAirGapYSize;
+  G4double MOPIFirstAirGapZSize;
+  G4double MOPIFirstAirGapXPosition;
+  G4double MOPIFirstAirGapYPosition;
+  G4double MOPIFirstAirGapZPosition;
+  G4Box* solidMOPIFirstAirGap;
+  G4LogicalVolume* logicMOPIFirstAirGap;
+  G4VPhysicalVolume* physiMOPIFirstAirGap;
+
+  // Cathode
+  G4double MOPICathodeXSize;
+  G4double MOPICathodeYSize;
+  G4double MOPICathodeZSize;
+  G4double MOPICathodeXPosition;
+  G4double MOPICathodeYPosition;
+  G4double MOPICathodeZPosition;
+  G4Box* solidMOPICathode;
+  G4LogicalVolume* logicMOPICathode;
+  G4VPhysicalVolume* physiMOPICathode;
+
+
+  // First Air Gap
+  G4double MOPISecondAirGapXSize;
+  G4double MOPISecondAirGapYSize;
+  G4double MOPISecondAirGapZSize;
+  G4double MOPISecondAirGapXPosition;
+  G4double MOPISecondAirGapYPosition;
+  G4double MOPISecondAirGapZPosition;
+  G4Box* solidMOPISecondAirGap;
+  G4LogicalVolume* logicMOPISecondAirGap;
+  G4VPhysicalVolume* physiMOPISecondAirGap;
+
+  // First Aluminum layer
+  G4double MOPISecondAluminumLayerXSize;
+  G4double MOPISecondAluminumLayerYSize;
+  G4double MOPISecondAluminumLayerZSize;
+  G4double MOPISecondAluminumLayerXPosition;
+  G4double MOPISecondAluminumLayerYPosition;
+  G4double MOPISecondAluminumLayerZPosition;
+  G4Box* solidMOPISecondAluminumLayer;
+  G4LogicalVolume* logicMOPISecondAluminumLayer;
+  G4VPhysicalVolume* physiMOPISecondAluminumLayer;
+  
+  // Second Kapton layer
+  G4double MOPISecondKaptonLayerXSize;
+  G4double MOPISecondKaptonLayerYSize;
+  G4double MOPISecondKaptonLayerZSize;
+  G4double MOPISecondKaptonLayerXPosition;
+  G4double MOPISecondKaptonLayerYPosition;
+  G4double MOPISecondKaptonLayerZPosition;
+  G4Box* solidMOPISecondKaptonLayer;
+  G4LogicalVolume* logicMOPISecondKaptonLayer;
+  G4VPhysicalVolume* physiMOPISecondKaptonLayer;
+
+  G4double innerRadiusFinalCollimator;
+  G4VPhysicalVolume* mother;
+
+
+
+
+  
+ 
+
+  
   G4VPhysicalVolume* physiFirstMonitorLayer1;
   G4VPhysicalVolume* physiFirstMonitorLayer2;
   G4VPhysicalVolume* physiFirstMonitorLayer3;
@@ -132,24 +285,12 @@ private:
   G4VPhysicalVolume* physiSecondMonitorLayer2;
   G4VPhysicalVolume* physiSecondMonitorLayer3;
   G4VPhysicalVolume* physiSecondMonitorLayer4;
-  G4VPhysicalVolume* physiThirdMonitorLayer1;
-  G4VPhysicalVolume* physiThirdMonitorLayer2;
-  G4VPhysicalVolume* physiThirdMonitorLayer3;
-  G4VPhysicalVolume* physiThirdMonitorLayer4;
   G4VPhysicalVolume* physiNozzleSupport;
-G4VPhysicalVolume* physiHoleNozzle;
-
   G4VPhysicalVolume* physiHoleNozzleSupport; 
   G4VPhysicalVolume* physiSecondHoleNozzleSupport;
   G4Tubs* solidFinalCollimator; 
   G4VPhysicalVolume* physiFinalCollimator; 
-  G4double firstScatteringFoilXSize;
-  G4double outerRadiusStopper;
-  G4double secondScatteringFoilXSize;
-  G4double rangeShifterXSize;
-  G4double rangeShifterXPosition;
-  G4double innerRadiusFinalCollimator;
-  G4VPhysicalVolume* mother;
+  
   HadrontherapyMaterial* material;
   G4Material* RSMat;
 };

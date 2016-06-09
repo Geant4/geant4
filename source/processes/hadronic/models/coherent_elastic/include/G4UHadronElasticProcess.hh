@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4UHadronElasticProcess.hh,v 1.10 2006/11/16 20:09:13 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // Geant4 Hadron Elastic Scattering Process -- header file
 // 

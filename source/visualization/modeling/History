@@ -1,4 +1,4 @@
-$Id: History,v 1.103 2007/11/10 14:56:54 allison Exp $
+$Id: History,v 1.106 2008/11/21 21:50:02 perl Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,12 @@ committal in the CVS repository !
 
 History file for visualization/modeling
 ---------------------------------------
+
+27th July 2008  John Allison (modeling-V09-01-01)
+- G4PhysicalVolumeSearchScene.cc: Cosmetic improvement to a message.
+
+4th January 2008  John Allison  (modeling-V09-01-00)
+- Adapted to new BeginPrimitives2D signature.
 
 10th November 2007  John Allison  (modeling-V09-00-00)
 - Minor improvement in warning message after change of geometry.

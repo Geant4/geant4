@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MuonMinusCaptureAtRest.hh,v 1.20 2007/11/15 10:05:13 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4MuonMinusCaptureAtRest.hh,v 1.23 2008/10/02 20:57:52 dennis Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 //  G4MuonMinusCaptureAtRest physics process
 //  Larry Felawka (TRIUMF) and Art Olin (TRIUMF) April 1998
@@ -56,6 +56,7 @@
 #include "G4MuMinusCaptureCascade.hh"
 #include "G4ReactionProductVector.hh"
 #include "G4MuonMinus.hh"
+#include "G4HadronicProcessType.hh"
 
 class G4Fancy3DNucleus;
 class G4ExcitationHandler;
@@ -71,12 +72,13 @@ public:
 
   virtual ~G4MuonMinusCaptureAtRest();
 
-  G4bool IsApplicable(const G4ParticleDefinition&);
+  virtual G4bool IsApplicable(const G4ParticleDefinition&);
 
-  void BuildPhysicsTable(const G4ParticleDefinition&) 
-  {};
+  virtual void PreparePhysicsTable(const G4ParticleDefinition&);
 
-  G4VParticleChange* AtRestDoIt(const G4Track&, const G4Step&); 
+  virtual void BuildPhysicsTable(const G4ParticleDefinition&);
+
+  virtual G4VParticleChange* AtRestDoIt(const G4Track&, const G4Step&); 
 
   G4double GetMeanLifeTime(const G4Track&, G4ForceCondition*) 
   {return 0;};

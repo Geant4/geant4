@@ -23,13 +23,17 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HadrontherapyPhysicsList.cc,v 1.0
+// $Id: HadrontherapyPhysicsList.cc
+// Last modified: M.P. Russo Nov 2008;
+// 
+// See more at: http://geant4infn.wikispaces.com/
+//
 // ----------------------------------------------------------------------------
 //                 GEANT 4 - Hadrontherapy example
 // ----------------------------------------------------------------------------
 // Code developed by:
 //
-// G.A.P. Cirrone(a)*, F. Di Rosa(a), S. Guatelli(b), G. Russo(a)
+// G.A.P. Cirrone(a)*, F. Di Rosa(a), S. Guatelli(b), G. Russo(a), M.P. Russo
 // 
 // (a) Laboratori Nazionali del Sud 
 //     of the National Institute for Nuclear Physics, Catania, Italy
@@ -45,6 +49,11 @@
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleTypes.hh"
 #include "G4ParticleTable.hh"
+
+#include "G4PhysListFactory.hh"
+#include "G4VModularPhysicsList.hh"
+#include "G4VPhysicsConstructor.hh"
+
 #include "HadrontherapyPhysicsList.hh"
 #include "HadrontherapyPhysicsListMessenger.hh"
 #include "HadrontherapyParticles.hh"
@@ -77,6 +86,7 @@
 #include "HEHadronIonQElastic.hh"
 #include "HEHadronIonUElastic.hh"
 #include "HRMuonMinusCapture.hh"
+#include "G4EmProcessOptions.hh"
 
 
 HadrontherapyPhysicsList::HadrontherapyPhysicsList(): G4VModularPhysicsList(),
@@ -92,9 +102,9 @@ HadrontherapyPhysicsList::HadrontherapyPhysicsList(): G4VModularPhysicsList(),
                                                       hadrInelasticProtonNeutronIsRegistered(false),
                                                       hadrAtRestMuonIsRegistered(false)
 {
-  // The secondary production threshold is set to 10. mm
-  // for all the particles in all the experimental set-up
-  // The phantom is defined as a Geant4 Region. Here the cut is fixed to 0.001 mm
+  // A default cut is applied to all volumes
+  // Moreover, in the HadrontherapyDetectorConstruction.cc a 
+  // spevific cut can be applied to the region where energy is collected
   defaultCutValue = 0.01 * mm;
 
   // Messenger: it is possible to activate physics processes and models interactively 
@@ -111,17 +121,43 @@ HadrontherapyPhysicsList::~HadrontherapyPhysicsList()
   delete messenger;
 }
 
+void HadrontherapyPhysicsList::AddPackage(const G4String& name)
+{
+  G4PhysListFactory factory;
+  G4VModularPhysicsList* phys =factory.GetReferencePhysList(name);
+  G4int i=0; 
+  const G4VPhysicsConstructor* elem= phys->GetPhysics(i);
+  G4VPhysicsConstructor* tmp = const_cast<G4VPhysicsConstructor*> (elem);
+  while (elem !=0)
+	{
+	  RegisterPhysics(tmp);
+	  elem= phys->GetPhysics(++i) ;
+	  tmp = const_cast<G4VPhysicsConstructor*> (elem);
+	}
+}
+
+
 void HadrontherapyPhysicsList::AddPhysicsList(const G4String& name)
 {
-  G4cout << "Adding PhysicsList component " << name << G4endl;
-  
+  // Options activated to improve accuracy and activated for the Standard EM models
+  // Usefull for a medical application
+  G4EmProcessOptions opt;
+  opt.SetStepFunction(0.2, 10*um);
+  opt.SetMinEnergy(0.1*keV);
+  opt.SetMaxEnergy(100.*GeV);
+  opt.SetDEDXBinning(360);
+  opt.SetLambdaBinning(360);
+  opt.SetLinearLossLimit(1.e-6);
 
+
+  G4cout << "Adding PhysicsList component " << name << G4endl;
   // ****************
   // *** A. DECAY ***
   // ****************
 
 
   if (name == "Decay") 
+
     {
       if (decayIsRegistered) 
 	{
@@ -777,15 +813,13 @@ void HadrontherapyPhysicsList::SetCuts()
   // Definition of a smaller threshold of production in the phantom region
   // where high accuracy is required in the energy deposit calculation
 
-  G4String regionName = "PhantomLog";
+  G4String regionName = "DetectorLog";
   G4Region* region = G4RegionStore::GetInstance()->GetRegion(regionName);
   G4ProductionCuts* cuts = new G4ProductionCuts ;
   G4double regionCut = 0.01*mm;
   cuts -> SetProductionCut(regionCut,G4ProductionCuts::GetIndex("gamma"));
   cuts -> SetProductionCut(regionCut,G4ProductionCuts::GetIndex("e-"));
   cuts -> SetProductionCut(regionCut,G4ProductionCuts::GetIndex("e+"));
-  cuts -> SetProductionCut(regionCut,G4ProductionCuts::GetIndex("proton"));
-  cuts -> SetProductionCut(regionCut,G4ProductionCuts::GetIndex("genericIons"));
   region -> SetProductionCuts(cuts);
 
   if (verboseLevel>0) DumpCutValuesTable();

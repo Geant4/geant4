@@ -23,15 +23,15 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: pyG4Element.cc,v 1.5 2006/08/25 05:46:17 kmura Exp $
-// $Name: geant4-09-01 $
+// $Id: pyG4Element.cc,v 1.7 2008/12/04 08:55:25 kmura Exp $
+// $Name: geant4-09-02 $
 // ====================================================================
 //   pyG4Element.cc
 //
 //                                         2005 Q
 // ====================================================================
 #include <boost/python.hpp>
-#include "pyG4Version.hh"
+#include "G4Version.hh"
 #include "G4Element.hh"
 
 using namespace boost::python;
@@ -75,8 +75,17 @@ void export_G4Element()
     .def(init<const G4String&, const G4String&, G4int>())
     // ---
     .def("AddIsotope",          &G4Element::AddIsotope)
+#if G4VERSION_NUMBER >= 920
+    .def("GetName",             &G4Element::GetName,
+         return_value_policy<reference_existing_object>())
+    .def("GetSymbol",           &G4Element::GetSymbol,
+         return_value_policy<reference_existing_object>())
+    .def("SetName",             &G4Element::SetName)
+#else
     .def("GetName",             &G4Element::GetName)
     .def("GetSymbol",           &G4Element::GetSymbol)
+#endif
+
     .def("GetZ",                &G4Element::GetZ)
     .def("GetN",                &G4Element::GetN)
     .def("GetA",                &G4Element::GetA)

@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4VPrimitiveScorer.hh,v 1.3 2007/08/28 07:51:45 asaim Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 
 #ifndef G4VPrimitiveScorer_h

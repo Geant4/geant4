@@ -23,28 +23,34 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// 080505 Fixed and changed sampling method of impact parameter by T. Koi 
+// 080602 Fix memory leaks by T. Koi 
+// 080612 Delete unnecessary dependency and unused functions
+//        Change criterion of reaction by T. Koi
+// 081107 Add UnUseGEM (then use the default channel of G4Evaporation)
+//            UseFrag (chage criterion of a inelastic reaction)
+//        Fix bug in nucleon projectiles  by T. Koi    
+//
 #include "G4QMDReaction.hh"
 #include "G4QMDNucleus.hh"
-
 #include "G4QMDGroundStateNucleus.hh"
-#include "G4Fancy3DNucleus.hh"
 
 #include "G4NistManager.hh"
 
 G4QMDReaction::G4QMDReaction()
-:system ( 0 )
+: system ( NULL )
 , deltaT ( 1 ) // in fsec
 , maxTime ( 100 ) // will have maxTime-th time step
+, gem ( true )
+, frag ( false )
 {
    meanField = new G4QMDMeanField();
    collision = new G4QMDCollision();
 
-   evaporation = new G4Evaporation;
-   evaporation->SetGEMChannel();
    excitationHandler = new G4ExcitationHandler;
+   evaporation = new G4Evaporation;
    excitationHandler->SetEvaporation( evaporation );
-//   preco = new G4PreCompoundModel( excitationHandler );
-
+   setEvaporationCh();
 }
 
 
@@ -52,22 +58,9 @@ G4QMDReaction::G4QMDReaction()
 G4QMDReaction::~G4QMDReaction()
 {
    delete evaporation; 
+   delete excitationHandler;
    delete collision;
    delete meanField;
-}
-
-
-
-void G4QMDReaction::setInitialCondition( G4QMDSystem* , G4QMDSystem* )
-{
-   ;
-}
-
-
-
-void G4QMDReaction::doPropagation()
-{
-   ;
 }
 
 
@@ -107,7 +100,7 @@ G4HadFinalState* G4QMDReaction::ApplyYourself( const G4HadProjectile & projectil
 
      //G4double xs_0 = shenXS.GetCrossSection ( proj_dp , targ_ele , aTemp );
      G4double xs_0 = genspaXS.GetCrossSection ( proj_dp , targ_ele , aTemp );
-     G4double bmax_0 = std::sqrt( xs_0 )/pi*2;
+     G4double bmax_0 = std::sqrt( xs_0 / pi );
      //std::cout << "bmax_0 in fm (fermi) " <<  bmax_0/fermi << std::endl;
 
      //delete proj_dp; 
@@ -147,7 +140,7 @@ G4HadFinalState* G4QMDReaction::ApplyYourself( const G4HadProjectile & projectil
 
 // impact parameter 
       G4double bmax = 1.05*(bmax_0/fermi);  // 10% for Peripheral reactions
-      G4double b = bmax * G4UniformRand();
+      G4double b = bmax * std::sqrt ( G4UniformRand() );
 //071112
       //G4double b = 0;
       //G4double b = bmax;
@@ -163,10 +156,11 @@ G4HadFinalState* G4QMDReaction::ApplyYourself( const G4HadProjectile & projectil
 // Projectile
       G4LorentzVector proj4pLAB = projectile.Get4Momentum()/GeV;
 
-      G4QMDNucleus* proj(NULL); 
-      if ( projectile.GetDefinition()->GetParticleType() == "nucleus" )
+      G4QMDGroundStateNucleus* proj(NULL); 
+      if ( projectile.GetDefinition()->GetParticleType() == "nucleus" 
+        || projectile.GetDefinition()->GetParticleName() == "proton"
+        || projectile.GetDefinition()->GetParticleName() == "neutron" )
       {
-         proj = new G4QMDNucleus; 
 
          proj_Z = proj_pd->GetAtomicNumber();
          proj_A = proj_pd->GetAtomicMass();
@@ -184,8 +178,7 @@ G4HadFinalState* G4QMDReaction::ApplyYourself( const G4HadProjectile & projectil
       G4int iz = int ( target.GetZ() );
       G4int ia = int ( target.GetN() );
 
-      //G4QMDNucleus* targ = new G4QMDNucleus;
-      G4QMDNucleus* targ = new G4QMDGroundStateNucleus( iz , ia );
+      G4QMDGroundStateNucleus* targ = new G4QMDGroundStateNucleus( iz , ia );
 
       meanField->SetSystem (targ );
       targ->SetTotalPotential( meanField->GetTotalPotential() );
@@ -282,7 +275,7 @@ G4HadFinalState* G4QMDReaction::ApplyYourself( const G4HadProjectile & projectil
       //G4cout << " do Paropagate " << i << " th time step. " << G4endl;
       meanField->DoPropagation( deltaT );
       //system->ShowParticipants();
-      collision->CalKinematicsOfBinaryCollisions();
+      collision->CalKinematicsOfBinaryCollisions( deltaT );
 
       if ( i / 10 * 10 == i ) 
       {
@@ -384,9 +377,11 @@ G4HadFinalState* G4QMDReaction::ApplyYourself( const G4HadProjectile & projectil
 //       ElasticLike with Collision 
          //if ( elasticLike_energy == true && withCollision == true ) elastic = true;   // ielst = 1 
 //       InelasticLike without Collision 
-         if ( elasticLike_energy == false ) elastic = false;                          // ielst = 2                
+         //if ( elasticLike_energy == false ) elastic = false;                          // ielst = 2                
+         if ( frag == true )
+            if ( elasticLike_energy == false ) elastic = false;
 //       InelasticLike with Collision 
-         //if ( elasticLike_energy == false && withCollision == true ) elastic = false; // ielst = 3
+         if ( elasticLike_energy == false && withCollision == true ) elastic = false; // ielst = 3
 
       }
 
@@ -402,6 +397,17 @@ G4HadFinalState* G4QMDReaction::ApplyYourself( const G4HadProjectile & projectil
 //071115
       //G4cout << elastic << G4endl;
       // if elastic is true try again from sampling of impact parameter 
+
+      if ( elastic == true )
+      {
+         // delete this nucleues
+         for ( std::vector< G4QMDNucleus* >::iterator
+               it = nucleuses.begin() ; it != nucleuses.end() ; it++ )
+         {
+            delete *it;
+         }
+         nucleuses.clear();
+      }
    } 
 
 
@@ -435,7 +441,8 @@ G4HadFinalState* G4QMDReaction::ApplyYourself( const G4HadProjectile & projectil
          // push back system 
          for ( G4int i = 0 ; i < (*it)->GetTotalNumberOfParticipant() ; i++ )
          {
-            system->SetParticipant ( (*it)->GetParticipant( i ) );  
+            G4QMDParticipant* aP = new G4QMDParticipant( ( (*it)->GetParticipant( i ) )->GetDefinition() , ( (*it)->GetParticipant( i ) )->GetMomentum() , ( (*it)->GetParticipant( i ) )->GetPosition() );  
+            system->SetParticipant ( aP );  
          } 
          continue;  
       }
@@ -507,11 +514,17 @@ G4HadFinalState* G4QMDReaction::ApplyYourself( const G4HadProjectile & projectil
 
       }
 
+      for ( G4ReactionProductVector::iterator itt
+          = rv->begin() ; itt != rv->end() ; itt++ )
+      {
+          delete *itt;
+      }
+      delete rv;
+
       delete aFragment;
 
-      delete *it;  // delete nulceuse 
-
    }
+
 
 
    for ( G4int i = 0 ; i < system->GetTotalNumberOfParticipant() ; i++ )
@@ -533,6 +546,13 @@ G4HadFinalState* G4QMDReaction::ApplyYourself( const G4HadProjectile & projectil
 */
 
    }
+
+   for ( std::vector< G4QMDNucleus* >::iterator it
+       = nucleuses.begin() ; it != nucleuses.end() ; it++ )
+   {
+      delete *it;  // delete nulceuse 
+   }
+   nucleuses.clear();
 
    system->Clear();
    delete system; 
@@ -665,3 +685,16 @@ G4double ptot , G4double etot , G4double bmax , G4ThreeVector boostToCM )
    coulomb_collision_pz_targ = pzta;
 
 }
+
+
+
+void G4QMDReaction::setEvaporationCh()
+{
+
+   if ( gem == true ) 
+      evaporation->SetGEMChannel();
+   else
+      evaporation->SetDefaultChannel();
+
+}
+

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // $Id: MyKleinNishinaCompton.cc,v 1.5 2007/10/01 15:19:57 maire Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

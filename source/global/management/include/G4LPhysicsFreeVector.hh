@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4LPhysicsFreeVector.hh,v 1.8 2006/06/29 19:01:51 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4LPhysicsFreeVector.hh,v 1.11 2008/09/22 08:26:33 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // 
 // ------------------------------------------------------------------
@@ -41,13 +41,9 @@
 // A subdivision method is used to find the energy|momentum bin.
 
 // F.W. Jones, TRIUMF, 04-JUN-96
-//
-// 10-JUL-96 FWJ: adapted to changes in G4PhysicsVector.
-//
-// 27-MAR-97 FWJ: first version for Alpha release
-// 20-JUN-97 FWJ: added comment re GetValue(): no longer virtual
 // 11-NOV-00 H.Kurashige: use STL vector for dataVector and binVector
-//
+// 02-APR-08 A.Bagulya: use GetValue() from base class
+// ------------------------------------------------------------------
 
 #ifndef G4LPhysicsFreeVector_h
 #define G4LPhysicsFreeVector_h 1
@@ -57,22 +53,21 @@
 class G4LPhysicsFreeVector : public G4PhysicsVector  
 {
 
-public: 
+public: // with description
 
    G4LPhysicsFreeVector();
-
-public: // with description
 
    G4LPhysicsFreeVector(size_t nbin, G4double binmin, G4double binmax);
 
    ~G4LPhysicsFreeVector();
 
+   G4LPhysicsFreeVector(const G4LPhysicsFreeVector&);
+   G4LPhysicsFreeVector& operator=(const G4LPhysicsFreeVector&);
+     // Copy constructor and assignment operator.
+
    void PutValues(size_t binNumber, G4double binValue, G4double dataValue);
      // G4PhysicsVector has PutValue() but it is inconvenient.
      // Want to simultaneously fill the bin and data vectors.
-
-   G4double GetValue(G4double theEnergy, G4bool& isOutRange);
-     // Note that theEnergy could be energy, momentum, or whatever.
 
    void SetVerboseLevel(G4int value);
 

@@ -24,11 +24,16 @@
 // ********************************************************************
 //
 //
-// $Id: G4PreCompoundFragmentVector.hh,v 1.3 2006/06/29 20:58:18 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4PreCompoundFragmentVector.hh,v 1.4 2008/09/22 10:18:36 ahoward Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // Hadronic Process: Nuclear Preequilibrium
-// by V. Lara 
+// by V. Lara
+//
+// Modif (03 September 2008) by J. M. Quesada for external choice of inverse 
+// cross section option 
+// JMQ (06 September 2008) Also external choice has been added for:
+//                      - superimposed Coulomb barrier (if useSICB=true) 
 
 #ifndef G4PreCompoundFragmentVector_h
 #define G4PreCompoundFragmentVector_h 1
@@ -67,6 +72,13 @@ private:
   pcfvector * theChannels;
 
   G4double TotalEmissionProbability;
+
+//for inverse cross section choice
+public:
+  inline void SetOPTxs(G4int);
+  //for superimposed CoulomBarrier for inverse cross sections
+  inline void UseSICB(G4bool);
+
 
 };
 

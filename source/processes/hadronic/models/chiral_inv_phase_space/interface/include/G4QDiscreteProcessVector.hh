@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4QDiscreteProcessVector.hh,v 1.1 2007/08/28 15:48:15 mkossov Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 //      ---------------- G4QDiscreteProcessVector ----------------
 //             by Mikhail Kossov, Aug 2007.

@@ -24,12 +24,17 @@
 // ********************************************************************
 //
 //
-// $Id: G4StatMFMacroMultiplicity.cc,v 1.5 2006/06/29 20:25:10 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4StatMFMacroMultiplicity.cc,v 1.7 2008/11/19 14:33:31 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara
-
+//
+// Modified:
+// 25.07.08 I.Pshenichnov (in collaboration with Alexander Botvina and Igor 
+//          Mishustin (FIAS, Frankfurt, INR, Moscow and Kurchatov Institute, 
+//          Moscow, pshenich@fias.uni-frankfurt.de) additional checks in
+//          solver of equation for the chemical potential
 
 #include "G4StatMFMacroMultiplicity.hh"
 
@@ -86,36 +91,54 @@ G4double G4StatMFMacroMultiplicity::CalcChemicalPotentialMu(void)
     G4double fChemPa = this->operator()(ChemPa); 
     G4double fChemPb = this->operator()(ChemPb); 
     
+
+    // Set the precision level for locating the root. 
+    // If the root is inside this interval, then it's done! 
+    G4double intervalWidth = 1.e-4;
+
     // bracketing the solution
     G4int iterations = 0;
-    while (fChemPa*fChemPb > 0.0 && iterations < 10) 
+    while (fChemPa*fChemPb > 0.0 && iterations < 100) 
     {
 	if (std::abs(fChemPa) <= std::abs(fChemPb)) 
 	{
 	    ChemPa += 0.6*(ChemPa-ChemPb);
 	    fChemPa = this->operator()(ChemPa);
+            iterations++;
 	} 
 	else 
 	{
 	    ChemPb += 0.6*(ChemPb-ChemPa);
 	    fChemPb = this->operator()(ChemPb);
+            iterations++;
 	}
     }
-    if (fChemPa*fChemPb > 0.0) 
+
+    if (fChemPa*fChemPb > 0.0) // the bracketing failed, complain 
     {
+      G4cerr <<"G4StatMFMacroMultiplicity:"<<" ChemPa="<<ChemPa<<" ChemPb="<<ChemPb<< G4endl;
+      G4cerr <<"G4StatMFMacroMultiplicity:"<<" fChemPa="<<fChemPa<<" fChemPb="<<fChemPb<< G4endl;
 	throw G4HadronicException(__FILE__, __LINE__, "G4StatMFMacroMultiplicity::CalcChemicalPotentialMu: I couldn't bracket the root.");
     }
-	
-	
-    G4Solver<G4StatMFMacroMultiplicity> * theSolver = new G4Solver<G4StatMFMacroMultiplicity>(100,1.e-4);
+    else if (fChemPa*fChemPb < 0.0 && std::abs(ChemPa-ChemPb) > intervalWidth) // the bracketing was OK, try to locate the root
+    {	
+    G4Solver<G4StatMFMacroMultiplicity> * theSolver = new G4Solver<G4StatMFMacroMultiplicity>(100,intervalWidth);
     theSolver->SetIntervalLimits(ChemPa,ChemPb);
     //    if (!theSolver->Crenshaw(*this)) 
     if (!theSolver->Brent(*this)) 
     {
+      G4cerr <<"G4StatMFMacroMultiplicity:"<<" ChemPa="<<ChemPa<<" ChemPb="<<ChemPb<< G4endl;
+      G4cerr <<"G4StatMFMacroMultiplicity:"<<" fChemPa="<<fChemPa<<" fChemPb="<<fChemPb<< G4endl;
 	throw G4HadronicException(__FILE__, __LINE__, "G4StatMFMacroMultiplicity::CalcChemicalPotentialMu: I couldn't find the root.");
     }
     _ChemPotentialMu = theSolver->GetRoot();
     delete theSolver;
+    }
+    else // the root is within the interval, which is shorter then the precision level - all done 
+    {
+     _ChemPotentialMu = ChemPa;
+    }
+
     return _ChemPotentialMu;
 }
 

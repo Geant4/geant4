@@ -1,0 +1,566 @@
+//
+// ********************************************************************
+// * License and Disclaimer                                           *
+// *                                                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
+// *                                                                  *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
+// ********************************************************************
+//
+//
+//
+// ===========================================================================
+// GEANT4 class
+//
+// Class:                G4IonParametrisedLossTable
+// Helper classes:       G4IonLossTableHandle
+//                       G4DummyScalingAlgorithm
+// 
+// Author:               Anton Lechner (Anton.Lechner@cern.ch)
+//
+// First implementation: 10. 11. 2008
+//
+// Modifications:
+//
+//
+// Class descriptions:
+//    G4IonParametrisedLossTable: Wrapper class for classes of the material
+//    category, which maintain stopping power vectors for ions. This wrapper
+//    class includes a cache for faster access of stopping powers and builds 
+//    stopping power vectors for compounds using Bragg's additivity rule. 
+//    G4IonLossTableHandle: A handle class for G4IonParametrisedLossTable
+//    G4DummyScalingAlgorithm: A dummy algorithm to scale energies and
+//    stopping powers (may be replaced with an algorithm, which relies on 
+//    dynamic information of the particle: This may be required if stopping
+//    power data is scaled using an effective charge approximation).
+//
+// Comments:
+//
+// =========================================================================== 
+
+
+template <
+    class LossTabulation,
+    class ScalingAlgorithm
+>
+G4IonParametrisedLossTable <
+    LossTabulation, 
+    ScalingAlgorithm
+>::G4IonParametrisedLossTable(G4int maxSizeCache, G4bool splines) :
+   maxCacheEntries(maxSizeCache),
+   useSplines(splines) {
+
+  if(maxCacheEntries < 1) maxCacheEntries = 1;
+
+  lowerEnergyEdge = LossTabulation::GetLowerEnergyBoundary();
+  upperEnergyEdge = LossTabulation::GetUpperEnergyBoundary();
+}
+
+
+template <
+    class LossTabulation,
+    class ScalingAlgorithm
+>
+G4IonParametrisedLossTable <
+    LossTabulation, 
+    ScalingAlgorithm
+>::~G4IonParametrisedLossTable() {
+
+  StoppingPowerTable::iterator iterStop = s.begin();
+  StoppingPowerTable::iterator iterStop_end = s.end();
+
+  for(;iterStop != iterStop_end; iterStop++) delete iterStop -> second;
+  s.clear();
+
+  CacheIterPointerMap::iterator iter = cacheKeyPointers.begin();
+  CacheIterPointerMap::iterator iter_end = cacheKeyPointers.end();
+  
+  for(;iter != iter_end; iter++) {
+      void* pointerIter = iter -> second;
+      typename CacheEntryList::iterator* listPointerIter = 
+                      	  (typename CacheEntryList::iterator*) pointerIter;
+
+      delete listPointerIter;
+  }
+ 
+  cacheEntries.clear();
+  cacheKeyPointers.clear();
+}
+
+
+template <
+    class LossTabulation,
+    class ScalingAlgorithm
+>
+G4bool G4IonParametrisedLossTable <
+    LossTabulation, 
+    ScalingAlgorithm>::IsApplicable(
+                 const G4ParticleDefinition* particle,  // Projectile (ion) 
+                 const G4Material* material,   // Target material 
+                 G4double kineticEnergy) {     // Kinetic energy of projectile
+
+  G4bool isApplicable = false; 
+  G4int atomicNumber = particle -> GetAtomicNumber();
+
+  // Availability of table for ion-material couple is checked only if
+  // the kinetic energy per nucleon is within the energy limits  
+  if(kineticEnergy / atomicNumber < upperEnergyEdge) {
+     isApplicable = IsApplicable(particle, material); 
+  }
+
+  return isApplicable; 
+}
+
+
+template <
+    class LossTabulation,
+    class ScalingAlgorithm
+>
+G4bool G4IonParametrisedLossTable <
+    LossTabulation, 
+    ScalingAlgorithm>::IsApplicable(
+                 const G4ParticleDefinition* particle,  // Projectile (ion) 
+                 const G4Material* material) {          // Target material 
+
+  G4bool isApplicable = false; 
+  G4int atomicNumber = particle -> GetAtomicNumber();
+
+  G4int index = 
+      LossTabulation::GetIonMaterialCoupleIndex(atomicNumber, 
+                                                material -> GetName());
+
+  if(index >= 0) isApplicable = true;
+  // If table for ion-material couple was not found, the applicability
+  // of the Bragg rule is checked  
+  else {
+
+     const G4int numberOfElements = material -> GetNumberOfElements();
+
+     if(numberOfElements > 1) {
+  
+        isApplicable = true;
+        const G4ElementVector* elementVector =
+                                      material -> GetElementVector() ;
+
+        G4int elemIndex;
+        for(G4int i = 0; i < numberOfElements; i++) {
+
+            elemIndex =  LossTabulation::GetIonMaterialCoupleIndex(
+                                         atomicNumber,
+                                         (*elementVector)[i] -> GetName());
+            if(elemIndex < 0) {
+               isApplicable = false;
+               break;
+           }
+        }
+     }
+  }
+  
+  return isApplicable; 
+}
+
+
+template <
+    class LossTabulation,
+    class ScalingAlgorithm
+>
+G4PhysicsVector* G4IonParametrisedLossTable <
+    LossTabulation, 
+    ScalingAlgorithm
+>::BuildStoppingPowerVector(
+              const G4ParticleDefinition* particle,  // Projectile (ion) 
+              const G4Material* material) {          // Target material 
+
+
+  const G4int numberOfElements = material -> GetNumberOfElements();
+  G4LPhysicsFreeVector* dEdxBragg = 0;
+
+  if(numberOfElements > 1) {
+     G4bool b;
+
+     const G4ElementVector* elementVector =
+                                   material -> GetElementVector() ;
+
+
+     G4int atomicNumber = particle -> GetAtomicNumber();
+
+     std::vector<G4PhysicsVector*> dEdxTable;
+     std::vector<G4double> densityTable;
+
+     for(G4int i = 0; i < numberOfElements; i++) {
+
+         const G4String& elemName = (*elementVector)[i] -> GetName();
+         G4int index = LossTabulation::GetIonMaterialCoupleIndex(
+                                          atomicNumber, 
+                                          elemName); 
+
+         if(index < 0) { dEdxTable.clear(); break; }
+
+         G4PhysicsVector* dEdx = 
+                     LossTabulation::GetPhysicsVector(atomicNumber, elemName);
+         dEdxTable.push_back(dEdx);
+
+         G4double density = LossTabulation::GetDensity(
+                                   LossTabulation::GetMaterialIndex(elemName));
+         densityTable.push_back(density);
+     }
+
+     if(dEdxTable.size() > 0) {
+
+        size_t nmbdEdxBins = dEdxTable[0] -> GetVectorLength();
+        G4double lowerEdge = dEdxTable[0] -> GetLowEdgeEnergy(0);
+        G4double upperEdge = dEdxTable[0] -> GetLowEdgeEnergy(nmbdEdxBins);
+
+        dEdxBragg = new G4LPhysicsFreeVector(nmbdEdxBins,
+                                             lowerEdge,
+                                             upperEdge);
+
+        const G4double* massFractionVector = material -> GetFractionVector();
+
+	G4double densityCompound = material -> GetDensity();
+
+        for(size_t j = 0; j < nmbdEdxBins; j++) {
+
+            G4double edge = dEdxTable[0] -> GetLowEdgeEnergy(j);
+
+            G4double value = 0.0;
+  	    for(G4int i = 0; i < numberOfElements; i++) {
+ 
+                value += (dEdxTable[i] -> GetValue(edge ,b)) * 
+                                     massFractionVector[i] / densityTable[i];
+	    }
+
+            value *= densityCompound;
+
+            dEdxBragg -> PutValues(j, edge, value); 
+	}
+
+        s[std::make_pair(particle, material)] = dEdxBragg; 
+     }
+  }
+  return dEdxBragg;
+}
+
+
+template <
+    class LossTabulation,
+    class ScalingAlgorithm
+>
+G4double G4IonParametrisedLossTable <
+    LossTabulation, 
+    ScalingAlgorithm
+>::GetLowerEnergyEdge(
+                   const G4ParticleDefinition* particle,  // Projectile (ion) 
+                   const G4Material* material) {          // Target material
+
+  G4CacheValue value = GetCacheValue(particle, material); 
+
+  G4double lowerEnergy = 0.0;
+     
+  if(value.energyScaling > 0) 
+     lowerEnergy = lowerEnergyEdge / value.energyScaling;
+
+  return lowerEnergy;
+}
+
+
+template <
+    class LossTabulation,
+    class ScalingAlgorithm
+>
+G4double G4IonParametrisedLossTable <
+    LossTabulation, 
+    ScalingAlgorithm
+>::GetUpperEnergyEdge(
+                   const G4ParticleDefinition* particle,  // Projectile (ion) 
+                   const G4Material* material) {          // Target material
+
+  G4CacheValue value = GetCacheValue(particle, material); 
+     
+  G4double upperEnergy = 0.0;
+     
+  if(value.energyScaling > 0) 
+     upperEnergy = upperEnergyEdge / value.energyScaling;
+
+  return upperEnergy;
+}
+
+
+template <
+    class LossTabulation,
+    class ScalingAlgorithm
+>
+void G4IonParametrisedLossTable <
+    LossTabulation, 
+    ScalingAlgorithm
+>::PrintDEDXTable(const G4ParticleDefinition* particle,  // Projectile (ion) 
+                  const G4Material* material,  // Target material
+                  G4double lowerBoundary,      // Minimum energy per nucleon
+                  G4double upperBoundary,      // Maximum energy per nucleon
+                  G4int nmbBins,               // Number of bins
+                  G4bool logScaleEnergy) {     // Logarithmic scaling of energy
+
+  G4double atomicMassNumber = particle -> GetAtomicMass();
+  G4double materialDensity = material -> GetDensity();
+
+  G4cout << "# dE/dx table for " << particle -> GetParticleName() 
+         << " in material " << material -> GetName()
+         << " of density " << materialDensity / g * cm3
+         << " g/cm3"
+         << G4endl
+         << "# Projectile mass number A1 = " << atomicMassNumber
+         << G4endl
+         << "# Energy range (per nucleon) of tabulation: " 
+         << GetLowerEnergyEdge(particle, material) / atomicMassNumber / MeV
+         << " - " 
+         << GetUpperEnergyEdge(particle, material) / atomicMassNumber / MeV
+         << " MeV"
+         << G4endl
+         << "# ------------------------------------------------------"
+         << G4endl;
+  G4cout << "#"
+         << std::setw(13) << std::right << "E"
+         << std::setw(14) << "E/A1"
+         << std::setw(14) << "dE/dx"
+         << std::setw(14) << "1/rho*dE/dx"
+         << G4endl;
+  G4cout << "#"
+         << std::setw(13) << std::right << "(MeV)"
+         << std::setw(14) << "(MeV)"
+         << std::setw(14) << "(MeV/cm)"
+         << std::setw(14) << "(MeV*cm2/mg)"
+         << G4endl
+         << "# ------------------------------------------------------"
+         << G4endl;
+
+  G4CacheValue value = GetCacheValue(particle, material); 
+
+  G4double energyLowerBoundary = lowerBoundary * atomicMassNumber;
+  G4double energyUpperBoundary = upperBoundary * atomicMassNumber; 
+
+  if(logScaleEnergy) {
+
+     energyLowerBoundary = std::log(energyLowerBoundary);
+     energyUpperBoundary = std::log(energyUpperBoundary); 
+  }
+
+  G4double deltaEnergy = (energyUpperBoundary - energyLowerBoundary) / 
+                                                           G4double(nmbBins);
+
+  G4cout.precision(6);
+  for(int i = 0; i < nmbBins + 1; i++) {
+
+      G4double energy = energyLowerBoundary + i * deltaEnergy;
+      if(logScaleEnergy) energy = std::exp(energy);
+
+      G4double loss = GetDEDX(particle, material, energy);
+
+      G4cout << std::setw(14) << std::right << energy / MeV
+             << std::setw(14) << energy / atomicMassNumber / MeV
+             << std::setw(14) << loss / MeV * cm
+             << std::setw(14) << loss / materialDensity / (MeV*cm2/(0.001*g)) 
+             << G4endl;
+  }
+}
+
+
+template <
+    class LossTabulation,
+    class ScalingAlgorithm
+>
+G4double G4IonParametrisedLossTable <
+    LossTabulation, 
+    ScalingAlgorithm>::GetDEDX(
+                 const G4ParticleDefinition* particle,  // Projectile (ion) 
+                 const G4Material* material,   // Target material 
+                 G4double kineticEnergy) {     // Kinetic energy of projectile
+
+  G4double dedx = 0.0;
+
+  G4CacheValue value = GetCacheValue(particle, material); 
+     
+  if(kineticEnergy <= 0.0) dedx = 0.0;
+  else if(value.dedx != 0) {
+ 
+     G4double factor = 0.0;
+     G4bool b;
+
+     factor = ScalingAlgorithm::ScalingFactorDEDX(particle, 
+                                                  material,
+                                                  kineticEnergy);
+     G4double scaledKineticEnergy = kineticEnergy * value.energyScaling;
+
+     if(scaledKineticEnergy < lowerEnergyEdge) {
+
+        factor *= std::sqrt(scaledKineticEnergy / lowerEnergyEdge);
+        scaledKineticEnergy = lowerEnergyEdge;
+     }
+
+     dedx = factor * value.dedx -> GetValue(scaledKineticEnergy, b);
+
+     if(dedx < 0.0) dedx = 0.0;
+  }
+  else dedx = 0.0;
+
+#ifdef PRINT_DEBUG
+     G4cout << "G4IonParametrisedLossTable::GetDEDX() E = " 
+            << kineticEnergy / MeV << " MeV * "
+            << value.energyScaling << " = "
+            << kineticEnergy * value.energyScaling / MeV 
+            << " MeV, dE/dx = " << dedx / MeV * cm << " MeV/cm = "
+            << dedx/factor/MeV*cm << " * " << factor << " MeV/cm; index = "
+            << value.dEdxIndex << ", material = " << material -> GetName()
+            << G4endl;
+#endif
+
+  return dedx;
+}
+
+
+template <
+    class LossTabulation,
+    class ScalingAlgorithm
+>
+G4CacheValue G4IonParametrisedLossTable <
+    LossTabulation, 
+    ScalingAlgorithm
+>::UpdateCacheValue(
+              const G4ParticleDefinition* particle,  // Projectile (ion) 
+              const G4Material* material) {          // Target material 
+
+  G4CacheValue value;
+  G4CacheKey key = std::make_pair(particle, material);
+
+  G4double nmbNucleons = G4double(particle -> GetAtomicMass());
+  value.energyScaling = 
+         ScalingAlgorithm::ScalingFactorEnergy(particle) / nmbNucleons;
+
+  G4int atomicNumber = particle -> GetAtomicNumber();
+
+  value.dEdxIndex = 
+      LossTabulation::GetIonMaterialCoupleIndex(atomicNumber, 
+                                                material -> GetName());
+
+  if(value.dEdxIndex < 0) {
+
+     StoppingPowerTable::iterator iter = s.find(key);
+     if(iter == s.end()) {
+        value.dedx = BuildStoppingPowerVector(particle, material);
+     }
+     else {
+        value.dedx = iter -> second;
+     }
+  }
+  else {
+     value.dedx = LossTabulation::GetPhysicsVector(atomicNumber, 
+                                                   material -> GetName());
+  }
+
+#ifdef PRINT_DEBUG
+  G4cout << "G4IonParametrisedLossTable::UpdateCacheValue() for " 
+         << particle -> GetParticleName() << " in "
+         << material -> GetName() << ": index = " << value.dEdxIndex
+         << G4endl;
+#endif
+
+  return value;
+}
+
+
+template <
+    class LossTabulation,
+    class ScalingAlgorithm
+>
+G4CacheValue G4IonParametrisedLossTable <
+    LossTabulation, 
+    ScalingAlgorithm
+>::GetCacheValue(
+              const G4ParticleDefinition* particle,  // Projectile (ion) 
+              const G4Material* material) {          // Target material 
+
+  G4CacheKey key = std::make_pair(particle, material);
+
+  G4CacheEntry entry;
+  typename CacheEntryList::iterator* pointerIter = 
+                  (typename CacheEntryList::iterator*) cacheKeyPointers[key];
+
+  if(!pointerIter) {
+      entry.value = UpdateCacheValue(particle, material);
+
+#ifdef PRINT_DEBUG
+      G4cout << "G4IonParametrisedLossTable::GetCacheValue() "
+             << "Updating cache for "
+             << material -> GetName() << ": index = " << entry.value.dEdxIndex
+             << G4endl;
+#endif
+
+      entry.key = key;
+      cacheEntries.push_front(entry);
+
+      typename CacheEntryList::iterator* pointerIter = 
+                                   new typename CacheEntryList::iterator();
+      *pointerIter = cacheEntries.begin();
+      cacheKeyPointers[key] = pointerIter;
+
+      if(G4int(cacheEntries.size()) > maxCacheEntries) {
+
+  	 G4CacheEntry lastEntry = cacheEntries.back();
+	          
+         void* pointerIter = cacheKeyPointers[lastEntry.key];
+         typename CacheEntryList::iterator* listPointerIter = 
+                      	  (typename CacheEntryList::iterator*) pointerIter;
+         delete listPointerIter;
+         cacheKeyPointers.erase(lastEntry.key);
+      }
+  }
+  else {
+      entry = *(*pointerIter);
+      // Cache entries are currently not re-ordered. 
+      // Uncomment for activating re-ordering:
+      //      cacheEntries.erase(*pointerIter);
+      //      cacheEntries.push_front(entry);
+      //      *pointerIter = cacheEntries.begin();
+  }
+  return entry.value;
+}
+
+
+template <
+    class LossTabulation,
+    class ScalingAlgorithm
+>
+void G4IonParametrisedLossTable <
+    LossTabulation, 
+    ScalingAlgorithm
+>::ClearCache() {
+
+  CacheIterPointerMap::iterator iter = cacheKeyPointers.begin();
+  CacheIterPointerMap::iterator iter_end = cacheKeyPointers.end();
+  
+  for(;iter != iter_end; iter++) {
+      void* pointerIter = iter -> second;
+      typename CacheEntryList::iterator* listPointerIter = 
+                      	  (typename CacheEntryList::iterator*) pointerIter;
+
+      delete listPointerIter;
+  }
+ 
+  cacheEntries.clear();
+  cacheKeyPointers.clear();
+}

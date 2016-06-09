@@ -14,6 +14,121 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+09-December 2008 A.Howard   hadr-pre-V09-01-15
+---------------------------------------------------
+Added protection for close to zero excitation energy in 
+G4PreCompoundModel.cc (according to JMQ, MAC) to not try to de-excite.
+
+09-December 2008 A.Howard   hadr-pre-V09-01-14
+---------------------------------------------------
+Added protection for close to zero excitation energy in 
+G4PreCompoundTransitions.cc (returns 0.0), prevents FPE later on.
+
+27-November 2008 A.Howard   hadr-pre-V09-01-13
+---------------------------------------------------
+Added data member initialisation to G4VPreCompoundTransitions.hh
+
+19-November 2008 A.Howard   hadr-pre-V09-01-12
+---------------------------------------------------
+JMQ fix to G4PreCompoundNeutron.cc for Zirconium (if (nu < 0.)nu=-nu).
+
+30-September 2008 A.Howard   hadr-pre-V09-01-11
+---------------------------------------------------
+Trivial protection against negative probabilities for incident protons on
+targets with A < Carbon.
+
+22-September 2008 A.Howard   hadr-pre-V09-01-10
+---------------------------------------------------
+JMQ's latest developments - which are an extension of hadr-pre-V09-01-08 with
+cross-section options (equivalent to the de-excitation modifications) and other
+options (SICB, Never Go Back,...).  In addition Gunter's fix to the factorials
+is included from hadr-pre-V09-01-09.
+Added new files: G4PreCompoundAlpha.cc G4PreCompoundDeuteron.cc
+G4PreCompoundHe3.cc G4PreCompoundNeutron.cc G4PreCompoundProton.cc
+G4PreCompoundTriton.cc (Classes previously existed.  Now they have more 
+involved cross-section calculations).
+
+19-September 2008 A.Howard   hadr-pre-V09-01-09
+---------------------------------------------------
+Including Gunter's fix (see 11-August below) on top of ref-07 
+(hadr-pre-V09-00-04), i.e. without JMQ's developments.
+
+11-August 2008 G.Folger      
+-----------------------------------------------
+Rewrite algorithm in G4PreCompoundEmission::rho() to avoid frequent 
+floating point overflow when using Precompund in combination 
+with Binary Cascade. 
+
+
+24 July 2008 J. M. Quesada   hadr-pre-V09-01-08
+---------------------------------------------------
+Minor fixes and Coulomb barrier just for Wellisch's proton cross section 
+(OPT=2) 
+
+
+23 July 2008 V.Ivanchenko    hadr-pre-V09-01-07
+---------------------------------------------------
+Fixed mistake in tagging
+
+23 July 2008 V.Ivanchenko    hadr-pre-V09-01-06
+---------------------------------------------------
+Return back Coulomb barrier initialisation (J.M.Quesada)
+
+27 June 2008 V.Ivanchenko    hadr-pre-V09-01-05
+---------------------------------------------------
+Fixed G4PreCompoundNucleon and G4PreCompoundIon for
+Coulomb barrier, added protections for zero cross sections,
+OPT=2 is used (J.M.Quesada)
+
+05 June 2008 J. M. Quesada   hadr-pre-V09-01-04
+---------------------------------------------------
+Bug fixed in OPT=1 (Chatterjee) charged particle cross sections.
+Unphysical values at very low emission energies have been corrected (set
+to 0); OPT=1 ( OPT=2 in previous tag)
+
+
+15-May 2008 J. M.Quesada     hadr-pre-V09-01-03
+-----------------------------------------------
+The retrieval of transition probabilities in G4PreCompoundModel.cc 
+(for protection against unphysically crossing the landa_+=landa_- condition) 
+was misplaced.  Now it has been placed inside the preequilibrium transitions 
+loop. 
+
+8-May 2008 J. M.Quesada     hadr-pre-V09-01-02
+-----------------------------------------------
+Protection against non physical situation has been set: Equilibrium exciton number 
+Neq (when reached, equilibrium regime starts) should correspond to equal transition 
+probabilities "back" and "forth". Nevertheless,  for heavy target (Neq is big even 
+for low incident energies) after first emission this condition (equal trans. prob.) 
+is reached far before reaching corresponding Neq of the residual. Unless this "jump" 
+to equilibrium is forced in this case, preequilibrium will be 
+spuriously prolonged (as a side effect, with huge CPU consumption).  
+G4PreCompoundModel and G4PreCompoundTransitions classes have been modified.
+
+
+1-May 2008 J. M.Quesada     hadr-pre-V09-01-01
+-----------------------------------------------
+- First trial with cvs. 00 skipped by mistake. 
+New inverse cross sections:
+        OPT=1 Chetterjee's parameterization to reaction cross sections from optical potential global fittings.
+        OPT=2 as OPT=1 but for protons the Wellisch's parameterization for protons is used  (DEFAULT)
+        OPT=3 Kalbach's modifications of Chatterjee's parameterization of cross sections
+        OPT=4 as OPT=3 but for protons the Wellisch's parameterization for protons is used
+
+Coulomb barrier has been suppressed as it enters through inverse cross sections. Also methods related to former Dostrovski's cross sections (alpha , beta and C parameters) have been suppressed. In all particle header files: 
+G4PreCompoundNucleon.hh ,G4PreCompoundNeutron.hh,G4PreCompoundProton.hh, G4PreCompoundIon.hh, G4PreCompoundDeuteron.hh, G4PreCompoundTriton.hh ,G4PreCompoundHe3.hh , G4PreCompoundAlpha.hh
+
+
+Soft cutoff transition from equilibrium to equilibrium has been suppressed (unphysical and not necessary anymore).In G4PreCompoundModel. 
+
+New transition probabilities :
+        OPT=1  Gudima's formulae
+        OPT=2  Machner parameterization of matrix elements for transitions (DEFAULT)
+  
+Level density is set to A/10 (Gudima's prescription). 
+
+Several bugs fixed (average xs in nucleon-nucleon xs in G4PreCompundTransitions.cc and  emission probability formula in G4PreCompoundIon.cc ) .  
+
 25-October 2007 A.Howard     hadr-pre-V09-00-04
 -----------------------------------------------
 - Removed compilation warning on unused parameter in G4PreCompoundIon.cc

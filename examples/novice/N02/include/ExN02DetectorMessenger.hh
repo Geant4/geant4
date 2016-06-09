@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: ExN02DetectorMessenger.hh,v 1.8 2006/06/29 17:47:33 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: ExN02DetectorMessenger.hh,v 1.9 2008/09/22 16:41:20 maire Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -59,6 +59,7 @@ class ExN02DetectorMessenger: public G4UImessenger
     G4UIcmdWithAString*        TargMatCmd;
     G4UIcmdWithAString*        ChamMatCmd;    
     G4UIcmdWithADoubleAndUnit* FieldCmd;
+    G4UIcmdWithADoubleAndUnit* StepMaxCmd;    
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

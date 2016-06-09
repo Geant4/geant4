@@ -1,0 +1,67 @@
+:P POSX 8.
+:P A_H 1.00797 
+:P A_O 15.9994
+
+// Define single elements
+:ELEM Hydrogen H 1. $A_H
+
+// Define elements from isotopes
+:ISOT N 7 14 14.0031 
+:ISOT N_2 7 15 15.0001 
+:ELEM_FROM_ISOT Nytrogen N 2
+   N 0.99632
+   N_2 0.00368
+
+:ISOT O 8 16 15.9949 
+:ISOT O_2 8 17 16.9991 
+:ISOT O_3 8 18 17.9992 
+:ELEM_FROM_ISOT Oxygen O 3
+   O 0.99757
+   O_2 0.00038
+   O_3 0.00205
+
+// Define single material 
+:MATE Hydrogen 1 1. 8.37480e-5
+
+// Define material mixtures
+// Define material mixture of elements by weight 
+:MIXT WaterW_EE 1. 2   // Use Hydrogen element built here and Oxygen element from GEANT4 NIST
+   Hydrogen  2.*$A_H/(2.*$A_H+$A_O)
+   O      $A_O/(2.*$A_H+$A_O)
+
+// Define material mixture of element and material by weight 
+:MIXT WaterW_EM 1. 2 // Use Hydrogen element built here and Oxygen material from GEANT4 NIST
+   Hydrogen  2.*$A_H/(2.*$A_H+$A_O)
+   G4_O      $A_O/(2.*$A_H+$A_O)
+
+// Define material mixture of elements by number of atoms
+:MIXT_BY_NATOMS WaterNA 1 2
+   Hydrogen   2
+   Oxygen     1
+
+// Define material mixture of material mixtures
+:MIXT_BY_NATOMS  CO2  1.8182E-3  2
+   C  1 
+   O  2
+
+:MIXT_BY_VOLUME H-CO2 (1.214E-03+1.8182E-3)/2. 2 // Use Hydrogen material (MIXT_BY_VOLUME does not use elements)
+   Hydrogen 0.5
+   CO2 0.5
+
+
+// Use materials (if a material is not used it will not be created as a Geant4 object)
+:ROTM R00 90. 0. 90. 90. 0. 0.
+
+:VOLU world BOX 100. 100. 100. WaterW_EE
+
+:VOLU "my tube" TUBS 0. 10. 20. 0. 360. WaterW_EM
+:PLACE "my tube" 1 world R00 0. 0. $POSX
+
+:VOLU sphere ORB 5.  WaterNA
+:PLACE sphere 1 "my tube" R00 0. 1. $POSX
+
+:VOLU sphere2 ORB 5.  H-CO2
+:PLACE sphere2 1 "my tube" R00 0. 1. -$POSX
+
+// Switch on overlap checking for all volumes
+:CHECK_OVERLAPS * ON

@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4VQCrossSection.hh,v 1.9 2007/11/15 09:36:43 mkossov Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 //
 // GEANT4 virtual class: G4VQCrossSection -- header file

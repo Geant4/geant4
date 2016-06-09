@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MultiNavigator.cc,v 1.7 2007/11/02 13:48:43 japost Exp $
+// $Id: G4MultiNavigator.cc,v 1.8 2008/10/24 14:00:03 gcosmo Exp $
 // GEANT4 tag $ Name:  $
 // 
 // class G4PathFinder Implementation
@@ -422,7 +422,8 @@ G4MultiNavigator::LocateGlobalPointWithinVolume(const G4ThreeVector& position)
 // ----------------------------------------------------------------------
 
 G4double G4MultiNavigator::ComputeSafety( const G4ThreeVector& position,
-                                                G4double       maxDistance)
+                                          const G4double       maxDistance,
+                                          const G4bool         state)
 {
     // Recompute safety for the relevant point
 
@@ -433,7 +434,7 @@ G4double G4MultiNavigator::ComputeSafety( const G4ThreeVector& position,
 
     for( register int num=0; num< fNoActiveNavigators; ++pNavigatorIter,++num )
     {
-       safety = (*pNavigatorIter)->ComputeSafety( position, maxDistance );
+       safety = (*pNavigatorIter)->ComputeSafety( position, maxDistance, state);
        if( safety < minSafety ) { minSafety = safety; } 
     } 
 

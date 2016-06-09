@@ -1,0 +1,855 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE xs:schema>
+<xs:schema attributeFormDefault="unqualified" elementFormDefault="unqualified" version="1.0" xmlns:gdml="http://cern.ch/2001/Schemas/GDML" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:include schemaLocation="gdml_core.xsd"></xs:include>
+  <xs:include schemaLocation="gdml_define.xsd"></xs:include>
+  <xs:include schemaLocation="gdml_extensions.xsd"/>
+  <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+  
+  <xs:complexType name="SolidType">
+    <xs:annotation>
+      <xs:documentation>Base solid type</xs:documentation>
+    </xs:annotation>
+    <xs:attribute default="mm" name="lunit" type="xs:string">
+      <xs:annotation>
+	<xs:documentation>Length unit of all dimensions used for this instance of solid</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute default="radian" name="aunit" type="xs:string">
+      <xs:annotation>
+	<xs:documentation>Angle unit of angles used in definition of this solid</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="name" type="xs:ID" use="required"></xs:attribute>
+  </xs:complexType>
+  <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+  
+  <xs:complexType name="BooleanSolidType">
+    <xs:annotation>
+      <xs:documentation>Base type for boolean solids</xs:documentation>
+    </xs:annotation>
+    <xs:complexContent>
+      <xs:extension base="SolidType">
+	<xs:sequence>
+	  <xs:element name="first" type="ReferenceType"></xs:element>
+	  <xs:element name="second" type="ReferenceType"></xs:element>
+	  <xs:choice minOccurs="0">
+	    <xs:element name="position" type="positionType"></xs:element>
+	    <xs:element name="positionref" type="ReferenceType"></xs:element>
+	  </xs:choice>
+	  <xs:choice minOccurs="0">
+	    <xs:element name="rotation" type="rotationType"></xs:element>
+	    <xs:element name="rotationref" type="ReferenceType"></xs:element>
+	  </xs:choice>
+	  <xs:choice minOccurs="0">
+	    <xs:element name="firstposition" type="positionType"></xs:element>
+	    <xs:element name="firstpositionref" type="ReferenceType"></xs:element>
+	  </xs:choice>
+	  <xs:choice minOccurs="0">
+	    <xs:element name="firstrotation" type="rotationType"></xs:element>
+	    <xs:element name="firstrotationref" type="ReferenceType"></xs:element>
+	  </xs:choice>
+	</xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+
+  <xs:element name="reflectedSolid" substitutionGroup="Solid">
+    <xs:annotation>
+      <xs:documentation>Reflected solid: 
+        sx, sy, sz are scale components (containing reflection),
+        rx, ry, rz are rotation angles around given axes and 
+        dx, dy, dz is the translation.
+      </xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:complexContent>
+	<xs:extension base="SolidType">
+	  <xs:attribute name="solid" type="ExpressionOrIDREFType" use="required"></xs:attribute>
+	  <xs:attribute default="1.0" name="sx" type="ExpressionOrIDREFType"></xs:attribute>
+	  <xs:attribute default="1.0" name="sy" type="ExpressionOrIDREFType"></xs:attribute>
+	  <xs:attribute default="1.0" name="sz" type="ExpressionOrIDREFType"></xs:attribute>
+	  <xs:attribute default="0.0" name="rx" type="ExpressionOrIDREFType"></xs:attribute>
+	  <xs:attribute default="0.0" name="ry" type="ExpressionOrIDREFType"></xs:attribute>
+	  <xs:attribute default="0.0" name="rz" type="ExpressionOrIDREFType"></xs:attribute>
+	  <xs:attribute default="0.0" name="dx" type="ExpressionOrIDREFType"></xs:attribute>
+	  <xs:attribute default="0.0" name="dy" type="ExpressionOrIDREFType"></xs:attribute>
+	  <xs:attribute default="0.0" name="dz" type="ExpressionOrIDREFType"></xs:attribute>
+	</xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
+  </xs:element>
+  <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+
+  <xs:complexType name="SurfacePropertyType">
+    <xs:annotation>
+      <xs:documentation>Base surface type</xs:documentation>
+    </xs:annotation>
+    <xs:attribute name="name" type="xs:ID" use="required"></xs:attribute>
+    <xs:attribute name="type" type="xs:string" default="dielectric_dielectric"></xs:attribute>
+  </xs:complexType>
+  <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+  
+  <xs:element abstract="true" name="Solid" type="SolidType">
+    <xs:annotation>
+      <xs:documentation>Abstract element for all solids substitution group</xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+  
+  <xs:element abstract="true" name="SurfaceProperty" type="SurfacePropertyType">
+    <xs:annotation>
+      <xs:documentation>Abstract element for surfaces substitution</xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+  
+  <xs:element name="solids">
+    <xs:annotation>
+      <xs:documentation>Solids definitions block</xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:choice maxOccurs="unbounded">
+	<xs:element minOccurs="0" name="define" type="defineType">
+	  <xs:annotation>
+	    <xs:documentation>Definitions of constants and expressions to be used for solids'
+              dimensions and transformations
+              In this version these become part of the global scope.</xs:documentation>
+	  </xs:annotation>
+	</xs:element>
+	<xs:element maxOccurs="unbounded" ref="Solid"></xs:element>
+	<xs:element minOccurs="0" maxOccurs="unbounded" ref="SurfaceProperty"></xs:element>
+	<xs:element maxOccurs="unbounded" minOccurs="0" ref="loop"/>	
+      </xs:choice>
+    </xs:complexType>
+  </xs:element>
+  <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+  
+  <xs:element name="union" substitutionGroup="Solid" type="BooleanSolidType">
+    <xs:annotation>
+      <xs:documentation>Exported boolean union of two solids</xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+  
+  <xs:element name="subtraction" substitutionGroup="Solid" type="BooleanSolidType">
+    <xs:annotation>
+      <xs:documentation>Exported boolean subtraction of two solids</xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+  
+  <xs:element name="intersection" substitutionGroup="Solid" type="BooleanSolidType">
+    <xs:annotation>
+      <xs:documentation>Exported boolean intersectioin of two solids</xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+  
+  <xs:element name="box" substitutionGroup="Solid">
+    <xs:annotation>
+      <xs:documentation>CSG box solid described by 3 dimensions of x, y, and z</xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:complexContent>
+	<xs:extension base="SolidType">
+	  <xs:attribute name="x" type="ExpressionOrIDREFType" use="required"></xs:attribute>
+	  <xs:attribute name="y" type="ExpressionOrIDREFType" use="required"></xs:attribute>
+	  <xs:attribute name="z" type="ExpressionOrIDREFType" use="required"></xs:attribute>
+	</xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
+  </xs:element>
+<!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+
+  <xs:element name="twistedbox" substitutionGroup="Solid">
+    <xs:annotation>
+      <xs:documentation>CSG twisted box solid described by 4 dimensions of 
+	x  length along x axis
+	y  length along y axis
+	z  length along z axis
+	PhiTwist twist angle </xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:complexContent>
+	<xs:extension base="SolidType">
+	  <xs:attribute name="x" type="ExpressionOrIDREFType" use="required"></xs:attribute>
+	  <xs:attribute name="y" type="ExpressionOrIDREFType" use="required"></xs:attribute>
+	  <xs:attribute name="z" type="ExpressionOrIDREFType" use="required"></xs:attribute>
+	  <xs:attribute name="PhiTwist" type="ExpressionOrIDREFType" use="required"></xs:attribute>
+	</xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
+  </xs:element>
+  <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+
+  <xs:element name="twistedtrap" substitutionGroup="Solid">
+    <xs:annotation>
+      <xs:documentation>general twisted trapezoid. faces perpendicular to the z planes are trapezia, and their centres are 
+			not necessarily on a line paralell to the z axis.
+	PhiTwist Twist Angle
+	z     length along the z-axis
+	Theta  Polar angle of the line joining the centres of the faces at -/+z
+	Phi    Azimuthal angle of the line joing the centre of the face at -z to the centre of the face at +z
+	y1    length along y of the face at -z
+    	x1    length along x of the side at y=-y1 of the face at -z
+	x2    length along x of the side at y=+y1 of the face at -z
+	y2    length along y of the face at +z
+	x3    length along x of the side at y=-y2 of the face at +z
+	x4    length along x of the side at y=+y2 of the face at +z
+	Alph   Angle with respect to the y axis from the centre of the side </xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:complexContent>
+	<xs:extension base="SolidType">
+          <xs:attribute name="PhiTwist" type="ExpressionOrIDREFType" use="required"></xs:attribute>
+	  <xs:attribute name="z" type="ExpressionOrIDREFType" use="required"></xs:attribute>
+	  <xs:attribute name="Theta" type="ExpressionOrIDREFType" use="required"></xs:attribute>
+	  <xs:attribute name="Phi" type="ExpressionOrIDREFType" use="required"></xs:attribute>
+	  <xs:attribute name="y1" type="ExpressionOrIDREFType" use="required"></xs:attribute>
+	  <xs:attribute name="x1" type="ExpressionOrIDREFType" use="required"></xs:attribute>
+	  <xs:attribute name="y2" type="ExpressionOrIDREFType" use="required"></xs:attribute>
+	  <xs:attribute name="x2" type="ExpressionOrIDREFType" use="required"></xs:attribute>
+	  <xs:attribute name="x3" type="ExpressionOrIDREFType" use="required"></xs:attribute>
+	  <xs:attribute name="x4" type="ExpressionOrIDREFType" use="required"></xs:attribute>
+          <xs:attribute name="Alph" type="ExpressionOrIDREFType" use="required"></xs:attribute>
+	</xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
+  </xs:element>
+  <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+
+  <xs:element name="twistedtrd" substitutionGroup="Solid">
+    <xs:annotation>
+      <xs:documentation>different length axis twistable trapezoid. faces perpendicular to the z planes are trapezia, and their centres are 
+			not necessarily on a line paralell to the z axis.
+	PhiTwist Twist Angle
+	z     length along the z-axis
+	y1    length along y of the face at -z
+    	x1    length along x of the side at y=-y1 of the face at -z
+	x2    length along x of the side at y=+y1 of the face at -z
+	y2    length along y of the face at +z </xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:complexContent>
+	<xs:extension base="SolidType">
+          <xs:attribute name="PhiTwist" type="ExpressionOrIDREFType" use="required"></xs:attribute>
+	  <xs:attribute name="z" type="ExpressionOrIDREFType" use="required"></xs:attribute>
+	  <xs:attribute name="y1" type="ExpressionOrIDREFType" use="required"></xs:attribute>
+	  <xs:attribute name="x1" type="ExpressionOrIDREFType" use="required"></xs:attribute>
+	  <xs:attribute name="y2" type="ExpressionOrIDREFType" use="required"></xs:attribute>
+	  <xs:attribute name="x2" type="ExpressionOrIDREFType" use="required"></xs:attribute>
+	</xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
+  </xs:element>
+  <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+  
+  <xs:element name="paraboloid" substitutionGroup="Solid">
+    <xs:annotation>
+      <xs:documentation>CSG paraboloid defined by
+       rlo         radius at -dz
+       rhi         radius at +dz
+       dz          half z length
+      </xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:complexContent>
+	<xs:extension base="SolidType">
+	  <xs:attribute name="rlo" type="ExpressionOrIDREFType" use="required"></xs:attribute>
+	  <xs:attribute name="rhi" type="ExpressionOrIDREFType" use="required"></xs:attribute>
+	  <xs:attribute name="dz" type="ExpressionOrIDREFType" use="required"></xs:attribute>
+	</xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
+  </xs:element>
+  <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+
+  <xs:element name="sphere" substitutionGroup="Solid">
+    <xs:annotation>
+      <xs:documentation>CSG sphere or spherical shell segment solid described by
+        rmin        inner radius
+        rmax        outer radius
+        startphi    starting angle of the segment in radians(0 &lt;= phi &lt;= 2*PI)
+        deltaphi    delta angle of the segment in radians
+        starttheta  starting angle of the segment in radians(0 &lt;= theta &lt;= PI)
+        deltatheta  delta angle of the segment in radians
+      </xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:complexContent>
+	<xs:extension base="SolidType">
+	  <xs:attribute default="0.0" name="rmin" type="ExpressionOrIDREFType"></xs:attribute>
+	  <xs:attribute name="rmax" type="ExpressionOrIDREFType" use="required"></xs:attribute>
+	  <xs:attribute default="0.0" name="startphi" type="ExpressionOrIDREFType"></xs:attribute>
+	  <xs:attribute name="deltaphi" type="ExpressionOrIDREFType" use="required"></xs:attribute>
+	  <xs:attribute default="0.0" name="starttheta" type="ExpressionOrIDREFType"></xs:attribute>
+	  <xs:attribute name="deltatheta" type="ExpressionOrIDREFType" use="required"></xs:attribute>
+	</xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
+  </xs:element>
+  <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+
+  <xs:element name="ellipsoid" substitutionGroup="Solid">
+    <xs:annotation>
+      <xs:documentation>CSG ellispoid or ellipsoidal shell segment solid described by
+        ax         x semiaxis
+        by         y semiaxis
+	cz	   z semiaxis
+        zcut1      bottom plane cutting ellipsoid
+        zcut2      top plane cutting ellispoid
+      </xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:complexContent>
+	<xs:extension base="SolidType">
+	  <xs:attribute name="ax" type="ExpressionOrIDREFType" use="required"></xs:attribute>
+	  <xs:attribute name="by" type="ExpressionOrIDREFType" use="required"></xs:attribute>
+	  <xs:attribute name="cz" type="ExpressionOrIDREFType" use="required"></xs:attribute>
+	  <xs:attribute default="-1000000.0" name="zcut1" type="ExpressionOrIDREFType"></xs:attribute>
+	  <xs:attribute default="1000000.0" name="zcut2" type="ExpressionOrIDREFType"></xs:attribute>
+	</xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
+  </xs:element>
+  <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+
+  <xs:element name="tube" substitutionGroup="Solid">
+    <xs:annotation>
+      <xs:documentation>CSG tube or tube segement solid described by
+	rmin      Inner radius
+        rmax      Outer radius
+        z         length in z
+        startphi  The starting phi angle in radians, adjusted such that
+        (startphi+deltaphi &lt;= 2PI, startphi &gt; -2PI)
+        deltaphi  Delta angle of the segment in radians</xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:complexContent>
+	<xs:extension base="SolidType">
+	  <xs:attribute name="z" type="ExpressionOrIDREFType"></xs:attribute>
+	  <xs:attribute default="0.0" name="rmin" type="ExpressionOrIDREFType"></xs:attribute>
+	  <xs:attribute name="rmax" type="ExpressionOrIDREFType" use="required"></xs:attribute>
+	  <xs:attribute default="0.0" name="startphi" type="ExpressionOrIDREFType"></xs:attribute>
+	  <xs:attribute name="deltaphi" type="ExpressionOrIDREFType" use="required"></xs:attribute>
+	</xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
+  </xs:element>
+ <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+
+  <xs:element name="twistedtubs" substitutionGroup="Solid">
+    <xs:annotation>
+      <xs:documentation>CSG twisted tube segement solid described by
+	twistedangle	twist angle
+	endinnerrad	inside radius at end of segment
+	endouterrad	outside radius at end of segment
+	zlen		z length of segment
+	phi		phi angle of a segment </xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:complexContent>
+	<xs:extension base="SolidType">
+	  <xs:attribute name="twistedangle" type="ExpressionOrIDREFType" use="required"></xs:attribute>
+	  <xs:attribute name="endinnerrad" type="ExpressionOrIDREFType" use="required"></xs:attribute>
+	  <xs:attribute name="endouterrad" type="ExpressionOrIDREFType" use="required"></xs:attribute>
+	  <xs:attribute name="zlen" type="ExpressionOrIDREFType" use="required"></xs:attribute>
+	  <xs:attribute name="phi" type="ExpressionOrIDREFType" use="required"></xs:attribute>
+	</xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
+  </xs:element>
+  <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+
+  <xs:element name="cutTube" substitutionGroup="Solid">
+    <xs:annotation>
+      <xs:documentation>CSG cut tube or cut tube segment solid described by
+	rmin                    Inner radius
+        rmax                    Outer radius
+        z                       length in z
+        startphi                The starting phi angle in radians, adjusted such that (startphi+deltaphi &lt;= 2PI, startphi &gt; -2PI)
+        deltaphi                Delta angle of the segment in radians
+	lowX, lowY, lowZ        Normal at lower Z plane
+	highX, highY, highZ     Normal at higher Z plane
+      </xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:complexContent>
+	<xs:extension base="SolidType">
+	  <xs:attribute name="z" type="ExpressionOrIDREFType"></xs:attribute>
+	  <xs:attribute default="0.0" name="rmin" type="ExpressionOrIDREFType"></xs:attribute>
+	  <xs:attribute name="rmax" type="ExpressionOrIDREFType" use="required"></xs:attribute>
+	  <xs:attribute default="0.0" name="startphi" type="ExpressionOrIDREFType"></xs:attribute>
+	  <xs:attribute name="deltaphi" type="ExpressionOrIDREFType" use="required"></xs:attribute>
+	  <xs:attribute name="lowX" type="ExpressionOrIDREFType" use="required"></xs:attribute>
+	  <xs:attribute name="lowY" type="ExpressionOrIDREFType" use="required"></xs:attribute>
+	  <xs:attribute name="lowZ" type="ExpressionOrIDREFType" use="required"></xs:attribute>
+	  <xs:attribute name="highX" type="ExpressionOrIDREFType" use="required"></xs:attribute>
+	  <xs:attribute name="highY" type="ExpressionOrIDREFType" use="required"></xs:attribute>
+	  <xs:attribute name="highZ" type="ExpressionOrIDREFType" use="required"></xs:attribute>
+	</xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
+  </xs:element>
+  <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+
+  <xs:element name="cone" substitutionGroup="Solid">
+    <xs:annotation>
+      <xs:documentation>CSG cone or cone segment described by
+        rmin1    inside radius at  z/2
+        rmin2    inside radius at  z/2
+        rmax1    outside radius at z/2
+        rmax2    outside radius at z/2
+        z        length in z
+        startphi starting angle of the segment in radians
+        deltaphi delta angle of the segment in radians</xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:complexContent>
+	<xs:extension base="SolidType">
+	  <xs:attribute name="z" type="ExpressionOrIDREFType" use="required"></xs:attribute>
+	  <xs:attribute default="0.0" name="rmin1" type="ExpressionOrIDREFType"></xs:attribute>
+	  <xs:attribute default="0.0" name="rmin2" type="ExpressionOrIDREFType"></xs:attribute>
+	  <xs:attribute name="rmax1" type="ExpressionOrIDREFType" use="required"></xs:attribute>
+	  <xs:attribute name="rmax2" type="ExpressionOrIDREFType" use="required"></xs:attribute>
+	  <xs:attribute default="0.0" name="startphi" type="ExpressionOrIDREFType"></xs:attribute>
+	  <xs:attribute name="deltaphi" type="ExpressionOrIDREFType" use="required"></xs:attribute>
+	</xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
+  </xs:element>
+  <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+
+  <xs:element name="elcone" substitutionGroup="Solid">
+    <xs:annotation>
+      <xs:documentation>CSG  cone with elliptical cross section 
+        dx    semiaxis in X
+        dy    semiaxis in Y
+        zmax  height of elliptical cone
+        zcut  upper cut plane level
+      </xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:complexContent>
+	<xs:extension base="SolidType">
+	  <xs:attribute name="dx" type="ExpressionOrIDREFType"></xs:attribute>
+	  <xs:attribute name="dy" type="ExpressionOrIDREFType"></xs:attribute>
+	  <xs:attribute name="zmax" type="ExpressionOrIDREFType" use="required"></xs:attribute>
+	  <xs:attribute name="zcut" type="ExpressionOrIDREFType" use="required"></xs:attribute>
+	 </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
+  </xs:element>
+  <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+  
+  <xs:element name="polycone" substitutionGroup="Solid">
+    <xs:annotation>
+      <xs:documentation>CSG polycone or polycone segment described by
+        startphi starting angle of the segment in radians
+        deltaphi delta angle of the segment in radians
+	
+	and a set of z-planes each described by
+        rmin     inside radius at  z/2
+        rmax     outside radius at z/2
+        z        length in z
+      </xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:complexContent>
+	<xs:extension base="SolidType">
+	  <xs:sequence>
+	    <xs:element name="zplane" minOccurs="1" maxOccurs="unbounded" type="ZPlaneType"/>	
+	  </xs:sequence>
+	  <xs:attribute name="deltaphi" type="ExpressionOrIDREFType" use="required"></xs:attribute>
+	  <xs:attribute default="0.0" name="startphi" type="ExpressionOrIDREFType"></xs:attribute>
+	</xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
+  </xs:element>  
+  <!-- +++++++++++++ -->
+  <xs:complexType name="ZPlaneType">
+    <xs:attribute name="z" type="ExpressionOrIDREFType" use="required"></xs:attribute>
+    <xs:attribute default="0.0" name="rmin" type="ExpressionOrIDREFType"></xs:attribute>
+    <xs:attribute name="rmax" type="ExpressionOrIDREFType" use="required"></xs:attribute>
+  </xs:complexType>
+  <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+  
+  <xs:element name="para" substitutionGroup="Solid">
+    <xs:annotation>
+      <xs:documentation>CSG parallelepiped solid is described by
+        x, y, z  length in x,y,z
+        alpha    Angle formed by the y axis and by the plane joining the centre of the faces
+        G4Parallel to the z-x plane at -y and +y
+        theta    Polar angle of the line joining the centres of the faces at -z and +z in z
+        phi      Azimuthal angle of the line joining the centres of the faces at -z and +z in z</xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:complexContent>
+	<xs:extension base="SolidType">
+	  <xs:attribute name="x" type="ExpressionOrIDREFType" use="required"></xs:attribute>
+	  <xs:attribute name="y" type="ExpressionOrIDREFType" use="required"></xs:attribute>
+	  <xs:attribute name="z" type="ExpressionOrIDREFType" use="required"></xs:attribute>
+	  <xs:attribute name="alpha" type="ExpressionOrIDREFType" use="required"></xs:attribute>
+	  <xs:attribute name="theta" type="ExpressionOrIDREFType" use="required"></xs:attribute>
+	  <xs:attribute name="phi" type="ExpressionOrIDREFType" use="required"></xs:attribute>
+	</xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
+  </xs:element>
+  <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+  
+  <xs:element name="trd" substitutionGroup="Solid">
+    <xs:annotation>
+      <xs:documentation>CSG trapezoid solid with varying x and y dimensions along z axis
+        x1 Length along x at the surface positioned at -z
+        x2 Length along x at the surface positioned at +z
+        y1 Length along y at the surface positioned at -z
+        y2 Length along y at the surface positioned at +z
+        z  Length along z axis</xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:complexContent>
+	<xs:extension base="SolidType">
+	  <xs:attribute name="x1" type="ExpressionOrIDREFType" use="required"></xs:attribute>
+	  <xs:attribute name="x2" type="ExpressionOrIDREFType" use="required"></xs:attribute>
+	  <xs:attribute name="y1" type="ExpressionOrIDREFType" use="required"></xs:attribute>
+	  <xs:attribute name="y2" type="ExpressionOrIDREFType" use="required"></xs:attribute>
+	  <xs:attribute name="z" type="ExpressionOrIDREFType" use="required"></xs:attribute>
+	</xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
+  </xs:element>
+  <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+
+  <xs:element name="trap" substitutionGroup="Solid">
+    <xs:annotation>
+      <xs:documentation>CSG general trapezoid solid is described by
+        z      Length along the z-axis
+        theta  Polar angle of the line joining the centres of the faces at -/+z
+        phi    Azimuthal angle of the line joing the centre of the face at -z to the centre of the face at +z
+        y1     Length along y of the face at -z
+        x1     Length along x of the side at y = -y1 of the face at -z
+        x2     Length along x of the side at y = +y1 of the face at -z
+        alp1   Angle with respect to the y axis from the centre of the side at y =- y1 to the centre at y = +y1 of the face at -z
+        y2     Length along y of the face at +z
+        x3     Length along x of the side at y = -y2 of the face at +z
+        x4     Length along x of the side at y = +y2 of the face at +z
+        alp2   Angle with respect to the y axis from the centre of the side at y = -y2 to the centre at y = +y2 of the face at +z</xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:complexContent>
+	<xs:extension base="SolidType">
+	  <xs:attribute name="z" type="ExpressionOrIDREFType" use="required"></xs:attribute>
+	  <xs:attribute name="theta" type="ExpressionOrIDREFType" use="required"></xs:attribute>
+	  <xs:attribute name="phi" type="ExpressionOrIDREFType" use="required"></xs:attribute>
+	  <xs:attribute name="y1" type="ExpressionOrIDREFType" use="required"></xs:attribute>
+	  <xs:attribute name="x1" type="ExpressionOrIDREFType" use="required"></xs:attribute>
+	  <xs:attribute name="x2" type="ExpressionOrIDREFType" use="required"></xs:attribute>
+	  <xs:attribute name="alpha1" type="ExpressionOrIDREFType" use="required"></xs:attribute>
+	  <xs:attribute name="y2" type="ExpressionOrIDREFType" use="required"></xs:attribute>
+	  <xs:attribute name="x3" type="ExpressionOrIDREFType" use="required"></xs:attribute>
+	  <xs:attribute name="x4" type="ExpressionOrIDREFType" use="required"></xs:attribute>
+	  <xs:attribute name="alpha2" type="ExpressionOrIDREFType" use="required"></xs:attribute>
+	</xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
+  </xs:element>
+  <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+  
+  <xs:element name="torus" substitutionGroup="Solid">
+    <xs:annotation>
+      <xs:documentation>CSG torus solid is described by
+	rmin  Inside radius
+	rmax  Outside radius
+	rtor  swept radius of torus
+	startphi  The starting phi angle in radians adjusted such that sphi+dphi lt 2PI, sphi gt -2PI
+	deltaphi  Delta angle of the segment in radians
+      </xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:complexContent>
+	<xs:extension base="SolidType">
+	  <xs:attribute name="rmin" type="ExpressionOrIDREFType" use="required"></xs:attribute>
+	  <xs:attribute name="rmax" type="ExpressionOrIDREFType" use="required"></xs:attribute>
+	  <xs:attribute name="rtor" type="ExpressionOrIDREFType" use="required"></xs:attribute>
+	  <xs:attribute name="startphi" type="ExpressionOrIDREFType" use="required"></xs:attribute>
+	  <xs:attribute name="deltaphi" type="ExpressionOrIDREFType" use="required"></xs:attribute>
+	</xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
+  </xs:element>
+  <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+  
+  <xs:element name="orb" substitutionGroup="Solid">
+    <xs:annotation>
+      <xs:documentation>CSG orb solid (simplified sphere with only rmax) is described by
+	r  Outside radius</xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:complexContent>
+	<xs:extension base="SolidType">
+	  <xs:attribute name="r" type="ExpressionOrIDREFType" use="required"></xs:attribute>
+	</xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
+  </xs:element>
+  <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+  
+  <xs:element name="polyhedra" substitutionGroup="Solid">
+    <xs:annotation>
+      <xs:documentation>Polyhedra is described by
+	startphi     initial phi starting angle
+	totalphi     total phi angle
+	numsides  number sides
+	and a set of zplanes.</xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:complexContent>
+	<xs:extension base="SolidType">
+	  <xs:sequence>
+	    <xs:element name="zplane" minOccurs="1" maxOccurs="unbounded" type="ZPlaneType"/>	
+	  </xs:sequence>
+	  
+	  <xs:attribute name="startphi" type="ExpressionOrIDREFType" use="required"></xs:attribute>
+	  <xs:attribute name="deltaphi" type="ExpressionOrIDREFType" use="required"></xs:attribute>
+	  <xs:attribute name="numsides" type="ExpressionOrIDREFType" use="required"></xs:attribute>
+	</xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
+  </xs:element>	
+  <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+  
+  <xs:complexType name="TwoDimVertexType">
+    <xs:attribute name="x" type="ExpressionOrIDREFType" use="required"></xs:attribute>
+    <xs:attribute name="y" type="ExpressionOrIDREFType" use="required"></xs:attribute>
+  </xs:complexType>
+  
+  <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+    
+  <xs:complexType name="SectionType">
+    <xs:attribute name="zOrder" type="ExpressionOrIDREFType" use="required"></xs:attribute>
+    <xs:attribute name="zPosition" type="ExpressionOrIDREFType" use="required"></xs:attribute>
+    <xs:attribute name="xOffset" type="ExpressionOrIDREFType" use="required"></xs:attribute>
+    <xs:attribute name="yOffset" type="ExpressionOrIDREFType" use="required"></xs:attribute>
+    <xs:attribute name="scalingFactor" type="ExpressionOrIDREFType" use="required"></xs:attribute>
+  </xs:complexType>  
+  <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+  
+  <xs:element name="xtru" substitutionGroup="Solid">
+    <xs:annotation>
+      <xs:documentation>Poligonal extrusion is described by
+	an unbounded (min. 3) number of vertices of the blueprint polygon
+	and an unbounded number of Z sections.
+      </xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:complexContent>
+	<xs:extension base="SolidType">
+	  <xs:sequence>
+	    <xs:sequence>
+	      <xs:element name="twoDimVertex" minOccurs="3" maxOccurs="unbounded" type="TwoDimVertexType"/>	
+            </xs:sequence>
+	    <xs:sequence>
+	      <xs:element name="section" minOccurs="2" maxOccurs="unbounded" type="SectionType"/>	
+	    </xs:sequence>
+	  </xs:sequence>
+	</xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
+  </xs:element>	
+  <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+  
+  <xs:element name="hype" substitutionGroup="Solid">
+    <xs:annotation>
+      <xs:documentation>Tube with hyperbolic profile described by
+	rmin    innerRadius
+	rmax    outerRadius
+	inst    innerStereo
+	outst   outerStereo
+        z       z length
+      </xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:complexContent>
+	<xs:extension base="SolidType">
+	  <xs:attribute name="rmin" type="ExpressionOrIDREFType" use="required"></xs:attribute>
+	  <xs:attribute name="rmax" type="ExpressionOrIDREFType" use="required"></xs:attribute>
+	  <xs:attribute name="inst" type="ExpressionOrIDREFType" use="required"></xs:attribute>
+	  <xs:attribute name="outst" type="ExpressionOrIDREFType" use="required"></xs:attribute>
+	  <xs:attribute name="z" type="ExpressionOrIDREFType" use="required"></xs:attribute>
+	</xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
+  </xs:element>
+  <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+  
+  <xs:element name="eltube" substitutionGroup="Solid">
+    <xs:annotation>
+      <xs:documentation>
+	Volume representing a tube with elliptical
+	cross section.
+      </xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:complexContent>
+	<xs:extension base="SolidType">
+	  <xs:attribute name="dx" type="ExpressionOrIDREFType" use="required"></xs:attribute>
+	  <xs:attribute name="dy" type="ExpressionOrIDREFType" use="required"></xs:attribute>
+	  <xs:attribute name="dz" type="ExpressionOrIDREFType" use="required"></xs:attribute>
+	</xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
+  </xs:element>  
+  <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+
+  <xs:element name="tet" substitutionGroup="Solid">
+    <xs:annotation>
+      <xs:documentation>
+	Volume representing a tetrahedron.
+      </xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:complexContent>
+	<xs:extension base="SolidType">
+ 	 <xs:attribute name="vertex1" type="ExpressionOrIDREFType" use="required"></xs:attribute>
+	 <xs:attribute name="vertex2" type="ExpressionOrIDREFType" use="required"></xs:attribute>
+	 <xs:attribute name="vertex3" type="ExpressionOrIDREFType" use="required"></xs:attribute>
+	 <xs:attribute name="vertex4" type="ExpressionOrIDREFType" use="required"></xs:attribute>
+	</xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
+  </xs:element>  
+  <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+
+  <xs:element name="arb8" substitutionGroup="Solid">
+    <xs:annotation>
+      <xs:documentation>
+	Volume representing an (almost)arbitrary 8 vertices solid.
+	The solid is defined by two quadrilaterals sitting on parallel planes,
+	the distance between these two planes is dz*2.
+	The base quadrilateral contained within the plane located at -dz is defined by
+	the first 4 vertices (v1,v2,v3,v4 each one with the x and y coordinates).
+	The other parallel quadrilateral contained within the plane at +dz is defined by
+	the other 4 vertices (v5,v6,v7,v8 each one with the x and y coordinates).
+      </xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:complexContent>
+	<xs:extension base="SolidType">
+ 	 <xs:attribute name="v1x" type="ExpressionOrIDREFType" use="required"></xs:attribute>
+	 <xs:attribute name="v1y" type="ExpressionOrIDREFType" use="required"></xs:attribute>
+	 <xs:attribute name="v2x" type="ExpressionOrIDREFType" use="required"></xs:attribute>
+	 <xs:attribute name="v2y" type="ExpressionOrIDREFType" use="required"></xs:attribute>
+	 <xs:attribute name="v3x" type="ExpressionOrIDREFType" use="required"></xs:attribute>
+	 <xs:attribute name="v3y" type="ExpressionOrIDREFType" use="required"></xs:attribute>
+	 <xs:attribute name="v4x" type="ExpressionOrIDREFType" use="required"></xs:attribute>
+	 <xs:attribute name="v4y" type="ExpressionOrIDREFType" use="required"></xs:attribute>
+	 <xs:attribute name="v5x" type="ExpressionOrIDREFType" use="required"></xs:attribute>
+	 <xs:attribute name="v5y" type="ExpressionOrIDREFType" use="required"></xs:attribute>
+	 <xs:attribute name="v6x" type="ExpressionOrIDREFType" use="required"></xs:attribute>
+	 <xs:attribute name="v6y" type="ExpressionOrIDREFType" use="required"></xs:attribute>
+	 <xs:attribute name="v7x" type="ExpressionOrIDREFType" use="required"></xs:attribute>
+	 <xs:attribute name="v7y" type="ExpressionOrIDREFType" use="required"></xs:attribute>
+	 <xs:attribute name="v8x" type="ExpressionOrIDREFType" use="required"></xs:attribute>
+	 <xs:attribute name="v8y" type="ExpressionOrIDREFType" use="required"></xs:attribute>
+	 <xs:attribute name="dz" type="ExpressionOrIDREFType" use="required"></xs:attribute>
+	</xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
+  </xs:element>     
+  <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+
+  <!-- Tessellated solid elements -->  
+
+  <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->  
+
+  <xs:complexType name="FacetType">
+    <xs:annotation>
+      <xs:documentation>Base facet type</xs:documentation>
+    </xs:annotation>
+  </xs:complexType>
+  <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+
+  <xs:element abstract="true" name="Facet" type="FacetType">
+    <xs:annotation>
+      <xs:documentation>Abstract element for all facets substitution group</xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+
+  <xs:element name="triangular" substitutionGroup="Facet">
+    <xs:annotation>
+      <xs:documentation>
+      Triangular facet.
+      </xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:complexContent>
+	<xs:extension base="FacetType">
+	<xs:attribute name="vertex1" type="ExpressionOrIDREFType" use="required"></xs:attribute>
+	<xs:attribute name="vertex2" type="ExpressionOrIDREFType" use="required"></xs:attribute>
+	<xs:attribute name="vertex3" type="ExpressionOrIDREFType" use="required"></xs:attribute>
+	<xs:attribute name="type" type="xs:string" default="ABSOLUTE"></xs:attribute>
+	</xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
+  </xs:element>  
+
+  <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+
+  <xs:element name="quadrangular" substitutionGroup="Facet">
+    <xs:annotation>
+      <xs:documentation>
+      Quadrangular facet.
+      </xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:complexContent>
+	<xs:extension base="FacetType">
+	<xs:attribute name="vertex1" type="ExpressionOrIDREFType" use="required"></xs:attribute>
+	<xs:attribute name="vertex2" type="ExpressionOrIDREFType" use="required"></xs:attribute>
+	<xs:attribute name="vertex3" type="ExpressionOrIDREFType" use="required"></xs:attribute>
+	<xs:attribute name="vertex4" type="ExpressionOrIDREFType" use="required"></xs:attribute>
+	<xs:attribute name="type" type="xs:string" default="ABSOLUTE"></xs:attribute>
+	</xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
+  </xs:element>  
+  <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+
+  <xs:element name="tessellated" substitutionGroup="Solid">
+    <xs:annotation>
+      <xs:documentation>Tessellated solid	
+      </xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:complexContent>
+	<xs:extension base="SolidType">
+	  <xs:sequence>
+	    <xs:element name="Facet" minOccurs="1" maxOccurs="unbounded" type="FacetType"/>	
+	  </xs:sequence>
+	</xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
+  </xs:element>
+  <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->  
+
+  <xs:element name="opticalsurface" substitutionGroup="SurfaceProperty">
+    <xs:annotation>
+      <xs:documentation>Optical surface used by Geant4 optical processes</xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:complexContent>
+	<xs:extension base="SurfacePropertyType">
+	  <xs:attribute name="model" type="xs:string" default="glisur"></xs:attribute>
+	  <xs:attribute name="finish" type="xs:string" default="polished"></xs:attribute>
+	  <xs:attribute name="value" type="xs:string" default="1.0"></xs:attribute>
+	</xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
+  </xs:element>
+  <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->  
+
+</xs:schema>

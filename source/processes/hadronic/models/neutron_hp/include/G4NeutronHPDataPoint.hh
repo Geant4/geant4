@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4NeutronHPDataPoint.hh,v 1.8 2006/06/29 20:47:13 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 #ifndef G4NeutronHPDataPoint_h
 #define G4NeutronHPDataPoint_h 1

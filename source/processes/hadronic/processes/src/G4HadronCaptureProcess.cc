@@ -39,49 +39,26 @@
 // G4CrossSectionDataSet/DataStore class design.
 // 29-JUN-98 FWJ: default data set G4HadronCrossSections
 // design re-done removing most of the original parts: JPW 2003.
+// 01-SEP-2008 V.Ivanchenko: use methods from the base class
 
 
 #include "G4HadronCaptureProcess.hh"
+#include "G4Neutron.hh"
+#include "G4HadronCaptureDataSet.hh"
 
 G4HadronCaptureProcess::G4HadronCaptureProcess(const G4String& processName) : 
    G4HadronicProcess(processName)
 {
-   G4HadronicProcess::AddDataSet(new G4HadronCaptureDataSet);
+  SetProcessSubType(fCapture);
+  G4HadronicProcess::AddDataSet(new G4HadronCaptureDataSet());
 }
 
 G4HadronCaptureProcess::~G4HadronCaptureProcess()
 {
 }
 
-
-G4double G4HadronCaptureProcess::
-GetMicroscopicCrossSection(const G4DynamicParticle* aParticle,
-                           const G4Element* anElement, G4double aTemp)
-{
-   // gives the microscopic cross section in GEANT4 internal units
-   if (!G4HadronicProcess::GetCrossSectionDataStore()) {
-      G4Exception("G4HadronCaptureProcess", "007", FatalException, 
-                  "G4HadronCaptureProcess: no cross section data Store");
-      return DBL_MIN;
-   }
-   return G4HadronicProcess::GetCrossSectionDataStore()
-            ->GetCrossSection(aParticle, anElement, aTemp);
-} 
 G4bool
 G4HadronCaptureProcess::IsApplicable(const G4ParticleDefinition& aParticleType)
 {
-   return (aParticleType == *(G4Neutron::Neutron()));
-}
-
-
-void G4HadronCaptureProcess::
-DumpPhysicsTable(const G4ParticleDefinition& aParticleType)
-{
-   if (!G4HadronicProcess::GetCrossSectionDataStore()) {
-      G4Exception("G4HadronCaptureProcess", "007", FatalException, 
-                  "G4HadronCaptureProcess: no cross section data set");
-      return;
-   }
-   G4HadronicProcess::GetCrossSectionDataStore()
-      ->DumpPhysicsTable(aParticleType);
+  return (&aParticleType == G4Neutron::Neutron());
 }

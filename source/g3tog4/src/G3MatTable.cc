@@ -25,7 +25,7 @@
 //
 //
 // $Id: G3MatTable.cc,v 1.16 2006/06/29 18:12:57 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // by I.Hrivnacova, 27 Sep 99
 

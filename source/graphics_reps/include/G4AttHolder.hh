@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // $Id: G4AttHolder.hh,v 1.6 2007/06/08 14:24:29 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// GEANT4 tag $Name: geant4-09-02 $
 
 #ifndef G4ATTHOLDER_HH
 #define G4ATTHOLDER_HH

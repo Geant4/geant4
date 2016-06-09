@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIcommandTree.cc,v 1.13 2006/06/29 19:08:58 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4UIcommandTree.cc,v 1.14 2008/01/30 11:20:03 lgarnier Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 
 #include "G4UIcommandTree.hh"
@@ -155,6 +155,9 @@ void G4UIcommandTree::RemoveCommand(G4UIcommand *aCommand)
   }
 }
 
+// L. Garnier 01.28.08 This function has not a good name. In fact, it try
+// to match a command name, not a path. It should be rename as FindCommandName
+
 G4UIcommand * G4UIcommandTree::FindPath(const char* commandPath)
 {
   G4String remainingPath = commandPath;
@@ -182,6 +185,38 @@ G4UIcommand * G4UIcommandTree::FindPath(const char* commandPath)
     {
       if( nextPath == tree[i_thTree]->GetPathName() )
       { return tree[i_thTree]->FindPath( commandPath ); }
+    }
+  }
+  return NULL;
+}
+
+
+/**
+ * Try to match a command or a path with the one given.
+ * @commandPath : command or path to match
+ * @return the commandTree found or NULL if not
+ */
+G4UIcommandTree * G4UIcommandTree::FindCommandTree(const char* commandPath)
+{
+  G4String remainingPath = commandPath;
+  if( remainingPath.index( pathName ) == std::string::npos )
+  { return NULL; }
+  remainingPath.remove(0,pathName.length());
+  G4int i = remainingPath.first('/');
+  if( i != G4int(std::string::npos) )
+  {
+    // Find path
+    G4String nextPath = pathName;
+    nextPath.append(remainingPath(0,i+1));
+    G4int n_treeEntry = tree.size();
+    for( G4int i_thTree = 0; i_thTree < n_treeEntry; i_thTree++ )
+    {
+      if (tree[i_thTree]->GetPathName() == commandPath) {
+        return tree[i_thTree];
+      }
+      else if( nextPath == tree[i_thTree]->GetPathName() ) {
+        return tree[i_thTree]->FindCommandTree( commandPath );
+      }
     }
   }
   return NULL;

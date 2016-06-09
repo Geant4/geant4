@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PenelopeCompton.hh,v 1.10 2006/06/29 19:36:21 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4PenelopeCompton.hh,v 1.11 2008/03/26 15:30:19 pandola Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // Author: Luciano Pandola
 //
@@ -35,6 +35,7 @@
 // 14 Feb 2003   MG Pia       Modified some variables to lowercase initial 
 // 26 Mar 2003   L.Pandola    Added fluorescence
 // 18 Mar 2004   L.Pandola    Use of std::map (code review)
+// 26 Mar 2008   L.Pandola    Add boolean flag to control atomic de-excitation
 //
 // -------------------------------------------------------------------
 
@@ -77,6 +78,10 @@ public:
 			    G4ForceCondition* condition) 
   { return GetMeanFreePath(aTrack, previousStepSize, condition); }
 
+  void SetUseAtomicDeexcitation(G4bool value){fUseAtomicDeexcitation = value;};
+
+  G4bool GetUseAtomicDeexcitation(){return fUseAtomicDeexcitation;};
+
 protected:
 
   G4double GetMeanFreePath(const G4Track& aTrack, 
@@ -117,7 +122,9 @@ private:
   const G4int nBins; //for building cross section table
 
   std::vector<G4VEMDataSet*> *matCrossSections; //for random choice of atom
+
   G4double cutForLowEnergySecondaryPhotons;
+  G4bool fUseAtomicDeexcitation;
 };
 
 #endif

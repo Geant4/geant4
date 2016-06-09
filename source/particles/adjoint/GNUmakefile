@@ -1,0 +1,22 @@
+# $Id: GNUmakefile,v 1.1 2008/11/06 13:17:36 kurasige Exp $
+# --------------------------------------------------------------
+# GNUmakefile for adjoint library.  Hisaya Kurashige, 06/11/08.
+# --------------------------------------------------------------
+
+name := G4partadj
+
+ifndef G4INSTALL
+  G4INSTALL = ../../..
+endif
+
+include $(G4INSTALL)/config/architecture.gmk
+
+CPPFLAGS += -DG4PARTICLES_ALLOC_EXPORT
+CPPFLAGS += \
+            -I$(G4BASE)/global/management/include \
+            -I$(G4BASE)/global/HEPRandom/include \
+            -I$(G4BASE)/global/HEPGeometry/include \
+            -I$(G4BASE)/materials/include \
+            -I$(G4BASE)/particles/management/include
+
+include $(G4INSTALL)/config/common.gmk

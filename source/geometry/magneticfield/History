@@ -1,4 +1,4 @@
-$Id: History,v 1.125.2.2 2007/12/10 13:17:13 gcosmo Exp $
+$Id: History,v 1.136 2008/12/11 10:47:59 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,52 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+November, 19th, 2008  P.Gumplinger - field-V09-01-05
+----------------------------------
+- Renormalize the spin to ONE in G4EqEMFieldWithSpin.cc and G4Mag_SpinEqRhs.cc
+
+November, 7th, 2008   P.Gumplinger - field-V09-01-04
+----------------------------------
+- Added SetAnomaly() and GetAnomaly() accessors to G4EqEMFieldWithSpin.
+
+October, 28th, 2008   T.Nikitina - field-V09-01-03
+--------------------------------
+- Added 'ApproxCurveV' to method G4ChordFinder::ApproxCurvePointS() in 
+  order to better calculate the curve length.
+- Some code cleanup.
+
+September, 18th, 2008   T.Nikitina
+----------------------------------
+- Added new stepper class G4ConstRK4, performing integration of one step
+  with error calculation in constant magnetic field; implementation derived
+  from G4ClassicalRK4.
+
+July, 15th, 2008   J.Apostolakis - field-V09-01-02
+--------------------------------
+- Revised signature of G4ChordFinder::FinderNextChord(), making 'FieldTrack'
+  argument passed a reference.
+
+May, 28th, 2008   T.Nikitina
+----------------------------
+- G4ChordFinder: added new method ApproxCurvePointS() using Brent second order
+  location mechanism.
+
+April 24th, 2008   T.Nikitina - field-V09-01-01
+-----------------------------
+- Fix 'unused' non-initialized values of dydx in G4EqMagElectricField
+  and G4EqEMFieldWithSpin.
+
+January 17th, 2008   G.Cosmo - field-V09-01-00
+----------------------------
+- G4CashKarpRKF45: deleted un-needed duplicate (and unused) instance variable
+ 'fNumberOfVariables', already defined in G4MagIntegratorStepper. (J.Ap.)
+- Some code cleanup.
+
+December 7th, 2007   J.Apostolakis & T.Nikitina - field-V09-00-03
+-----------------------------------------------
+- New class G4FieldManagerStore. It enables resetting of all chord
+  finders' state. Needed to address problem reported by user.
 
 September 9th, 2007  G.Cosmo - field-V09-00-02a
 ----------------------------

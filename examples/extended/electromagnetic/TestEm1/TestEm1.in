@@ -1,4 +1,4 @@
-# $Id: TestEm1.in,v 1.24 2006/02/16 13:54:26 maire Exp $
+# $Id: TestEm1.in,v 1.25 2008/09/12 16:32:25 maire Exp $
 #
 # Macro file for "TestEm1.cc"
 # (can be run in batch, without graphic)
@@ -21,9 +21,7 @@
 /testem/histo/setHisto 2 100 0  300 none	#nb steps of primary
 /testem/histo/setHisto 3 200 0   20 mm		#step size of primary
 #
-/testem/histo/setFileType hbook	
-###/testem/histo/setFileType root
-###/testem/histo/setFileType XML
+/testem/histo/setFileType root
 #
 /testem/phys/setCuts 1 mm
 /testem/histo/setFileName run0 

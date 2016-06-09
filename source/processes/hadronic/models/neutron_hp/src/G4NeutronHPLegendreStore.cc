@@ -27,12 +27,92 @@
 // J.P. Wellisch, Nov-1996
 // A prototype of the low energy neutron transport model.
 //
+// 080612 SampleDiscreteTwoBody contribution from Benoit Pirard and Laurent Desorgher (Univ. Bern) #3
+//
 #include "G4NeutronHPLegendreStore.hh"
 #include "G4NeutronHPVector.hh"
 #include "G4NeutronHPInterpolator.hh"
 #include "G4NeutronHPFastLegendre.hh"
 #include "Randomize.hh"
 #include <iostream>
+
+
+
+//080612TK contribution from Benoit Pirard and Laurent Desorgher (Univ. Bern) #3 
+G4double G4NeutronHPLegendreStore::SampleDiscreteTwoBody (G4double anEnergy)
+{
+  G4double result;
+  
+  G4int i0;
+  G4int low(0), high(0);
+  G4NeutronHPFastLegendre theLeg;
+  for (i0=0; i0<nEnergy; i0++)
+  {
+    high = i0;
+    if(theCoeff[i0].GetEnergy()>anEnergy) break;
+  }
+  low = std::max(0, high-1);
+  G4NeutronHPInterpolator theInt;
+  G4double x, x1, x2;
+  x = anEnergy;
+  x1 = theCoeff[low].GetEnergy();
+  x2 = theCoeff[high].GetEnergy();
+  G4double theNorm = 0;
+  G4double try01=0, try02=0;
+  G4double max1, max2, costh;
+  max1 = 0; max2 = 0;
+  G4int l,m;
+  for(i0=0; i0<601; i0++)
+  {
+      costh = G4double(i0-300)/300.;
+      try01 = 0.5;
+      for(m=0; m<theCoeff[low].GetNumberOfPoly() ; m++)
+      {  
+	  l=m+1;
+	  try01 += (2.*l+1)/2.*theCoeff[low].GetCoeff(m)*theLeg.Evaluate(l, costh);
+      } 
+      if(try01>max1) max1=try01;
+      try02 = 0.5;
+      for(m=0; m<theCoeff[high].GetNumberOfPoly() ; m++)
+      {
+	  l=m+1;
+	  try02 += (2.*l+1)/2.*theCoeff[high].GetCoeff(m)*theLeg.Evaluate(l, costh);
+      }
+      if(try02>max2) max2=try02;
+  } 
+  theNorm = theInt.Interpolate(theManager.GetScheme(high), x, x1, x2, max1, max2);
+  
+  G4double value, random;
+  G4double v1, v2;
+  do
+  {
+    v1 = 0.5;
+    v2 = 0.5;
+    result = 2.*G4UniformRand()-1.;
+    for(m=0; m<theCoeff[low].GetNumberOfPoly() ; m++)
+    {
+	l=m+1;	
+	G4double legend = theLeg.Evaluate(l, result); // @@@ done to avoid optimization error on SUN
+	v1 += (2.*l+1)/2.*theCoeff[low].GetCoeff(m)*legend;
+    } 
+    for(m=0; m<theCoeff[high].GetNumberOfPoly() ; m++)
+    {	
+	l=m+1;
+	G4double legend = theLeg.Evaluate(l, result); // @@@ done to avoid optimization error on SUN
+	v2 += (2.*l+1)/2.*theCoeff[high].GetCoeff(m)*legend;
+    } 
+    // v1 = std::max(0.,v1); // Workaround in case one of the distributions is fully non-physical.
+    // v2 = std::max(0.,v2); 
+    value = theInt.Interpolate(theManager.GetScheme(high), x, x1, x2, v1, v2);
+    random = G4UniformRand();
+    if(0>=theNorm) break; // Workaround for negative cross-section values. @@@@ 31 May 2000
+  }
+  while(random>value/theNorm);
+
+  return result;
+}
+
+
 
 G4double G4NeutronHPLegendreStore::SampleMax (G4double anEnergy)
 {

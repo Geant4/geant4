@@ -24,14 +24,16 @@
 // ********************************************************************
 //
 //
-// $Id: G4VScoreColorMap.hh,v 1.3 2007/11/06 17:17:14 asaim Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4VScoreColorMap.hh,v 1.5 2008/08/29 02:50:05 akimura Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 
 #ifndef G4VScoreColorMap_h
 #define G4VScoreColorMap_h 1
 
 #include "globals.hh"
+
+class G4VVisManager;
 
 class G4VScoreColorMap
 {
@@ -51,22 +53,31 @@ class G4VScoreColorMap
       { return ifFloat; }
       inline void SetMinMax(G4double minVal, G4double maxVal)
       {
-	if(fMinVal >= fMaxVal)
-	{ G4cerr << "G4VScoreColoMap::SetMinMax() : minimum is larger than maximum. Verify values you set, ["
-		 << fMinVal << ", " << fMaxVal << "]" << G4endl; }
-        else
-        { fMinVal = minVal; fMaxVal = maxVal; }
+	if(minVal >= maxVal)
+	{ G4cerr << "WARNING: G4VScoreColoMap::SetMinMax() : minimum is larger than or equal to maximum. Verify values you set, ["
+		 << minVal << ", " << maxVal << "]" << G4endl;
+	  fMinVal = maxVal; fMaxVal = minVal;
+	}
+	else {
+	  fMinVal = minVal; fMaxVal = maxVal;
+	}
       }
       inline G4double GetMin() const
       { return fMinVal; }
       inline G4double GetMax() const
       { return fMaxVal; }
 
+  // draw a color chart
+  virtual void DrawColorChart(G4int nPoint = 5);
+  virtual void DrawColorChartBar(G4int nPoint);
+  virtual void DrawColorChartText(G4int nPoint);
+
   protected:
       G4String fName;
       G4bool ifFloat;
       G4double fMinVal;
       G4double fMaxVal;
+  G4VVisManager * fVisManager;
 };
 
 #endif

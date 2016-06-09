@@ -25,7 +25,7 @@
 //
 //
 // $Id: Em8CalorimeterSD.cc,v 1.7 2006/06/29 17:00:05 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // 
 

@@ -1,0 +1,219 @@
+
+*************************************************************
+ Geant4 version Name: global-V09-01-17    (19-December-2008)
+                      Copyright : Geant4 Collaboration
+                      Reference : NIM A 506 (2003), 250-303
+                            WWW : http://cern.ch/geant4
+*************************************************************
+
+
+
+***** Table : Nb of materials = 2 *****
+
+ Material:      H2O     density:  1.000 g/cm3   RadL:  36.092 cm   Nucl.Int.Length:  75.416 cm   Imean:  70.893 eV 
+   --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole  ElmMassFraction:  11.21 %  ElmAbundance  66.67 %
+   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:  88.79 %  ElmAbundance  33.33 %
+
+ Material:   Vacuum     density:  0.000 kg/m3   RadL: 204727512.315 pc   Nucl.Int.Length: 113804112.800 pc   Imean:  21.800 eV   temperature: 273.15 K  pressure:   1.00 atm
+   --->  Element: Vacuum ( )   Z =  1.0   N =   1.0   A =   1.01 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
+
+
+### NIST DataBase for Materials is used
+PhysicsList::SetCuts:CutLength : 1 um 
+ ********************** 
+ **** CONFIGURATION *** 
+ ********************** 
+
+=====> You have selected :
+-> Square quadrupole field
+   G1 (T/m) = -11.9646
+   G2 (T/m) = 16.4947
+   G3 (T/m) = 9.86677
+   G4 (T/m) = -6.24449
+
+phot:   for  gamma    SubType= 12
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+       PhotoElectric :     Emin=          0 eV         Emax=   100 TeV
+
+compt:   for  gamma    SubType= 13
+      Lambda tables from 100 eV  to 100 TeV in 84 bins, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+       Klein-Nishina :     Emin=          0 eV         Emax=   100 TeV
+
+conv:   for  gamma    SubType= 14
+      Lambda tables from 1.022 MeV to 100 TeV in 84 bins, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+       Bethe-Heitler :     Emin=          0 eV         Emax=   100 TeV
+
+msc:   for e-    SubType= 10
+      Lambda tables from 100 eV  to 100 TeV in 84 bins, spline: 1
+      RangeFactor= 0.02, step limit type: 1, lateralDisplacement: 1, skin= 3, geomFactor= 2.5
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+         UrbanMscUni :     Emin=          0 eV         Emax=   100 TeV
+
+eIoni:   for  e-    SubType= 2
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV in 84 bins, spline: 1
+      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+        MollerBhabha :     Emin=          0 eV         Emax=   100 TeV
+
+eBrem:   for  e-    SubType= 3
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV in 84 bins, spline: 1
+      LPM flag: 1 for E > 1 GeV
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               eBrem :     Emin=          0 eV         Emax=   1 GeV
+            eBremRel :     Emin=          1 GeV        Emax=   100 TeV
+
+eIoni:   for  e+    SubType= 2
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV in 84 bins, spline: 1
+      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+        MollerBhabha :     Emin=          0 eV         Emax=   100 TeV
+
+eBrem:   for  e+    SubType= 3
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV in 84 bins, spline: 1
+      LPM flag: 1 for E > 1 GeV
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               eBrem :     Emin=          0 eV         Emax=   1 GeV
+            eBremRel :     Emin=          1 GeV        Emax=   100 TeV
+
+annihil:   for  e+    SubType= 5
+      Lambda tables from 100 eV  to 100 TeV in 84 bins, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            eplus2gg :     Emin=          0 eV         Emax=   100 TeV
+
+msc:   for proton    SubType= 10
+      Lambda tables from 100 eV  to 100 TeV in 84 bins, spline: 1
+      RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 1, skin= 3
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+       UrbanMscUni90 :     Emin=          0 eV         Emax=   100 TeV
+
+hIoni:   for  proton    SubType= 2
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV in 84 bins, spline: 1
+      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      NuclearStopping= 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               Bragg :     Emin=          0 eV         Emax=   2 MeV
+          BetheBloch :     Emin=          2 MeV        Emax=   100 TeV
+
+hIoni:   for  anti_proton    SubType= 2
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV in 84 bins, spline: 1
+      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      NuclearStopping= 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               Bragg :     Emin=          0 eV         Emax=   2 MeV
+          BetheBloch :     Emin=          2 MeV        Emax=   100 TeV
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Vacuum
+ Range cuts        :  gamma 1 um     e- 1 um     e+ 1 um 
+ Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
+-> Event= 1: X0(mm)= 0 X0(mm) = 0 Z0(m) = -8.87 THETA(mrad)= -0.09 PHI(mrad)= -0.09 E0(MeV)= 2.9997
+    =>IMAGE : X(microns)=-3.5867089010791 Y(microns)=-0.45887737486595 THETA(mrad)=-5.8367647764082 PHI(mrad)=-9.1305836538323
+
+-> Event= 2: X0(mm)= 0 X0(mm) = 0 Z0(m) = -8.87 THETA(mrad)= -0.03 PHI(mrad)= -0.09 E0(MeV)= 2.9997
+    =>IMAGE : X(microns)=-0.48858394982666 Y(microns)=-0.30133481278277 THETA(mrad)=-1.9441075333148 PHI(mrad)=-9.1297089122698
+
+-> Event= 3: X0(mm)= 0 X0(mm) = 0 Z0(m) = -8.87 THETA(mrad)= 0.03 PHI(mrad)= -0.09 E0(MeV)= 2.9997
+    =>IMAGE : X(microns)=0.48858394982666 Y(microns)=-0.30133481278277 THETA(mrad)=1.9441075333148 PHI(mrad)=-9.1297089122698
+
+-> Event= 4: X0(mm)= 0 X0(mm) = 0 Z0(m) = -8.87 THETA(mrad)= 0.09 PHI(mrad)= -0.09 E0(MeV)= 2.9997
+    =>IMAGE : X(microns)=3.5867089010791 Y(microns)=-0.45887737486595 THETA(mrad)=5.8367647764082 PHI(mrad)=-9.1305836538323
+
+-> Event= 5: X0(mm)= 0 X0(mm) = 0 Z0(m) = -8.87 THETA(mrad)= -0.09 PHI(mrad)= -0.03 E0(MeV)= 2.9997
+    =>IMAGE : X(microns)=-3.3399324435349 Y(microns)=-0.11876365231005 THETA(mrad)=-5.8363619945219 PHI(mrad)=-3.0434522502772
+
+-> Event= 6: X0(mm)= 0 X0(mm) = 0 Z0(m) = -8.87 THETA(mrad)= -0.03 PHI(mrad)= -0.03 E0(MeV)= 2.9997
+    =>IMAGE : X(microns)=-0.40645857802869 Y(microns)=-0.066246823180853 THETA(mrad)=-1.9439736159923 PHI(mrad)=-3.0431621480574
+
+-> Event= 7: X0(mm)= 0 X0(mm) = 0 Z0(m) = -8.87 THETA(mrad)= 0.03 PHI(mrad)= -0.03 E0(MeV)= 2.9997
+    =>IMAGE : X(microns)=0.40645857802869 Y(microns)=-0.066246823180853 THETA(mrad)=1.9439736159923 PHI(mrad)=-3.0431621480574
+
+-> Event= 8: X0(mm)= 0 X0(mm) = 0 Z0(m) = -8.87 THETA(mrad)= 0.09 PHI(mrad)= -0.03 E0(MeV)= 2.9997
+    =>IMAGE : X(microns)=3.3399324435349 Y(microns)=-0.11876365231005 THETA(mrad)=5.8363619945219 PHI(mrad)=-3.0434522502772
+
+-> Event= 9: X0(mm)= 0 X0(mm) = 0 Z0(m) = -8.87 THETA(mrad)= -0.09 PHI(mrad)= 0.03 E0(MeV)= 2.9997
+    =>IMAGE : X(microns)=-3.3399324435349 Y(microns)=0.11876365231005 THETA(mrad)=-5.8363619945219 PHI(mrad)=3.0434522502772
+
+-> Event= 10: X0(mm)= 0 X0(mm) = 0 Z0(m) = -8.87 THETA(mrad)= -0.03 PHI(mrad)= 0.03 E0(MeV)= 2.9997
+    =>IMAGE : X(microns)=-0.40645857802869 Y(microns)=0.066246823180853 THETA(mrad)=-1.9439736159923 PHI(mrad)=3.0431621480574
+
+-> Event= 11: X0(mm)= 0 X0(mm) = 0 Z0(m) = -8.87 THETA(mrad)= 0.03 PHI(mrad)= 0.03 E0(MeV)= 2.9997
+    =>IMAGE : X(microns)=0.40645857802869 Y(microns)=0.066246823180853 THETA(mrad)=1.9439736159923 PHI(mrad)=3.0431621480574
+
+-> Event= 12: X0(mm)= 0 X0(mm) = 0 Z0(m) = -8.87 THETA(mrad)= 0.09 PHI(mrad)= 0.03 E0(MeV)= 2.9997
+    =>IMAGE : X(microns)=3.3399324435349 Y(microns)=0.11876365231005 THETA(mrad)=5.8363619945219 PHI(mrad)=3.0434522502772
+
+-> Event= 13: X0(mm)= 0 X0(mm) = 0 Z0(m) = -8.87 THETA(mrad)= -0.09 PHI(mrad)= 0.09 E0(MeV)= 2.9997
+    =>IMAGE : X(microns)=-3.5867089010791 Y(microns)=0.45887737486595 THETA(mrad)=-5.8367647764082 PHI(mrad)=9.1305836538323
+
+-> Event= 14: X0(mm)= 0 X0(mm) = 0 Z0(m) = -8.87 THETA(mrad)= -0.03 PHI(mrad)= 0.09 E0(MeV)= 2.9997
+    =>IMAGE : X(microns)=-0.48858394982666 Y(microns)=0.30133481278277 THETA(mrad)=-1.9441075333148 PHI(mrad)=9.1297089122698
+
+-> Event= 15: X0(mm)= 0 X0(mm) = 0 Z0(m) = -8.87 THETA(mrad)= 0.03 PHI(mrad)= 0.09 E0(MeV)= 2.9997
+    =>IMAGE : X(microns)=0.48858394982666 Y(microns)=0.30133481278277 THETA(mrad)=1.9441075333148 PHI(mrad)=9.1297089122698
+
+-> Event= 16: X0(mm)= 0 X0(mm) = 0 Z0(m) = -8.87 THETA(mrad)= 0.09 PHI(mrad)= 0.09 E0(MeV)= 2.9997
+    =>IMAGE : X(microns)=3.5867089010791 Y(microns)=0.45887737486595 THETA(mrad)=5.8367647764082 PHI(mrad)=9.1305836538323
+
+-> Event= 17: X0(mm)= 0 X0(mm) = 0 Z0(m) = -8.87 THETA(mrad)= -0.09 PHI(mrad)= -0.09 E0(MeV)= 3.0003
+    =>IMAGE : X(microns)=-1.7196770328417 Y(microns)=-0.11880586487665 THETA(mrad)=-5.8315814398783 PHI(mrad)=-9.124902487762
+
+-> Event= 18: X0(mm)= 0 X0(mm) = 0 Z0(m) = -8.87 THETA(mrad)= -0.03 PHI(mrad)= -0.09 E0(MeV)= 3.0003
+    =>IMAGE : X(microns)=0.13297208222397 Y(microns)=0.038567370885464 THETA(mrad)=-1.9423814979315 PHI(mrad)=-9.1240303956597
+
+-> Event= 19: X0(mm)= 0 X0(mm) = 0 Z0(m) = -8.87 THETA(mrad)= 0.03 PHI(mrad)= -0.09 E0(MeV)= 3.0003
+    =>IMAGE : X(microns)=-0.13297208222397 Y(microns)=0.038567370885464 THETA(mrad)=1.9423814979315 PHI(mrad)=-9.1240303956597
+
+-> Event= 20: X0(mm)= 0 X0(mm) = 0 Z0(m) = -8.87 THETA(mrad)= 0.09 PHI(mrad)= -0.09 E0(MeV)= 3.0003
+    =>IMAGE : X(microns)=1.7196770328417 Y(microns)=-0.11880586487665 THETA(mrad)=5.8315814398783 PHI(mrad)=-9.124902487762
+
+-> Event= 21: X0(mm)= 0 X0(mm) = 0 Z0(m) = -8.87 THETA(mrad)= -0.09 PHI(mrad)= -0.03 E0(MeV)= 3.0003
+    =>IMAGE : X(microns)=-1.4734196916507 Y(microns)=-0.0054541489705432 THETA(mrad)=-5.8311795427551 PHI(mrad)=-3.0415592251015
+
+-> Event= 22: X0(mm)= 0 X0(mm) = 0 Z0(m) = -8.87 THETA(mrad)= -0.03 PHI(mrad)= -0.03 E0(MeV)= 3.0003
+    =>IMAGE : X(microns)=0.21499992476237 Y(microns)=0.047025989915602 THETA(mrad)=-1.9422479641261 PHI(mrad)=-3.0412671975718
+
+-> Event= 23: X0(mm)= 0 X0(mm) = 0 Z0(m) = -8.87 THETA(mrad)= 0.03 PHI(mrad)= -0.03 E0(MeV)= 3.0003
+    =>IMAGE : X(microns)=-0.21499992476237 Y(microns)=0.047025989915602 THETA(mrad)=1.9422479641261 PHI(mrad)=-3.0412671975718
+
+-> Event= 24: X0(mm)= 0 X0(mm) = 0 Z0(m) = -8.87 THETA(mrad)= 0.09 PHI(mrad)= -0.03 E0(MeV)= 3.0003
+    =>IMAGE : X(microns)=1.4734196916507 Y(microns)=-0.0054541489705432 THETA(mrad)=5.8311795427551 PHI(mrad)=-3.0415592251015
+
+-> Event= 25: X0(mm)= 0 X0(mm) = 0 Z0(m) = -8.87 THETA(mrad)= -0.09 PHI(mrad)= 0.03 E0(MeV)= 3.0003
+    =>IMAGE : X(microns)=-1.4734196916507 Y(microns)=0.0054541489705432 THETA(mrad)=-5.8311795427551 PHI(mrad)=3.0415592251015
+
+-> Event= 26: X0(mm)= 0 X0(mm) = 0 Z0(m) = -8.87 THETA(mrad)= -0.03 PHI(mrad)= 0.03 E0(MeV)= 3.0003
+    =>IMAGE : X(microns)=0.21499992476237 Y(microns)=-0.047025989915602 THETA(mrad)=-1.9422479641261 PHI(mrad)=3.0412671975718
+
+-> Event= 27: X0(mm)= 0 X0(mm) = 0 Z0(m) = -8.87 THETA(mrad)= 0.03 PHI(mrad)= 0.03 E0(MeV)= 3.0003
+    =>IMAGE : X(microns)=-0.21499992476237 Y(microns)=-0.047025989915602 THETA(mrad)=1.9422479641261 PHI(mrad)=3.0412671975718
+
+-> Event= 28: X0(mm)= 0 X0(mm) = 0 Z0(m) = -8.87 THETA(mrad)= 0.09 PHI(mrad)= 0.03 E0(MeV)= 3.0003
+    =>IMAGE : X(microns)=1.4734196916507 Y(microns)=0.0054541489705432 THETA(mrad)=5.8311795427551 PHI(mrad)=3.0415592251015
+
+-> Event= 29: X0(mm)= 0 X0(mm) = 0 Z0(m) = -8.87 THETA(mrad)= -0.09 PHI(mrad)= 0.09 E0(MeV)= 3.0003
+    =>IMAGE : X(microns)=-1.7196770328417 Y(microns)=0.11880586487665 THETA(mrad)=-5.8315814398783 PHI(mrad)=9.124902487762
+
+-> Event= 30: X0(mm)= 0 X0(mm) = 0 Z0(m) = -8.87 THETA(mrad)= -0.03 PHI(mrad)= 0.09 E0(MeV)= 3.0003
+    =>IMAGE : X(microns)=0.13297208222397 Y(microns)=-0.038567370885464 THETA(mrad)=-1.9423814979315 PHI(mrad)=9.1240303956597
+
+-> Event= 31: X0(mm)= 0 X0(mm) = 0 Z0(m) = -8.87 THETA(mrad)= 0.03 PHI(mrad)= 0.09 E0(MeV)= 3.0003
+    =>IMAGE : X(microns)=-0.13297208222397 Y(microns)=-0.038567370885464 THETA(mrad)=1.9423814979315 PHI(mrad)=9.1240303956597
+
+-> Event= 32: X0(mm)= 0 X0(mm) = 0 Z0(m) = -8.87 THETA(mrad)= 0.09 PHI(mrad)= 0.09 E0(MeV)= 3.0003
+    =>IMAGE : X(microns)=1.7196770328417 Y(microns)=0.11880586487665 THETA(mrad)=5.8315814398783 PHI(mrad)=9.124902487762
+

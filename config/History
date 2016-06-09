@@ -1,4 +1,4 @@
-$Id: History,v 1.310 2007/12/11 13:20:28 gcosmo Exp $
+cvs log $Id: History,v 1.344 2008/12/09 11:20:58 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,6 +15,99 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+9th December 2008  Guy Barrand (config-V09-01-17)
+- G4UI_USE.gmk: corrected G4UI_USE_OSC to use $(shell ...) instead 
+  of direct backquoting to solve a tricky env expansion problem,
+  restricted to the Open-Scientist setup.
+
+8th December 2008  John Allison (config-V09-01-16)
+- G4UI_USE.gmk: added -DG4UI_USE to CPPFLAGS. Re-ordered G4UI_NONE
+  and G4UI_USE_INCLUDED blocks to be coherent with G4VIS_USE.gmk.
+
+4th December 2008  Laurent Garnier (config-V09-01-15)
+- Darwin.gmk: fixed mistake in setting of OGLLIBS for Leopard.
+
+4th December 2008  Gabriele Cosmo, Ben Morgan (config-V09-01-14)
+- Linux-g++.gmk: implemented temporary workaround to allow for automatic
+  detection of location in non-POSIX paths for X11 and GL libraries depending
+  on 32/64 bits architectures.
+
+3rd December 2008  Gabriele Cosmo (config-V09-01-13)
+- Define $FIND, $SORT, $TOUCH variables to be customised with absolute
+  path in WIN32-VC in order to pick up correct Cygwin toolset.
+
+1st December 2008  Ben Morgan (config-V09-01-12)
+- Darwin-g++.gmk, Linux-g++.gmk: corrected definition of temporary QT3_MT
+  by adding missing protection.
+
+24th November 2008  Laurent Garnier (config-V09-01-11)
+- interactivity.gmk: changed flags for OpenGL and QT.
+- Darwin-g++.gmk, Linux-g++.gmk, WIN32-VC.gmk: major update to Qt setup.
+- Darwin.gmk: automatically detect GLLIBS for Leopard.
+- moc.gmk: suppressed echo when compiling.
+
+14th November 2008  Gabriele Cosmo (config-V09-01-10)
+- Added "electromagnetic/adjoint" sub-module in binmake.gmk.
+
+6th November 2008  Gabriele Cosmo (config-V09-01-09)
+- Added "particles/adjoint" sub-module in binmake.gmk.
+
+23rd October 2008  Gabriele Cosmo (config-V09-01-08)
+- Added "persistency/ascii" sub-module in binmake.gmk.
+
+11th July 2008  Gabriele Cosmo (config-V09-01-07)
+- architecture.gmk: removed obsoled DOM library from GDMLIBS.
+
+12th June 2008  Gabriele Cosmo (config-V09-01-06)
+- Linux-g++.gmk: added G4OPTDEBUG flag for "-O2 -g" combined compilation.
+- AIX-xlC.gmk: added shared libs section as for Linux-g++ according to user
+  suggestion on HN.
+
+9th June 2008  Gabriele Cosmo (config-V09-01-05)
+- Integrated improvements to Qt setup and AIDA.
+  Restored Qt libs setup to include GL as default.
+
+20th May 2008  Gunter Folger  (config-V09-01-04)
+- liblist.c: removed C++ style comments.
+- Not including changes made after "config-V09-01-03 ".
+
+13th May 2008  Guy Barrand
+- G4UI_USE.gmk: added material (protected with G4UI_USE_OSC) to use osc_vis
+  binary kits built with the Geant4 drivers. It allows to use the G4Lab::UIOnX
+  G4 session in Geant4 (G4Lab::UIOnX allows for visualization and AIDA plotting
+  within the same GUI).
+- analysis.gmk: added default setup aida-config for flags
+  G4ANALYSIS_AIDA_CONFIG_CFLAGS and G4ANALYSIS_AIDA_CONFIG_LIBS.
+
+30th April 2008  Laurent Garnier
+- common.gmk: simplified Qt moc files integration.
+- moc.gmk: new configuration file for Qt moc files setup.
+- G4UI_USE, G4VIS_USE, interactivity, sys/*: separation of Qt with or
+  without OpenGL.
+
+3rd April 2008  Gabriele Cosmo (config-V09-01-03)
+- Linux-icc.gmk: updated setup to make use of icc-10.1 and ifort-10.1;
+  changed compilation option "-mp" to more performant "-fp_model precise".
+
+2nd April 2008  Gunter Folger (config-V09-01-02)
+- Replaced gets() by safer fgets() in liblist.c.
+  (this tag does not include latest changes in interactivity.gmk)
+
+18th March 2008  Laurent Garnier
+- interactivity.gmk: moved Qt setup before X11.
+
+21st February 2008  Gabriele Cosmo (config-V09-01-01)
+- Replaced g77 with gfortran for Linux-g++ and Linux-icc platforms.
+
+15th February 2008  Laurent Garnier
+- common.gmk: added ability to autogenerate moc files for Qt driver.
+- WIN32-VC: added flags to build Qt driver on Windows.
+- Darwin-g++, Linux-g++: improvements for autogeneration of MOC files for Qt.
+
+15th January 2008  Gabriele Cosmo (config-V09-01-00)
+- Added commented lines for OpenGL setup in Darwin-g++.gmk for MacOS
+  10.5 Leopard, pending fix from Apple.
 
 11th December 2007  Gabriele Cosmo (config-V09-00-12)
 - Corrected setup for GDML on WIN32-VC to allow for building DLLs.
@@ -51,6 +144,17 @@ committal in the CVS repository !
 10th October 2007  Gunter Folger (config-V09-00-05)
 - Added "incl" (Liege cascade) hadronic model module to binmake.gmk. 
  
+ 
+3th October 2007  Laurent Garnier 
+- Added setup for Qt in those files : 
+- config/G4UI_BUILD.gmk 
+- config/G4UI_USE.gmk 
+- config/G4VIS_BUILD.gmk 
+- config/G4VIS_USE.gmk 
+- config/interactivity.gmk 
+- config/sys/Darwin-g++.gmk 
+- config/sys/Linux-g++.gmk 
+
 16th August 2007  Gabriele Cosmo (config-V09-00-04)
 - Corrected definition of OUT internal variable to allow for proper
   linking also of unit tests.

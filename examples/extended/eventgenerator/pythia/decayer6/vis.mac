@@ -1,0 +1,54 @@
+# $Id: vis.mac,v 1.1 2008/11/03 11:48:35 gcosmo Exp $
+#
+# Macro file for the initialization phase
+# when running in interactive mode
+#
+# Sets some default verbose
+#
+/control/verbose 2
+/control/saveHistory
+/run/verbose 2
+#
+# create empty scene
+#
+/vis/scene/create
+#
+# Create a scene handler for a specific graphics system
+# (Edit the next line(s) to choose another graphic system)
+#
+# Use this open statement to get an .eps and .prim files
+# suitable for viewing in DAWN.
+#/vis/open DAWNFILE
+#
+# Use this open statement instead for OpenGL in immediate mode.
+/vis/open OGLIX
+#/vis/open RayTracer
+#/vis/open OIX
+# Output an empty detector
+/vis/viewer/set/viewpointThetaPhi 30 30 deg
+/vis/viewer/flush
+#
+# Draw trajectories at end of event, showing trajectory points as
+# markers of size 2 pixels
+/vis/scene/add/trajectories
+/vis/modeling/trajectories/create/drawByCharge
+/vis/modeling/trajectories/drawByCharge-0/default/setDrawStepPts true
+/vis/modeling/trajectories/drawByCharge-0/default/setStepPtsSize 2
+# (if too many tracks cause core dump => /tracking/storeTrajectory 0)
+#
+# To draw gammas only
+#/vis/filtering/trajectories/create/particleFilter
+#/vis/filtering/trajectories/particleFilter-0/add gamma
+#
+# To draw charged particles only
+#/vis/filtering/trajectories/particleFilter-0/invert true
+#
+# Many other options available with /vis/modeling and /vis/filtering.
+# For example, select colour by particle ID
+#/vis/modeling/trajectories/create/drawByParticleID
+#/vis/modeling/trajectories/drawByParticleID-0/set e- red
+#
+/vis/scene/endOfEventAction accumulate
+#
+# At end of each run, an automatic flush causes graphical output.
+#/run/beamOn 1

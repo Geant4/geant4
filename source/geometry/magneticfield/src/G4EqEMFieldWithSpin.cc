@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4EqEMFieldWithSpin.cc,v 1.1 2007/08/30 23:34:19 gum Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4EqEMFieldWithSpin.cc,v 1.4 2008/11/21 21:17:03 gum Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 //
 //  This is the standard right-hand side for equation of motion.
@@ -39,15 +39,23 @@
 // -------------------------------------------------------------------
 
 #include "G4EqEMFieldWithSpin.hh"
+#include "G4ElectroMagneticField.hh"
 #include "G4ThreeVector.hh"
 #include "globals.hh"
 
 G4EqEMFieldWithSpin::G4EqEMFieldWithSpin(G4ElectroMagneticField *emField )
-      : G4EquationOfMotion( emField ) { anomaly = 1.165923e-3; }
+      : G4EquationOfMotion( emField )
+{ 
+  anomaly = 0.0011659208;
+}
+
+G4EqEMFieldWithSpin::~G4EqEMFieldWithSpin()
+{
+} 
 
 void  
 G4EqEMFieldWithSpin::SetChargeMomentumMass(G4double particleCharge, // e+ units
-		                            G4double MomentumXc,
+                                            G4double MomentumXc,
                                             G4double particleMass)
 {
    fElectroMagCof =  eplus*particleCharge*c_light ;
@@ -60,14 +68,13 @@ G4EqEMFieldWithSpin::SetChargeMomentumMass(G4double particleCharge, // e+ units
    E = std::sqrt(sqr(MomentumXc)+sqr(particleMass));
    beta  = MomentumXc/E;
    gamma = E/particleMass;
+
 }
-
-
 
 void
 G4EqEMFieldWithSpin::EvaluateRhsGivenB(const G4double y[],
-			                const G4double Field[],
-				              G4double dydx[] ) const
+                                       const G4double Field[],
+                                             G4double dydx[] ) const
 {
 
    // Components of y:
@@ -98,10 +105,12 @@ G4EqEMFieldWithSpin::EvaluateRhsGivenB(const G4double y[],
    dydx[4] = cof1*(cof2*Field[4] + (y[5]*Field[0] - y[3]*Field[2])) ; 
  
    dydx[5] = cof1*(cof2*Field[5] + (y[3]*Field[1] - y[4]*Field[0])) ;  
+   
+   dydx[6] = dydx[8] = 0.;//not used
 
    // Lab Time of flight
    dydx[7] = inverse_velocity;
-
+   
    G4ThreeVector BField(Field[0],Field[1],Field[2]);
 
    G4ThreeVector u(y[3], y[4], y[5]);
@@ -111,6 +120,9 @@ G4EqEMFieldWithSpin::EvaluateRhsGivenB(const G4double y[],
    G4double ucb = (anomaly+1./gamma)/beta;
 
    G4ThreeVector Spin(y[9],y[10],y[11]);
+
+   if (Spin.mag() > 0.) Spin = Spin.unit();
+
    G4ThreeVector dSpin;
 
    dSpin = ParticleCharge*omegac*(ucb*(Spin.cross(BField))-udb*(Spin.cross(u)));

@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: FTFP_EMV.icc,v 1.2 2007/05/16 11:35:36 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: FTFP_EMV.icc,v 1.3 2008/06/19 08:08:22 gunter Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 //---------------------------------------------------------------------------
 //
@@ -41,6 +41,7 @@
 // 15.06.2006 G.Folger: Migrate to HadronElasticPhysics using improved elastic
 // 20.11.2006 G.Folger: add Tracking Cut for neutrons
 // 16.05.2007 V.Ivanchenko: rename EM builders
+// 19.06.2008 G.Folger: don't use chips quasielastic in FTF
 //
 //----------------------------------------------------------------------------
 //
@@ -74,7 +75,7 @@ template<class T> TFTFP_EMV<T>::TFTFP_EMV(G4int ver):  T()
   // default cut value  (1.0mm) 
   // defaultCutValue = 1.0*mm;
   G4DataQuestionaire it(photon);
-  G4cout << "<<< Geant4 Physics List simulation engine: FTFP_EMV 1.0"<<G4endl;
+  G4cout << "<<< Geant4 Physics List simulation engine: FTFP_EMV 1.1"<<G4endl;
   G4cout <<G4endl;
   this->defaultCutValue = 0.7*mm;  
   this->SetVerboseLevel(ver);
@@ -92,7 +93,8 @@ template<class T> TFTFP_EMV<T>::TFTFP_EMV(G4int ver):  T()
   this-> RegisterPhysics( new G4HadronElasticPhysics("elastic",ver,false));
 
    // Hadron Physics
-  this->RegisterPhysics(  new HadronPhysicsFTFP("hadron"));
+   G4bool quasiElastic;
+  this->RegisterPhysics(  new HadronPhysicsFTFP("hadron",quasiElastic=false));
 
   // Stopping Physics
   this->RegisterPhysics( new G4QStoppingPhysics("stopping"));

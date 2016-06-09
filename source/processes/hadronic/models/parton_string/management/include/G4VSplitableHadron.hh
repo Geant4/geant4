@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSplitableHadron.hh,v 1.3 2006/06/29 20:55:29 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4VSplitableHadron.hh,v 1.4 2008/05/19 13:03:20 vuzhinsk Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 
 #ifndef G4VSplitableHadron_h
@@ -74,6 +74,9 @@ class G4VSplitableHadron
       void IncrementCollisionCount(G4int aCount);
       void SetCollisionCount(G4int aCount);
 
+      void SetTimeOfCreation(G4double aTime);           // Uzhi 7.05.08
+      G4double GetTimeOfCreation();                     // Uzhi 7.05.08
+
       void SetPosition(const G4ThreeVector &aPosition);
       const G4ThreeVector & GetPosition() const;
 
@@ -82,9 +85,9 @@ class G4VSplitableHadron
       virtual G4Parton * GetNextAntiParton() = 0 ;
       G4bool IsSplit() { return isSplit;}
 
-
-  protected:
       G4int GetSoftCollisionCount();
+  protected:
+
       void Splitting() {isSplit = true;}
       
   private:
@@ -98,6 +101,7 @@ class G4VSplitableHadron
 
       G4LorentzVector the4Momentum;
 
+      G4double TimeOfCreation;    // Uzhi 7.05.08
       G4ThreeVector thePosition;
       G4int theCollisionCount;
 
@@ -140,6 +144,15 @@ inline void G4VSplitableHadron::IncrementCollisionCount(G4int aCount)
 	theCollisionCount += aCount;
 }
 
+inline void G4VSplitableHadron::SetTimeOfCreation(G4double aTime)  // Uzhi 7.05.08
+{
+        TimeOfCreation=aTime;
+}
+
+inline G4double G4VSplitableHadron::GetTimeOfCreation()           // Uzhi 7.05.08
+{
+        return TimeOfCreation; 
+}
 
 inline void G4VSplitableHadron::SetPosition(const G4ThreeVector &aPosition)
 {

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Material.cc,v 1.38 2007/10/18 11:30:48 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4Material.cc,v 1.42 2008/08/13 16:06:42 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //
@@ -65,6 +65,7 @@
 // 10-01-07, compute fAtomVector in the case of mass fraction (V.Ivanchenko) 
 // 27-07-07, improve destructor (V.Ivanchenko) 
 // 18-10-07, move definition of material index to InitialisePointers (V.Ivanchenko) 
+// 13-08-08, do not use fixed size arrays (V.Ivanchenko) 
 // 
 
 // 
@@ -106,6 +107,7 @@ G4Material::G4Material(const G4String& name, G4double z,
   // Initialize theElementVector allocating one
   // element corresponding to this material
   maxNbComponents        = fNumberOfComponents = fNumberOfElements = 1;
+  fArrayLength           = maxNbComponents;
   fImplicitElement       = true;
   theElementVector       = new G4ElementVector();
   theElementVector->push_back( new G4Element(name, " ", z, a));  
@@ -151,6 +153,7 @@ G4Material::G4Material(const G4String& name, G4double density,
   fChemicalFormula = " ";
     
   maxNbComponents     = nComponents;
+  fArrayLength        = maxNbComponents;
   fNumberOfComponents = fNumberOfElements = 0;
   fImplicitElement    = false;
   theElementVector    = new G4ElementVector();
@@ -184,8 +187,8 @@ void G4Material::AddElement(G4Element* element, G4int nAtoms)
 {   
   // initialization
   if ( fNumberOfElements == 0 ) {
-     fAtomsVector        = new G4int   [maxNbComponents];
-     fMassFractionVector = new G4double[maxNbComponents];
+     fAtomsVector        = new G4int   [fArrayLength];
+     fMassFractionVector = new G4double[fArrayLength];
   }
 
   // filling ...
@@ -194,11 +197,12 @@ void G4Material::AddElement(G4Element* element, G4int nAtoms)
      fAtomsVector       [fNumberOfElements] = nAtoms;
      fNumberOfComponents = ++fNumberOfElements;
      element->increaseCountUse();
-  }
-  else
-     G4Exception
+  } else {
+    G4cerr << "G4Material::AddElement ERROR for " << fName << " nElement= " 
+	   <<  fNumberOfElements << G4endl;
+    G4Exception
     ("ERROR!!! - Attempt to add more than the declared number of elements.");
-
+  }
   // filled.
   if ( G4int(fNumberOfElements) == maxNbComponents ) {     
      // compute proportion by mass
@@ -225,8 +229,8 @@ void G4Material::AddElement(G4Element* element, G4double fraction)
 {
   // initialization
   if (fNumberOfComponents == 0) {
-    fMassFractionVector = new G4double[50];
-    fAtomsVector        = new G4int   [50];
+    fMassFractionVector = new G4double[fArrayLength];
+    fAtomsVector        = new G4int   [fArrayLength];
   }
 
   // filling ...
@@ -241,11 +245,13 @@ void G4Material::AddElement(G4Element* element, G4double fraction)
 	element->increaseCountUse();
       }
       fNumberOfComponents++;  
-  }
-  else
-     G4Exception
+  } else {
+    G4cerr << "G4Material::AddElement ERROR for " << fName << " nElement= " 
+	   <<  fNumberOfElements << G4endl;
+    G4Exception
     ("ERROR!!! - Attempt to add more than the declared number of components.");
-    
+  }    
+
   // filled.
   if (G4int(fNumberOfComponents) == maxNbComponents) {
 
@@ -259,9 +265,8 @@ void G4Material::AddElement(G4Element* element, G4double fraction)
        Amol +=  fMassFractionVector[i]*(*theElementVector)[i]->GetA();
      }
      if (std::abs(1.-wtSum) > perThousand) {
-       G4cerr << "WARNING !! - Fractional masses do not sum to 1 : "
-                 "the Delta is > 0.001"
-                 "(the weights are NOT renormalized; the results may be wrong)" 
+       G4cerr << "WARNING !! for " << fName << " sum of fractional masses "
+              <<  wtSum << " is not 1 - results may be wrong" 
               << G4endl;
      }
      for (i=0;i<fNumberOfElements;i++) {
@@ -281,13 +286,31 @@ void G4Material::AddMaterial(G4Material* material, G4double fraction)
 {
   // initialization
   if (fNumberOfComponents == 0) {
-    fMassFractionVector = new G4double[50];
-    fAtomsVector        = new G4int   [50];
+    fMassFractionVector = new G4double[fArrayLength];
+    fAtomsVector        = new G4int   [fArrayLength];
+  }
+
+  size_t nelm = material->GetNumberOfElements();
+
+  // arrays should be extended
+  if(nelm > 1) {
+    G4int nold    = fArrayLength;
+    fArrayLength += nelm - 1;
+    G4double* v1 = new G4double[fArrayLength];
+    G4int* i1    = new G4int[fArrayLength];
+    for(G4int i=0; i<nold; i++) {
+      v1[i] = fMassFractionVector[i];
+      i1[i] = fAtomsVector[i];
+    }
+    delete [] fAtomsVector;
+    delete [] fMassFractionVector;
+    fMassFractionVector = v1;
+    fAtomsVector = i1;
   }
 
   // filling ...
   if (G4int(fNumberOfComponents) < maxNbComponents) {
-     for (size_t elm=0; elm < material->GetNumberOfElements(); elm++)
+     for (size_t elm=0; elm<nelm; elm++)
        {
         G4Element* element = (*(material->GetElementVector()))[elm];
         size_t el = 0;
@@ -303,11 +326,13 @@ void G4Material::AddMaterial(G4Material* material, G4double fraction)
         }
        } 
       fNumberOfComponents++;  
-  }
-  else
-     G4Exception
-    ("ERROR!!! - Attempt to add more than the declared number of components.");
-    
+  } else {
+    G4cerr << "G4Material::AddElement ERROR for " << fName << " nElement= " 
+	   <<  fNumberOfElements << G4endl;
+    G4Exception
+      ("ERROR!!! - Attempt to add more than the declared number of components.");
+  }    
+
   // filled.
   if (G4int(fNumberOfComponents) == maxNbComponents) {
      size_t i=0;
@@ -320,9 +345,8 @@ void G4Material::AddMaterial(G4Material* material, G4double fraction)
        Amol +=  fMassFractionVector[i]*(*theElementVector)[i]->GetA();
      }
      if (std::abs(1.-wtSum) > perThousand) {
-       G4cerr << "WARNING !! - Fractional masses do not sum to 1 : "
-                 "the Delta is > 0.001"
-                 "(the weights are NOT renormalized; the results may be wrong)" 
+       G4cerr << "WARNING !! for " << fName << " sum of fractional masses "
+              <<  wtSum << " is not 1 - results may be wrong" 
               << G4endl;
      }
      for (i=0;i<fNumberOfElements;i++) {
@@ -542,14 +566,17 @@ std::ostream& operator<<(std::ostream& flux, G4Material* material)
   G4long prec = flux.precision(3);
   
   flux
-    << " Material: "      << std::setw(8) <<  material->fName
+    << " Material: "         << std::setw(8) <<  material->fName
     << " " << material->fChemicalFormula << " "
-    << "  density: "     << std::setw(6) << std::setprecision(3)  
+    << "  density: "         << std::setw(6) << std::setprecision(3)  
     << G4BestUnit(material->fDensity,"Volumic Mass") 
-    << "  RadL: "        << std::setw(7)  << std::setprecision(3)  
+    << "  RadL: "            << std::setw(7)  << std::setprecision(3)  
     << G4BestUnit(material->fRadlen,"Length")
-    << "  Imean: "       << std::setw(7)  << std::setprecision(3)  
+    << "  Nucl.Int.Length: " << std::setw(7)  << std::setprecision(3)  
+    << G4BestUnit(material->fNuclInterLen,"Length")    
+    << "  Imean: "           << std::setw(7)  << std::setprecision(3)  
     << G4BestUnit(material->GetIonisation()->GetMeanExcitationEnergy(),"Energy");
+    
   if(material->fState == kStateGas)
     flux
       << "  temperature: " << std::setw(6) << std::setprecision(2)  

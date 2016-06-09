@@ -30,7 +30,7 @@
 #include <cmath>
 #include <algorithm>
 #include <vector>
-
+#include "G4CascadeMomentum.hh"
 
 namespace G4InuclSpecialFunctions {
 
@@ -70,7 +70,7 @@ namespace G4InuclSpecialFunctions {
 
   G4double nucleiLevelDensity(G4double a);
 
-  std::vector<G4double> generateWithFixedTheta(G4double ct, 
+  G4CascadeMomentum generateWithFixedTheta(G4double ct, 
 					  G4double p);
 }
 #endif

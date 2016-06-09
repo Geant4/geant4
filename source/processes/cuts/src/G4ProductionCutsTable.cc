@@ -24,18 +24,20 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProductionCutsTable.cc,v 1.17 2007/05/30 08:22:20 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4ProductionCutsTable.cc,v 1.18 2008/03/02 10:52:55 kurasige Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 //
 // --------------------------------------------------------------
 //      GEANT 4 class implementation file/  History:
 //    06/Oct. 2002, M.Asai : First implementation
+//    02/Mar. 2008, H.Kurashige : Add messenger
 // --------------------------------------------------------------
 
 #include "G4ProductionCutsTable.hh"
 #include "G4ProductionCuts.hh"
 #include "G4MCCIndexConversionTable.hh"
+#include "G4ProductionCutsTableMessenger.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleTable.hh"
 #include "G4RegionStore.hh"
@@ -65,7 +67,7 @@ G4ProductionCutsTable* G4ProductionCutsTable::GetProductionCutsTable()
 }
 
 G4ProductionCutsTable::G4ProductionCutsTable()
-  : firstUse(true),verboseLevel(1)
+  : firstUse(true),verboseLevel(1),fMessenger(0)
 {
   for(size_t i=0;i< NumberOfG4CutIndex;i++)
   {
@@ -77,6 +79,9 @@ G4ProductionCutsTable::G4ProductionCutsTable()
   }
   fG4RegionStore = G4RegionStore::GetInstance();
   defaultProductionCuts = new G4ProductionCuts();
+
+  // add messenger for UI 
+  fMessenger = new G4ProductionCutsTableMessenger(this);
 }
 
 G4ProductionCutsTable::G4ProductionCutsTable(const G4ProductionCutsTable& )
@@ -102,17 +107,26 @@ G4ProductionCutsTable::~G4ProductionCutsTable()
     if(energyDoubleVector[i]!=0) delete [] energyDoubleVector[i];
   }
   fG4ProductionCutsTable =0;
+
+  if (fMessenger !=0) delete fMessenger;
+  fMessenger = 0;
 }
 
 void G4ProductionCutsTable::UpdateCoupleTable(G4VPhysicalVolume* currentWorld)
 {
   if(firstUse){
-    if(G4ParticleTable::GetParticleTable()->FindParticle("gamma"))
-    { converters[0] = new G4RToEConvForGamma(); }
-    if(G4ParticleTable::GetParticleTable()->FindParticle("e-"))
-    { converters[1] = new G4RToEConvForElectron(); }
-    if(G4ParticleTable::GetParticleTable()->FindParticle("e+"))
-    { converters[2] = new G4RToEConvForPositron(); }
+    if(G4ParticleTable::GetParticleTable()->FindParticle("gamma")){
+      converters[0] = new G4RToEConvForGamma(); 
+      converters[0]->SetVerboseLevel(GetVerboseLevel());
+    }
+    if(G4ParticleTable::GetParticleTable()->FindParticle("e-")){
+      converters[1] = new G4RToEConvForElectron(); 
+      converters[1]->SetVerboseLevel(GetVerboseLevel());
+	}
+    if(G4ParticleTable::GetParticleTable()->FindParticle("e+")){
+      converters[2] = new G4RToEConvForPositron(); 
+      converters[2]->SetVerboseLevel(GetVerboseLevel());
+    }
     firstUse = false;
   }
 
@@ -375,7 +389,7 @@ G4bool  G4ProductionCutsTable::StoreCutsTable(const G4String& dir,
   if (!StoreCutsInfo(dir, ascii)) return false;
   
 #ifdef G4VERBOSE  
-  if (verboseLevel >1) {
+  if (verboseLevel >2) {
     G4cout << "G4ProductionCutsTable::StoreCutsTable " ;
     G4cout << " Material/Cuts information have been succesfully stored ";
     if (ascii) {
@@ -395,7 +409,7 @@ G4bool  G4ProductionCutsTable::RetrieveCutsTable(const G4String& dir,
   if (!CheckForRetrieveCutsTable(dir, ascii)) return false;
   if (!RetrieveCutsInfo(dir, ascii)) return false;
 #ifdef G4VERBOSE  
-  if (verboseLevel >1) {
+  if (verboseLevel >2) {
     G4cout << "G4ProductionCutsTable::RetrieveCutsTable " ;
     G4cout << " Material/Cuts information have been succesfully retreived ";
     if (ascii) {
@@ -419,11 +433,11 @@ G4bool
   G4cerr << "G4ProductionCutsTable::CheckForRetrieveCutsTable!!"<< G4endl;
   //  isNeedForRestoreCoupleInfo = false;
   if (!CheckMaterialInfo(directory, ascii)) return false;
-  if (verboseLevel >1) {
+  if (verboseLevel >2) {
       G4cerr << "G4ProductionCutsTable::CheckMaterialInfo  passed !!"<< G4endl;
   }
   if (!CheckMaterialCutsCoupleInfo(directory, ascii)) return false;
-  if (verboseLevel >1) {
+  if (verboseLevel >2) {
     G4cerr << "G4ProductionCutsTable::CheckMaterialCutsCoupleInfo  passed !!"<< G4endl;
   }
   return true;
@@ -1079,3 +1093,16 @@ G4bool   G4ProductionCutsTable::RetrieveCutsInfo(const G4String& directory,
   }
   return true;
 }
+
+// Set Verbose Level 
+//   set same verbosity to all registered RangeToEnergyConverters  
+ void G4ProductionCutsTable::SetVerboseLevel(G4int value)
+{
+  verboseLevel = value;
+  for (int ip=0; ip< NumberOfG4CutIndex; ip++) {
+    if (converters[ip] !=0 ){
+      converters[ip]->SetVerboseLevel(value);
+    }
+  }
+}
+

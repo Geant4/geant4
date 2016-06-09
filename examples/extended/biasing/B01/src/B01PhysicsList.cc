@@ -25,7 +25,7 @@
 //
 //
 // $Id: B01PhysicsList.cc,v 1.8 2007/06/05 18:20:09 ahoward Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 
 #include "globals.hh"

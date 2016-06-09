@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicsOrderedFreeVector.cc,v 1.10 2006/06/29 19:04:20 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4PhysicsOrderedFreeVector.cc,v 1.12 2008/09/22 14:49:57 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 ////////////////////////////////////////////////////////////////////////
 // PhysicsOrderedFreeVector Class Implementation
@@ -60,14 +60,12 @@
 G4PhysicsOrderedFreeVector::G4PhysicsOrderedFreeVector(G4double *Energies,
                                                        G4double *Values,
                                                        size_t VectorLength)
+  : G4PhysicsVector()
 {
         type = T_G4PhysicsOrderedFreeVector;
 
-        lastBin = INT_MAX;
-
-        lastEnergy = -DBL_MAX;
-        lastValue = DBL_MAX;
-
+        dataVector.reserve(VectorLength+1);
+        binVector.reserve(VectorLength+1); 
         numberOfBin = VectorLength;
 
         for (size_t i = 0 ; i < VectorLength ; i++)
@@ -77,19 +75,14 @@ G4PhysicsOrderedFreeVector::G4PhysicsOrderedFreeVector(G4double *Energies,
         }
         edgeMin = binVector.front();
         edgeMax = binVector.back();
+	binVector.push_back ( binVector[numberOfBin-1] + 1.0 );
+	dataVector.push_back( dataVector[numberOfBin-1] );
 }
 
 G4PhysicsOrderedFreeVector::G4PhysicsOrderedFreeVector()
+  : G4PhysicsVector()
 {
         type = T_G4PhysicsOrderedFreeVector;
-
-        lastBin = INT_MAX;
-        lastEnergy = -DBL_MAX;
-        lastValue = DBL_MAX;
-
-        edgeMin = 0.0;
-        edgeMax = 0.0;
-        numberOfBin = 0;
 }
 
         ////////////////

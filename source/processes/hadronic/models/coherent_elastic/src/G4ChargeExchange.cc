@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ChargeExchange.cc,v 1.11 2007/05/25 17:46:52 dennis Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4ChargeExchange.cc,v 1.14 2008/12/18 13:01:48 gunter Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 //
 // G4 Model: Charge and strangness exchange based on G4LightMedia model
@@ -40,32 +40,16 @@
 #include "G4ParticleTable.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4IonTable.hh"
-#include "G4QElasticCrossSection.hh"
-#include "G4VQCrossSection.hh"
-#include "G4ElasticHadrNucleusHE.hh"
 #include "Randomize.hh"
-#include "G4HadronElastic.hh"
+#include "G4NucleiProperties.hh"
 
-
-G4ChargeExchange::G4ChargeExchange(G4HadronElastic* hel, G4double elim,
-                                   G4double ehigh)
-: G4HadronicInteraction("G4ChargeExchange"),
-  fElastic(hel),
-  native(false),
-  ekinlim(elim),
-  ekinhigh(ehigh)
+G4ChargeExchange::G4ChargeExchange() : G4HadronicInteraction("Charge Exchange")
 {
   SetMinEnergy( 0.0*GeV );
   SetMaxEnergy( 100.*TeV );
-  ekinlow = 19.0*MeV;
 
-  verboseLevel= 0;
-  if(!fElastic) {
-    native = true;
-    fElastic = new G4HadronElastic();
-  }
-  qCManager   = fElastic->GetCS();
-  hElastic    = fElastic->GetHElastic();
+  lowEnergyRecoilLimit = 100.*keV;  
+  lowestEnergyLimit    = 1.*MeV;  
 
   theProton   = G4Proton::Proton();
   theNeutron  = G4Neutron::Neutron();
@@ -99,9 +83,7 @@ G4ChargeExchange::G4ChargeExchange(G4HadronElastic* hel, G4double elim,
 }
 
 G4ChargeExchange::~G4ChargeExchange()
-{
-  if(native) delete fElastic;
-}
+{}
 
 G4HadFinalState* G4ChargeExchange::ApplyYourself(
 		 const G4HadProjectile& aTrack, G4Nucleus& targetNucleus)
@@ -116,7 +98,7 @@ G4HadFinalState* G4ChargeExchange::ApplyYourself(
   G4int Z = static_cast<G4int>(zTarget+0.5);
   G4int A = static_cast<G4int>(aTarget+0.5);
 
-  if(ekin == 0.0 || A < 3) {
+  if(ekin <= lowestEnergyLimit || A < 3) {
     theParticleChange.SetEnergyChange(ekin);
     theParticleChange.SetMomentumChange(aTrack.Get4Momentum().vect().unit());
     return &theParticleChange;
@@ -132,7 +114,6 @@ G4HadFinalState* G4ChargeExchange::ApplyYourself(
 
   // Scattered particle referred to axis of incident particle
   const G4ParticleDefinition* theParticle = aParticle->GetDefinition();
-  G4double m1 = theParticle->GetPDGMass();
 
   G4int N = A - Z;
   G4int projPDG = theParticle->GetPDGEncoding();
@@ -144,12 +125,7 @@ G4HadFinalState* G4ChargeExchange::ApplyYourself(
 
   G4ParticleDefinition * theDef = 0;
 
-  if (Z == 1 && A == 3) theDef = theT;
-  else if (Z == 2 && A == 3) theDef = theHe3;
-  else if (Z == 2 && A == 4) theDef = theA;
-  else theDef = G4ParticleTable::GetParticleTable()->FindIon(Z,A,0,Z);
-
-  G4double m2 = theDef->GetPDGMass();
+  G4double m2 = G4NucleiProperties::GetNuclearMass((G4double)A, (G4double)Z);
   G4LorentzVector lv1 = aParticle->Get4Momentum();
   G4LorentzVector lv0(0.0,0.0,0.0,m2);
 
@@ -258,80 +234,36 @@ G4HadFinalState* G4ChargeExchange::ApplyYourself(
   else           theRecoil = theDef;
 
   G4double etot = lv0.e() + lv1.e();
-  if(etot < m11 + m21) return &theParticleChange;
+
+  // kinematiacally impossible
+  if(etot < m11 + m21) {
+    theParticleChange.SetEnergyChange(ekin);
+    theParticleChange.SetMomentumChange(aTrack.Get4Momentum().vect().unit());
+    return &theParticleChange;
+  }
 
   G4ThreeVector p1 = lv1.vect();
-  G4double e1 = 0.5*etot*(1.0 + (m21*m21 - m11*m11)/(etot*etot));
+  G4double e1 = 0.5*etot*(1.0 - (m21*m21 - m11*m11)/(etot*etot));
   //  G4double e2 = etot - e1;
   G4double ptot = std::sqrt(e1*e1 - m11*m11);
 
   G4double tmax = 4.0*ptot*ptot;
-  G4double t = 0.0;
+  G4double g2 = GeV*GeV; 
 
-  // Choose generator
-  G4ElasticGenerator gtype = fLElastic;
-  if ((theParticle == theProton || theParticle == theNeutron) && 
-      Z <= 2 && ekin >= ekinlow) {
-    gtype = fQElastic;
-  } else {
-    if(ekin >= ekinlow)       gtype = fSWave;
-    else if(ekin >= ekinhigh) gtype = fHElastic;
-  }
-
-  // Sample t
-  if(gtype == fQElastic) {
-    if (verboseLevel > 1)
-      G4cout << "G4ChargeExchange: Z= " << Z << " N= "
-	     << N << " pdg= " <<  projPDG
-	     << " mom(GeV)= " << plab/GeV << "  " << qCManager << G4endl;
-    if(Z == 1 && N == 2) N = 1;
-    else if (Z == 2 && N == 1) N = 2;
-    G4double cs = qCManager->GetCrossSection(false,plab,Z,N,projPDG);
-    if(cs > 0.0) t = qCManager->GetExchangeT(Z,N,projPDG);
-    else gtype = fSWave;
-  }
-
-  if(gtype == fHElastic) {
-    t = hElastic->SampleT(theParticle,plab,Z,A);
-    if(t > tmax) gtype = fSWave;
-  }
-
-  if(gtype == fLElastic) {
-    t = GeV*GeV*fElastic->SampleT(ptot,m1,m2,aTarget);
-    if(t > tmax) gtype = fSWave;
-  }
-
-  // NaN finder
-  if(!(t < 0.0 || t >= 0.0)) {
-    if (verboseLevel > -1) {
-      G4cout << "G4ChargeExchange:WARNING: Z= " << Z << " N= " 
-	     << N << " pdg= " <<  projPDG
-	     << " mom(GeV)= " << plab/GeV 
-	     << " the model type " << gtype;
-      if(gtype ==  fQElastic) G4cout << " CHIPS ";
-      else if(gtype ==  fLElastic) G4cout << " LElastic ";
-      else if(gtype ==  fHElastic) G4cout << " HElastic ";
-      G4cout << " t= " << t
-	     << " S-wave will be sampled" 
-	     << G4endl; 
-    }
-    gtype = fSWave;
-  }
-
-  if(gtype == fSWave) t = G4UniformRand()*tmax;
+  G4double t = g2*SampleT(tmax/g2,aTarget);
 
   if(verboseLevel>1)
-    G4cout <<"type= " << gtype <<" t= " << t << " tmax= " << tmax
+    G4cout <<"## G4ChargeExchange t= " << t << " tmax= " << tmax
 	   << " ptot= " << ptot << G4endl;
 
   // Sampling in CM system
   G4double phi  = G4UniformRand()*twopi;
   G4double cost = 1. - 2.0*t/tmax;
-  if(std::abs(cost) > 1.0) cost = -1.0 + 2.0*G4UniformRand();
+  if(std::abs(cost) > 1.0) cost = 1.0;
   G4double sint = std::sqrt((1.0-cost)*(1.0+cost));
 
-  if (verboseLevel > 1)
-    G4cout << "cos(t)=" << cost << " std::sin(t)=" << sint << G4endl;
+  //if (verboseLevel > 1)
+  //  G4cout << "cos(t)=" << cost << " std::sin(t)=" << sint << G4endl;
 
   G4ThreeVector v1(sint*std::cos(phi),sint*std::sin(phi),cost);
   v1 *= ptot;
@@ -342,20 +274,52 @@ G4HadFinalState* G4ChargeExchange::ApplyYourself(
   nlv1.boost(bst);
 
   theParticleChange.SetStatusChange(stopAndKill);
+  theParticleChange.SetEnergyChange(0.0);
   G4DynamicParticle * aSec = new G4DynamicParticle(theSecondary, nlv1);
   theParticleChange.AddSecondary(aSec);
 
   G4double erec =  nlv0.e() - m21;
+
+  //G4cout << "erec= " <<erec << " Esec= " << aSec->GetKineticEnergy() << G4endl;  
+
   if(theHyperon) {
     theParticleChange.SetLocalEnergyDeposit(erec);
     aSec = new G4DynamicParticle();
     aSec->SetDefinition(theRecoil);
     aSec->SetKineticEnergy(0.0);
-  } else if(erec > ekinlim) {
+  } else if(erec > lowEnergyRecoilLimit) {
     aSec = new G4DynamicParticle(theRecoil, nlv0);
     theParticleChange.AddSecondary(aSec);
   } else {
+    if(erec < 0.0) erec = 0.0;
     theParticleChange.SetLocalEnergyDeposit(erec);
   }
   return &theParticleChange;
 }
+
+G4double G4ChargeExchange::SampleT(G4double tmax, G4double A)
+{
+  G4double aa, bb, cc, dd;
+  if (A <= 62.) {
+    aa = std::pow(A, 1.63);
+    bb = 14.5*std::pow(A, 0.66);
+    cc = 1.4*std::pow(A, 0.33);
+    dd = 10.;
+  } else {
+    aa = std::pow(A, 1.33);
+    bb = 60.*std::pow(A, 0.33);
+    cc = 0.4*std::pow(A, 0.40);
+    dd = 10.;
+  }
+  G4double x1 = (1.0 - std::exp(-tmax*bb))*aa/bb;
+  G4double x2 = (1.0 - std::exp(-tmax*dd))*cc/dd;
+  
+  G4double t;
+  G4double y = bb;
+  if(G4UniformRand()*(x1 + x2) < x2) y = dd;
+
+  do {t = -std::log(G4UniformRand())/y;} while (t > tmax);
+
+  return t;
+}
+

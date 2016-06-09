@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: global-V09-00-02    (14-December-2007)
+ Geant4 version Name: global-V09-01-17    (19-December-2008)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -42,47 +42,65 @@ theBox : (0,0,0.08)
  buildBhabha cross section 0
 G4PolarizedPEEffectCrossSection() init
 
-pol-phot:  Total cross sections from Sandia parametrisation. 
+pol-phot:   for  gamma    SubType= 12
+ Total cross sections from Sandia parametrisation. 
       Sampling according Polarized-PhotoElectric model
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+Polarized-PhotoElectric :     Emin=          0 eV         Emax=   100 TeV
 
-pol-compt:  Total cross sections has a good parametrisation from 10 KeV to (100/Z) GeV
+pol-compt:   for  gamma    SubType= 13
+      Lambda tables from 100 eV  to 100 GeV in 90 bins, spline: 1
+ Total cross sections has a good parametrisation from 10 KeV to (100/Z) GeV
       Sampling according Polarized-Compton model
-      tables are built for  gamma
-      Lambda tables from 100 eV  to 100 GeV in 90 bins.
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+   Polarized-Compton :     Emin=          0 eV         Emax=   100 GeV
 
-pol-conv:  Total cross sections has a good parametrisation from 1.5 MeV to 100 GeV for all Z;
+pol-conv:   for  gamma    SubType= 14
+      Lambda tables from 1.022 MeV to 100 GeV in 100 bins, spline: 1
+ Total cross sections has a good parametrisation from 1.5 MeV to 100 GeV for all Z;
       sampling secondary e+e- according to the polarized compton cross section
-      tables are built for  gamma
-      Lambda tables from 1.022 MeV to 100 GeV in 100 bins.
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+             polConv :     Emin=          0 eV         Emax=   100 GeV
 
-msc:  Model variant of multiple scattering for e-
-      Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      LateralDisplacementFlag=  1   Skin= 0
-      Boundary/stepping algorithm is active with RangeFactor= 0.02  Step limit type 1
+msc:   for e-    SubType= 10
+      Lambda tables from 100 eV  to 100 TeV in 84 bins, spline: 1
+      RangeFactor= 0.02, step limit type: 1, lateralDisplacement: 1, skin= 3, geomFactor= 2.5
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+         UrbanMscUni :     Emin=          0 eV         Emax=   100 TeV
 
-pol-eIoni:   tables are built for  e-
-      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
-      Lambda tables from threshold to 100 TeV in 120 bins.
+pol-eIoni:   for  e-    SubType= 2
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
+      Lambda tables from threshold to 100 TeV in 120 bins, spline: 1
+      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       Delta cross sections from Moller+Bhabha, good description from 1 KeV to 100 GeV.
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+PolarizedMollerBhabha :     Emin=          0 eV         Emax=   100 TeV
 
-pol-eBrem:   tables are built for  e-
-      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
-      Lambda tables from threshold to 100 TeV in 120 bins.
+pol-eBrem:   for  e-    SubType= 3
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV in 84 bins, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+             PolBrem :     Emin=          0 eV         Emax=   100 TeV
 
-pol-eIoni:   tables are built for  e+
-      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
-      Lambda tables from threshold to 100 TeV in 120 bins.
+pol-eIoni:   for  e+    SubType= 2
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
+      Lambda tables from threshold to 100 TeV in 120 bins, spline: 1
+      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       Delta cross sections from Moller+Bhabha, good description from 1 KeV to 100 GeV.
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+PolarizedMollerBhabha :     Emin=          0 eV         Emax=   100 TeV
 
-pol-eBrem:   tables are built for  e+
-      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
-      Lambda tables from threshold to 100 TeV in 120 bins.
+pol-eBrem:   for  e+    SubType= 3
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV in 84 bins, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+             PolBrem :     Emin=          0 eV         Emax=   100 TeV
 
-pol-annihil:       Polarized model for annihilation into 2 photons
-      tables are built for  e+
-      Lambda tables from 100 eV  to 100 TeV in 120 bins.
+pol-annihil:   for  e+    SubType= 5
+      Lambda tables from 100 eV  to 100 TeV in 120 bins, spline: 1
+      Polarized model for annihilation into 2 photons
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+Polarized-Annihilation :     Emin=          0 eV         Emax=   100 TeV
  annih-numOfCouples=2
 annih- 0/2
 annih- 1
@@ -129,39 +147,39 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=8.46s Real=8.46s Sys=0s
+  User=0.36s Real=0.36s Sys=0s
 
  The run consists of 10000 gamma of 10 MeV through 1.75 mm  of G4_Fe (density: 7.874 g/cm3 )
 
 --------- Ranlux engine status ---------
  Initial seed = 9876
- float_seed_table[] = 0.152339 0.25755 0.713728 0.0103734 0.564808 0.643406 0.374264 0.937159 0.805849 0.0434163 0.374805 0.197638 0.150186 0.321046 0.150129 0.145958 0.210049 0.747725 0.736227 0.0699872 0.339619 0.327128 0.669458 0.525705 
- i_lag = 23, j_lag = 9
- carry = 0, count24 = 23
+ float_seed_table[] = 0.811133 0.670786 0.419067 0.31915 0.637175 0.314616 0.255555 0.941604 0.869501 0.40014 0.576243 0.459917 0.406934 0.398763 0.759094 0.125266 0.325534 0.0675368 0.0205697 0.514129 0.216193 0.204895 0.0710009 0.690242 
+ i_lag = 2, j_lag = 12
+ carry = 0, count24 = 1
  luxury = 3 nskip = 199
 ----------------------------------------
 
  Process calls frequency --->
-	Transportation = 31244
-	pol-compt = 267
-	msc = 3847
-	pol-eBrem = 382
-	pol-conv = 234
-	pol-eIoni = 617
-	pol-annihil = 63
-	pol-phot = 173
+	Transportation = 31070
+	pol-compt = 253
+	msc = 3246
+	pol-eBrem = 314
+	pol-conv = 189
+	pol-eIoni = 538
+	pol-phot = 145
+	pol-annihil = 65
  Gamma: 
-Mean Number per Event :1.0098
-Mean Energy :9.548 MeV +- 1.9702 MeV
-Mean Polarization :-0.96123 +- 0.19031
+Mean Number per Event :1.01
+Mean Energy :9.5971 MeV +- 1.8649 MeV
+Mean Polarization :-0.96592 +- 0.17829
  Electron: 
-Mean Number per Event :0.0348
-Mean Energy :5.1647 MeV +- 2.4291 MeV
-Mean Polarization :-0.71224 +- 0.30264
+Mean Number per Event :0.031
+Mean Energy :5.3462 MeV +- 2.4873 MeV
+Mean Polarization :-0.74389 +- 0.27751
  Positron: 
-Mean Number per Event :0.0176
-Mean Energy :4.3394 MeV +- 2.0534 MeV
-Mean Polarization :-0.60672 +- 0.32544
+Mean Number per Event :0.0125
+Mean Energy :4.3364 MeV +- 1.9514 MeV
+Mean Polarization :-0.63862 +- 0.29018
 #
 UserDetectorConstruction deleted.
 UserPhysicsList deleted.
@@ -169,7 +187,6 @@ UserRunAction deleted.
 UserPrimaryGenerator deleted.
 G4 kernel has come to Quit state.
 EventManager deleted.
-Default detector region deleted.
 UImanager deleted.
 Units table cleared.
 StateManager deleted.

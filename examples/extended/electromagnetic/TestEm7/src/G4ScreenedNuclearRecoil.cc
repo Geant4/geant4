@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScreenedNuclearRecoil.cc,v 1.4 2007/12/10 16:28:15 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// G4ScreenedNuclearRecoil.cc,v 1.57 2008/05/07 11:51:26 marcus Exp
+// GEANT4 tag 
 //
 //
 // Class Description
@@ -83,10 +83,14 @@
 
 #include "G4ScreenedNuclearRecoil.hh"
 
+const char* G4ScreenedCoulombCrossSectionInfo::CVSFileVers() { return 
+	"G4ScreenedNuclearRecoil.cc,v 1.57 2008/05/07 11:51:26 marcus Exp GEANT4 tag ";
+}
+
 #include "G4ParticleTypes.hh"
 #include "G4ParticleTable.hh"
 #include "G4VParticleChange.hh"
-#include "G4ParticleChange.hh"
+#include "G4ParticleChangeForLoss.hh"
 #include "G4DataVector.hh"
 #include "G4Track.hh"
 #include "G4Step.hh"
@@ -98,11 +102,14 @@
 #include "G4ElementVector.hh"
 #include "G4IsotopeVector.hh"
 
+#include "G4EmProcessSubType.hh"
+
 #include "G4RangeTest.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4DynamicParticle.hh"
 #include "G4ProcessManager.hh"
 #include "G4StableIsotopes.hh"
+#include "G4LindhardPartition.hh"
 
 #include "Randomize.hh"
 
@@ -111,20 +118,14 @@
 #include <iostream>
 #include <iomanip>
 
+#include "c2_factory.hh"
+static c2_factory<G4double> c2; // this makes a lot of notation shorter
+typedef c2_ptr<G4double> c2p;
+
 G4ScreenedCoulombCrossSection::~G4ScreenedCoulombCrossSection()
 {
-	ScreeningMap::iterator tables=screeningData.begin();
-	for (;tables != screeningData.end(); tables++) {
-		delete (*tables).second.EMphiData;
-	}
 	screeningData.clear();
-	
-	std::map<G4int, c2_function<G4double> *>::iterator mfpit=MFPTables.begin();
-	for (;mfpit != MFPTables.end(); mfpit++) {
-		delete (*mfpit).second;
-	}
-	MFPTables.clear();
-	
+	MFPTables.clear();	
 }
 
 const G4double G4ScreenedCoulombCrossSection::massmap[nMassMapElements+1]={
@@ -247,7 +248,7 @@ void G4ScreenedCoulombCrossSection::BuildMFPTables()
         {
 			element=elementVector[kel];
 			G4int Z=(G4int)std::floor(element->GetZ()+0.5);
-			c2_function<G4double> &ifunc=*sigmaMap[Z];
+			const G4_c2_function &ifunc=sigmaMap[Z];
 			if(!kel || ifunc.xmin() > emin) emin=ifunc.xmin();
 			if(!kel || ifunc.xmax() < emax) emax=ifunc.xmax();			
         }
@@ -267,7 +268,7 @@ void G4ScreenedCoulombCrossSection::BuildMFPTables()
         {
 			element=elementVector[kel];
 			G4int Z=(G4int)std::floor(element->GetZ()+0.5);
-			c2_function<G4double> &sigma=*sigmaMap[Z];
+			const G4_c2_function &sigma=sigmaMap[Z];
 			G4double ndens = atomDensities[kel]; // compute atom fraction for this element in this material
 						
 			for (G4int eidx=0; eidx < nmfpvals; eidx++) {
@@ -280,17 +281,8 @@ void G4ScreenedCoulombCrossSection::BuildMFPTables()
 			mfpvals[eidx] = 1.0/mfpvals[eidx];
 		}
 		// and make a new interpolating function out of the sum
-		MFPTables[matidx] = static_cast<c2_function<G4double> *>(new log_log_interpolating_function<G4double>(
-				evals, mfpvals));
+		MFPTables[matidx] = c2.log_log_interpolating_function().load(evals, mfpvals,true,0,true,0);
     }
-	
-#ifdef DEBUG	
-	for (G4int matidx=0; matidx < nMaterials; matidx++) {
-		const G4Material* material= (*materialTable)[matidx];
-		G4cout << "***** MFP (1MeV) ***** " << material->GetName() << "  " << (*MFPTables[matidx])(1.0) << G4endl; 
-	}
-#endif
-	
 }
 
 G4ScreenedNuclearRecoil::
@@ -303,8 +295,14 @@ G4ScreenedNuclearRecoil(const G4String& processName,
 	generateRecoils(GenerateRecoils), avoidReactions(1), 
 	recoilCutoff(RecoilCutoff), physicsCutoff(PhysicsCutoff),
 	hardeningFraction(0.0), hardeningFactor(1.0),
-	externalCrossSectionConstructor(0)
+	externalCrossSectionConstructor(0),
+	NIELPartitionFunction(new G4LindhardRobinsonPartition)
 {
+		// for now, point to class instance of this. Doing it by creating a new one fails
+		// to correctly update NIEL
+		// not even this is needed... done in G4VProcess().
+		// pParticleChange=&aParticleChange; 
+		processMaxEnergy=50000.0*MeV;
 		highEnergyLimit=100.0*MeV;
 		lowEnergyLimit=physicsCutoff;
 		registerDepositedEnergy=1; // by default, don't hide NIEL
@@ -312,15 +310,11 @@ G4ScreenedNuclearRecoil(const G4String& processName,
 		// SetVerboseLevel(2);
 		AddStage(new G4ScreenedCoulombClassicalKinematics);
 		AddStage(new G4SingleScatter); 
+		SetProcessSubType(fCoulombScattering);
 }
 
 void G4ScreenedNuclearRecoil::ResetTables()
 {
-	std::map<G4int, c2_function<G4double>*>::iterator xh=meanFreePathTables.begin();
-	for(;xh != meanFreePathTables.end(); xh++) {
-		delete (*xh).second;
-	}
-	meanFreePathTables.clear();
 	
 	std::map<G4int, G4ScreenedCoulombCrossSection*>::iterator xt=crossSectionHandlers.begin();
 	for(;xt != crossSectionHandlers.end(); xt++) {
@@ -337,6 +331,23 @@ void G4ScreenedNuclearRecoil::ClearStages()
 	//for(; stage != collisionStages.end(); stage++) delete (*stage);
 
 	collisionStages.clear();
+}
+
+void G4ScreenedNuclearRecoil::SetNIELPartitionFunction(const G4VNIELPartition *part)
+{
+	if(NIELPartitionFunction) delete NIELPartitionFunction;
+	NIELPartitionFunction=part;
+}
+
+void G4ScreenedNuclearRecoil::DepositEnergy(G4int z1, G4double a1, const G4Material *material, G4double energy)
+{
+	if(!NIELPartitionFunction) {
+		IonizingLoss+=energy;
+	} else {
+		G4double part=NIELPartitionFunction->PartitionNIEL(z1, a1, material, energy);
+		IonizingLoss+=energy*(1-part);
+		NIEL += energy*part;
+	}
 }
 
 G4ScreenedNuclearRecoil::~G4ScreenedNuclearRecoil()
@@ -362,16 +373,21 @@ G4ScreenedCoulombCrossSection *G4ScreenedNuclearRecoil::GetNewCrossSectionHandle
 
 G4double G4ScreenedNuclearRecoil::GetMeanFreePath(const G4Track& track,
 						  G4double, 
-						  G4ForceCondition*)
+						  G4ForceCondition* cond)
 {
 	const G4DynamicParticle* incoming = track.GetDynamicParticle();
 	G4double energy = incoming->GetKineticEnergy();
 	G4double a1=incoming->GetDefinition()->GetPDGMass()/amu_c2;
 	
 	G4double meanFreePath;
+	*cond=NotForced;
 	
-	if (energy < lowEnergyLimit || energy < recoilCutoff) return 1.0*nanometer; /* stop slow particles! */
-	else if (energy > highEnergyLimit*a1) energy=highEnergyLimit*a1; /* constant MFP at high energy */
+	if (energy < lowEnergyLimit || energy < recoilCutoff*a1) {
+		*cond=Forced;
+		return 1.0*nm; /* catch and stop slow particles to collect their NIEL! */
+	} else if (energy > processMaxEnergy*a1) {
+		return DBL_MAX; // infinite mean free path
+	} else if (energy > highEnergyLimit*a1) energy=highEnergyLimit*a1; /* constant MFP at high energy */
 
 	G4double fz1=incoming->GetDefinition()->GetPDGCharge();
 	G4int z1=(G4int)(fz1/eplus + 0.5);
@@ -389,7 +405,7 @@ G4double G4ScreenedNuclearRecoil::GetMeanFreePath(const G4Track& track,
 	const G4MaterialCutsCouple* materialCouple = track.GetMaterialCutsCouple();
 	size_t materialIndex = materialCouple->GetMaterial()->GetIndex();
 
-	c2_function<G4double> &mfp=*(*xs)[materialIndex];
+	const G4_c2_function &mfp=*(*xs)[materialIndex];
 	
 	// make absolutely certain we don't get an out-of-range energy
 	meanFreePath = mfp(std::min(std::max(energy, mfp.xmin()), mfp.xmax()));
@@ -402,8 +418,9 @@ G4double G4ScreenedNuclearRecoil::GetMeanFreePath(const G4Track& track,
 G4VParticleChange* G4ScreenedNuclearRecoil::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
 {
 	validCollision=1;
-	aParticleChange.Initialize(aTrack);
+	pParticleChange->Initialize(aTrack);
 	NIEL=0.0; // default is no NIEL deposited
+	IonizingLoss=0.0;
 	
 	// do universal setup
 	
@@ -412,63 +429,64 @@ G4VParticleChange* G4ScreenedNuclearRecoil::PostStepDoIt(const G4Track& aTrack, 
 	
 	G4double fz1=baseParticle->GetPDGCharge()/eplus;
 	G4int z1=(G4int)(fz1+0.5);
+	G4double a1=baseParticle->GetPDGMass()/amu_c2;
 	G4double incidentEnergy = incidentParticle->GetKineticEnergy();
 		
 	// Select randomly one element and (possibly) isotope in the current material.
 	const G4MaterialCutsCouple* couple = aTrack.GetMaterialCutsCouple();
 	
-	if(incidentEnergy < GetRecoilCutoff()) { // check energy sanity on entry
-		if(!baseParticle->GetProcessManager()->
-		   GetAtRestProcessVector()->size())
-			aParticleChange.ProposeTrackStatus(fStopAndKill);
-		else
-			aParticleChange.ProposeTrackStatus(fStopButAlive);
+	const G4Material* mat = couple->GetMaterial();
 
-		AddToNIEL(incidentEnergy);
-		aParticleChange.ProposeEnergy(0.0);
+	G4double P=0.0; // the impact parameter of this collision
+
+	if(incidentEnergy < GetRecoilCutoff()*a1) { // check energy sanity on entry
+		DepositEnergy(z1, baseParticle->GetPDGMass()/amu_c2, mat, incidentEnergy);
+		GetParticleChange().ProposeEnergy(0.0);
 		// stop the particle and bail out
 		validCollision=0;
-	} 	
-	
-	const G4Material* mat = couple->GetMaterial();
-	G4double numberDensity=mat->GetTotNbOfAtomsPerVolume();
-	G4double lattice=0.5/std::pow(numberDensity,1.0/3.0); // typical lattice half-spacing
-	G4double length=GetCurrentInteractionLength();
-	G4double sigopi=1.0/(CLHEP::pi*numberDensity*length);  // this is sigma0/pi
-	
-	// compute the impact parameter very early, so if is rejected as too far away, little effort is wasted
-	// this is the TRIM method for determining an impact parameter based on the flight path
-	// this gives a cumulative distribution of N(P)= 1-exp(-pi P^2 n l)
-	// which says the probability of NOT hitting a disk of area sigma= pi P^2 =exp(-sigma N l) 
-	// which may be reasonable
-	G4double P;
-	if(sigopi < lattice*lattice) { 
-		// normal long-flight approximation
-		P = std::sqrt(-std::log(G4UniformRand()) *sigopi);
 	} else {
-		// short-flight limit
-		P = std::sqrt(G4UniformRand())*lattice;
-	}
 		
-	G4double fraction=GetHardeningFraction();
-	if(fraction && G4UniformRand() < fraction) { 
-		// pick out some events, and increase the central cross section
-		// by reducing the impact parameter
-		P /= std::sqrt(GetHardeningFactor());
-	}
-	
-	
-	// check if we are far enough away that the energy transfer must be below cutoff, 
-	// and leave everything alone if so, saving a lot of time.
-	if(P*P > sigopi) {
-		if(GetVerboseLevel() > 1) 
-			printf("ScreenedNuclear impact reject: length=%.3f P=%.4f limit=%.4f\n",
-				   length/angstrom, P/angstrom,std::sqrt(sigopi)/angstrom);
-		// no collision, don't follow up with anything
-		validCollision=0;
+		G4double numberDensity=mat->GetTotNbOfAtomsPerVolume();
+		G4double lattice=0.5/std::pow(numberDensity,1.0/3.0); // typical lattice half-spacing
+		G4double length=GetCurrentInteractionLength();
+		G4double sigopi=1.0/(CLHEP::pi*numberDensity*length);  // this is sigma0/pi
+		
+		// compute the impact parameter very early, so if is rejected as too far away, little effort is wasted
+		// this is the TRIM method for determining an impact parameter based on the flight path
+		// this gives a cumulative distribution of N(P)= 1-exp(-pi P^2 n l)
+		// which says the probability of NOT hitting a disk of area sigma= pi P^2 =exp(-sigma N l) 
+		// which may be reasonable
+		if(sigopi < lattice*lattice) { 
+			// normal long-flight approximation
+			P = std::sqrt(-std::log(G4UniformRand()) *sigopi);
+		} else {
+			// short-flight limit
+			P = std::sqrt(G4UniformRand())*lattice;
+		}
+			
+		G4double fraction=GetHardeningFraction();
+		if(fraction && G4UniformRand() < fraction) { 
+			// pick out some events, and increase the central cross section
+			// by reducing the impact parameter
+			P /= std::sqrt(GetHardeningFactor());
+		}
+		
+		
+		// check if we are far enough away that the energy transfer must be below cutoff, 
+		// and leave everything alone if so, saving a lot of time.
+		if(P*P > sigopi) {
+			if(GetVerboseLevel() > 1) 
+				printf("ScreenedNuclear impact reject: length=%.3f P=%.4f limit=%.4f\n",
+					   length/angstrom, P/angstrom,std::sqrt(sigopi)/angstrom);
+			// no collision, don't follow up with anything
+			validCollision=0;
+		}
 	}
 	
 	// find out what we hit, and record it in our kinematics block.
+	kinematics.targetMaterial=mat;
+	kinematics.a1=a1;
+	
 	if(validCollision) {
 		G4ScreenedCoulombCrossSection	*xsect=GetCrossSectionHandlers()[z1];
 		G4ParticleDefinition *recoilIon=
@@ -476,12 +494,10 @@ G4VParticleChange* G4ScreenedNuclearRecoil::PostStepDoIt(const G4Track& aTrack, 
 		kinematics.crossSection=xsect;
 		kinematics.recoilIon=recoilIon;
 		kinematics.impactParameter=P;
-		kinematics.a1=baseParticle->GetPDGMass()/amu_c2;
 		kinematics.a2=recoilIon->GetPDGMass()/amu_c2;
 	} else {
 		kinematics.recoilIon=0;
 		kinematics.impactParameter=0;
-		kinematics.a1=baseParticle->GetPDGMass()/amu_c2;
 		kinematics.a2=0;
 	}
 	
@@ -490,9 +506,24 @@ G4VParticleChange* G4ScreenedNuclearRecoil::PostStepDoIt(const G4Track& aTrack, 
 	for(; stage != collisionStages.end(); stage++) 
 		(*stage)->DoCollisionStep(this,aTrack, aStep);
 	
-	if(registerDepositedEnergy) aParticleChange.ProposeLocalEnergyDeposit(NIEL);
-	
+	if(registerDepositedEnergy) {
+		pParticleChange->ProposeLocalEnergyDeposit(IonizingLoss+NIEL);
+		pParticleChange->ProposeNonIonizingEnergyDeposit(NIEL);
+		//MHM G4cout << "depositing energy, total = " << IonizingLoss+NIEL << " NIEL = " << NIEL << G4endl;
+	}
+
 	return G4VDiscreteProcess::PostStepDoIt( aTrack, aStep );
+}
+
+G4ScreenedCoulombClassicalKinematics::G4ScreenedCoulombClassicalKinematics() :
+// instantiate all the needed functions statically, so no allocation is done at run time
+// we will be solving x^2 - x phi(x*au)/eps - beta^2 == 0.0
+// or, for easier scaling, x'^2 - x' au phi(x')/eps - beta^2 au^2
+// note that only the last of these gets deleted, since it owns the rest
+phifunc(c2.const_plugin_function()),
+xovereps(c2.linear(0., 0., 0.)), // will fill this in with the right slope at run time
+diff(c2.quadratic(0., 0., 0., 1.)-xovereps*phifunc)
+{
 }
 
 G4bool G4ScreenedCoulombClassicalKinematics::DoScreeningComputation(G4ScreenedNuclearRecoil *master,
@@ -517,37 +548,26 @@ G4bool G4ScreenedCoulombClassicalKinematics::DoScreeningComputation(G4ScreenedNu
 		
 	}
 	
-	c2_function<G4double> &phiData=*(screen->EMphiData);
-	// instantiate all the needed functions statically, so no allocation is done at run time
 	// we will be solving x^2 - x phi(x*au)/eps - beta^2 == 0.0
 	// or, for easier scaling, x'^2 - x' au phi(x')/eps - beta^2 au^2
-	static c2_plugin_function<G4double> phifunc;
-	static c2_quadratic<G4double> xsq(0., 0., 0., 1.); //  x^2
-	static c2_linear<G4double> xovereps(0., 0., 0.); // will fill this in with the right slope at run time
-	static c2_function<G4double> &xphi=xovereps*phifunc;
-	static c2_function<G4double> &diff=xsq-xphi;
-	
 	xovereps.reset(0., 0.0, au/eps); // slope of x*au/eps term
-	phifunc.set_function(phiData); // install interpolating table
-	
+	phifunc.set_function(&(screen->EMphiData.get())); // install interpolating table
 	G4double xx1, phip, phip2;
-	G4int root_error;
-	
-	xx1=diff.find_root(phiData.xmin(), std::min(10*xx0*au,phiData.xmax()), 
-					   std::min(xx0*au, phiData.xmax()), beta*beta*au*au, &root_error, &phip, &phip2)/au; 
+	G4int root_error;	
+	xx1=diff->find_root(phifunc.xmin(), std::min(10*xx0*au,phifunc.xmax()), 
+					   std::min(xx0*au, phifunc.xmax()), beta*beta*au*au, &root_error, &phip, &phip2)/au; 
 	
 	if(root_error) {
 		G4cout << "Screened Coulomb Root Finder Error" << G4endl;
 		G4cout << "au " << au << " A " << A << " a1 " << a1 << " xx1 " << xx1 << " eps " << eps << " beta " << beta << G4endl;
-		G4cout << " xmin " << phiData.xmin() << " xmax " << std::min(10*xx0*au,phiData.xmax()) ;
-		G4cout << " f(xmin) " << phifunc(phiData.xmin()) <<  " f(xmax) " << phifunc(std::min(10*xx0*au,phiData.xmax())) ;
-		G4cout << " xstart " << std::min(xx0*au, phiData.xmax()) <<  " target " <<  beta*beta*au*au ;
+		G4cout << " xmin " << phifunc.xmin() << " xmax " << std::min(10*xx0*au,phifunc.xmax()) ;
+		G4cout << " f(xmin) " << phifunc(phifunc.xmin()) <<  " f(xmax) " << phifunc(std::min(10*xx0*au,phifunc.xmax())) ;
+		G4cout << " xstart " << std::min(xx0*au, phifunc.xmax()) <<  " target " <<  beta*beta*au*au ;
 		G4cout << G4endl;
 		throw c2_exception("Failed root find");
 	}
 	
-	phifunc.unset_function(); // throws an exception if used without setting again
-							  // phiprime is scaled by one factor of au because phi is evaluated at (xx0*au),
+	// phiprime is scaled by one factor of au because phi is evaluated at (xx0*au),
 	G4double phiprime=phip*au;
 	
 	//lambda0 is from W&M 19
@@ -561,10 +581,12 @@ G4bool G4ScreenedCoulombClassicalKinematics::DoScreeningComputation(G4ScreenedNu
 	for(G4int k=0; k<4; k++) {
 		G4double x, ff;
 		x=xx1/xvals[k];
-		ff=1.0/std::sqrt(1.0-phiData(x*au)/(x*eps)-beta*beta/(x*x));
+		ff=1.0/std::sqrt(1.0-phifunc(x*au)/(x*eps)-beta*beta/(x*x));
 		alpha+=weights[k]*ff;
 	}
 	
+	phifunc.unset_function(); // throws an exception if used without setting again
+
 	G4double thetac1=CLHEP::pi*beta*alpha/xx1; // complement of CM scattering angle
 	G4double sintheta=std::sin(thetac1); //note sin(pi-theta)=sin(theta)
 	G4double costheta=-std::cos(thetac1); // note cos(pi-theta)=-cos(theta)
@@ -623,21 +645,16 @@ void G4ScreenedCoulombClassicalKinematics::DoCollisionStep(G4ScreenedNuclearReco
 	G4double eRecoil=4*incidentEnergy*a1*A*kin.cosZeta*kin.cosZeta/((a1+A)*(a1+A));
 	kin.eRecoil=eRecoil;
 	
-	if(incidentEnergy-eRecoil < master->GetRecoilCutoff()) {
-		if(!baseParticle->GetProcessManager()->
-		   GetAtRestProcessVector()->size())
-			aParticleChange.ProposeTrackStatus(fStopAndKill);
-		else
-			aParticleChange.ProposeTrackStatus(fStopButAlive);
+	if(incidentEnergy-eRecoil < master->GetRecoilCutoff()*a1) {
 		aParticleChange.ProposeEnergy(0.0);
-		master->AddToNIEL(incidentEnergy-eRecoil);
+		master->DepositEnergy(int(screen->z1), a1, kin.targetMaterial, incidentEnergy-eRecoil);
 	} 
 	
-	if(master->GetEnableRecoils() && eRecoil > master->GetRecoilCutoff()) {
+	if(master->GetEnableRecoils() && eRecoil > master->GetRecoilCutoff() * kin.a2) {
 		kin.recoilIon=recoilIon;		
 	} else {
 		kin.recoilIon=0; // this flags no recoil to be generated
-		master->AddToNIEL(eRecoil) ;
+		master->DepositEnergy(Z, A, kin.targetMaterial, eRecoil) ;
 	}	
 }
 
@@ -703,7 +720,7 @@ DumpPhysicsTable(const G4ParticleDefinition&)
 #include "G4ElementVector.hh"
 #include <vector>
 
-static c2_function<G4double> &ZBLScreening(G4int z1, G4int z2, size_t npoints, G4double rMax, G4double *auval)
+G4_c2_function &ZBLScreening(G4int z1, G4int z2, size_t npoints, G4double rMax, G4double *auval)
 {
 	static const size_t ncoef=4;
 	static G4double scales[ncoef]={-3.2, -0.9432, -0.4028, -0.2016};
@@ -726,10 +743,10 @@ static c2_function<G4double> &ZBLScreening(G4int z1, G4int z2, size_t npoints, G
 	phiprime0*=(1.0/au); // put back in natural units;
 	
 	*auval=au;
-	return *static_cast<c2_function<G4double> *>(new lin_log_interpolating_function<G4double>(r, phi, false, phiprime0));
+	return c2.lin_log_interpolating_function().load(r, phi, false, phiprime0,true,0);
 }
 
-static c2_function<G4double> &MoliereScreening(G4int z1, G4int z2, size_t npoints, G4double rMax, G4double *auval)
+G4_c2_function &MoliereScreening(G4int z1, G4int z2, size_t npoints, G4double rMax, G4double *auval)
 {	
 	static const size_t ncoef=3;
 	static G4double scales[ncoef]={-6.0, -1.2, -0.3};
@@ -752,10 +769,10 @@ static c2_function<G4double> &MoliereScreening(G4int z1, G4int z2, size_t npoint
 	phiprime0*=(1.0/au); // put back in natural units;
 	
 	*auval=au;
-	return *static_cast<c2_function<G4double> *>(new lin_log_interpolating_function<G4double>(r, phi, false, phiprime0));
+	return c2.lin_log_interpolating_function().load(r, phi, false, phiprime0,true,0);
 }
 
-static c2_function<G4double> &LJScreening(G4int z1, G4int z2, size_t npoints, G4double rMax, G4double *auval)
+G4_c2_function &LJScreening(G4int z1, G4int z2, size_t npoints, G4double rMax, G4double *auval)
 {	
 //from Loftager, Besenbacher, Jensen & Sorensen
 //PhysRev A20, 1443++, 1979
@@ -778,7 +795,33 @@ static c2_function<G4double> &LJScreening(G4int z1, G4int z2, size_t npoints, G4
 	logphiprime0 *= (1.0/au); // #put back in natural units
 	
 	*auval=au;
-	return *static_cast<c2_function<G4double> *>(new lin_log_interpolating_function<G4double>(r, phi, false, logphiprime0*phi[0]));
+	return c2.lin_log_interpolating_function().load(r, phi, false, logphiprime0*phi[0],true,0);
+}
+
+G4_c2_function &LJZBLScreening(G4int z1, G4int z2, size_t npoints, G4double rMax, G4double *auval)
+{	
+// hybrid of LJ and ZBL, uses LJ if x < 0.25*auniv, ZBL if x > 1.5*auniv, and 
+/// connector in between.  These numbers are selected so the switchover
+// is very near the point where the functions naturally cross.
+	G4double auzbl, aulj;
+	
+	c2p zbl=ZBLScreening(z1, z2, npoints, rMax, &auzbl);
+	c2p lj=LJScreening(z1, z2, npoints, rMax, &aulj);
+
+	G4double au=(auzbl+aulj)*0.5;
+	lj->set_domain(lj->xmin(), 0.25*au);
+	zbl->set_domain(1.5*au,zbl->xmax());
+	
+	c2p conn=c2.connector_function(lj->xmax(), lj, zbl->xmin(), zbl, true,0);
+	c2_piecewise_function_p<G4double> &pw=c2.piecewise_function();
+	c2p keepit(pw);
+	pw.append_function(lj);
+	pw.append_function(conn);
+	pw.append_function(zbl);
+	
+	*auval=au;
+	keepit.release_for_return();
+	return pw;
 }
 
 G4NativeScreenedCoulombCrossSection::~G4NativeScreenedCoulombCrossSection() {
@@ -788,6 +831,7 @@ G4NativeScreenedCoulombCrossSection::G4NativeScreenedCoulombCrossSection() {
 	AddScreeningFunction("zbl", ZBLScreening);
 	AddScreeningFunction("lj", LJScreening);	
 	AddScreeningFunction("mol", MoliereScreening);	
+	AddScreeningFunction("ljzbl", LJZBLScreening);	
 }
 
 std::vector<G4String> G4NativeScreenedCoulombCrossSection::GetScreeningKeys() const {
@@ -852,10 +896,10 @@ void G4NativeScreenedCoulombCrossSection::LoadData(G4String screeningKey, G4int 
 			ScreeningFunc sfunc=(*sfunciter).second;
 			
 			G4double au; 
-			c2_function<G4double> &screen=sfunc(z1, Z, 200, 50.0*angstrom, &au); // generate the screening data
-
+			G4_c2_ptr screen=sfunc(z1, Z, 200, 50.0*angstrom, &au); // generate the screening data
 			G4ScreeningTables st;
-			st.EMphiData=&screen; // this is our phi table
+	
+			st.EMphiData=screen; //save our phi table
 			st.z1=z1; st.m1=a1; st.z2=Z; st.m2=a2; st.emin=recoilCutoff;
 			st.au=au;
 
@@ -866,10 +910,13 @@ void G4NativeScreenedCoulombCrossSection::LoadData(G4String screeningKey, G4int 
 			//Since we don't need exact sigma values, this is good enough (within a factor of 2 almost always)
 			//this rearranges to phi(x0)/(x0*eps) = 2*theta/pi - theta^2/pi^2
 			
-			c2_linear<G4double> c2au(0.0, 0.0, au);
-			c2_composed_function<G4double> phiau(screen, c2au); // build phi(x*au) for dimensionless phi
-			c2_linear<G4double> c2eps(0.0, 0.0, 0.0); // will store an appropriate eps inside this in loop
-			c2_ratio<G4double> x0func(phiau, c2eps); // this will be phi(x)/(x*eps) when c2eps is correctly set
+			c2_linear_p<G4double> &c2eps=c2.linear(0.0, 0.0, 0.0); // will store an appropriate eps inside this in loop
+			G4_c2_ptr phiau=screen(c2.linear(0.0, 0.0, au));
+			G4_c2_ptr x0func(phiau/c2eps); // this will be phi(x)/(x*eps) when c2eps is correctly set
+			x0func->set_domain(1e-6*angstrom/au, 0.9999*screen->xmax()/au); // needed for inverse function
+			// use the c2_inverse_function interface for the root finder... it is more efficient for an ordered 
+			// computation of values.
+			G4_c2_ptr x0_solution(c2.inverse_function(x0func));
 			
 			G4double m1c2=a1*amu_c2;
 			G4double escale=z1*Z*elm_coupling/au; // energy at screening distance
@@ -894,16 +941,25 @@ void G4NativeScreenedCoulombCrossSection::LoadData(G4String screeningKey, G4int 
 				
 				G4double q=theta/pi;
 				// G4cout << ee << " " << m1c2 << " " << gamma << " " << eps << " " << theta << " " << q << G4endl;
-				G4double x0= x0func.find_root(1e-6*angstrom/au, 0.9999*screen.xmax()/au, 1.0, 2*q-q*q);
+				// old way using root finder
+				// G4double x0= x0func->find_root(1e-6*angstrom/au, 0.9999*screen.xmax()/au, 1.0, 2*q-q*q);
+				// new way using c2_inverse_function which caches useful information so should be a bit faster
+				// since we are scanning this in strict order.
+				G4double x0=0;
+				try {
+					x0=x0_solution(2*q-q*q);
+				} catch(c2_exception e) {
+					G4Exception(
+						G4String("G4ScreenedNuclearRecoil: failure in inverse solution to generate MFP Tables: ")+e.what()
+					);
+				}
 				G4double betasquared=x0*x0 - x0*phiau(x0)/eps;	
 				G4double sigma=pi*betasquared*au*au;
 				energies[idx]=ee;
 				data[idx]=sigma;
 			}
-			
 			screeningData[Z]=st;
-			sigmaMap[Z] = static_cast<c2_function<G4double> *>(new log_log_interpolating_function<G4double>(
-				energies, data));
+			sigmaMap[Z] = c2.log_log_interpolating_function().load(energies, data, true,0,true,0);
 		}
 	}
 }

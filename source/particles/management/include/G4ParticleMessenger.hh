@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleMessenger.hh,v 1.7 2006/06/29 19:24:06 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4ParticleMessenger.hh,v 1.8 2008/06/08 12:43:19 kurasige Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 //
 //---------------------------------------------------------------
@@ -43,7 +43,9 @@
 //  /particle/   Paricle control commands.
 //   Commands : 
 //    select * Select particle 
-//    List * List name of particles.
+//    list * List name of particles.
+//    find * find particle by PDG encoding.
+//    verbose * Set Verbose level of Particle Table
 //
 // G4ParticlePropertyMessenger
 //  /particle/property/   Paricle Table control commands.
@@ -51,7 +53,7 @@
 //     dump * dump particle properties.
 //     stable * Set stable flag.
 //     lifetime * Set life time.
-//     Verbose * Set Verbose level
+//     verbose * Set Verbose level
 //
 // G4DecayTableMessenger
 //  /particle/property/decay/   Decay Table control commands.
@@ -67,6 +69,7 @@
 //    08 Jan. 1998, H. Kurashige   : new UIcommand
 //    08 June 1998, H. Kurashige   : remove fProcessManagerMessenger
 //    25 Nov. 1998, H. Kurashige   : add /particle/find
+//    08 Jun. 2008, H. Kurashige   : add /particle/verbose
 //---------------------------------------------------------------
 
 #ifndef G4ParticleMessenger_h
@@ -104,6 +107,7 @@ class G4ParticleMessenger: public G4UImessenger
     G4UIcmdWithAString *        listCmd;
     G4UIcmdWithAString *        selectCmd;
     G4UIcmdWithAnInteger *      findCmd;
+    G4UIcmdWithAnInteger *      verboseCmd;
 
     G4ParticleTable* theParticleTable;
     G4ParticleDefinition* currentParticle;

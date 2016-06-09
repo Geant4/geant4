@@ -1,4 +1,4 @@
-# $Id: g4compile.gmk,v 1.2 2006/08/08 05:11:44 kmura Exp $
+# $Id: g4compile.gmk,v 1.3 2008/06/05 02:25:08 kmura Exp $
 # ===========================================================
 #   Script for building a Boost-Python module 
 # ===========================================================
@@ -15,18 +15,10 @@ G4PY_INCFLAGS := -I$(Q_G4_INCDIR)
 G4PY_INCFLAGS += -I$(Q_CLHEP_INCDIR)
 G4PY_LOPT += -L$(Q_CLHEP_LIBDIR) -l$(Q_CLHEP_LIB)
 
-# geant4 version
-G4PY_INCFLAGS += -I$(G4PY_INSTALL)/source/version
-
 # finished
 CXXFLAGS += $(INCFLAGS)
 CXXFLAGS += $(G4PY_INCFLAGS)
 LOPT += $(G4PY_LOPT)
-
-# Geant4 version
-ifdef Q_G4_VERSION
-  CXXFLAGS += -DG4VERSION_NUMBER=$(Q_G4_VERSION)
-endif
 
 # ===========================================================
 #   Script for building a module

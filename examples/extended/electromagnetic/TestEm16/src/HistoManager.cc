@@ -51,8 +51,8 @@ HistoManager::HistoManager()
 #endif 
  
   fileName[0] = "testem16";
-  fileType    = "hbook";
-  fileOption  = "--noErrors uncompress";
+  fileType    = "root";
+  fileOption  = "--noErrors export=root uncompress";
   // histograms
   for (G4int k=0; k<MaxHisto; k++) {
     histo[k] = 0;

@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4VDigiCollection.hh,v 1.3 2006/06/29 18:06:20 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 
 #ifndef G4VDigiCollection_h

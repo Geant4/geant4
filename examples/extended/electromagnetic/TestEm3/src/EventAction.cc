@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: EventAction.cc,v 1.15 2007/04/22 16:25:21 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: EventAction.cc,v 1.16 2008/05/29 16:59:27 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -70,8 +70,9 @@ void EventAction::BeginOfEventAction(const G4Event* evt)
     
   //initialize EnergyDeposit per event
   //
-  for (G4int k=0; k<MaxAbsor; k++)
+  for (G4int k=0; k<MaxAbsor; k++) {
     energyDeposit[k] = trackLengthCh[k] = 0.0;   
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

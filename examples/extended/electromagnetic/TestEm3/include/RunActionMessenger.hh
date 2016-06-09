@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // $Id: RunActionMessenger.hh,v 1.10 2007/04/22 16:25:21 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

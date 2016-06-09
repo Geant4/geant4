@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4hLowEnergyLoss.cc,v 1.23 2006/06/29 19:42:23 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4hLowEnergyLoss.cc,v 1.27 2008/06/20 19:54:03 sincerti Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // -----------------------------------------------------------
 //      GEANT 4 class implementation file
@@ -795,7 +795,17 @@ void G4hLowEnergyLoss::BuildRangeCoeffATable(
         Rim = 0. ;
       else
       {
-        Tim = Ti/RTable ;
+	// ---- MGP ---- Modified to avoid a floating point exception
+	// The correction is just a temporary patch, the whole class should be redesigned 
+	// Original: Tim = Ti/RTable  results in 0./0. 
+	if (RTable != 0.)
+	  {
+	    Tim = Ti/RTable ;
+	  }
+	else
+	  {
+	    Tim = 0.;
+	  }
         Rim = rangeVector->GetValue(Tim,isOut);
       }
       if ( i==(TotBin-1))
@@ -805,7 +815,7 @@ void G4hLowEnergyLoss::BuildRangeCoeffATable(
         Tip = Ti*RTable ;
         Rip = rangeVector->GetValue(Tip,isOut);
       }
-      Value = (w1*Rip + w2*Ri + w3*Rim)/(Ti*Ti) ; 
+      if (Ti!=0) Value = (w1*Rip + w2*Ri + w3*Rim)/(Ti*Ti); else Value=0; 
 
       aVector->PutValue(i,Value);
       Ti = RTable*Ti ;
@@ -867,7 +877,7 @@ void G4hLowEnergyLoss::BuildRangeCoeffBTable(
          Rim = 0. ;
       else
       {
-        Tim = Ti/RTable ;
+        if (RTable!=0) Tim = Ti/RTable ; else Tim =0;
         Rim = rangeVector->GetValue(Tim,isOut);
       }
       if ( i==(TotBin-1))
@@ -877,7 +887,7 @@ void G4hLowEnergyLoss::BuildRangeCoeffBTable(
         Tip = Ti*RTable ;
         Rip = rangeVector->GetValue(Tip,isOut);
       }
-      Value = (w1*Rip + w2*Ri + w3*Rim)/Ti;
+      if (Ti!=0) Value = (w1*Rip + w2*Ri + w3*Rim)/Ti; else Value=0;
 
       aVector->PutValue(i,Value);
       Ti = RTable*Ti ;
@@ -938,7 +948,7 @@ void G4hLowEnergyLoss::BuildRangeCoeffCTable(
         Rim = 0. ;
       else
       {
-        Tim = Ti/RTable ;
+        if (RTable!=0) Tim = Ti/RTable ; else Tim=0;
         Rim = rangeVector->GetValue(Tim,isOut);
       }
       if ( i==(TotBin-1))

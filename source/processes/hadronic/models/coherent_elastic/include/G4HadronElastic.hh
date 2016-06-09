@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4HadronElastic.hh,v 1.26 2007/05/15 16:06:47 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4HadronElastic.hh,v 1.27 2008/05/19 09:59:44 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 //
 // G4 Model: Low energy elastic scattering with 4-momentum balance 
@@ -122,6 +122,12 @@ private:
   G4double lowEnergyLimitQ;  
   G4double lowestEnergyLimit;  
   G4double plabLowLimit;
+
+  G4int nnans;
+  G4int npos;
+  G4int nneg;
+  G4int neneg;
+
 };
 
 inline void G4HadronElastic::SetRecoilKinEnergyLimit(G4double value)

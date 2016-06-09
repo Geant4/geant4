@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4UserRunAction.cc,v 1.8 2006/06/29 21:13:58 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 
 #include "G4UserRunAction.hh"

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Track.hh,v 1.18 2006/06/29 21:14:47 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4Track.hh,v 1.19 2008/10/24 08:22:20 kurasige Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 //
 //---------------------------------------------------------------
@@ -216,11 +216,11 @@ public: // With description
    G4double GetVertexKineticEnergy() const;
    void SetVertexKineticEnergy(const G4double aValue);
 
-   G4LogicalVolume* GetLogicalVolumeAtVertex() const;
-   void SetLogicalVolumeAtVertex(G4LogicalVolume* );
+   const G4LogicalVolume* GetLogicalVolumeAtVertex() const;
+   void SetLogicalVolumeAtVertex(const G4LogicalVolume* );
 
    const G4VProcess* GetCreatorProcess() const;
-   void SetCreatorProcess(G4VProcess* aValue);
+   void SetCreatorProcess(const G4VProcess* aValue);
 
   // track weight
   // These are methods for manipulating a weight for this track.
@@ -272,8 +272,8 @@ public: // With description
    G4ThreeVector fVtxPosition;          // (x,y,z) of the vertex
    G4ThreeVector fVtxMomentumDirection; // Momentum direction at the vertex
    G4double fVtxKineticEnergy;          // Kinetic energy at the vertex
-   G4LogicalVolume* fpLVAtVertex;       //Logical Volume at the vertex
-   G4VProcess* fpCreatorProcess;        // Process which created the track
+   const G4LogicalVolume* fpLVAtVertex; //Logical Volume at the vertex
+   const G4VProcess* fpCreatorProcess; // Process which created the track
    
    G4VUserTrackInformation* fpUserInformation;
 };

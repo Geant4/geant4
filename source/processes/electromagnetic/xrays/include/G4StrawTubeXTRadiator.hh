@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4StrawTubeXTRadiator.hh,v 1.4 2007/09/29 17:49:34 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // 
 ///////////////////////////////////////////////////////////////////////////

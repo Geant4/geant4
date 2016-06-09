@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4ErrorTanPlaneTarget.cc,v 1.1 2007/05/16 12:50:52 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 //
 // --------------------------------------------------------------------

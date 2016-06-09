@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParameterisationTrd.hh,v 1.7 2006/06/29 18:18:22 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4ParameterisationTrd.hh,v 1.8 2008/12/03 16:48:48 arce Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // classes G4ParameterisationTrdX
 //         G4ParameterisationTrdY
@@ -60,6 +60,7 @@ class G4Hype;
 class G4Tubs;
 class G4Polycone;
 class G4Polyhedra;
+#include <vector>
 
 class G4VParameterisationTrd : public G4VDivisionParameterisation
 { 
@@ -70,6 +71,10 @@ class G4VParameterisationTrd : public G4VDivisionParameterisation
                             G4VSolid* msolid, DivisionType divType );
   
     virtual ~G4VParameterisationTrd();
+
+
+protected:
+  G4bool bDivInTrap;
 };
 
 class G4ParameterisationTrdX : public G4VParameterisationTrd
@@ -88,8 +93,14 @@ class G4ParameterisationTrdX : public G4VParameterisationTrd
     virtual void ComputeTransformation(const G4int copyNo,
                                        G4VPhysicalVolume* physVol) const;
 
-    void ComputeDimensions(G4Trd& trd, const G4int copyNo,
+    virtual void ComputeDimensions(G4Trd& trd, const G4int copyNo,
                            const G4VPhysicalVolume* pv) const;
+
+    virtual void ComputeDimensions(G4Trap& trd, const G4int copyNo,
+                           const G4VPhysicalVolume* pv) const;
+  
+    virtual G4VSolid*   ComputeSolid(const G4int, G4VPhysicalVolume *);
+
 
   private:  // Dummy declarations to get rid of warnings ...
 
@@ -105,8 +116,6 @@ class G4ParameterisationTrdX : public G4VParameterisationTrd
                             const G4VPhysicalVolume*) const {}
     void ComputeDimensions (G4Para&,const G4int,
                             const G4VPhysicalVolume*) const {}
-    void ComputeDimensions (G4Trap&,const G4int,
-                            const G4VPhysicalVolume*) const {}
     void ComputeDimensions (G4Hype&,const G4int,
                             const G4VPhysicalVolume*) const {}
     void ComputeDimensions (G4Tubs&,const G4int,
@@ -115,6 +124,9 @@ class G4ParameterisationTrdX : public G4VParameterisationTrd
                             const G4VPhysicalVolume*) const {}
     void ComputeDimensions (G4Polyhedra&,const G4int,
                             const G4VPhysicalVolume*) const {}
+
+  void ComputeTrapParams();
+ G4Trap* theTrap;
 };
 
 

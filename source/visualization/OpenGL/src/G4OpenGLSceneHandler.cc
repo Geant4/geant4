@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLSceneHandler.cc,v 1.51 2007/05/25 15:41:38 allison Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4OpenGLSceneHandler.cc,v 1.54 2008/04/04 13:32:22 allison Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // 
 // Andrew Walkden  27th March 1996
@@ -71,6 +71,7 @@ G4OpenGLSceneHandler::G4OpenGLSceneHandler (G4VGraphicsSystem& system,
 			      const G4String& name):
   G4VSceneHandler (system, id, name),
   fPickName(0),
+  fProcessing2D (false),
   fProcessingPolymarker(false)
 {}
 
@@ -123,13 +124,16 @@ void G4OpenGLSceneHandler::EndPrimitives ()
   G4VSceneHandler::EndPrimitives ();
 }
 
-void G4OpenGLSceneHandler::BeginPrimitives2D ()
+void G4OpenGLSceneHandler::BeginPrimitives2D
+(const G4Transform3D& objectTransformation)
 {
-  G4VSceneHandler::BeginPrimitives2D ();
+  G4VSceneHandler::BeginPrimitives2D (objectTransformation);
+  fProcessing2D = true;
 }
 
 void G4OpenGLSceneHandler::EndPrimitives2D ()
 {
+  fProcessing2D = false;
   G4VSceneHandler::EndPrimitives2D ();
 }
 
@@ -463,6 +467,9 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron) {
 
   G4bool clipping = pViewer->fVP.IsSection() || pViewer->fVP.IsCutaway();
 
+  // Lighting disabled unless otherwise requested
+  glDisable (GL_LIGHTING);
+
   switch (drawing_style) {
   case (G4ViewParameters::hlhsr):
     // Set up as for hidden line removal but paint polygon faces later...
@@ -489,7 +496,6 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron) {
 	glPolygonMode (GL_FRONT, GL_LINE);
       }
     }
-    glDisable (GL_LIGHTING);
     glColor3d (c.GetRed (), c.GetGreen (), c.GetBlue ());
     break;
   case (G4ViewParameters::hsr):
@@ -514,14 +520,13 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron) {
       }
       glMaterialfv (GL_FRONT, GL_AMBIENT_AND_DIFFUSE, materialColour);
     }
-    glEnable (GL_LIGHTING);
+    if (!fProcessing2D) glEnable (GL_LIGHTING);
     break;
   case (G4ViewParameters::wireframe):
   default:
     glEnable (GL_DEPTH_TEST);
     glDepthFunc (GL_LEQUAL);    //??? was GL_ALWAYS
     glDisable (GL_CULL_FACE);
-    glDisable (GL_LIGHTING);
     glPolygonMode (GL_FRONT_AND_BACK, GL_LINE);
     glColor3d (c.GetRed (), c.GetGreen (), c.GetBlue ());
     break;
@@ -600,11 +605,14 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron) {
 		 // having glBegin/End pairs *inside* loop in the more
 		 // usual case of no hidden line removal.
 
+      // Lighting disabled unless otherwise requested
+      glDisable (GL_LIGHTING);
+
       // Draw through stencil...
       glStencilFunc (GL_EQUAL, 0, 1);
       glStencilOp (GL_KEEP, GL_KEEP, GL_KEEP);
       if (drawing_style == G4ViewParameters::hlhsr) {
-	glEnable (GL_LIGHTING);
+	if (!fProcessing2D) glEnable (GL_LIGHTING);
       }
       glEnable (GL_DEPTH_TEST);
       glDepthFunc (GL_LEQUAL);    
@@ -707,6 +715,7 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron) {
   glEnd ();
   glDisable (GL_STENCIL_TEST);  // Revert to default for next primitive.
   glDepthMask (1);              // Revert to default for next primitive.
+  glDisable (GL_LIGHTING);      // Revert to default for next primitive.
 }
 
 //Method for handling G4NURBS objects for drawing solids.
@@ -726,18 +735,18 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4NURBS& nurb) {
   GLfloat *u_knot_array, *u_knot_array_ptr;
   u_knot_array = u_knot_array_ptr = new GLfloat [nurb.GetnbrKnots(G4NURBS::U)];
   G4NURBS::KnotsIterator u_iterator (nurb, G4NURBS::U);
-  while (u_iterator.pick (u_knot_array_ptr++));
+  while (u_iterator.pick (u_knot_array_ptr++)){}
 
   GLfloat *v_knot_array, *v_knot_array_ptr;
   v_knot_array = v_knot_array_ptr = new GLfloat [nurb.GetnbrKnots(G4NURBS::V)];
   G4NURBS::KnotsIterator v_iterator (nurb, G4NURBS::V);
-  while (v_iterator.pick (v_knot_array_ptr++));
+  while (v_iterator.pick (v_knot_array_ptr++)){}
 
   GLfloat *ctrl_pnt_array, *ctrl_pnt_array_ptr;
   ctrl_pnt_array = ctrl_pnt_array_ptr =
     new GLfloat [nurb.GettotalnbrCtrlPts () * G4NURBS::NofC];
   G4NURBS::CtrlPtsCoordsIterator c_p_iterator (nurb);
-  while (c_p_iterator.pick (ctrl_pnt_array_ptr++));
+  while (c_p_iterator.pick (ctrl_pnt_array_ptr++)){}
 
   // Get vis attributes - pick up defaults if none.
   const G4VisAttributes* pVA =
@@ -758,7 +767,7 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4NURBS& nurb) {
     // << "Using hidden surface removal." << G4endl;
   case (G4ViewParameters::hsr):
     {
-      glEnable (GL_LIGHTING);
+      if (!fProcessing2D) glEnable (GL_LIGHTING);
       glEnable (GL_DEPTH_TEST);
       glEnable (GL_AUTO_NORMAL);
       glEnable (GL_NORMALIZE);

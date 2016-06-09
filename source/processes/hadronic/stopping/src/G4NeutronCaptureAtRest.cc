@@ -53,7 +53,7 @@ G4NeutronCaptureAtRest::G4NeutronCaptureAtRest(const G4String& processName,
   if (verboseLevel>0) {
     G4cout << GetProcessName() << " is created "<< G4endl;
   }
-
+  SetProcessSubType(fHadronAtRest);
   pv   = new G4GHEKinematicsVector [MAX_SECONDARIES+1];
   eve  = new G4GHEKinematicsVector [MAX_SECONDARIES];
   gkin = new G4GHEKinematicsVector [MAX_SECONDARIES];
@@ -397,7 +397,7 @@ G4double G4NeutronCaptureAtRest::AtomAs(G4float a, G4float z)
   else if (ia == 4 && iz == 2) {
     mass = rma;
   }
-  else if (ia == 2 && iz != 1 || ia == 3 || ia == 4 && iz != 2 || ia > 4) {
+  else if ( (ia == 2 && iz != 1) || ia == 3 || (ia == 4 && iz != 2) || ia > 4) {
     d__1 = aa / G4float(2.) - zz;
     d__2 = zz;
     mass = (aa - zz) * rmn + zz * rmp + zz * rmel - aa * G4float(15.67) +

@@ -24,12 +24,14 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoringMessenger.hh,v 1.21 2007/11/07 04:12:07 akimura Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4ScoringMessenger.hh,v 1.22 2008/02/29 12:23:14 akimura Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // (HISTORY)
 //  03-Sep-2007  T.Aso Command definitions are introduced.
 //  01-Nov-2007  M.Asai Class is splitted into two.
+//  18-Feb-2008  T.Aso Command for cylindrical scorer.
+//  18-Feb-2008  T.Aso Command for color chart display.
 
 
 #ifndef G4ScoringMessenger_h
@@ -88,7 +90,7 @@ class G4ScoringMessenger: public G4UImessenger
     //
     G4UIdirectory*             meshCreateDir;
     G4UIcmdWithAString*        meshBoxCreateCmd;
-//    G4UIcmdWithAString*        meshTubsCreateCmd;
+   G4UIcmdWithAString*        meshCylinderCreateCmd;
 //    G4UIcmdWithAString*        meshSphereCreateCmd;
     //
     // Mesh commands
@@ -100,8 +102,8 @@ class G4ScoringMessenger: public G4UImessenger
     //
     //   Size commands
     G4UIcmdWith3VectorAndUnit* mBoxSizeCmd;
-    G4UIcmdWith3VectorAndUnit* mTubsSizeCmd;
-    G4UIcmdWith3VectorAndUnit* mSphereSizeCmd;
+    G4UIcommand* mCylinderSizeCmd;
+//    G4UIcmdWith3VectorAndUnit* mSphereSizeCmd;
     //
     //   Division command
     G4UIcommand*               mBinCmd;
@@ -123,6 +125,7 @@ class G4ScoringMessenger: public G4UImessenger
     G4UIcmdWithoutParameter * listColorMapCmd;
     G4UIcmdWithAString *      floatMinMaxCmd;
     G4UIcommand *             colorMapMinMaxCmd;
+    G4UIcommand *             chartCmd;
     //
     // Dump scoring result to file
     G4UIcommand * dumpQtyToFileCmd;

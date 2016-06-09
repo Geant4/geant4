@@ -259,13 +259,17 @@
     std::vector<G4ReactionProduct> savevec;
     for (G4int i = 0; i < vecLen; i++) savevec.push_back(*vec[i]);
 
-    if( annihilation || (vecLen >= 6) ||
-        (modifiedOriginal.GetKineticEnergy()/GeV >= 1.0) &&
-        (((originalIncident->GetDefinition() == G4KaonPlus::KaonPlus() ||
-           originalIncident->GetDefinition() == G4KaonMinus::KaonMinus() ||
-           originalIncident->GetDefinition() == G4KaonZeroLong::KaonZeroLong() ||
-           originalIncident->GetDefinition() == G4KaonZeroShort::KaonZeroShort()) &&
-          rand1 < 0.5) || rand2 > twsup[vecLen]) )
+    if (annihilation || 
+        vecLen >= 6 ||
+        ( modifiedOriginal.GetKineticEnergy()/GeV >= 1.0 &&
+          ( ( (originalIncident->GetDefinition() == G4KaonPlus::KaonPlus() ||
+               originalIncident->GetDefinition() == G4KaonMinus::KaonMinus() ||
+               originalIncident->GetDefinition() == G4KaonZeroLong::KaonZeroLong() ||
+               originalIncident->GetDefinition() == G4KaonZeroShort::KaonZeroShort() ) 
+               &&
+	       rand1 < 0.5 ) 
+	    || rand2 > twsup[vecLen] )  )  )
+
       finishedGenXPt =
         theReactionDynamics.GenerateXandPt( vec, vecLen,
                                             modifiedOriginal, originalIncident,

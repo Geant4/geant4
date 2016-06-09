@@ -23,6 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+//J. M. Quesada (May 08). New virtual classes have been added 
+// JMQ (06 September 2008) Also external choices have been added for:
+//                      - "never go back"  hipothesis (useNGB=true) 
+//                      - CEM transition probabilities (useCEMtr=true)  
+
 #ifndef G4VPreCompoundTransitions_hh
 #define G4VPreCompoundTransitions_hh 1
 
@@ -32,12 +37,24 @@ class G4VPreCompoundTransitions
 {
 public:
 
-  G4VPreCompoundTransitions() {}
+  G4VPreCompoundTransitions():useNGB(false),useCEMtr(false) {}
   virtual ~G4VPreCompoundTransitions() {}
 
   virtual G4double CalculateProbability(const G4Fragment& aFragment) = 0;
   virtual G4Fragment PerformTransition(const G4Fragment&  aFragment) = 0;
+//J. M. Quesada (May.08) New virtual classes
+  virtual G4double GetTransitionProb1()=0;
+  virtual G4double GetTransitionProb2()=0;
+  virtual G4double GetTransitionProb3()=0;
 
+  // for never go back hypothesis (if useNGB=true, default=false)
+  inline void UseNGB(G4bool use){useNGB=use;}
+  //for use of CEM transition probabilities (if useCEMtr=true, defaut false)
+  inline void UseCEMtr(G4bool use){useCEMtr=use;}
+
+protected:
+  G4bool useNGB;
+  G4bool useCEMtr;
 };
 
 #endif

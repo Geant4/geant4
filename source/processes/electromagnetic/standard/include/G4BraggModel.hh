@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BraggModel.hh,v 1.10 2007/05/22 17:34:36 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4BraggModel.hh,v 1.12 2008/09/14 17:11:48 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // -------------------------------------------------------------------
 //
@@ -44,13 +44,16 @@
 // 12-11-03 Fix for GenericIons (V.Ivanchenko)
 // 11-04-05 Major optimisation of internal interfaces (V.Ivantchenko)
 // 15-02-06 ComputeCrossSectionPerElectron, ComputeCrossSectionPerAtom (mma)
-// 25-04-06 Add stopping data from PSTAR (V.Ivanchenko)
+// 25-04-06 Added stopping data from PSTAR (V.Ivanchenko)
+// 12-08-08 Added methods GetParticleCharge, GetChargeSquareRatio, 
+//          CorrectionsAlongStep needed for ions(V.Ivanchenko)
 
 //
 // Class Description:
 //
 // Implementation of energy loss and delta-electron production
-// by heavy slow charged particles using eveluated data
+// by heavy slow charged particles using ICRU'49 and NIST evaluated data 
+// for protons
 
 // -------------------------------------------------------------------
 //
@@ -62,6 +65,7 @@
 #include "G4PSTARStopping.hh"
 
 class G4ParticleChangeForLoss;
+class G4EmCorrections;
 
 class G4BraggModel : public G4VEmModel
 {
@@ -108,6 +112,22 @@ public:
 				 G4double tmin,
 				 G4double maxEnergy);
 
+  // Compute ion charge 
+  virtual G4double GetChargeSquareRatio(const G4ParticleDefinition*,
+					const G4Material*,
+					G4double kineticEnergy);
+
+  virtual G4double GetParticleCharge(const G4ParticleDefinition* p,
+				     const G4Material* mat,
+				     G4double kineticEnergy);
+
+  // add correction to energy loss and compute non-ionizing energy loss
+  virtual void CorrectionsAlongStep(const G4MaterialCutsCouple*,
+				    const G4DynamicParticle*,
+				    G4double& eloss,
+				    G4double& niel,
+				    G4double length);
+
 protected:
 
   G4double MaxSecondaryEnergy(const G4ParticleDefinition*,
@@ -139,6 +159,9 @@ private:
   G4BraggModel & operator=(const  G4BraggModel &right);
   G4BraggModel(const  G4BraggModel&);
 
+
+  G4EmCorrections*            corr;
+
   const G4ParticleDefinition* particle;
   G4ParticleDefinition*       theElectron;
   G4ParticleChangeForLoss*    fParticleChange;
@@ -149,8 +172,6 @@ private:
   G4double chargeSquare;
   G4double massRate;
   G4double ratio;
-  G4double highKinEnergy;
-  G4double lowKinEnergy;
   G4double lowestKinEnergy;
   G4double protonMassAMU;
   G4double theZieglerFactor;
@@ -158,6 +179,7 @@ private:
 
   G4int    iMolecula;          // index in the molecula's table
   G4bool   isIon;
+  G4bool   isInitialised;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

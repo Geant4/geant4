@@ -1,11 +1,13 @@
+#!/usr/bin/python
+
 #### 2006 Sep 26, the first draft version
 ## Wired not yet. g4pipe control and Popen
 
 from Geant4 import *
-import Qmaterials, NISTmaterials
-import ExN03geom
-import ExN03pl
-import ParticleGun, MedicalBeam
+import g4py.Qmaterials, g4py.NISTmaterials
+import g4py.ExN03geom
+import g4py.ExN03pl
+import g4py.ParticleGun, g4py.MedicalBeam
 import sys
 from time import *
 from subprocess import *
@@ -27,20 +29,20 @@ HepRandom.setTheSeed(20050830L)
 
 
 # NIST materials
-#NISTmaterials.Construct()
+#g4py.NISTmaterials.Construct()
 
 # ------------------------------------------------------------------
 # setup for geometry
 # ------------------------------------------------------------------
 # normal way for constructing user geometry
 
-exN03geom= ExN03geom.ExN03DetectorConstruction()
+exN03geom= g4py.ExN03geom.ExN03DetectorConstruction()
 gRunManager.SetUserInitialization(exN03geom)
 
 # 2nd way, short-cut way
 
-#ExN01geom.Construct()
-#ExN03geom.Construct()
+#g4py.ExN01geom.Construct()
+#g4py.ExN03geom.Construct()
 
 # magnetic field
 #exN03geom.SetMagField(0.1 * tesla)
@@ -49,23 +51,23 @@ gRunManager.SetUserInitialization(exN03geom)
 # setup for physics list
 # ------------------------------------------------------------------
 # normal way for constructing user physics list
-exN03PL= ExN03pl.ExN03PhysicsList()
+exN03PL= g4py.ExN03pl.ExN03PhysicsList()
 gRunManager.SetUserInitialization(exN03PL)
 
 # 2nd way, short-cut way
-#ExN01pl.Construct()
+#g4py.ExN01pl.Construct()
 
 
 # ------------------------------------------------------------------
 # setup for primary generator action
 # ------------------------------------------------------------------
 # normal way for constructing user physics list
-#pgPGA= ParticleGun.ParticleGunAction()
+#pgPGA= g4py.ParticleGun.ParticleGunAction()
 #gRunManager.SetUserAction(pgPGA)
 #pg= pgPGA.GetParticleGun()
 
 # 2nd way, short-cut way
-pg= ParticleGun.Construct()
+pg= g4py.ParticleGun.Construct()
 
 # set parameters of particle gun
 pg.SetParticleByName("e-")

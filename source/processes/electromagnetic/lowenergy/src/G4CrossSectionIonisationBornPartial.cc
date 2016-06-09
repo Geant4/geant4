@@ -23,52 +23,15 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4CrossSectionIonisationBornPartial.cc,v 1.3 2007/11/09 20:11:04 pia Exp $
-// GEANT4 tag $Name: geant4-09-01 $
-// 
-// Contact Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
-//
-// Reference: TNS Geant4-DNA paper
-// Reference for implementation model: NIM. 155, pp. 145-156, 1978
-
-// History:
-// -----------
-// Date         Name              Modification
-// 28 Apr 2007  M.G. Pia          Created in compliance with design described in TNS paper
-//
-// -------------------------------------------------------------------
-
-// Class description:
-// Geant4-DNA Cross total cross section for electron elastic scattering in water
-// Reference: TNS Geant4-DNA paper
-// S. Chauvie et al., Geant4 physics processes for microdosimetry simulation:
-// design foundation and implementation of the first set of models,
-// IEEE Trans. Nucl. Sci., vol. 54, no. 6, Dec. 2007.
-// Further documentation available from http://www.ge.infn.it/geant4/dna
-
-// -------------------------------------------------------------------
-
+// $Id: G4CrossSectionIonisationBornPartial.cc,v 1.4 2008/07/14 20:47:34 sincerti Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 
 #include "G4CrossSectionIonisationBornPartial.hh"
-#include "G4ParticleDefinition.hh"
-#include "G4Electron.hh"
-#include "G4Proton.hh"
-#include "G4Track.hh"
-#include "G4LogLogInterpolation.hh"
-#include "G4SystemOfUnits.hh"
 
-#include "Randomize.hh"
-
-#include <utility>
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4CrossSectionIonisationBornPartial::G4CrossSectionIonisationBornPartial()
 {
-
-  name = "IonisationBorn";
-  
-  // Default energy limits (defined for protection against anomalous behaviour only)
-  name = "IonisationBornPartial";
   lowEnergyLimitDefault = 25 * eV;
   highEnergyLimitDefault = 30 * keV;
 
@@ -81,134 +44,113 @@ G4CrossSectionIonisationBornPartial::G4CrossSectionIonisationBornPartial()
   G4String electron;
   G4String proton;
   
-  // Factor to scale microscopic/macroscopic cross section data in water
-  // ---- MGP ---- Hardcoded (taken from prototype code); to be replaced with proper calculation
   G4double scaleFactor = (1.e-22 / 3.343) * m*m;
 
-
-  // Data members for electrons
-
   if (electronDef != 0)
-    {
-      electron = electronDef->GetParticleName();
-      tableFile[electron] = fileElectron;
+  {
+    electron = electronDef->GetParticleName();
+    tableFile[electron] = fileElectron;
 
-      // Energy limits
-      lowEnergyLimit[electron] = 25. * eV;
-      highEnergyLimit[electron] = 30. * keV;
+    lowEnergyLimit[electron] = 25. * eV;
+    highEnergyLimit[electron] = 30. * keV;
 
-      // Create data set with electron cross section data and load values stored in file
-      G4DNACrossSectionDataSet* tableE = new G4DNACrossSectionDataSet(new G4LogLogInterpolation, eV,scaleFactor );
-      tableE->LoadData(fileElectron);
+    G4DNACrossSectionDataSet* tableE = new G4DNACrossSectionDataSet(new G4LogLogInterpolation, eV,scaleFactor );
+    tableE->LoadData(fileElectron);
       
-      // Insert key-table pair in map
-      tableData[electron] = tableE;
-    }
+    tableData[electron] = tableE;
+  }
   else
-    {
-      G4Exception("G4CrossSectionIonisationBornPartial Constructor: electron is not defined");
-    }
-
-  // Data members for protons
+  {
+    G4Exception("G4CrossSectionIonisationBornPartial Constructor: electron is not defined");
+  }
 
   if (protonDef != 0)
-    {
-      proton = protonDef->GetParticleName();
-      tableFile[proton] = fileProton;
+  {
+    proton = protonDef->GetParticleName();
+    tableFile[proton] = fileProton;
 
-      // Energy limits
-      lowEnergyLimit[proton] = 500. * keV;
-      highEnergyLimit[proton] = 10. * MeV;
+    lowEnergyLimit[proton] = 500. * keV;
+    highEnergyLimit[proton] = 10. * MeV;
 
-      // Create data set with proton cross section data and load values stored in file
-      G4DNACrossSectionDataSet* tableP = new G4DNACrossSectionDataSet(new G4LogLogInterpolation, eV,scaleFactor );
-      tableP->LoadData(fileProton);
+    G4DNACrossSectionDataSet* tableP = new G4DNACrossSectionDataSet(new G4LogLogInterpolation, eV,scaleFactor );
+    tableP->LoadData(fileProton);
       
-      // Insert key-table pair in map
-      tableData[proton] = tableP;
-    }
+    tableData[proton] = tableP;
+  }
   else
-    {
-      G4Exception("G4CrossSectionIonisationBornPartial Constructor: proton is not defined");
-    }
+  {
+    G4Exception("G4CrossSectionIonisationBornPartial Constructor: proton is not defined");
+  }
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4CrossSectionIonisationBornPartial::~G4CrossSectionIonisationBornPartial()
 {
-   // Destroy the content of the map
   std::map< G4String,G4DNACrossSectionDataSet*,std::less<G4String> >::iterator pos;
   for (pos = tableData.begin(); pos != tableData.end(); ++pos)
-    {
-      G4DNACrossSectionDataSet* table = pos->second;
-      delete table;
-    }
+  {
+    G4DNACrossSectionDataSet* table = pos->second;
+    delete table;
+  }
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4int G4CrossSectionIonisationBornPartial::RandomSelect(G4double k, const G4String& particle )
 {   
-  
   G4int level = 0;
 
-  // Retrieve data table corresponding to the current particle type  
+  std::map< G4String,G4DNACrossSectionDataSet*,std::less<G4String> >::iterator pos;
+  pos = tableData.find(particle);
 
-    std::map< G4String,G4DNACrossSectionDataSet*,std::less<G4String> >::iterator pos;
-    pos = tableData.find(particle);
+  if (pos != tableData.end())
+  {
+    G4DNACrossSectionDataSet* table = pos->second;
 
-    if (pos != tableData.end())
-      {
-	G4DNACrossSectionDataSet* table = pos->second;
-
-	if (table != 0)
-	  {
-	    // C-style arrays are used in G4DNACrossSectionDataSet: this design feature was 
-	    // introduced without authorization and should be replaced by the use of STL containers
+    if (table != 0)
+    {
+      G4double* valuesBuffer = new G4double[table->NumberOfComponents()];
+      const size_t n(table->NumberOfComponents());
+      size_t i(n);
+      G4double value = 0.;
 	    
-	    G4double* valuesBuffer = new G4double[table->NumberOfComponents()];
-	    
-	    const size_t n(table->NumberOfComponents());
-	    size_t i(n);
-	    G4double value = 0.;
-	    
-	    while (i>0)
-	      { 
-		i--;
-		valuesBuffer[i] = table->GetComponent(i)->FindValue(k);
-		value += valuesBuffer[i];
-	      }
-	    
-	    value *= G4UniformRand();
-	    
-	    i = n;
-	    
-	    while (i > 0)
-	      {
-		i--;
-		
-		if (valuesBuffer[i] > value)
-		  {
-		    delete[] valuesBuffer;
-		    return i;
-		  }
-		value -= valuesBuffer[i];
-	      }
-	    
-	    // It should never end up here
-
-	    // ---- MGP ---- Is the following line really necessary?  
-	    if (valuesBuffer) delete[] valuesBuffer;
-	    
-	  }
+      while (i>0)
+      { 
+	i--;
+	valuesBuffer[i] = table->GetComponent(i)->FindValue(k);
+	value += valuesBuffer[i];
       }
-    else
+	    
+      value *= G4UniformRand();
+    
+      i = n;
+	    
+      while (i > 0)
       {
-	G4Exception("G4CrossSectionIonisationBornPartial: attempting to calculate cross section for wrong particle");
+	i--;
+
+	if (valuesBuffer[i] > value)
+        {
+          delete[] valuesBuffer;
+          return i;
+        }
+	value -= valuesBuffer[i];
       }
+	    
+      if (valuesBuffer) delete[] valuesBuffer;
+    
+    }
+  }
+  else
+  {
+    G4Exception("G4CrossSectionIonisationBornPartial: attempting to calculate cross section for wrong particle");
+  }
       
   return level;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4double G4CrossSectionIonisationBornPartial::CrossSection(const G4Track& track )
 {
@@ -217,65 +159,52 @@ G4double G4CrossSectionIonisationBornPartial::CrossSection(const G4Track& track 
   const G4DynamicParticle* particle = track.GetDynamicParticle();
   G4double k = particle->GetKineticEnergy();
   
-  // Cross section = 0 outside the energy validity limits set in the constructor
-  // ---- MGP ---- Better handling of these limits to be set in a following design iteration
-
   G4double lowLim = lowEnergyLimitDefault;
   G4double highLim = highEnergyLimitDefault;
 
   const G4String& particleName = particle->GetDefinition()->GetParticleName();
 
-  // Retrieve energy limits for the current particle type
+  std::map< G4String,G4double,std::less<G4String> >::iterator pos1;
+  pos1 = lowEnergyLimit.find(particleName);
 
-    std::map< G4String,G4double,std::less<G4String> >::iterator pos1;
-    pos1 = lowEnergyLimit.find(particleName);
+  if (pos1 != lowEnergyLimit.end())
+  {
+    lowLim = pos1->second;
+  }
 
-    // Lower limit
-    if (pos1 != lowEnergyLimit.end())
-      {
-	lowLim = pos1->second;
-      }
+  std::map< G4String,G4double,std::less<G4String> >::iterator pos2;
+  pos2 = highEnergyLimit.find(particleName);
 
-    // Upper limit
-    std::map< G4String,G4double,std::less<G4String> >::iterator pos2;
-    pos2 = highEnergyLimit.find(particleName);
+  if (pos2 != highEnergyLimit.end())
+  {
+     highLim = pos2->second;
+  }
 
-    if (pos2 != highEnergyLimit.end())
-      {
-	highLim = pos2->second;
-      }
-
-    // Verify that the current track is within the energy limits of validity of the cross section model
-    if (k > lowLim && k < highLim)
-      {
-	std::map< G4String,G4DNACrossSectionDataSet*,std::less<G4String> >::iterator pos;
-	pos = tableData.find(particleName);
+  if (k > lowLim && k < highLim)
+  {
+     std::map< G4String,G4DNACrossSectionDataSet*,std::less<G4String> >::iterator pos;
+     pos = tableData.find(particleName);
 	
-	if (pos != tableData.end())
-	  {
-	    G4DNACrossSectionDataSet* table = pos->second;
-	    if (table != 0)
-	      {
-		// ---- MGP ---- Temporary
-		// table->PrintData();
+     if (pos != tableData.end())
+     {
+       G4DNACrossSectionDataSet* table = pos->second;
+       if (table != 0)
+       {
+  	 sigma = table->FindValue(k);
+       }
+     }
+     else
+     {
+       G4Exception("G4CrossSectionIonisationBornPartial: attempting to calculate cross section for wrong particle");
+     }
+  }
 
-		// Cross section
-		sigma = table->FindValue(k);
-	      }
-	  }
-	else
-	  {
-	    // The track corresponds to a not pertinent particle
-	    G4Exception("G4CrossSectionIonisationBornPartial: attempting to calculate cross section for wrong particle");
-	  }
-      }
-
-    return sigma;
+  return sigma;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4double G4CrossSectionIonisationBornPartial::Sum(G4double /* energy */, const G4String& /* particle */)
 {
-
   return 0;
 }

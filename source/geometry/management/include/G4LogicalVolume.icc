@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4LogicalVolume.icc,v 1.24 2006/06/29 18:30:57 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4LogicalVolume.icc,v 1.25 2008/07/10 09:40:08 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // 
 // class G4LogicalVolume Inline Implementation file
@@ -433,6 +433,16 @@ inline
 void G4LogicalVolume::SetMaterialCutsCouple(G4MaterialCutsCouple* cuts)
 {
   fCutsCouple = cuts;
+}
+
+// ********************************************************************
+// Lock
+// ********************************************************************
+//
+inline
+void G4LogicalVolume::Lock()
+{
+  fLock = true;
 }
 
 // ********************************************************************

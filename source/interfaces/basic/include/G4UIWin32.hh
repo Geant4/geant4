@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4UIWin32.hh,v 1.14 2006/06/29 19:09:29 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 #ifndef G4UIWin32_h
 #define G4UIWin32_h 

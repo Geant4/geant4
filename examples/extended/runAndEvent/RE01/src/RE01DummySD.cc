@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // $Id: RE01DummySD.cc,v 1.2 2006/06/29 17:43:52 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 //
 // Dummy sensitive used only to flag sensitivity

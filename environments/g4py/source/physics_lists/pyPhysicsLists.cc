@@ -23,15 +23,17 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: pyPhysicsLists.cc,v 1.5 2007/11/25 19:40:13 kmura Exp $
-// $Name: geant4-09-01 $
+// $Id: pyPhysicsLists.cc,v 1.8 2008/12/04 10:26:40 kmura Exp $
+// $Name: geant4-09-02 $
 // ====================================================================
 //   pyPhysicsLists.cc
 //
 //                                         2007 Q
 // ====================================================================
 #include <boost/python.hpp>
-#include "pyG4Version.hh"
+#include "G4Version.hh"
+#include <vector>
+#include <algorithm>
 
 #if G4VERSION_NUMBER >= 820
 
@@ -87,184 +89,103 @@
 #include "FTF_BIC.hh"
 #include "QGSC_BERT.hh"
 #include "QGS_BIC.hh"
-#include "QGSP_BIC2.hh"
+#include "QGSP_DIF.hh"
+#include "QGSP_BERT_DIF.hh"
 #endif
 
+// macro for adding physics lists
+#define ADD_PHYSICS_LIST(plname) \
+  class_<plname, plname*, bases<G4VUserPhysicsList> > \
+    (#plname, #plname " physics list") \
+    ; \
+  AddPhysicsList(#plname);
+
 using namespace boost::python;
+
+// ====================================================================
+// thin wrappers
+// ====================================================================
+namespace pyPhysicsLists {
+
+  static std::vector<std::string> plList;
+
+void AddPhysicsList(const G4String& plname) {
+  plList.push_back(plname);
+}
+
+void ListPhysicsList() {
+  for (G4int i=0; i< plList.size(); i++) {
+    G4cout << plList[i] << G4endl;
+  }
+}
+
+};
+
+using namespace pyPhysicsLists;
 
 // ====================================================================
 // module definition
 // ====================================================================
 void export_PhysicsLists()
 {
+  def("ListPhysicsList",   ListPhysicsList);
+
 #if G4VERSION_NUMBER >= 820
-
-  class_<FTFC, FTFC*, bases<G4VUserPhysicsList> >
-    ("FTFC", "FTFC physics list")
-    ;
-
-  class_<FTFP, FTFP*, bases<G4VUserPhysicsList> >
-    ("FTFP", "FTFP physics list")
-    ;
-
-  class_<LBE, LBE*, bases<G4VUserPhysicsList> >
-    ("LBE", "LBE physics list")
-    ;
-
-  class_<LHEP, LHEP*, bases<G4VUserPhysicsList> >
-    ("LHEP", "LHEP physics list")
-    ;
-
-  class_<LHEP_BERT, LHEP_BERT*, bases<G4VUserPhysicsList> >
-    ("LHEP_BERT", "LHEP_BERT physics list")
-    ;
-
-  class_<LHEP_BERT_HP, LHEP_BERT_HP*, bases<G4VUserPhysicsList> >
-    ("LHEP_BERT_HP", "LHEP_BERT_HP physics list")
-    ;
-
-
-  class_<LHEP_EMV, LHEP_EMV*, bases<G4VUserPhysicsList> >
-    ("LHEP_EMV", "LHEP_EMV physics list")
-    ;
-
-  class_<LHEP_PRECO_HP, LHEP_PRECO_HP*, bases<G4VUserPhysicsList> >
-    ("LHEP_PRECO_HP", "LHEP_PRECO_HP physics list")
-    ;
-
-  class_<QBBC, QBBC*, bases<G4VUserPhysicsList> >
-  ("QBBC", "QBBC physics list")
-    ;
-
-  class_<QGSC, QGSC*, bases<G4VUserPhysicsList> >
-    ("QGSC", "QGSC physics list")
-    ;
-
-  class_<QGSC_EFLOW, QGSC_EFLOW*, bases<G4VUserPhysicsList> >
-    ("QGSC_EFLOW", "QGSC_EFLOW physics list")
-    ;
-
-  class_<QGSC_EMV, QGSC_EMV*, bases<G4VUserPhysicsList> >
-    ("QGSC", "QGSC_EMV physics list")
-    ;
-
-  class_<QGSP, QGSP*, bases<G4VUserPhysicsList> >
-    ("QGSP", "QGSP physics list")
-    ;
-
-  class_<QGSP_BERT, QGSP_BERT*, bases<G4VUserPhysicsList> >
-    ("QGSP_BERT", "QGSP_BERT physics list")
-    ;
-
-  class_<QGSP_BERT_HP, QGSP_BERT_HP*, bases<G4VUserPhysicsList> >
-    ("QGSP_BERT_HP", "QGSP_BERT_HP physics list")
-    ;
-
-  class_<QGSP_BIC, QGSP_BIC*, bases<G4VUserPhysicsList> >
-    ("QGSP_BIC", "QGSP_BIC physics list")
-    ;
-
-  class_<QGSP_BIC_HP, QGSP_BIC_HP*, bases<G4VUserPhysicsList> >
-    ("QGSP_BIC_HP", "QGSP_BIC_HP physics list")
-    ;
-
-  class_<QGSP_EMV, QGSP_EMV*, bases<G4VUserPhysicsList> >
-    ("QGSP_EMV", "QGSP_EMV physics list")
-    ;
-
-  class_<QGSP_EMX, QGSP_EMX*, bases<G4VUserPhysicsList> >
-    ("QGSP_EMX", "QGSP_EMX physics list")
-    ;
-
-  class_<QGSP_QEL, QGSP_QEL*, bases<G4VUserPhysicsList> >
-    ("QGSP_QEL", "QGSP_QEL physics list")
-    ;
-
+  ADD_PHYSICS_LIST(FTFC);
+  ADD_PHYSICS_LIST(FTFP);
+  ADD_PHYSICS_LIST(LBE);
+  ADD_PHYSICS_LIST(LHEP);
+  ADD_PHYSICS_LIST(LHEP_BERT);
+  ADD_PHYSICS_LIST(LHEP_BERT_HP);
+  ADD_PHYSICS_LIST(LHEP_EMV);
+  ADD_PHYSICS_LIST(LHEP_PRECO_HP);
+  ADD_PHYSICS_LIST(QBBC);
+  ADD_PHYSICS_LIST(QGSC);
+  ADD_PHYSICS_LIST(QGSC_EFLOW);
+  ADD_PHYSICS_LIST(QGSC_EMV);
+  ADD_PHYSICS_LIST(QGSP);
+  ADD_PHYSICS_LIST(QGSP_BERT);
+  ADD_PHYSICS_LIST(QGSP_BERT_HP);
+  ADD_PHYSICS_LIST(QGSP_BIC);
+  ADD_PHYSICS_LIST(QGSP_BIC_HP);
+  ADD_PHYSICS_LIST(QGSP_EMV);
+  ADD_PHYSICS_LIST(QGSP_EMX);
+  ADD_PHYSICS_LIST(QGSP_QEL);
 
 #if G4VERSION_NUMBER <= 830
-  class_<LHEP_BIC, LHEP_BIC*, bases<G4VUserPhysicsList> >
-    ("LHEP_BIC", "LHEP_BIC physics list")
-    ;
-
-  class_<LHEP_BIC_HP, LHEP_BIC_HP*, bases<G4VUserPhysicsList> >
-    ("LHEP_BIC_HP", "LHEP_BIC_HP physics list")
-    ;
-
-  class_<LHEP_HP, LHEP_HP*, bases<G4VUserPhysicsList> >
-    ("LHEP_HP", "LHEP_HP physics list")
-    ;
-
-  class_<LHEP_LEAD, LHEP_LEAD*, bases<G4VUserPhysicsList> >
-    ("LHEP_LEAD", "LHEP_LEAD physics list")
-    ;
-
-  class_<LHEP_LEAD_HP, LHEP_LEAD_HP*, bases<G4VUserPhysicsList> >
-    ("LHEP_LEAD_HP", "LHEP_LEAD_HP physics list")
-    ;
-
-  class_<LHEP_PRECO, LHEP_PRECO*, bases<G4VUserPhysicsList> >
-    ("LHEP_PRECO", "LHEP_PRECO physics list")
-    ;
-
-  class_<QGSC_LEAD, QGSC_LEAD*, bases<G4VUserPhysicsList> >
-    ("QGSC_LEAD", "QGSC_LEAD physics list")
-    ;
-
-  class_<QGSC_LEAD_HP, QGSC_LEAD_HP*, bases<G4VUserPhysicsList> >
-    ("QGSC_LEAD_HP", "QGSC_LEAD_HP physics list")
-    ;
-
-  class_<QGSP_HP, QGSP_HP*, bases<G4VUserPhysicsList> >
-    ("QGSP_HP", "QGSP_HP physics list")
-    ;
+  ADD_PHYSICS_LIST(LHEP_BIC);
+  ADD_PHYSICS_LIST(LHEP_BIC_HP);
+  ADD_PHYSICS_LIST(LHEP_HP);
+  ADD_PHYSICS_LIST(LHEP_LEAD);
+  ADD_PHYSICS_LIST(LHEP_LEAD_HP);
+  ADD_PHYSICS_LIST(LHEP_PRECO);
+  ADD_PHYSICS_LIST(QGSC_LEAD);
+  ADD_PHYSICS_LIST(QGSC_LEAD_HP);
+  ADD_PHYSICS_LIST(QGSP_HP);
 #endif
 
 #endif
 
 #if G4VERSION_NUMBER >= 830
-
-  class_<FTFP_EMV, FTFP_EMV*, bases<G4VUserPhysicsList> >
-    ("FTFP_EMV", "FTFP_EMV physics list")
-    ;
-
-  class_<QGSP_BERT_EMV, QGSP_BERT_EMV*, bases<G4VUserPhysicsList> >
-    ("QGSP_BERT_EMV", "QGSP_BERT_EMV physics list")
-    ;
-
-  class_<QGSP_BERT_NQE, QGSP_BERT_NQE*, bases<G4VUserPhysicsList> >
-    ("QGSP_BERT_NQE", "QGSP_BERT_NQE physics list")
-    ;
-
-  class_<QGSP_BERT_TRV, QGSP_BERT_TRV*, bases<G4VUserPhysicsList> >
-    ("QGSP_BERT_TRV", "QGSP_BERT_TRV physics list")
-    ;
-
-  class_<QGSP_EMV_NQE, QGSP_EMV_NQE*, bases<G4VUserPhysicsList> >
-    ("QGSP_EMV_NQE", "QGSP_EMV_NQE physics list")
-    ;
-
-  class_<QGSP_NQE, QGSP_NQE*, bases<G4VUserPhysicsList> >
-    ("QGSP_NQE", "QGSP_NQE physics list")
-    ;
+  ADD_PHYSICS_LIST(FTFP_EMV);
+  ADD_PHYSICS_LIST(QGSP_BERT_EMV);
+  ADD_PHYSICS_LIST(QGSP_BERT_NQE);
+  ADD_PHYSICS_LIST(QGSP_BERT_TRV);
+  ADD_PHYSICS_LIST(QGSP_EMV_NQE);
+  ADD_PHYSICS_LIST(QGSP_NQE);
 #endif
 
 #if G4VERSION_NUMBER >= 910
-  class_<FTFP_BERT, FTFP_BERT*, bases<G4VUserPhysicsList> >
-    ("FTFP_BERT", "FTFP_BERT physics list")
-    ;
-  class_<FTF_BIC, FTF_BIC*, bases<G4VUserPhysicsList> >
-    ("FTF_BIC", "FTFP_BIC physics list")
-    ;
-  class_<QGSC_BERT, QGSC_BERT*, bases<G4VUserPhysicsList> >
-    ("QGSC_BERT", "QGSC_BERT physics list")
-    ;
-  class_<QGS_BIC, QGS_BIC*, bases<G4VUserPhysicsList> >
-    ("QGS_BIC", "QGS_BIC physics list")
-    ;
-  class_<QGSP_BIC2, QGSP_BIC2*, bases<G4VUserPhysicsList> >
-    ("QGSP_BIC2", "QGSP_BIC2 physics list")
-    ;
+  ADD_PHYSICS_LIST(FTFP_BERT);
+  ADD_PHYSICS_LIST(FTF_BIC);
+  ADD_PHYSICS_LIST(QGSC_BERT);
+  ADD_PHYSICS_LIST(QGS_BIC);
+  ADD_PHYSICS_LIST(QGSP_DIF);
+  ADD_PHYSICS_LIST(QGSP_BERT_DIF);
 #endif
+
+  // sort PL vector
+  std::sort(plList.begin(), plList.end());
 
 }
 

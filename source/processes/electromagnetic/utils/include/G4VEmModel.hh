@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEmModel.hh,v 1.48 2007/10/29 08:38:58 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4VEmModel.hh,v 1.59 2008/11/13 19:29:41 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // -------------------------------------------------------------------
 //
@@ -60,6 +60,10 @@
 // 07-03-06 Optimize msc methods (V.Ivanchenko)
 // 29-06-06 Add member currentElement and Get/Set methods (V.Ivanchenko)
 // 29-10-07 Added SampleScattering (V.Ivanchenko)
+// 15-07-08 Reorder class members and improve comments (VI)
+// 21-07-08 Added vector of G4ElementSelector and methods to use it (VI)
+// 12-09-08 Added methods GetParticleCharge, GetChargeSquareRatio, 
+//          CorrectionsAlongStep, ActivateNuclearStopping (VI)
 //
 // Class Description:
 //
@@ -80,7 +84,9 @@
 #include "G4ElementVector.hh"
 #include "G4DataVector.hh"
 #include "G4VEmFluctuationModel.hh"
+#include "G4EmElementSelector.hh"
 #include "Randomize.hh"
+#include <vector>
 
 class G4PhysicsTable;
 class G4Region;
@@ -97,11 +103,11 @@ public:
   virtual ~G4VEmModel();
 
   //------------------------------------------------------------------------
-  // Virtual methods to be implemented for the concrete model
+  // Virtual methods to be implemented for any concrete model
   //------------------------------------------------------------------------
 
-  virtual void Initialise(const G4ParticleDefinition*, const G4DataVector&) = 0;
-
+  virtual void Initialise(const G4ParticleDefinition*, 
+			  const G4DataVector&) = 0;
 
   virtual void SampleSecondaries(std::vector<G4DynamicParticle*>*,
 				 const G4MaterialCutsCouple*,
@@ -113,47 +119,64 @@ public:
   // Methods with standard implementation; may be overwritten if needed 
   //------------------------------------------------------------------------
 
-  virtual G4double MinEnergyCut(const G4ParticleDefinition*,
-			const G4MaterialCutsCouple*);
-
+  // dEdx per unit length
   virtual G4double ComputeDEDX(const G4MaterialCutsCouple*,
 			       const G4ParticleDefinition*,
 			       G4double kineticEnergy,
 			       G4double cutEnergy = DBL_MAX);
 
+  // main method to compute dEdx
+  virtual G4double ComputeDEDXPerVolume(const G4Material*,
+					const G4ParticleDefinition*,
+					G4double kineticEnergy,
+					G4double cutEnergy = DBL_MAX);
+
+  // cross section per volume
   virtual G4double CrossSection(const G4MaterialCutsCouple*,
 				const G4ParticleDefinition*,
 				G4double kineticEnergy,
 				G4double cutEnergy = 0.0,
 				G4double maxEnergy = DBL_MAX);
 
-  virtual G4double ComputeDEDXPerVolume(const G4Material*,
-					const G4ParticleDefinition*,
-					G4double kineticEnergy,
-					G4double cutEnergy = DBL_MAX);
-
-
-  virtual G4double ComputeCrossSectionPerAtom(const G4ParticleDefinition*,
-					      G4double kinEnergy, 
-					      G4double Z, 
-					      G4double A = 0., 
-					      G4double cutEnergy = 0.0,
-					      G4double maxEnergy = DBL_MAX);
-				      
-  virtual G4double ComputeMeanFreePath(const G4ParticleDefinition*,
-				       G4double kineticEnergy,
-				       const G4Material*,    
-				       G4double cutEnergy = 0.0,
-				       G4double maxEnergy = DBL_MAX);
-				     
+  // main method to compute cross section per Volume
   virtual G4double CrossSectionPerVolume(const G4Material*,
 					 const G4ParticleDefinition*,
 					 G4double kineticEnergy,
 					 G4double cutEnergy = 0.0,
 					 G4double maxEnergy = DBL_MAX);
 
+  // main method to compute cross section depending on atom
+  virtual G4double ComputeCrossSectionPerAtom(const G4ParticleDefinition*,
+					      G4double kinEnergy, 
+					      G4double Z, 
+					      G4double A = 0., /* amu */
+					      G4double cutEnergy = 0.0,
+					      G4double maxEnergy = DBL_MAX);
+				      				     
+  // min cut in kinetic energy allowed by the model
+  virtual G4double MinEnergyCut(const G4ParticleDefinition*,
+				const G4MaterialCutsCouple*);
+
+  // Compute effective ion charge square
+  virtual G4double GetChargeSquareRatio(const G4ParticleDefinition*,
+					const G4Material*,
+					G4double kineticEnergy);
+
+  // Compute ion charge 
+  virtual G4double GetParticleCharge(const G4ParticleDefinition*,
+				     const G4Material*,
+				     G4double kineticEnergy);
+
+  // add correction to energy loss and ompute non-ionizing energy loss
+  virtual void CorrectionsAlongStep(const G4MaterialCutsCouple*,
+				    const G4DynamicParticle*,
+				    G4double& eloss,
+				    G4double& niel,
+				    G4double length);
+
 protected:
 
+  // kinematically allowed max kinetic energy of a secondary
   virtual G4double MaxSecondaryEnergy(const G4ParticleDefinition*,
 				      G4double kineticEnergy);  
 				          
@@ -176,37 +199,89 @@ public:
 
   virtual void DefineForRegion(const G4Region*);
 
+  virtual void SetupForMaterial(const G4ParticleDefinition*,
+				const G4Material*,
+                                G4double kineticEnergy);
+
   //------------------------------------------------------------------------
   // Generic methods common to all models
   //------------------------------------------------------------------------
 
-  void SetParticleChange(G4VParticleChange*, G4VEmFluctuationModel*);
+  // should be called at initialisation to build element selectors
+  void InitialiseElementSelectors(const G4ParticleDefinition*, 
+				  const G4DataVector&);
 
-  G4VEmFluctuationModel* GetModelOfFluctuations();
+  // compute mean free path via cross section per volume
+  G4double ComputeMeanFreePath(const G4ParticleDefinition*,
+			       G4double kineticEnergy,
+			       const G4Material*,    
+			       G4double cutEnergy = 0.0,
+			       G4double maxEnergy = DBL_MAX);
 
-  G4double HighEnergyLimit();
+  // generic cross section per element
+  inline G4double ComputeCrossSectionPerAtom(const G4ParticleDefinition*,
+                                             const G4Element*,
+					     G4double kinEnergy, 
+					     G4double cutEnergy = 0.0,
+					     G4double maxEnergy = DBL_MAX);
 
-  G4double LowEnergyLimit();
+  // atom can be selected effitiantly if element selectors are initialised 
+  inline const G4Element* SelectRandomAtom(const G4MaterialCutsCouple*,
+					   const G4ParticleDefinition*,
+					   G4double kineticEnergy,
+					   G4double cutEnergy = 0.0,
+					   G4double maxEnergy = DBL_MAX);
 
-  void SetHighEnergyLimit(G4double);
+  // this method can be used only in the case if generic method to compute
+  // cross section per volume is used and not overwritten in derived class 
+  inline const G4Element* SelectRandomAtom(const G4Material*,
+					   const G4ParticleDefinition*,
+					   G4double kineticEnergy,
+					   G4double cutEnergy = 0.0,
+					   G4double maxEnergy = DBL_MAX);
 
-  void SetLowEnergyLimit(G4double);
+  // select isotope in order to have precise mass of the nucleus
+  inline G4int SelectIsotopeNumber(const G4Element*);
 
-  G4double MaxSecondaryKinEnergy(const G4DynamicParticle* dynParticle);
+  //------------------------------------------------------------------------
+  // Get/Set methods
+  //------------------------------------------------------------------------
 
-  const G4Element* SelectRandomAtom(const G4Material*,
-				    const G4ParticleDefinition*,
-				    G4double kineticEnergy,
-				    G4double cutEnergy = 0.0,
-				    G4double maxEnergy = DBL_MAX);
+  inline G4VEmFluctuationModel* GetModelOfFluctuations();
 
-  const G4String& GetName() const;
+  inline G4double HighEnergyLimit() const;
+
+  inline G4double LowEnergyLimit() const;
+
+  inline G4double PolarAngleLimit() const;
+
+  inline G4double SecondaryThreshold() const;
+
+  inline G4bool LPMFlag() const;
+
+  inline void SetHighEnergyLimit(G4double);
+
+  inline void SetLowEnergyLimit(G4double);
+
+  inline void SetPolarAngleLimit(G4double);
+
+  inline void SetSecondaryThreshold(G4double);
+
+  inline void SetLPMFlag(G4bool val);
+
+  inline void ActivateNuclearStopping(G4bool);
+
+  inline G4double MaxSecondaryKinEnergy(const G4DynamicParticle* dynParticle);
+
+  inline const G4String& GetName() const;
+
+  inline void SetParticleChange(G4VParticleChange*, G4VEmFluctuationModel*);
 
 protected:
 
-  const G4Element* GetCurrentElement() const;
+  inline const G4Element* GetCurrentElement() const;
 
-  void SetCurrentElement(const G4Element*);
+  inline void SetCurrentElement(const G4Element*);
 
 private:
 
@@ -214,33 +289,71 @@ private:
   G4VEmModel & operator=(const  G4VEmModel &right);
   G4VEmModel(const  G4VEmModel&);
 
-  G4double        lowLimit;
-  G4double        highLimit;
-  G4double        xsec[40];
+  // ======== Parameters of the class fixed at construction =========
 
   G4VEmFluctuationModel* fluc;
-
   const G4String   name;
-  const G4Element* currentElement;
+
+  // ======== Parameters of the class fixed at initialisation =======
+
+  G4double        lowLimit;
+  G4double        highLimit;
+  G4double        polarAngleLimit;
+  G4double        secondaryThreshold;
+  G4bool          theLPMflag;
+
+  G4int           nSelectors;
+  std::vector<G4EmElementSelector*> elmSelectors;
 
 protected:
 
   G4VParticleChange*  pParticleChange;
+  G4bool              nuclearStopping;
+
+  // ======== Cashed values - may be state dependent ================
+
+private:
+
+  const G4Element* currentElement;
+  G4int                  nsec;
+  std::vector<G4double>  xsec;
+
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-inline G4double G4VEmModel::HighEnergyLimit()
+inline G4double G4VEmModel::HighEnergyLimit() const
 {
   return highLimit;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-inline G4double G4VEmModel::LowEnergyLimit()
+inline G4double G4VEmModel::LowEnergyLimit() const
 {
   return lowLimit;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+inline G4double G4VEmModel::PolarAngleLimit() const
+{
+  return polarAngleLimit;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+inline G4double G4VEmModel::SecondaryThreshold() const
+{
+  return secondaryThreshold;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline G4bool G4VEmModel::LPMFlag() const 
+{
+  return theLPMflag;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -255,6 +368,48 @@ inline void G4VEmModel::SetHighEnergyLimit(G4double val)
 inline void G4VEmModel::SetLowEnergyLimit(G4double val)
 {
   lowLimit = val;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+inline void G4VEmModel::SetPolarAngleLimit(G4double val)
+{
+  polarAngleLimit = val;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+inline void G4VEmModel::SetSecondaryThreshold(G4double val) 
+{
+  secondaryThreshold = val;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline void G4VEmModel::SetLPMFlag(G4bool val) 
+{
+  theLPMflag = val;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline void G4VEmModel::ActivateNuclearStopping(G4bool val)
+{
+  nuclearStopping = val;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+inline G4double G4VEmModel::ComputeCrossSectionPerAtom(
+		const G4ParticleDefinition* part,
+		const G4Element* elm,
+		G4double kinEnergy, 
+		G4double cutEnergy,
+		G4double maxEnergy)
+{
+  currentElement = elm;
+  return ComputeCrossSectionPerAtom(part,kinEnergy,elm->GetZ(),elm->GetN(),
+				    cutEnergy,maxEnergy);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -284,11 +439,33 @@ inline G4double G4VEmModel::MinEnergyCut(const G4ParticleDefinition*,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-inline G4double G4VEmModel::ComputeDEDXPerVolume(
-                                        const G4Material*,
-					const G4ParticleDefinition*,
-					G4double,
-					G4double)
+inline G4double G4VEmModel::GetChargeSquareRatio(const G4ParticleDefinition* p,
+						 const G4Material*, G4double)
+{
+  G4double q = p->GetPDGCharge()/CLHEP::eplus;
+  return q*q;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+inline G4double G4VEmModel::GetParticleCharge(const G4ParticleDefinition* p,
+					      const G4Material*, G4double)
+{
+  return p->GetPDGCharge();
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+inline void G4VEmModel::CorrectionsAlongStep(const G4MaterialCutsCouple*,
+					     const G4DynamicParticle*,
+					     G4double&,G4double&,G4double)
+{}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+inline G4double G4VEmModel::ComputeDEDXPerVolume(const G4Material*,
+						 const G4ParticleDefinition*,
+						 G4double,G4double)
 {
   return 0.0;
 }
@@ -311,8 +488,8 @@ inline G4double G4VEmModel::CrossSection(const G4MaterialCutsCouple* c,
 					 G4double cutEnergy,
 					 G4double maxEnergy)
 {
-  return 
-    CrossSectionPerVolume(c->GetMaterial(),p,kinEnergy,cutEnergy,maxEnergy);
+  return CrossSectionPerVolume(c->GetMaterial(),p,
+			       kinEnergy,cutEnergy,maxEnergy);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -327,20 +504,39 @@ inline G4double G4VEmModel::ComputeCrossSectionPerAtom(
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-inline const G4Element* G4VEmModel::SelectRandomAtom(
-				         const G4Material* material,
-				         const G4ParticleDefinition* pd,
-					 G4double kinEnergy,
-					 G4double tcut,
-					 G4double tmax)
+inline 
+const G4Element* G4VEmModel::SelectRandomAtom(const G4MaterialCutsCouple* couple,
+					      const G4ParticleDefinition* p,
+					      G4double kinEnergy,
+					      G4double cutEnergy,
+					      G4double maxEnergy)
+{
+  if(nSelectors > 0) {
+    currentElement = 
+      elmSelectors[couple->GetIndex()]->SelectRandomAtom(kinEnergy);
+  } else {
+    currentElement = SelectRandomAtom(couple->GetMaterial(),p,kinEnergy,
+				      cutEnergy,maxEnergy);
+  }
+  return currentElement;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+inline 
+const G4Element* G4VEmModel::SelectRandomAtom(const G4Material* material,
+					      const G4ParticleDefinition* pd,
+					      G4double kinEnergy,
+					      G4double tcut,
+					      G4double tmax)
 {
   const G4ElementVector* theElementVector = material->GetElementVector();
-  G4int nelm = material->GetNumberOfElements();
-  currentElement = (*theElementVector)[nelm-1];
-  if (nelm > 1) {
+  G4int n = material->GetNumberOfElements() - 1;
+  currentElement = (*theElementVector)[n];
+  if (n > 0) {
     G4double x = G4UniformRand()*
-                 CrossSectionPerVolume(material,pd,kinEnergy,tcut,tmax);
-    for(G4int i=0; i<nelm; i++) {
+                 G4VEmModel::CrossSectionPerVolume(material,pd,kinEnergy,tcut,tmax);
+    for(G4int i=0; i<n; i++) {
       if (x <= xsec[i]) {
 	currentElement = (*theElementVector)[i];
 	break;
@@ -348,6 +544,28 @@ inline const G4Element* G4VEmModel::SelectRandomAtom(
     }
   }
   return currentElement;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+inline G4int G4VEmModel::SelectIsotopeNumber(const G4Element* elm)
+{
+  G4int N = G4int(elm->GetN() + 0.5);
+  G4int ni = elm->GetNumberOfIsotopes();
+  if(ni > 0) {
+    G4int idx = 0;
+    if(ni > 1) {
+      G4double* ab = currentElement->GetRelativeAbundanceVector();
+      G4double x = G4UniformRand();
+      for(; idx<ni; idx++) {
+	x -= ab[idx];
+	if (x <= 0.0) break;
+      }
+      if(idx >= ni) idx = ni - 1;
+    }
+    N = elm->GetIsotope(idx)->GetN();
+  }
+  return N;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -366,11 +584,11 @@ inline void G4VEmModel::SetCurrentElement(const G4Element* elm)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-inline G4double G4VEmModel::MaxSecondaryKinEnergy(
-                                          const G4DynamicParticle* dynParticle)
+inline 
+G4double G4VEmModel::MaxSecondaryKinEnergy(const G4DynamicParticle* dynPart)
 {
-  return MaxSecondaryEnergy(dynParticle->GetDefinition(),
-                            dynParticle->GetKineticEnergy());
+  return MaxSecondaryEnergy(dynPart->GetDefinition(),
+                            dynPart->GetKineticEnergy());
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -422,6 +640,12 @@ inline G4double G4VEmModel::ComputeTrueStepLength(G4double geomPathLength)
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 inline void G4VEmModel::DefineForRegion(const G4Region*) 
+{}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+inline void G4VEmModel::SetupForMaterial(const G4ParticleDefinition*,
+					 const G4Material*, G4double)
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

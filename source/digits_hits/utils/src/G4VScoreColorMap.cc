@@ -24,11 +24,18 @@
 // ********************************************************************
 //
 //
-// $Id: G4VScoreColorMap.cc,v 1.1 2007/11/04 04:06:09 asaim Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4VScoreColorMap.cc,v 1.3 2008/02/14 10:45:12 akimura Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 
 #include "G4VScoreColorMap.hh"
+
+#include "G4VVisManager.hh"
+#include "G4VisAttributes.hh"
+#include "G4Text.hh"
+#include "G4Circle.hh"
+#include "G4Polyline.hh"
+#include "G4Colour.hh"
 
 G4VScoreColorMap::G4VScoreColorMap(G4String mName)
 :fName(mName),ifFloat(true),fMinVal(0.),fMaxVal(DBL_MAX)
@@ -37,3 +44,66 @@ G4VScoreColorMap::G4VScoreColorMap(G4String mName)
 G4VScoreColorMap::~G4VScoreColorMap()
 {;}
 
+void G4VScoreColorMap::DrawColorChart(G4int _nPoint) {
+
+  fVisManager = G4VVisManager::GetConcreteInstance();
+  if(!fVisManager) {
+    G4cerr << "G4VScoringMesh::DrawColorChart(): no visualization system" << G4endl;
+    return;
+  }
+
+  DrawColorChartBar(_nPoint);
+  DrawColorChartText(_nPoint);
+}
+
+void G4VScoreColorMap::DrawColorChartBar(G4int _nPoint) {
+
+  G4double min = this->GetMin();
+  G4double max = this->GetMax();
+  G4double smin = -0.89, smax = smin + 0.05*(_nPoint)*0.83, step=0.001;
+  G4double c[4];
+  for(G4double y = smin; y < smax; y+=step) {
+    G4double ra = (y-smin)/(smax-smin), rb = 1.-ra;
+    G4Polyline line;
+    line.push_back(G4Point3D(-0.96, y, 0.));
+    line.push_back(G4Point3D(-0.91, y, 0.));
+    this->GetMapColor((ra*max+rb*min)/(ra+rb), c);
+    G4Colour col(c[0], c[1], c[2]);
+    G4VisAttributes att(col);
+    line.SetVisAttributes(&att);
+    fVisManager->Draw2D(line);
+  }
+
+}
+void G4VScoreColorMap::DrawColorChartText(G4int _nPoint) {
+  G4double min = this->GetMin();
+  G4double max = this->GetMax();
+  G4double c[4];
+  G4Colour black(0., 0., 0.);
+  for(int n = 0; n < _nPoint; n++) {
+    G4double a = n/(_nPoint-1.), b = 1.-a;
+    G4double v = (a*max + b*min)/(a+b);
+    // background color
+    for(int l = 0; l < 21; l++) {
+      G4Polyline line;
+      line.push_back(G4Point3D(-0.908, -0.905+0.05*n+0.002*l, 0.));
+      line.push_back(G4Point3D(-0.705, -0.905+0.05*n+0.002*l, 0.));
+      G4VisAttributes attblack(black);
+      line.SetVisAttributes(&attblack);
+      fVisManager->Draw2D(line);
+    }
+    // text
+    char cstring[80]; 
+    std::sprintf(cstring, "%8.2e", v);
+    G4String value(cstring);
+    G4Text text(value, G4Point3D(-0.9, -0.9+0.05*n, 0));
+    G4double size = 12.;
+    text.SetScreenSize(size);
+    this->GetMapColor(v, c);
+    G4Colour color(c[0], c[1], c[2]);
+    G4VisAttributes att(color);
+    text.SetVisAttributes(&att);
+
+    fVisManager->Draw2D(text);
+  }
+}

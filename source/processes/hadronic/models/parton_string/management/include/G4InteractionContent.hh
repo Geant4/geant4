@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4InteractionContent.hh,v 1.4 2007/01/24 10:28:54 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 
 #ifndef G4InteractionContent_h

@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NistManager.cc,v 1.15 2007/12/11 13:32:08 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4NistManager.cc,v 1.19 2008/07/23 14:49:31 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // -------------------------------------------------------------------
 //
@@ -62,8 +62,6 @@
 #include "G4Isotope.hh"
 
 G4NistManager* G4NistManager::instance = 0;
-G4double G4NistManager::POWERZ13[256] = {0};
-G4double G4NistManager::LOGA[256] = {0};
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
@@ -88,13 +86,22 @@ G4NistManager::G4NistManager()
   matBuilder = new G4NistMaterialBuilder(elmBuilder,verbose);
   
   messenger  = new G4NistMessenger(this);  
+
+  // compute frequently used values
   for(G4int i=1; i<256; i++) {
     G4double x = G4double(i);
     POWERZ13[i] = std::pow(x,1.0/3.0);
     LOGA[i] = std::log(x);
   }
+  for(G4int j=1; j<101; j++) {
+    G4double A = elmBuilder->GetA(j);
+    POWERA27[j] = std::pow(A,0.27);
+    LOGAZ[j]    = std::log(A);
+  }
   POWERZ13[0] = 1.0;
+  POWERA27[0] = 1.0;
   LOGA[0]     = 0.0;
+  LOGAZ[0]    = 0.0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -172,28 +179,6 @@ void G4NistManager::SetVerbose(G4int val)
   verbose = val;
   elmBuilder->SetVerbose(val);
   matBuilder->SetVerbose(val);
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-G4double G4NistManager::GetZ13(G4double Z)
-{
-  G4int iz = G4int(Z);
-  G4double x = (Z - G4double(iz))/(3.0*Z);
-  if(iz > 255) iz = 255;
-  else if(iz < 0) iz = 0;
-  return POWERZ13[iz]*(1.0 + x);
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-G4double G4NistManager::GetLOGA(G4double A)
-{
-  G4int ia = G4int(A);
-  G4double x = (A - G4double(ia))/A;
-  if(ia > 255) ia = 255;
-  else if(ia < 0) ia = 0;
-  return LOGA[ia] + x;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -1,4 +1,4 @@
-$Id: README,v 1.22 2007/11/12 15:48:58 maire Exp $
+$Id: README,v 1.26 2008/10/23 12:20:13 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -28,8 +28,20 @@ $Id: README,v 1.22 2007/11/12 15:48:58 maire Exp $
  	
  2 - PHYSICS LIST
  
-  The particle list is the one of novice/exampleN03.
-  The physics list contains the 'standard' electromagnetic processes, and decay.
+  Physics lists can be local (eg. in this example) or from G4 kernel
+  physics_lists subdirectory.
+     
+  Local physics lists:	 
+   - "standard"	  standard EM physics with current 'best' options setting.
+                  these options are explicited in PhysListEmStandard
+   - "livermore"  low-energy EM physics using Livermore data
+   - "penelope"   low-energy EM physics implementing Penelope models
+        
+  Physics lists and options can be (re)set with UI commands
+    
+  Please, notice that options set through G4EmProcessOPtions are global, eg
+  for all particle types. In G4 builders (geant4/source/physics_lists/builders)
+  it is shown how to set options per particle type. 
  		
   Few commands have been added to PhysicsList, in order to set the production 
   threshold for secondaries for gamma and e-/e+.
@@ -95,7 +107,7 @@ $Id: README,v 1.22 2007/11/12 15:48:58 maire Exp $
   	
  8 - HISTOGRAMS
  
-  Testem1 produces several histo which are saved as testem1.hbook by default.
+  Testem1 produces several histo which are saved as testem1.root by default.
   Content of these histo:  
       1 : track length of primary particle
       2 : number of steps primary particle
@@ -110,7 +122,7 @@ $Id: README,v 1.22 2007/11/12 15:48:58 maire Exp $
    /testem/histo/setFileName  name  (default testem1)
    
    It is possible to choose the format of the histogram file (hbook, root, XML)
-   with the command /testem/histo/setFileType (hbook by default)
+   with the command /testem/histo/setFileType (root by default)
    
    It is also possible to print selected histograms on an ascii file:
    /testem/histo/printHisto id
@@ -126,45 +138,5 @@ $Id: README,v 1.22 2007/11/12 15:48:58 maire Exp $
  9 - USING HISTOGRAMS
 
   To use histograms, at least one of the AIDA implementations should be 
-  available (see http://aida.freehep.org).
+  available. See the file InstallAida.txt
   
- 9a - PI 
-
-  A package including AIDA and extended interfaces also using Python is PI, 
-  available from: http://cern.ch/pi
-
-  Once installed PI or PI-Lite in a specified local area $MYPY, it is required 
-  to add the installation path to $PATH, i.e. for example, for release 1.2.1 of 
-  PI:
-  setenv PATH ${PATH}:$MYPI/1.2.1/app/releases/PI/PI_1_2_1/rh73_gcc32/bin
-
-  CERN users can use the PATH to the LCG area on AFS.
-  Before running the example the command should be issued:
-  eval `aida-config --runtime csh`
-
- 9b -  OpenScientist
-
-  OpenScientist is available at http://OpenScientist.lal.in2p3.fr.
-
-  You have to "setup" the OpenScientist AIDA implementation before compiling
-  (then with G4ANALYSIS_USE set) and running your Geant4 application.
-
- On UNIX you setup, with a csh flavoured shell : 
-	csh> source <<OpenScientist install path>/aida-setup.csh 
-        or with a sh flavoured shell : 
-	sh> . <<OpenScientist install path>/aida-setup.sh
- On Windows : 
-	DOS> call <<OpenScientist install path>/aida-setup.bat 
-
-  You can use various file formats for writing (AIDA-XML, hbook, root).
-  These formats are readable by the Lab onx interactive program
-  or the OpenPAW application. See the web pages.
-
-
-  With OpenPAW, on a run.hbook file, one can view the histograms
-  with something like :
-	OS> opaw 
-        opaw> h/file 1 run.hbook  ( or opaw> h/file 1 run.aida or run.root)  
-	opaw> zone 2 2 
-	opaw> h/plot 1 
-	opaw> h/plot 2

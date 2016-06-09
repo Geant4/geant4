@@ -23,15 +23,15 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: pyG4Version.cc,v 1.1 2006/08/23 04:43:27 kmura Exp $
-// $Name: geant4-09-01 $
+// $Id: pyG4Version.cc,v 1.2 2008/03/13 07:32:18 kmura Exp $
+// $Name: geant4-09-02 $
 // ====================================================================
 //   pyG4Version.cc
 //
 //                                         2006 Q
 // ====================================================================
 #include <boost/python.hpp>
-#include "pyG4Version.hh"
+#include "G4Version.hh"
 
 using namespace boost::python;
 

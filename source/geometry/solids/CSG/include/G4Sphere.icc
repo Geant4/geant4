@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Sphere.icc,v 1.7 2006/10/19 15:33:37 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4Sphere.icc,v 1.8 2008/11/21 09:50:05 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // --------------------------------------------------------------------
 // GEANT 4 inline definitions file
@@ -37,6 +37,12 @@
 
 inline
 G4double G4Sphere::GetInsideRadius() const
+{
+  return fRmin;
+}
+
+inline
+G4double G4Sphere::GetInnerRadius() const
 {
   return fRmin;
 }
@@ -72,6 +78,15 @@ G4double G4Sphere::GetDeltaThetaAngle() const
 
 inline
 void G4Sphere::SetInsideRadius(G4double newRmin)
+{
+  fRmin= newRmin;
+  fCubicVolume= 0.;
+  fSurfaceArea= 0.;
+  fpPolyhedron = 0;
+}
+
+inline
+void G4Sphere::SetInnerRadius(G4double newRmin)
 {
   fRmin= newRmin;
   fCubicVolume= 0.;

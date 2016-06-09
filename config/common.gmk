@@ -1,18 +1,25 @@
-# $Id: common.gmk,v 1.43 2007/06/28 14:33:38 gcosmo Exp $
+# $Id: common.gmk,v 1.53 2008/12/03 13:35:36 gcosmo Exp $
 # ----------------------------------------------------------------
 # Common part of GNUmakefile for libraries.  John Allison, 5/7/95.
 # ----------------------------------------------------------------
 # Libraries are created according to G4SYSTEM. G.Cosmo, 11/6/96.
 # Introduced G4LIBDIR and G4TMPDIR. G.Cosmo, 23/6/98.
+# Introduced Qt moc rule, L.Garnier 15/2/08.
 
 ifndef G4LIBDIR
   G4LIBDIR := $(G4LIB)/$(G4SYSTEM)
 endif
 G4TMPDIR := $(G4TMP)/$(G4SYSTEM)/$(name)
 
-sources := $(wildcard src/*.cc)
-objects := $(patsubst src/%.cc,$(G4TMPDIR)/%.o,$(sources))
+sources      := $(wildcard src/*.cc)
 dependencies := $(patsubst src/%.cc,$(G4TMPDIR)/%.d,$(sources))
+objects      := $(patsubst src/%.cc,$(G4TMPDIR)/%.o,$(sources))
+
+ifneq ($(G4INTY_BUILD_QT),)
+ sources      += $(moc_sources)
+ dependencies += $(moc_dependencies)
+ objects      += $(moc_objects)
+endif
 
    g4libraries_to_build :=
 ifeq ($(G4LIB_NO_SHARED),)
@@ -59,6 +66,7 @@ $(G4LIBDIR)/lib$(name).a: $(G4TMPDIR)/obj.last
 	ranlib $(G4LIBDIR)/lib$(name).a ; fi ; fi
 endif
 
+
 ###############################################################################
 #
 # Actual targets for .o, .d files
@@ -80,7 +88,7 @@ obj: $(G4TMPDIR)/obj.last
 
 # Touch the versioning file
 $(G4TMPDIR)/obj.last: $(objects)
-	@touch $@
+	@$(TOUCH) $@
 
 # Make the .d file(s) and include it(them).
 

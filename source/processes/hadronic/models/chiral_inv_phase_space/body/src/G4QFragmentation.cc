@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4QFragmentation.cc,v 1.3 2007/05/02 14:59:55 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // -----------------------------------------------------------------------------
 //      GEANT 4 class header file

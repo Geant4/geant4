@@ -23,7 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// by V. Lara
+//J. M. Quesada (August 2008).  
+//Based  on previous work by V. Lara
+//
 
 #ifndef G4PreCompoundIon_h
 #define G4PreCompoundIon_h 1
@@ -69,23 +71,23 @@ public:
     return G4PreCompoundFragment::operator!=(right);
   }
     
-  virtual G4double ProbabilityDistributionFunction(const G4double eKin,
-						   const G4Fragment& aFragment);
+  virtual G4double ProbabilityDistributionFunction(const G4double eKin, 
+                                                   const G4Fragment& aFragment);
 
-protected:
-  G4bool IsItPossible(const G4Fragment& aFragment) 
-  {
-    G4int pplus = aFragment.GetNumberOfCharged();   
-    G4int pneut = aFragment.GetNumberOfParticles()-pplus;
-    return (pneut >= (GetA()-GetZ()) && pplus >= GetZ());
-  }
+  private:
+
+  G4bool IsItPossible(const G4Fragment& aFragment) ;
   
-  virtual G4double GetAlpha() = 0;
-  virtual G4double GetBeta() = 0;
-  virtual G4double GetRj(const G4int NumberParticles, const G4int NumberCharged) = 0;
+  protected:
+
+  virtual G4double CrossSection(const G4double ekin)=0; 
+
+  virtual G4double GetRj(const G4int NumberParticles, const G4int NumberCharged) = 0; 
+
   virtual G4double FactorialFactor(const G4double N, const G4double P) = 0;
+
   virtual G4double CoalescenceFactor(const G4double A) = 0; 
-    
-};
+
+   };
 
 #endif

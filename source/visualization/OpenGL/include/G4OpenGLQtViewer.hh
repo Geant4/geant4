@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLQtViewer.hh,v 1.4 2007/11/13 17:48:51 lgarnier Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4OpenGLQtViewer.hh,v 1.13 2008/11/06 13:43:44 lgarnier Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // 
 // G4OpenGLQtViewer : Class to provide WindowsNT specific
@@ -54,8 +54,14 @@ class QMenu;
 #endif
 class QImage;
 class QAction;
+class QMouseEvent;
+class QKeyEvent;
+class QWheelEvent;
+class QProcess;
+class QTime;
 
 class G4OpenGLSceneHandler;
+class G4OpenGLQtMovieDialog;
 
 class G4OpenGLQtViewer: public QObject, virtual public G4OpenGLViewer {
 
@@ -65,19 +71,51 @@ public:
   G4OpenGLQtViewer (G4OpenGLSceneHandler& scene);
   virtual ~G4OpenGLQtViewer ();
   void SetView ();
-  void ShowView ();
   virtual void updateQWidget()=0;
+  void setupViewport(int, int);
+  QString setEncoderPath(QString path);
+  QString getEncoderPath();
+  QString setTempFolderPath(QString path);
+  QString getTempFolderPath();
+  QString setSaveFileName(QString path);
+  QString getSaveFileName();
+  bool isRecording();
+  bool isStopped();
+  bool isPaused();
+  bool isEncoding();
+  bool isWaiting();
+  bool isFailed();
+  void setWaiting();
+  bool isBadEncoder();
+  bool isBadOutput();
+  bool isBadTmp();
+  bool isSuccess();
+  void setBadTmp();
+  void setBadOutput();
+  void setBadEncoder();
+  bool isReadyToEncode();
+  void resetRecording();
+  void encodeVideo();
+  void stopVideo();
+  void saveVideo();
+  bool generateMpegEncoderParameters();
+  void displayRecordingStatus();
 
 protected:
   void CreateGLQtContext ();
-  virtual void CreateMainWindow (QGLWidget*);
-  void manageContextMenuEvent(QContextMenuEvent *e);
-  void G4MousePressEvent(QPoint);
-#if QT_VERSION < 0x040000
-  void G4MouseMoveEvent(int, int, Qt::ButtonState);
-#else
-  void G4MouseMoveEvent(int, int, Qt::MouseButtons);
-#endif
+  virtual void CreateMainWindow (QGLWidget*,QString);
+  void G4resizeGL(int, int);
+  void G4manageContextMenuEvent(QContextMenuEvent *e);
+  void G4MousePressEvent(QMouseEvent *event);
+  void G4MouseReleaseEvent();
+  void G4MouseDoubleClickEvent();
+  void G4MouseMoveEvent(QMouseEvent *event);
+  void G4wheelEvent (QWheelEvent * event); 
+  void G4keyPressEvent (QKeyEvent * event); 
+  void rotateQtScene(float, float);
+  void rotateQtCamera(float, float);
+  void moveScene(float, float, float,bool);
+  void FinishView();
 
 
 protected:
@@ -85,53 +123,126 @@ protected:
   G4int WinSize_y;
   QGLWidget* fWindow;
   QDialog* GLWindow;
+  bool hasPendingEvents();
+  void savePPMToTemp();
+  int fRecordFrameNumber;
+  float fRotationAngleX;
+  float fRotationAngleY;
+  float fRotationAngleZ;
+  float fDeltaRotationAngleX;
+  float fDeltaRotationAngleY;
+  float fDeltaRotationAngleZ;
+
+  bool hasToRepaint;
+  bool readyToPaint;
+  bool zoomAction;
+  QPoint beginZoom;
+  QPoint endZoom;
 
 private:
+  enum mouseActions {STYLE1,STYLE2,STYLE3,STYLE4}; 
+  enum RECORDING_STEP {WAIT,START,PAUSE,CONTINUE,STOP,READY_TO_ENCODE,ENCODING,FAILED,SUCCESS,BAD_ENCODER,BAD_OUTPUT,BAD_TMP,SAVE}; 
+
   void createPopupMenu();
   void createRadioAction(QAction *,QAction *, const std::string&,unsigned int a=1);
   void rescaleImage(int, int);
   bool generateEPS(QString,int,QImage);  
+  bool generateVectorEPS (QString,int,int,QImage);
   bool generatePS_PDF(QString,int,QImage);  
+  void showMovieParametersDialog();
+  void initMovieParameters();
+  QString createTempFolder();
+  QString removeTempFolder();
+  void setRecordingStatus(RECORDING_STEP);
+  void setRecordingInfos(QString);
+  QString getProcessErrorMsg();
+
 
 #if QT_VERSION < 0x040000
   QPopupMenu *fContextMenu;
 #else
   QMenu *fContextMenu;
 #endif
-  bool fMouseAction; // 1: rotate 0:move
-  QPoint lastPos;
-#if QT_VERSION < 0x040000
-  QPopupMenu *fDrawingWireframe;
-  QPopupMenu *fDrawingLineRemoval;
-  QPopupMenu *fDrawingSurfaceRemoval;
-  QPopupMenu *fDrawingLineSurfaceRemoval;
-#else
+
+  mouseActions fMouseAction; // 1: rotate 2:move 3:pick 4:shortcuts 
+  QPoint fLastPos1;
+  QPoint fLastPos2;
+  QPoint fLastPos3;
+  /** delta of scene rotation. This delta is put in degree */
+  G4double fDeltaRotation;
+  /** delta of scene translation. This delta is put in % of the scene view */
+  G4double fDeltaSceneTranslation;
+  /** delta of depth move. This delta is put in % of the scene view */
+  G4double fDeltaDepth;
+  /** delta of zoom move. This delta is put in % of the scene view */
+  G4double fDeltaZoom;
+  /** delta of auto move/rotation. This delta is put in % of the move/rotation param */
+  G4double fDeltaMove;
+  /** To ensure key event are keep one by one */
+  bool fHoldKeyEvent;
+  /** To ensure move event are keep one by one */
+  bool fHoldMoveEvent;
+  /** To ensure rotate event are keep one by one */
+  bool fHoldRotateEvent;
+  bool fAutoMove;
+  QString fEncoderPath;
+  QString fTempFolderPath;
+  QString fMovieTempFolderPath;
+  QString fSaveFileName;
+  QString fParameterFileName;
+  QAction *fRotateAction;
+  QAction *fMoveAction;
+  QAction *fPickAction;
+  QAction *fFullScreenOn;
+  QAction *fFullScreenOff;
   QAction *fDrawingWireframe;
   QAction *fDrawingLineRemoval;
   QAction *fDrawingSurfaceRemoval;
   QAction *fDrawingLineSurfaceRemoval;
-#endif
+  G4OpenGLQtMovieDialog* fMovieParametersDialog;
+  RECORDING_STEP fRecordingStep;
+  QProcess *fProcess;
+  QTime *fLastEventTime;
+  int fSpinningDelay;
+  int fLaunchSpinDelay;
+
+signals:
+ void rotateTheta(int);
+ void rotatePhi(int);
+ void moveX(int);
+ void moveY(int);
+ void moveZ(int);
+
+public slots :
+  void startPauseVideo();
 
 private slots :
+  void actionMouseRotate();
+  void actionMouseMove();
+  void actionMousePick();
   void actionDrawingWireframe();
   void actionDrawingLineRemoval();
   void actionDrawingSurfaceRemoval();
   void actionDrawingLineSurfaceRemoval();
-  void actionControlPanels();
-  void actionExitG4();
-  void actionCreateEPS();
+  void actionSaveImage();
+  void actionMovieParameters();
 
+  void showShortcuts();
   void toggleDrawingAction(int);
-  void toggleMouseAction(bool);
+  void toggleMouseAction(mouseActions);
   void toggleRepresentation(bool);
+  void toggleProjection(bool);
   void toggleBackground(bool);
   void toggleTransparency(bool);
   void toggleAntialiasing(bool);
   void toggleHaloing(bool);
   void toggleAux(bool);
   void toggleFullScreen(bool);
-
-  void dialogClosed();
+  void processEncodeFinished();
+  void processLookForFinished();
+  void processEncodeStdout();
+  // Only use for Qt>4.0
+  //  void dialogClosed();
 };
 
 #endif

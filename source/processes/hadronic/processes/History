@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: History,v 1.2 2007/01/07 04:57:36 dennis Exp $
+$Id: History,v 1.5 2008/10/02 20:40:16 dennis Exp $
 -------------------------------------------------------------------
 
      ==========================================================
@@ -16,6 +16,23 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+2 Oct 2008 Dennis Wright (hadr-proc-V09-01-02)
+----------------------------------------------
+- G4HadronCaptureProcess.cc - change subtype from 13 to fCapture
+- G4HadronFissionProcess.cc - change subtype from 14 to fFission
+- G4HadronElasticProcess.cc - change subtype from 11 to fHadronElastic
+
+1 Sep 2008 Vladimir Ivanchenko (hadr-proc-V09-01-01)
+----------------------------------------------------
+- G4HadronElasticProcess, G4HadronCaptureProcess, 
+  G4HadronFissionProcess - used PostStepDoIt, DumpPhysicsTable from
+                           the base class G4HadronicProcess 
+
+8 Jul 2008 Dennis Wright (hadr-proc-V09-01-00)
+----------------------------------------------
+- set process sub-type to 11 for G4HadronElasticProcess, 
+  13 for G4HadronCaptureProcess, and 14 for G4HadronFissionProcess
+ 
 6 Jan 2007 Dennis Wright (hadr-proc-V08-02-00)
 ----------------------------------------------
 - added process names to G4HadronElasticProcess, G4HadronCaptureProcess, 

@@ -1,4 +1,4 @@
-$Id: README,v 1.19 2006/05/15 14:39:20 maire Exp $
+$Id: README,v 1.21 2008/09/12 18:46:14 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -75,49 +75,10 @@ $Id: README,v 1.19 2006/05/15 14:39:20 maire Exp $
 	gmake histclean
 	gmake
 
-  It is possible to choose the format of the histogram file (hbook, root, XML):
+  It is possible to choose the format of the histogram file :
+  hbook, root (default), XML
   comment/uncomment 1 line in the constructor of RunAction. 
 
   To use histograms, at least one of the AIDA implementations should be 
-  available (see http://aida.freehep.org).
+  available. See InstallAida.txt
   
- 7a - PI 
-
-  A package including AIDA and extended interfaces also using Python is PI, 
-  available from: http://cern.ch/pi
-
-  Once installed PI or PI-Lite in a specified local area $MYPY, it is required 
-  to add the installation path to $PATH, i.e. for example, for release 1.2.1 of 
-  PI:
-  setenv PATH ${PATH}:$MYPI/1.2.1/app/releases/PI/PI_1_2_1/rh73_gcc32/bin
-
-  CERN users can use the PATH to the LCG area on AFS.
-  Before running the example the command should be issued:
-  eval `aida-config --runtime csh`
-
- 7b -  OpenScientist
-
-  OpenScientist is available at http://OpenScientist.lal.in2p3.fr.
-
-  You have to "setup" the OpenScientist AIDA implementation before compiling
-  (then with G4ANALYSIS_USE set) and running your Geant4 application.
-
- On UNIX you setup, with a csh flavoured shell : 
-	csh> source <<OpenScientist install path>/aida-setup.csh 
-        or with a sh flavoured shell : 
-	sh> . <<OpenScientist install path>/aida-setup.sh
- On Windows : 
-	DOS> call <<OpenScientist install path>/aida-setup.bat 
-
-  You can use various file formats for writing (AIDA-XML, hbook, root).
-  These formats are readable by the Lab onx interactive program
-  or the OpenPAW application. See the web pages.
-
-
-  With OpenPAW, on a run.hbook file, one can view the histograms
-  with something like :
-	OS> opaw 
-        opaw> h/file 1 run.hbook  ( or opaw> h/file 1 run.aida or run.root)  
-	opaw> zone 2 2 
-	opaw> h/plot 1 
-	opaw> h/plot 2

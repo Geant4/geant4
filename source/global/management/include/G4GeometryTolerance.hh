@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4GeometryTolerance.hh,v 1.2 2007/06/18 13:26:40 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // --------------------------------------------------------------------
 // GEANT 4 class header file 

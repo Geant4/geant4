@@ -23,7 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HadrontherapyMuonStandard.cc; May 2005
+// $Id: EMMuonStandard.cc; 
+// Last modified: A.Lechner (anton.lechner@cern.ch), August 2008;
+//
+// See more at: http://geant4infn.wikispaces.com
+//
 // ----------------------------------------------------------------------------
 //                 GEANT 4 - Hadrontherapy example
 // ----------------------------------------------------------------------------
@@ -32,8 +36,8 @@
 // G.A.P. Cirrone(a)*, F. Di Rosa(a), S. Guatelli(b), G. Russo(a)
 // 
 // (a) Laboratori Nazionali del Sud 
-//     of the National Institute for Nuclear Physics, Catania, Italy
-// (b) National Institute for Nuclear Physics Section of Genova, genova, Italy
+//     of the INFN, Catania, Italy
+// (b) INFN Section of Genova, Genova, Italy
 // 
 // * cirrone@lns.infn.it
 // ----------------------------------------------------------------------------
@@ -73,66 +77,58 @@ void EMMuonStandard::ConstructProcess()
 {
   G4ParticleDefinition* particle = 0;
   G4ProcessManager* processManager = 0;
-
-
-  // ***********************************
-  // *** Muon+/-: Common Definitions ***
-  // ***********************************
-
-  G4EmProcessOptions* muonEmProcessOptions = new G4EmProcessOptions;
-  muonEmProcessOptions -> SetDEDXBinning(480);
-
-  G4MultipleScattering* muonMultipleScatteringProcess = new G4MultipleScattering();
-  G4MuIonisation* muonIonisationProcess = new G4MuIonisation();
-  G4MuBremsstrahlung* muonBremsstrahlungProcess = new G4MuBremsstrahlung();
-  G4MuPairProduction* muonPairProductionProcess = new G4MuPairProduction();
-
-  G4StepLimiter* muonStepLimiter = new G4StepLimiter();
-
-
+ 
+  
   // *************
   // *** Muon+ ***
   // *************
 
+  G4MultipleScattering* muonPlusMultipleScatteringProcess = new G4MultipleScattering();
+  G4MuIonisation* muonPlusIonisationProcess = new G4MuIonisation();
+  G4MuBremsstrahlung* muonPlusBremsstrahlungProcess = new G4MuBremsstrahlung();
+  G4MuPairProduction* muonPlusPairProductionProcess = new G4MuPairProduction();
+
   particle = G4MuonPlus::MuonPlus(); 
   processManager = particle -> GetProcessManager();
-  processManager -> AddProcess(muonMultipleScatteringProcess);
-  processManager -> AddProcess(muonIonisationProcess);
-  processManager -> AddProcess(muonBremsstrahlungProcess);
-  processManager -> AddProcess(muonPairProductionProcess);
-  processManager -> AddProcess(muonStepLimiter, -1, -1, 3);
+  processManager -> AddProcess(muonPlusMultipleScatteringProcess);
+  processManager -> AddProcess(muonPlusIonisationProcess);
+  processManager -> AddProcess(muonPlusBremsstrahlungProcess);
+  processManager -> AddProcess(muonPlusPairProductionProcess);
  
-  processManager -> SetProcessOrdering(muonMultipleScatteringProcess, idxAlongStep,1);
-  processManager -> SetProcessOrdering(muonIonisationProcess,         idxAlongStep,2);
-  processManager -> SetProcessOrdering(muonBremsstrahlungProcess,     idxAlongStep,3);
-  processManager -> SetProcessOrdering(muonPairProductionProcess,     idxAlongStep,4);      
+  processManager -> SetProcessOrdering(muonPlusMultipleScatteringProcess, idxAlongStep,1);
+  processManager -> SetProcessOrdering(muonPlusIonisationProcess,         idxAlongStep,2);
+  processManager -> SetProcessOrdering(muonPlusBremsstrahlungProcess,     idxAlongStep,3);
+  processManager -> SetProcessOrdering(muonPlusPairProductionProcess,     idxAlongStep,4);      
 	  
-  processManager -> SetProcessOrdering(muonMultipleScatteringProcess, idxPostStep,1);
-  processManager -> SetProcessOrdering(muonIonisationProcess,         idxPostStep,2);
-  processManager -> SetProcessOrdering(muonBremsstrahlungProcess,     idxPostStep,3);
-  processManager -> SetProcessOrdering(muonPairProductionProcess,     idxPostStep,4);
+  processManager -> SetProcessOrdering(muonPlusMultipleScatteringProcess, idxPostStep,1);
+  processManager -> SetProcessOrdering(muonPlusIonisationProcess,         idxPostStep,2);
+  processManager -> SetProcessOrdering(muonPlusBremsstrahlungProcess,     idxPostStep,3);
+  processManager -> SetProcessOrdering(muonPlusPairProductionProcess,     idxPostStep,4);
 
 
   // *************
   // *** Muon- ***
   // *************
 
+  G4MultipleScattering* muonMinusMultipleScatteringProcess = new G4MultipleScattering();
+  G4MuIonisation* muonMinusIonisationProcess = new G4MuIonisation();
+  G4MuBremsstrahlung* muonMinusBremsstrahlungProcess = new G4MuBremsstrahlung();
+  G4MuPairProduction* muonMinusPairProductionProcess = new G4MuPairProduction();
+
   particle = G4MuonMinus::MuonMinus(); 
   processManager = particle -> GetProcessManager();
-  processManager -> AddProcess(muonMultipleScatteringProcess);
-  processManager -> AddProcess(muonIonisationProcess);
-  processManager -> AddProcess(muonBremsstrahlungProcess);
-  processManager -> AddProcess(muonPairProductionProcess);
-  processManager -> AddProcess(muonStepLimiter, -1, -1, 3);
+  processManager -> AddProcess(muonMinusMultipleScatteringProcess);
+  processManager -> AddProcess(muonMinusIonisationProcess);
+  processManager -> AddProcess(muonMinusBremsstrahlungProcess);
+  processManager -> AddProcess(muonMinusPairProductionProcess);
  
-  processManager -> SetProcessOrdering(muonMultipleScatteringProcess, idxAlongStep,1);
-  processManager -> SetProcessOrdering(muonIonisationProcess,         idxAlongStep,2);
-  processManager -> SetProcessOrdering(muonBremsstrahlungProcess,     idxAlongStep,3);
-  processManager -> SetProcessOrdering(muonPairProductionProcess,     idxAlongStep,4);      
+  processManager -> SetProcessOrdering(muonMinusMultipleScatteringProcess, idxAlongStep,1);
+  processManager -> SetProcessOrdering(muonMinusIonisationProcess,         idxAlongStep,2);
+  processManager -> SetProcessOrdering(muonMinusBremsstrahlungProcess,     idxAlongStep,3);
+  processManager -> SetProcessOrdering(muonMinusPairProductionProcess,     idxAlongStep,4);      
 	  
-  processManager -> SetProcessOrdering(muonMultipleScatteringProcess, idxPostStep,1);
-  processManager -> SetProcessOrdering(muonIonisationProcess,         idxPostStep,2);
-  processManager -> SetProcessOrdering(muonBremsstrahlungProcess,     idxPostStep,3);
-  processManager -> SetProcessOrdering(muonPairProductionProcess,     idxPostStep,4);
- 
+  processManager -> SetProcessOrdering(muonMinusMultipleScatteringProcess, idxPostStep,1);
+  processManager -> SetProcessOrdering(muonMinusIonisationProcess,         idxPostStep,2);
+  processManager -> SetProcessOrdering(muonMinusBremsstrahlungProcess,     idxPostStep,3);
+  processManager -> SetProcessOrdering(muonMinusPairProductionProcess,     idxPostStep,4);
 }

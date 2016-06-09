@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VEMDataSet.hh,v 1.9 2007/10/15 08:31:49 pia Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4VEMDataSet.hh,v 1.12 2008/03/17 13:45:25 pia Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
 //
@@ -43,36 +43,38 @@
 
 // -------------------------------------------------------------------
 
-#ifndef   G4VEMDATASET_HH
- #define  G4VEMDATASET_HH 1
+#ifndef  G4VEMDATASET_HH
+#define  G4VEMDATASET_HH 1
 
- #include "globals.hh"
- #include "G4DataVector.hh"
+#include "globals.hh"
+#include "G4DataVector.hh"
 
- class G4VEMDataSet 
- { 
-  public:
-                                                G4VEMDataSet() { }
-   virtual                                     ~G4VEMDataSet() { }
+class G4VEMDataSet 
+{ 
+public:
+  G4VEMDataSet() { }
+  virtual ~G4VEMDataSet() { }
   
-   virtual G4double                             FindValue(G4double argEnergy, G4int argComponentId=0) const = 0;
+  virtual G4double FindValue(G4double x, G4int componentId = 0) const = 0;
  
-   virtual void                                 PrintData(void) const = 0;
+  virtual void PrintData(void) const = 0;
   
-   virtual const G4VEMDataSet *                 GetComponent(G4int argComponentId) const = 0;
-   virtual void                                 AddComponent(G4VEMDataSet * argDataSet) = 0;
-   virtual size_t                               NumberOfComponents(void) const = 0;
+  virtual const G4VEMDataSet* GetComponent(G4int componentId) const = 0;
+  virtual void AddComponent(G4VEMDataSet* dataSet) = 0;
+  virtual size_t NumberOfComponents(void) const = 0;
  
-   virtual const G4DataVector &                 GetEnergies(G4int argComponentId) const = 0;
-   virtual const G4DataVector &                 GetData(G4int argComponentId) const = 0;
-   virtual void                                 SetEnergiesData(G4DataVector * argEnergies, G4DataVector * argData, G4int argComponent=0) = 0;
+  virtual const G4DataVector& GetEnergies(G4int componentId) const = 0;
+  virtual const G4DataVector& GetData(G4int componentId) const = 0;
+  virtual void SetEnergiesData(G4DataVector* x, G4DataVector* data, G4int component=0) = 0;
  
-   virtual G4bool                               LoadData(const G4String & argFileName) = 0;
-   virtual G4bool                               SaveData(const G4String & argFileName) const = 0;
+  virtual G4bool LoadData(const G4String& fileName) = 0;
+  virtual G4bool SaveData(const G4String& fileName) const = 0;
+
+  virtual G4double RandomSelect(G4int componentId = 0) const = 0;
    
-  private:
-   // Hide copy constructor and assignment operator 
-                                                G4VEMDataSet(const G4VEMDataSet & copy);
-   G4VEMDataSet &                               operator=(const G4VEMDataSet & right);
- };
+private:
+  // Hide copy constructor and assignment operator 
+  G4VEMDataSet(const G4VEMDataSet& copy);
+  G4VEMDataSet& operator=(const G4VEMDataSet& right);
+};
 #endif /* G4VEMDATASET_HH */

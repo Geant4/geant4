@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4GaussLegendreQ.cc,v 1.8 2007/11/13 17:35:06 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 #include "G4GaussLegendreQ.hh"
 

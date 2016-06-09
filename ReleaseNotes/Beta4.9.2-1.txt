@@ -1,0 +1,272 @@
+
+                  Geant4 9.2-beta-01 Release Notes
+                  --------------------------------
+
+                                                            4 July 2008
+
+List of main features and fixes included in this Beta release since 9.1.p02:
+
+  o Configuration:
+    -------------
+    + Integrated improvements to Qt setup.
+    + Embedded AIDA setup in central configuration scripts, simplified
+      GNUmakefiles in examples.
+
+  o Environments:
+    ------------
+    + Updated G4Py configure scripts and fixed some minor bugs.
+
+  o Event
+    -----
+    + Fixed problem of out of bounds array access in G4SPSEneDistribution.
+      Added accessors to G4SPSAngDistribution, addressing problem report #1013.
+
+  o Geometry:
+    --------
+    + management:
+      o G4Region: changed condition inside ScanVolumeTree() to check for the
+        existence of a valid material-scanner pointer to apply the material
+        scan instead of using the flag for nested structures.
+      o G4GeometryManager: do not apply optimisation on the current volume
+        if it has been defined as a regular structure.
+      o Addresses problem report #990.
+    + solids/CSG:
+      o G4Tubs: fix in DistanceToIn(p,v, ...) in case of point on surface with
+        very small tangent direction; now returning kInfinity and no longer zero.
+        It fixes observed cases of zero value returned by both DistanceToIn()
+        and DistanceToOut(), causing stuck tracks with zero step length.
+      o G4Sphere: fixed calculation of roots in DistanceToOut(p,v,...) for
+        theta-conical surfaces interserctions and for sTheta<=90 degree
+        intersection. Addresses issue reported when running PET application
+        with optical photons about mis-computation of distance on half-sphere
+        constructs.
+    + solids/specific:
+      o Enhanced GetPointOnSurface() for generic G4Polycone and G4Polyhedra
+        constructs.
+
+  o Global:
+    ------
+    + G4UnitsTable: added units for electric-field, V/m.
+    + G4PhysicsVector: introduced cubic spline interpolation, optionally
+      selectable. Optimised implementation of GetValue() method.
+    + G4LPhysicsFreeVector: corrected use of GetValue() to adopt
+      implementation available from the base class.
+    + Modified G4RandomDirection global function to use unit radius sphere
+      surface algorithm instead of 8-quadrants technique, giving ~30%
+      performance boost in dedicated stress tests.
+    + Changed date for 9.2-beta release.
+
+  o Intercoms
+    ---------
+    + Added a new function in G4UIcommandTree to find a subtree.
+
+  o Interfaces
+    ----------
+    + Improvements for layout in Qt driver for Qt3.
+
+  o Materials:
+    ---------
+    + G4NistElementBuilder: provide unique name for each isotope of an element.
+    + G4IonisParamElm: added Fermi velocity and L-factor (both used for
+      parameterizations of the effective charge and straggling of ions).
+      G4IonisParamMat: use Fermi velocity and L-factor from G4IonisParamElm.
+    + Added virtual destructor to G4SurfaceProperty and derivated.
+      Addresses problem report #1014.
+    + G4Element: added more safe check of consistence between Z and A in the
+      constructor. Improved printout of errors and warnings.
+
+  o Particles:
+    ---------
+    + Added UI command for setting the verbosity level on the particle-table.
+    + Modified proton mass to be equal to 'proton_mass_c2' from updated
+      PDG-2006 values in CLHEP (difference is 10 eV).
+
+  o Persistency (GDML):
+    ------------------
+    + Introducing GDML writer: material properties; support for parameterised
+      volumes; division volumes; replica volumes; matrices; naming of physical
+      volumes; Twistedtrap, Twistedtubs, Tet, Twistedbox, Twistedtrd, Hype, Orb,
+      Para, Ellipsoid, Ellipticaltube, Polyhedra, Torus, Cone, Tube, Extruded,
+      Boolean (intersection, subtraction, union), Reflections (using scaled
+      transformation) solids; elements and composite materials.
+    + Added support for modular files in GDML writer and reader. Added handling
+      of precision and optional rounding of errors for imported/exported values.
+      Added schema validation mechanism and schema files.
+    + Added features to reader: physical-volumes name; temperature, pressure
+      and state of materials; NIST support. Added support for border surface
+      and skin surface properties.
+    + Added optional handling if precision on values loaded.
+
+  o Physics Lists:
+    -------------
+    + Updated FTF* lists and physics NOT to use quasi-elastic from CHIPS.
+      FTF now has quasi-elastic included in the FTF model itself.
+    + Updated option2 EM physics (EMX) and added option3. For these 
+      options it is now defined 'linLossLimit' per particle type;
+      added hadron induced bremsstrahlung and pair production;
+      using Spline interpolation for physics tables.
+    + New helper class G4PhysListFactory for building Physics Lists.
+    + Removed obsolete class G4HadronProcessStore.
+
+  o Electromagnetic Processes:
+    -------------------------
+    + Low Energy:
+      o Added PIXE cross section, L-shells, for protons in G4OrlicLCrossSection.
+        Added semi-Empirical model implementation for L-SubShells-Cross-Section
+        with protons projectiles.
+      o New charge transfer process by incident protons (two cross-section and
+        one final state policy classes).
+      o Added Doppler broadening to G4LowEnergyCompton, based on "Y.Namito,
+        S.Ban and H.Hirayama, NIM A 349, pp. 489-494, 1994".
+        Added Doppler broadening in G4LowEnergyComptonPolarized, same model
+        as in G4LowEnergyCompton.
+      o Allow for loading the complete Auger dataset on initialization.
+      o Requires new data set G4EMLOW.6.1.
+    + High Energy:
+      o Added new Bremsstrahlung and pair-production models for hadrons.
+      o Added initialization of 'SubType' for all processes.
+    + Muons:
+      o Several fixes and further developments in G4Mu* models and associated
+        processes.
+    + Standard:
+      o New multiple-scattering model G4WentzelVIModel used in new muon
+        physics processes.
+      o Cloned G4UrbanMscModel class into G4UrbanMscModel2; introduced several
+        fixes and tunings to G4UrbanMscModel2 variant.
+      o New process G4eMultipleScattering specialized for e+,e-.
+      o G4eBremsstrahlungHEModel: new model, an extension of the standard
+        Bremsstrahlung model but using a more sophisticated LPM approach.
+      o G4PAIxSection: new functions for resonance and Rutherford collisions.
+      o Fixed nuclear size correction for the G4BetheBlochModel.
+      o G4ionGasIonisation: fixed bug in update of the dynamic charge of an ion.
+      o G4IonFluctuations: added protection to the computation of the correction
+        factor to dispersion which provide smooth transition to small velocities
+        of an ion; added protection in computation of dispersion on allowing
+        have a corrected dispersion below Bohr value.
+      o G4eCoulombScatteringModel: speedup run-time computations using
+        precomputed nuclear form-factors per element.
+      o G4WaterStopping: using Spline interpolation.
+      o Added initialization of 'SubType' for all processes.
+    + Utils:
+      o New class G4VMscModel to define general multiple-scattering parameters.
+      o New class G4EmElementSelector, a helper class to sample random
+        G4Element in a compound material.
+      o Added new correction methods in order to provide a smooth transition
+        between low-energy parameterization and Bethe-Bloch model in EM
+        standard processes. Added new G4EmSaturation helper class.
+      o G4VEnergyLossProcess: fixed computation of NIEL at the last step of a
+        particle.
+      o G4LossTableManager: fixed logic in compute dEdx table for an inactive
+        process.
+    + Xrays:
+      o Added scintillation with Birk's law and make now use of G4EmSaturation
+        to implement Birks correction.
+
+  o Hadronic Processes:
+    ------------------
+    + management:
+      o Added class G4HadronicProcessStore, helper class to keep pointers to
+        all registered hadronic processes.
+    + models/coherent_elastic:
+      o G4HadronElastic: added counts of abnornal sampling results and
+        printing out values in the destructor.
+    + models/de_excitation:
+      o G4PhotonEvaporation: atomic relaxation model is no longer applied
+        following internal electron conversion. Instead the vacant shell index
+        is passed to radioactive decay model, where the ARM is applied.
+      o Fixed minor memory leak in G4ExcitationHandler.
+    + models/high_energy:
+      o G4HEInelastic: removed abnormally high pt secondaries due to incident
+        strange particles by prohibiting the assignment of leading particle to
+        anything that goes backward in the CM frame.
+    + models/neutron_hp:
+      o Improved energy and angular distributions for both scattered neutron
+        and recoil targets. Fixed missing inelastic gamma-ray lines.
+        Addresses problem report #1008.
+      o Fixed bug for missed pouch-out particles
+    + models/parton_string:
+      o Revised string fragmentation and tuned parameters in FTF model for Pi+P
+        and pion-nucleon interactions. Implemented quasi-elastic hadron-nucleus
+        scattering in FTF and formation time; tuned string tension.
+    + models/qmd:
+      o Fixed and changed sampling method of impact parameter in G4QMDReaction.
+      o Fixed minor memory leaks.
+    + models/radioactive_decay:
+      o G4NuclearDecayChannel: ARM is no longer applied in photon-evaporation
+        for IT mode and is now applied at the end of DecayIt(); now using the
+        correct shell index in appling ARM and switching on Auger electron
+        production. Checking the residual kinetic energy after ARM and adding
+        it to the atom.
+    + models/rpg:
+      o Fixed energy non-conservation problem in G4RPGFragmentation and in
+        G4RPGReaction. Fixed K0 ID problem in G4RPGInelastic.
+
+  o Generic Processes:
+    -----------------
+    + Biasing:
+      o Fixed use of 'WeightCutOff' now correctly working in a mass geometry.
+      o Archived obsolete class G4CellFinder.
+    + Cuts:
+      o Added G4ProductionCutsTableMessenger class.
+    + Decay:
+      o G4DecayWithSpin: modified DecayIt() to allow spin precession also
+        for EM fields.
+    + Scoring:
+      o Added copying of non-ionizing energy deposit in G4Step.
+
+  o Run:
+    ---
+    + Invoke G4Particle::DeleteAllParticles() in the destructor of
+      G4VUserPhysicsList to clear leaks induced by particles created in
+      the user application.
+
+  o Tracking & Track:
+    ----------------
+    + Fix in G4SteppingManager for properly update of 'fTouchableHandle'.
+      Addressing problem report #1009.
+    + Reset non-ionizing energy loss in G4Step::ResetTotalEnergyDeposit()
+      in order to initialize NIEL in each step.
+
+  o Visualization:
+    -------------
+    + Fixed remaining gcc-4.3.0 compiler warnings.
+    + OpenGL:
+      o Fixed DBL_MAX problem in 2D drawing.
+      o Improvements in Qt driver and setup.
+
+  o Examples:
+    --------
+    + Various fixes, improvements, adoption of new features.
+    + advanced/hadrontherapy:
+      o Reviewed example to update to the new beam line setup.
+    + advanced/microdosimetry:
+      o New application simulating 10 keV tracks Helium+ (positive
+        charge is +e) particle in liquid water using only G4DNA processes.
+    + extended/gdml:
+      o general polishing and new convention for running.
+
+
+ ----------------------------------------------------------------------------
+
+                             Technical Notes
+                             --------------- 
+
+  o Official platforms:
+    + Linux, gcc-3.4.6.
+      Tested on 32 bits architectures and 64 bits architectures
+      (Intel or AMD) with the Scientific Linux CERN 4 (SLC4) distribution
+      (based on RedHat Linux Enterprise 4).
+      Versions of Geant4 have also been compiled successfully on other
+      Linux distributions, like Debian, Suse or other RedHat systems.
+    + MacOSX 10.5, gcc-4.0.1
+    + Windows/XP and CygWin Tools with: Visual C++ 9.0 (Visual Studio 2008)
+
+  o More verified configurations:
+    + Linux, gcc-4.3.1
+    + Linux, Intel-icc 10.1
+
+  o Geant4 9.2-beta-01 requires the installation of CLHEP-2.0.3.3.
+
+ Please refer to the Geant4 User Documentation:
+   http://cern.ch/geant4/support/userdocuments.shtml
+ for further information about using Geant4.

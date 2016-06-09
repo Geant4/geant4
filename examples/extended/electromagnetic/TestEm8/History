@@ -1,4 +1,4 @@
-$Id: History,v 1.29 2007/11/12 10:54:49 vnivanch Exp $
+$Id: History,v 1.32 2008/12/05 17:46:12 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,16 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+05-12-08 V.Ivant (testem8-V09-01-02)
+- Fixed typo in Physics List
+
+21-11-08 V.Ivant (testem8-V09-01-01)
+- remove local components of PhsyicsList and use G4EmConfigurator to
+  configure PAI model
+
+12-06-08 mma (testem8-V09-01-00)
+- Remove AIDA from GNUmakefile 
 
 12-11-07 V.Ivant  (testem8-V09-00-05)
 - Fixed logic in SteppingAction 

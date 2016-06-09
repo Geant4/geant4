@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Polycone.cc,v 1.39 2007/10/02 09:50:46 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4Polycone.cc,v 1.43 2008/05/15 13:45:15 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // 
 // --------------------------------------------------------------------
@@ -780,87 +780,94 @@ G4ThreeVector G4Polycone::GetPointOnCut(G4double fRMin1, G4double fRMax1,
 // GetPointOnSurface
 //
 G4ThreeVector G4Polycone::GetPointOnSurface() const
-{ 
-  G4double Area=0,totArea=0,Achose1=0,Achose2=0,phi,cosphi,sinphi,rRand;
-  G4int i=0;
-  G4int numPlanes = original_parameters->Num_z_planes;
-  
-  phi = RandFlat::shoot(startPhi,endPhi);
-  cosphi = std::cos(phi);
-  sinphi = std::sin(phi);
-
-  rRand = RandFlat::shoot(original_parameters->Rmin[0],
-                          original_parameters->Rmax[0]);
-  
-  std::vector<G4double> areas;       // (numPlanes+1);
-  std::vector<G4ThreeVector> points; // (numPlanes-1);
-  
-  areas.push_back(pi*(sqr(original_parameters->Rmax[0])
-                     -sqr(original_parameters->Rmin[0])));
-
-  for(i=0; i<numPlanes-1; i++)
+{
+  if (!genericPcon)  // Polycone by faces
   {
-    Area = (original_parameters->Rmin[i]+original_parameters->Rmin[i+1])* 
-      std::sqrt(sqr(original_parameters->Rmin[i]
-                   -original_parameters->Rmin[i+1])+
-                sqr(original_parameters->Z_values[i+1]
-                   -original_parameters->Z_values[i]));
-    
-    Area += (original_parameters->Rmax[i]+original_parameters->Rmax[i+1])*
-      std::sqrt(sqr(original_parameters->Rmax[i]
-                   -original_parameters->Rmax[i+1])+
-                sqr(original_parameters->Z_values[i+1]
-                   -original_parameters->Z_values[i]));
+    G4double Area=0,totArea=0,Achose1=0,Achose2=0,phi,cosphi,sinphi,rRand;
+    G4int i=0;
+    G4int numPlanes = original_parameters->Num_z_planes;
+  
+    phi = RandFlat::shoot(startPhi,endPhi);
+    cosphi = std::cos(phi);
+    sinphi = std::sin(phi);
 
-    Area *= 0.5*(endPhi-startPhi);
-    
-    if(startPhi==0.&& endPhi == twopi)
+    rRand = RandFlat::shoot(original_parameters->Rmin[0],
+                            original_parameters->Rmax[0]);
+  
+    std::vector<G4double> areas;       // (numPlanes+1);
+    std::vector<G4ThreeVector> points; // (numPlanes-1);
+  
+    areas.push_back(pi*(sqr(original_parameters->Rmax[0])
+                       -sqr(original_parameters->Rmin[0])));
+
+    for(i=0; i<numPlanes-1; i++)
     {
-      Area += std::fabs(original_parameters->Z_values[i+1]
-                       -original_parameters->Z_values[i])*
-                       (original_parameters->Rmax[i]
-                       +original_parameters->Rmax[i+1]
-                       -original_parameters->Rmin[i]
-                       -original_parameters->Rmin[i+1]);
-    }
-    areas.push_back(Area);
-    totArea += Area;
-  }
-  
-  areas.push_back(pi*(sqr(original_parameters->Rmax[numPlanes-1])-
-                      sqr(original_parameters->Rmin[numPlanes-1])));
-  
-  totArea += (areas[0]+areas[numPlanes]);
-  G4double chose = RandFlat::shoot(0.,totArea);
+      Area = (original_parameters->Rmin[i]+original_parameters->Rmin[i+1])
+           * std::sqrt(sqr(original_parameters->Rmin[i]
+                      -original_parameters->Rmin[i+1])+
+                       sqr(original_parameters->Z_values[i+1]
+                      -original_parameters->Z_values[i]));
 
-  if( (chose>=0.) && (chose<areas[0]) )
-  {
-    return G4ThreeVector(rRand*cosphi, rRand*sinphi,
-                         original_parameters->Z_values[0]);
-  }
-  
-  for (i=0; i<numPlanes-1; i++)
-  {
-    Achose1 += areas[i];
-    Achose2 = (Achose1+areas[i+1]);
-    if(chose>=Achose1 && chose<Achose2)
-      {// G4cout<<"will return Point On Cut"<<G4endl;
-      return GetPointOnCut(original_parameters->Rmin[i],
-                           original_parameters->Rmax[i],
-                           original_parameters->Rmin[i+1],
-                           original_parameters->Rmax[i+1],
-                           original_parameters->Z_values[i],
-                           original_parameters->Z_values[i+1], Area);
-    }
-  }
+      Area += (original_parameters->Rmax[i]+original_parameters->Rmax[i+1])
+            * std::sqrt(sqr(original_parameters->Rmax[i]
+                       -original_parameters->Rmax[i+1])+
+                        sqr(original_parameters->Z_values[i+1]
+                       -original_parameters->Z_values[i]));
 
-  rRand = RandFlat::shoot(original_parameters->Rmin[numPlanes-1],
-                          original_parameters->Rmax[numPlanes-1]);
+      Area *= 0.5*(endPhi-startPhi);
+    
+      if(startPhi==0.&& endPhi == twopi)
+      {
+        Area += std::fabs(original_parameters->Z_values[i+1]
+                         -original_parameters->Z_values[i])*
+                         (original_parameters->Rmax[i]
+                         +original_parameters->Rmax[i+1]
+                         -original_parameters->Rmin[i]
+                         -original_parameters->Rmin[i+1]);
+      }
+      areas.push_back(Area);
+      totArea += Area;
+    }
   
-  return G4ThreeVector(rRand*cosphi,rRand*sinphi,
-                       original_parameters->Z_values[numPlanes-1]);  
+    areas.push_back(pi*(sqr(original_parameters->Rmax[numPlanes-1])-
+                        sqr(original_parameters->Rmin[numPlanes-1])));
+  
+    totArea += (areas[0]+areas[numPlanes]);
+    G4double chose = RandFlat::shoot(0.,totArea);
+
+    if( (chose>=0.) && (chose<areas[0]) )
+    {
+      return G4ThreeVector(rRand*cosphi, rRand*sinphi,
+                           original_parameters->Z_values[0]);
+    }
+  
+    for (i=0; i<numPlanes-1; i++)
+    {
+      Achose1 += areas[i];
+      Achose2 = (Achose1+areas[i+1]);
+      if(chose>=Achose1 && chose<Achose2)
+      {
+        return GetPointOnCut(original_parameters->Rmin[i],
+                             original_parameters->Rmax[i],
+                             original_parameters->Rmin[i+1],
+                             original_parameters->Rmax[i+1],
+                             original_parameters->Z_values[i],
+                             original_parameters->Z_values[i+1], Area);
+      }
+    }
+
+    rRand = RandFlat::shoot(original_parameters->Rmin[numPlanes-1],
+                            original_parameters->Rmax[numPlanes-1]);
+  
+    return G4ThreeVector(rRand*cosphi,rRand*sinphi,
+                         original_parameters->Z_values[numPlanes-1]);  
+
+  }
+  else  // Generic Polycone
+  {
+    return GetPointOnSurfaceGeneric();  
+  }
 }
-
 
 //
 // CreatePolyhedron

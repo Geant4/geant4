@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Element.cc,v 1.26 2007/10/18 11:14:33 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4Element.cc,v 1.31 2008/08/11 11:53:11 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -68,28 +68,41 @@ G4Element::G4Element(const G4String& name, const G4String& symbol,
                      G4double zeff, G4double aeff)
   : fName(name), fSymbol(symbol)		     
 {
-  if (zeff<1.) G4Exception (" ERROR from G4Element::G4Element !"
-			    " It is not allowed to create an Element with Z < 1" );
-
-  if (aeff/(g/mole)<zeff) G4Exception (" ERROR from G4Element::G4Element !"
-				       " Attempt to create an Element with N < Z !!!" );
-
-  if ((zeff-G4int(zeff)) > perMillion)
+  G4int iz = (G4int)zeff;
+  if (zeff<1.) {
+    G4cout << "G4Element ERROR:  " << name << " Z= " << zeff 
+	   << " A= " << aeff/(g/mole) << G4endl; 
+    G4Exception (" ERROR from G4Element::G4Element !"
+		 " It is not allowed to create an Element with Z < 1" );
+  }
+  if (std::abs(zeff - iz) > perMillion) {
+    G4cout << "G4Element Warning:  " << name << " Z= " << zeff 
+	   << " A= " << aeff/(g/mole) << G4endl; 
     G4cerr << name << " : WARNING from G4Element::G4Element !"  
       " Trying to define an element as a mixture directly via effective Z."
 	   << G4endl;
+  }
 
   InitializePointers();
 
   fZeff   = zeff;
   fNeff   = aeff/(g/mole);
   fAeff   = aeff;
+
+  if(fNeff < 1.0) fNeff = 1.0;
+
+  if (fNeff < zeff) {
+    G4cout << "G4Element ERROR:  " << name << " Z= " << zeff 
+	   << " A= " << fNeff << G4endl; 
+    G4Exception (" ERROR from G4Element::G4Element !"
+		 " Attempt to create an Element with N < Z !!!" );
+  }
    
-  fNbOfAtomicShells = G4AtomicShells::GetNumberOfShells((G4int)fZeff);
+  fNbOfAtomicShells = G4AtomicShells::GetNumberOfShells(iz);
   fAtomicShells     = new G4double[fNbOfAtomicShells];
-  for (G4int i=0;i<fNbOfAtomicShells;i++)
-    fAtomicShells[i] = G4AtomicShells::GetBindingEnergy((G4int)fZeff,i);
-           
+  for (G4int i=0;i<fNbOfAtomicShells;i++) {
+    fAtomicShells[i] = G4AtomicShells::GetBindingEnergy(iz, i);
+  }
   ComputeDerivedQuantities();
 }
 
@@ -116,25 +129,31 @@ G4Element::G4Element(const G4String& name,
 
 void G4Element::AddIsotope(G4Isotope* isotope, G4double abundance)
 {
-  if (theIsotopeVector == 0)
+  if (theIsotopeVector == 0) {
+    G4cout << "G4Element ERROR:  " << fName << G4endl; 
     G4Exception ("ERROR from G4Element::AddIsotope!"
 		 " Trying to add an Isotope before contructing the element.");
+  }
+  G4int iz = isotope->GetZ();
 
   // filling ...
   if ( fNumberOfIsotopes < theIsotopeVector->size() ) {
     // check same Z
-    if (fNumberOfIsotopes==0) fZeff = G4double(isotope->GetZ());
-    else if (G4double(isotope->GetZ()) != fZeff) 
+    if (fNumberOfIsotopes==0) fZeff = G4double(iz);
+    else if (G4double(iz) != fZeff) { 
       G4Exception ("ERROR from G4Element::AddIsotope!"
 		   " Try to add isotopes with different Z");
+    }
     //Z ok   
     fRelativeAbundanceVector[fNumberOfIsotopes] = abundance;
     (*theIsotopeVector)[fNumberOfIsotopes] = isotope;
     ++fNumberOfIsotopes;
     isotope->increaseCountUse();
-  } 
-  else G4Exception ("ERROR from G4Element::AddIsotope!"  
-		    " Attempt to add more than the declared number of isotopes.");
+  } else {
+    G4cout << "G4Element ERROR:  " << fName << G4endl; 
+    G4Exception ("ERROR from G4Element::AddIsotope!"  
+		 " Attempt to add more than the declared number of isotopes.");
+  }
 
   // filled.
   if ( fNumberOfIsotopes == theIsotopeVector->size() ) {
@@ -150,10 +169,11 @@ void G4Element::AddIsotope(G4Isotope* isotope, G4double abundance)
     fNeff /=  wtSum;
     fAeff /=  wtSum;
       
-    fNbOfAtomicShells = G4AtomicShells::GetNumberOfShells((G4int)fZeff);
+    fNbOfAtomicShells = G4AtomicShells::GetNumberOfShells(iz);
     fAtomicShells     = new G4double[fNbOfAtomicShells];
-    for (G4int j=0;j<fNbOfAtomicShells;j++)
-      fAtomicShells[j] = G4AtomicShells::GetBindingEnergy((G4int)fZeff,j);
+    for (G4int j=0;j<fNbOfAtomicShells;j++) {
+      fAtomicShells[j] = G4AtomicShells::GetBindingEnergy(iz, j);
+    }
          
     ComputeDerivedQuantities();
 
@@ -212,9 +232,9 @@ void G4Element::ComputeDerivedQuantities()
       
   // check if elements with same Z already exist
   fIndexZ = 0; 
-  for (size_t J=0 ; J<fIndexInTable ; J++)
+  for (size_t J=0 ; J<fIndexInTable ; J++) {
     if (theElementTable[J]->GetZ() == fZeff) fIndexZ++;
-
+  }
   //nb of materials which use this element
   fCountUse = 0;
 
@@ -256,7 +276,7 @@ void G4Element::ComputeLradTsaiFactor()
   const G4double logZ3 = std::log(fZeff)/3.;
 
   G4double Lrad, Lprad;
-  G4int iz = (int)(fZeff+0.5) - 1 ;
+  G4int iz = (G4int)(fZeff+0.5) - 1 ;
   if (iz <= 3) { Lrad = Lrad_light[iz] ;  Lprad = Lprad_light[iz] ; }
     else { Lrad = std::log(184.15) - logZ3 ; Lprad = std::log(1194.) - 2*logZ3;}
 

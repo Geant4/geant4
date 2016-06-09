@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Decay.hh,v 1.18 2007/07/23 23:13:04 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4Decay.hh,v 1.20 2008/09/19 03:19:53 kurasige Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 //
 // ------------------------------------------------------------
@@ -57,6 +57,8 @@
 #include "globals.hh"
 #include "G4VRestDiscreteProcess.hh"
 #include "G4ParticleChangeForDecay.hh"
+#include "G4DecayProcessType.hh"
+
 class G4VExtDecayer;
 
 class G4Decay : public G4VRestDiscreteProcess 
@@ -202,12 +204,6 @@ inline
 			    )
 {
   return DecayIt(aTrack, aStep);
-}
-
-inline
- void G4Decay::SetExtDecayer(G4VExtDecayer* val)
-{
-  pExtDecayer = val;
 }
 
 inline

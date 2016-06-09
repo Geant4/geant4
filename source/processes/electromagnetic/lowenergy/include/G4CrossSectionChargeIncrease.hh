@@ -23,40 +23,16 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4CrossSectionChargeIncrease.hh,v 1.1 2007/11/08 18:24:04 pia Exp $
-// GEANT4 tag $Name: geant4-09-01 $
-// 
-// Contact Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
-//
-// History:
-// -----------
-// Date         Name              Modification
-// 28 Apr 2007  M.G. Pia          Created in compliance with design described in TNS paper
-//
-// -------------------------------------------------------------------
-
-// Class description:
-// Geant4-DNA Cross total cross section for electron elastic scattering in water
-// Reference: TNS Geant4-DNA paper
-// S. Chauvie et al., Geant4 physics processes for microdosimetry simulation:
-// design foundation and implementation of the first set of models,
-// IEEE Trans. Nucl. Sci., vol. 54, no. 6, Dec. 2007.
-// Reference for implementation model: NIM. 155, pp. 145-156, 1978
-// Further documentation available from http://www.ge.infn.it/geant4/dna
-
-// -------------------------------------------------------------------
-
+// $Id: G4CrossSectionChargeIncrease.hh,v 1.2 2008/07/14 20:47:33 sincerti Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 
 #ifndef G4CROSSSECTIONCHARGEIncrease_HH
 #define G4CROSSSECTIONCHARGEIncrease_HH 1
  
-#include "globals.hh"
-#include <map>
 #include "G4CrossSectionChargeIncreasePartial.hh"
+#include "G4Track.hh"
+#include "G4DNAGenericIonsManager.hh"
 
-class G4Track;
- 
 class G4CrossSectionChargeIncrease
 {
 public:
@@ -67,11 +43,8 @@ public:
   
   G4double CrossSection(const G4Track&);
   
-  // Copy constructor and assignment operator to be added here
-    
 private:
    
-  G4String name;  
   G4double lowEnergyLimitDefault;
   G4double highEnergyLimitDefault;
 

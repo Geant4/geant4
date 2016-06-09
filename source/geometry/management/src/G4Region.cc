@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Region.cc,v 1.23 2007/04/26 21:20:53 asaim Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4Region.cc,v 1.26 2008/07/15 10:27:36 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // 
 // class G4Region Implementation
@@ -139,7 +139,7 @@ void G4Region::ScanVolumeTree(G4LogicalVolume* lv, G4bool region)
     //
     G4VPVParameterisation* pParam = daughterPVol->GetParameterisation();
 
-    if (pParam->IsNested())
+    if (pParam->GetMaterialScanner())
     {
       size_t matNo = pParam->GetMaterialScanner()->GetNumberOfMaterials();
       for (register size_t mat=0; mat<matNo; mat++)
@@ -231,7 +231,7 @@ void G4Region::AddRootLogicalVolume(G4LogicalVolume* lv)
 //    regions. It also recomputes the materials list for the region.
 // *******************************************************************
 //
-void G4Region::RemoveRootLogicalVolume(G4LogicalVolume* lv)
+void G4Region::RemoveRootLogicalVolume(G4LogicalVolume* lv, G4bool scan)
 {
   // Find and remove logical volume from the list
   //
@@ -246,13 +246,10 @@ void G4Region::RemoveRootLogicalVolume(G4LogicalVolume* lv)
     fRootVolumes.erase(pos);
   }
 
-  // Scan recursively the tree of daugther volumes and reset regions
-  //
-  //ScanVolumeTree(lv, false);
-
-  // Update the materials list
-  //
-  //UpdateMaterialList();
+  if (scan)  // Update the materials list
+  {
+    UpdateMaterialList();
+  }
 
   // Set region as modified
   //

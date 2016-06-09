@@ -1,4 +1,4 @@
-# $Id: cms10gev.mac,v 1.2 2006/10/26 15:50:35 maire Exp $
+# $Id: cms10gev.mac,v 1.5 2008/09/24 10:38:46 vnivanch Exp $
 #
 # Macro file for "TestEm9.cc" 
 #
@@ -9,14 +9,16 @@
 /tracking/verbose 0
 #
 /testem/det/CalMat     G4_PbWO4
-/testem/del/EcalLength 230 mm
+/testem/det/EcalLength 230 mm
 /testem/det/EcalWidth   22 mm
 #
-/testem/phys/addPhysics  standard
+#/testem/phys/addPhysics  emstandard_opt2
+/testem/phys/addPhysics  standardLPM
 #
+/testem/phys/setCuts 1 mm
 /testem/phys/VertexCuts 0.01 mm
 /testem/phys/MuonCuts  10.0 mm
-/testem/stepMax          10 mm
+#/testem/stepMax          10 mm
 #
 #
 /gun/particle e-
@@ -30,15 +32,18 @@
 #/random/setSavingFlag true
 #/random/resetEngineFrom first.rndm
 /testem/event/printModulo 1000
-/testem/histo/fileName  cms.paw
-/testem/histo/setHisto  0 75  7000  8500 MeV
-/testem/histo/setHisto  1 100 9000 10000 MeV
-/testem/histo/setHisto  2 100 9500 10000 MeV
-#/testem/histo/fileType  hbook
-/testem/
-#
-/testem/phys/setCuts 1 mm
+/testem/histo/fileName cms10gev1mm
+/testem/histo/fileType root
+/testem/histo/setHisto 0  250 0.60 0.85 
+/testem/histo/setHisto 1  200 0.80 1.00 
+/testem/histo/setHisto 2  100 0.90 1.00 
+/testem/histo/setHisto 10  80 0.80 0.88 
+/testem/histo/setHisto 11 100 0.75 0.85 
+/testem/histo/setHisto 12  40 0.94 0.98 
 /run/initialize
-/run/beamOn 1000
+/run/beamOn 10000
 #
+/testem/phys/setCuts 3 mm
+/testem/histo/fileName cms10gev3mm
+/run/beamOn 10000
 #

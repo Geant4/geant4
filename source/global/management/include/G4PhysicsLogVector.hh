@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicsLogVector.hh,v 1.11 2006/06/29 19:02:25 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4PhysicsLogVector.hh,v 1.13 2008/09/22 08:26:33 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // 
 //--------------------------------------------------------------------
@@ -74,9 +74,13 @@ class G4PhysicsLogVector : public G4PhysicsVector
     ~G4PhysicsLogVector();
       // Destructor
 
+    G4PhysicsLogVector(const G4PhysicsLogVector&);
+    G4PhysicsLogVector& operator=(const G4PhysicsLogVector&);
+      // Copy constructor and assignment operator.
+      
     G4bool Retrieve(std::ifstream& fIn, G4bool ascii);
       // To retrieve persistent data from file stream.
-
+  
   protected:
 
     size_t FindBinLocation(G4double theEnergy) const;

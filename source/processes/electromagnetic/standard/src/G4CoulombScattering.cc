@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CoulombScattering.cc,v 1.11 2007/11/20 18:43:25 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4CoulombScattering.cc,v 1.19 2008/10/15 17:53:44 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // -------------------------------------------------------------------
 //
@@ -58,23 +58,20 @@
 using namespace std;
 
 G4CoulombScattering::G4CoulombScattering(const G4String& name)
-  : G4VEmProcess(name),thetaMin(0.0),thetaMax(pi),q2Max(DBL_MAX),
+  : G4VEmProcess(name),thetaMin(0.0),thetaMax(pi),q2Max(TeV*TeV),
     isInitialised(false)
 {
-  G4VEmProcess::SetBuildTableFlag(true);
+  SetBuildTableFlag(true);
   SetStartFromNullFlag(false);
   SetIntegral(true);
-  SetMinKinEnergy(keV);
-  SetMaxKinEnergy(PeV);
   thEnergy = PeV;
   thEnergyElec = PeV;
   if(name == "CoulombScat") {
     thEnergy = 10.*MeV;
     thEnergyElec = 10.*GeV;
   }
-  SetLambdaBinning(120);
   SetSecondaryParticle(G4Electron::Electron());
-  buildElmTableFlag = true;
+  SetProcessSubType(fCoulombScattering);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -86,12 +83,20 @@ G4CoulombScattering::~G4CoulombScattering()
 
 void G4CoulombScattering::InitialiseProcess(const G4ParticleDefinition* p)
 {
-  if(!isInitialised) {
+  // second initialisation
+  if(isInitialised) {
+    G4VEmModel* mod = GetModelByIndex(0);
+    mod->SetPolarAngleLimit(PolarAngleLimit());
+    mod = GetModelByIndex(1);
+    if(mod) mod->SetPolarAngleLimit(PolarAngleLimit());
+
+    // first initialisation
+  } else {
     isInitialised = true;
     aParticle = p;
     G4double mass = p->GetPDGMass();
     if (mass > GeV || p->GetParticleType() == "nucleus") {
-      buildElmTableFlag = false;
+      SetBuildTableFlag(false);
       verboseLevel = 0;
     } else {
       G4String name = p->GetParticleName();
@@ -105,15 +110,15 @@ void G4CoulombScattering::InitialiseProcess(const G4ParticleDefinition* p)
     G4double eth  = thEnergy;
     if(mass < MeV) eth  = thEnergyElec; 
     if(eth > emin) {
-      G4eCoulombScatteringModel* model = 
-	new G4eCoulombScatteringModel(thetaMin,thetaMax,buildElmTableFlag,q2Max);
+      G4eCoulombScatteringModel* model = new G4eCoulombScatteringModel();
+      model->SetPolarAngleLimit(PolarAngleLimit());
       model->SetLowEnergyLimit(emin);
       model->SetHighEnergyLimit(std::min(eth,emax));
       AddEmModel(1, model);
     }
     if(eth < emax) {
-      G4CoulombScatteringModel* model = 
-	new G4CoulombScatteringModel(thetaMin,thetaMax,buildElmTableFlag,q2Max);
+      G4CoulombScatteringModel* model = new G4CoulombScatteringModel();
+      model->SetPolarAngleLimit(PolarAngleLimit());
       model->SetLowEnergyLimit(eth);
       model->SetHighEnergyLimit(emax);
       AddEmModel(2, model);
@@ -125,10 +130,9 @@ void G4CoulombScattering::InitialiseProcess(const G4ParticleDefinition* p)
 
 void G4CoulombScattering::PrintInfo()
 {
-  G4cout << " Scattering of " << aParticle->GetParticleName()
-	 << " with   " << thetaMin/degree
-	 << " < Theta(degree) < " << thetaMax/degree
-	 << "; Eth(MeV)= ";
+  G4cout << "      " << PolarAngleLimit()/degree
+	 << " < Theta(degree) < 180" 
+	 << ", Eth(MeV)= ";
   if(aParticle->GetPDGMass() < MeV) G4cout << thEnergyElec;
   else                              G4cout << thEnergy;
 

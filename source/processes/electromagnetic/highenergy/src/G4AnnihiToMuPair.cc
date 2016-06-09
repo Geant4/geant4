@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4AnnihiToMuPair.cc,v 1.3 2006/06/29 19:32:34 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4AnnihiToMuPair.cc,v 1.5 2008/10/16 14:29:48 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 //         ------------ G4AnnihiToMuPair physics process ------
 //         by H.Burkhardt, S. Kelner and R. Kokoulin, November 2002
@@ -65,6 +65,8 @@ G4AnnihiToMuPair::G4AnnihiToMuPair(const G4String& processName,
  HighestEnergyLimit = 1000*TeV;
  
  CrossSecFactor = 1.;
+ SetProcessSubType(6);
+
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -243,9 +245,10 @@ G4VParticleChange* G4AnnihiToMuPair::PostStepDoIt(const G4Track& aTrack,
 
 void G4AnnihiToMuPair::PrintInfoDefinition()
 {
-  G4String comments ="e+e->mu+mu- annihilation, atomic e- at rest.\n";
-  G4cout << G4endl << GetProcessName() << ":  " << comments
-         << "        threshold at " << LowestEnergyLimit/GeV << " GeV"
+  G4String comments ="e+e->mu+mu- annihilation, atomic e- at rest, SubType=.";
+  G4cout << G4endl << GetProcessName() << ":  " << comments 
+	 << GetProcessSubType() << G4endl;
+  G4cout << "        threshold at " << LowestEnergyLimit/GeV << " GeV"
          << " good description up to "
          << HighestEnergyLimit/TeV << " TeV for all Z." << G4endl;
 }

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VCSGface.hh,v 1.7 2006/06/29 18:48:08 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4VCSGface.hh,v 1.9 2008/05/15 11:41:59 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // 
 // --------------------------------------------------------------------
@@ -299,6 +299,9 @@ class G4VCSGface
                                 G4SolidExtentList &extentList       ) = 0;
 
   virtual G4VCSGface* Clone() = 0;
+
+  virtual G4double SurfaceArea( ) = 0;
+  virtual G4ThreeVector GetPointOnFace() = 0;
 };
 
 #endif

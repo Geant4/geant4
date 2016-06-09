@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4LogicalVolume.hh,v 1.26 2006/06/29 18:30:55 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4LogicalVolume.hh,v 1.27 2008/07/10 09:40:08 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // 
 // class G4LogicalVolume
@@ -286,6 +286,9 @@ class G4LogicalVolume
       // persistency for clients requiring preallocation of memory for
       // persistifiable objects.
 
+    inline void Lock();
+      // Set lock identifier for final deletion of entity.
+
   private:
 
     G4LogicalVolume(const G4LogicalVolume&);
@@ -316,6 +319,8 @@ class G4LogicalVolume
       // Flag to identify if optimisation should be applied or not.
     G4bool fRootRegion;
       // Flag to identify if the logical volume is a root region.
+    G4bool fLock;
+      // Flag to identify if entity is locked for final deletion.
     G4double fSmartless;
       // Quality for optimisation, average number of voxels to be spent
       // per content.

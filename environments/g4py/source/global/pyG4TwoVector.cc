@@ -23,15 +23,15 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: pyG4TwoVector.cc,v 1.1 2007/05/28 03:03:21 kmura Exp $
-// $Name: geant4-09-01 $
+// $Id: pyG4TwoVector.cc,v 1.2 2008/03/13 07:32:18 kmura Exp $
+// $Name: geant4-09-02 $
 // ====================================================================
 //   pyG4TwoVector.cc
 //
 //                                         2007 Q
 // ====================================================================
 #include <boost/python.hpp>
-#include "pyG4Version.hh"
+#include "G4Version.hh"
 
 #if G4VERSION_NUMBER >= 830
 #include "G4TwoVector.hh"

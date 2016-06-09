@@ -23,6 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+//
+// $Id: EMElectronStandard.cc; Last by G.A.P.Cirrone September 2008
 // ----------------------------------------------------------------------------
 //                 GEANT 4 - Hadrontherapy example
 // ----------------------------------------------------------------------------
@@ -35,6 +37,9 @@
 // (b) National Institute for Nuclear Physics Section of Genova, genova, Italy
 // 
 // * cirrone@lns.infn.it
+//
+// This class manages the electromagnetic processes for electrons
+// using the Standard Models of Geant4
 // --------------------------------------------------------------
 
 #include "EMElectronStandard.hh"
@@ -44,7 +49,6 @@
 #include "G4eIonisation.hh"
 #include "G4eBremsstrahlung.hh"
 #include "G4StepLimiter.hh"
-#include "G4EmProcessOptions.hh"
 
 
 EMElectronStandard::EMElectronStandard(const G4String& name): 
@@ -70,20 +74,16 @@ void EMElectronStandard::ConstructProcess()
   // *** Electron ***
   // ****************
 
-  G4EmProcessOptions* electronEmProcessOptions = new G4EmProcessOptions();
-  electronEmProcessOptions -> SetDEDXBinning(480);
-
   G4MultipleScattering* electronMultipScatProcess = new G4MultipleScattering();
   G4eIonisation* electronIonisationProcess = new G4eIonisation();
   G4eBremsstrahlung* electronBremsstrProcess = new G4eBremsstrahlung();
 
-  G4StepLimiter* electronStepLimiter = new G4StepLimiter();
-
   G4ParticleDefinition* particle = G4Electron::Electron(); 
   G4ProcessManager* processManager = particle -> GetProcessManager();
+
   processManager -> AddProcess(electronMultipScatProcess, -1, 1, 1);
   processManager -> AddProcess(electronIonisationProcess, -1, 2, 2);
-  processManager -> AddProcess(electronBremsstrProcess, -1, -1, 3);
-  processManager -> AddProcess(electronStepLimiter, -1, -1,  3);
+  processManager -> AddProcess(electronBremsstrProcess, -1, 3, 3);
 
+ 
 }

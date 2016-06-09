@@ -32,7 +32,7 @@ G4FTFBinaryNeutronBuilder::
 G4FTFBinaryNeutronBuilder(G4bool quasiElastic) 
 {
   theMin = 4*GeV;
-  theModel = new G4TheoFSGenerator;
+  theModel = new G4TheoFSGenerator("FTFB");
 
   theStringModel = new G4FTFModel;
   theStringDecay = new G4ExcitedStringDecay(new G4LundStringFragmentation);
@@ -57,7 +57,6 @@ G4FTFBinaryNeutronBuilder::
 {
   delete theStringDecay;
   delete theStringModel;
-  delete thePreEquilib;
   delete theCascade;
   if ( theQuasiElastic ) delete theQuasiElastic;
 }

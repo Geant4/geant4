@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4MaterialPropertyVector.hh,v 1.10 2006/06/29 19:11:17 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4MaterialPropertyVector.hh,v 1.11 2008/06/05 23:37:37 gum Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // 
 ////////////////////////////////////////////////////////////////////////
@@ -34,7 +34,7 @@
 //
 // File:        G4MaterialPropertyVector.hh
 //
-// Description: A one-to-one mapping from Photon Momentum to some
+// Description: A one-to-one mapping from Photon Energy to some
 //              optical property 
 // Version:     1.0
 // Created:     1996-02-08
@@ -58,7 +58,7 @@
 #include <functional>
 
 // Class Description:
-// A one-to-one mapping from Photon Momentum to some optical property.
+// A one-to-one mapping from Photon Energy to some optical property.
 // Class Description - End:
 
 /////////////////////
@@ -95,7 +95,7 @@ public: // Without description
 
 public: // With description
 	
-	G4MaterialPropertyVector(G4double *PhotonMomenta, 
+	G4MaterialPropertyVector(G4double *PhotonEnergies, 
 		  	   	 G4double *PropertyValues,
 				 G4int     NumElements);
         // Constructor of G4MaterialPropertyVector object.
@@ -118,15 +118,15 @@ public: // With description
 
 	void ResetIterator();
 
-        void AddElement(G4double aPhotonMomentum, 
+        void AddElement(G4double aPhotonEnergy, 
 			G4double aPropertyValue);
         // Add a new element (pair of numbers) to the G4MaterialPropertyVector.
-	void RemoveElement(G4double aPhotonMomentum);
+	void RemoveElement(G4double aPhotonEnergy);
         // Remove the element with given x-value.
 
-        G4double GetProperty(G4double aPhotonMomentum) const;
+        G4double GetProperty(G4double aPhotonEnergy) const;
         // Returns the y-value for given x-value (with interpolation).
-	G4double GetPhotonMomentum(G4double aProperty) const;
+	G4double GetPhotonEnergy(G4double aProperty) const;
         // Returns the x-value for given y-value (with interpolation).
         // NOTE: Assumes that the y-value is an increasing function of 
         //       the x-value. Returns the x-value corresponding to the 
@@ -134,15 +134,15 @@ public: // With description
         //       the y-value passed in, the method returns the first 
         //       x-value in the vector that corresponds to that value.
 	// For use with G4MaterialPropertyVector iterator: return
-        // property (or Photon momentum) at current point of iterator.
+        // property (or Photon Energy) at current point of iterator.
 
 	G4double GetProperty() const;
-	G4double GetPhotonMomentum() const;
+	G4double GetPhotonEnergy() const;
 
 	G4double GetMaxProperty() const;
 	G4double GetMinProperty() const;
-	G4double GetMaxPhotonMomentum() const;
-	G4double GetMinPhotonMomentum() const;
+	G4double GetMaxPhotonEnergy() const;
+	G4double GetMinPhotonEnergy() const;
 		
 	//////////
 	// Tests
@@ -158,7 +158,7 @@ private:
 
 	G4MPVEntry GetEntry(G4int i) const;
 
-	void GetAdjacentBins(G4double aPhotonMomentum,
+	void GetAdjacentBins(G4double aPhotonEnergy,
                              G4int *left,G4int *right) const;
 
 	/////////////////////////
@@ -187,15 +187,15 @@ G4double G4MaterialPropertyVector::GetMinProperty() const
 }
 
 inline
-G4double G4MaterialPropertyVector::GetMaxPhotonMomentum() const
+G4double G4MaterialPropertyVector::GetMaxPhotonEnergy() const
 {
-  return MPV.back()->GetPhotonMomentum();
+  return MPV.back()->GetPhotonEnergy();
 }
 
 inline 
-G4double G4MaterialPropertyVector::GetMinPhotonMomentum() const
+G4double G4MaterialPropertyVector::GetMinPhotonEnergy() const
 {
-  return MPV.front()->GetPhotonMomentum();
+  return MPV.front()->GetPhotonEnergy();
 }
 
 #endif /* G4MaterialPropertyVector_h */

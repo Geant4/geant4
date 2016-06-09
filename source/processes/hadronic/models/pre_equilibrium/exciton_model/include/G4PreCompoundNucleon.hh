@@ -23,7 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// by V. Lara
+//J. M. Quesada (August 2008).  
+//Based  on previous work by V. Lara
+//
+
 
 #ifndef G4PreCompoundNucleon_h
 #define G4PreCompoundNucleon_h 1
@@ -45,10 +48,11 @@ public:
   // constructor  
   G4PreCompoundNucleon(const G4double anA, 
 		       const G4double aZ, 
-		       G4VCoulombBarrier* aCoulombBarrier,
-		       const G4String & aName): 
-    G4PreCompoundFragment(anA,aZ,aCoulombBarrier,aName) {}
-  
+		       G4VCoulombBarrier* aCoulombBarrier,		       
+		       const G4String & aName) :
+    G4PreCompoundFragment(anA,aZ,aCoulombBarrier,aName) {} 
+
+
   virtual ~G4PreCompoundNucleon() {}
 
   // operators  
@@ -71,15 +75,17 @@ public:
     
   virtual G4double ProbabilityDistributionFunction(const G4double eKin,
 						   const G4Fragment& aFragment);
+  
+  private:
 
+  G4bool IsItPossible(const G4Fragment&) ;   
     
-protected:
+ protected:
 
-// added Rj method according to literature and JMQ
+  virtual G4double CrossSection(const G4double ekin)=0; 
+
   virtual G4double GetRj(const G4int NumberParticles, const G4int NumberCharged) = 0; 
-  virtual G4double GetAlpha() = 0;
-  virtual G4double GetBeta() = 0;
-  virtual G4bool IsItPossible(const G4Fragment&) = 0;     
-};
+
+ };
 
 #endif

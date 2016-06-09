@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QElastic.cc,v 1.25 2007/11/15 09:36:43 mkossov Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4QElastic.cc,v 1.27 2008/10/02 21:10:07 dennis Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 //      ---------------- G4QElastic class -----------------
 //                 by Mikhail Kossov, December 2003.
@@ -50,13 +50,14 @@ std::vector<std::vector<G4int>*> G4QElastic::ElIsoN;       // N of isotope(j) of
 std::vector<std::vector<G4double>*>G4QElastic::IsoProbInEl;//SumProbabIsotopes inElementI
 
 // Constructor
-G4QElastic::G4QElastic(const G4String& processName) : G4VDiscreteProcess(processName)
+G4QElastic::G4QElastic(const G4String& processName): 
+ G4VDiscreteProcess(processName, fHadronic)
 {
 #ifdef debug
   G4cout<<"G4QElastic::Constructor is called processName="<<processName<<G4endl;
 #endif
   if (verboseLevel>0) G4cout << GetProcessName() << " process is created "<< G4endl;
-
+  SetProcessSubType(fHadronElastic);
   //G4QCHIPSWorld::Get()->GetParticles(nPartCWorld); // Create CHIPS World (234 part. max)
 }
 

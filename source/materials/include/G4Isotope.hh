@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Isotope.hh,v 1.19 2006/06/29 19:11:07 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4Isotope.hh,v 1.21 2008/11/14 15:14:24 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -35,6 +35,7 @@
 //                                                 Z: atomic number,
 //                                                 N: number of nucleons, 
 //                                                 A: mass of a mole (optional).
+// If A is not defined it is taken from Geant4 database
 //
 // The class contains as a private static member the table of defined
 // isotopes (an ordered vector of isotopes).
@@ -72,6 +73,7 @@ class G4Isotope
  public:  // with description
 
     // Make an isotope
+    //
     G4Isotope(const G4String& name,		//its name
                     G4int     z,		//atomic number
                     G4int     n,		//number of nucleons
@@ -80,14 +82,13 @@ class G4Isotope
     virtual ~G4Isotope();
 
     // Retrieval methods
-    G4String GetName()  const {return fName;};    
-    G4int    GetZ()     const {return fZ;};
-    G4int    GetN()     const {return fN;};
-    G4double GetA()     const {return fA;};
+    //
+    const G4String& GetName()  const {return fName;}
+    G4int    GetZ()     const {return fZ;}
+    G4int    GetN()     const {return fN;}
+    G4double GetA()     const {return fA;}
     
-    G4int GetCountUse() const {return fCountUse;};
-    void  increaseCountUse()  {fCountUse++;};
-    void  decreaseCountUse()  {fCountUse--;};
+    G4int GetCountUse() const {return fCountUse;}
     
     static  
     G4Isotope* GetIsotope(G4String name, G4bool warning=false);
@@ -98,7 +99,7 @@ class G4Isotope
     static 
     size_t GetNumberOfIsotopes();
     
-    size_t GetIndex() const {return fIndexInTable;};    
+    size_t GetIndex() const {return fIndexInTable;}
     
     friend
     std::ostream& operator<<(std::ostream&, G4Isotope*);
@@ -119,11 +120,15 @@ class G4Isotope
       // persistency for clients requiring preallocation of memory for
       // persistifiable objects.
    
+    void SetName(const G4String& name) {fName=name;}
+    void increaseCountUse()  {fCountUse++;}
+    void decreaseCountUse()  {fCountUse--;}
+
  private:
      
     G4Isotope(G4Isotope&);
     G4Isotope& operator=(const G4Isotope&);
-     
+
  private:
 
     G4String fName;              // name of the Isotope

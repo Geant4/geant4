@@ -50,14 +50,14 @@ G4CollisionOutput G4BigBanger::collide(G4InuclParticle* /*bullet*/,
   const G4double small_ekin = 1.0e-6;
 
   G4CollisionOutput output;
-  std::vector<G4double> totscm;
-  std::vector<G4double> totlab;
+  G4CascadeMomentum totscm;
+  G4CascadeMomentum totlab;
 
   if(G4InuclNuclei* nuclei_target = dynamic_cast<G4InuclNuclei*>(target)) {
   
     G4double A = nuclei_target->getA();
     G4double Z = nuclei_target->getZ();
-    std::vector<G4double> PEX = nuclei_target->getMomentum();
+    const G4CascadeMomentum& PEX = nuclei_target->getMomentum();
     G4double EEXS = nuclei_target->getExitationEnergy();
     G4InuclElementaryParticle dummy(small_ekin, 1);
     G4LorentzConvertor toTheNucleiSystemRestFrame;
@@ -84,19 +84,19 @@ G4CollisionOutput G4BigBanger::collide(G4InuclParticle* /*bullet*/,
 	particles[i].printParticle();
     }
     if(!particles.empty()) { // convert back to Lab
-      if (verboseLevel > 2) {
-	std::vector<G4double> totscm(4, 0.0);
-	std::vector<G4double> totlab(4, 0.0);
-      }
+      //      if (verboseLevel > 2) {
+      // not used    G4CascadeMomentum totscm;
+      // not used    G4CascadeMomentum totlab;
+      //      }
       particleIterator ipart;
 
       for(ipart = particles.begin(); ipart != particles.end(); ipart++) {
 	if (verboseLevel > 2) {
-	  std::vector<G4double> mom_scm = ipart->getMomentum();
+	  const G4CascadeMomentum& mom_scm = ipart->getMomentum();
 
 	  for(G4int i = 0; i < 4; i++) totscm[i] += mom_scm[i];
 	}
-	std::vector<G4double> mom = 
+	G4CascadeMomentum mom = 
 	  toTheNucleiSystemRestFrame.backToTheLab(ipart->getMomentum());
 	ipart->setMomentum(mom); 
 
@@ -152,7 +152,7 @@ G4BigBanger::generateBangInSCM(G4double etot,
     // abnormal situation
     G4double m = iz > 0 ? mp : mn;
     G4double pmod = std::sqrt((etot + 2.0 * m) * etot);
-    std::vector<G4double> mom(4);
+    G4CascadeMomentum mom;
     std::pair<G4double, G4double> COS_SIN = randomCOS_SIN();
     G4double FI = randomPHI();
     G4double Pt = pmod * COS_SIN.second;
@@ -175,11 +175,11 @@ G4BigBanger::generateBangInSCM(G4double etot,
 
   while(bad && itry < itry_max) {
     itry++;
-    std::vector<std::vector<G4double> > scm_momentums;
-    std::vector<G4double> tot_mom(4);
+    std::vector<G4CascadeMomentum> scm_momentums;
+    G4CascadeMomentum tot_mom;
 
     if(ia == 2) {
-      std::vector<G4double> mom(4);
+      G4CascadeMomentum mom;
       std::pair<G4double, G4double> COS_SIN = randomCOS_SIN();
       double FI = randomPHI();
       double Pt = pmod[0] * COS_SIN.second;
@@ -192,7 +192,7 @@ G4BigBanger::generateBangInSCM(G4double etot,
 
       scm_momentums.push_back(mom);
 
-      std::vector<G4double> mom1(4);
+      G4CascadeMomentum mom1;
 
       for(G4int i = 1; i < 4; i++) mom1[i] = - mom[i];
 
@@ -201,7 +201,7 @@ G4BigBanger::generateBangInSCM(G4double etot,
     }
     else {
       for(G4int i = 0; i < ia - 2; i++) {
-	std::vector<G4double> mom(4);
+	G4CascadeMomentum mom;
 	std::pair<G4double, G4double> COS_SIN = randomCOS_SIN();
 	G4double FI = randomPHI();
 	G4double Pt = pmod[i] * COS_SIN.second;
@@ -227,19 +227,19 @@ G4BigBanger::generateBangInSCM(G4double etot,
       }
   
       if(std::fabs(ct) < ang_cut) {
-	std::vector<G4double> mom2 = generateWithFixedTheta(ct, pmod[ia - 2]);
+	G4CascadeMomentum mom2 = generateWithFixedTheta(ct, pmod[ia - 2]);
 	//       rotate to the normal system
-	std::vector<G4double> apr = tot_mom;
+	G4CascadeMomentum apr = tot_mom;
 	G4int i;
 	for(i = 1; i < 4; i++) apr[i] /= tot_mod;
 	G4double a_tr = std::sqrt(apr[1] * apr[1] + apr[2] * apr[2]);
-	std::vector<G4double> mom(4);
+	G4CascadeMomentum mom;
 	mom[1] = mom2[3] * apr[1] + ( mom2[1] * apr[2] + mom2[2] * apr[3] * apr[1]) / a_tr; // ::: replace with clhep tools?
 	mom[2] = mom2[3] * apr[2] + (-mom2[1] * apr[1] + mom2[2] * apr[3] * apr[2]) / a_tr;      
 	mom[3] = mom2[3] * apr[3] - mom2[2] * a_tr;      
 	scm_momentums.push_back(mom);
 	//               and the last one
-	std::vector<G4double> mom1(4);
+	G4CascadeMomentum mom1;
 	for(i = 1; i < 4; i++) mom1[i] = - mom[i] - tot_mom[i];
 	scm_momentums.push_back(mom1);  
 	bad = false;

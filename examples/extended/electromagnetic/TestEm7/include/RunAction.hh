@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RunAction.hh,v 1.11 2007/06/12 14:01:13 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: RunAction.hh,v 1.14 2008/08/22 18:30:27 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -39,39 +39,35 @@ class DetectorConstruction;
 class PhysicsList;
 class PrimaryGeneratorAction;
 class G4Run;
-
-namespace AIDA {
- class IAnalysisFactory;
- class ITree;
- class IHistogram1D;
-} 
+class Histo;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class RunAction : public G4UserRunAction
 {
 public:
-  RunAction(DetectorConstruction*, PhysicsList*,PrimaryGeneratorAction*);
+  RunAction(DetectorConstruction*, PhysicsList*,
+	    PrimaryGeneratorAction*);
   virtual ~RunAction();
 
   void BeginOfRunAction(const G4Run*);
   void   EndOfRunAction(const G4Run*);
     
-  void FillTallyEdep(G4int n, G4double e) {tallyEdep[n] += e;};
+  void FillTallyEdep(G4int n, G4double e)  {tallyEdep[n] += e;};
+  void FillEdep(G4double de, G4double eni) {edeptot += de; eniel += eni;};
        
   G4double GetBinLength() {return binLength;};
   G4double GetLength()    {return length;};
-  G4double GetOffsetX()   {return offsetX;} 
-  void     FillHisto(G4int id, G4double x, G4double weight = 1.0);
+  G4double GetOffsetX()   {return offsetX;}
+ 
+  void FillHisto(G4int id, G4double x, G4double weight = 1.0);
     
-  void AddProjRange (G4double x) {projRange += x; projRange2 += x*x;};
+  void AddProjRange (G4double x) 
+  {projRange += x; projRange2 += x*x; nRange++;};
   void AddPrimaryStep() {nPrimarySteps++;};
                    
 private:  
-  void bookHisto();
-  void cleanHisto();
     
-private:
   DetectorConstruction*   detector;
   PhysicsList*            physics;
   PrimaryGeneratorAction* kinematic;
@@ -80,11 +76,11 @@ private:
   G4double                offsetX;
   G4double                length;
   G4double                projRange, projRange2;
+  G4double                edeptot, eniel;
   G4int                   nPrimarySteps;
-           
-  AIDA::IAnalysisFactory* af;  
-  AIDA::ITree*            tree;
-  AIDA::IHistogram1D*     histo[1];        
+  G4int                   nRange;
+
+  Histo*                  histo;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -32,7 +32,7 @@ G4QGSCPiKBuilder::
 G4QGSCPiKBuilder(G4bool quasiElastic) 
 {
   theMin = 8*GeV;
-  theModel = new G4TheoFSGenerator;
+  theModel = new G4TheoFSGenerator("QGSC");
   
   theStringModel = new G4QGSModel< G4QGSParticipants >;
   theStringDecay = new G4ExcitedStringDecay(new G4QGSMFragmentation);

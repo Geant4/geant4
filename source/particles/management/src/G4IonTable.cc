@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4IonTable.cc,v 1.48 2007/11/14 02:23:03 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4IonTable.cc,v 1.53 2008/10/15 02:41:37 kurasige Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // 
 // --------------------------------------------------------------
@@ -80,8 +80,8 @@ G4IonTable::~G4IonTable()
       delete fIsotopeTable;
     }
     fIsotopeTableList->clear();
+    delete fIsotopeTableList;
   }
-  delete fIsotopeTableList;
   fIsotopeTableList =0;
 
 
@@ -614,23 +614,38 @@ G4bool G4IonTable::IsLightIon(G4ParticleDefinition* particle) const
 G4ParticleDefinition* G4IonTable::GetLightIon(G4int Z, G4int A) const
 {
   // returns pointer to pre-defined ions 
+  static G4bool isInitialized = false;
+  static G4ParticleDefinition* p_proton=0;
+  static G4ParticleDefinition* p_neutron=0;
+  static G4ParticleDefinition* p_deuteron=0;
+  static G4ParticleDefinition* p_triton=0;
+  static G4ParticleDefinition* p_alpha=0;
+  static G4ParticleDefinition* p_He3=0;
+  
+  if (!isInitialized) {
+    p_proton   = G4ParticleTable::GetParticleTable()->FindParticle("proton"); // proton 
+    p_neutron  = G4ParticleTable::GetParticleTable()->FindParticle("neutron"); // neutron 
+    p_deuteron = G4ParticleTable::GetParticleTable()->FindParticle("deuteron"); // deuteron 
+    p_triton   = G4ParticleTable::GetParticleTable()->FindParticle("triton"); // tritoon 
+    p_alpha    = G4ParticleTable::GetParticleTable()->FindParticle("alpha"); // alpha 
+    p_He3      = G4ParticleTable::GetParticleTable()->FindParticle("He3"); // He3 
+    isInitialized = true;
+  }
 
   G4ParticleDefinition* ion=0;
   if ( (Z<=2) ) {
     if ( (Z==1)&&(A==1) ) {
-      ion = G4ParticleTable::GetParticleTable()->FindParticle("proton"); // proton 
-
+      ion = p_proton;
     } else if ( (Z==0)&&(A==1) ) {
-      ion = G4ParticleTable::GetParticleTable()->FindParticle("neutron"); // neutron 
+      ion = p_neutron;
     } else if ( (Z==1)&&(A==2) ) {
-      ion = G4ParticleTable::GetParticleTable()->FindParticle("deuteron"); // deuteron 
+      ion = p_deuteron;
     } else if ( (Z==1)&&(A==3) ) {
-      ion = G4ParticleTable::GetParticleTable()->FindParticle("triton"); // tritoon 
+      ion = p_triton;
     } else if ( (Z==2)&&(A==4) ) {
-      ion = G4ParticleTable::GetParticleTable()->FindParticle("alpha"); // alpha 
-
+      ion = p_alpha;
     } else if ( (Z==2)&&(A==3) ) {
-      ion = G4ParticleTable::GetParticleTable()->FindParticle("He3"); // He3 
+      ion = p_He3;
     }
   }
   return ion;
@@ -685,13 +700,6 @@ void G4IonTable::Insert(G4ParticleDefinition* particle)
 {
   if (IsIon(particle)) {
     fIonList->push_back(particle);
-  } else {
-    //#ifdef G4VERBOSE
-    //if (GetVerboseLevel()>1) {
-    //  G4cout << "G4IonTable::Insert :" << particle->GetParticleName() ;
-    //  G4cout << " is not ions" << G4endl; 
-    //}
-    //#endif
   }
 }
 
@@ -703,17 +711,18 @@ void G4IonTable::Remove(G4ParticleDefinition* particle)
     for (idx = fIonList->begin(); idx!= fIonList->end(); ++idx) {
       if ( particle == *idx) {
         fIonList->erase(idx);
+        break;
       }
     }
   } else {
 #ifdef G4VERBOSE
-    if (GetVerboseLevel()>0) {
+    if (GetVerboseLevel()>1) {
       G4cout << "G4IonTable::Remove :" << particle->GetParticleName() ;
       G4cout << " is not ions" << G4endl; 
     }
 #endif
   }
-
+  
 }
 
 

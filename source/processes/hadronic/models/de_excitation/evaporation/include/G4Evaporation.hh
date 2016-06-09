@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Evaporation.hh,v 1.4 2007/02/14 13:37:49 ahoward Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4Evaporation.hh,v 1.5 2008/09/19 13:32:54 ahoward Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara
@@ -68,8 +68,6 @@ public:
 
   void SetDefaultChannel();
   void SetGEMChannel();
-  
-private:
 
 #ifdef debug
   void CheckConservation(const G4Fragment & theInitialState,

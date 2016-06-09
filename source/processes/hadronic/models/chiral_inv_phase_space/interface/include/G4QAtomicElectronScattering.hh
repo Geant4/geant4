@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // $Id: G4QAtomicElectronScattering.hh,v 1.2 2006/12/13 15:45:16 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 //      ---------------- G4QAtomicElectronScattering header ----------------
 //                 by Mikhail Kossov, December 2003.

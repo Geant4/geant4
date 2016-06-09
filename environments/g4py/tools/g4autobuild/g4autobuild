@@ -1,6 +1,8 @@
-#! /bin/sh -
+#! /bin/bash -
 # ======================================================================
 #  A script for Geant4 autobuild
+#
+#  Version 2.3 Dec 2008
 #
 #  [usage]
 #    g4autobuild [<options>]
@@ -9,6 +11,8 @@
 #      --help, -h       print this message
 #      --prefix=PREFIX  base directory of Geant4 builds [$(cwd)/]
 #      --config=CONFIG  configure file [PREFIX/g4auto.cfg]
+#      --jobs=N         allow N jobs at once
+#      --with-fpic      default -fPIC option
 # ======================================================================
 export LANG=C
 
@@ -30,8 +34,29 @@ cat <<EOF
      --help, -h       print this message
      --prefix=PREFIX  root directory of autobuild [\$(PWD)/]
      --config=CONFIG  configure file [PREFIX/g4auto.cfg]
+     --jobs=N         allow N jobs at once
+     --with-fpic      default -fPIC option
 
 EOF
+}
+
+# ======================================================================
+# external environment
+# ======================================================================
+add_ext_env() {
+aext=$1
+aval=$2
+
+# for bash
+cat >> g4rc.sh <<EOF
+export $aext=$aval
+EOF
+
+# for csh
+cat >> g4rc.csh <<EOF
+setenv $aext $aval
+EOF
+
 }
 
 # ======================================================================
@@ -74,6 +99,25 @@ EOF
 
 }
 
+# ======================================================================
+# options
+# ======================================================================
+add_options() {
+aopt=$1
+
+# for bash
+cat >> g4rc.sh <<EOF
+export G4LIB_BUILD_${aopt}=1
+export G4LIB_USE_${aopt}=1
+EOF
+
+# for csh
+cat >> g4rc.csh <<EOF
+setenv G4LIB_BUILD_${aopt} 1
+setenv G4LIB_USE_${aopt} 1
+EOF
+
+}
 
 # ======================================================================
 # main
@@ -82,6 +126,8 @@ EOF
 prefix=`pwd`
 config=$prefix/g4auto.cfg
 status_dir=$prefix/status
+njobs=1
+qfpic=0
 
 # parsing options
 while test $# -gt 0
@@ -96,6 +142,8 @@ do
     # ---------------------------------------------------------------
     --prefix=*)                prefix=$optarg                    ;;
     --config=*)                config=$optarg                    ;;
+    --jobs=*)                  njobs=$optarg                     ;;
+    --with-fpic )              qfpic=1                           ;;
     # ---------------------------------------------------------------
     -*)
       echo "Unrecognized option: $1"
@@ -125,6 +173,11 @@ if [ ! -d $status_dir ]; then
   mkdir $status_dir
 fi
 
+if [ ! `echo "$njobs" | egrep "^[0-9]+$"` ];  then
+  echo "*** abort : #jobs must be a number."
+  exit -1
+fi
+
 # ======================================================================
 # parsing a config file...
 # ======================================================================
@@ -132,9 +185,15 @@ g4sys=`grep '^G4SYS'  $config | awk '{print $2}'`
 g4base=`grep '^G4BASE' $config | awk '{print $2}'`
 clhepbase=`grep '^CLHEPBASE' $config | awk '{print $2}'`
 geant4_set=`grep '^-' $config | awk '{print $2}'`
-clhep_set=( `grep '^-' $config | awk '{print $3}'` )
+clhep_set=`grep '^-' $config | awk '{print $3}'`
+xercescroot=`grep '^XERCESCROOT' $config | awk '{print $2}'`
 vis_set=`grep '^v' $config | awk '{print $2}'`
 ui_set=`grep '^u' $config | awk '{print $2}'`
+opt_set=`grep '^o' $config | awk '{print $2}'`
+
+if [ $g4sys == Darwin-g++ ]; then
+  qfic=1
+fi
 
 if [ ! -d $g4base ]; then
   echo "*** abort :$g4base does not exist."
@@ -146,14 +205,21 @@ if [ ! -d $clhepbase ]; then
   exit -1
 fi
 
+if [ $xercescroot ]; then
+  if [ ! -d $xercescroot ]; then
+    echo "*** abort :$xercescroot does not exist."
+    exit -1
+  fi
+fi
+
 # ======================================================================
 # building Geant4
 
-idx=0
+idx=1
 for g4 in $geant4_set
 do
   echo "@@@ building Geant4 ($g4) ..."
-
+  
   g4dir=$g4base/$g4
 
   if [ ! -d $g4dir ]; then
@@ -161,7 +227,11 @@ do
     exit -1
   fi
 
-  pushd $g4dir >& /dev/null
+  set $clhep_set
+  clhep="clhep=\$$idx"
+  eval $clhep
+
+  pushd $g4dir > /dev/null 2>&1
 
   cat > g4rc.sh << EOF
 # ========================================================================
@@ -174,11 +244,7 @@ export LANG=C
 # ========================================================================
 export G4SYSTEM=$g4sys
 export G4INSTALL=$g4base/$g4
-export CLHEP_BASE_DIR=$clhepbase/${clhep_set[$idx]}
-
-# ========================================================================
-# Visualization
-# ========================================================================
+export CLHEP_BASE_DIR=$clhepbase/$clhep
 EOF
 
   cat > g4rc.csh << EOF
@@ -192,7 +258,22 @@ setenv LANG C
 # ========================================================================
 setenv G4SYSTEM $g4sys
 setenv G4INSTALL $g4base/$g4
-setenv CLHEP_BASE_DIR $clhepbase/${clhep_set[$idx]}
+setenv CLHEP_BASE_DIR $clhepbase/$clhep
+EOF
+
+if [ $xercescroot ]; then
+  envval=XERCESCROOT
+  add_ext_env XERCESCROOT $xercescroot
+fi
+
+  cat >> g4rc.sh <<EOF
+
+# ========================================================================
+# Visualization
+# ========================================================================
+EOF
+
+  cat >> g4rc.csh << EOF
 
 # ========================================================================
 # Visualization
@@ -223,6 +304,26 @@ EOF
     add_ui_envs $ui
   done
 
+  cat >> g4rc.sh <<EOF
+
+# ========================================================================
+# Options
+# ========================================================================
+EOF
+
+  cat >> g4rc.csh <<EOF
+
+# ========================================================================
+# Options
+# ========================================================================
+EOF
+
+  # options
+  for aopt in $opt_set
+  do
+    add_options $aopt
+  done
+
   # ======================================================================
   # ok, Lets' build...
   . g4rc.sh
@@ -231,10 +332,10 @@ EOF
   # normal lib
   if [ ! -e $status_dir/$g4.lib ]; then
     echo "@@@ building normal lib ..."
-    pushd source >& /dev/null
-    make >& make.log
-    make includes >& /dev/null
-    popd >& /dev/null
+    pushd source > /dev/null 2>&1
+    make --jobs=$njobs > make.log 2>&1
+    make includes > /dev/null 2>&1
+    popd > /dev/null 2>&1
 
     touch $status_dir/$g4.lib
   fi
@@ -245,9 +346,9 @@ EOF
     echo "@@@ buinding global lib ..."
     export G4LIB=$G4INSTALL/glib
 
-    pushd source >& /dev/null
-    make global >& make-global.log
-    popd >& /dev/null
+    pushd source > /dev/null 2>&1
+    make global > make-global.log 2>&1
+    popd > /dev/null 2>&1
 
     touch $status_dir/$g4.glib
   fi
@@ -257,16 +358,17 @@ EOF
   if [ ! -e $status_dir/$g4.slib ]; then
     echo "@@@ buinding shared lib ..."
     export G4LIB=$G4INSTALL/slib
-    if [ $g4sys == Darwin-g++ ]; then
+    if [ $qfpic == 1 ]; then
       export G4TMP=$G4INSTALL/tmp
     else
       export G4TMP=$G4INSTALL/tmp-slib
     fi
     export G4LIB_BUILD_SHARED=1
 
-    pushd source >& /dev/null
-    make global >& make-slib.log
-    popd >& /dev/null
+    pushd source > /dev/null 2>&1
+    make --jobs=$njobs > make-slib.log 2>&1  
+    make global >> make-slib.log 2>&1
+    popd > /dev/null 2>&1
 
     touch $status_dir/$g4.slib
   fi
@@ -277,9 +379,9 @@ EOF
   unset G4TMP
   unset G4LIB_BUILD_SHARED
 
-  popd >& /dev/null
+  popd > /dev/null 2>&1
 
-  echo $((idx++)) >& /dev/null
+  echo $((idx++)) > /dev/null 2>&1
 done
 
 exit 0

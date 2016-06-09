@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4VScoringMesh.hh,v 1.27 2007/11/06 17:17:14 asaim Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 
 #ifndef G4VScoringMesh_h

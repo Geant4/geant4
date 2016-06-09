@@ -149,7 +149,7 @@ std::pair<G4double, G4double> G4InuclSpecialFunctions::randomCOS_SIN() {
   return std::pair<G4double, G4double>(CT, std::sqrt(1.0 - CT * CT));
 }
 
-std::vector<G4double> G4InuclSpecialFunctions::generateWithFixedTheta(G4double ct,
+G4CascadeMomentum G4InuclSpecialFunctions::generateWithFixedTheta(G4double ct,
 									G4double p) {
   G4int verboseLevel = 2;
 
@@ -157,10 +157,10 @@ std::vector<G4double> G4InuclSpecialFunctions::generateWithFixedTheta(G4double c
     G4cout << " >>> G4InuclSpecialFunctions::generateWithFixedTheta" << G4endl;
   }
 
-  std::vector<G4double> momr(4);
+  G4CascadeMomentum momr;
   G4double phi = randomPHI();
   G4double pt = p * std::sqrt(std::fabs(1.0 - ct * ct));
-  std::vector<G4double> mom1(4);
+  //  not used:  G4CascadeMomentum mom1;
   momr[1] = pt * std::cos(phi);
   momr[2] = pt * std::sin(phi);
   momr[3] = p * ct;

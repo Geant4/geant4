@@ -1,4 +1,4 @@
-$Id: History,v 1.16 2007/10/31 18:05:44 ahoward Exp $
+$Id: History,v 1.19 2008/04/22 09:29:35 ahoward Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,19 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+April 22nd, 2008 Alex Howard (procbiasing-V09-01-02)
+- Removed G4CellFinder and associated dependency in G4WeigthCutOffProcess and 
+  G4WeightCutOffConfigurator- was a hang-up from previous implementation 
+  which was erroneously left in the G4WeightCutOffProcess.
+  This meant the WeightCutOff could only work in a MASS geometry 
+  (by coincidence between the ImportanceBiasing and the GeometryCells).
+
+April 21st, 2008 Alex Howard (procbiasing-V09-01-01)
+- mis-tagged - please ignore
+
+April 21st, 2008 Alex Howard (procbiasing-V09-01-00)
+- Tag of the HEAD which includes scoring for backwards compatibility
 
 October 31st, 2007 Alex Howard (procbiasing-V09-00-00)
 - Fixed G4ProcessPlacer.cc to put biasing process second for AlongStep

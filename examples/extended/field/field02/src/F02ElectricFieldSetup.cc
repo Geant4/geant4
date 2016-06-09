@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: F02ElectricFieldSetup.cc,v 1.2 2006/06/29 17:17:59 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: F02ElectricFieldSetup.cc,v 1.4 2008/05/14 15:27:29 tnikitin Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 //  
 //   User Field class implementation.
@@ -230,7 +230,7 @@ void F02ElectricFieldSetup::SetFieldValue(G4ThreeVector fieldVector)
     fEquation->SetFieldObj(fEMfield);   // As a double check ...
 
     G4MagneticField* fEMfield = 0;
-    fieldMgr->SetDetectorField(fEMfield);
+     fieldMgr->SetDetectorField(fEMfield);
   }
 }
 

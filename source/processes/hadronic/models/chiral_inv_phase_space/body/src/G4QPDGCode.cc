@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4QPDGCode.cc,v 1.55 2007/10/07 13:31:42 mkossov Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4QPDGCode.cc,v 1.56 2008/03/20 20:11:38 dennis Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 //      ---------------- G4QPDGCode ----------------
 //             by Mikhail Kossov, Sept 1999.
@@ -635,8 +635,7 @@ G4double G4QPDGCode::GetMass()
 #ifdef debug
 		G4cout<<"G4QPDGCode::GetMass: Mass for Q="<<ab<<",PDG="<<thePDGCode<<",N="<<nQHM<<G4endl;
 #endif
-  if(ab<0&&thePDGCode<80000000||!thePDGCode)
-  {
+  if ( (ab < 0 && thePDGCode < 80000000) || !thePDGCode) {
 #ifdef debug
     if(thePDGCode!=10)
       G4cout<<"**G4QPDGCode::GetMass:m=100000.,QC="<<theQCode<<",PDG="<<thePDGCode<<G4endl;
@@ -1636,8 +1635,10 @@ G4double G4QPDGCode::CalculateNuclMass(G4int z, G4int n, G4int s)
   {
     if     (!S&&Z<0) return mPi*N;
     else if(!S&&N<0) return mPi*Z;
-    else if(N==1&&S==-1||N==-1&&S==1) return mK0; // Simple decision
-    else if(S==1&&Z==-1||S==-1&&Z==1) return mK;  // Simple decision
+    else if ( (N == 1 && S == -1) || (N == -1 && S == 1) ) 
+      return mK0; // Simple decision
+    else if ( (S == 1 && Z == -1) || (S == -1 && Z == 1) ) 
+      return mK;  // Simple decision
     else if(S>0)                                  // General decision
 	   {
       if     (-Z>S) return S*mK-(S+Z)*mPi+eps;
@@ -1899,8 +1900,8 @@ G4double G4QPDGCode::CalculateNuclMass(G4int z, G4int n, G4int s)
   if (!A) return k+S*mL+S*eps;              // @@ multy LAMBDA states are not implemented
   G4double m=k+A*um;                        // Expected mass in atomic units
   //G4double D=N-Z;                         // Isotopic shift of the nucleus
-  if(A+S<1&&k==0.||Z<0||N<0)                // @@ Can be generalized to anti-nuclei
-  {
+  if ( (A+S < 1 && k==0.) || Z < 0 || N < 0 ) 
+  {  // @@ Can be generalized to anti-nuclei
 #ifdef debug
     G4cout<<"**G4QPDGCode::CalcNuclMass:A="<<A<<"<1 || Z="<<Z<<"<0 || N="<<N<<"<0"<<G4endl;
     //@@throw G4QException("***G4QPDGCode::GetNuclMass: Impossible nucleus");
@@ -1945,8 +1946,8 @@ G4double G4QPDGCode::CalculateNuclMass(G4int z, G4int n, G4int s)
     if(!Am) return km+eps;
     mm=km+Am*um;                            // Expected mass in atomic units
     //G4double Dm=Nm-Zm;                    // Isotopic shift of the nucleus
-    if(Am<1&&km==0.||Zm<0||Nm<0)            // @@ Can be generalized to anti-nuclei
-    {
+    if ( (Am < 1 && km==0.) || Zm < 0 || Nm < 0 ) 
+    {   // @@ Can be generalized to anti-nuclei
 #ifdef debug
       G4cerr<<"**G4QPDGCode::CalcNucM:A="<<Am<<"<1 || Z="<<Zm<<"<0 || N="<<Nm<<"<0"<<G4endl;
 #endif
@@ -2212,7 +2213,7 @@ G4int G4QPDGCode::GetRelCrossIndex(G4int i, G4int o)  const
 
   if(theQCode<fragmStart) return 7;
   G4int sub=theQCode-fragmStart;
-  if(sub>1&&sub<8||sub==15) return 7; //@@Why they are in clusters?-Residuals(?)
+  if ( (sub > 1 && sub < 8) || sub == 15) return 7; //@@Why they are in clusters?-Residuals(?)
   G4int rel=sub;                         // case of nuclear baryons and isonuclei
   if     (sub>31)rel =(sub-32)%15;       // case of heavy fragments (BaryNum>3)
   else if(sub>15)rel = sub-16;           // case of nuclear di-baryon & tri-baryons

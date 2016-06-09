@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4TwistTubsHypeSide.cc,v 1.6 2007/05/18 07:39:56 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // 
 // --------------------------------------------------------------------

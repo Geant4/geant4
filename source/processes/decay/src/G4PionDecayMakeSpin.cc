@@ -36,7 +36,12 @@
 // constructor
 
 G4PionDecayMakeSpin::G4PionDecayMakeSpin(const G4String& processName)
-                               : G4Decay(processName) { }
+                               : G4Decay(processName) 
+{
+  // set Process Sub Type
+  SetProcessSubType(static_cast<int>(DECAY_PionMakeSpin));
+
+}
 
 G4PionDecayMakeSpin::~G4PionDecayMakeSpin() { }
 

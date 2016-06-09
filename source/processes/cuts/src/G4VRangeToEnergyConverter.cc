@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VRangeToEnergyConverter.cc,v 1.8 2007/06/06 05:13:34 urban Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4VRangeToEnergyConverter.cc,v 1.9 2008/03/02 10:52:56 kurasige Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 //
 // --------------------------------------------------------------
@@ -273,7 +273,7 @@ void G4VRangeToEnergyConverter::BuildLossTable()
     theLossTable = new G4LossTable();
     theLossTable->reserve(G4Element::GetNumberOfElements());
 #ifdef G4VERBOSE
-    if (GetVerboseLevel()>2) {
+    if (GetVerboseLevel()>3) {
       G4cout << "G4VRangeToEnergyConverter::BuildLossTable() ";
       G4cout << "Create theLossTable[" << theLossTable << "]";
       G4cout << " NumberOfElements=" << NumberOfElements <<G4endl;
@@ -446,7 +446,7 @@ G4double G4VRangeToEnergyConverter::ConvertCutToKineticEnergy(
   // check cut in length is smaller than range max
   if ( theCutInLength >= rmax )  {
 #ifdef G4VERBOSE
-    if (GetVerboseLevel()>0) {
+    if (GetVerboseLevel()>2) {
       G4cout << "G4VRangeToEnergyConverter::ConvertCutToKineticEnergy ";
       G4cout << "  for " << theParticle->GetParticleName() << G4endl;
       G4cout << "The cut in range [" << theCutInLength/mm << " (mm)]  ";

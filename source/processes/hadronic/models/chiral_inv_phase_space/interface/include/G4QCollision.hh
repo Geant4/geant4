@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QCollision.hh,v 1.10 2007/11/01 16:09:38 mkossov Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4QCollision.hh,v 1.11 2008/10/02 21:10:07 dennis Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 //      ---------------- G4QCollision header ----------------
 //                 by Mikhail Kossov, December 2003.
@@ -84,6 +84,7 @@
 #include "G4NucleiPropertiesTable.hh"
 #include "G4ThreeVector.hh"
 #include "G4LorentzVector.hh"
+#include "G4HadronicProcessType.hh"
 
 // CHIPS Headers
 #include "G4QEnvironment.hh"

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Isotope.cc,v 1.21 2007/10/18 11:14:33 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4Isotope.cc,v 1.22 2008/08/11 11:53:11 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -62,9 +62,9 @@ G4Isotope::G4Isotope(const G4String& Name, G4int Z, G4int N, G4double A)
   if (N<Z) G4Exception
     (" ERROR! Attempt to create an Isotope with N < Z !!!" );
     
-  if (A<=DBL_MIN)
-    fA = (G4NistManager::Instance()->GetIsotopeMass(Z,N))*g/(mole*amu_c2);  
-
+  if (A<=DBL_MIN) {
+    fA = (G4NistManager::Instance()->GetAtomicMass(Z,N))*g/(mole*amu_c2);  
+  }
   theIsotopeTable.push_back(this);
   fIndexInTable = theIsotopeTable.size() - 1;
 }

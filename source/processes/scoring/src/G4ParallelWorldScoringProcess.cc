@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParallelWorldScoringProcess.cc,v 1.8 2007/05/30 17:47:11 ahoward Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4ParallelWorldScoringProcess.cc,v 1.11 2008/09/06 06:18:12 asaim Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 //
 
@@ -375,6 +375,7 @@ void G4ParallelWorldScoringProcess::CopyStep(const G4Step & step)
   fGhostStep->SetTrack(step.GetTrack());
   fGhostStep->SetStepLength(step.GetStepLength());
   fGhostStep->SetTotalEnergyDeposit(step.GetTotalEnergyDeposit());
+  fGhostStep->SetNonIonizingEnergyDeposit(step.GetNonIonizingEnergyDeposit());
   fGhostStep->SetControlFlag(step.GetControlFlag());
 
   *fGhostPreStepPoint = *(step.GetPreStepPoint());

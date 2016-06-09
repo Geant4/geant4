@@ -26,7 +26,7 @@
 
 //
 // $Id: DetectorConstruction.cc,v 1.1 2007/06/21 15:18:32 jjacquem Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // 
 

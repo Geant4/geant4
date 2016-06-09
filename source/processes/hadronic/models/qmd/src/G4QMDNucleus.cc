@@ -23,6 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// 081024 G4NucleiPropertiesTable:: to G4NucleiProperties::
+//
 #include "G4QMDNucleus.hh"
 #include "G4Proton.hh"
 #include "G4Neutron.hh"
@@ -90,7 +92,7 @@ G4int G4QMDNucleus::GetAtomicNumber()
 G4double G4QMDNucleus::GetNuclearMass()
 {
 
-   G4double mass = G4NucleiPropertiesTable::GetNuclearMass( GetAtomicNumber() , GetMassNumber() );
+   G4double mass = G4NucleiProperties::GetNuclearMass( GetMassNumber() , GetAtomicNumber() );
    
    if ( mass == 0.0 )
    {
@@ -213,9 +215,9 @@ void G4QMDNucleus::CalEnergyAndAngularMomentumInCM()
    //G4cout << "KineticEnergySum in GeV " << std::accumulate ( es.begin() , es.end() , 0.0 ) - totalMass << G4endl;
    //G4cout << "PotentialEnergy in GeV " << potentialEnergy << G4endl;
    //G4cout << "BindingEnergy in GeV " << bindingEnergy << G4endl;
-   //G4cout << "G4BindingEnergy in GeV " << G4NucleiPropertiesTable::GetBindingEnergy( GetAtomicNumber() , GetMassNumber() )/GeV << G4endl;
+   //G4cout << "G4BindingEnergy in GeV " << G4NucleiProperties::GetBindingEnergy( GetAtomicNumber() , GetMassNumber() )/GeV << G4endl;
 
-   excitationEnergy = bindingEnergy + G4NucleiPropertiesTable::GetBindingEnergy( GetAtomicNumber() , GetMassNumber() )/GeV;
+   excitationEnergy = bindingEnergy + G4NucleiProperties::GetBindingEnergy( GetMassNumber() , GetAtomicNumber() )/GeV;
    //G4cout << "excitationEnergy in GeV " << excitationEnergy << G4endl;
    if ( excitationEnergy < 0 ) excitationEnergy = 0.0; 
 

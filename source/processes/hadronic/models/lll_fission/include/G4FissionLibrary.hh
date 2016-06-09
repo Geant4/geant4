@@ -53,7 +53,7 @@
 // UCRL-CODE-224807
 //
 // $Id: G4FissionLibrary.hh,v 1.4 2007/06/01 14:02:08 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 
 #ifndef G4FissionLibrary_h

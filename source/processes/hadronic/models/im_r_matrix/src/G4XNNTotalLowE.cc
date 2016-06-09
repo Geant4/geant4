@@ -71,8 +71,11 @@ G4XNNTotalLowE::G4XNNTotalLowE()
 
 G4XNNTotalLowE::~G4XNNTotalLowE()
 {
-  delete theCrossSections[G4Proton::ProtonDefinition()->GetParticleName()];
-  delete theCrossSections[G4Neutron::NeutronDefinition()->GetParticleName()];
+  G4String name_proton = "proton";
+  G4String name_neutron = "neutron";
+  
+  delete theCrossSections[name_proton];
+  delete theCrossSections[name_neutron];
 }
 
 G4double G4XNNTotalLowE::CrossSection(const G4KineticTrack& trk1, const G4KineticTrack& trk2) const

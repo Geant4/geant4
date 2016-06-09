@@ -25,7 +25,7 @@
 //
 //
 // $Id: exampleN03Con.cc,v 1.2 2007/05/26 00:24:09 tkoi Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

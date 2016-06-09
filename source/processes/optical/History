@@ -16,6 +16,46 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+07th Nov 2008 Peter Gumplinger (op-V09-01-09)
+              use new global/HEPRandom's G4RandomTools.hh
+
+24th Oct 2008 Peter Gumplinger (op-V09-01-08)
+              use local G4OpProcessSubType.hh
+
+21st Oct 2008 Peter Gumplinger (op-V09-01-07)
+              add SetProcessSubType for G4OpAbsorption, G4OpBoundaryProcess,
+              G4OpRayleigh and G4OpWLS
+
+18th Aug 2008 Peter Gumplinger (op-V09-01-06)
+              use signatures G4SwapPtr(T*& and G4SwapObj(T*
+              in G4OpBoundaryProcess - to work with global-V09-01-12
+
+15th Aug 2008 Peter Gumplinger (op-V09-01-05)
+              replaced G4SwapPtr with G4SwapObj for Rindex
+              in G4OpBoundaryProcess - serious error since op-V09-01-00
+              (see also Problem Report 1020)
+
+4th July 2008 Peter Gumplinger (op-V09-01-04)
+              In G4OpWLS now SetTouchableHandle(aTrack.GetTouchableHandle())
+              for the secondaries in the DoIt.
+              In G4OpBoundaryProcess.cc initialize the pointer:
+              G4LogicalSurface* Surface = NULL;
+
+27th June 2008 Peter Gumplinger (op-V09-01-03)
+               In G4OpBoundaryProcess changed unsafe cast
+               (G4OpticalSurface*) to dynamic_cast<G4OpticalSurface*>
+               following suggestion in bug-report #1014
+
+6th June 2008 Peter Gumplinger (op-V09-01-02)
+              G4OpRayleigh, G4OpWLS = trivial name changes: 
+              momentum->energy, momenta->energies
+
+5th June 2008 Peter Gumplinger (op-V09-01-00)
+              G4OpBoundaryProcess: Removed G4Swap methods - replaced by
+              G4SwapPtr. Removed G4IsotropicRand method - replaced by
+              G4RandomDirection. Add commented code to change absorption
+              at a dielectric/metal boundary into transmission.
+
 29th Oct 2007 Peter Gumplinger (op-V09-00-01)
               In G4OpWLS.cc allow for the MeanNumberOfPhotons to be
               different from one, in case the constant property: 

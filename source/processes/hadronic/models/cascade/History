@@ -14,6 +14,83 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+25 Nov 2008 Dennis Wright (hadr-casc-V09-01-10)
+-----------------------------------------------
+- fix multiplicity sampling in G4ElementaryParticleCollider::generateMultiplicity().
+  Now partial cross sections are normalized to the total cross section instead 
+  of just the sum of 2-body to 6-body final state cross sections.  Also fix 
+  2-body cross sections above 7 GeV where they were too small.
+  Fix the same cross sections which appear in G4CascadSpecialFunctions.cc
+
+21 Nov 2008 Dennis Wright (hadr-casc-V09-01-09)
+-----------------------------------------------
+- add some comments to cross section tables in G4CascadSpecialFunctions.cc
+  and G4ElementaryParticleCollider.cc
+
+24 Oct 2008 Dennis Wright (hadr-casc-V09-01-08)
+-----------------------------------------------
+- replace GetAtomicMass() with GetNuclearMass() in cascade/G4InuclEvaporation
+  and evaporation/G4BertiniEvaporation
+- V. Ivantchenko added name to G4CascadeInterface ("Bertini Cascade")
+
+17 Oct 2008 Dennis Wright (hadr-casc-V09-01-07)
+-----------------------------------------------
+- added Coulomb barrier plus barrier penetration in G4IntraNucleiCascader.cc
+
+27 Sep 2008 Dennis Wright (hadr-casc-V09-01-06)
+-----------------------------------------------
+- Fixed 4.3 compiler warnings for G4InuclElementaryParticle.hh by providing
+  initializers for particle type and mass
+- Remove unused variables totscm, totlab in G4BigBanger.cc, 
+  G4ElementaryParticleCollider.cc, and unused mom1 from G4InuclSpecialFunctions.cc
+
+22 Sep 2008 Gabriele Cosmo (hadr-casc-V09-01-05)
+------------------------------------------------
+- Introduced simple wrapper class G4CascadeMomentum meant to replace usage
+  of std::vector<double> in the cascade code, to reduce memory allocations.
+  Courtesy of P.Elmer (princeton Univ.).
+- Modified cascade code to make use of G4CascadeMomentum.
+
+ 3 Sep 2008 Dennis Wright (hadr-casc-V09-01-04)
+-----------------------------------------------
+- G4ElementaryParticleCollider.cc: in method generateMultiplicity, remove
+  large_cut which increases multiplicity from 3 to 4 abruptly at 4 GeV
+  and above.   This caused a sharp drop-off in the single pion spectra from 
+  pH reactions.   The effect in heavier nuclei is small.
+  
+29 Jun 2008 Dennis Wright (hadr-casc-V09-01-03)
+-----------------------------------------------
+- add changes made by M. Paterno, J. Kowalkowski, and M. Fischler (FNAL)  
+  to speed up code.  All G4Cascade***Channel classes and related code changed.
+
+ 5 May 2008 Dennis Wright (hadr-casc-V09-01-02)
+-----------------------------------------------
+- retag hadr-casc-V09-csbug as hadr-casc-V09-01-02
+
+30 Apr 2008 Dennis Wright (hadr-casc-V09-csbug)
+-----------------------------------------------
+- fix cross section bug in G4CascadSpecialFunctions that returned
+  low or zero total cross sections for pi-p, pi+n, np, and pi0 
+  interactions
+
+29 Apr 2008 Dennis Wright (hadr-casc-V09-01-01)
+-----------------------------------------------
+- bring tag hadr-casc-V09-01-coula to HEAD, make official tag
+
+22 Apr 2008 Dennis Wright (hadr-casc-V09-01-param)
+--------------------------------------------------
+- changed pp, nn total cross section parameterization in 
+  G4CascadSpecialFunctions to more closely reflect the PDG values (old one 
+  was off by as much as a factor of 3.
+
+3 Apr 2008 Dennis Wright (hadr-casc-V09-01-coula)
+-------------------------------------------------
+- removed Coulomb barrier from G4IntraNucleiCascader.cc (causes unphysical spike)
+
+3 Apr 2008 Dennis Wright (hadr-casc-V09-01-coul)
+------------------------------------------------
+- Added Coulomb barrier in G4EquilibriumEvaporator.cc, G4IntraNucleiCascader.cc
+
 17 Nov 2007 Dennis Wright (hadr-casc-V09-00-02)
 -----------------------------------------------
 - Fix angular distribution for nucleon-nucleon elastic scattering

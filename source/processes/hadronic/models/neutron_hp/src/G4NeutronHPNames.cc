@@ -33,6 +33,7 @@
 // 07-06-25 Change data selection logic when G4NEUTRONHP_SKIP_MISSING_ISOTOPES is turn on
 //          Natural Abundance data are allowed. by T. Koi
 // 07-07-06 Allow _nat_ final state even for isotoped cross sections by T. Koi
+// 08-09-01 Add protection that deuteron data do not selected for hydrogen and so on by T. Koi
 //
 #include "G4NeutronHPNames.hh"
 #include "G4SandiaTable.hh"
@@ -318,7 +319,19 @@ if(getenv("NeutronHPNames"))    G4cout <<"HPWD 4b2c "<<*theName<<G4endl;
           }
           else
           { 
-             G4cout << "NeutronHP: " << reac << " file for Z = " << Z << ", A = " << A << " is not found and NeutronHP will use " << result.GetName() << G4endl;
+             //080901 Add protection that deuteron data do not selected for hydrogen and so on by T. Koi
+             if ( (reac.find("Inelastic") != reac.size() && 
+                   ((Z == 1 && A == 1) || (Z == 2 && A == 4) ) ) 
+                 ||   
+                  (reac.find("Capture") != reac.size() && (Z == 2 && A == 4) ) )
+             {
+                G4String new_name = base+"/"+rest+"0_0_Zero";
+                result.SetName( new_name );
+             }
+             else
+             {
+                G4cout << "NeutronHP: " << reac << " file for Z = " << Z << ", A = " << A << " is not found and NeutronHP will use " << result.GetName() << G4endl;
+             }
           }
        }
     }

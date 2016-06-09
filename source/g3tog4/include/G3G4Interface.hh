@@ -25,7 +25,7 @@
 //
 //
 // $Id: G3G4Interface.hh,v 1.10 2006/06/29 18:11:54 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 //   Interfaces for G3 equivalent routines
 //

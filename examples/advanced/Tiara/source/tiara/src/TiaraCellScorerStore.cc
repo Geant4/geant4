@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: TiaraCellScorerStore.cc,v 1.1.1.2 2006/06/29 15:44:39 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: TiaraCellScorerStore.cc,v 1.2 2008/06/14 16:56:59 cirrone Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -48,20 +48,20 @@ G4CellScorer *TiaraCellScorerStore::
 AddG4CellScorer(const G4GeometryCell &g) {
   return fMapGeometryCellCellScorer[g] = 
     new G4CellScorer;
-};
+}
 
 void TiaraCellScorerStore::
 AddTiaraCellScorer(TiaraCellScorer *tiaraScorer,
 		 const G4GeometryCell &g) {
   fMapGeometryCellTiaraCellScorer[g] = tiaraScorer;
-};
+}
 
 void TiaraCellScorerStore::EndOfEventAction() {
   for (TiaraMapGeometryCellTiaraCellScorer::iterator it = fMapGeometryCellTiaraCellScorer.begin();
        it != fMapGeometryCellTiaraCellScorer.end(); it++) {
     (*it).second->EndOfEventAction();
   }
-};
+}
 
 const G4MapGeometryCellCellScorer &TiaraCellScorerStore::GetMapGeometryCellCellScorer()  {      
   for (TiaraMapGeometryCellTiaraCellScorer::iterator it = fMapGeometryCellTiaraCellScorer.begin();

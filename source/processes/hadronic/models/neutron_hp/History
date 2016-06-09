@@ -12,7 +12,235 @@ code and to keep track of all tags.
 
      ---------------------------------------------------------------
      * Please list in reverse chronological order (last date on top)
-      ---------------------------------------------------------------
+     ---------------------------------------------------------------
+
+3 December 2008  Tatsumi Koi  (hadr-hpn-V09-01-28)
+- Fix bug in Register in G4NeutronHPChannel 
+  and add limitation of trial of creating final states and proctection for pure 1H case in G4NeutronHPInelastic
+	G4NeutronHPChannel.cc
+        G4NeutronHPInelastic.cc
+
+2 December 2008  Tatsumi Koi  (hadr-hpn-V09-01-27)
+- Remove unused variable
+        G4NeutronHPThermalScattering.cc
+
+1 December 2008  Tatsumi Koi  (hadr-hpn-V09-01-26)
+- Fix for Memory Leak 
+        G4NeutronHPThermalScattering.cc
+
+24 November 2008  Tatsumi Koi  (hadr-hpn-V09-01-25)
+- Protect invalid read which caused run time errors
+        G4NeutronHPFissionData.cc
+
+05 November 2008  Dennis Wright  (hadr-hpn-V09-01-24)
+  G4NeutronHPNames.cc: put parentheses around && in || (line 324) to 
+  satisfy gcc 4.3 compiler.
+
+27 October 2008 Tatsumi Koi (hadr-hpn-V09-01-23)
+  Z,A to A,Z for functions of NucleiProperties 
+	recommit and re tag hadr-hpn-V09-01-22 
+
+27 October 2008 Tatsumi Koi (hadr-hpn-V09-01-22)
+  Z,A to A,Z for functions of NucleiProperties 
+	G4NeutronHPThermalBoost.hh
+        G4NeutronHPCaptureData.cc
+        G4NeutronHPCaptureFS.cc
+        G4NeutronHPContAngularPar.cc
+        G4NeutronHPElasticData.cc
+        G4NeutronHPFissionData.cc
+        G4NeutronHPInelasticBaseFS.cc
+        G4NeutronHPInelasticCompFS.cc
+        G4NeutronHPInelasticData.cc
+        G4NeutronHPorLCaptureData.cc
+        G4NeutronHPorLEInelasticData.cc
+        G4NeutronHPorLElasticData.cc
+        G4NeutronHPorLFissionData.cc
+
+24 October 2008 Tatsumi Koi (hadr-hpn-V09-01-21)
+- Migarate to "particles-V09-01-09"
+	G4NeutronHPThermalBoost.hh
+        G4NeutronHPCaptureData.cc
+        G4NeutronHPCaptureFS.cc
+        G4NeutronHPContAngularPar.cc
+        G4NeutronHPElasticData.cc
+        G4NeutronHPFissionData.cc
+        G4NeutronHPInelasticBaseFS.cc
+        G4NeutronHPInelasticCompFS.cc
+        G4NeutronHPInelasticData.cc
+        G4NeutronHPorLCaptureData.cc
+        G4NeutronHPorLEInelasticData.cc
+        G4NeutronHPorLElasticData.cc
+        G4NeutronHPorLFissionData.cc
+
+4 September 2008 Tatsumi Koi (hadr-hpn-V09-01-20)
+---------------------------------------------
+- Delete output for debugging
+	G4NeutronHPProduct.cc
+
+4 September 2008 Tatsumi Koi (hadr-hpn-V09-01-19)
+---------------------------------------------
+- Add Protection for negative energy results in very low energy ( 1E-6 eV ) scattering 
+	G4NeutronHPElasticFS.cc
+
+1 September 2008 Tatsumi Koi (hadr-hpn-V09-01-18)
+---------------------------------------------
+- Bug fix of too many secondaries production in nd rections
+	G4NeutronHPProduct.cc
+- Set protection for selecting data in hydrogen and alpha
+	G4NeutronHPName.cc
+- Avoiding troubles which caused by G4PhysicsVecotor of length 0 
+	G4NeutronHPIsoData.cc
+
+11 August 2008 Tatsumi Koi (hadr-hpn-V09-01-17)
+---------------------------------------------
+- Bug fix G4NeutronHPLabAngularEnergy
+	G4NeutronHPLabAngularEnergy.cc
+  Change interpolation scheme for histogram  
+	G4NeutronHPInterpolator.hh
+  Bug fix in Sample and GetXsec in G4NeutronHpVector 
+	G4NeutronHPVector.hh
+	G4NeutronHPVector.cc
+  Prohibit level transition to oneself
+	G4NeutronHPDeExGammas.cc
+  Fix memory leak and Correcting data disorder which happened 
+      when both InitPartial and InitAnglurar methods 
+      was called in a same instance 
+	G4NeutronHPPhotonDist.cc
+
+1 August 2008 Tatsumi Koi (hadr-hpn-V09-01-16)
+---------------------------------------------
+- Introduce theNDLDataA,Z which has A and Z of used NDL data
+  residual reconstraction with theNDLDataA,Z
+  several fixes and protection for G4FPE_DEBUF and checking with valgrind 
+	G4NeutronHPFinalState.hh
+	G4NeutronHPFinalState.cc
+	G4NeutronHPInelasticCompFS.cc
+	G4NeutronHPInelasticBaseFS.cc
+	G4NeutronHPKallbachMannSyst.cc
+	G4NeutronHPContAngularPar.cc
+
+21 July 2008 Tatsumi Koi (hadr-hpn-V09-01-15)
+---------------------------------------------
+- Adjusting final states based on the energy and momentum conservation
+	G4NeutronHPFinalState.hh
+	G4NeutronHPFinalState.cc
+	G4NeutronHPInelasticCompFS.cc
+	G4NeutronHPInelasticBaseFS.cc
+
+21 July 2008 Tatsumi Koi (hadr-hpn-V09-01-14)
+---------------------------------------------
+- Limiting the sum of secondary energies
+	G4VNeutronHPEnergyAngular.hh
+	G4NeutronHPContEnergyAngular.hh
+	G4NeutronHPContAngularPar.hh
+	G4NeutronHPProduct.cc
+	G4NeutronHPEnAngCorrelation.cc
+	G4NeutronHPContEnergyAngular.cc
+	G4NeutronHPContAngularPar.cc
+
+17 July 2008 Tatsumi Koi (hadr-hpn-V09-01-13)
+---------------------------------------------
+- Fix of calculation of residual momentum
+	G4NeutronHPInelasticCompFS.cc
+	G4NeutronHPDiscreteTwoBody.cc
+
+26 June 2008 Tatsumi Koi (hadr-hpn-V09-01-12)
+---------------------------------------------
+- Fix for Memory Leak 
+	G4NeutronHPPhotonDist.hh
+
+18 June 2008 Tatsumi Koi (hadr-hpn-V09-01-11)
+---------------------------------------------
+- Fix for tag hadr-hpn-V09-01-09 and 10 
+	G4NeutronHPDiscreteTwoBody.cc
+
+13 June 2008 Tatsumi Koi (hadr-hpn-V09-01-10)
+---------------------------------------------
+- Bug fixes contribution from Benoit Pirard and Laurent Desorgher (Univ. Bern) 
+	G4NeutronHPContAngularPar.cc 
+
+12 June 2008 Tatsumi Koi (hadr-hpn-V09-01-09)
+---------------------------------------------
+- Bug fixes contribution from Benoit Pirard and Laurent Desorgher (Univ. Bern) 
+	G4NeutronHPLegendreStore.hh
+	G4NeutronHPAngular.cc
+	G4NeutronHPDiscreteTwoBody.cc
+	G4NeutronHPInelasticCompFS.cc
+	G4NeutronHPLegendreStore.cc
+
+
+03 June 2008 Tatsumi Koi (hadr-hpn-V09-01-08)
+---------------------------------------------
+- Bug fixe for codition jump by uninitialised value by T. Koi
+	G4NeutronHPInelasticData.cc
+	G4NeutronHPCaptureData.cc
+
+03 June 2008 Tatsumi Koi (hadr-hpn-V09-01-07)
+---------------------------------------------
+- Bug fixes for Hadron Hyper News #932 by T. Koi
+	G4NeutronHPInelasticCompFS.cc
+
+20 May 2008 Tatsumi Koi (hadr-hpn-V09-01-06)
+---------------------------------------------
+- Delete unnecessary dependencies by T. Koi
+	G4NeutronHPChannel.hh
+	G4NeutronHPElementData.hh
+
+28 April 2008 Tatsumi Koi (hadr-hpn-V09-01-05)
+---------------------------------------------
+- Change checking point of "neglecting doppler broadening" flag 
+  from GetCrossSection to BuildPhysicsTable by T. Koi
+	G4NeutronHPElasticData.hh
+	G4NeutronHPInelasticData.hh
+	G4NeutronHPCaptureData.hh
+	G4NeutronHPElasticData.cc
+	G4NeutronHPInelasticData.cc
+	G4NeutronHPCaptureData.cc
+
+22 April 2008 Tatsumi Koi (hadr-hpn-V09-01-04)
+---------------------------------------------
+- Add IsZAApplicable(,,) {return false;} by T. Koi
+	G4NeutronHPorLElasticData.cc
+	G4NeutronHPorLEInelasticData.cc
+	G4NeutronHPorLCaptureData.cc
+	G4NeutronHPorLFissionData.cc
+	G4NeutronHPJENDLHEData.cc
+
+17 April 2008 Tatsumi Koi (hadr-hpn-V09-01-03)
+---------------------------------------------
+- Add IsZAApplicable(,,) {return false;} by T. Koi
+	G4NeutronHPElasticData.cc
+	G4NeutronHPInelasticData.cc
+	G4NeutronHPCaptureData.cc
+	G4NeutronHPFissionData.cc
+        G4NeutronHPThermalScatteringData.cc
+
+9 April 2008 Tatsumi Koi (hadr-hpn-V09-01-02)
+---------------------------------------------
+- Bug fixes for G4FPE_DEBUG by T. Koi
+	G4NeutronHPContAngularPar.cc 
+
+9 April 2008 Tatsumi Koi (hadr-hpn-V09-01-01)
+---------------------------------------------
+- Bug fixes for G4FPE_DEBUG by T. Koi
+	G4NeutronHPContAngularPar.cc
+	G4NeutronHPVector.hh
+
+19 March 2008 Tatsumi Koi (hadr-hpn-V09-01-00)
+---------------------------------------------
+- Fix compilation warnings - gcc-4.3.0 by T. Koi
+  (This fix has a real effect to the code.) 
+	G4NeutronHPContAngularPar.cc
+- Also tagged "hadr-hpn-V09-00-05".
+
+19 March 2008 Tatsumi Koi (hadr-hpn-V09-00-04)
+---------------------------------------------
+- Fix compilation warnings - gcc-4.3.0 by T. Koi
+	G4NeutronHPElastic.cc
+	G4NeutronHPorLElastic.cc
+	G4NeutronHPorLCapture.cc
+	G4NeutronHPorLFission.cc
+
 31 Oct 2007 Tatsumi Koi (hadr-hpn-V09-00-03)
 ---------------------------------------------
 - Bug fix which pointed out by A. Howard 

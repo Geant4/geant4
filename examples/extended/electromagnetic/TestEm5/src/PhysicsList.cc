@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysicsList.cc,v 1.21 2007/11/19 14:57:07 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: PhysicsList.cc,v 1.26 2008/11/16 18:51:42 maire Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -34,13 +34,13 @@
 
 #include "PhysListEmStandard.hh"
 #include "PhysListEmStandardSS.hh"
-#include "PhysListEmStandardIG.hh"
 #include "PhysListEmLivermore.hh"
 #include "PhysListEmPenelope.hh"
 
 #include "G4EmStandardPhysics.hh"
 #include "G4EmStandardPhysics_option1.hh"
 #include "G4EmStandardPhysics_option2.hh"
+#include "G4EmStandardPhysics_option3.hh"
 
 #include "G4HadronElasticPhysics.hh"
 #include "G4HadronDElasticPhysics.hh"
@@ -54,8 +54,6 @@
 
 #include "G4ParticleDefinition.hh"
 #include "G4ProcessManager.hh"
-#include "G4Decay.hh"
-#include "StepMax.hh"
 
 // Bosons
 #include "G4ChargedGeantino.hh"
@@ -93,8 +91,6 @@ PhysicsList::PhysicsList() : G4VModularPhysicsList()
   helIsRegisted  = false;
   bicIsRegisted  = false;
   biciIsRegisted = false;
-  
-  stepMaxProcess  = 0;
     
   defaultCutValue = 1.*mm;
   cutForGamma     = defaultCutValue;
@@ -164,6 +160,8 @@ void PhysicsList::ConstructProcess()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+#include "G4Decay.hh"
+
 void PhysicsList::AddDecay()
 {
   // Add Decay Process
@@ -189,10 +187,12 @@ void PhysicsList::AddDecay()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+#include "StepMax.hh"
+
 void PhysicsList::AddStepMax()
 {
   // Step limitation seen as a process
-  stepMaxProcess = new StepMax();
+  StepMax* stepMaxProcess = new StepMax();
 
   theParticleIterator->reset();
   while ((*theParticleIterator)()){
@@ -239,19 +239,19 @@ void PhysicsList::AddPhysicsList(const G4String& name)
     emName = name;
     delete emPhysicsList;
     emPhysicsList = new G4EmStandardPhysics_option2();
+    
+  } else if (name == "emstandard_opt3") {
 
+    emName = name;
+    delete emPhysicsList;
+    emPhysicsList = new G4EmStandardPhysics_option3();
+    
   } else if (name == "standardSS") {
 
     emName = name;
     delete emPhysicsList;
     emPhysicsList = new PhysListEmStandardSS(name);
-        
-  } else if (name == "standardIG") {
-
-    emName = name;
-    delete emPhysicsList;
-    emPhysicsList = new PhysListEmStandardIG(name);
-        
+                
   } else if (name == "livermore") {
 
     emName = name;

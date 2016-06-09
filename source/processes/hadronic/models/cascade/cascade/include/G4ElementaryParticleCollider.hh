@@ -32,71 +32,56 @@
 #include "G4CascadSpecialFunctions.hh"
 #include "G4LorentzConvertor.hh"
 
-#include "G4CascadeKplusPChannel.hh"
-#include "G4CascadeKplusNChannel.hh"
-#include "G4CascadeKzeroPChannel.hh"
-#include "G4CascadeKzeroNChannel.hh"
-#include "G4CascadeKminusPChannel.hh"
-#include "G4CascadeKminusNChannel.hh"
-#include "G4CascadeKzeroBarPChannel.hh"
-#include "G4CascadeKzeroBarNChannel.hh"
-#include "G4CascadeLambdaPChannel.hh"
-#include "G4CascadeLambdaNChannel.hh"
-#include "G4CascadeSigmaPlusPChannel.hh"
-#include "G4CascadeSigmaPlusNChannel.hh"
-#include "G4CascadeSigmaZeroPChannel.hh"
-#include "G4CascadeSigmaZeroNChannel.hh"
-#include "G4CascadeSigmaMinusPChannel.hh"
-#include "G4CascadeSigmaMinusNChannel.hh"
-#include "G4CascadeXiZeroPChannel.hh"
-#include "G4CascadeXiZeroNChannel.hh"
-#include "G4CascadeXiMinusPChannel.hh"
-#include "G4CascadeXiMinusNChannel.hh"
 
 using namespace G4InuclSpecialFunctions;
 using namespace G4CascadSpecialFunctions;
 
-class G4ElementaryParticleCollider : public G4Collider {
+class G4ElementaryParticleCollider {
 
 public:
 
   G4ElementaryParticleCollider();
 
-  virtual G4CollisionOutput collide(G4InuclParticle* bullet,
-				    G4InuclParticle* target);
+  G4CollisionOutput collide(G4InuclParticle* bullet,
+			    G4InuclParticle* target);
 
 private:
 
-  G4CascadeKplusPChannel kpp;
-  G4CascadeKplusNChannel kpn;
-  G4CascadeKzeroPChannel k0p;
-  G4CascadeKzeroNChannel k0n;
-  G4CascadeKminusPChannel kmp;
-  G4CascadeKminusNChannel kmn;
-  G4CascadeKzeroBarPChannel k0bp;
-  G4CascadeKzeroBarNChannel k0bn;
-  G4CascadeLambdaPChannel lp;
-  G4CascadeLambdaNChannel ln;
-  G4CascadeSigmaPlusPChannel spp;
-  G4CascadeSigmaPlusNChannel spn;
-  G4CascadeSigmaZeroPChannel s0p;
-  G4CascadeSigmaZeroNChannel s0n;
-  G4CascadeSigmaMinusPChannel smp;
-  G4CascadeSigmaMinusNChannel smn;
-  G4CascadeXiZeroPChannel x0p;
-  G4CascadeXiZeroNChannel x0n;
-  G4CascadeXiMinusPChannel xmp;
-  G4CascadeXiMinusNChannel xmn;
+//   G4CascadeKplusPChannel kpp;
+//   G4CascadeKplusNChannel kpn;
+//   G4CascadeKzeroPChannel k0p;
+//   G4CascadeKzeroNChannel k0n;
+//   G4CascadeKminusPChannel kmp;
+//   G4CascadeKminusNChannel kmn;
+//   G4CascadeKzeroBarPChannel k0bp;
+//   G4CascadeKzeroBarNChannel k0bn;
+//   G4CascadeLambdaPChannel lp;
+//   G4CascadeLambdaNChannel ln;
+//   G4CascadeSigmaPlusPChannel spp;
+//   G4CascadeSigmaPlusNChannel spn;
+//   G4CascadeSigmaZeroPChannel s0p;
+//   G4CascadeSigmaZeroNChannel s0n;
+//   G4CascadeSigmaMinusPChannel smp;
+//   G4CascadeSigmaMinusNChannel smn;
+//   G4CascadeXiZeroPChannel x0p;
+//   G4CascadeXiZeroNChannel x0n;
+//   G4CascadeXiMinusPChannel xmp;
+//   G4CascadeXiMinusNChannel xmn;
 
   G4int verboseLevel;
   G4int generateMultiplicity(G4int is, 
 			     G4double ekin) const;
+
+  void collide(G4InuclElementaryParticle* bullet,
+	       G4InuclElementaryParticle* target,
+	       G4CollisionOutput& output);
+
       
   std::vector<G4InuclElementaryParticle> generateSCMfinalState(G4double ekin, 
-							  G4double etot_scm, G4double pscm,	     
-							  G4InuclElementaryParticle* particle1,
-							  G4InuclElementaryParticle* particle2, 
-							  G4LorentzConvertor* toSCM) const; 
+							       G4double etot_scm, G4double pscm,	     
+							       G4InuclElementaryParticle* particle1,
+							       G4InuclElementaryParticle* particle2, 
+							       G4LorentzConvertor* toSCM) const; 
 
   std::vector<G4double> generateMomModules(const std::vector<G4int>& kinds, 
 				      G4int mult,
@@ -108,7 +93,7 @@ private:
 		      G4int is) const;
 
 
-  std::vector<G4double> particleSCMmomentumFor2to2(G4int is, 
+  G4CascadeMomentum particleSCMmomentumFor2to2(G4int is, 
 			             G4int kw, 
 				     G4double ekin,
 				     G4double pscm) const; 
@@ -134,7 +119,7 @@ private:
 
   G4bool satisfyTriangle(const std::vector<G4double>& modules) const; 
 	
-  std::vector<G4double> particleSCMmomentumFor2to3(G4int is, 
+  G4CascadeMomentum particleSCMmomentumFor2to3(G4int is, 
 					      G4int knd, 
 					      G4double ekin, 
 					      G4double pmod) const; 

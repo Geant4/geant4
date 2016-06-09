@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredQtViewer.cc,v 1.6 2007/11/15 18:24:28 lgarnier Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4OpenGLStoredQtViewer.cc,v 1.20 2008/11/06 13:43:44 lgarnier Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 //
 // Class G4OpenGLStoredQtViewer : a class derived from G4OpenGLQtViewer and
@@ -34,7 +34,6 @@
 #ifdef G4VIS_BUILD_OPENGLQT_DRIVER
 
 #include "G4OpenGLStoredQtViewer.hh"
-#include "G4VisManager.hh"
 
 #include "G4ios.hh"
 
@@ -44,286 +43,268 @@
 G4OpenGLStoredQtViewer::G4OpenGLStoredQtViewer
 (G4OpenGLStoredSceneHandler& sceneHandler,
  const G4String&  name):
- G4VViewer (sceneHandler, sceneHandler.IncrementViewCount (), name),
- G4OpenGLViewer (sceneHandler),
- G4OpenGLQtViewer (sceneHandler),
- G4OpenGLStoredViewer (sceneHandler),
- QGLWidget()                      // FIXME : gerer le pb du parent !
- {
-   nbPaint =0;
-   hasToRepaint =false;
+  G4VViewer (sceneHandler, sceneHandler.IncrementViewCount (), name),
+  G4OpenGLViewer (sceneHandler),
+  G4OpenGLQtViewer (sceneHandler),
+  G4OpenGLStoredViewer (sceneHandler)             // FIXME : gerer le pb du parent !
+{
+
+  //set true to picking
+  fVP.SetPicking(true);
+#if QT_VERSION < 0x040000
+  setFocusPolicy(QWidget::StrongFocus); // enable keybord events
+#else
+  setFocusPolicy(Qt::StrongFocus); // enable keybord events
+#endif
+  hasToRepaint =false;
+
   if (fViewId < 0) return;  // In case error in base class instantiation.
 }
 
 G4OpenGLStoredQtViewer::~G4OpenGLStoredQtViewer() {
-#ifdef GEANT4_QT_DEBUG
-   printf("GLWidget::~GLWidget \n");
-#endif
-   makeCurrent();
-   // this is connect to the Dialog for deleting it properly
-   // when close event.
-   //   ((QDialog*)window())->reject();
-#ifdef GEANT4_QT_DEBUG
-   printf("GLWidget::~GLWidget END\n");
-#endif
+  makeCurrent();
+  // this is connect to the Dialog for deleting it properly
+  // when close event.
+  //   ((QDialog*)window())->reject();
 }
 
 void G4OpenGLStoredQtViewer::Initialise() {
-#ifdef GEANT4_QT_DEBUG
-   printf("GLWidget::Initialise \n");
+#ifdef G4DEBUG
+  printf("G4OpenGLStoredQtViewer::Initialise 1\n");
 #endif
-   readyToPaint = false;
-   CreateGLQtContext ();
-#ifdef GEANT4_QT_DEBUG
-   printf("G4OpenGLStoredQtViewer::Initialise () 2\n");
-#endif
-  CreateMainWindow (this);
-#ifdef GEANT4_QT_DEBUG
-  printf("G4OpenGLStoredQtViewer::Initialise () 3\n");
-#endif
-  CreateFontLists ();  // FIXME Does nothing!
+  readyToPaint = false;
+  CreateMainWindow (this,QString(fName));
+  CreateFontLists ();
   
-#ifdef GEANT4_QT_DEBUG
-  printf("readyToPaint = true \n");
-#endif
   readyToPaint = true;
-  
-  // First Draw
-  SetView();
-#ifdef GEANT4_QT_DEBUG
-  printf("    ClearView\n");
-#endif
-  ClearView (); //ok, put the background correct
-  ShowView();
-  FinishView();
 }
 
 void G4OpenGLStoredQtViewer::initializeGL () {
 
-   InitializeGLView ();
+  InitializeGLView ();
 
-#ifdef GEANT4_QT_DEBUG
-   printf("G4OpenGLStoredQtViewer::InitialiseGL () 1\n");
+#ifdef G4DEBUG
+  printf("G4OpenGLStoredQtViewer::InitialiseGL () 1\n");
 #endif
 
-   // clear the buffers and window.
-   ClearView ();
-   //   printf("G4OpenGLStoredQtViewer::InitialiseGL () 2\n");
-   FinishView ();
+  // clear the buffers and window.
+  ClearView ();
+  FinishView ();
    
-   glDepthFunc (GL_LEQUAL);
-   glDepthMask (GL_TRUE);
+  glDepthFunc (GL_LEQUAL);
+  glDepthMask (GL_TRUE);
 
-   hasToRepaint =true;
+  if (fSceneHandler.GetScene() == 0) {
+    hasToRepaint =false;
+  } else {
+    hasToRepaint =true;
+  }
 
-#ifdef GEANT4_QT_DEBUG
-   printf("G4OpenGLStoredQtViewer::InitialiseGL  -------------------------------------------------------------------------------------\n");
+#ifdef G4DEBUG
+  printf("G4OpenGLStoredQtViewer::InitialiseGL  END\n");
 #endif
 }
 
 
 void G4OpenGLStoredQtViewer::DrawView () {
-
-#ifdef GEANT4_QT_DEBUG
-  printf("G4OpenGLStoredQtViewer::DrawView %d %d   VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV\n",WinSize_x, WinSize_y);
-  printf("G4OpenGLStoredQtViewer::DrawView Dialog adress : %d\n",GLWindow);
+#ifdef G4DEBUG
+  printf("G4OpenGLStoredQtViewer::DrawView  VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV\n");
 #endif
-   G4ViewParameters::DrawingStyle style = GetViewParameters().GetDrawingStyle();
-
-   //Make sure current viewer is attached and clean...
-   //Qt version needed
-   glViewport (0, 0, WinSize_x, WinSize_y);
-
-   //See if things have changed from last time and remake if necessary...
-   // The fNeedKernelVisit flag might have been set by the user in
-   // /vis/viewer/rebuild, but if not, make decision and set flag only
-   // if necessary...
-   if (!fNeedKernelVisit) 
-
-   if (!fNeedKernelVisit) KernelVisitDecision ();
-   
-   G4bool kernelVisitWasNeeded = fNeedKernelVisit; // Keep (ProcessView resets).
-   ProcessView ();
-   
-
-   if(style!=G4ViewParameters::hlr &&
-      haloing_enabled) {
-#ifdef GEANT4_QT_DEBUG
-     printf("G4OpenGLStoredQtViewer::DrawView DANS LE IF\n");
+  // That's no the same logic as Immediate Viewer, I don't know why...
+  // But if I send updateGL here, we go here :
+  //  updateQWidget -> paintGL -> ComputeView
+  // whih is not the same as ComputeView Directly
+  // And we loose the redraw of things !
+  
+  ComputeView();
+#ifdef G4DEBUG
+  printf("G4OpenGLStoredQtViewer::DrawView  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n");
 #endif
-
-     HaloingFirstPass ();
-     DrawDisplayLists ();
-     glFlush ();
-
-     HaloingSecondPass ();
-
-     DrawDisplayLists ();
-     FinishView ();
-
-   } else {
-#ifdef GEANT4_QT_DEBUG
-     printf("***************************  CASE 1 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \n");
-#endif
-     
-     // If kernel visit was needed, drawing and FinishView will already
-     // have been done, so...
-     if (!kernelVisitWasNeeded) {
-#ifdef GEANT4_QT_DEBUG
-       printf("***************************  CASE 2 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \n");
-#endif
-       DrawDisplayLists ();
-       FinishView ();
-     } else {
-#ifdef GEANT4_QT_DEBUG
-       printf("***************************  CASE 3 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \n");
-#endif
-       // However, union cutaways are implemented in DrawDisplayLists, so make
-       // an extra pass...
-       if (fVP.IsCutaway() &&
-           fVP.GetCutawayMode() == G4ViewParameters::cutawayUnion) {
-         ClearView();
-         DrawDisplayLists ();
-         FinishView ();
-#ifdef GEANT4_QT_DEBUG
-         printf("***************************  CASE 4 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \n");
-#endif
-       } else { // ADD TO AVOID KernelVisit=1 and nothing to display
-         DrawDisplayLists ();
-         FinishView ();
-       }
-     }
-   }
-
-#ifdef GEANT4_QT_DEBUG
-   printf("G4OpenGLStoredQtViewer::DrawView %d %d ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \n",WinSize_x, WinSize_y);
-#endif
-   hasToRepaint =true;
 }
 
+void G4OpenGLStoredQtViewer::ComputeView () {
 
-//////////////////////////////////////////////////////////////////////////////
-void G4OpenGLStoredQtViewer::FinishView (
-) 
-//////////////////////////////////////////////////////////////////////////////
-//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!//
-{
-#ifdef GEANT4_QT_DEBUG
-  printf("G4OpenGLStoredQtViewer::FinishView VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV\n");
+#ifdef G4DEBUG
+  printf("G4OpenGLStoredQtViewer::ComputeView %d %d   VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV\n",WinSize_x, WinSize_y);
+#endif
+  makeCurrent();
+  G4ViewParameters::DrawingStyle style = GetViewParameters().GetDrawingStyle();
+
+  //Make sure current viewer is attached and clean...
+
+  //See if things have changed from last time and remake if necessary...
+  // The fNeedKernelVisit flag might have been set by the user in
+  // /vis/viewer/rebuild, but if not, make decision and set flag only
+  // if necessary...
+  if (!fNeedKernelVisit) {
+    KernelVisitDecision ();
+  }
+  G4bool kernelVisitWasNeeded = fNeedKernelVisit; // Keep (ProcessView resets).
+  ProcessView ();
+   
+
+  if(style!=G4ViewParameters::hlr &&
+     haloing_enabled) {
+#ifdef G4DEBUG
+    printf("G4OpenGLStoredQtViewer::ComputeView DANS LE IF\n");
 #endif
 
-  glFlush ();
-  swapBuffers ();
-#ifdef GEANT4_QT_DEBUG
-  printf("G4OpenGLStoredQtViewer::FinishView ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \n");
-#endif
+    HaloingFirstPass ();
+    DrawDisplayLists ();
+    glFlush ();
 
+    HaloingSecondPass ();
+
+    DrawDisplayLists ();
+    FinishView ();
+
+  } else {
+     
+    // If kernel visit was needed, drawing and FinishView will already
+    // have been done, so...
+    if (!kernelVisitWasNeeded) {
+#ifdef G4DEBUG
+      printf("**************************  G4OpenGLStoredQtViewer::ComputeView Don't need kernel Visit \n");
+#endif
+      DrawDisplayLists ();
+      FinishView ();
+    } else {
+#ifdef G4DEBUG
+      printf("**************************  G4OpenGLStoredQtViewer::ComputeView need kernel Visit \n");
+#endif
+      // However, union cutaways are implemented in DrawDisplayLists, so make
+      // an extra pass...
+      if (fVP.IsCutaway() &&
+          fVP.GetCutawayMode() == G4ViewParameters::cutawayUnion) {
+        ClearView();
+        DrawDisplayLists ();
+        FinishView ();
+#ifdef G4DEBUG
+        printf("***************************  CASE 4 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \n");
+#endif
+      } else { // ADD TO AVOID KernelVisit=1 and nothing to display
+        DrawDisplayLists ();
+        FinishView ();
+      }
+    }
+  }
+
+  if (isRecording()) {
+    savePPMToTemp();
+  }
+
+#ifdef G4DEBUG
+  printf("G4OpenGLStoredQtViewer::ComputeView %d %d ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \n",WinSize_x, WinSize_y);
+#endif
+  hasToRepaint =true;
 }
 
 
 /**
- - Lors du resize de la fenetre, on doit non pas redessiner le detecteur, mais aussi les evenements
- */
+   - Lors du resize de la fenetre, on doit non pas redessiner le detecteur, mais aussi les evenements
+*/
 void G4OpenGLStoredQtViewer::resizeGL(
- int aWidth
-,int aHeight)
+                                      int aWidth
+                                      ,int aHeight)
 {  
-  glViewport(0, 0, aWidth, aHeight);
-  glMatrixMode(GL_PROJECTION);
-  glMatrixMode(GL_MODELVIEW);
-
-   if (((WinSize_x != (G4int)aWidth)) || (WinSize_y != (G4int) aHeight)) {
-     hasToRepaint =true;
-   }
-   WinSize_x = (G4int) aWidth;
-   WinSize_y = (G4int) aHeight;
-
-#ifdef GEANT4_QT_DEBUG
-  printf("G4OpenGLStoredQtViewer::resizeGL ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ %d %d=%d %d=%d\n",hasToRepaint,width(),aWidth,height(),aHeight);
-#endif
+  G4resizeGL(aWidth,aHeight);
 }
 
 
-
 void G4OpenGLStoredQtViewer::paintGL()
- {
-   if (!readyToPaint) {
-#ifdef GEANT4_QT_DEBUG
-     printf("G4OpenGLStoredQtViewer::paintGL ============  Not ready %d\n",readyToPaint);
+{
+#ifdef G4DEBUG
+  printf("G4OpenGLStoredQtViewer::paintGL ??\n");
 #endif
-     readyToPaint= true;
-     return;
-   }
-   // DO NOT RESIZE IF SIZE HAS NOT CHANGE :
-   //    WHEN CLICK ON THE FRAME FOR EXAMPLE
-   //    EXECEPT WHEN MOUSE MOVE EVENT
-   if ( !hasToRepaint) {
-     if (((WinSize_x == (G4int)width())) &&(WinSize_y == (G4int) height())) {
-#ifdef GEANT4_QT_DEBUG
-       printf("G4OpenGLStoredQtViewer::paintGL ============  Dont repaint\n");
+  if (!readyToPaint) {
+    readyToPaint= true;
+    return;
+  }
+  // DO NOT RESIZE IF SIZE HAS NOT CHANGE :
+  //    WHEN CLICK ON THE FRAME FOR EXAMPLE
+  //    EXECEPT WHEN MOUSE MOVE EVENT
+  if ( !hasToRepaint) {
+    if (((WinSize_x == (G4int)width())) &&(WinSize_y == (G4int) height())) {
+      return;
+    }
+  }
+#ifdef G4DEBUG
+  printf("G4OpenGLStoredQtViewer::paintGL VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV ready %d\n",readyToPaint);
 #endif
-       return;
-     }
-   }
-   nbPaint++;
-#ifdef GEANT4_QT_DEBUG
-   printf("G4OpenGLStoredQtViewer::paintGL VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV %d ready %d\n",nbPaint,readyToPaint);
-#endif
-   WinSize_x = (G4int) width();
-   WinSize_y = (G4int) height();
-   
-   glViewport (0, 0, width(), height());
-   //   glLoadIdentity();
-   
+  WinSize_x = (G4int) width();
+  WinSize_y = (G4int) height();
 
-   SetView();
+  setupViewport(width(),height());
 
-//   //  printf("before ClearView\n");
-#ifdef GEANT4_QT_DEBUG
-   printf("    ClearView\n");
+  SetView();
+          
+  ClearView (); //ok, put the background correct
+  ComputeView();
+     
+  hasToRepaint =false;
+     
+#ifdef G4DEBUG
+  printf("G4OpenGLStoredQtViewer::paintGL ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ready %d\n",readyToPaint);
 #endif
-   
-   ClearView (); //ok, put the background correct
-   DrawView();
-
-   hasToRepaint =false;
-
-#ifdef GEANT4_QT_DEBUG
-   printf("G4OpenGLStoredQtViewer::paintGL ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ %d ready %d\n",nbPaint,readyToPaint);
-#endif
- }
+}
 
 void G4OpenGLStoredQtViewer::mousePressEvent(QMouseEvent *event)
 {
-#ifdef GEANT4_QT_DEBUG
-  printf("G4OpenGLStoredQtViewer::mousePressEvent\n");
-#endif
-  G4MousePressEvent(event->pos());
+  G4MousePressEvent(event);
+}
+
+void G4OpenGLStoredQtViewer::keyPressEvent (QKeyEvent * event) 
+{
+  G4keyPressEvent(event);
+}
+
+void G4OpenGLStoredQtViewer::wheelEvent (QWheelEvent * event) 
+{
+  G4wheelEvent(event);
+}
+
+/**
+ * This function was build in order to make a zoom on double clic event.
+ * It was think to build a rubberband on the zoom area, but never work fine
+ */
+void G4OpenGLStoredQtViewer::mouseDoubleClickEvent(QMouseEvent *event)
+{
+  G4MouseDoubleClickEvent();
+}
+
+void G4OpenGLStoredQtViewer::mouseReleaseEvent(QMouseEvent *event)
+{
+  G4MouseReleaseEvent();
 }
 
 void G4OpenGLStoredQtViewer::mouseMoveEvent(QMouseEvent *event)
 {
-#ifdef GEANT4_QT_DEBUG
-  printf("G4OpenGLStoredQtViewer::mouseMoveEvent\n");
-#endif
-#if QT_VERSION < 0x040000
-  G4MouseMoveEvent(event->x(),event->y(),event->button());
-#else
-  G4MouseMoveEvent(event->x(),event->y(),event->buttons());
-#endif
-  //  DrawView();
+  G4MouseMoveEvent(event);
 }
 
 
 void G4OpenGLStoredQtViewer::contextMenuEvent(QContextMenuEvent *e)
 {
-  manageContextMenuEvent(e);
+  G4manageContextMenuEvent(e);
 }
 
 void G4OpenGLStoredQtViewer::updateQWidget() {
   hasToRepaint= true;
   updateGL();
   hasToRepaint= false;
+}
+
+void G4OpenGLStoredQtViewer::ShowView (
+) 
+//////////////////////////////////////////////////////////////////////////////
+//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!//
+{
+#if QT_VERSION < 0x040000
+  setActiveWindow();
+#else
+  activateWindow();
+#endif
+  updateQWidget();
 }
 
 #endif

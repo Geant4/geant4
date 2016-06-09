@@ -23,89 +23,43 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4FinalStateExcitationMillerGreen.cc,v 1.2 2007/11/09 20:11:04 pia Exp $
-// GEANT4 tag $Name: geant4-09-01 $
-// 
-// Contact Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
-//
-// Reference: TNS Geant4-DNA paper
-// Reference for implementation model: NIM. 155, pp. 145-156, 1978
-
-// History:
-// -----------
-// Date         Name              Modification
-// 28 Apr 2007  M.G. Pia          Created in compliance with design described in TNS paper
-//
-// -------------------------------------------------------------------
-
-// Class description:
-// Reference: TNS Geant4-DNA paper
-// S. Chauvie et al., Geant4 physics processes for microdosimetry simulation:
-// design foundation and implementation of the first set of models,
-// IEEE Trans. Nucl. Sci., vol. 54, no. 6, Dec. 2007.
-// Further documentation available from http://www.ge.infn.it/geant4/dna
-
-// -------------------------------------------------------------------
-
+// $Id: G4FinalStateExcitationMillerGreen.cc,v 1.3 2008/07/14 20:47:34 sincerti Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 
 #include "G4FinalStateExcitationMillerGreen.hh"
-#include "G4Track.hh"
-#include "G4Step.hh"
-#include "G4DynamicParticle.hh"
-#include "Randomize.hh"
 
-#include "G4ParticleTypes.hh"
-#include "G4ParticleDefinition.hh"
-#include "G4Electron.hh"
-#include "G4SystemOfUnits.hh"
-#include "G4ParticleMomentum.hh"
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4FinalStateExcitationMillerGreen::G4FinalStateExcitationMillerGreen()
 {
-  name = "ExcitationMillerGreen";
   lowEnergyLimit = 10 * eV;
   highEnergyLimit = 10 * MeV;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4FinalStateExcitationMillerGreen::~G4FinalStateExcitationMillerGreen()
 {}
  
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 const G4FinalStateProduct& G4FinalStateExcitationMillerGreen::GenerateFinalState(const G4Track& track, const G4Step& /* step */)
 {
-  // Clear previous secondaries, energy deposit and particle kill status
   product.Clear();
 
   const G4DynamicParticle* particle = track.GetDynamicParticle();
 
-  // Kinetic energy of primary particle
   G4double k = particle->GetKineticEnergy();
 
-  // Select excitation level on the basis of partial excitation cross section
   G4int level = cross.RandomSelect(k,track.GetDefinition());
-  // Excitation energy corresponding to the selected level
   G4double excitationEnergy = waterStructure.ExcitationEnergy(level);
   G4double newEnergy = k - excitationEnergy;
   
-  // ---- SI ---- Test on newEnergy
   if (newEnergy > 0)
-    {
-      // Deposit excitation energy locally, modify primary energy accordingly 
-      // Particle direction is unchanged
-      product.ModifyPrimaryParticle(particle->GetMomentumDirection(),newEnergy);
-      product.AddEnergyDeposit(excitationEnergy);
-    }
-
-  // ---- SI ---- Particle is not modified by default otherwise
-/*
-  else
-    {
-      // Primary particle is killed
-      product.KillPrimaryParticle();
-    }
-*/
+  {
+    product.ModifyPrimaryParticle(particle->GetMomentumDirection(),newEnergy);
+    product.AddEnergyDeposit(excitationEnergy);
+  }
 
   return product;
 }

@@ -1,0 +1,30 @@
+// Define a parameter for later use
+:P POSZ 50.
+
+// Define rotation matrix
+:ROTM R00 1. 0. 0. 0. 1. 0. 0. 0. 1.  // unit matrix
+
+// Define volumes and place them
+:VOLU world BOX 50. 50. 3*$POSZ G4_AIR
+:VIS world OFF
+
+// some defined as solids, some as volumes
+:SOLID box1 BOX 5. 5. 10.
+:SOLID box2 BOX 10. 10. 20.
+:SOLID box3 BOX 15. 15. 30.
+:SOLID BOX_UNION UNION box1 box2 R00 0. 0. 30. 
+:VOLU BOX_SUBT SUBTRACTION box3 box2 R00 0. 0. 15. G4_Cu  
+:SOLID BOX_INTERS INTERSECTION BOX_UNION box3 R00 0. 10. 0. 
+
+:VOLU BOX_UNION  BOX_UNION G4_AIR
+:COLOUR BOX_UNION 1. 0. 0.  // red
+:PLACE BOX_UNION 1 world R00 0. 0. -2.*$POSZ
+
+:PLACE BOX_SUBT 1 world R00 0. 0. $POSZ
+:COLOUR BOX_SUBT 0. 1. 0.  // green
+
+:VOLU BOX_INTERS  BOX_INTERS G4_Fe
+:PLACE BOX_INTERS 1 world R00 0. 0. 3*$POSZ
+:COLOUR BOX_INTERS 0. 0. 1.  // blue
+
+

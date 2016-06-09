@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4SafetyHelper.cc,v 1.15 2007/11/14 10:04:21 gcosmo Exp $
+// $Id: G4SafetyHelper.cc,v 1.16 2008/10/24 14:00:03 gcosmo Exp $
 // GEANT4 tag $ Name:  $
 // 
 // class G4SafetyHelper Implementation
@@ -127,12 +127,12 @@ G4double G4SafetyHelper::ComputeSafety( const G4ThreeVector& position )
     if( !fUseParallelGeometries )
     {
       // Safety for mass geometry
-      fLastSafety = fpMassNavigator->ComputeSafety(position); 
+      fLastSafety = fpMassNavigator->ComputeSafety(position,true); 
     }
     else
     {
       // Safety for all geometries
-      fLastSafety = fpPathFinder->ComputeSafety( position ); 
+      fLastSafety = fpPathFinder->ComputeSafety(position); 
     } 
     newSafety = fLastSafety;
   }

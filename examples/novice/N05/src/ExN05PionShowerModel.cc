@@ -25,7 +25,7 @@
 //
 //
 // $Id: ExN05PionShowerModel.cc,v 1.19 2007/05/18 14:32:35 mverderi Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 #include "ExN05PionShowerModel.hh"
 #include "ExN05EnergySpot.hh"

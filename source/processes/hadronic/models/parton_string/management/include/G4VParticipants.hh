@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VParticipants.hh,v 1.3 2006/06/29 20:55:25 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4VParticipants.hh,v 1.4 2008/05/19 13:03:20 vuzhinsk Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 
 #ifndef G4VParticipants_h
@@ -89,6 +89,7 @@ inline void G4VParticipants::Init(G4double theA, G4double theZ)
 {
 	if ( theNucleus == NULL ) theNucleus = new G4Fancy3DNucleus();
 	theNucleus->Init(theA, theZ);
+        theNucleus->SortNucleonsInZ();    // Uzhi 16.05.08 Sorting of nucleon-Z
 }
 
 

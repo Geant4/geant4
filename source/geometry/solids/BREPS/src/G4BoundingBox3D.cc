@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4BoundingBox3D.cc,v 1.12 2007/07/16 08:06:55 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file

@@ -24,13 +24,16 @@
 // ********************************************************************
 //
 //
-// $Id: G4VEmissionProbability.hh,v 1.3 2006/06/29 20:27:59 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4VEmissionProbability.hh,v 1.4 2008/09/19 13:32:54 ahoward Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Oct 1998) 
 //
-
+// Modif (03 September 2008) by J. M. Quesada for external choice of inverse 
+// cross section option
+// JMQ (06 September 2008) Also external choices have been added for 
+// superimposed Coulomb barrier (if useSICB is set true, by default is false) 
 
 
 #ifndef G4VEmissionProbability_h
@@ -55,6 +58,14 @@ private:
   
 public:
   virtual G4double EmissionProbability(const G4Fragment & fragment, const G4double anEnergy) = 0;
+
+  // for cross section selection
+  inline void SetOPTxs(G4int opt) { OPTxs = opt; }
+  // for superimposed Coulomb Barrier for inverse cross sections 	
+  inline void UseSICB(G4bool use) { useSICB = use; }	
+protected:
+   G4int OPTxs;
+   G4bool useSICB;
 
 };
 

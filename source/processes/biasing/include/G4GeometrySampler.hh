@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4GeometrySampler.hh,v 1.9 2007/06/01 09:52:23 ahoward Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4GeometrySampler.hh,v 1.11 2008/04/21 09:10:28 ahoward Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // ----------------------------------------------------------------------
 // Class G4GeometrySampler
@@ -49,7 +49,7 @@ class G4ImportanceConfigurator;
 class G4WeightWindowConfigurator;
 //class G4ScoreConfigurator;
 class G4WeightCutOffConfigurator;
-class G4VGCellFinder;
+//class G4VGCellFinder;
 
 class G4GeometrySampler : public G4VSampler
 {
@@ -91,7 +91,7 @@ private:
   G4VPhysicalVolume* fWorld;
   G4ImportanceConfigurator *fImportanceConfigurator;
   //  G4ScoreConfigurator *fScoreConfigurator;
-  G4VGCellFinder *fGCellFinder;
+  //  G4VGCellFinder *fGCellFinder;
   G4WeightCutOffConfigurator *fWeightCutOffConfigurator;
   G4VIStore *fIStore;
   G4WeightWindowConfigurator *fWeightWindowConfigurator;

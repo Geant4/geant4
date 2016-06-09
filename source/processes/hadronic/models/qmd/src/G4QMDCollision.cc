@@ -23,11 +23,15 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// 080602 Fix memory leaks by T. Koi 
+// 081120 Add deltaT in signature of CalKinematicsOfBinaryCollisions
+//        Add several required updating of Mean Filed 
+//        Modified handling of absorption case by T. Koi
+//
 #include "G4QMDCollision.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4Scatterer.hh"
 #include "Randomize.hh"
-#include "G4PionZero.hh"
 
 G4QMDCollision::G4QMDCollision()
 : deltar ( 4 )
@@ -48,111 +52,141 @@ G4QMDCollision::~G4QMDCollision()
 }
 
 
-void G4QMDCollision::CalKinematicsOfBinaryCollisions()
+void G4QMDCollision::CalKinematicsOfBinaryCollisions( G4double dt )
 {
-
+   G4double deltaT = dt; 
 
    G4int n = theSystem->GetTotalNumberOfParticipant(); 
+//081118
+   //G4int nb = 0;
+   for ( G4int i = 0 ; i < n ; i++ )
+   {
+      theSystem->GetParticipant( i )->UnsetHitMark();
+      theSystem->GetParticipant( i )->UnsetHitMark();
+      //nb += theSystem->GetParticipant( i )->GetBaryonNumber();
+   }
+   //G4cout << "nb = " << nb << " n = " << n << G4endl;
+
 
 //071101
    for ( G4int i = 0 ; i < n ; i++ )
    {
+
       //std::cout << i << " " << theSystem->GetParticipant( i )->GetDefinition()->GetParticleName() << " " << theSystem->GetParticipant( i )->GetPosition() << std::endl;
+
       if ( theSystem->GetParticipant( i )->GetDefinition()->IsShortLived() )
       {
+
+         G4bool decayed = false; 
+
          G4ParticleDefinition* pd0 = theSystem->GetParticipant( i )->GetDefinition();
          G4ThreeVector p0 = theSystem->GetParticipant( i )->GetMomentum();
          G4ThreeVector r0 = theSystem->GetParticipant( i )->GetPosition();
 
          G4LorentzVector p40 = theSystem->GetParticipant( i )->Get4Momentum();
 
-         G4double epot = theMeanField->GetTotalPotential();
-         G4double eini = epot + p40.e();
+         G4double eini = theMeanField->GetTotalPotential() + p40.e();
 
          G4int n0 = theSystem->GetTotalNumberOfParticipant(); 
          G4int i0 = 0; 
-G4bool isThisEnergyOK = false;
+
+         G4bool isThisEnergyOK = false;
+
          for ( G4int ii = 0 ; ii < 4 ; ii++ )
-{ 
+         { 
 
-         //G4LorentzVector p4 = theSystem->GetParticipant( i )->Get4Momentum();
-         G4LorentzVector p400 = p40;
+            //G4LorentzVector p4 = theSystem->GetParticipant( i )->Get4Momentum();
+            G4LorentzVector p400 = p40;
 
-         p400 *= GeV;
-         //G4KineticTrack kt( theSystem->GetParticipant( i )->GetDefinition() , 0.0 , (theSystem->GetParticipant( i )->GetPosition())*fermi , p4 );
-         G4KineticTrack kt( pd0 , 0.0 , r0*fermi , p400 );
-//         std::cout << "G4KineticTrack " << i << " " <<  kt.GetDefinition()->GetParticleName() <<  kt.GetPosition() << std::endl;
-         G4KineticTrackVector* secs = NULL;
-         secs = kt.Decay();
-         G4int id = 0;
-         G4double et = 0;
-         if ( secs )
-         {
-            for ( G4KineticTrackVector::iterator it 
-                  = secs->begin() ; it != secs->end() ; it++ )
+            p400 *= GeV;
+            //G4KineticTrack kt( theSystem->GetParticipant( i )->GetDefinition() , 0.0 , (theSystem->GetParticipant( i )->GetPosition())*fermi , p4 );
+            G4KineticTrack kt( pd0 , 0.0 , r0*fermi , p400 );
+            //std::cout << "G4KineticTrack " << i << " " <<  kt.GetDefinition()->GetParticleName() <<  kt.GetPosition() << std::endl;
+            G4KineticTrackVector* secs = NULL;
+            secs = kt.Decay();
+            G4int id = 0;
+            G4double et = 0;
+            if ( secs )
             {
-//              std::cout << "G4KineticTrack" 
-//                 << " " << (*it)->GetDefinition()->GetParticleName()
-//                 << " " << (*it)->Get4Momentum()
-//                 << " " << (*it)->GetPosition()/fermi
-//                         << std::endl;
-                if ( id == 0 ) 
-                {
-                   theSystem->GetParticipant( i )->SetDefinition( (*it)->GetDefinition() );
-                   theSystem->GetParticipant( i )->SetMomentum( (*it)->Get4Momentum().v()/GeV );
-                   theSystem->GetParticipant( i )->SetPosition( (*it)->GetPosition()/fermi );
-                   //theMeanField->Cal2BodyQuantities( i ); 
-                   et += (*it)->Get4Momentum().e()/GeV;
-                }
-                if ( id > 0 )
-                {
-                   // Append end;
-                   theSystem->SetParticipant ( new G4QMDParticipant ( (*it)->GetDefinition() , (*it)->Get4Momentum().v()/GeV , (*it)->GetPosition()/fermi ) );
-                   et += (*it)->Get4Momentum().e()/GeV;
-                   if ( id > 1 )
+               for ( G4KineticTrackVector::iterator it 
+                     = secs->begin() ; it != secs->end() ; it++ )
+               {
+/*
+                  G4cout << "G4KineticTrack" 
+                  << " " << (*it)->GetDefinition()->GetParticleName()
+                  << " " << (*it)->Get4Momentum()
+                  << " " << (*it)->GetPosition()/fermi
+                  << G4endl;
+*/
+                   if ( id == 0 ) 
                    {
- //                     std::cout << "NAGISA id >2; id= " << id  << std::endl; 
+                      theSystem->GetParticipant( i )->SetDefinition( (*it)->GetDefinition() );
+                      theSystem->GetParticipant( i )->SetMomentum( (*it)->Get4Momentum().v()/GeV );
+                      theSystem->GetParticipant( i )->SetPosition( (*it)->GetPosition()/fermi );
+                      //theMeanField->Cal2BodyQuantities( i ); 
+                      et += (*it)->Get4Momentum().e()/GeV;
                    }
-                }
-                id++; 
+                   if ( id > 0 )
+                   {
+                      // Append end;
+                      theSystem->SetParticipant ( new G4QMDParticipant ( (*it)->GetDefinition() , (*it)->Get4Momentum().v()/GeV , (*it)->GetPosition()/fermi ) );
+                      et += (*it)->Get4Momentum().e()/GeV;
+                      if ( id > 1 )
+                      {
+                         //081118
+                         //G4cout << "G4QMDCollision id >2; id= " << id  << G4endl; 
+                      }
+                   }
+                   id++; // number of daughter particles
 
-                delete *it;
+                   delete *it;
+               }
+
+               theMeanField->Update();
+               i0 = id-1; // 0 enter to i
+
+               delete secs;
             }
-            theMeanField->SetSystem ( theSystem );
-            i0 = id-1; // 0 enter to i
-         }
 
-//       EnergyCheck  
+//          EnergyCheck  
 
-         G4double epot = theMeanField->GetTotalPotential();
-         G4double efin = epot + et; 
-         //std::cout <<  std::abs ( eini - efin ) - epse << std::endl; 
-//         std::cout <<  std::abs ( eini - efin ) - epse*10 << std::endl; 
-//071031
-//                                        *10 TK  
-         if ( std::abs ( eini - efin ) < epse*10 ) 
-         {
-            // Energy OK 
-//            std::cout << "Decay Succeeded Energy OK" << std::endl;
-            isThisEnergyOK = true;
-            break; 
-         }
-         else
-         {
-            for ( G4int i0i = 0 ; i0i < id-1 ; i0i++ )
+            G4double efin = theMeanField->GetTotalPotential() + et; 
+            //std::cout <<  std::abs ( eini - efin ) - epse << std::endl; 
+//            std::cout <<  std::abs ( eini - efin ) - epse*10 << std::endl; 
+//                                           *10 TK  
+            if ( std::abs ( eini - efin ) < epse*10 ) 
             {
-//               std::cout << "Decay Energitically Blocked deleteing " << i0i+n0  << std::endl;
-               theSystem->DeleteParticipant( i0i+n0 );
+               // Energy OK 
+               isThisEnergyOK = true;
+               break; 
             }
+            else
+            {
+
+               theSystem->GetParticipant( i )->SetDefinition( pd0 );
+               theSystem->GetParticipant( i )->SetPosition( r0 );
+               theSystem->GetParticipant( i )->SetMomentum( p0 );
+
+               for ( G4int i0i = 0 ; i0i < id-1 ; i0i++ )
+               {
+                  //081118
+                  //std::cout << "Decay Energitically Blocked deleteing " << i0i+n0  << std::endl;
+                  theSystem->DeleteParticipant( i0i+n0 );
+               }
+               //081103
+               theMeanField->Update();
+            }
+
          }
-}
+
 
 //       Pauli Check 
          if ( isThisEnergyOK == true )
          {
-//          if ( theMeanField->IsPauliBlocked ( i ) != true ) 
+            if ( theMeanField->IsPauliBlocked ( i ) != true ) 
             {
-               bool allOK = true; 
+
+               G4bool allOK = true; 
                for ( G4int i0i = 0 ; i0i < i0 ; i0i++ )
                {
                   if ( theMeanField->IsPauliBlocked ( i0i+n0 ) == true )
@@ -162,40 +196,64 @@ G4bool isThisEnergyOK = false;
                   } 
                }
 
-//               if ( allOK ) std::cout << "Decay Succeeded" << std::endl;
-               if ( allOK ) continue; //Do not Pauli Blocked
+               if ( allOK ) 
+               {
+                  decayed = true; //Decay Succeeded
+               }
             }
+
          }
 //       
 
-//         std::cout << "Decay Blocked" << std::endl;
-         theSystem->GetParticipant( i )->SetDefinition( pd0 );
-         theSystem->GetParticipant( i )->SetPosition( r0 );
-         theSystem->GetParticipant( i )->SetMomentum( p0 );
+         if ( decayed )
+         {
+            //081119
+            //G4cout << "Decay Suceeded! " << std::endl;
+            theSystem->GetParticipant( i )->SetHitMark();
+            for ( G4int i0i = 0 ; i0i < i0 ; i0i++ )
+            {
+                theSystem->GetParticipant( i0i+n0 )->SetHitMark();
+            }
 
-         if ( isThisEnergyOK == true )
-         {
-         for ( G4int i0i = 0 ; i0i < i0 ; i0i++ )
-         {
-//            std::cout << "Decay Blocked deleteing " << i0i+n0  << std::endl;
-            theSystem->DeleteParticipant( i0i+n0 );
          }
+         else
+         {
+
+//          Decay Blocked and re-enter orginal participant;
+
+            if ( isThisEnergyOK == true )  // for false case already done
+            {
+
+               theSystem->GetParticipant( i )->SetDefinition( pd0 );
+               theSystem->GetParticipant( i )->SetPosition( r0 );
+               theSystem->GetParticipant( i )->SetMomentum( p0 );
+
+               for ( G4int i0i = 0 ; i0i < i0 ; i0i++ )
+               {
+                  //081118
+                  //std::cout << "Decay Blocked deleteing " << i0i+n0  << std::endl;
+                  theSystem->DeleteParticipant( i0i+n0 );
+               }
+               //081103
+               theMeanField->Update();
+            }
+
          }
-         
-      }
-   }
+
+      }  //shortlive
+   }  // go next participant 
 //071101
 
 
    n = theSystem->GetTotalNumberOfParticipant(); 
-   //std::cout << "Collision n " << n << std::endl;
 
-   std::vector< G4bool > isCollided ( n , false );
-
-   for ( G4int i = 1 ; i < n ; i++ )
+//081118
+   //for ( G4int i = 1 ; i < n ; i++ )
+   for ( G4int i = 1 ; i < theSystem->GetTotalNumberOfParticipant() ; i++ )
    {
 
       //std::cout << "Collision i " << i << std::endl;
+      if ( theSystem->GetParticipant( i )->IsThisHit() ) continue; 
 
       G4ThreeVector ri =  theSystem->GetParticipant( i )->GetPosition();
       G4LorentzVector p4i =  theSystem->GetParticipant( i )->Get4Momentum();
@@ -205,7 +263,7 @@ G4bool isThisEnergyOK = false;
       //std::cout << " p4i00 " << p4i << std::endl;
       for ( G4int j = 0 ; j < i ; j++ )
       {
-//         std::cout << "Collision " << i << " " << j << std::endl;
+
 
 /*
          std::cout << "Collision " << i << " " << theSystem->GetParticipant( i )->IsThisProjectile() << std::endl;
@@ -215,8 +273,11 @@ G4bool isThisEnergyOK = false;
 */
 
          // Only 1 Collision allowed for each particle in a time step. 
-         if ( isCollided[ i ] == true ) continue;
-         if ( isCollided[ j ] == true ) continue;
+         //081119
+         if ( theSystem->GetParticipant( i )->IsThisHit() ) continue; 
+         if ( theSystem->GetParticipant( j )->IsThisHit() ) continue; 
+
+         //std::cout << "Collision " << i << " " << j << std::endl;
 
          // Do not allow collision between nucleons in target/projectile til its first collision.
          if ( theSystem->GetParticipant( i )->IsThisProjectile() )
@@ -284,8 +345,6 @@ G4bool isThisEnergyOK = false;
          G4double ti = ( pidr/rmi - bij / aij ) * p4i.e() / rmi;
          G4double tj = (-pjdr/rmj - bji / aij ) * p4j.e() / rmj;
 
-         G4double deltaT = 0.0;
-         deltaT = 1.0; // TK  
 
 /*
          std::cout << "collisions4  p4i " << p4i << std::endl;
@@ -318,8 +377,9 @@ G4bool isThisEnergyOK = false;
          G4bool energetically_forbidden = !( CalFinalStateOfTheBinaryCollision ( i , j ) ); // Use Geant4 Collision Library
          //G4bool energetically_forbidden = !( CalFinalStateOfTheBinaryCollisionJQMD ( sig , cutoff , pcm , prcm , srt, beta , gamma , i , j ) ); // JQMD Elastic 
 
+/*
          G4bool pauli_blocked = false;
-         if ( energetically_forbidden != true ) 
+         if ( energetically_forbidden == false ) // result true 
          { 
             if ( theMeanField->IsPauliBlocked ( i ) == true || theMeanField->IsPauliBlocked ( j ) == true ) 
             {
@@ -329,39 +389,59 @@ G4bool isThisEnergyOK = false;
          }
          else
          {
+            if ( theMeanField->IsPauliBlocked ( i ) == true || theMeanField->IsPauliBlocked ( j ) == true ) 
+               pauli_blocked = false;
             //std::cout << "G4QMDRESULT Collsion Blocked " << std::endl;
          } 
+*/
 
 /*
             std::cout << "G4QMDRESULT Collsion initial p4 i and j " 
                       << p4i << " " << p4j
                       << std::endl;
 */
-
- 
-         if ( energetically_forbidden == true ||  pauli_blocked == true )
+//       081118
+         //if ( energetically_forbidden == true || pauli_blocked == true )
+         if ( energetically_forbidden == true )
          {
-//       Collsion not allowed then re enter orginal participants 
-//       Now only momentum, becasuse we only consider elastic scattering of nucleons
+
+            //G4cout << " energetically_forbidden  " << G4endl;
+//          Collsion not allowed then re enter orginal participants 
+//          Now only momentum, becasuse we only consider elastic scattering of nucleons
 
             theSystem->GetParticipant( i )->SetMomentum( p4i.vect() );
             theSystem->GetParticipant( i )->SetDefinition( pdi );
             theSystem->GetParticipant( i )->SetPosition( ri );
+
             theSystem->GetParticipant( j )->SetMomentum( p4j.vect() );
             theSystem->GetParticipant( j )->SetDefinition( pdj );
             theSystem->GetParticipant( j )->SetPosition( rj );
 
+            theMeanField->Cal2BodyQuantities( i ); 
+            theMeanField->Cal2BodyQuantities( j ); 
+
          }
          else 
          {
-//       Collsion allowed (really happened) 
+
+            
+           G4bool absorption = false; 
+           if ( n == theSystem->GetTotalNumberOfParticipant()+1 ) absorption = true;
+           if ( absorption ) 
+           {
+              //G4cout << "Absorption happend " << G4endl; 
+              i = i-1; 
+              n = n-1;
+           } 
+              
+//          Collsion allowed (really happened) 
 
             // Unset Projectile/Target flag
             theSystem->GetParticipant( i )->UnsetInitialMark();
-            theSystem->GetParticipant( j )->UnsetInitialMark();
+            if ( !absorption ) theSystem->GetParticipant( j )->UnsetInitialMark();
 
-            isCollided[ i ] = true; 
-            isCollided[ j ] = true; 
+            theSystem->GetParticipant( i )->SetHitMark();
+            if ( !absorption ) theSystem->GetParticipant( j )->SetHitMark();
 
             theSystem->IncrementCollisionCounter();
 
@@ -389,31 +469,14 @@ G4bool isThisEnergyOK = false;
                       << theSystem->GetParticipant( j )->GetPosition()
                       << std::endl;
 */
+             
 
          }
-
-//         theMeanField
 
       }
+
    }
 
-//071106
-   n = theSystem->GetTotalNumberOfParticipant(); 
-   G4bool isThisModefied = false;
-   for ( G4int i = 0 ; i < n ; i++ )
-   {
-      if ( theSystem->GetParticipant( i )->GetDefinition() == G4PionZero::PionZero() )
-      {
-         if ( theSystem->GetParticipant( i )->GetPosition().mag() > 1.0e9 )
-         {
-//            std::cout << "Deleting " << i << " " << theSystem->GetParticipant( i )->GetPosition().mag() << std::endl;
-            theSystem->DeleteParticipant( i );
-            isThisModefied = true;
-         }
-      } 
-   }
-   if ( isThisModefied == true ) theMeanField->SetSystem ( theSystem );
-//071106
 
 }
 
@@ -422,37 +485,41 @@ G4bool isThisEnergyOK = false;
 G4bool G4QMDCollision::CalFinalStateOfTheBinaryCollision( G4int i , G4int j )
 {
 
-   //G4cout << "CalFinalStateOfTheBinaryCollision " << G4endl;
+//081103
+   //G4cout << "CalFinalStateOfTheBinaryCollision " << i << " " << j << " " << theSystem->GetTotalNumberOfParticipant() << G4endl;
 
-   G4bool result = true;
+   G4bool result = false;
+   G4bool energyOK = false; 
+   G4bool pauliOK = false; 
+   G4bool abs = false;
+   G4QMDParticipant* absorbed = NULL;  
 
-   G4LorentzVector p4i =  theSystem->GetParticipant( i )->Get4Momentum();
-   G4LorentzVector p4j =  theSystem->GetParticipant( j )->Get4Momentum();
+   G4LorentzVector p4i = theSystem->GetParticipant( i )->Get4Momentum();
+   G4LorentzVector p4j = theSystem->GetParticipant( j )->Get4Momentum();
 
-//071031
-   // will use KineticTrack
-   G4LorentzVector p4ix = p4i*GeV;
-   G4LorentzVector p4jx = p4j*GeV;
-   G4ThreeVector rix = (theSystem->GetParticipant( i )->GetPosition())*fermi; 
-   G4ThreeVector rjx = (theSystem->GetParticipant( j )->GetPosition())*fermi; 
 //071031
 
    G4double epot = theMeanField->GetTotalPotential();
 
    G4double eini = epot + p4i.e() + p4j.e();
 
-
 //071031
+   // will use KineticTrack
    G4ParticleDefinition* pdi0 =theSystem->GetParticipant( i )->GetDefinition();
    G4ParticleDefinition* pdj0 =theSystem->GetParticipant( j )->GetDefinition();
-   G4ThreeVector ri0 =(theSystem->GetParticipant( i )->GetPosition())*fermi;
-   G4ThreeVector rj0 =(theSystem->GetParticipant( j )->GetPosition())*fermi;
+   G4LorentzVector p4i0 = p4i*GeV;
+   G4LorentzVector p4j0 = p4j*GeV;
+   G4ThreeVector ri0 = ( theSystem->GetParticipant( i )->GetPosition() )*fermi;
+   G4ThreeVector rj0 = ( theSystem->GetParticipant( j )->GetPosition() )*fermi;
 
    for ( G4int iitry = 0 ; iitry < 4 ; iitry++ )
    {
 
-      G4KineticTrack kt1( pdi0 , 0.0 , ri0 , p4ix );
-      G4KineticTrack kt2( pdj0 , 0.0 , rj0 , p4jx );
+      abs = false;
+
+      G4KineticTrack kt1( pdi0 , 0.0 , ri0 , p4i0 );
+      G4KineticTrack kt2( pdj0 , 0.0 , rj0 , p4j0 );
+
       G4LorentzVector p4ix_new; 
       G4LorentzVector p4jx_new; 
       G4KineticTrackVector* secs = NULL;
@@ -461,6 +528,8 @@ G4bool G4QMDCollision::CalFinalStateOfTheBinaryCollision( G4int i , G4int j )
       //std::cout << "G4QMDSCATTERER BEFORE " << kt1.GetDefinition()->GetParticleName() << " " << kt1.Get4Momentum()/GeV << " " << kt1.GetPosition()/fermi << std::endl;
       //std::cout << "G4QMDSCATTERER BEFORE " << kt2.GetDefinition()->GetParticleName() << " " << kt2.Get4Momentum()/GeV << " " << kt2.GetPosition()/fermi << std::endl;
       //std::cout << "THESCATTERER " << theScatterer->GetCrossSection ( kt1 , kt2 )/millibarn << " " << elastic << " " << sig << std::endl;
+
+
       if ( secs )
       {
          G4int iti = 0;
@@ -487,25 +556,31 @@ G4bool G4QMDCollision::CalFinalStateOfTheBinaryCollision( G4int i , G4int j )
                iti++;
             }
          }
-         else
+         else if ( secs->size() == 1 )
          {
-            //std::cout << "NAGISA pion absrorption " << secs->front()->GetDefinition()->GetParticleName() << std::endl;
+//081118
+            abs = true;
+            //G4cout << "G4QMDCollision pion absrorption " << secs->front()->GetDefinition()->GetParticleName() << G4endl;
             //secs->front()->Decay();
             theSystem->GetParticipant( i )->SetDefinition( secs->front()->GetDefinition() );
             p4ix_new = secs->front()->Get4Momentum()/GeV;
             theSystem->GetParticipant( i )->SetMomentum( p4ix_new.v() );
-            
-              //std::cout << "THESCATTERER " << (*it)->GetDefinition()->GetParticleName() << std::endl;
-              p4jx_new( 0 ); 
-              //theSystem->GetParticipant( j )->SetDefinition( G4Gamma::Gamma() );
-              //theSystem->GetParticipant( j )->SetDefinition( G4Neutron::Neutron() );
-              theSystem->GetParticipant( j )->SetDefinition( G4PionZero::PionZero() );
-              theSystem->GetParticipant( j )->SetMomentum( G4ThreeVector( G4UniformRand() )*eV );
-              theSystem->GetParticipant( j )->SetPosition( G4ThreeVector( 1000, 1000, 1000 )*km );
 
          } 
 
-         if ( secs->size() > 2 ) std::cout << "NAGISA secs size > 2;  " << secs->size() << std::endl;
+//081118
+         if ( secs->size() > 2 ) 
+         {
+
+            G4cout << "G4QMDCollision secs size > 2;  " << secs->size() << G4endl;
+
+            for ( G4KineticTrackVector::iterator it 
+                = secs->begin() ; it != secs->end() ; it++ )
+            {
+               G4cout << "G4QMDSCATTERER AFTER " << (*it)->GetDefinition()->GetParticleName() << " " << (*it)->Get4Momentum()/GeV << G4endl;
+            }
+
+         }
 
          // deleteing KineticTrack
          for ( G4KineticTrackVector::iterator it 
@@ -513,11 +588,21 @@ G4bool G4QMDCollision::CalFinalStateOfTheBinaryCollision( G4int i , G4int j )
          {  
             delete *it;
          }
+
+         delete secs;
       }
 //071031
 
-      theMeanField->Cal2BodyQuantities( i ); 
-      theMeanField->Cal2BodyQuantities( j ); 
+      if ( !abs )
+      { 
+         theMeanField->Cal2BodyQuantities( i ); 
+         theMeanField->Cal2BodyQuantities( j ); 
+      } 
+      else
+      {
+         absorbed = theSystem->EraseParticipant( j ); 
+         theMeanField->Update();
+      }
 
       epot = theMeanField->GetTotalPotential();
 
@@ -539,19 +624,67 @@ G4bool G4QMDCollision::CalFinalStateOfTheBinaryCollision( G4int i , G4int j )
          //std::cout << "collisions before " << p4i << " " << p4j << std::endl;
          //std::cout << "collisions after " << theSystem->GetParticipant( i )->Get4Momentum() << " " << theSystem->GetParticipant( j )->Get4Momentum() << std::endl;
          //std::cout << "collisions dif " << ( p4i + p4j ) - ( theSystem->GetParticipant( i )->Get4Momentum() + theSystem->GetParticipant( j )->Get4Momentum() ) << std::endl;
-         //std::cout << "collisions before " << rix/fermi << " " << rjx/fermi << std::endl;
+         //std::cout << "collisions before " << ri0/fermi << " " << rj0/fermi << std::endl;
          //std::cout << "collisions after " << theSystem->GetParticipant( i )->GetPosition() << " " << theSystem->GetParticipant( j )->GetPosition() << std::endl;
+         energyOK = true;
+         break;
+      }
+      else
+      {
+         //G4cout << "Energy Not OK " << G4endl;
+         if ( abs )
+         {
+            //G4cout << "TKDB reinsert j " << G4endl;
+            theSystem->InsertParticipant( absorbed , j );   
+            theMeanField->Update();
+         }
+         // do not need reinsert in no absroption case 
       }
 //071031
-
-      if ( std::abs ( eini - efin ) < epse ) return result;  // Collison OK 
-
    }
 
-//  Energetically forbidden collision
-    result = false;
+// Energetically forbidden collision
 
-    return result;
+   if ( energyOK )
+   {
+      // Pauli Check 
+      //G4cout << "Pauli Checking " << theSystem->GetTotalNumberOfParticipant() << G4endl;
+      if ( !abs ) 
+      {
+         if ( !( theMeanField->IsPauliBlocked ( i ) == true || theMeanField->IsPauliBlocked ( j ) == true ) ) 
+         {
+            //G4cout << "Binary Collision Happen " << theSystem->GetTotalNumberOfParticipant() << G4endl;
+            pauliOK = true;
+         }
+      }
+      else 
+      {
+         if ( theMeanField->IsPauliBlocked ( i ) == false ) 
+         { 
+            //G4cout << "Absorption Happen " << theSystem->GetTotalNumberOfParticipant() << G4endl;
+            delete absorbed;
+            pauliOK = true;
+         }
+      }
+      
+
+      if ( pauliOK ) 
+      {
+         result = true;
+      }
+      else
+      {
+         //G4cout << "Pauli Blocked" << G4endl;
+         if ( abs )
+         {
+            //G4cout << "TKDB reinsert j pauli block" << G4endl;
+            theSystem->InsertParticipant( absorbed , j );   
+            theMeanField->Update(); 
+         }
+      }
+   }
+
+   return result;
 
 } 
 

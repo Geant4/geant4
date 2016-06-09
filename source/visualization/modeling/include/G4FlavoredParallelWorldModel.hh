@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4FlavoredParallelWorldModel.hh,v 1.8 2006/06/29 21:30:12 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // P. Mora de Freitas et M.Verderi - 19 June 1998.
 //

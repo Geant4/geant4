@@ -66,10 +66,11 @@ void exrdmEventAction::BeginOfEventAction(const G4Event* )
 
 void exrdmEventAction::EndOfEventAction(const G4Event* evt)
 {
-  G4int event_id       = evt->GetEventID();
   //analysis
   exrdmAnalysisManager::getInstance()->EndOfEvent();
   // visualisation
+#ifdef G4VIS_USE
+  G4int event_id       = evt->GetEventID();
   if (event_id < 100 && G4VVisManager::GetConcreteInstance()) {
     G4TrajectoryContainer * trajectoryContainer = evt->GetTrajectoryContainer();
     G4int n_trajectories = 0;
@@ -84,6 +85,7 @@ void exrdmEventAction::EndOfEventAction(const G4Event* evt)
       }
     }
   }
+#endif
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

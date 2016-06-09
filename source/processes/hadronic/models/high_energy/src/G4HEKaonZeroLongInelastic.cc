@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4HEKaonZeroLongInelastic.cc,v 1.10 2006/06/29 20:30:22 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 //
 

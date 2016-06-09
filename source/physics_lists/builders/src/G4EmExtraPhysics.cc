@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmExtraPhysics.cc,v 1.2 2007/11/15 18:08:11 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4EmExtraPhysics.cc,v 1.3 2008/01/08 10:36:32 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 //---------------------------------------------------------------------------
 //
@@ -120,13 +120,13 @@ void G4EmExtraPhysics::BuildMuonNuclear()
   munActivated = true;
   G4ProcessManager * pManager = 0;
 
-  pManager = G4Electron::Electron()->GetProcessManager();
-  theElectronSynch = new G4SynchrotronRadiation();
-  pManager->AddDiscreteProcess(theElectronSynch);
+  pManager  = G4MuonPlus::MuonPlus()->GetProcessManager();
+  theMuNuc1 = new G4MuNuclearInteraction("muNucl");
+  pManager->AddDiscreteProcess(theMuNuc1);
 
-  pManager = G4Positron::Positron()->GetProcessManager();
-  thePositronSynch = new G4SynchrotronRadiation();
-  pManager->AddDiscreteProcess(thePositronSynch);
+  pManager  = G4MuonMinus::MuonMinus()->GetProcessManager();
+  theMuNuc2 = new G4MuNuclearInteraction("muNucl");
+  pManager->AddDiscreteProcess(theMuNuc2);
 }
 
 void G4EmExtraPhysics::BuildGammaNuclear()
@@ -144,11 +144,11 @@ void G4EmExtraPhysics::BuildSynch()
   synActivated = true;
   G4ProcessManager * pManager = 0;
 
-  pManager  = G4MuonPlus::MuonPlus()->GetProcessManager();
-  theMuNuc1 = new G4MuNuclearInteraction("muNucl");
-  pManager->AddDiscreteProcess(theMuNuc1);
+  pManager = G4Electron::Electron()->GetProcessManager();
+  theElectronSynch = new G4SynchrotronRadiation();
+  pManager->AddDiscreteProcess(theElectronSynch);
 
-  pManager  = G4MuonMinus::MuonMinus()->GetProcessManager();
-  theMuNuc2 = new G4MuNuclearInteraction("muNucl");
-  pManager->AddDiscreteProcess(theMuNuc2);
+  pManager = G4Positron::Positron()->GetProcessManager();
+  thePositronSynch = new G4SynchrotronRadiation();
+  pManager->AddDiscreteProcess(thePositronSynch);
 }

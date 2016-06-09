@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4NucleiPropertiesTheoreticalTable.hh,v 1.7 2006/06/29 19:23:58 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4NucleiPropertiesTheoreticalTable.hh,v 1.8 2008/10/22 12:35:46 kurasige Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // 
 // ------------------------------------------------------------
@@ -45,6 +45,8 @@
 
 #include "globals.hh"
 
+class G4NucleiProperties;
+
 class G4NucleiPropertiesTheoreticalTable 
 {
 private:
@@ -60,8 +62,11 @@ public:
   enum  {nEntries = 8979, shortTableSize = 137}; 
 
   // Other Operations 
+  // all methods are private and can be used only by G4NucleiProperties
+  friend class G4NucleiProperties;  
 
- public: // With Description
+  
+ private: // With Description
   // Operation: GetMassExcess
   static G4double GetMassExcess(G4int Z, G4int A); 
 

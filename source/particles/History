@@ -1,4 +1,4 @@
-$Id: History,v 1.148 2007/11/14 02:25:49 kurasige Exp $
+$Id: History,v 1.162 2008/11/13 08:23:12 kurasige Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,8 +16,66 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+- Nov. 13 2008      H.Kurashige (particles-V09-01-13)
+- Fix magnetic moment for leptons
 
-- Nov. 14  2007      H.Kurashige (particles-V09-00-03)
+- Nov. 10 2008      H.Kurashige (particles-V09-01-12)
+- Fix particle name of G4AdjointPositron 
+
+- Nov. 06 2008      H.Kurashige (particles-V09-01-11)
+- Adding new sub-directory of adjoint and adjoint-particles (Laurent)
+
+- Oct. 28 2008      H.Kurashige (particles-V09-01-10)
+- Add methods of taking A nd Z arguments as G4double G4NucleiProperties
+
+- Oct. 23 2008      H.Kurashige (particles-V09-01-09)
+- Add G4NucleiProperties::IsInStableTable  
+  (as a replace of G4NucleiPropertiesTable::IsInTable) 
+- Change G4NucleiProperties::GetBindingEnergy as 'public'
+- Change G4NucleiProperties::GetMassExcess as 'public'
+
+- Oct. 22 2008      H.Kurashige (particles-V09-01-08)
+- Fix using raw number of elecrtron mass in calculation of magnetic moment for e+/- 
+
+- Oct. 22  2008    H.Kurashige (particles-V09-01-07)
+- Hide all methods of getting mass of nucleus except for G4NucleiProperties::GetNuclearMass()
+- Cash pointers/masses of light nuclei in G4NucleiProperties
+- Add a table of sum of masses of orbital electrons and their binding energy  in G4NucleiProperties
+
+- Sep.  18  2008    H.Kurashige (particles-V09-01-06)
+- update mass/width according PDG2008
+
+- Sep.  17  2008    H.Kurashige (particles-V09-01-05)
+- Avoid direct comparison with string in G4IonTable::IsIon()
+
+- August 08  2008    H.Kurashige (particles-V09-01-04)
+- Modify G4HtmlPPReporter
+
+- June 08  2008      H.Kurashige (particles-V09-01-03)
+- Add /particle/verbose command for setting verbose level for the ParticleTable
+- The initial verbose level of the ParticleTable is set to 1 
+- The verbose level of the ParticleDefinition at the construction 
+  is set same as the ParticleTable 
+
+- Mar. 21  2008      H.Kurashige (particles-V09-01-02)
+- Modify  implementaion of G4ParticleTable::Remove() and
+  G4ParticleTable::RemoveAllParticles() so that particle 
+  definition objects are deleted in these methods.
+  Users are responsible to delete particle objetcs.
+- Add G4ParticleTable::DeleteAllParticles() to 
+  remove and delete all particles in the list.
+ 
+- Mar. 20  2008      H.Kurashige (particles-V09-01-01)
+- Modify implementaion of G4ParticleTable::Remove() method
+  (delete the particle as same way as RemoveAllParticles() method)
+- Fix bugs in G4Iontable::Remove() and G4ShortLivedTable::Remove()
+- Fix bugs in G4ParticleTable::RemoveAllParticles() method
+  (G4Iontable and G4ShortLivedTable should not be deleted in this method)  
+ 
+- Mar. 06  2008      H.Kurashige (particles-V09-01-00)
+- Modify proton mass equal to proton_mass_c2 from CLHEP
+ (DIFFERFENCE is 10 eV)
+
 - Check if the atmic number should be less than 999 for G4IonTable  
 - Add class/method  name in printouts 
 

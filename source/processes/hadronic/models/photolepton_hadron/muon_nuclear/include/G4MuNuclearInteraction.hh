@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4MuNuclearInteraction.hh,v 1.4 2006/06/29 20:57:20 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4MuNuclearInteraction.hh,v 1.6 2008/10/02 21:04:35 dennis Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // $Id: 
 // ------------------------------------------------------------
@@ -54,90 +54,92 @@
 #include "G4ElementTable.hh"
 #include "G4PhysicsLogVector.hh"
 #include "G4ParametrizedHadronicVertex.hh"
+#include "G4HadronicProcessType.hh"
  
 class G4MuNuclearInteraction : public G4VDiscreteProcess
  
 { 
-  public:
+public:
  
-     G4MuNuclearInteraction(const G4String& processName = "muNuclear");
+  G4MuNuclearInteraction(const G4String& processName = "muNuclear");
  
-    ~G4MuNuclearInteraction();
+  virtual ~G4MuNuclearInteraction();
 
-     G4bool IsApplicable(const G4ParticleDefinition&);
+  virtual G4bool IsApplicable(const G4ParticleDefinition&);
 
-     void SetPhysicsTableBining(G4double lowE, G4double highE, G4int nBins);
+  void SetPhysicsTableBining(G4double lowE, G4double highE, G4int nBins);
 
-     void BuildPhysicsTable(const G4ParticleDefinition& ParticleType);
+  virtual void PreparePhysicsTable(const G4ParticleDefinition& ParticleType);
 
-     void PrintInfoDefinition() ;
+  virtual void BuildPhysicsTable(const G4ParticleDefinition& ParticleType);
 
-     G4double GetMeanFreePath(const G4Track& track,
-                              G4double previousStepSize,
-                              G4ForceCondition* condition ) ;
+  virtual void PrintInfoDefinition() ;
+
+  virtual G4double GetMeanFreePath(const G4Track& track,
+				   G4double previousStepSize,
+				   G4ForceCondition* condition ) ;
  
-     G4VParticleChange *PostStepDoIt(const G4Track& track,
-                                     const G4Step& Step  ) ;
+  virtual G4VParticleChange *PostStepDoIt(const G4Track& track,
+					  const G4Step& Step  ) ;
 
-  protected:
+protected:
 
-     G4double ComputeMeanFreePath( const G4ParticleDefinition* ParticleType,
-                                           G4double KineticEnergy,
-                                           const G4Material* aMaterial);
+  virtual G4double ComputeMeanFreePath( const G4ParticleDefinition* ParticleType,
+					G4double KineticEnergy,
+					const G4Material* aMaterial);
 
-     void ComputePartialSumSigma(  const G4ParticleDefinition* ParticleType,
-                                           G4double KineticEnergy,
-                                           const G4Material* aMaterial);
+  void ComputePartialSumSigma(  const G4ParticleDefinition* ParticleType,
+				G4double KineticEnergy,
+				const G4Material* aMaterial);
 
-     virtual G4double ComputeMicroscopicCrossSection(
-                                      const G4ParticleDefinition* ParticleType,
-                                            G4double KineticEnergy,
-                                            G4double AtomicNumber,
-                                            G4double AtomicMass);
+  virtual G4double ComputeMicroscopicCrossSection(
+				const G4ParticleDefinition* ParticleType,
+				G4double KineticEnergy,
+				G4double AtomicNumber,
+				G4double AtomicMass);
 
-     virtual G4double ComputeDMicroscopicCrossSection(
-                                      const G4ParticleDefinition* ParticleType,
-                                            G4double KineticEnergy,
-                                            G4double AtomicNumber,
-                                            G4double AtomicMass,
-                                            G4double epsilon);
+  virtual G4double ComputeDMicroscopicCrossSection(
+                                const G4ParticleDefinition* ParticleType,
+				G4double KineticEnergy,
+				G4double AtomicNumber,
+				G4double AtomicMass,
+				G4double epsilon);
 
-  private:
+private:
 
-     G4MuNuclearInteraction & operator=(const G4MuNuclearInteraction &right);
-     G4MuNuclearInteraction(const G4MuNuclearInteraction&);
+  G4MuNuclearInteraction & operator=(const G4MuNuclearInteraction &right);
+  G4MuNuclearInteraction(const G4MuNuclearInteraction&);
 
-     G4Element* SelectRandomAtom(G4Material* aMaterial) const;
+  G4Element* SelectRandomAtom(G4Material* aMaterial) const;
 
-     void MakeSamplingTables( const G4ParticleDefinition* ParticleType );
+  void MakeSamplingTables( const G4ParticleDefinition* ParticleType );
 
-  private:
+private:
 
-     G4PhysicsTable* theMeanFreePathTable;
-     G4PhysicsTable* theCrossSectionTable ;        
+  G4PhysicsTable* theMeanFreePathTable;
+  G4PhysicsTable* theCrossSectionTable ;        
 
-     G4OrderedTable PartialSumSigma;     
+  G4OrderedTable PartialSumSigma;     
 
-     G4double LowestKineticEnergy;  
-     G4double HighestKineticEnergy;   
-     G4int TotBin;      
+  G4double LowestKineticEnergy;  
+  G4double HighestKineticEnergy;   
+  G4int TotBin;      
 
-     //cut from R.P. Kokoulin
-     const G4double CutFixed ;
-     // for the atomic weight conversion
-     G4double GramPerMole ;
+  //cut from R.P. Kokoulin
+  const G4double CutFixed ;
+  // for the atomic weight conversion
+  G4double GramPerMole ;
 
-     const G4MuonMinus* theMuonMinus;
-     const G4MuonPlus* theMuonPlus;
-     const G4PionZero* thePionZero;
+  const G4MuonMinus* theMuonMinus;
+  const G4MuonPlus* theMuonPlus;
+  const G4PionZero* thePionZero;
 
-     // tables for sampling ..............
-     static G4int nzdat,ntdat,NBIN ;
-     static G4double zdat[5],adat[5],tdat[8] ;
-     static G4double ya[1001],proba[5][8][1001] ;
+  // tables for sampling ..............
+  static G4int nzdat,ntdat,NBIN ;
+  static G4double zdat[5],adat[5],tdat[8] ;
+  static G4double ya[1001],proba[5][8][1001] ;
      
-     // for the hadronic final state; use base cass * in next release
-     G4ParametrizedHadronicVertex theHadronicVertex;
+  G4ParametrizedHadronicVertex theHadronicVertex;
 };
 
 #include "G4MuNuclearInteraction.icc"

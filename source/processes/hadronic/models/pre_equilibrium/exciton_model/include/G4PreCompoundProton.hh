@@ -24,10 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PreCompoundProton.hh,v 1.7 2007/10/01 10:42:00 ahoward Exp $
-// GEANT4 tag $Name: geant4-09-01 $
-//
-// by V. Lara
+//J. M. Quesada (July 08) 
 
 #ifndef G4PreCompoundProton_h
 #define G4PreCompoundProton_h 1
@@ -37,9 +34,7 @@
 #include "G4Proton.hh"
 #include "G4PreCompoundParameters.hh"
 #include "Randomize.hh"
-
 #include "G4ProtonCoulombBarrier.hh"
-
 
 class G4PreCompoundProton : public G4PreCompoundNucleon
 {
@@ -67,60 +62,39 @@ public:
   { return G4PreCompoundNucleon::operator!=(right);}
 
 
-  G4ReactionProduct * GetReactionProduct() const
-  {
-    G4ReactionProduct * theReactionProduct = 
-      new G4ReactionProduct(G4Proton::ProtonDefinition());
-    theReactionProduct->SetMomentum(GetMomentum().vect());
-    theReactionProduct->SetTotalEnergy(GetMomentum().e());
-#ifdef PRECOMPOUND_TEST
-    theReactionProduct->SetCreatorModel("G4PrecompoundModel");
-#endif
-    return theReactionProduct;
-  }
+  G4ReactionProduct * GetReactionProduct() const;
+ 
   
 private:
 
-// added Rj method according to literature and JMQ - formula from Jose Quesada
-  virtual G4double GetRj(const G4int NumberParticles, const G4int NumberCharged)
-  {
-    G4double rj = 1.0;
-    if(NumberParticles != 0) rj = static_cast<G4double>(NumberCharged)/static_cast<G4double>(NumberParticles);
-    return rj;
-  }
+//JMQ (Sep. 07) combinatorial factor Rj
+  virtual G4double GetRj(const G4int NumberParticles, const G4int NumberCharged);
+
+  virtual G4double CrossSection(const  G4double K) ; 
 
 
-  virtual G4double GetAlpha()
-  {
-    G4double aZ = static_cast<G4double>(GetRestZ());
-    G4double C = 0.0;
-    if (aZ >= 70) 
-      {
-	C = 0.10;
-      } 
-    else 
-      {
-	C = ((((0.15417e-06*aZ) - 0.29875e-04)*aZ + 0.21071e-02)*aZ - 0.66612e-01)*aZ + 0.98375;
-      }
-    return 1.0 + C;
-  }
+  G4double GetOpt0(const G4double K);
+  G4double GetOpt1(const G4double K);
+  G4double GetOpt2(const G4double K);
+  G4double GetOpt3(const G4double K);
 
-  virtual G4double GetBeta()
-  {
-    return -GetCoulombBarrier();
-  }
+  G4double GetAlpha();
   
-  virtual G4bool IsItPossible(const G4Fragment& aFragment)
-  {
-    return (aFragment.GetNumberOfCharged() >= 1);
-  }
-  
-  
-private:
-  
-  G4ProtonCoulombBarrier theProtonCoulombBarrier;
-  
+  G4double GetBeta();
+
+//data members
+
+      G4ProtonCoulombBarrier theProtonCoulombBarrier;
+       G4double ResidualA;
+      G4double ResidualZ; 
+      G4double theA;
+      G4double theZ;
+      G4double ResidualAthrd;
+      G4double FragmentA;
+      G4double FragmentAthrd;
+
+
+ 
 };
-
 #endif
  

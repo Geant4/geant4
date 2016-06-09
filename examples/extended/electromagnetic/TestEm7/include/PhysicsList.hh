@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: PhysicsList.hh,v 1.6 2006/11/22 18:56:21 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: PhysicsList.hh,v 1.8 2008/11/20 20:34:50 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //
@@ -38,6 +38,7 @@
 #define PhysicsList_h 1
 
 #include "G4VModularPhysicsList.hh"
+#include "G4EmConfigurator.hh"
 #include "globals.hh"
 
 class G4VPhysicsConstructor;
@@ -49,6 +50,7 @@ class PhysicsListMessenger;
 class PhysicsList: public G4VModularPhysicsList
 {
 public:
+
   PhysicsList();
   virtual ~PhysicsList();
 
@@ -66,6 +68,9 @@ public:
   StepMax* GetStepMaxProcess() {return stepMaxProcess;};
 
 private:
+
+  G4EmConfigurator em_config; 
+
   G4double cutForGamma;
   G4double cutForElectron;
   G4double cutForPositron;
@@ -76,6 +81,7 @@ private:
     
   G4String                             emName;
   G4VPhysicsConstructor*               emPhysicsList;
+  G4VPhysicsConstructor*               decPhysicsList;
   std::vector<G4VPhysicsConstructor*>  hadronPhys;
     
   StepMax* stepMaxProcess;

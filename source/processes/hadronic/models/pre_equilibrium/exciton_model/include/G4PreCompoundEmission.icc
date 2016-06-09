@@ -23,6 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// Modif (03 September 2008) by J. M. Quesada for external choice of inverse 
+// cross section option
+// JMQ (06 September 2008) Also external choice has been added for:
+//                      - superimposed Coulomb barrier (if useSICB=true) 
+
 inline void G4PreCompoundEmission::Initialize(const G4Fragment & aFragment) 
 {
   theFragmentsVector->Initialize(aFragment);
@@ -45,3 +50,17 @@ inline void G4PreCompoundEmission::SetUp(const G4Fragment & aFragment)
   theFragmentsVector->ResetStage();
   return;
 }
+
+//for inverse cross section choice
+inline void G4PreCompoundEmission::SetOPTxs(G4int opt)
+{
+  theFragmentsVector->SetOPTxs(opt);
+  return;
+}
+//for superimposed Coumlomb Barrier for inverse cross sections 
+inline void G4PreCompoundEmission::UseSICB(G4bool use)
+{
+  theFragmentsVector->UseSICB(use);
+  return;
+}
+

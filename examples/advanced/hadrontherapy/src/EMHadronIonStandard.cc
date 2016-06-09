@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HadrontherapyIonStandard.cc; May 2005
+// $Id: EMIonStandard.cc; November 2008
 // ----------------------------------------------------------------------------
 //                 GEANT 4 - Hadrontherapy example
 // ----------------------------------------------------------------------------
@@ -36,18 +36,21 @@
 // (b) National Institute for Nuclear Physics Section of Genova, genova, Italy
 // 
 // * cirrone@lns.infn.it
+// 
+// This class manages the electromagnetic processes for charged hadrons and ions
+// using the Standard Models of Geant4
 // ----------------------------------------------------------------------------
 
 #include "EMHadronIonStandard.hh"
 #include "G4ProcessManager.hh"
 #include "G4ParticleDefinition.hh"
-#include "G4MultipleScattering.hh"
+#include "G4hMultipleScattering.hh"
 #include "G4hIonisation.hh"
 #include "G4ionIonisation.hh"
 #include "G4MultipleScattering.hh"
 #include "G4StepLimiter.hh"
 #include "G4EmProcessOptions.hh"
-
+#include "G4MuIonisation.hh"
 
 EMHadronIonStandard::EMHadronIonStandard(const G4String& name): 
    G4VPhysicsConstructor(name)
@@ -61,23 +64,12 @@ void EMHadronIonStandard::ConstructProcess()
   G4ParticleDefinition* particle = 0;
   G4ProcessManager* processManager = 0;
 
-
   // ********************************
   // *** Charged Hadrons and Ions ***
   // ********************************
 
-  G4EmProcessOptions* hadronIonEmProcessOptions = new G4EmProcessOptions();
-  hadronIonEmProcessOptions -> SetDEDXBinning(480);
-
-  G4VProcess* hadronIonMultipleScatProcess = new G4MultipleScattering(); 
-  G4ionIonisation* ionIonisationProcess = new G4ionIonisation();	  
-  G4hIonisation* hadronIonisationProcess = new G4hIonisation();
-
-  G4StepLimiter* hadronIonStepLimiter = new G4StepLimiter();
-
-
   theParticleIterator -> reset();
-
+  
   while( (*theParticleIterator)() )
     {
       particle = theParticleIterator -> value();
@@ -89,9 +81,8 @@ void EMHadronIonStandard::ConstructProcess()
 	  particleName == "alpha" ||
 	  particleName == "He3")
 	{
-	  processManager -> AddProcess(hadronIonMultipleScatProcess, -1, 1, 1);   
-	  processManager -> AddProcess(ionIonisationProcess, -1, 2, 2);
-	  processManager -> AddProcess(hadronIonStepLimiter, -1, -1, 3);
+	  processManager -> AddProcess(new G4hMultipleScattering, -1, 1, 1);   
+	  processManager -> AddProcess(new G4hIonisation ,-1, 2, 2);
 	}
       else
 	{
@@ -104,13 +95,13 @@ void EMHadronIonStandard::ConstructProcess()
 	      if((!particle -> IsShortLived()) &&
 		 (particle -> GetParticleName() != "chargedgeantino"))
 		{
-		  processManager -> AddProcess(hadronIonMultipleScatProcess, -1, 1, 1);   
-		  processManager -> AddProcess(hadronIonisationProcess, -1, 2, 2);
-		  processManager -> AddProcess(hadronIonStepLimiter, -1, -1, 3);
+		  processManager -> AddProcess(new G4hMultipleScattering, -1, 1, 1);   
+		  processManager -> AddProcess(new G4hIonisation, -1, 2, 2);
 		}
 	    }
 	}
     }
-}
+
+ }
 
    

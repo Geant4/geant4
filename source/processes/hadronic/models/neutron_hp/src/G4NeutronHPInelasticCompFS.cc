@@ -29,10 +29,16 @@
 //
 // 070523 bug fix for G4FPE_DEBUG on by A. Howard ( and T. Koi)
 // 070606 bug fix and migrate to enable to Partial cases by T. Koi 
+// 080603 bug fix for Hadron Hyper News #932 by T. Koi 
+// 080612 bug fix contribution from Benoit Pirard and Laurent Desorgher (Univ. Bern) #4,6
+// 080717 bug fix of calculation of residual momentum by T. Koi
+// 080801 protect negative avalable energy by T. Koi
+//        introduce theNDLDataA,Z which has A and Z of NDL data by T. Koi
+// 081024 G4NucleiPropertiesTable:: to G4NucleiProperties::
 //
 #include "G4NeutronHPInelasticCompFS.hh"
 #include "G4Nucleus.hh"
-#include "G4NucleiPropertiesTable.hh"
+#include "G4NucleiProperties.hh"
 #include "G4He3.hh"
 #include "G4Alpha.hh"
 #include "G4Electron.hh"
@@ -73,6 +79,8 @@ void G4NeutronHPInelasticCompFS::Init (G4double A, G4double Z, G4String & dirNam
   G4String filename = aFile.GetName();
   theBaseA = aFile.GetA();
   theBaseZ = aFile.GetZ();
+   theNDLDataA = (int)aFile.GetA();
+   theNDLDataZ = aFile.GetZ();
   if(!dbool || ( Z<2.5 && ( std::abs(theBaseZ - Z)>0.0001 || std::abs(theBaseA - A)>0.0001)))
   {
     if(getenv("NeutronHPNamesLogging")) G4cout << "Skipped = "<< filename <<" "<<A<<" "<<Z<<G4endl;
@@ -184,10 +192,11 @@ G4int G4NeutronHPInelasticCompFS::SelectExitChannel(G4double eKinetic)
   return it;
 }
 
+
+                                                                                                       //n,p,d,t,he3,a
 void G4NeutronHPInelasticCompFS::CompositeApply(const G4HadProjectile & theTrack, G4ParticleDefinition * aDefinition)
 {
 
-    //G4cout << "G4NeutronHPInelasticCompFS::CompositeApply " << G4endl; 
 // prepare neutron
     theResult.Clear();
     G4double eKinetic = theTrack.GetKineticEnergy();
@@ -200,9 +209,10 @@ void G4NeutronHPInelasticCompFS::CompositeApply(const G4HadProjectile & theTrack
     G4int i;
     for(i=0; i<50; i++)
     { if(theXsection[i] != 0) { break; } } 
+
     G4double targetMass=0;
     G4double eps = 0.0001;
-    targetMass = ( G4NucleiPropertiesTable::GetNuclearMass(static_cast<G4int>(theBaseZ+eps), static_cast<G4int>(theBaseA+eps))) /
+    targetMass = ( G4NucleiProperties::GetNuclearMass(static_cast<G4int>(theBaseA+eps), static_cast<G4int>(theBaseZ+eps))) /
                    G4Neutron::Neutron()->GetPDGMass();
 //    if(theEnergyAngData[i]!=0)
 //        targetMass = theEnergyAngData[i]->GetTargetMass();
@@ -219,7 +229,7 @@ void G4NeutronHPInelasticCompFS::CompositeApply(const G4HadProjectile & theTrack
     G4double residualMass=0;
     G4double residualZ = theBaseZ - aDefinition->GetPDGCharge();
     G4double residualA = theBaseA - aDefinition->GetBaryonNumber()+1;
-    residualMass = ( G4NucleiPropertiesTable::GetNuclearMass(static_cast<G4int>(residualZ+eps), static_cast<G4int>(residualA+eps)) ) /
+    residualMass = ( G4NucleiProperties::GetNuclearMass(static_cast<G4int>(residualA+eps), static_cast<G4int>(residualZ+eps)) ) /
                      G4Neutron::Neutron()->GetPDGMass();
 
 // prepare energy in target rest frame
@@ -229,7 +239,7 @@ void G4NeutronHPInelasticCompFS::CompositeApply(const G4HadProjectile & theTrack
 //    G4double momentumInCMS = boosted.GetTotalMomentum();
   
 // select exit channel for composite FS class.
-    G4int it = SelectExitChannel(eKinetic);
+    G4int it = SelectExitChannel( eKinetic );
    
 // set target and neutron in the relevant exit channel
     InitDistributionInitialState(theNeutron, theTarget, it);    
@@ -240,22 +250,31 @@ void G4NeutronHPInelasticCompFS::CompositeApply(const G4HadProjectile & theTrack
     aHadron.SetDefinition(aDefinition); // what if only cross-sections exist ==> Na 23 11 @@@@    
     G4double availableEnergy = theNeutron.GetKineticEnergy() + theNeutron.GetMass() - aHadron.GetMass() +
                              (targetMass - residualMass)*G4Neutron::Neutron()->GetPDGMass();
+//080730c
+    if ( availableEnergy < 0 )
+    {
+       //G4cout << "080730c Adjust availavleEnergy " << G4endl; 
+       availableEnergy = 0; 
+    }
     G4int nothingWasKnownOnHadron = 0;
     G4int dummy;
     G4double eGamm = 0;
     G4int iLevel=it-1;
-//  TK debug 070530  (without photon has it = 0)
-    //if(50==it) 
-    if( 0 == it ) 
+
+//  TK without photon has it = 0
+    if( 50 == it ) 
     {
+
+//    TK Excitation level is not determined
       iLevel=-1;
       aHadron.SetKineticEnergy(availableEnergy*residualMass*G4Neutron::Neutron()->GetPDGMass()/
                                (aHadron.GetMass()+residualMass*G4Neutron::Neutron()->GetPDGMass()));
 
-      //aHadron.SetMomentum(theNeutron.GetMomentum()*(1./theNeutron.GetTotalMomentum())*
-      //                  std::sqrt(aHadron.GetTotalEnergy()*aHadron.GetTotalEnergy()-
-      //                            aHadron.GetMass()*aHadron.GetMass()));
+      aHadron.SetMomentum(theNeutron.GetMomentum()*(1./theNeutron.GetTotalMomentum())*
+                        std::sqrt(aHadron.GetTotalEnergy()*aHadron.GetTotalEnergy()-
+                                  aHadron.GetMass()*aHadron.GetMass()));
 
+/*
       G4double p2 = ( aHadron.GetTotalEnergy()*aHadron.GetTotalEnergy()-aHadron.GetMass()*aHadron.GetMass() );
       G4double p = 0.0;
       if ( p2 > 0.0 )
@@ -263,15 +282,18 @@ void G4NeutronHPInelasticCompFS::CompositeApply(const G4HadProjectile & theTrack
          p = std::sqrt( p ); 
       } 
       aHadron.SetMomentum(theNeutron.GetMomentum()*(1./theNeutron.GetTotalMomentum())*p );
+*/
 
     }
     else
     {
       while( iLevel!=-1 && theGammas.GetLevel(iLevel)==0 ) { iLevel--; }
     }
-    if(theAngularDistribution[it]!= 0)
+
+
+    if ( theAngularDistribution[it] != 0 ) // MF4
     {
-      if(theEnergyDistribution[it]!=0)
+      if(theEnergyDistribution[it]!=0) // MF5
       {
         aHadron.SetKineticEnergy(theEnergyDistribution[it]->Sample(eKinetic, dummy));
         G4double eSecN = aHadron.GetKineticEnergy();
@@ -303,7 +325,8 @@ void G4NeutronHPInelasticCompFS::CompositeApply(const G4HadProjectile & theTrack
 	
       }
       theAngularDistribution[it]->SampleAndUpdate(aHadron);
-      if(theFinalStatePhotons[it] == 0)
+
+      if( theFinalStatePhotons[it] == 0 )
       {
 // TK comment Most n,n* eneter to this  
 	thePhotons = theGammas.GetDecayGammas(iLevel);
@@ -323,7 +346,7 @@ void G4NeutronHPInelasticCompFS::CompositeApply(const G4HadProjectile & theTrack
 	}
       }
     }
-    else if(theEnergyAngData[it] != 0)  
+    else if(theEnergyAngData[it] != 0) // MF6  
     {
       theParticles = theEnergyAngData[it]->Sample(eKinetic);
     }
@@ -332,16 +355,17 @@ void G4NeutronHPInelasticCompFS::CompositeApply(const G4HadProjectile & theTrack
       // @@@ what to do, if we have photon data, but no info on the hadron itself
       nothingWasKnownOnHadron = 1;
     }
+
     //G4cout << "theFinalStatePhotons it " << it << G4endl;
     //G4cout << "theFinalStatePhotons[it] " << theFinalStatePhotons[it] << G4endl;
-//  TK 070530
-    if ( it != 0 ) it = 50;  // it 50 has final state data for photon MF13 cross and MF14 ang
     //G4cout << "theFinalStatePhotons it " << it << G4endl;
     //G4cout << "theFinalStatePhotons[it] " << theFinalStatePhotons[it] << G4endl;
     //G4cout << "thePhotons " << thePhotons << G4endl;
-    if(theFinalStatePhotons[it]!=0) 
+
+    if ( theFinalStatePhotons[it] != 0 ) 
     {
-      // the photon distributions are in the Nucleus rest frame.
+       // the photon distributions are in the Nucleus rest frame.
+       // TK residual rest frame
       G4ReactionProduct boosted;
       boosted.Lorentz(theNeutron, theTarget);
       G4double anEnergy = boosted.GetKineticEnergy();
@@ -492,7 +516,12 @@ void G4NeutronHPInelasticCompFS::CompositeApply(const G4HadProjectile & theTrack
         theResidual.SetDefinition(G4ParticleTable::GetParticleTable()
 	                          ->GetIon(static_cast<G4int>(residualZ), static_cast<G4int>(residualA), 0));  
         theResidual.SetKineticEnergy(aHadron.GetKineticEnergy()*aHadron.GetMass()/theResidual.GetMass());
-        theResidual.SetMomentum(-1.*aHadron.GetMomentum());
+
+        //080612TK contribution from Benoit Pirard and Laurent Desorgher (Univ. Bern) #6
+        //theResidual.SetMomentum(-1.*aHadron.GetMomentum());
+	G4ThreeVector incidentNeutronMomentum = theNeutron.GetMomentum();
+        theResidual.SetMomentum(incidentNeutronMomentum - aHadron.GetMomentum());
+
 	theResidual.Lorentz(theResidual, -1.*theTarget);
 	G4ThreeVector totalPhotonMomentum(0,0,0);
 	if(thePhotons!=0)
@@ -528,7 +557,14 @@ void G4NeutronHPInelasticCompFS::CompositeApply(const G4HadProjectile & theTrack
   	         resiualKineticEnergy  = std::sqrt(resiualKineticEnergy) - theResidual.GetMass();
 //        cout << "Kinetic energy of the residual = "<<resiualKineticEnergy<<endl;
 	theResidual.SetKineticEnergy(resiualKineticEnergy);
-        theResidual.SetMomentum(-1.*totalMomentum);
+
+        //080612TK contribution from Benoit Pirard and Laurent Desorgher (Univ. Bern) #4
+        //theResidual.SetMomentum(-1.*totalMomentum);
+	//G4ThreeVector incidentNeutronMomentum = theNeutron.GetMomentum();
+        //theResidual.SetMomentum(incidentNeutronMomentum - aHadron.GetMomentum());
+//080717 TK Comment still do NOT include photon's mometum which produce by thePhotons
+        theResidual.SetMomentum( theNeutron.GetMomentum() + theTarget.GetMomentum() - totalMomentum );
+
         theSec = new G4DynamicParticle;   
         theSec->SetDefinition(theResidual.GetDefinition());
         theSec->SetMomentum(theResidual.GetMomentum());
@@ -548,6 +584,14 @@ void G4NeutronHPInelasticCompFS::CompositeApply(const G4HadProjectile & theTrack
 // some garbage collection
       delete thePhotons;
     }
+
+//080721 
+   G4ParticleDefinition* targ_pd = G4ParticleTable::GetParticleTable()->GetIon ( (G4int)theBaseZ , (G4int)theBaseA , 0.0 );
+   G4LorentzVector targ_4p_lab ( theTarget.GetMomentum() , std::sqrt( targ_pd->GetPDGMass()*targ_pd->GetPDGMass() + theTarget.GetMomentum().mag2() ) );
+   G4LorentzVector proj_4p_lab = theTrack.Get4Momentum();
+   G4LorentzVector init_4p_lab = proj_4p_lab + targ_4p_lab;
+   adjust_final_state ( init_4p_lab ); 
+
 // clean up the primary neutron
     theResult.SetStatusChange(stopAndKill);
 }

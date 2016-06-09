@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEmFluctuationModel.hh,v 1.10 2006/06/29 19:54:41 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4VEmFluctuationModel.hh,v 1.11 2008/09/12 14:47:38 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // -------------------------------------------------------------------
 //
@@ -94,6 +94,8 @@ public:
 
   virtual void InitialiseMe(const G4ParticleDefinition*);
 
+  virtual void SetParticleAndCharge(const G4ParticleDefinition*, G4double q2);
+
   //------------------------------------------------------------------------
   // Generic methods common to all models
   //------------------------------------------------------------------------
@@ -113,6 +115,11 @@ private:
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 inline void G4VEmFluctuationModel::InitialiseMe(const G4ParticleDefinition*)
+{}
+
+inline 
+void G4VEmFluctuationModel::SetParticleAndCharge(const G4ParticleDefinition*, 
+						 G4double)
 {}
 
 inline G4String G4VEmFluctuationModel::GetName() const 

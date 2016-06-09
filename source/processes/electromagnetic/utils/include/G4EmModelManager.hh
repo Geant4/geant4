@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmModelManager.hh,v 1.22 2007/11/09 11:35:54 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4EmModelManager.hh,v 1.25 2008/10/13 14:56:56 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // -------------------------------------------------------------------
 //
@@ -73,6 +73,8 @@
 #include "globals.hh"
 #include "G4DataVector.hh"
 #include "G4EmTableType.hh"
+#include "G4EmProcessSubType.hh"
+#include "G4Region.hh"
 
 class G4RegionModels
 {
@@ -83,7 +85,8 @@ public:
 
 private:
 
-  G4RegionModels(G4int nMod, std::vector<G4int>& list, G4DataVector& lowE);
+  G4RegionModels(G4int nMod, std::vector<G4int>& indx, 
+		 G4DataVector& lowE, const G4Region* reg);
 
   ~G4RegionModels();
 
@@ -104,6 +107,15 @@ private:
     return nModelsForRegion;
   };
 
+  G4double LowEdgeEnergy(G4int n) const {
+    return lowKineticEnergy[n];
+  };
+
+  const G4Region* Region() const {
+    return theRegion;
+  };
+
+  const G4Region*    theRegion;
   G4int              nModelsForRegion;
   G4int*             theListOfModelIndexes;
   G4double*          lowKineticEnergy;
@@ -149,13 +161,15 @@ public:
 
   G4VEmModel* SelectModel(G4double& energy, size_t& index);
 
-  G4VEmModel* GetModel(G4int);
+  G4VEmModel* GetModel(G4int, G4bool ver = false);
 
   G4int NumberOfModels() const;
 
   void AddEmModel(G4int, G4VEmModel*, G4VEmFluctuationModel*, const G4Region*);
   
   void UpdateEmModel(const G4String&, G4double, G4double);
+
+  void DumpModelList(G4int verb);
 
 private:
 
@@ -175,7 +189,6 @@ private:
   std::vector<G4VEmFluctuationModel*>     flucModels;
   std::vector<const G4Region*>            regions;
   std::vector<G4int>                      orderOfModels;
-  G4DataVector                            upperEkin;
 
   G4int                       nEmModels;
   G4int                       nRegions;

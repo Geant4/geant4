@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Incl.hh,v 1.10 2007/12/03 19:36:06 miheikki Exp $ 
+// $Id: G4Incl.hh,v 1.13 2008/06/25 17:20:04 kaitanie Exp $ 
 // Translation of INCL4.2/ABLA V3 
 // Pekka Kaitaniemi, HIP (translation)
 // Christelle Schmidt, IPNL (fission code)
@@ -34,6 +34,7 @@
 #define G4Incl_hh 1
 
 #include "globals.hh"
+#include "G4InclRandomNumbers.hh"
 #include "G4InclDataDefs.hh"
 #include "G4Abla.hh"
 #include <fstream>
@@ -815,6 +816,7 @@ public: // Utilities
 
   G4Volant *volant;
   G4Abla *abla;
+  G4InclRandomInterface *randomGenerator;
 };
 
 #endif

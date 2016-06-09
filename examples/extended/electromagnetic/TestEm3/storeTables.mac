@@ -1,4 +1,4 @@
-# $Id: storeTables.mac,v 1.8 2007/05/18 19:00:44 vnivanch Exp $
+# $Id: storeTables.mac,v 1.9 2008/09/14 17:14:54 vnivanch Exp $
 #
 # Macro file for "testEm3.cc"
 # 
@@ -8,8 +8,11 @@
 /control/verbose 2
 #
 /testem/phys/addPhysics  emstandard
+#/testem/phys/addPhysics  standardLPM
 #
 /run/initialize
+/process/eLoss/verbose 1
+/process/eLoss/CSDARange true
 /run/beamOn 3
 #
 /run/particle/storePhysicsTable physdata

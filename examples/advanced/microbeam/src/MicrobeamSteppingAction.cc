@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // -------------------------------------------------------------------
-// $Id: MicrobeamSteppingAction.cc,v 1.8 2007/08/22 13:58:33 sincerti Exp $
+// $Id: MicrobeamSteppingAction.cc,v 1.9 2008/06/16 07:46:11 sincerti Exp $
 // -------------------------------------------------------------------
 
 #include "G4SteppingManager.hh"
@@ -157,7 +157,7 @@ if (
 if (aStep->GetPreStepPoint()->GetPhysicalVolume()->GetName()  == "physicalNucleus")
 
 	{ 
-   	 G4double dose = (e_SI*(aStep->GetTotalEnergyDeposit()/eV))/(Run->GetMassNucleus());
+   	 G4double dose = (aStep->GetTotalEnergyDeposit()/joule)/(Run->GetMassNucleus()/kg);
    	 Run->AddDoseN(dose);
 
 	 G4ThreeVector v;
@@ -169,7 +169,7 @@ if (aStep->GetPreStepPoint()->GetPhysicalVolume()->GetName()  == "physicalNucleu
 if (aStep->GetPreStepPoint()->GetPhysicalVolume()->GetName()  == "physicalCytoplasm")
 
 	{ 
-   	 G4double dose = (e_SI*(aStep->GetTotalEnergyDeposit()/eV))/(Run->GetMassCytoplasm());
+   	 G4double dose = (aStep->GetTotalEnergyDeposit()/joule)/(Run->GetMassCytoplasm()/kg);
    	 Run->AddDoseC(dose);
 
 	 G4ThreeVector v;

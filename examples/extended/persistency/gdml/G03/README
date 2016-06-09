@@ -1,0 +1,36 @@
+$Id: README,v 1.1 2008/11/20 15:41:53 gcosmo Exp $
+-------------------------------------------------------------------
+
+ Example of use GDML extension and associated reader
+ -----------------------------------------------------------
+
+ In this directory you can find an example showing how to extend the GDML
+ schema and plug-in a custom reader to the system for handling the extension.
+ For more information, please, refer to the GDML Documentation.
+  
+ The Geometry is a Simple Box to which it is assigned a color as
+ visualization attribute.
+ The entity "color" is defined as part of the "extension" tag and properly
+ implemented in the GDML schema extension placed inside the directory
+ SimpleExtensionSchema.
+ The GDML file implenting the geometry with colors extension is
+ color_extension.gdml, in which the standard "gdml" tag has been replaced
+ by the "gdml_simple_extension" tag, with relative location for the new schema.
+ The GDML file is automatically loaded by the program.
+ It is also possible to use UI commands or macros as arguments to read any
+ standard GDML file.
+  
+ HOW TO BUILD THE EXAMPLE ?
+ 
+ - You need to have built the persistency/gdml plugin module along with the
+   Geant4 libraries, by having set the G4LIB_BUILD_GDML variable in your
+   environment.
+   It is also required to specify the path where the XercesC XML parser
+   package is installed in your system, through the variable XERCESCROOT.
+ 
+ - Compile and link to generate the executable:
+               % gmake
+ 
+ - Execute the application:
+               % read_ext [macro-file.mac]
+

@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eeToHadronsModel.hh,v 1.6 2007/05/22 17:37:30 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4eeToHadronsModel.hh,v 1.7 2008/07/10 18:06:38 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // -------------------------------------------------------------------
 //
@@ -62,14 +62,12 @@ class G4eeToHadronsModel : public G4VEmModel
 
 public:
 
-  G4eeToHadronsModel(const G4Vee2hadrons*, G4int ver=0,
+  G4eeToHadronsModel(G4Vee2hadrons*, G4int ver=0,
                      const G4String& nam = "eeToHadrons");
 
   virtual ~G4eeToHadronsModel();
 
   virtual void Initialise(const G4ParticleDefinition*, const G4DataVector&);
-
-  G4double PeakEnergy() const;
 
   virtual G4double CrossSectionPerVolume(const G4Material*,
 					 const G4ParticleDefinition*,
@@ -98,6 +96,8 @@ public:
 
   G4DynamicParticle* GenerateCMPhoton(G4double);
 
+  inline G4double PeakEnergy() const;
+
 private:
 
   void ComputeCMCrossSectionPerElectron();
@@ -106,7 +106,7 @@ private:
   G4eeToHadronsModel & operator=(const  G4eeToHadronsModel &right);
   G4eeToHadronsModel(const  G4eeToHadronsModel&);
 
-  const G4Vee2hadrons*  model;
+  G4Vee2hadrons*        model;
   G4ParticleDefinition* theGamma;
   G4PhysicsVector*      crossPerElectron;
   G4PhysicsVector*      crossBornPerElectron;
@@ -128,29 +128,6 @@ private:
 inline G4double G4eeToHadronsModel::PeakEnergy() const
 {
   return peakKinEnergy;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline G4double G4eeToHadronsModel::CrossSectionPerVolume(
-				      const G4Material* mat,
-				      const G4ParticleDefinition* p,
-				      G4double kineticEnergy,
-				      G4double, G4double)
-{
-  return mat->GetElectronDensity()*
-    ComputeCrossSectionPerElectron(p, kineticEnergy);
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline G4double G4eeToHadronsModel::ComputeCrossSectionPerAtom(
-                                      const G4ParticleDefinition* p,
-				      G4double kineticEnergy,
-				      G4double Z, G4double,
-				      G4double, G4double)
-{
-  return Z*ComputeCrossSectionPerElectron(p, kineticEnergy);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

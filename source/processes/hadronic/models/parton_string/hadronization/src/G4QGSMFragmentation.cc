@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4QGSMFragmentation.cc,v 1.6 2007/04/24 14:55:23 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4QGSMFragmentation.cc,v 1.9 2008/06/23 08:35:55 vuzhinsk Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // -----------------------------------------------------------------------------
 //      GEANT 4 class implementation file
@@ -120,7 +120,7 @@ G4KineticTrackVector* G4QGSMFragmentation::FragmentString(const G4ExcitedString&
 			   currentString=newString;
 			} else {
 			 // abandon ... start from the beginning
-			   if (newString) delete newString;
+			   if (newString) delete newString;          // Uzhi restore 20.06.08
 			   if (Hadron)    delete Hadron;
 			   inner_sucess=false;
 			   break;
@@ -228,7 +228,8 @@ G4double G4QGSMFragmentation::GetLightConeZ(G4double zmin, G4double zmax, G4int 
 //-----------------------------------------------------------------------------------------
 
 G4LorentzVector * G4QGSMFragmentation::SplitEandP(G4ParticleDefinition * pHadron,
-	G4FragmentingString * string)
+                                                  G4FragmentingString * string,    // Uzhi
+                                                  G4FragmentingString * ) // Uzhi
 {
        G4double HadronMass = pHadron->GetPDGMass();
 

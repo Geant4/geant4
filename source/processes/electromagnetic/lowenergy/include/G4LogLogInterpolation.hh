@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4LogLogInterpolation.hh,v 1.4 2006/06/29 19:35:51 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4LogLogInterpolation.hh,v 1.6 2008/12/09 13:28:02 sincerti Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
 //

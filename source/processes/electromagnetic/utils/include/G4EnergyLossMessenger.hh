@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4EnergyLossMessenger.hh,v 1.18 2007/05/18 18:39:54 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4EnergyLossMessenger.hh,v 1.22 2008/10/20 13:27:45 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // -------------------------------------------------------------------
 //
@@ -44,6 +44,7 @@
 // 12-02-07 Add SetSkin, SetLinearLossLimit (V.Ivanchenko)
 // 16-03-07 modify /process/eLoss/minsubsec command (V.Ivanchenko)
 // 18-05-07 add /process/msc directory and commands (V.Ivanchenko)
+// 11-03-08 add /process/em directory and commands (V.Ivanchenko)
 //
 // -------------------------------------------------------------------
 //
@@ -99,6 +100,7 @@ private:
 
   G4UIdirectory*             eLossDirectory;
   G4UIdirectory*             mscDirectory;
+  G4UIdirectory*             emDirectory;
   G4UIcmdWithABool*          RndmStepCmd;
   G4UIcmdWithABool*          EnlossFlucCmd;
   G4UIcmdWithABool*          SubSecCmd;
@@ -111,7 +113,10 @@ private:
   G4UIcmdWithABool*          rangeCmd;
   G4UIcmdWithABool*          lpmCmd;
   G4UIcmdWithABool*          latCmd;
+  G4UIcmdWithABool*          splCmd;
+  G4UIcmdWithABool*          aplCmd;
   G4UIcmdWithAnInteger*      verCmd;
+  G4UIcmdWithAnInteger*      ver1Cmd;
   G4UIcmdWithAnInteger*      dedxCmd;
   G4UIcmdWithAnInteger*      lamCmd;
   G4UIcmdWithADouble*        lllCmd;
@@ -119,6 +124,7 @@ private:
   G4UIcmdWithADouble*        skinCmd;
   G4UIcmdWithADouble*        frCmd;
   G4UIcmdWithADouble*        fgCmd;
+  G4UIcmdWithADoubleAndUnit* angCmd;
 };
 
 #endif

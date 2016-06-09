@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LowEnergyCompton.hh,v 1.21 2006/06/29 19:35:57 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4LowEnergyCompton.hh,v 1.24 2008/11/04 10:14:00 pandola Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // Author: A. Forti
 //         Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -47,6 +47,8 @@
 
 #include "globals.hh"
 #include "G4VDiscreteProcess.hh"
+#include "G4ShellData.hh"
+#include "G4DopplerProfile.hh"
 
 class G4Track;
 class G4Step;
@@ -66,19 +68,19 @@ public:
 
   G4bool IsApplicable(const G4ParticleDefinition& definition);
   
-  void BuildPhysicsTable(const G4ParticleDefinition& photon);
+  void BuildPhysicsTable(const G4ParticleDefinition& definition);
  
-  G4VParticleChange* PostStepDoIt(const G4Track& aTrack, const G4Step& aStep);
+  G4VParticleChange* PostStepDoIt(const G4Track& track, const G4Step& step);
  
   // For testing purpose only
-  G4double DumpMeanFreePath(const G4Track& aTrack, 
+  G4double DumpMeanFreePath(const G4Track& track, 
 			    G4double previousStepSize, 
 			    G4ForceCondition* condition) 
-  { return GetMeanFreePath(aTrack, previousStepSize, condition); }
+  { return GetMeanFreePath(track, previousStepSize, condition); }
 
 protected:
 
-  G4double GetMeanFreePath(const G4Track& aTrack, 
+  G4double GetMeanFreePath(const G4Track& track, 
 			   G4double previousStepSize, 
 			   G4ForceCondition* condition);
 
@@ -101,6 +103,8 @@ private:
   const G4double intrinsicLowEnergyLimit; // intrinsic validity range
   const G4double intrinsicHighEnergyLimit;
 
+  G4ShellData shellData;
+  G4DopplerProfile profileData;
 };
 
 #endif

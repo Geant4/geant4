@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Decay.cc,v 1.27 2007/10/06 07:01:09 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4Decay.cc,v 1.30 2008/09/19 03:19:53 kurasige Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // 
 // --------------------------------------------------------------
@@ -63,11 +63,15 @@ G4Decay::G4Decay(const G4String& processName)
                                 HighestValue(20.0),
                                 pExtDecayer(0)
 {
+  // set Process Sub Type
+  SetProcessSubType(static_cast<int>(DECAY));
+
 #ifdef G4VERBOSE
   if (GetVerboseLevel()>1) {
     G4cout << "G4Decay  constructor " << "  Name:" << processName << G4endl;
   }
 #endif
+
   pParticleChange = &fParticleChangeForDecay;
 }
 
@@ -403,9 +407,20 @@ G4double G4Decay::PostStepGetPhysicalInteractionLength(
     // reminder proper time
     fRemainderLifeTime = pTime - track.GetProperTime();
     if (fRemainderLifeTime <= 0.0) fRemainderLifeTime = DBL_MIN;
-  
+    
+    G4double  rvalue=0.0; 
     // use pre-assigned Decay time to determine PIL
-    return (fRemainderLifeTime/aLife)*GetMeanFreePath(track, previousStepSize, condition);
+    if (aLife>0.0) {
+      // ordinary particle
+      rvalue = (fRemainderLifeTime/aLife)*GetMeanFreePath(track, previousStepSize, condition);
+    } else {
+     // shortlived particle
+      rvalue = c_light * fRemainderLifeTime;
+     // by using normalized kinetic energy (= Ekin/mass)
+     G4double   aMass =  track.GetDynamicParticle()->GetMass();
+     rvalue *= track.GetDynamicParticle()->GetTotalMomentum()/aMass;
+    }
+    return rvalue;
   }
 }
 
@@ -426,4 +441,15 @@ G4double G4Decay::AtRestGetPhysicalInteractionLength(
       theNumberOfInteractionLengthLeft * GetMeanLifeTime(track, condition);
   }
   return fRemainderLifeTime;
+}
+
+
+void G4Decay::SetExtDecayer(G4VExtDecayer* val)
+{
+  pExtDecayer = val;
+
+  // set Process Sub Type
+  if ( pExtDecayer !=0 ) {
+    SetProcessSubType(static_cast<int>(DECAY_External));
+  }
 }

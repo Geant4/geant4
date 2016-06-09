@@ -33,6 +33,8 @@
 // 
 //      Creation date: 9 April 2007
 // -----------------------------------------------------------------------------
+//
+// 081120 Add deltaT in signature of CalKinematicsOfBinaryCollisions
 
 #ifndef G4QMDCollision_hh
 #define G4QMDCollision_hh
@@ -48,13 +50,12 @@ class G4QMDCollision
       G4QMDCollision();
       ~G4QMDCollision();
 
-      void CalKinematicsOfBinaryCollisions();
+      void CalKinematicsOfBinaryCollisions( G4double );
       G4bool CalFinalStateOfTheBinaryCollision( G4int , G4int );
       G4bool CalFinalStateOfTheBinaryCollisionJQMD( G4double , G4double , G4ThreeVector , G4double , G4double , G4ThreeVector , G4double , G4int , G4int );
       //     CalFinalStateOfTheBinaryCollision ( sig , cutoff , pcm , prcm , srt, beta , gamma , i , j );
 
       void SetMeanField ( G4QMDMeanField* meanfield ){ theMeanField = meanfield; theSystem = meanfield->GetSystem(); }
-
 
    private:
       G4QMDSystem* theSystem;

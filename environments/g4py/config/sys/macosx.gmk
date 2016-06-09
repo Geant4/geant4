@@ -1,9 +1,9 @@
-# $Id: macosx.gmk,v 1.4 2006/08/10 08:49:08 kmura Exp $
-# $Name: geant4-09-01 $
+# $Id: macosx.gmk,v 1.5 2008/12/01 06:47:39 kmura Exp $
+# $Name: geant4-09-02 $
 # ===========================================================
 #   System specific terms
 #
-#   MacOSX 10.4 (Tiger) gcc 4.0.1
+#   MacOSX 10.4 (Tiger/Leopard) gcc 4.0.1
 #   Note: gc-3.3 is not valid for this setup.
 # ===========================================================
 

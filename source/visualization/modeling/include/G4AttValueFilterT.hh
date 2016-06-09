@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // $Id: G4AttValueFilterT.hh,v 1.3 2006/12/13 15:50:00 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // Templated class for G4AttValue filters.
 //

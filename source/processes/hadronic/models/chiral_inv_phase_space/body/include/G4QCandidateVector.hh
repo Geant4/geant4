@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4QCandidateVector.hh,v 1.21 2006/06/29 20:06:01 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 //      ---------------- G4QCandidateVector ----------------
 //             by Mikhail Kossov, Sept 1999.

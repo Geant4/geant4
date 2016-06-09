@@ -1,0 +1,125 @@
+
+                 Geant4 8.3 - patch-02 Release Notes
+                 -----------------------------------
+
+                                                           25 January 2008
+
+List of fixes included in this public patch since the public release 8.3.p01:
+
+  o Event:
+    -----
+    + G4ParticleGun:
+      o Added class member 'particle_momentum' and method
+        SetParticleMomentum().
+      o Added private copy constructor and =, ==, += operators to
+        Addressing problem report #984.
+    + Modified G4SPSEneDistribution to adress problem report #988.
+    + Fix to normalisation of source intensities with multiple sources
+      in G4GeneralParticleSource::IntensityNormalization().
+
+  o Geometry:
+    --------
+    + management:
+      o Fixed typo in forcing minimum number of points in method
+        G4VSolid::EstimateSurfaceArea(). Addresses problem report #981.
+      o Added dummy constructor and destructor to G4VPVParameterisation.
+    + navigation:
+      o G4PropagatorInField:
+        - Fixes for compilation of code under G4DEBUG_FIELD
+          (problem report #982).
+        - Changed condition for 'ReEstimationEndPoint' in order to better
+          handle very strict parameters of propagation. Also added more
+          verbosity in case of error for negative step.
+          Fixes rare problem observed in production by ATLAS.
+    + solids/Boolean:
+      o Boosted performance for response of Inside() for G4SubtractionSolid
+        and G4UnionSolid according to suggestion in problem report #979.
+    + solids/BREPS:
+      o Fixed bug in G4BREPSolidPolyhedra::DistanceToOut() for cases of
+        particle passing the border of two touching surfaces.
+      o G4BREPSolidBox: fixed problem in the constructor in definition of
+        the side for the normal to surface.
+    + solids/CSG:
+      o G4Torus:
+        - Fixed bug in CalculateExtent() for case of non-rotated full-Phi
+          torus definition: added protection against negative value for sqrt()
+          and corrected formula for 'delta'.
+          Fixes problem of NaN detected in initialisation by CMS.
+        - Fixed bug in SolveNumericJT(): corrected handling of complex roots.
+          Addresses problem report #969.
+      o G4Tubs: fixed bug in DistanceToOut(p,v,..) for negative value under
+        sqrt() for the case of point p on the surface and v tangent to the
+        surface. Responsible for rare cases of NaN.
+      o Fixed problem of undefined side for valid surface normal in case of
+        'Phi' section and direction through the center of either a G4Tubs or
+        G4Cons shape.
+    + solids/specific:
+      o G4EllipticalCone:
+        - DistanceToIn(p): corrected answer for p.z()<-zTopCut and for the
+          point p on the surface.
+        - DistanceToOut(p,v): now returning positive solution or zero when
+          crossing the elliptical surface.
+        - Fix in DistanceToOut(p) which was giving always zero.
+        - Corrected visualisation error of solid in graphics_reps.
+        - Added some formulas on how to pre-calculate 'SemiAxis' and 'zheight'.
+      o Fixed dummy constructors of G4Polycone and G4PolyPhiFace for
+        initialisation of 'edges' and 'corners'.
+      o G4PolyconeSide: added workaround to initialisation of 'corners'
+        vector, to allow for object persistency with Root-I/O.
+      o Removed debug printout in G4Polycone::GetPointOnCone().
+
+  o Global:
+    ------
+    + Changed date for patch-02 to release 8.3.
+
+  o Hadronic Processes:
+    ------------------
+    + management:
+      o G4HadronicProcess:
+        - Fix in FillTotalResult() addressing problem report #967, replaced
+          call to 'aT.GetGlobalTime()' with an internal variable.
+          Use different G4DynamicParticle constructor and do not allow kinetic
+          energy to be exactly 0. This partly removes a spurious peak at
+          90 degrees.
+      o Fixed memory leak with deletion of 'theIsoResult' and
+        'theCrossSectionDataStore' in destructor.
+      o Changed default for isotope production to off. Fixes a memory leak.
+      o Removed effective charge calculation and unused variable 'newWeight'.
+    + models/chiral_inv_phase_space:
+      o Fixed problem of non-reproducibility induced by G4QElasticCrossSection
+        and G4StringChipsInterface.
+      o Reduced memory allocation induced by use std::deque collection in
+        G4QHadron class; temporary workaround by replacing it with std::list.
+    + models/high_energy:
+      o G4HEInelastic::TuningOfHighEnergyCascading(): fixed incorrect
+        assignment of leading particle to low energy backward nucleons and
+        fragments. This bug caused high energy backward particles to be
+        emitted from high energy collisions.
+      o G4HEPionMinusInelastic: fixed incorrect 'Imax' in sampling of charge
+        exchange.
+    + stopping:
+      o G4StopElementSelector: fixed typo in Primakoff formula for
+        capture velocity.
+      o G4MuonMinusCaptureAtRest: fixed old memory leak.
+      o Removed old-style copyright from all headers and fixed Software
+        Reference Manual tags.
+      o Fixed signature of G4MuMinusCaptureCascade::DoCascade() expecting
+        'const' as arguments for A and Z. Resolves linking problems on SUN-CC.
+
+
+ ----------------------------------------------------------------------------
+
+                             Technical Notes
+                             --------------- 
+
+  o  This patch should be applied on top of release 8.3
+  o  Technical notes distributed for release 8.3 are also applicable and
+     valid for this patch.
+
+The code and rebuilt binary libraries for release 8.3 are available
+through our "Archive of Previous Releases" Web page:
+   http://cern.ch/geant4/support/source_archive.shtml
+
+Please refer to the Geant4 User Documentation:
+   http://cern.ch/geant4/support/userdocuments.shtml
+for further information about using Geant4.

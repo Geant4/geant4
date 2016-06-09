@@ -29,7 +29,7 @@
 // Main author:   Riccardo Capra <capra@ge.infn.it>
 //
 // Id:            $Id: RadmonPhysicsElectronStandard.cc,v 1.4 2006/06/29 16:18:43 gunter Exp $
-// Tag:           $Name: geant4-09-01 $
+// Tag:           $Name: geant4-09-02 $
 //
 
 #include "RadmonPhysicsElectronStandard.hh"

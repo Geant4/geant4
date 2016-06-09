@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PenelopeCompton.cc,v 1.26 2006/06/29 19:40:41 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4PenelopeCompton.cc,v 1.33 2008/06/03 15:44:25 pandola Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // Author: Luciano Pandola
 //
@@ -44,6 +44,14 @@
 //                            (bug report # 585)
 // 17 Mar 2004 L.Pandola      Removed unnecessary calls to std::pow(a,b)
 // 18 Mar 2004 L.Pandola      Use of std::map (code review)
+// 26 Mar 2008 L.Pandola      Add boolean flag to control atomic de-excitation
+// 27 Mar 2008 L.Pandola      Re-named some variables to improve readability, 
+//                            and check for strict energy conservation
+// 03 Jun 2008 L.Pandola      Added further protection against non-conservation 
+//                            of energy: it may happen because ionization energy
+//                            from de-excitation manager and from Penelope internal 
+//                            database do not match (difference is <10 eV, but may 
+//                            give a e- with negative kinetic energy). 
 //
 // -------------------------------------------------------------------
 
@@ -85,7 +93,8 @@ G4PenelopeCompton::G4PenelopeCompton(const G4String& processName)
     energyForIntegration(0.0),
     ZForIntegration(1),
     nBins(200),
-    cutForLowEnergySecondaryPhotons(250.0*eV)
+    cutForLowEnergySecondaryPhotons(250.0*eV),
+    fUseAtomicDeexcitation(true)
 {
   if (lowEnergyLimit < intrinsicLowEnergyLimit ||
       highEnergyLimit > intrinsicHighEnergyLimit)
@@ -117,9 +126,9 @@ G4PenelopeCompton::~G4PenelopeCompton()
   delete meanFreePathTable;
   delete rangeTest;
 
-  for (size_t i1=0;i1<matCrossSections->size();i1++)
+  for (size_t i=0;i<matCrossSections->size();i++)
     {
-      delete (*matCrossSections)[i1];
+      delete (*matCrossSections)[i];
     }
 
   delete matCrossSections;
@@ -139,8 +148,7 @@ void G4PenelopeCompton::BuildPhysicsTable(const G4ParticleDefinition& )
 {
   G4DataVector energyVector;
   G4double dBin = std::log10(highEnergyLimit/lowEnergyLimit)/nBins;
-  G4int i;
-  for (i=0;i<nBins;i++)
+  for (G4int i=0;i<nBins;i++)
     {
       energyVector.push_back(std::pow(10.,std::log10(lowEnergyLimit)+i*dBin));
     }
@@ -149,17 +157,15 @@ void G4PenelopeCompton::BuildPhysicsTable(const G4ParticleDefinition& )
   G4int nMaterials = G4Material::GetNumberOfMaterials();
   G4VDataSetAlgorithm* algo = new G4LogLogInterpolation();
 
-  size_t nOfBins = energyVector.size();
-  size_t bin=0;
+  //size_t nOfBins = energyVector.size();
+  //size_t bin=0;
 
   G4DataVector* energies;
   G4DataVector* data;
 
   matCrossSections = new std::vector<G4VEMDataSet*>;
 
-  
-  G4int m;
-  for (m=0; m<nMaterials; m++)
+  for (G4int m=0; m<nMaterials; m++)
     {
       const G4Material* material= (*materialTable)[m];
       G4int nElements = material->GetNumberOfElements();
@@ -168,7 +174,7 @@ void G4PenelopeCompton::BuildPhysicsTable(const G4ParticleDefinition& )
 
       G4VEMDataSet* setForMat = new G4CompositeEMDataSet(algo,1.,1.);
 
-      for (i=0; i<nElements; i++) {
+      for (G4int i=0; i<nElements; i++) {
  
         G4int Z = (G4int) (*elementVector)[i]->GetZ();
         G4double density = nAtomsPerVolume[i];
@@ -177,7 +183,7 @@ void G4PenelopeCompton::BuildPhysicsTable(const G4ParticleDefinition& )
         data = new G4DataVector;
 
 
-        for (bin=0; bin<nOfBins; bin++)
+        for (size_t bin=0; bin<energyVector.size(); bin++)
 	  {
 	    G4double e = energyVector[bin];
 	    energies->push_back(e);
@@ -199,13 +205,13 @@ void G4PenelopeCompton::BuildPhysicsTable(const G4ParticleDefinition& )
   G4VEMDataSet* materialSet = new G4CompositeEMDataSet(algo,1.,1.);
  
  
-  for (m=0; m<nMaterials; m++)
+  for (G4int m=0; m<nMaterials; m++)
     { 
       energies = new G4DataVector;
       data = new G4DataVector;
       const G4Material* material= (*materialTable)[m];
       material= (*materialTable)[m];
-      for (bin=0; bin<nOfBins; bin++)
+      for (size_t bin=0; bin<energyVector.size(); bin++)
 	{
 	  G4double energy = energyVector[bin];
 	  energies->push_back(energy);
@@ -253,6 +259,7 @@ G4VParticleChange* G4PenelopeCompton::PostStepDoIt(const G4Track& aTrack,
 
   const G4MaterialCutsCouple* couple = aTrack.GetMaterialCutsCouple();
   const G4Material* material = couple->GetMaterial();
+  
   G4int Z = SelectRandomAtomForCompton(material,photonEnergy0);
   const G4int nmax = 64;
   G4double rn[nmax],pac[nmax];
@@ -273,6 +280,8 @@ G4VParticleChange* G4PenelopeCompton::PostStepDoIt(const G4Track& aTrack,
   taumin = 1.0/ki2;
   a1 = std::log(ki2);
   a2 = a1+2.0*ki*(1.0+ki)/(ki2*ki2);
+  //If the incoming photon is above 5 MeV, the quicker approach based on the 
+  //pure Klein-Nishina formula is used
   if (photonEnergy0 > 5*MeV)
     {
       do{
@@ -304,7 +313,6 @@ G4VParticleChange* G4PenelopeCompton::PostStepDoIt(const G4Track& aTrack,
 	ionEnergy = (*(ionizationEnergy->find(Z)->second))[iosc];
       }while((epsilon*photonEnergy0-photonEnergy0+ionEnergy) >0);
     }
-
   else //photonEnergy0<5 MeV
     {
       //Incoherent scattering function for theta=PI
@@ -358,11 +366,13 @@ G4VParticleChange* G4PenelopeCompton::PostStepDoIt(const G4Track& aTrack,
 		  (electron_mass_c2*std::sqrt(2.0*aux+ionEnergy*ionEnergy));
 		if (pzomc > 0) 
 		  {
-		    rn[i] = 1.0-0.5*std::exp(0.5-(std::sqrt(0.5)+std::sqrt(2.0)*pzomc)*(std::sqrt(0.5)+std::sqrt(2.0)*pzomc));
+		    rn[i] = 1.0-0.5*std::exp(0.5-(std::sqrt(0.5)+std::sqrt(2.0)*pzomc)*
+					     (std::sqrt(0.5)+std::sqrt(2.0)*pzomc));
 		  }
 		else
 		  {
-		    rn[i] = 0.5*std::exp(0.5-(std::sqrt(0.5)-std::sqrt(2.0)*pzomc)*(std::sqrt(0.5)-std::sqrt(2.0)*pzomc));
+		    rn[i] = 0.5*std::exp(0.5-(std::sqrt(0.5)-std::sqrt(2.0)*pzomc)*
+					 (std::sqrt(0.5)-std::sqrt(2.0)*pzomc));
 		  }
 		S = S + occupNb*rn[i];
 		pac[i] = S;
@@ -430,7 +440,6 @@ G4VParticleChange* G4PenelopeCompton::PostStepDoIt(const G4Track& aTrack,
 	}
     }
   
-
   G4double sinTheta = std::sqrt(1-cosTheta*cosTheta);
   G4double phi = twopi * G4UniformRand() ;
   G4double dirx = sinTheta * std::cos(phi);
@@ -455,12 +464,9 @@ G4VParticleChange* G4PenelopeCompton::PostStepDoIt(const G4Track& aTrack,
     }
 
 
-  // Kinematics of the scattered electron 
-
-  
+  // Kinematics of the scattered electron   
   G4double diffEnergy = photonEnergy0*(1-epsilon);
   ionEnergy = (*(ionizationEnergy->find(Z)->second))[iosc];
-  //G4double eKineticEnergy = diffEnergy - ionEnergy;
   G4double Q2 = photonEnergy0*photonEnergy0+photonEnergy1*(photonEnergy1-2.0*photonEnergy0*cosTheta);
   G4double cosThetaE; //scattering angle for the electron
   if (Q2 > 1.0e-12)
@@ -472,64 +478,84 @@ G4VParticleChange* G4PenelopeCompton::PostStepDoIt(const G4Track& aTrack,
       cosThetaE = 1.0;
     }
   G4double sinThetaE = std::sqrt(1-cosThetaE*cosThetaE);
+  //initialize here, then check photons created by Atomic-Deexcitation, and the final state e-
+  G4int nbOfSecondaries = 0; 
+  
+  std::vector<G4DynamicParticle*>* photonVector=0;
 
- 
- 
   const G4AtomicTransitionManager* transitionManager = G4AtomicTransitionManager::Instance();
   const G4AtomicShell* shell = transitionManager->Shell(Z,iosc);
   G4double bindingEnergy = shell->BindingEnergy();
   G4int shellId = shell->ShellId();
-  //G4cout << bindingEnergy/keV << " " << ionEnergy/keV << " keV" << G4endl;
-  ionEnergy = std::max(bindingEnergy,ionEnergy); //protection against energy non-conservation 
-  G4double eKineticEnergy = diffEnergy - ionEnergy;
+  G4double ionEnergyInPenelopeDatabase = ionEnergy;
+  ionEnergy = std::max(bindingEnergy,ionEnergyInPenelopeDatabase); //protection against energy non-conservation 
 
-  size_t nTotPhotons=0;
-  G4int nPhotons=0;
+  G4double eKineticEnergy = diffEnergy - ionEnergy; //subtract the excitation energy. If not emitted by fluorescence,
+  //the ionization energy is deposited as local energy deposition
+  G4double localEnergyDeposit = ionEnergy; 
+  G4double energyInFluorescence = 0.; //testing purposes only
 
-  const G4ProductionCutsTable* theCoupleTable=
-    G4ProductionCutsTable::GetProductionCutsTable();
-  size_t indx = couple->GetIndex();
-  G4double cutg = (*(theCoupleTable->GetEnergyCutsVector(0)))[indx];
-  cutg = std::min(cutForLowEnergySecondaryPhotons,cutg);
-
-  G4double cute = (*(theCoupleTable->GetEnergyCutsVector(1)))[indx];
-  cute = std::min(cutForLowEnergySecondaryPhotons,cute);
-  
-  std::vector<G4DynamicParticle*>* photonVector=0;
-  G4DynamicParticle* aPhoton;
-  G4AtomicDeexcitation deexcitationManager;
-
-  if (Z>5 && (ionEnergy > cutg || ionEnergy > cute))
+  if (eKineticEnergy < 0) 
     {
-      photonVector = deexcitationManager.GenerateParticles(Z,shellId);
-      nTotPhotons = photonVector->size();
-      for (size_t k=0;k<nTotPhotons;k++){
-	aPhoton = (*photonVector)[k];
-	if (aPhoton)
-	  {
-	    G4double itsCut = cutg;
-	    if (aPhoton->GetDefinition() == G4Electron::Electron()) itsCut = cute;
-	    G4double itsEnergy = aPhoton->GetKineticEnergy();
-	    if (itsEnergy > itsCut && itsEnergy <= ionEnergy)
+      //It means that there was some problem/mismatch between the two databases. Try to make it work
+      //In this case available Energy (diffEnergy) < ionEnergy
+      //Full residual energy is deposited locally
+      localEnergyDeposit = diffEnergy;
+      eKineticEnergy = 0.0;
+    }
+
+  //the local energy deposit is what remains: part of this may be spent for fluorescence.
+ 
+  if (fUseAtomicDeexcitation)
+    { 
+      G4int nPhotons=0;
+      
+      const G4ProductionCutsTable* theCoupleTable=
+	G4ProductionCutsTable::GetProductionCutsTable();
+      size_t indx = couple->GetIndex();
+
+      G4double cutg = (*(theCoupleTable->GetEnergyCutsVector(0)))[indx];
+      cutg = std::max(cutForLowEnergySecondaryPhotons,cutg);
+
+      G4double cute = (*(theCoupleTable->GetEnergyCutsVector(1)))[indx];
+      cute = std::max(cutForLowEnergySecondaryPhotons,cute);
+     
+      G4DynamicParticle* aPhoton;
+      G4AtomicDeexcitation deexcitationManager;
+      
+      if (Z>5 && (localEnergyDeposit > cutg || localEnergyDeposit > cute))
+	{
+	  photonVector = deexcitationManager.GenerateParticles(Z,shellId);
+	  for (size_t k=0;k<photonVector->size();k++){
+	    aPhoton = (*photonVector)[k];
+	    if (aPhoton)
 	      {
-		nPhotons++;
-		ionEnergy -= itsEnergy;
-	      }
-	    else
-	      {
-		delete aPhoton;
-		(*photonVector)[k]=0;
+		G4double itsCut = cutg;
+		if (aPhoton->GetDefinition() == G4Electron::Electron()) itsCut = cute;
+		G4double itsEnergy = aPhoton->GetKineticEnergy();
+		if (itsEnergy > itsCut && itsEnergy <= localEnergyDeposit)
+		  {
+		    nPhotons++;
+		    localEnergyDeposit -= itsEnergy;
+		    energyInFluorescence += itsEnergy;
+		  }
+		else
+		  {
+		    delete aPhoton;
+		    (*photonVector)[k]=0;
+		  }
 	      }
 	  }
-      }
+	}
+      nbOfSecondaries=nPhotons;
     }
-  G4double energyDeposit =ionEnergy; //il deposito locale e' quello che rimane
-  G4int nbOfSecondaries=nPhotons;
 
+  
   // Generate the electron only if with large enough range w.r.t. cuts and safety 
   G4double safety = aStep.GetPostStepPoint()->GetSafety();
   G4DynamicParticle* electron = 0;
-  if (rangeTest->Escape(G4Electron::Electron(),couple,eKineticEnergy,safety))
+  if (rangeTest->Escape(G4Electron::Electron(),couple,eKineticEnergy,safety) && 
+      eKineticEnergy>cutForLowEnergySecondaryPhotons)
     {
       G4double xEl = sinThetaE * std::cos(phi+pi); 
       G4double yEl = sinThetaE * std::sin(phi+pi);
@@ -542,27 +568,49 @@ G4VParticleChange* G4PenelopeCompton::PostStepDoIt(const G4Track& aTrack,
     }
   else
     {
-      
-      energyDeposit += eKineticEnergy;
+      localEnergyDeposit += eKineticEnergy;
     }
 
   aParticleChange.SetNumberOfSecondaries(nbOfSecondaries);
   if (electron) aParticleChange.AddSecondary(electron);
-  for (size_t ll=0;ll<nTotPhotons;ll++)
+
+  //This block below is executed only if there is at least one secondary photon produced by
+  //AtomicDeexcitation
+  if (photonVector)
     {
-      aPhoton = (*photonVector)[ll];
-      if (aPhoton) aParticleChange.AddSecondary(aPhoton);
+      for (size_t ll=0;ll<photonVector->size();ll++)
+	{
+	  if ((*photonVector)[ll]) aParticleChange.AddSecondary((*photonVector)[ll]);
+	}
     }
   delete photonVector;
-  if (energyDeposit < 0)
+  if (localEnergyDeposit < 0)
     {
       G4cout << "WARNING-" 
 	     << "G4PenelopeCompton::PostStepDoIt - Negative energy deposit"
 	     << G4endl;
-      energyDeposit=0;
+      localEnergyDeposit=0.;
     }
-  aParticleChange.ProposeLocalEnergyDeposit(energyDeposit);
+  aParticleChange.ProposeLocalEnergyDeposit(localEnergyDeposit);
   
+
+  if (verboseLevel > 1)
+    {
+      G4cout << "-----------------------------------------------------------" << G4endl;
+      G4cout << "Energy balance from G4PenelopeCompton" << G4endl;
+      G4cout << "Incoming photon energy: " << photonEnergy0/keV << " keV" << G4endl;
+      G4cout << "-----------------------------------------------------------" << G4endl;
+      G4cout << "Scattered photon: " << photonEnergy1/keV << " keV" << G4endl;
+      G4double electronEnergy = 0.;
+      if (electron)
+	electronEnergy = eKineticEnergy;
+      G4cout << "Scattered electron " << electronEnergy/keV << " keV" << G4endl;
+      G4cout << "Fluorescence: " << energyInFluorescence/keV << " keV" << G4endl;
+      G4cout << "Local energy deposit " << localEnergyDeposit/keV << " keV" << G4endl;
+      G4cout << "Total final state: " << (photonEnergy1+electronEnergy+energyInFluorescence+localEnergyDeposit)/keV << 
+	" keV" << G4endl;
+      G4cout << "-----------------------------------------------------------" << G4endl;
+    }
 
   return G4VDiscreteProcess::PostStepDoIt( aTrack, aStep);
 }

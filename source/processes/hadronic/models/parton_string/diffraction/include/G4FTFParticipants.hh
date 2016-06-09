@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4FTFParticipants.hh,v 1.4 2006/06/29 20:54:32 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4FTFParticipants.hh,v 1.5 2008/03/31 15:34:01 vuzhinsk Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 
 #ifndef G4FTFParticipants_h
@@ -40,6 +40,7 @@
 // ------------------------------------------------------------
 
 #include "G4VParticipants.hh"
+#include "G4FTFParameters.hh"   // Uzhi 29.03.08
 #include <vector>
 #include "G4Nucleon.hh"
 #include "G4V3DNucleus.hh"
@@ -59,15 +60,17 @@ class G4FTFParticipants : public G4VParticipants
       int operator==(const G4FTFParticipants &right) const;
       int operator!=(const G4FTFParticipants &right) const;
 
-      void BuildInteractions(const G4ReactionProduct  &thePrimary);
-      G4bool Next();
-      const G4InteractionContent & GetInteraction() const;
+      void GetList(const G4ReactionProduct  &thePrimary, 
+                         G4FTFParameters    *theParameters); // Uzhi 29.03.08
 
       void StartLoop();
+      G4bool Next();
+      const G4InteractionContent & GetInteraction() const;
       
+      std::vector<G4InteractionContent *> theInteractions;
   private:
 
-      std::vector<G4InteractionContent *> theInteractions;
+//      std::vector<G4InteractionContent *> theInteractions;
   
       G4int currentInteraction;
 
@@ -94,5 +97,3 @@ const G4InteractionContent & G4FTFParticipants::GetInteraction() const
 }
 
 #endif
-
-

@@ -14,6 +14,38 @@ code and to keep track of all tags.
   * Please list in reverse chronological order (last date on top)
   ---------------------------------------------------------------
 
+23 July 2008 - Dennis Wright for Vladimir Uzhinskiy (hadr-hep-V09-01-04)
+------------------------------------------------------------------------
+ G4HEInelastic::HighEnergyCascading: fix bug in momentum sampling which 
+   caused oscillatory behavior in spectrum.
+   Replace
+     xval = Amin(1.0, pt*(binl[l-1] + G4UniformRand()*(binl[l]-binl[l-1])/2.));
+   with 
+     xval = Amin(1.0, pt*(binl[l-1] + G4UniformRand()*(binl[l]-binl[l-1])));
+
+  G4HEInelastic::MediumEnergyCascading: same as above
+
+9 July 2008 - Dennis Wright (hadr-hep-V09-01-03)
+------------------------------------------------
+ G4HEInelastic::Factorial: replace exit with G4Exception.
+
+9 June 2008 - Dennis Wright (hadr-hep-V09-01-02)
+------------------------------------------------
+ G4HEInelastic::NBodyPhaseSpace: remove error message "total mass > total energy"
+ and replace with message only when verbosity is > 1
+
+15 May 2008 - Dennis Wright (hadr-hep-V09-01-01)
+------------------------------------------------
+ G4HEInelastic::TuningOfHighEnergyCascade: remove abnormally high pt 
+ secondaries due to incident strange particles by prohibiting the 
+ assignment of leading particle to anything that goes backward in the 
+ CM frame.   
+ 
+17 Mar 2008 - Dennis Wright (hadr-hep-V09-01-00)
+------------------------------------------------
+ Add braces around single-statement if/else blocks to fix warning from 
+ gcc-4.3 compiler.  Nearly all files affected.
+
 19 Nov 2007 - Dennis Wright (hadr-hep-V09-00-01)
 ------------------------------------------------
  G4HEInelastic::TuningOfHighEnergyCascading: fixed incorrect assignment 

@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4AtomicTransitionManager.cc,v 1.2 ????
-// GEANT4 tag $Name: geant4-09-01 $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // Authors: Elena Guardincerri (Elena.Guardincerri@ge.infn.it)
 //          Alfonso Mantero (Alfonso.Mantero@ge.infn.it)
@@ -318,7 +318,7 @@ std::map<G4int,std::vector<G4FluoTransition*>,std::less<G4int> >::iterator pos;
 	G4DataVector transProb = transition->TransitionProbabilities();
 	G4double totalRadTransProb = 0;
 	
-      for (size_t j = 1; j<transProb.size(); j++)
+	for (size_t j = 0; j<transProb.size(); j++) // AM -- corrected, it was 1
 	{
 	  totalRadTransProb = totalRadTransProb + transProb[j];
 	}
@@ -360,7 +360,7 @@ G4double G4AtomicTransitionManager::TotalNonRadiativeTransitionProbability(G4int
       G4DataVector transProb = transition->TransitionProbabilities();
       G4double totalRadTransProb = 0;
       
-      for(size_t j = 1; j<transProb.size(); j++)
+      for(size_t j = 0; j<transProb.size(); j++) // AM -- Corrected, was 1
 	{
 	  totalRadTransProb = totalRadTransProb + transProb[j];
 	}

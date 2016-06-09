@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4EllipticalCone.icc,v 1.6 2006/10/20 13:45:20 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4EllipticalCone.icc,v 1.7 2008/11/21 09:26:22 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 //
 // --------------------------------------------------------------------
@@ -42,6 +42,24 @@ inline
 G4double G4EllipticalCone::GetSemiAxisMax () const
 {
   return ySemiAxis > xSemiAxis ? ySemiAxis : xSemiAxis;
+}
+
+inline
+G4double G4EllipticalCone::GetSemiAxisX () const
+{
+  return xSemiAxis;
+}
+
+inline
+G4double G4EllipticalCone::GetSemiAxisY () const
+{
+  return ySemiAxis;
+}
+
+inline
+G4double G4EllipticalCone::GetZMax() const
+{
+  return zheight;
 }
 
 inline

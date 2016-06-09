@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpticalSurface.cc,v 1.10 2006/06/29 19:13:08 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4OpticalSurface.cc,v 1.12 2008/12/11 10:23:54 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // 
 ////////////////////////////////////////////////////////////////////////
@@ -97,13 +97,20 @@ G4OpticalSurface::G4OpticalSurface(const G4String& name,
 	}
 }
 
+G4OpticalSurface::G4OpticalSurface()
+  : G4SurfaceProperty()
+{
+}
+
+G4OpticalSurface::~G4OpticalSurface()
+{
+}
+
 G4OpticalSurface::G4OpticalSurface(const G4OpticalSurface &right)
   : G4SurfaceProperty(right.GetName())
 {
 	*this = right;
 }
-
-G4OpticalSurface::~G4OpticalSurface(){}
 
 G4int G4OpticalSurface::operator==(const G4OpticalSurface &right) const
 {

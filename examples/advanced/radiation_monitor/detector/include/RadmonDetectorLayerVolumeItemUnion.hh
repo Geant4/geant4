@@ -29,7 +29,7 @@
 // Main author:   Riccardo Capra <capra@ge.infn.it>
 //
 // Id:            $Id: RadmonDetectorLayerVolumeItemUnion.hh,v 1.3 2006/06/29 16:10:29 gunter Exp $
-// Tag:           $Name: geant4-09-01 $
+// Tag:           $Name: geant4-09-02 $
 //
 // Description:   Union of two solids
 //

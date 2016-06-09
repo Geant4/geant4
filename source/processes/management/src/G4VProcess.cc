@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VProcess.cc,v 1.15 2007/10/02 08:23:20 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4VProcess.cc,v 1.16 2007/11/15 04:10:18 kurasige Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // 
 // --------------------------------------------------------------
@@ -51,11 +51,13 @@ G4VProcess::G4VProcess(const G4String& aName, G4ProcessType   aType )
                     currentInteractionLength(-1.0),
                     theProcessName(aName),
 		    theProcessType(aType),
+		    theProcessSubType(-1),
                     thePILfactor(1.0),
-		    enableAtRestDoIt(true),
-		    enableAlongStepDoIt(true),
-		    enablePostStepDoIt(true),
+                    enableAtRestDoIt(true),
+                    enableAlongStepDoIt(true),
+                    enablePostStepDoIt(true),
                     verboseLevel(0)
+
 {
   pParticleChange = &aParticleChange;
 }
@@ -70,11 +72,12 @@ G4VProcess::G4VProcess(const G4VProcess& right)
             currentInteractionLength(-1.0),
             theProcessName(right.theProcessName),
             theProcessType(right.theProcessType),
+	    theProcessSubType(right.theProcessSubType),
             thePILfactor(1.0),
-	    enableAtRestDoIt(true),
-	    enableAlongStepDoIt(true),
-	    enablePostStepDoIt(true),
-	    verboseLevel(right.verboseLevel)
+            enableAtRestDoIt(right.enableAtRestDoIt),
+            enableAlongStepDoIt(right.enableAlongStepDoIt),
+            enablePostStepDoIt(right.enablePostStepDoIt),
+            verboseLevel(right.verboseLevel)
 {
 }
 
@@ -84,6 +87,10 @@ void G4VProcess::SubtractNumberOfInteractionLengthLeft(
 {
   if (currentInteractionLength>0.0) {
     theNumberOfInteractionLengthLeft -= previousStepSize/currentInteractionLength;
+    if(theNumberOfInteractionLengthLeft<0.) {
+       theNumberOfInteractionLengthLeft=perMillion;
+    }          
+
   } else {
 #ifdef G4VERBOSE
     if (verboseLevel>0) {
@@ -181,7 +188,8 @@ G4int G4VProcess::operator!=(const G4VProcess &right) const
 void G4VProcess::DumpInfo() const
 {
   G4cout << "Process Name " << theProcessName ;
-  G4cout << " : Type[" << GetProcessTypeName(theProcessType) << "]"<< G4endl;
+  G4cout << " : Type[" << GetProcessTypeName(theProcessType) << "]";
+  G4cout << " : SubType[" << theProcessSubType << "]"<< G4endl;
 }
 
 

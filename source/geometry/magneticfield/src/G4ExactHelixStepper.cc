@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ExactHelixStepper.cc,v 1.8 2007/12/10 16:29:47 gunter Exp $ 
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4ExactHelixStepper.cc,v 1.9 2008/10/29 14:34:35 gcosmo Exp $ 
+// GEANT4 tag $Name: geant4-09-02 $
 //
 //  Helix a-la-Explicity Euler: x_1 = x_0 + helix(h)
 //   with helix(h) being a helix piece of length h
@@ -111,7 +111,7 @@ G4ExactHelixStepper::DumbStepper( const G4double  yIn[],
 G4double G4ExactHelixStepper::DistChord()   const 
 {
   // Implementation : must check whether h/R >  pi  !!
-  //   If( h/R <  pi)   DistChord=h/2*tan(Ang_curve/4)
+  //   If( h/R <  pi)   DistChord=h/2*std::tan(Ang_curve/4)
   //   Else             DistChord=R_helix
   //
   G4double distChord;

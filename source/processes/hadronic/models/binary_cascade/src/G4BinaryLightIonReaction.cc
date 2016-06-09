@@ -38,7 +38,8 @@
 #include <cmath>
  
   G4BinaryLightIonReaction::G4BinaryLightIonReaction()
-  : theModel(), theHandler(), theProjectileFragmentation(&theHandler) {}
+    : G4HadronicInteraction("Binary Cascade"), theModel(), theHandler(), 
+      theProjectileFragmentation(&theHandler) {}
   
   G4HadFinalState *G4BinaryLightIonReaction::
   ApplyYourself(const G4HadProjectile &aTrack, G4Nucleus & targetNucleus )

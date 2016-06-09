@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4UItcsh.cc,v 1.15 2007/11/06 09:36:23 kmura Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4UItcsh.cc,v 1.17 2008/07/18 06:37:06 kmura Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 
 #ifndef WIN32
@@ -558,8 +558,7 @@ G4String G4UItcsh::ReadLine()
     case AsciiCtrD:       // ... delete/exit/show matched list
       if(commandLine.length()!=0 && IsCursorLast()) ListMatchedCommand();
       else if (commandLine.empty()) {
-	G4cout << G4endl;
-	exit(0);
+        return G4String("exit");	
       } else DeleteCharacter();
       break;
     case AsciiCtrE:       // ... move cursor to the end

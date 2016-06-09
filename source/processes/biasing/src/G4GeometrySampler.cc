@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4GeometrySampler.cc,v 1.8 2007/06/01 09:52:23 ahoward Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4GeometrySampler.cc,v 1.10 2008/04/21 09:10:28 ahoward Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -45,7 +45,7 @@
 #include "G4ImportanceConfigurator.hh"
 #include "G4WeightWindowConfigurator.hh"
 #include "G4WeightCutOffConfigurator.hh"
-#include "G4GCellFinder.hh"
+//#include "G4GCellFinder.hh"
 
  G4GeometrySampler::
  G4GeometrySampler(G4VPhysicalVolume *parallelworld, const G4String &particlename)
@@ -53,7 +53,7 @@
     fWorld(parallelworld),
     fImportanceConfigurator(0),
     //    fScoreConfigurator(0),
-    fGCellFinder(0),
+    //    fGCellFinder(0),
     fWeightCutOffConfigurator(0),
     fIStore(0),
     fWeightWindowConfigurator(0),
@@ -90,11 +90,11 @@ void G4GeometrySampler::ClearSampling()
     delete fWeightCutOffConfigurator;
     fWeightCutOffConfigurator = 0;
   }
-  if (fGCellFinder)
-  {
-    delete fGCellFinder;
-    fGCellFinder = 0;
-  }
+//   if (fGCellFinder)
+//   {
+//     delete fGCellFinder;
+//     fGCellFinder = 0;
+//   }
   fIStore = 0;
   fConfigurators.clear();
   fIsConfigured = false;
@@ -161,13 +161,13 @@ G4GeometrySampler::PrepareWeightRoulett(G4double wsurvive,
 {
   //  fGCellFinder = new G4GCellFinder(fWorld);
   G4cout << " preparing weight roulette" << G4endl;
-  fGCellFinder = new G4GCellFinder();
-  if (!fGCellFinder)
-  {
-    G4Exception("G4GeometrySampler::PrepareWeightRoulett()",
-                "FatalError", FatalException,
-                "Failed allocation of G4GCellFinder !");
-  }
+  //  fGCellFinder = new G4GCellFinder();
+//   if (!fGCellFinder)
+//   {
+//     G4Exception("G4GeometrySampler::PrepareWeightRoulett()",
+//                 "FatalError", FatalException,
+//                 "Failed allocation of G4GCellFinder !");
+//   }
   
   fWeightCutOffConfigurator = 
     new G4WeightCutOffConfigurator(fWorld, fParticleName,
@@ -175,7 +175,8 @@ G4GeometrySampler::PrepareWeightRoulett(G4double wsurvive,
                                    wlimit,
                                    isource,
                                    fIStore,
-                                   *fGCellFinder, paraflag);
+				   paraflag);
+				   //*fGCellFinder, paraflag);
   if (!fWeightCutOffConfigurator)
   {
     G4Exception("G4GeometrySampler::PrepareWeightRoulett()",

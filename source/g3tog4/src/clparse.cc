@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: clparse.cc,v 1.18 2006/06/29 18:15:08 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: clparse.cc,v 1.19 2008/11/17 08:33:57 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // modified by I.Hrivnacova
 // added G3SensVol
@@ -45,19 +45,20 @@
 
 std::ofstream ofile;
 
-extern "C" {
+extern "C"
+{
 #include <stdlib.h>
 }
 
 extern std::ofstream ofile;
 
 G3VolTable G3Vol;
-G3MatTable G3Mat; // material G3 ID <-> G4 pointer table
-G3MedTable G3Med; // trk media G3 ID <-> G4 pointer table
-G3RotTable G3Rot; // rotation ID <-> G4 transform object table
+G3MatTable G3Mat;   // material G3 ID <-> G4 pointer table
+G3MedTable G3Med;   // trk media G3 ID <-> G4 pointer table
+G3RotTable G3Rot;   // rotation ID <-> G4 transform object table
 G3PartTable G3Part; // particle ID <-> ParticleDefinition pointer
-G3DetTable G3Det; // sensitive detector name <-> pointer
-G3EleTable G3Ele; // element names table
+G3DetTable G3Det;   // sensitive detector name <-> pointer
+G3EleTable G3Ele;   // element names table
 G3SensVolVector G3SensVol; // vector of sensitive logical volumes
 char gSeparator('_');
 
@@ -71,6 +72,7 @@ G4int G3CLTokens(G4String *line, G4String *tokens);
 void G3CLEval(G4String *tokens, char *select);
 
 // front-end decoders for G3 routines
+//
 void PG4gsvolu(G4String *tokens);
 void PG4gspos (G4String *tokens);
 void PG4gsposp(G4String *tokens);
@@ -95,105 +97,102 @@ void PG4gsdetd(G4String *tokens);
 void PG4gsdetu(G4String *tokens);
 void PG4ggclos();
 
-void G3CLRead(G4String & fname, char *select = 0){
-//
-//  G3CLRead
-//  Read the call List file, parse the tokens, and pass the token
-//  List to the Geant4 interpreter
-//
-//  fname: call List filename
-//
+void G3CLRead(G4String & fname, char *select = 0)
+{
+  //
+  //  G3CLRead
+  //  Read the call List file, parse the tokens, and pass the token
+  //  List to the Geant4 interpreter
+  //
+  //  fname: call List filename
   
-  G4String line;
-  G4String tokens[1000];
+    G4String line;
+    G4String tokens[1000];
 
-  const char* ofname = "clparse.out";
-  ofile.open(ofname);
-  ofile << "Output file open\n";
+    const char* ofname = "clparse.out";
+    ofile.open(ofname);
+    ofile << "Output file open\n";
 
-  G4int count = 0;
-  G4int ntokens = 0;
-  std::ifstream istr(fname);
+    G4int count = 0;
+    G4int ntokens = 0;
+    std::ifstream istr(fname);
     
-  while (line.readLine(istr) && ! istr.eof()){
-      count++;
-      ntokens = G3CLTokens(&line,tokens);  // tokenize the line
-      for (G4int i=0; i < ntokens; i++) ofile << tokens[i] << G4endl;
-      
-          // interpret the line as a Geant call
-      G3CLEval(tokens, select);
-  }
+    while (line.readLine(istr) && ! istr.eof())
+    {
+        count++;
+        ntokens = G3CLTokens(&line,tokens);  // tokenize the line
+        for (G4int i=0; i < ntokens; i++)
+        {
+          ofile << tokens[i] << G4endl;
+        }
+
+        // interpret the line as a Geant call
+        //
+        G3CLEval(tokens, select);
+    }
 }
 
 
 G4int G3CLTokens(G4String *line, G4String tokens[])
-//
-// G3CLTokens
-//
-// Tokenize line, returning tokens in tokens[]. Items in ".."
-// are extracted as single tokens, despite embedded spaces.
-//
 {
+  //
+  // G3CLTokens
+  //
+  // Tokenize line, returning tokens in tokens[]. Items in ".."
+  // are extracted as single tokens, despite embedded spaces.
+
     G4Tokenizer next(*line);
+
     // first tokenize using " to identify strings
+    //
     G4int itok = 0;
     G4int ntokens = 0;
     G4String token1, token2;
     while (!(token1=next("\"")).isNull())
+    {
+        itok++;
+        if (itok%2 == 0 ) // even: inside a string
         {
-            itok++;
-            if (itok%2 == 0 ) // even: inside a string
-                {
-                    tokens[ntokens++] = token1;
-                } else        // not in a quoted string: finish tokenization
-                {
-                    G4Tokenizer lev2(token1);
-                    while (!(token2=lev2()).isNull())
-                        {
-                            tokens[ntokens] = token2;
-                            ntokens++;
-                        }
-                }
+            tokens[ntokens++] = token1;
         }
+        else              // not in a quoted string: finish tokenization
+        {
+            G4Tokenizer lev2(token1);
+            while (!(token2=lev2()).isNull())
+            {
+                tokens[ntokens] = token2;
+                ntokens++;
+            }
+        }
+    }
     return ntokens;
 }
 
+
 void G3CLEval(G4String tokens[], char *select)
-//
-// G3CLEval
-//
-// Evaluate the token List as a Geant3 call, and execute it as
-// a Geant4 call.
-//
 {
+  //
+  // G3CLEval
+  //
+  // Evaluate the token List as a Geant3 call, and execute it as
+  // a Geant4 call.
+
     const char* context = tokens[0];
     const char* routine = tokens[1];
+    const char* wcard = "*";
 
-    // If context is selected, return unless context matches.
-    if (select != 0 && select != "*") if ( strcmp(select,context) ) return;
+    // If context is selected, return unless context matches
+    //
+    if ((select != 0) && (select != wcard))
+    {
+      if ( strcmp(select,context) )  { return; }
+    }
 
     // Branch on Geant3 routine name
+    //
     ofile << "Do routine " << routine << " in context " << context << G4endl;
     
-    if ( !strcmp(routine,"GSVOLU") ) { 
-//      volcount++;
-//      if (volcount == 1) {
-//        // Special handling of the first one, assumed to be global mother
-//        if ( GlobalMotherVolume == 0 ) {
-//        PG4gsvolu(&tokens[2]); 
-//        } else {
-//          G4String gblmoth="Global mother";
-//          G3Vol.PutLV(&gblmoth,GlobalMotherVolume);
-//        }
-//      } else {
-//        PG4gsvolu(&tokens[2]); 
-//      }
-//      if (volcount == 2) {
-//        G4String vname = tokens[2];
-//        SubsystemMotherVolume = G3Vol.GetLV(&vname);
-//      }
-        { PG4gsvolu(&tokens[2]); return;}
-    }
+    if ( !strcmp(routine,"GSVOLU") ) { PG4gsvolu(&tokens[2]); return;}
     if ( !strcmp(routine,"GSPOS") )  { PG4gspos (&tokens[2]); return;}
     if ( !strcmp(routine,"GSPOSP") ) { PG4gsposp(&tokens[2]); return;}
     if ( !strcmp(routine,"GSATT") )  { PG4gsatt (&tokens[2]); return;}
@@ -219,19 +218,20 @@ void G3CLEval(G4String tokens[], char *select)
 }
 
 void G3fillParams(G4String *tokens, const char *ptypes)
-//
-// G3fillParams
-//
-// Interpret tokens to fill call parameters, based on parameter
-//   types ptypes
-//
 {
+  //
+  // G3fillParams
+  //
+  // Interpret tokens to fill call parameters, based on parameter types ptypes
+
     // loop over ptypes
+    //
     G4int i =0, ipt = 0, k = 0;
     G4int ni =0, nr = 0, ns = 0;
     while (ptypes[i] != '\0')
+    {
+        switch (ptypes[i])
         {
-            switch (ptypes[i]) {
             case 'i':
                 Ipar[ni] = atoi(tokens[ipt].data());
                 narray = Ipar[ni];
@@ -247,38 +247,39 @@ void G3fillParams(G4String *tokens, const char *ptypes)
                 break;
             case 'I':
                 for (k=0; k < narray; k++)
-                    {
-                        Ipar[ni] = atoi(tokens[ipt].data());
-                        ni++; ipt++;
-                    }
+                {
+                    Ipar[ni] = atoi(tokens[ipt].data());
+                    ni++; ipt++;
+                }
                 break;
             case 'R':
                 for (k=0; k < narray; k++) 
-                    { 
-                        Rpar[nr] = atof(tokens[ipt].data()); 
-                        nr++; ipt++;
-                    }
+                { 
+                    Rpar[nr] = atof(tokens[ipt].data()); 
+                    nr++; ipt++;
+                }
                 break;
             case 'Q':
                 // special case of reading three successive R arrays 
                 // into one (used in gsmixt)
+                //
                 narray = 3 * std::abs(narray);
                 for (k=0; k < narray; k++) 
-                    { 
-                        Rpar[nr] = atof(tokens[ipt].data()); 
-                        nr++; ipt++;
-                    }
+                { 
+                    Rpar[nr] = atof(tokens[ipt].data()); 
+                    nr++; ipt++;
+                }
                 break;
             case 'S':
                 for (k=0; k < narray; k++)
-                    {
-                        Spar[ns] = tokens[ipt];
-                        ns++; ipt++;
-                    }
+                {
+                    Spar[ns] = tokens[ipt];
+                    ns++; ipt++;
+                }
                 break;
             default:
                 ofile << "unidentified ptype '" << ptypes[i] << G4endl;
-            };
-            i++;
-        }
+        };
+        i++;
+    }
 }

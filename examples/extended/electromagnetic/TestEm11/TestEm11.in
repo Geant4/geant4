@@ -1,4 +1,4 @@
-# $Id: TestEm11.in,v 1.6 2006/10/26 10:18:59 maire Exp $
+# $Id: TestEm11.in,v 1.7 2008/09/22 15:11:34 maire Exp $
 #
 # limit the step size from histo 1
 #
@@ -17,7 +17,7 @@
 /gun/particle e-
 /gun/energy 500 keV
 #
-/testem/histo/setFileType hbook
+/testem/histo/setFileType root
 /testem/histo/setFileName testem11
 /testem/histo/setHisto 1 100 0.    1. mm	#edep profile
 /testem/histo/setHisto 2 102 0.  510. keV	#total Edep

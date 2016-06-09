@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RunAction.cc,v 1.34 2007/04/24 13:05:14 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: RunAction.cc,v 1.37 2008/05/29 16:59:27 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -130,7 +130,7 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   G4int  prec = G4cout.precision(2);
   G4cout << "\n------------------------------------------------------------\n";
   G4cout << std::setw(14) << "material"
-         << std::setw(17) << "Total Edep"
+         << std::setw(17) << "Edep       RMS"
 	 << std::setw(33) << "sqrt(E0(GeV))*rmsE/Emean"
 	 << std::setw(23) << "total tracklen \n \n";
 
@@ -138,8 +138,9 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
     {
       MeanEAbs  = sumEAbs[k]*norm;
       MeanEAbs2 = sum2EAbs[k]*norm;
-      rmsEAbs  = std::sqrt(std::fabs(MeanEAbs2 - MeanEAbs*MeanEAbs));
-
+      rmsEAbs  = std::sqrt(std::abs(MeanEAbs2 - MeanEAbs*MeanEAbs));
+      //G4cout << "k= " << k << "  RMS= " <<  rmsEAbs 
+      //     << "  applyLimit: " << applyLimit << G4endl;
       if(applyLimit) {
         G4int    nn    = 0;
         G4double sume  = 0.0;
@@ -158,7 +159,7 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
         if(norm1 > 0.0) norm1 = 1.0/norm1;
 	MeanEAbs  = sume*norm1;
 	MeanEAbs2 = sume2*norm1;
-	rmsEAbs  = std::sqrt(std::fabs(MeanEAbs2 - MeanEAbs*MeanEAbs));
+	rmsEAbs  = std::sqrt(std::abs(MeanEAbs2 - MeanEAbs*MeanEAbs));
       }
 
       resolution= 100.*sqbeam*rmsEAbs/MeanEAbs;
@@ -170,14 +171,14 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
 
       MeanLAbs  = sumLAbs[k]*norm;
       MeanLAbs2 = sum2LAbs[k]*norm;
-      rmsLAbs  = std::sqrt(std::fabs(MeanLAbs2 - MeanLAbs*MeanLAbs));
+      rmsLAbs  = std::sqrt(std::abs(MeanLAbs2 - MeanLAbs*MeanLAbs));
 
       //print
       //
       G4cout
        << std::setw(14) << Detector->GetAbsorMaterial(k)->GetName() << ": "
        << std::setprecision(5)
-       << std::setw(6) << G4BestUnit(MeanEAbs,"Energy") << " +- "
+       << std::setw(6) << G4BestUnit(MeanEAbs,"Energy") << " :  "
        << std::setprecision(4)
        << std::setw(5) << G4BestUnit( rmsEAbs,"Energy")  
        << std::setw(10) << resolution  << " +- " 
@@ -188,6 +189,11 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
        << G4endl;
     }
   G4cout << "\n------------------------------------------------------------\n";
+
+  G4cout << " Beam particle " 
+	 << Primary->GetParticleGun()->
+    GetParticleDefinition()->GetParticleName()
+	 << "  E = " << G4BestUnit(beamEnergy,"Energy") << G4endl;
   
   //Energy flow
   //

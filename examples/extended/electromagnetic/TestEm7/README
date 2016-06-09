@@ -1,4 +1,4 @@
-$Id: README,v 1.17 2007/12/04 12:06:28 vnivanch Exp $
+$Id: README,v 1.21 2008/10/24 15:36:24 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -34,36 +34,50 @@ $Id: README,v 1.17 2007/12/04 12:06:28 vnivanch Exp $
      defined via UI commands : /testem/det/tally...    
  	
  2- PHYSICS LIST
-
-    The following EM physics lists are available in this example:	 
-    - "standard"     standard EM physics (default)
-    - "livermore"    low-energy EM physics using Livermore data
-    - "penelope"     low-energy EM physics implementing Penelope models
-    - "standardSS"   standard EM physics with single Coulomb scattering 
-                     instead of multiple scattering; G4ionIonisation is 
-                     substituted by G4ionGasIonisation for GenericIons
-    - "standardNR"   standard EM physics with single Coulomb scattering 
-                     process G4ScreenedNuclearRecoil instead of the 
-                     multiple scattering; the new process was developed 
-                     by M.H. Mendenhall and R.A. Weller from Vanderbuilt 
-                     University and published in NIM B 277 (2005) 420.
-                     In later Geant4 releases the process will be a part
-                     of Geant4 source, currently it is released together
-                     with its mathematical tool c2_functions in current 
-                     example
+ 
+ Physics lists can be local (eg. in this example) or from G4 kernel
+ physics_lists subdirectory.
+     
+ Local physics lists:	 
+ - "standard"	standard EM physics with current 'best' options setting.
+                these options are explicited in PhysListEmStandard		
+ - "standardSS" standard EM physics with single Coulomb scattering 
+                instead of multiple scattering; 
+ - "standardNR" standard EM physics with single Coulomb scattering 
+                process G4ScreenedNuclearRecoil instead of the 
+                multiple scattering for ions with energy less than 
+                100 MeV/nucleon; the new process was developed 
+                by M.H. Mendenhall and R.A. Weller from Vanderbuilt 
+                University and published in NIM B 277 (2005) 420.
+                In later Geant4 releases the process will be a part
+                of Geant4 source, currently it is released together
+                with its mathematical tool c2_functions in current 
+                example 
+ - "livermore"  low-energy EM physics using Livermore data
+ - "penelope"   low-energy EM physics implementing Penelope models 
     
-    Alternatively, the user may use predefined Geant4 builders:
-    - "emstandard"        G4EmStandardPhysics builder
-    - "emstandard_opt1"   G4EmStandardPhysics_option1 builder
-    - "emstandard_opt2"   G4EmStandardPhysics_option2 builder
-    See geant4/source/physics_lists/History for details        
-
-    Optional components can be added:
-    - "elastic"       elastic scattering of hadrons
-    - "HElastic"
-    - "QElastic"    
-    - "binary"        QBBC configuration of hadron inelastic models
-    - "binary_ion"    Binary ion inelastic models 		
+ From geant4/source/physics_lists/builders:	 
+ - "emstandard"      recommended standard EM physics for LHC
+ - "emstandard_opt1" best CPU performance standard physics for LHC
+                     option1 in physics_list library (simplified msc, 
+                     the most fast simulation, precision is limited)
+ - "emstandard_opt2" option2 in physics_list library (subcutoff, 
+                     use spline, step function per particle type)
+ - "emstandard_opt3" option3 in physics_list library (advanced msc, 
+                     use spline, step function per particle type) 
+    
+ Optional components can be added:
+ - "elastic"       elastic scattering of hadrons
+ - "HElastic"
+ - "QElastic"    
+ - "binary"        QBBC configuration of hadron inelastic models
+ - "binary_ion"    Binary ion inelastic models
+     		        
+ Physics lists and options can be (re)set with UI commands
+    
+ Please, notice that options set through G4EmProcessOPtions are global, eg
+ for all particle types. In G4 builders, it is shown how to set options per
+ particle type.		
  	 
  3- AN EVENT : THE PRIMARY GENERATOR
  
@@ -80,8 +94,13 @@ $Id: README,v 1.17 2007/12/04 12:06:28 vnivanch Exp $
 	 	
      A RUN is a set of events.
  	
+
+ 4- DOSE IN 'TEST-VOLUMES'
+  
+     The energy deposited in the test-volumes (tallies) defined in
+     DetectorConstruction are printed at EndOfRun, both in MeV and gray.
  				
- 4- VISUALIZATION
+ 5- VISUALIZATION
  
      The Visualization Manager is set in the main().
      The initialisation of the drawing is done via the command
@@ -94,7 +113,7 @@ $Id: README,v 1.17 2007/12/04 12:06:28 vnivanch Exp $
      or none. This command is defined in EventActionMessenger class.
      
 		  	
- 5- HOW TO START ?
+ 6- HOW TO START ?
  
      - compile and link to generate an executable
 	% cd geant4/examples/extended/electromagnetic/TestEm7 
@@ -111,7 +130,7 @@ $Id: README,v 1.17 2007/12/04 12:06:28 vnivanch Exp $
  	Idle> exit
 
 
- 6- HISTOGRAM OF THE BRAGG PEAK
+ 7- HISTOGRAM OF THE BRAGG PEAK
  
      Testem7 computes the total energy deposited along the trajectory of 
      the incident particle : the so-called Bragg peak.
@@ -120,77 +139,36 @@ $Id: README,v 1.17 2007/12/04 12:06:28 vnivanch Exp $
      the maximum allowed for the step size of charged particles.
      (command /testem/stepMax )
  
-     The result is a 1D histogram  which is the total energy deposited along 
-     the trajectory of the incident particle.
-     
-     The histogram is saved in hbook format (testem7.hbook) 
+     The result is a 1D histogram, which is the total energy deposited 
+     along the trajectory of the incident particle.
      
      The bin size is egal to stepMax. The number of bins is determined by 
      the thickness of the absorber (with a minimum of 100 bins).
      The total energy deposited is plotted in MeV/mm per incident particle.  
 
-     Note that, by default, histograms are disabled. To activate them, uncomment
-     G4ANALYSIS_USE in GNUmakefile.
-     
-  7- DOSE IN 'TEST-VOLUMES'
+     The next histogram alowing to have a zoom around the Bragg peak. Its binning 
+     should be defined via UI command: 
+     /testem/histo/setHisto 1 nbins xmin xmax
+
+     The last histogram shows the projectile range. Its binning should be defined
+     similary by the UI command:
+     /testem/histo/setHisto 2 nbins xmin xmax
+      
+  8- USING HISTOGRAMS
+
+     By default the histograms are not activated. To activate histograms
+     the environment variable G4ANALYSIS_USE should be defined. For instance
+     uncomment the flag G4ANALYSIS_USE in GNUmakefile.
   
-     The energy deposited in the test-volumes (tallies) defined in
-     DetectorConstruction are printed at EndOfRun, both in MeV and gray.
- 
+     To use histograms, at least one of the AIDA implementations should be 
+     available. See InstallAida.txt
 
- 8- USING HISTOGRAMS
-
-  By default the histograms are not activated. To activate histograms
-  the environment variable G4ANALYSIS_USE should be defined. For instance
-  uncomment the flag G4ANALYSIS_USE in GNUmakefile.
-
-  It is possible to choose the format of the histogram file (hbook, root, XML):
-  comment/uncomment 1 line in  RunAction::bookHisto().
-  
-  Before compilation of the example it is optimal to clean up old files:
+     Before compilation of the example it is optimal to clean up old files:
   	gmake histclean
   	gmake 
 
-  To use histograms, at least one of the AIDA implementations should be 
-  available (see http://aida.freehep.org).
-  
- 8a - PI 
+     It is possible to choose the format of the histogram file (hbook, root, XML):
+     /testem/histo/setHistoType root
 
-  A package including AIDA and extended interfaces also using Python is PI, 
-  available from: http://cern.ch/pi
-
-  Once installed PI or PI-Lite in a specified local area $MYPY, it is required 
-  to add the installation path to $PATH, i.e. for example, for release 1.2.1 of 
-  PI:
-  setenv PATH ${PATH}:$MYPI/1.2.1/app/releases/PI/PI_1_2_1/rh73_gcc32/bin
-
-  CERN users can use the PATH to the LCG area on AFS.
-  Before running the example the command should be issued:
-  eval `aida-config --runtime csh`
-
- 8b -  OpenScientist
-
-  OpenScientist is available at http://OpenScientist.lal.in2p3.fr.
-
-  You have to "setup" the OpenScientist AIDA implementation before compiling
-  (then with G4ANALYSIS_USE set) and running your Geant4 application.
-
- On UNIX you setup, with a csh flavoured shell : 
-	csh> source <<OpenScientist install path>/aida-setup.csh 
-        or with a sh flavoured shell : 
-	sh> . <<OpenScientist install path>/aida-setup.sh
- On Windows : 
-	DOS> call <<OpenScientist install path>/aida-setup.bat 
-
-  You can use various file formats for writing (AIDA-XML, hbook, root).
-  These formats are readable by the Lab onx interactive program
-  or the OpenPAW application. See the web pages.
-
-
-  With OpenPAW, on a run.hbook file, one can view the histograms
-  with something like :
-	OS> opaw 
-        opaw> h/file 1 run.hbook  ( or opaw> h/file 1 run.aida or run.root)  
-	opaw> zone 2 2 
-	opaw> h/plot 1 
-	opaw> h/plot 2
+     The default name "testem7" can be changed:
+     /testem/histo/setHistoName myname

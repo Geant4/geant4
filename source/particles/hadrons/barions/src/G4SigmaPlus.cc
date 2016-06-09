@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4SigmaPlus.cc,v 1.14 2007/03/11 07:17:35 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4SigmaPlus.cc,v 1.15 2008/09/18 08:37:27 kurasige Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // 
 // ----------------------------------------------------------------------
@@ -69,11 +69,11 @@ G4SigmaPlus* G4SigmaPlus::Definition()
   //             shortlived      subType    anti_encoding
 
     anInstance = new G4ParticleDefinition(
-                 name,    1.18937*GeV, 8.209e-12*MeV,       eplus,
+                 name,    1.18937*GeV, 8.264e-12*MeV,       eplus,
                     1,              +1,             0,
                     2,              +2,             0,
              "baryon",               0,            +1,        3222,
-                false,       0.0802*ns,          NULL,
+                false,      0.08018*ns,          NULL,
                 false,       "sigma");
  
     // Magnetic Moment

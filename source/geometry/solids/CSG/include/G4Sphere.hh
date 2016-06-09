@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Sphere.hh,v 1.20 2007/05/18 07:38:00 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4Sphere.hh,v 1.21 2008/11/21 09:50:05 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 //
 // --------------------------------------------------------------------
@@ -87,7 +87,7 @@ class G4Sphere : public G4CSGSolid
     
     // Accessors
        
-    inline G4double GetInsideRadius   () const;
+    inline G4double GetInnerRadius    () const;
     inline G4double GetOuterRadius    () const;
     inline G4double GetStartPhiAngle  () const;
     inline G4double GetDeltaPhiAngle  () const;
@@ -96,7 +96,7 @@ class G4Sphere : public G4CSGSolid
 
     // Modifiers
 
-    inline void SetInsideRadius   (G4double newRmin);
+    inline void SetInnerRadius    (G4double newRMin);
     inline void SetOuterRadius    (G4double newRmax);
     inline void SetStartPhiAngle  (G4double newSphi);
     inline void SetDeltaPhiAngle  (G4double newDphi);
@@ -161,6 +161,8 @@ class G4Sphere : public G4CSGSolid
     inline G4double  GetDPhi()   const;
     inline G4double  GetSTheta() const;
     inline G4double  GetDTheta() const;
+    inline G4double  GetInsideRadius() const;
+    inline void SetInsideRadius(G4double newRmin);
 
   protected:
  

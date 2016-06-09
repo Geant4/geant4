@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4SmartVoxelNode.hh,v 1.10 2006/06/29 18:32:13 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4SmartVoxelNode.hh,v 1.12 2008/01/24 15:47:23 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // class G4SmartVoxelNode
 //
@@ -70,25 +70,35 @@ class G4SmartVoxelNode
     ~G4SmartVoxelNode();
       // Destructor. No actions.
 
-    G4int GetVolume(G4int pVolumeNo) const;
+    inline G4int GetVolume(G4int pVolumeNo) const;
       // Return contained volume number pVolumeNo.
       // Note: starts from 0 and no bounds checking performed.
 
-    void Insert(G4int pVolumeNo);
+    inline void Insert(G4int pVolumeNo);
       // Add the specified volume number to the contents.
 
-    G4int GetNoContained() const;
+    inline G4int GetNoContained() const;
       // Return the number of volumes inside the node.
 
-    G4int GetMaxEquivalentSliceNo() const;
+    inline G4int GetCapacity() const;
+      // Return the maximum capacity of the buffer.
+
+    inline void Reserve(G4int noSlices);
+      // Reserve memory in the vector of slices according to the specified
+      // quantity, relative to the maximum number of slices.
+
+    inline void Shrink();
+      // Shrink buffer capacity to actual size to reduce wasted memory.
+
+    inline G4int GetMaxEquivalentSliceNo() const;
       // Return the maximum slice (node/header) number with the same contents,
       // and with all intermediate slice also having the same contents.
-    void SetMaxEquivalentSliceNo(G4int pMax);
+    inline void SetMaxEquivalentSliceNo(G4int pMax);
       // Set the maximum slice number (as above).
-    G4int GetMinEquivalentSliceNo() const;
+    inline G4int GetMinEquivalentSliceNo() const;
       // Return the minimum slice (node/header) number with the same contents,
       // and with all intermediate nodes also having the same contents.
-    void SetMinEquivalentSliceNo(G4int pMin);
+    inline void SetMinEquivalentSliceNo(G4int pMin);
       // Set the minimum slice number (as above).
 
     G4bool operator == (const G4SmartVoxelNode& v) const;

@@ -1,4 +1,4 @@
-$Id: History,v 1.93 2007/11/28 12:37:56 maire Exp $
+$Id: History,v 1.112 2008/11/16 19:13:33 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,67 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+          
+16-11-08 mma (testem5-V09-01-13)
+- Em options: 20bins/decade  LinLossLimit=default=0.01
+     
+11-11-08 mma (testem5-V09-01-12)
+- update PhysListEmStandardSS
+     
+31-10-08 mma (testem5-V09-01-11)
+- Use G4hMultipleScattering for muons and protons
+- Modify EM options 
+    
+23-10-08 mma (testem5-V09-01-10)
+- update PhysListEmStandard and README
+
+16-10-08 V.Ivant (testem5-V09-01-09)
+- Removed temporary builder PhysListEmStandardIG
+     
+12-09-08 mma (testem5-V09-01-08)
+- HistoManager.cc : change default histo format
+ 
+28-08-08 mma (testem5-V09-01-07)
+- TrackingAction.cc : reset id=0 between blocks
+      
+23-08-08 mma (testem5-V09-01-06)
+- HistoManager.cc : add missing comma in title array.
+- TrackingAction.cc : use vertex position to help to define transmit 
+
+12-06-08 mma (testem5-V09-01-05)
+- Remove AIDA from GNUmakefile 
+     
+06-05-08 mma (testem5-V09-01-04)
+- PhysListEmStandard : add spline option for physics tables
+- README : update Aida informations
+     
+11-04-08 mma
+- HistoManager::Scale() : suppress warning
+     
+07-04-08 mma (testem5-V09-01-03)
+- PhysicsList : add emstandard_opt3
+- PhysListEmStandard : replace G4MultipleScattering by G4eMultipleScattering 
+- HistoManager::saveAscii() : redefinition of binEdge
+      
+17-03-08 mma (testem5-V09-01-02)
+- macro TestEm5.in : physics list emstandard_opt2
+     
+14-01-08 mma (testem5-V09-01-01)
+- normalize histo 1
+- new subdirectory berger : berger.kumac, berger.C, 530um.ascii  
+    
+19-12-07 mma (testem5-V09-01-00)
+- PhysListEmStandard.cc : select G4hMultipleScattering for muon and proton
+- subdirectory mumsc : mumsc.kumac, deviation.ascii
+     
+3-12-07 mma (testem5-V09-00-08)
+- subdirectory tramu : data mars14.ascii, macros tramu.kumac and tramu.C 
+     
+30-11-07 mma
+- HistoManager: add function Scale(). 
+                ascii[0] = flag to control creation of .ascii file
+- RunAction: normalize histo 10 (--> tramu.mac)
+- add subdirectory tramu
      
 28-11-07 mma (testem5-V09-00-07)
 - TrackingAction: new histos (4 and 5) to plot vertex position of secondaries

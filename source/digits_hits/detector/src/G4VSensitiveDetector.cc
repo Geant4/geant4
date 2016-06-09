@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4VSensitiveDetector.cc,v 1.3 2006/06/29 18:06:11 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // G4VSensitiveDetector
 #include "G4VSensitiveDetector.hh"

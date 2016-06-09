@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4CashKarpRKF45.cc,v 1.14 2006/06/29 18:23:29 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4CashKarpRKF45.cc,v 1.15 2008/01/11 18:11:44 japost Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // The Cash-Karp Runge-Kutta-Fehlberg 4/5 method is an embedded fourth
 // order method (giving fifth-order accuracy) for the solution of an ODE.
@@ -45,26 +45,29 @@
 //
 // Constructor
 
-G4CashKarpRKF45::G4CashKarpRKF45(G4EquationOfMotion *EqRhs, G4int numberOfVariables, G4bool primary)
-  : G4MagIntegratorStepper(EqRhs, numberOfVariables)
+G4CashKarpRKF45::G4CashKarpRKF45(G4EquationOfMotion *EqRhs, 
+				 G4int noIntegrationVariables, 
+				 G4bool primary)
+  : G4MagIntegratorStepper(EqRhs, noIntegrationVariables)
 {
-  fNumberOfVariables = numberOfVariables ;
+  // unsigned int noVariables= std::max(numberOfVariables,8); // For Time .. 7+1
+  const G4int numberOfVariables = noIntegrationVariables;
 
-  ak2 = new G4double[fNumberOfVariables] ;  
-  ak3 = new G4double[fNumberOfVariables] ; 
-  ak4 = new G4double[fNumberOfVariables] ; 
-  ak5 = new G4double[fNumberOfVariables] ; 
-  ak6 = new G4double[fNumberOfVariables] ; 
+  ak2 = new G4double[numberOfVariables] ;  
+  ak3 = new G4double[numberOfVariables] ; 
+  ak4 = new G4double[numberOfVariables] ; 
+  ak5 = new G4double[numberOfVariables] ; 
+  ak6 = new G4double[numberOfVariables] ; 
   ak7 = 0;
-  yTemp = new G4double[fNumberOfVariables] ; 
-  yIn = new G4double[fNumberOfVariables] ;
+  yTemp = new G4double[numberOfVariables] ; 
+  yIn = new G4double[numberOfVariables] ;
 
-  fLastInitialVector = new G4double[fNumberOfVariables] ;
-  fLastFinalVector = new G4double[fNumberOfVariables] ;
-  fLastDyDx = new G4double[fNumberOfVariables];
+  fLastInitialVector = new G4double[numberOfVariables] ;
+  fLastFinalVector = new G4double[numberOfVariables] ;
+  fLastDyDx = new G4double[numberOfVariables];
 
-  fMidVector = new G4double[fNumberOfVariables];
-  fMidError =  new G4double[fNumberOfVariables];
+  fMidVector = new G4double[numberOfVariables];
+  fMidError =  new G4double[numberOfVariables];
   fAuxStepper = 0;   
   if( primary ) 
       fAuxStepper = new G4CashKarpRKF45(EqRhs, numberOfVariables, !primary);
@@ -134,48 +137,55 @@ G4CashKarpRKF45::Stepper(const G4double yInput[],
  const G4double dc1 = c1 - 2825.0/27648.0 ,  dc3 = c3 - 18575.0/48384.0 ,
     dc4 = c4 - 13525.0/55296.0 , dc6 = c6 - 0.25 ;
 
+ // Initialise time to t0, needed when it is not updated by the integration.
+ //        [ Note: Only for time dependent fields (usually electric) 
+ //                  is it neccessary to integrate the time.] 
+ yOut[7] = yTemp[7]   = yIn[7]; 
+
+ const G4int numberOfVariables= this->GetNumberOfVariables(); 
+ // The number of variables to be integrated over
 
    //  Saving yInput because yInput and yOut can be aliases for same array
 
-   for(i=0;i<fNumberOfVariables;i++) 
+   for(i=0;i<numberOfVariables;i++) 
    {
      yIn[i]=yInput[i];
    }
  // RightHandSide(yIn, dydx) ;              // 1st Step
 
- for(i=0;i<fNumberOfVariables;i++) 
+ for(i=0;i<numberOfVariables;i++) 
  {
    yTemp[i] = yIn[i] + b21*Step*dydx[i] ;
  }
  RightHandSide(yTemp, ak2) ;              // 2nd Step
 
- for(i=0;i<fNumberOfVariables;i++)
+ for(i=0;i<numberOfVariables;i++)
  {
     yTemp[i] = yIn[i] + Step*(b31*dydx[i] + b32*ak2[i]) ;
  }
  RightHandSide(yTemp, ak3) ;              // 3rd Step
 
- for(i=0;i<fNumberOfVariables;i++)
+ for(i=0;i<numberOfVariables;i++)
  {
     yTemp[i] = yIn[i] + Step*(b41*dydx[i] + b42*ak2[i] + b43*ak3[i]) ;
  }
  RightHandSide(yTemp, ak4) ;              // 4th Step
 
- for(i=0;i<fNumberOfVariables;i++)
+ for(i=0;i<numberOfVariables;i++)
  {
     yTemp[i] = yIn[i] + Step*(b51*dydx[i] + b52*ak2[i] + b53*ak3[i] +
                       b54*ak4[i]) ;
  }
  RightHandSide(yTemp, ak5) ;              // 5th Step
 
- for(i=0;i<fNumberOfVariables;i++)
+ for(i=0;i<numberOfVariables;i++)
  {
     yTemp[i] = yIn[i] + Step*(b61*dydx[i] + b62*ak2[i] + b63*ak3[i] +
                       b64*ak4[i] + b65*ak5[i]) ;
  }
  RightHandSide(yTemp, ak6) ;              // 6th Step
 
- for(i=0;i<fNumberOfVariables;i++)
+ for(i=0;i<numberOfVariables;i++)
  {
     // Accumulate increments with proper weights
 

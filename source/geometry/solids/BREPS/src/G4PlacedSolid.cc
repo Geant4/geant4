@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4PlacedSolid.cc,v 1.6 2007/05/11 13:49:32 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file

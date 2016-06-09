@@ -33,11 +33,12 @@
 #endif
 
 #ifdef G4ANALYSIS_USE
-#include <AIDA/AIDA.h>
 #include "exGPSAnalysisManager.hh"
 #endif
 
+#ifdef G4VIS_USE
 #include "G4VisExecutive.hh"
+#endif
 
 #include "exGPSGeometryConstruction.hh"
 #include "exGPSPhysicsList.hh"
@@ -53,7 +54,7 @@ int main(int argc,char** argv) {
 
 #ifdef G4ANALYSIS_USE
   //constructe the analysis manager (need here to activate the UI)
-  exGPSAnalysisManager* aMgr = exGPSAnalysisManager::getInstance(); 
+  exGPSAnalysisManager::getInstance(); 
 #endif
 
   // set mandatory initialization classes
@@ -87,8 +88,10 @@ int main(int argc,char** argv) {
     }
   
   // visualization manager
+#ifdef G4VIS_USE
   G4VisManager* visManager = new G4VisExecutive;
   visManager->Initialize();
+#endif
     
   //Initialize G4 kernel
   runManager->Initialize();
@@ -113,10 +116,12 @@ int main(int argc,char** argv) {
   // job termination
 
 #ifdef G4ANALYSIS_USE
-  delete aMgr;
+  exGPSAnalysisManager::dispose();
 #endif
 
+#ifdef G4VIS_USE
   delete visManager;
+#endif
   delete runManager;
   
   return 0;

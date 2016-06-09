@@ -239,8 +239,6 @@ void UltraPhysicsList::ConstructOp()
 {
   // this Cerenkov Process
   G4Cerenkov*   theCerenkovProcess = new G4Cerenkov("Cerenkov");
-  // this is Scintillation process
-  G4Scintillation* theScintillationProcess = new G4Scintillation("Scintillation");
   // this absorption process inside optical media
   G4OpAbsorption* theAbsorptionProcess = new G4OpAbsorption();
   // Rayleigh scattering for optical photons (aerogel radiators)
@@ -250,7 +248,6 @@ void UltraPhysicsList::ConstructOp()
 
   // Chose level 0 (no verbose)
   theCerenkovProcess           -> SetVerboseLevel(0);
-  theScintillationProcess      -> SetVerboseLevel(0);
   theAbsorptionProcess         -> SetVerboseLevel(0);
   theRayleighScatteringProcess -> SetVerboseLevel(0);
   theBoundaryProcess           -> SetVerboseLevel(0);
@@ -260,10 +257,6 @@ void UltraPhysicsList::ConstructOp()
 //   G4int MaxNumPhotons = 300;
 //   theCerenkovProcess->SetMaxNumPhotonsPerStep(MaxNumPhotons);
   theCerenkovProcess->SetTrackSecondariesFirst(true);
-
-  theScintillationProcess->SetTrackSecondariesFirst(true);
-  theScintillationProcess->SetScintillationYieldFactor(1.);
-  theScintillationProcess->SetScintillationExcitationRatio(0.0);
 
   // Boundary model (UNIFIED OR GLISUR (OLD GEANT3)) For now only GEANT3
   G4OpticalSurfaceModel themodel = unified;
@@ -276,15 +269,10 @@ void UltraPhysicsList::ConstructOp()
     G4String particleName = particle->GetParticleName();
 
     if (theCerenkovProcess->IsApplicable(*particle)) {
-      //      pmanager->AddProcess(theCerenkovProcess);
-      //      pmanager->SetProcessOrdering(theCerenkovProcess,idxPostStep);
+      pmanager->AddProcess(theCerenkovProcess);
+      pmanager->SetProcessOrdering(theCerenkovProcess,idxPostStep);
     }
 
-    if (theScintillationProcess->IsApplicable(*particle)) {
-      pmanager->AddProcess(theScintillationProcess);
-      pmanager->SetProcessOrderingToLast(theScintillationProcess, idxAtRest);
-      pmanager->SetProcessOrderingToLast(theScintillationProcess, idxPostStep);
-    }
 
     if (particleName == "opticalphoton") {
       G4cout << ">>>>>>>>>>>>>> AddDiscreteProcess to OpticalPhoton " << G4endl;

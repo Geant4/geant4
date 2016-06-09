@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4PSPassageTrackLength3D.cc,v 1.3 2007/08/29 06:36:42 taso Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // G4PSPassageTrackLength3D
 #include "G4PSPassageTrackLength3D.hh"

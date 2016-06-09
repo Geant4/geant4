@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: History,v 1.31 2006/11/14 14:39:51 ribon Exp $
+$Id: History,v 1.32 2008/06/15 18:13:06 cirrone Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -8,6 +8,9 @@ $Id: History,v 1.31 2006/11/14 14:39:51 ribon Exp $
 
                       Example History file
                       ---------------------
+15.06.2008 
+ - G.A.P.Cirrone; Tag: ccal-V09-01-00
+    Removed no more necessary AIDA commands from GNUmakefile
 
 14.11.2006 - A.Ribon (ccal-V08-01-01)
 - Removed hadronic_lists.gmk after the inclusion of 

@@ -33,6 +33,7 @@
 // 
 //      Creation date: 29 March 2007
 // -----------------------------------------------------------------------------
+// 081120 Add Update
 
 #ifndef G4QMDMeanField_hh
 #define G4QMDMeanField_hh
@@ -72,6 +73,8 @@ class G4QMDMeanField
 
       std::vector< G4double > GetLocalDensity();  
       std::vector< G4double > GetDepthOfPotential();  
+
+      void Update();
 
    private:
       G4double calPauliBlockingFactor( G4int ); 

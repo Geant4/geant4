@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VRestDiscreteProcess.hh,v 1.8 2006/06/29 21:07:56 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4VRestDiscreteProcess.hh,v 1.9 2007/11/15 04:10:18 kurasige Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // 
 // ------------------------------------------------------------
@@ -140,14 +140,15 @@ inline
 			     G4ForceCondition* condition
 			    )
 {
-  if ( (previousStepSize <=0.0) || (theNumberOfInteractionLengthLeft<=0.0)) {
+  if ( (previousStepSize < 0.0) || (theNumberOfInteractionLengthLeft<=0.0)) {
     // beggining of tracking (or just after DoIt of this process)
     ResetNumberOfInteractionLengthLeft();
-  } else {
+  } else if ( previousStepSize > 0.0) {
     // subtract NumberOfInteractionLengthLeft 
     SubtractNumberOfInteractionLengthLeft(previousStepSize);
-    if(theNumberOfInteractionLengthLeft<0.)
-       theNumberOfInteractionLengthLeft=perMillion;          
+  } else {
+    // zero step
+    //  DO NOTHING
   }
 
   // condition is set to "Not Forced"
@@ -155,16 +156,6 @@ inline
 
   // get mean free path
   currentInteractionLength = GetMeanFreePath(track, previousStepSize, condition);
-
-#ifdef G4VERBOSE
-   if ((currentInteractionLength <=0.0) || (verboseLevel>2)){
-    G4cout << "G4VRestDiscreteProcess::PostStepGetPhysicalInteractionLength ";
-    G4cout << "[ " << GetProcessName() << "]" <<G4endl;
-    track.GetDynamicParticle()->DumpInfo();
-    G4cout << " in Material  " << track.GetMaterial()->GetName() <<G4endl;
-    G4cout << "MeanFreePath = " << currentInteractionLength/cm << "[cm]" <<G4endl;
-  }
-#endif
 
   G4double value;
   if (currentInteractionLength <DBL_MAX) {

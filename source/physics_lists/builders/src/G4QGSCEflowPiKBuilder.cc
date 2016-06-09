@@ -32,7 +32,7 @@ G4QGSCEflowPiKBuilder::
 G4QGSCEflowPiKBuilder(G4bool quasiElastic) 
 {
   theMin = 8*GeV;
-  theModel = new G4TheoFSGenerator;
+  theModel = new G4TheoFSGenerator("QGSCEflow");
   
   theStringModel = new G4QGSModel< G4QGSParticipants >;
   theStringDecay = new G4ExcitedStringDecay(new G4QGSMFragmentation);

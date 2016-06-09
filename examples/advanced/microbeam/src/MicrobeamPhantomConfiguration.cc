@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // -------------------------------------------------------------------
-// $Id: MicrobeamPhantomConfiguration.cc,v 1.5 2006/06/29 16:05:31 gunter Exp $
+// $Id: MicrobeamPhantomConfiguration.cc,v 1.6 2008/06/16 07:46:11 sincerti Exp $
 // -------------------------------------------------------------------
 
 #include "MicrobeamPhantomConfiguration.hh"
@@ -86,17 +86,17 @@ G4int MicrobeamPhantomConfiguration::Initialize() {
 
     if (mat==2) // NUCLEUS
     	{
-	  if (den==1) density = denNucl1;
-	  if (den==2) density = denNucl2;
-	  if (den==3) density = denNucl3;
+	  if (den==1) density = denNucl1*(g/cm3);
+	  if (den==2) density = denNucl2*(g/cm3);
+	  if (den==3) density = denNucl3*(g/cm3);
 	  nucleusMass   = nucleusMass   + density * dx * dy * dz ;
     	}
 
     if (mat==1) // CYTOPLASM
     	{ 
-	  if (den==1) density = denCyto1;
-	  if (den==2) density = denCyto2;
-	  if (den==3) density = denCyto3;
+	  if (den==1) density = denCyto1*(g/cm3);
+	  if (den==2) density = denCyto2*(g/cm3);
+	  if (den==3) density = denCyto3*(g/cm3);
 	  cytoplasmMass = cytoplasmMass + density * dx * dy * dz ;
 	}
     
@@ -105,10 +105,7 @@ G4int MicrobeamPhantomConfiguration::Initialize() {
   }
 
   fclose(fMap);
-  
-  nucleusMass   = nucleusMass * 1e-6 ;
-  cytoplasmMass = cytoplasmMass * 1e-6 ;
-  
+
   return 0;
 }
 

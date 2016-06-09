@@ -1,4 +1,4 @@
-$Id: History,v 1.106 2007/11/12 10:34:23 vnivanch Exp $
+$Id: History,v 1.124 2008/11/13 14:14:07 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,74 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+12 November 08: V.Ivant (emmuons-V09-01-15)
+G4EnergyLossForExtrapolator - added method TrueStepLength; fixed initialisation
+                              before a step
+
+27 October 08: V.Ivant (emmuons-V09-01-14)
+G4EnergyLossForExtrapolator - make method ComputeTrueStep public and cleanup
+
+16 October 08: V.Ivant (emmuons-V09-01-13)
+G4MuMscModel - remove obsolete
+G4EnergyLossForExtrapolator - added spline option
+G4MuIonisation, G4MuBremsstrahlung, G4MuPairProduction, 
+G4MuMultipleScattering - change SubType and improved cout 
+
+4 August 08: V.Ivant (emmuons-V09-01-12)
+G4MuMscModel - added protection for ions
+
+31 July 08: V.Ivant (emmuons-V09-01-11)
+G4MuMscModel - do not define min and max energy in constructor but use Set
+               methods
+G4MuMultipleScattering - added cout of model names
+
+21 April 08:  V.Ivanchenko (emmuons-V09-01-10)
+G4MuBremsstrahlungModel, G4MuPairProductionModel - use CrossSectionPerVolume
+                    from the base class, do not use A in CrossSEctionPerAtom
+G4MuMscModel - do not use A in SetupTarget
+
+04 April 08:  V.Ivanchenko (emmuons-V09-01-09)
+G4MuMultipleScattering - use G4WentzelVIModel model
+                         build table for particles with mass < GeV
+
+04 April 08:  V.Ivanchenko (emmuons-V09-01-08)
+- G4MuBremsstrahlungModel - instead of static const use members of a class,
+                            this allows to reuse the model for different 
+                            particle type
+
+27 March 08:  V.Ivanchenko (emmuons-V09-01-07)
+- G4MuPairProductionModel - fixed nan value at initialisation 
+  of the sampling table
+
+26 March 08:  V.Ivanchenko (emmuons-V09-01-06)
+- G4MuMscModel - fixed outstanding bug in sampling of scattering
+
+25 March 08:  V.Ivanchenko (emmuons-V09-01-05)
+- G4MuMscModel - added shift along particle direction for displacement
+- G4MuBetheBlochModel - update computation of correction
+
+17 March 08:  V.Ivanchenko (emmuons-V09-01-04)
+- G4MuMscModel - fixed sampling
+
+14 March 08:  V.Ivanchenko (emmuons-V09-01-03)
+- G4MuMscModel - use G4VMscModel interface
+
+06 March 08:  V.Ivanchenko (emmuons-V09-01-02)
+- G4MuBremsstrahlungModel - remove ignoreCut flag, remove obsolete methods 
+                            and members, set some members protected to
+                            be used by G4hBremsstrahlungModel 
+- G4MuPairProductionModel - remove ignoreCut flag,  set some members protected 
+			    to be used by G4hBremsstrahlungModel
+- SubType for all processes is initialized
+
+22 February 08:  V.Ivanchenko (emmuons-V09-01-01)
+G4MuMscModel - added sampling of tail distribution
+
+14 January 08:  V.Ivanchenko (emmuons-V09-01-00)
+G4MuMscModel - added computation of the second moment of the distribution;
+               fixed sampling
+G4MuMultipleScattering - modified default RangeFactor
 
 12 November 07:  V.Ivanchenko (emmuons-V09-00-04)
 11 November 07:  V.Ivanchenko (emmuons-V09-00-03)

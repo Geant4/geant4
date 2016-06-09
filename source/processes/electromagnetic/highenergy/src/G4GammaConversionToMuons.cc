@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4GammaConversionToMuons.cc,v 1.4 2006/06/29 19:32:40 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4GammaConversionToMuons.cc,v 1.7 2008/10/16 14:29:48 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 //         ------------ G4GammaConversionToMuons physics process ------
 //         by H.Burkhardt, S. Kelner and R. Kokoulin, April 2002
@@ -50,7 +50,9 @@ G4GammaConversionToMuons::G4GammaConversionToMuons(const G4String& processName,
     LowestEnergyLimit (4*G4MuonPlus::MuonPlus()->GetPDGMass()), // 4*Mmuon
     HighestEnergyLimit(1e21*eV), // ok to 1e21eV=1e12GeV, then LPM suppression
     CrossSecFactor(1.)
-{ }
+{ 
+  SetProcessSubType(15);
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
@@ -260,9 +262,9 @@ G4VParticleChange* G4GammaConversionToMuons::PostStepDoIt(
     if(W<1.) W=1.; // to avoid negative cross section at xmin
     G4double xxp=1.-4./3.*xPM; // the main xPlus dependence
     result=xxp*log(W)*LogWmaxInv;
-    if(result>1.)
-    { G4cout << "error in dSigxPlusGen, result=" << result << " is >1" << '\n';
-      exit(10);
+    if(result>1.) {
+      G4cout << "G4GammaConversionToMuons::PostStepDoIt WARNING:"
+	     << " in dSigxPlusGen, result=" << result << " > 1" << G4endl;
     }
   }
   while (G4UniformRand() > result);
@@ -284,9 +286,12 @@ G4VParticleChange* G4GammaConversionToMuons::PostStepDoIt(
     { t=G4UniformRand();
       f1=(1.-2.*xPM+4.*xPM*t*(1.-t)) / (1.+C1/(t*t));
       if(f1<0 || f1> f1_max) // should never happend
-      { G4cout << "outside allowed range f1=" << f1 << G4endl;
-        exit(1);
-      }
+	{
+	  G4cout << "G4GammaConversionToMuons::PostStepDoIt WARNING:"
+		 << "outside allowed range f1=" << f1 << " is set to zero"
+		 << G4endl;
+          f1 = 0.0;
+	}
     }
     while ( G4UniformRand()*f1_max > f1);
     // generate psi by the rejection method
@@ -298,9 +303,12 @@ G4VParticleChange* G4GammaConversionToMuons::PostStepDoIt(
     { psi=2.*pi*G4UniformRand();
       f2=1.-2.*xPM+4.*xPM*t*(1.-t)*(1.+cos(2.*psi));
       if(f2<0 || f2> f2_max) // should never happend
-      { G4cout << "outside allowed range f2=" << f2 << G4endl;
-        exit(1);
-      }
+	{
+	  G4cout << "G4GammaConversionToMuons::PostStepDoIt WARNING:"
+		 << "outside allowed range f2=" << f2 << " is set to zero"
+		 << G4endl;
+          f2 = 0.0;
+	}
     }
     while ( G4UniformRand()*f2_max > f2);
 
@@ -386,9 +394,10 @@ G4Element* G4GammaConversionToMuons::SelectRandomAtom(
 
 void G4GammaConversionToMuons::PrintInfoDefinition()
 {
-  G4String comments ="gamma->mu+mu- Bethe Heitler process.\n";
+  G4String comments ="gamma->mu+mu- Bethe Heitler process, SubType= ";
   G4cout << G4endl << GetProcessName() << ":  " << comments
-         << "        good cross section parametrization from "
+	 << GetProcessSubType() << G4endl;
+  G4cout << "        good cross section parametrization from "
          << G4BestUnit(LowestEnergyLimit,"Energy")
          << " to " << HighestEnergyLimit/GeV << " GeV for all Z." << G4endl;
 }

@@ -1,5 +1,5 @@
 # --------------------------------------------------------------
-# $Id: GNUmakefile,v 1.7 2002/11/14 15:56:14 santin Exp $
+# $Id: GNUmakefile,v 1.8 2008/06/15 22:53:06 cirrone Exp $
 # --------------------------------------------------------------
 # GNUmakefile for examples module.  Gabriele Cosmo, 06/04/98.
 # --------------------------------------------------------------
@@ -20,10 +20,6 @@ ifdef G4ANALYSIS_USE_PLOTTER
   CPPFLAGS += -DG4ANALYSIS_USE_PLOTTER
 endif
 
-ifdef G4ANALYSIS_USE
-  CPPFLAGS += `aida-config --include`
-  LDFLAGS += `aida-config --lib`
-endif
 
 .PHONY: all
 all: lib bin

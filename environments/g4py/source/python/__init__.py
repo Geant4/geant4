@@ -1,4 +1,3 @@
-# $Id: __init__.py,v 1.16 2007/11/13 09:59:46 kmura Exp $
 """
 # ==================================================================
 #  [Geant4] module package
@@ -9,16 +8,34 @@
 #  Hava A Fun!
 # ==================================================================
 """
+# $Id: __init__.py,v 1.19 2008/12/03 07:01:22 kmura Exp $
+__version__ ='9.2.0'
+__date__ = '1/Dec/2008'
+__author__ = 'K.Murakami (Koichi.Murakami@kek.jp)'
+__url__ = 'http://www-geant4.kek.jp/projects/Geant4Py/'
 
-# ==================================================================
-# docs
-# ==================================================================
-__version__ = '1.5.0'
-__date__    = '16/Nov/2007'
-__author__  = 'K.Murakami (Koichi.Murakami@kek.jp)'
-__url__     = 'http://www-geant4.kek.jp/projects/Geant4Py/'
 
-def PrintVersion():
+# import submodules
+from G4interface import *
+from G4intercoms import *
+from G4global import *
+from G4run import *
+from G4event import *
+from G4tracking import *
+from G4track import *
+from G4particles import *
+from G4processes import *
+from G4geometry import *
+from G4materials import *
+from G4physicslists import *
+from G4digits_hits import *
+from G4visualization import *
+from G4gdml import *
+from G4graphics_reps import *
+from hepunit import *
+from colortable import *
+
+def print_version():
   print """=============================================================
   Welcome to Geant4Py (A Geant4-Python Bridge)
   
@@ -28,182 +45,134 @@ def PrintVersion():
   WWW     : %s
 =============================================================
 """ % ( __version__, __date__, __author__, __url__)
-  
 
 # ==================================================================
-# import submodules
+# initialize
 # ==================================================================
-from G4interface      import *
-from G4intercoms      import *
-from G4global         import *
-from G4run            import *
-from G4event          import *
-from G4tracking       import *
-from G4track          import *
-from G4particles      import *
-from G4processes      import *
-from G4geometry       import *
-from G4materials      import *
-from G4physicslists   import *
-from G4digits_hits    import *
-from G4visualization  import *
-from G4graphics_reps  import *
-from HEPUnit          import *
-from colortable       import *
+# set G4cout/G4cerr to Python stdout
+SetG4PyCoutDestination()
 
 # ==================================================================
 # globals, which start with "g"
 # ==================================================================
-# ------------------------------------------------------------------
 # gRunManager
-# ------------------------------------------------------------------
-if(G4RunManager.GetRunManager() == None):
-  gRunManager= G4RunManager()
+if G4RunManager.GetRunManager() == None:
+  gRunManager = G4RunManager()
 else:
-  gRunManager= G4RunManager.GetRunManager()
-gRunManagerKernel= G4RunManagerKernel.GetRunManagerKernel()
+  gRunManager = G4RunManager.GetRunManager()
+gRunManagerKernel = G4RunManagerKernel.GetRunManagerKernel()
 
-# ------------------------------------------------------------------
 # gUImanager
-# ------------------------------------------------------------------
-gUImanager= G4UImanager.GetUIpointer()
+gUImanager = G4UImanager.GetUIpointer()
 
-# ------------------------------------------------------------------
 # gEventManager
-# ------------------------------------------------------------------
-gEventManager= G4EventManager.GetEventManager()
+gEventManager = G4EventManager.GetEventManager()
 
-# ------------------------------------------------------------------
 # gStackManager
-# ------------------------------------------------------------------
-gStackManager= gEventManager.GetStackManager()
+gStackManager = gEventManager.GetStackManager()
 
-# ------------------------------------------------------------------
 # gTrackingManager
-# ------------------------------------------------------------------
-gTrackingManager= gEventManager.GetTrackingManager()
+gTrackingManager = gEventManager.GetTrackingManager()
 
-# ------------------------------------------------------------------
 # gStateManager
-# ------------------------------------------------------------------
-gStateManager= G4StateManager.GetStateManager()
-gExceptionHandler= G4ExceptionHandler() # automatically registered
+gStateManager = G4StateManager.GetStateManager()
+gExceptionHandler = G4ExceptionHandler() # automatically registered
 
-# ------------------------------------------------------------------
+# gGeometryManager
+gGeometryManager = G4GeometryManager.GetInstance()
+
 # gTransportationManager
-# ------------------------------------------------------------------
-gTransportationManager= G4TransportationManager.GetTransportationManager()
+gTransportationManager = G4TransportationManager.GetTransportationManager()
 
-# ------------------------------------------------------------------
 # gParticleTable
-# ------------------------------------------------------------------
-gParticleTable= G4ParticleTable.GetParticleTable()
-gParticleIterator= PyG4ParticleList()
+gParticleTable = G4ParticleTable.GetParticleTable()
+gParticleIterator = PyG4ParticleList()
 
-# ------------------------------------------------------------------
 # gProcessTable
-# ------------------------------------------------------------------
-gProcessTable= G4ProcessTable.GetProcessTable()
+gProcessTable = G4ProcessTable.GetProcessTable()
 
-# ------------------------------------------------------------------
 # gLossTableManager
-# ------------------------------------------------------------------
-gLossTableManager= G4LossTableManager.Instance()
+gLossTableManager = G4LossTableManager.Instance()
 
-# ------------------------------------------------------------------
 # gProductionCutsTable
-# ------------------------------------------------------------------
-gProductionCutsTable= G4ProductionCutsTable.GetProductionCutsTable()
+gProductionCutsTable = G4ProductionCutsTable.GetProductionCutsTable()
 
-# ------------------------------------------------------------------
 # gEmCalculator
-# ------------------------------------------------------------------
-gEmCalculator= G4EmCalculator()
+gEmCalculator = G4EmCalculator()
 
-# ------------------------------------------------------------------
+# gMaterial/ElementTable
+gMaterialTable = G4Material.GetMaterialTable()
+gElementTable = G4Element.GetElementTable()
+
 # gNistManager (since 7.1)
-# ------------------------------------------------------------------
-material_class_list= dir(G4materials)
-qfind= (material_class_list.count("G4NistManager") >0)
-if(qfind) :
-  gNistManager= G4NistManager.Instance()
+_material_class_list = dir(G4materials)
+_qfind = _material_class_list.count("G4NistManager") > 0
+if _qfind:
+  gNistManager = G4NistManager.Instance()
 
-# ------------------------------------------------------------------
 # gVisManager
-# ------------------------------------------------------------------
-#global gVisManager
-#global opengl_ix, opengl_sx, opengl_ixm, opengl_sxm, vrml1, vrml2, dawn, \
-#       heprep_xml, heprep_file, atree, raytracer, raytracer_x
+_visdriver_list = dir(G4visualization)
+_q_opengl_ix = "G4OpenGLImmediateX" in _visdriver_list
+_q_opengl_sx = "G4OpenGLStoredX" in _visdriver_list
+_q_opengl_ixm = "G4OpenGLImmediateXm" in _visdriver_list
+_q_opengl_sxm = "G4OpenGLStoredXm" in _visdriver_list
+_q_raytracer_x = "G4RayTracerX" in _visdriver_list
 
-visdriver_list = dir(G4visualization)
-q_opengl_ix   = (visdriver_list.count("G4OpenGLImmediateX") > 0)
-q_opengl_sx   = (visdriver_list.count("G4OpenGLStoredX") >0)
-q_opengl_ixm  = (visdriver_list.count("G4OpenGLImmediateXm") > 0)
-q_opengl_sxm  = (visdriver_list.count("G4OpenGLStoredXm") >0)
-q_raytracer_x = (visdriver_list.count("G4RayTracerX") >0)
-  
-if(G4VisManager.GetConcreteInstance() == None):
-  gVisManager= G4VisManager()
-  if(q_opengl_ix):
-    opengl_ix= G4OpenGLImmediateX()
-  if(q_opengl_sx):
-    opengl_sx= G4OpenGLStoredX()
-  if(q_opengl_ixm):
-    opengl_ixm= G4OpenGLImmediateXm()
-  if(q_opengl_sxm):
-    opengl_sxm= G4OpenGLStoredXm()
-  if(q_raytracer_x):
-    raytracer_x= G4RayTracerX()
+if G4VisManager.GetConcreteInstance() == None:
+  gVisManager = G4VisManager()
+  if _q_opengl_ix:
+    _opengl_ix = G4OpenGLImmediateX()
+  if _q_opengl_sx:
+    _opengl_sx = G4OpenGLStoredX()
+  if _q_opengl_ixm:
+    _opengl_ixm = G4OpenGLImmediateXm()
+  if _q_opengl_sxm:
+    _opengl_sxm = G4OpenGLStoredXm()
+  if _q_raytracer_x:
+    _raytracer_x = G4RayTracerX()
 
-  vrml1= G4VRML1File()
-  vrml2= G4VRML2File()
-  dawn= G4DAWNFILE()
-  heprep_xml= G4HepRep()
-  heprep_file= G4HepRepFile()
-  atree= G4ASCIITree()
-  raytracer= G4RayTracer()
+  _vrml1 = G4VRML1File()
+  _vrml2 = G4VRML2File()
+  _dawn = G4DAWNFILE()
+  _heprep_xml = G4HepRep()
+  _heprep_file = G4HepRepFile()
+  _atree = G4ASCIITree()
+  _raytracer = G4RayTracer()
 
-  if(q_opengl_ix):
-    gVisManager.RegisterGraphicsSystem(opengl_ix)
-  if(q_opengl_sx):
-    gVisManager.RegisterGraphicsSystem(opengl_sx)
-  if(q_opengl_ixm):
-    gVisManager.RegisterGraphicsSystem(opengl_ixm)
-  if(q_opengl_sxm):
-    gVisManager.RegisterGraphicsSystem(opengl_sxm)
-  if(q_raytracer_x):
-    gVisManager.RegisterGraphicsSystem(raytracer_x)
+  if _q_opengl_ix:
+    gVisManager.RegisterGraphicsSystem(_opengl_ix)
+  if _q_opengl_sx:
+    gVisManager.RegisterGraphicsSystem(_opengl_sx)
+  if _q_opengl_ixm:
+    gVisManager.RegisterGraphicsSystem(_opengl_ixm)
+  if _q_opengl_sxm:
+    gVisManager.RegisterGraphicsSystem(_opengl_sxm)
+  if _q_raytracer_x:
+    gVisManager.RegisterGraphicsSystem(_raytracer_x)
 
-  gVisManager.RegisterGraphicsSystem(vrml1)
-  gVisManager.RegisterGraphicsSystem(vrml2)
-  gVisManager.RegisterGraphicsSystem(dawn)
-  gVisManager.RegisterGraphicsSystem(heprep_xml)
-  gVisManager.RegisterGraphicsSystem(heprep_file)
-  gVisManager.RegisterGraphicsSystem(atree)
-  gVisManager.RegisterGraphicsSystem(raytracer)
+  gVisManager.RegisterGraphicsSystem(_vrml1)
+  gVisManager.RegisterGraphicsSystem(_vrml2)
+  gVisManager.RegisterGraphicsSystem(_dawn)
+  gVisManager.RegisterGraphicsSystem(_heprep_xml)
+  gVisManager.RegisterGraphicsSystem(_heprep_file)
+  gVisManager.RegisterGraphicsSystem(_atree)
+  gVisManager.RegisterGraphicsSystem(_raytracer)
     
   gVisManager.Initialize()
 
-# ------------------------------------------------------------------
 # version information
-# ------------------------------------------------------------------
-gG4Version        = G4Version
-gG4Date           = G4Date
+gG4Version = G4Version
+gG4Date = G4Date
 gG4VERSION_NUMBER = G4VERSION_NUMBER
 
 # ------------------------------------------------------------------
 # functions
 # ------------------------------------------------------------------
-gControlExecute= gUImanager.ExecuteMacroFile
-gApplyUICommand= G4intercoms.ApplyUICommand
-gGetCurrentValues= gUImanager.GetCurrentValues
+gControlExecute = gUImanager.ExecuteMacroFile
+gApplyUICommand = G4intercoms.ApplyUICommand
+gGetCurrentValues = gUImanager.GetCurrentValues
+gStartUISession = G4interface.StartUISession
 
-gStartUISession= G4interface.StartUISession
-
-# EmCalculator
-from emcalculator import *
-gCalculatePhotonCrossSection= CalculatePhotonCrossSection
-gCalculateDEDX= CalculateDEDX
 
 # ==================================================================
 # extentions
@@ -212,39 +181,33 @@ gCalculateDEDX= CalculateDEDX
 # ------------------------------------------------------------------
 # generate one event
 # ------------------------------------------------------------------
-def OneEvent(self):
+def _one_event(self):
   "generate one event."
   self.BeamOn(1)
 
-G4RunManager.OneEvent = OneEvent
+G4RunManager.OneEvent = _one_event
 
 # ------------------------------------------------------------------
 # list material information
 # ------------------------------------------------------------------
-#global gMaterialTable
-gMaterialTable= G4Material.GetMaterialTable()
-
-global gElementTable
-gElementTable= G4Element.GetElementTable()
-
-def ListMaterial(self):
+def _list_material(self):
   "list materials."
-  n_materials= len(gMaterialTable)
+  n_materials = len(gMaterialTable)
   print " +------------------------------------------------------------------"
   print " |       Table of G4Material-s (%d materails defined)" % (n_materials)
   for i in range(0, n_materials) :
-    material= gMaterialTable[i]
+    material = gMaterialTable[i]
     print " |--------------------------------------------------------"\
           "----------"
     print " | %s: %s" % (material.GetName(),
                          G4BestUnit(material.GetDensity(),"Volumic Mass"))
 
-    elementVec= material.GetElementVector()
-    fractionVec= material.GetFractionVector()
-    abundanceVec= material.GetVecNbOfAtomsPerVolume()
-    totNAtoms= material.GetTotNbOfAtomsPerVolume()
+    elementVec = material.GetElementVector()
+    fractionVec = material.GetFractionVector()
+    abundanceVec = material.GetVecNbOfAtomsPerVolume()
+    totNAtoms = material.GetTotNbOfAtomsPerVolume()
 
-    n_elements= len(elementVec)
+    n_elements = len(elementVec)
     for j in range(0, n_elements):
       print " | + (%1d) %s(%s): A=%4.1f, N=%5.1f, " \
             "Frac.=(%4.1f%%m,%4.1f%%a)" % \
@@ -256,22 +219,33 @@ def ListMaterial(self):
 
   print " +------------------------------------------------------------------"
 
-G4MaterialTable.ListMaterial = ListMaterial
+G4MaterialTable.ListMaterial = _list_material
+
+
+# ------------------------------------------------------------------
+# termination
+# ------------------------------------------------------------------
+def gTerminate():
+    gGeometryManager.OpenGeometry()
+
 
 # ------------------------------------------------------------------
 # signal handler
 # ------------------------------------------------------------------
 import signal
+import threading
 
-def RunAbort(signum, frame):
-  state= gStateManager.GetCurrentState();
+def _run_abort(signum, frame):
+  state = gStateManager.GetCurrentState();
 
-  if(state==G4ApplicationState.G4State_GeomClosed or
-     state==G4ApplicationState.G4State_EventProc):
+  if(state == G4ApplicationState.G4State_GeomClosed or
+     state == G4ApplicationState.G4State_EventProc):
     print "aborting Run ...";
     gRunManager.AbortRun(True);
   else:
     raise KeyboardInterrupt
-    
-signal.signal(signal.SIGINT, RunAbort)
+
+if (threading.activeCount() == 1):
+  signal.signal(signal.SIGINT, _run_abort)
+
 

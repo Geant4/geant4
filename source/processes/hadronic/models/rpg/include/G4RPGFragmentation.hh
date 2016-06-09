@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4RPGFragmentation.hh,v 1.1 2007/07/18 20:51:37 dennis Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4RPGFragmentation.hh,v 1.2 2008/02/22 22:02:13 dennis Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // Author: D.H. Wright
 // Date:   29 May 2007
@@ -71,6 +71,16 @@
 
 
  private:
+
+   void 
+   ReduceEnergiesOfSecondaries(G4int /*startingIndex*/,
+			       G4double& /*forwardKinetic*/,
+			       G4double& /*backwardKinetic*/,
+			       G4FastVector<G4ReactionProduct,256>& /*vec*/,
+                               G4int& /*vecLen*/,
+                               G4ReactionProduct& /*forwardPseudoParticle*/,
+                               G4ReactionProduct& /*backwardPseudoParticle*/,
+                               G4double& /*pt*/);
 
    G4double dndl[20];    
  };

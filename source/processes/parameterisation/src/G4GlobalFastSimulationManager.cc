@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4GlobalFastSimulationManager.cc,v 1.20 2007/05/11 13:50:20 mverderi Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 //  
 //---------------------------------------------------------------

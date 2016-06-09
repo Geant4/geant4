@@ -30,6 +30,9 @@
 // 070523 add neglecting doppler broadening on the fly. T. Koi
 // 070613 fix memory leaking by T. Koi
 // 071002 enable cross section dump by T. Koi
+// 080428 change checking point of "neglecting doppler broadening" flag 
+//        from GetCrossSection to BuildPhysicsTable by T. Koi
+// 081024 G4NucleiPropertiesTable:: to G4NucleiProperties::
 //
 #include "G4NeutronHPInelasticData.hh"
 #include "G4Neutron.hh"
@@ -47,6 +50,7 @@ G4bool G4NeutronHPInelasticData::IsApplicable(const G4DynamicParticle*aP, const 
 G4NeutronHPInelasticData::G4NeutronHPInelasticData()
 {
 // TKDB
+   onFlightDB = true;
    theCrossSections = 0;
   BuildPhysicsTable(*G4Neutron::Neutron());
 }
@@ -63,6 +67,10 @@ void G4NeutronHPInelasticData::BuildPhysicsTable(const G4ParticleDefinition& aP)
 {
   if(&aP!=G4Neutron::Neutron()) 
      throw G4HadronicException(__FILE__, __LINE__, "Attempt to use NeutronHP data for particles other than neutrons!!!");  
+
+//080428
+   if ( getenv( "G4NEUTRONHP_NEGLECT_DOPPLER" ) ) onFlightDB = false;
+
   size_t numberOfElements = G4Element::GetNumberOfElements();
 //  theCrossSections = new G4PhysicsTable( numberOfElements );
 // TKDB
@@ -129,7 +137,7 @@ void G4NeutronHPInelasticData::DumpPhysicsTable(const G4ParticleDefinition& aP)
   //G4cout << "G4NeutronHPInelasticData::DumpPhysicsTable still to be implemented"<<G4endl;
 }
 
-#include "G4NucleiPropertiesTable.hh"
+#include "G4NucleiProperties.hh"
 
 G4double G4NeutronHPInelasticData::
 GetCrossSection(const G4DynamicParticle* aP, const G4Element*anE, G4double aT)
@@ -142,7 +150,9 @@ GetCrossSection(const G4DynamicParticle* aP, const G4Element*anE, G4double aT)
   G4double eKinetic = aP->GetKineticEnergy();
 
   // T. K. 
-  if ( getenv( "G4NEUTRONHP_NEGLECT_DOPPLER" ) )
+//if ( getenv( "G4NEUTRONHP_NEGLECT_DOPPLER" ) )
+//080428
+  if ( !onFlightDB )
   {
      G4double factor = 1.0;
      if ( eKinetic < aT * k_Boltzmann ) 
@@ -165,7 +175,7 @@ GetCrossSection(const G4DynamicParticle* aP, const G4Element*anE, G4double aT)
   G4double theA = anE->GetN();
   G4double theZ = anE->GetZ();
   G4double eleMass; 
-  eleMass = ( G4NucleiPropertiesTable::GetNuclearMass(static_cast<G4int>(theZ+eps), static_cast<G4int>(theA+eps))
+  eleMass = ( G4NucleiProperties::GetNuclearMass(static_cast<G4int>(theA+eps), static_cast<G4int>(theZ+eps))
 	     ) / G4Neutron::Neutron()->GetPDGMass();
   
   G4ReactionProduct boosted;

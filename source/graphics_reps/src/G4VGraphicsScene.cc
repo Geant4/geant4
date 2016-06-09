@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4VGraphicsScene.cc,v 1.1 2007/07/17 17:52:20 allison Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// GEANT4 tag $Name: geant4-09-02 $
 // John Allison  19th July 1996
 
 #include "G4VGraphicsScene.hh"

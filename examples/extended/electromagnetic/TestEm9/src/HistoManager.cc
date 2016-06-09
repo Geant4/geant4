@@ -86,7 +86,7 @@ void HistoManager::bookHisto()
   nBinsEA= 40;
   nBinsED= 100;
   nTuple = false;
-  nHisto = 10;
+  nHisto = 13;
 
   // initialise acceptance
   for(G4int i=0; i<nmax; i++) {
@@ -96,13 +96,13 @@ void HistoManager::bookHisto()
   }
 
   histo->add1D("10",
-    "Energy deposit (MeV) in central crystal",nBinsED,0.0,beamEnergy,MeV);
+    "Evis/E0 in central crystal",nBinsED,0.0,1,1.0);
 
   histo->add1D("11",
-    "Energy deposit (MeV) in 3x3",nBinsED,0.0,beamEnergy,MeV);
+    "Evis/E0 in 3x3",nBinsED,0.0,1.0,1.0);
 
   histo->add1D("12",
-    "Energy deposit (MeV) in 5x5",nBinsED,0.0,beamEnergy,MeV);
+    "Evis/E0 in 5x5",nBinsED,0.0,1.0,1.0);
 
   histo->add1D("13",
     "Energy (MeV) of delta-electrons",nBinsE,0.0,maxEnergy,MeV);
@@ -125,6 +125,15 @@ void HistoManager::bookHisto()
   histo->add1D("19",
     "Number of vertex hits",20,-0.5,19.5,1.0);
 
+  histo->add1D("20",
+    "E1/E9 Ratio",nBinsED,0.0,1,1.0);
+
+  histo->add1D("21",
+    "E1/25 Ratio",nBinsED,0.0,1.0,1.0);
+
+  histo->add1D("22",
+    "E9/E25 Ratio",nBinsED,0.0,1.0,1.0);
+
   if(nTuple) {
     histo->addTuple( "100", "Dose deposite","float r, z, e" );
   }
@@ -140,13 +149,16 @@ void HistoManager::BeginOfRun()
   n_posit= 0;
   n_gam  = 0;
   n_step = 0;
+  n_lowe = 0;
 
-  for(G4int i=0; i<nmax; i++) {
+  for(G4int i=0; i<6; i++) {
     stat[i] = 0;
     edep[i] = 0.0;
     erms[i] = 0.0;
-    edeptr[i] = 0.0;
-    ermstr[i] = 0.0;
+    if(i < 3) {
+      edeptr[i] = 0.0;
+      ermstr[i] = 0.0;
+    }
   }
 
   histo->book();
@@ -163,7 +175,7 @@ void HistoManager::EndOfRun()
 {
 
   G4cout << "HistoManager: End of run actions are started" << G4endl;
-  G4String nam[3] = {"1x1", "3x3", "5x5"};
+  G4String nam[6] = {"1x1", "3x3", "5x5", "E1/E9 ", "E1/E25", "E9/E25"};
 
   // average
 
@@ -174,23 +186,23 @@ void HistoManager::EndOfRun()
   for(j=0; j<nmax; j++) {
 
     // total mean
-    edep[j] *= x/beamEnergy;
-    G4double y = erms[j]*x/(beamEnergy*beamEnergy) - edep[j]*edep[j];
+    edep[j] *= x;
+    G4double y = erms[j]*x - edep[j]*edep[j];
     if(y < 0.0) y = 0.0;
     erms[j] = std::sqrt(y);
 
     // trancated mean
     G4double xx = G4double(stat[j]);
     if(xx > 0.0) xx = 1.0/xx;
-    edeptr[j] *= xx/beamEnergy;
-    y = ermstr[j]*xx/(beamEnergy*beamEnergy) - edeptr[j]*edeptr[j];
+    edeptr[j] *= xx;
+    y = ermstr[j]*xx - edeptr[j]*edeptr[j];
     if(y < 0.0) y = 0.0;
     ermstr[j] = std::sqrt(y);
   }
   G4double xe = x*(G4double)n_elec;
   G4double xg = x*(G4double)n_gam;
   G4double xp = x*(G4double)n_posit;
-  G4double xs = x*(G4double)n_step;
+  G4double xs = x*n_step;
 
   G4double f = 100.*std::sqrt(beamEnergy/GeV);
 
@@ -200,10 +212,12 @@ void HistoManager::EndOfRun()
   G4cout << std::setprecision(4) << "Average number of e+         " << xp << G4endl;
   G4cout << std::setprecision(4) << "Average number of steps      " << xs << G4endl;
   
-  for(j=0; j<nmax; j++) {
+  for(j=0; j<3; j++) {
     G4double e = edeptr[j];
     G4double s = ermstr[j];
-    G4double r = s*std::sqrt(x);
+    G4double xx= G4double(stat[j]);
+    if(xx > 0.0) xx = 1.0/xx;
+    G4double r = s*std::sqrt(xx);
     G4cout << std::setprecision(4) << "Edep " << nam[j] << " =                   " << e
            << " +- " << r;
     if(e > 0.0) G4cout << "  res=  " << f*s/e << " %";
@@ -221,6 +235,22 @@ void HistoManager::EndOfRun()
       G4cout << G4endl;
     }
   }
+  G4cout<<"===========  Ratios without trancating ==========================="<<G4endl;
+  for(j=3; j<6; j++) {
+    G4double e = edep[j];
+    G4double xx= G4double(stat[j]);
+    if(xx > 0.0) xx = 1.0/xx;
+    e *= xx;
+    G4double y = erms[j]*xx - e*e;
+    G4double r = 0.0;
+    if(y > 0.0) r = std::sqrt(y*xx);
+    G4cout << "  " << nam[j] << " =                   " << e
+           << " +- " << r;
+    G4cout << G4endl;
+  }
+  G4cout << std::setprecision(4) << "Beam Energy                  " << beamEnergy/GeV 
+	 << " GeV" << G4endl;
+  if(n_lowe > 0)          G4cout << "Number of events E/E0<0.8    " << n_lowe << G4endl; 
   G4cout<<"=================================================================="<<G4endl;
   G4cout<<G4endl;
 
@@ -263,7 +293,7 @@ void HistoManager::BeginOfEvent()
   Eabs4  = 0.0;
   Evertex.clear();
   Nvertex.clear();
-  for (int i=0; i<25; i++) {
+  for (G4int i=0; i<25; i++) {
     E[i] = 0.0;
   }
 }
@@ -274,22 +304,51 @@ void HistoManager::EndOfEvent()
 {
   G4double e9 = 0.0;
   G4double e25= 0.0;
-  for (int i=0; i<25; i++) {
+  for (G4int i=0; i<25; i++) {
+    E[i] /= beamEnergy;
     e25 += E[i];
     if( ( 6<=i &&  8>=i) || (11<=i && 13>=i) || (16<=i && 18>=i)) e9 += E[i];
   }
-  histo->fill(0,E[12],1.0);
+
+  if(e25 < 0.8) {
+    n_lowe++;
+    G4cout << "### in the event# " << n_evt << "  E25= " << e25 << G4endl;
+  }
+
+  // compute ratios
+  G4double e0 = E[12];
+  G4double e19  = 0.0;
+  G4double e125 = 0.0;
+  G4double e925 = 0.0;
+  if(e9 > 0.0) {
+    e19 = e0/e9;
+    e125 = e0/e25;
+    e925 = e9/e25;
+    edep[3] += e19;
+    erms[3] += e19*e19;
+    edep[4] += e125;
+    erms[4] += e125*e125;
+    edep[5] += e925;
+    erms[5] += e925*e925;
+    stat[3] += 1;
+    stat[4] += 1;
+    stat[5] += 1;
+  }
+
+  // fill histo
+  histo->fill(0,e0,1.0);
   histo->fill(1,e9,1.0);
   histo->fill(2,e25,1.0);
   histo->fill(5,Eabs1,1.0);
   histo->fill(6,Eabs2,1.0);
   histo->fill(7,Eabs3,1.0);
   histo->fill(8,Eabs4,1.0);
-  float nn = (double)(Nvertex.size());
-  histo->fill(9,nn,1.0);
+  histo->fill(9,G4double(Nvertex.size()),1.0);
+  histo->fill(10,e19,1.0);
+  histo->fill(11,e125,1.0);
+  histo->fill(12,e925,1.0);
 
-  G4double e0 = E[12];
-
+  // compute sums
   edep[0] += e0;
   erms[0] += e0*e0;
   edep[1] += e9;
@@ -298,17 +357,17 @@ void HistoManager::EndOfEvent()
   erms[2] += e25*e25;
 
   // trancated mean
-  if(limittrue[0] == DBL_MAX || std::abs(e0/beamEnergy-edeptrue[0])<rmstrue[0]*limittrue[0]) {
+  if(limittrue[0] == DBL_MAX || std::abs(e0-edeptrue[0])<rmstrue[0]*limittrue[0]) {
     stat[0] += 1;
     edeptr[0] += e0;
     ermstr[0] += e0*e0;
   }
-  if(limittrue[1] == DBL_MAX || std::abs(e9/beamEnergy-edeptrue[1])<rmstrue[1]*limittrue[1]) {
+  if(limittrue[1] == DBL_MAX || std::abs(e9-edeptrue[1])<rmstrue[1]*limittrue[1]) {
     stat[1] += 1;
     edeptr[1] += e9;
     ermstr[1] += e9*e9;
   }
-  if(limittrue[2] == DBL_MAX || std::abs(e25/beamEnergy-edeptrue[2])<rmstrue[2]*limittrue[2]) {
+  if(limittrue[2] == DBL_MAX || std::abs(e25-edeptrue[2])<rmstrue[2]*limittrue[2]) {
     stat[2] += 1;
     edeptr[2] += e25;
     ermstr[2] += e25*e25;
@@ -332,6 +391,7 @@ void HistoManager::ScoreNewTrack(const G4Track* aTrack)
 
   if(0 == pid) {
 
+    beamEnergy = kinE;
     histo->fillTuple("TKIN", kinE/MeV);
 
     G4double mass = 0.0;

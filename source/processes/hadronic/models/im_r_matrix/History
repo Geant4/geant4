@@ -14,6 +14,12 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+8-Dec-2008  Gunter Folger           hadr-im_r-V09-01-01
+-  G4XNNElasticLowE:  remove use of ParticleDefinition object in dtor 
+
+5-Dec-2008  Gunter Folger           hadr-im_r-V09-01-00
+-  G4XNNTotalLowE:  remove use of ParticleDefinition object in dtor 
+
 15-Nov-2007  Gunter Folger          hadr-im_r_V09-00-03
 ----------------------------------------------------------------
 -  In G4ParticleTypeConverter, remove warning on unknown particle;

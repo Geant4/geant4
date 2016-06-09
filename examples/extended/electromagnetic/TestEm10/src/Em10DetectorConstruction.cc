@@ -25,7 +25,7 @@
 //
 //
 // $Id: Em10DetectorConstruction.cc,v 1.32 2007/07/27 17:52:04 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // 
 

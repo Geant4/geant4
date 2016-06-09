@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // $Id: G4MagIntegratorStepper.hh,v 1.12 2006/09/20 09:31:01 japost Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 //
 // class G4MagIntegratorStepper

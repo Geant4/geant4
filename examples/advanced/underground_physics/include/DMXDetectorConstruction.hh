@@ -157,8 +157,8 @@ private:
   G4LogicalVolume*   americium_log;   
   G4VPhysicalVolume* americium_phys; 
   G4LogicalVolume*   ring_log;   
-  G4VPhysicalVolume* ring_phys_gas[1]; 
-  G4VPhysicalVolume* ring_phys_liq[5]; 
+  G4VPhysicalVolume* ring_phys_gas[2]; 
+  G4VPhysicalVolume* ring_phys_liq[6]; 
   G4LogicalVolume*   mirror_log;   
   G4VPhysicalVolume* mirror_phys; 
   G4LogicalVolume*   grid1_log;   

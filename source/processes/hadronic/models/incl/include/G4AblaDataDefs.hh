@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4AblaDataDefs.hh,v 1.6 2007/12/03 19:36:06 miheikki Exp $ 
+// $Id: G4AblaDataDefs.hh,v 1.9 2008/06/25 17:20:04 kaitanie Exp $ 
 // Translation of INCL4.2/ABLA V3 
 // Pekka Kaitaniemi, HIP (translation)
 // Christelle Schmidt, IPNL (fission code)
@@ -75,6 +75,18 @@ public:
   ~G4Ec2sub() {};
 
   G4double ecnz[EC2SUBROWS][EC2SUBCOLS]; 
+
+  /**
+   * Dump the contents of the ecnz data table.
+   */
+  void dump() {
+    for(G4int i = 0; i < EC2SUBROWS; i++) {
+      for(G4int j = 0; j < EC2SUBCOLS; j++) {
+	G4cout << ecnz[i][j] << " ";
+      }
+      G4cout << G4endl;
+    }
+  }
 };
 
 class G4Ald {
@@ -86,15 +98,6 @@ public:
   ~G4Ald() {};
   
   G4double av,as,ak,optafan;
-};
-
-class G4Ablamain {
-public:
-  G4Ablamain() {};
-  ~G4Ablamain() {};
-  
-  G4double ap,zp,at,zt,eap,beta,bmaxnuc,crtot,crnuc,r_0, r_p,r_t,pi,bfpro,snpro,sppro,shell;
-  G4int imax, inum;
 };
 
 #define ECLDROWS 154
@@ -184,23 +187,6 @@ public:
   G4double she[EENUCSIZE],xhe[XHESIZE][EENUCSIZE];                                            
 };
 
-#define EMDPARSIZE 1000
-/**
- * Energies widths and cross sections for em excitation.
- */
-
-class G4Emdpar {
-
-public:
-  G4Emdpar() {};
-  ~G4Emdpar() {};
-  
-  G4double egdr,egqr,fwhmgdr,fwhmgqr,cremde1,cremde2;                  
-  G4double ae1[EMDPARSIZE],be1[EMDPARSIZE],ce1[EMDPARSIZE],ae2[EMDPARSIZE];      
-  G4double be2[EMDPARSIZE],ce2[EMDPARSIZE],sre1[EMDPARSIZE],sre2[EMDPARSIZE];
-  G4double xre1[EMDPARSIZE],xre2[EMDPARSIZE],ds1,ds2;                             
-};
-
 //#define VOLANTSIZE 200
 #define VOLANTSIZE 2000
 /**
@@ -210,19 +196,56 @@ public:
 class G4Volant {
   
 public:
-  G4Volant() {};
+  G4Volant()
+  {
+    clear();
+  }
+
   ~G4Volant() {};
+
+  void clear()
+  {
+    for(G4int i = 0; i < VOLANTSIZE; i++) {
+      copied[i] = false;
+      acv[i] = 0;
+      zpcv[i] = 0;
+      pcv[i] = 0;
+      xcv[i] = 0;
+      ycv[i] = 0;
+      zcv[i] = 0;
+      iv = 0;
+    }
+  }
+
+  G4double getTotalMass()
+  {
+    G4double total = 0.0;
+    for(G4int i = 0; i <= iv; i++) {
+      total += acv[i];
+    }
+    return total;
+  }
 
   void dump()
   {
+    G4double totA = 0.0, totZ = 0.0, totP = 0.0;
     G4cout <<"i \t ACV \t ZPCV \t PCV" << G4endl; 
     for(G4int i = 0; i <= iv; i++) {
+      if(i == 0 && acv[i] != 0) {
+	G4cout <<"G4Volant: Particle stored at index " << i << G4endl;
+      }
+      totA += acv[i];
+      totZ += zpcv[i];
+      totP += pcv[i];
       G4cout << "volant" << i << "\t" << acv[i] << " \t " << zpcv[i] << " \t " << pcv[i] << G4endl;
     }
+    G4cout <<"Particle count index (iv) = " << iv << G4endl;
+    G4cout <<"ABLA Total: A = " << totA << " Z = " << totZ <<  " momentum = " << totP << G4endl;
   }
 
   G4double acv[VOLANTSIZE],zpcv[VOLANTSIZE],pcv[VOLANTSIZE],xcv[VOLANTSIZE];
   G4double ycv[VOLANTSIZE],zcv[VOLANTSIZE];
+  G4bool copied[VOLANTSIZE];
   G4int iv; 
 };
 

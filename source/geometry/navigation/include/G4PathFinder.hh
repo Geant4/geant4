@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // $Id: G4PathFinder.hh,v 1.34 2007/11/02 12:28:31 japost Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// GEANT4 tag $Name: geant4-09-02 $
 // 
 // class G4PathFinder 
 //

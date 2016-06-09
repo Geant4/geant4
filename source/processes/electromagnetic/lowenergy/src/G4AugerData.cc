@@ -479,17 +479,14 @@ void G4AugerData::BuildAugerTransitionTable()
   }
 
 
-  for (G4int element = 6; element < 101; element++)
+  for (G4int element = 6; element < 100; element++)
     { 
-      if(nMaterials == 0 || activeZ.contains(element)) {
-        augerTransitionTable.insert(trans_Table::value_type(element,LoadData(element)));
-      
-        G4cout << "G4AugerData for Element no. " << element << " are loaded" << G4endl;
-      //      PrintData(element);
-      }    
+      //      if(nMaterials == 0 || activeZ.contains(element)) {
+      augerTransitionTable.insert(trans_Table::value_type(element,LoadData(element)));
+      //	G4cout << "G4AugerData for Element no. " << element << " are loaded" << G4endl;
+      // G4cout << "G4AugerData for Element no. " << element << " are loaded" << G4endl;
+      G4cout << "AugerTransitionTable complete"<< G4endl;
     }
-  
-  G4cout << "AugerTransitionTable complete"<< G4endl;
 }
 
 void G4AugerData::PrintData(G4int Z) 

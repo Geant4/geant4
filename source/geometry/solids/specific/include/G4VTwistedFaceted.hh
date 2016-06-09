@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4VTwistedFaceted.hh,v 1.10 2006/10/20 13:45:20 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// GEANT4 tag $Name: geant4-09-02 $
 // 
 // --------------------------------------------------------------------
 // GEANT 4 class header file

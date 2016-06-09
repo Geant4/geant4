@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLImmediateSceneHandler.hh,v 1.13 2007/04/04 16:50:26 allison Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4OpenGLImmediateSceneHandler.hh,v 1.14 2008/01/04 22:07:01 allison Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // 
 // Andrew Walkden  10th February 1997
@@ -53,7 +53,7 @@ public:
   virtual ~G4OpenGLImmediateSceneHandler ();
   void BeginPrimitives (const G4Transform3D& objectTransformation);
   void EndPrimitives ();
-  void BeginPrimitives2D ();
+  void BeginPrimitives2D (const G4Transform3D& objectTransformation);
   void EndPrimitives2D ();
   void BeginModeling ();
   void EndModeling ();

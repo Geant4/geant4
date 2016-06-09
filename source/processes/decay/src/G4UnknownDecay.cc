@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4UnknownDecay.cc,v 1.5 2007/10/06 07:01:09 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4UnknownDecay.cc,v 1.6 2007/12/15 12:29:16 kurasige Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // 
 // --------------------------------------------------------------
@@ -39,6 +39,8 @@
 #include "G4DecayProducts.hh"
 #include "G4PhysicsLogVector.hh"
 #include "G4ParticleChangeForDecay.hh"
+#include "G4DecayProcessType.hh"
+
 
 // constructor
 G4UnknownDecay::G4UnknownDecay(const G4String& processName)
@@ -46,6 +48,9 @@ G4UnknownDecay::G4UnknownDecay(const G4String& processName)
 				verboseLevel(1),
                                 HighestValue(20.0)
 {
+  // set Process Sub Type
+  SetProcessSubType(static_cast<int>(DECAY_Unknown));
+
 #ifdef G4VERBOSE
   if (GetVerboseLevel()>1) {
     G4cout << "G4UnknownDecay  constructor " << "  Name:" << processName << G4endl;

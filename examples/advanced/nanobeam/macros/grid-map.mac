@@ -1,0 +1,10 @@
+/quad/setModel 2
+/quad/setG1 -11.234147
+/quad/setG2 15.503626
+/quad/setG3 9.167942
+/quad/setG4 -5.777609
+/displayProfile 0
+/setGrid 1
+/quad/update
+/beam/emission 2
+/run/beamOn 1000

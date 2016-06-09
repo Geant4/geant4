@@ -23,9 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+//J. M. Quesada (August 2008).  
+//Based  on previous work by V. Lara
+// JMQ (06 September 2008) Also external choice has been added for:
+//                      - superimposed Coulomb barrier (if useSICB=true) 
 //
-// by V. Lara
- 
 #include "G4PreCompoundFragment.hh"
 
 G4PreCompoundFragment::
@@ -40,7 +42,8 @@ G4PreCompoundFragment(const G4double anA,
 		      G4VCoulombBarrier* aCoulombBarrier,
 		      const G4String & aName):
   G4VPreCompoundFragment(anA,aZ,aCoulombBarrier,aName)
-{}
+{
+}
 
 
 
@@ -70,22 +73,27 @@ G4int G4PreCompoundFragment::operator!=(const G4PreCompoundFragment & right) con
 G4double G4PreCompoundFragment::
 CalcEmissionProbability(const G4Fragment & aFragment)
 {
-  if (GetEnergyThreshold() <= 0.0) 
+// If  theCoulombBarrier effect is included in the emission probabilities
+//if (GetMaximalKineticEnergy() <= 0.0) 
+  G4double limit;
+  if(OPTxs==0 ||  useSICB) limit= theCoulombBarrier;
+  else limit=0.;
+  if (GetMaximalKineticEnergy() <= limit) 
     {
       theEmissionProbability = 0.0;
       return 0.0;
   }    
-  // Coulomb barrier is the lower limit 
-  // of integration over kinetic energy
-  G4double LowerLimit = theCoulombBarrier;
-  
-  // Excitation energy of nucleus after fragment emission is the upper limit
-  // of integration over kinetic energy
-  G4double UpperLimit = this->GetMaximalKineticEnergy();
+// If  theCoulombBarrier effect is included in the emission probabilities
+//  G4double LowerLimit = 0.;
+// Coulomb barrier is the lower limit 
+// of integration over kinetic energy
+  G4double LowerLimit = limit;
+
+// Excitation energy of nucleus after fragment emission is the upper limit of integration over kinetic energy
+  G4double UpperLimit = GetMaximalKineticEnergy();
   
   theEmissionProbability = 
     IntegrateEmissionProbability(LowerLimit,UpperLimit,aFragment);
-  
   return theEmissionProbability;
 }
 
@@ -129,7 +137,6 @@ IntegrateEmissionProbability(const G4double & Low, const G4double & Up,
       Total += w[i]*ProbabilityDistributionFunction(KineticE, aFragment);
     }
   Total  *= (Up-Low)/2.0;
-
   return Total;
 }
 
@@ -139,19 +146,20 @@ IntegrateEmissionProbability(const G4double & Low, const G4double & Up,
 G4double G4PreCompoundFragment::
 GetKineticEnergy(const G4Fragment & aFragment) 
 {
-  G4double V = this->GetCoulombBarrier();
-  G4double Tmax =  this->GetMaximalKineticEnergy() - V;
-  
+
+//	G4double V = this->GetCoulombBarrier();// alternative way for accessing the Coulomb barrier
+//                                             //should be equivalent (in fact it is)
+  G4double V;
+  if(OPTxs==0 || useSICB) V= theCoulombBarrier;//let's keep this way for consistency with CalcEmissionProbability method
+  else V=0.;
+
+  G4double Tmax =  GetMaximalKineticEnergy() ;  
   G4double T(0.0);
   G4double NormalizedProbability(1.0);
   do 
     {
-      T = V + G4UniformRand()*Tmax;
-      NormalizedProbability = this->ProbabilityDistributionFunction(T,aFragment)/
-	this->GetEmissionProbability();
-      
-    } 
-  while (G4UniformRand() > NormalizedProbability);
-  
+      T =V+ G4UniformRand()*(Tmax-V);
+      NormalizedProbability = ProbabilityDistributionFunction(T,aFragment)/GetEmissionProbability();      
+    }   while (G4UniformRand() > NormalizedProbability);  
   return T;
 }

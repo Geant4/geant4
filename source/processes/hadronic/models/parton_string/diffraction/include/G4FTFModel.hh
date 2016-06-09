@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4FTFModel.hh,v 1.5 2007/04/24 10:32:59 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4FTFModel.hh,v 1.7 2008/04/25 14:20:13 vuzhinsk Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // Class Description
 // Final state production code for hadron inelastic scattering above 20 GeV
@@ -51,11 +51,13 @@
 
 class G4VSplitableHadron;
 class G4ExcitedString;
+
+#include "G4FTFParameters.hh"                            // Uzhi 29.03.08
 #include "G4FTFParticipants.hh"
 
 #include "G4ExcitedStringVector.hh"
 #include "G4DiffractiveExcitation.hh"
-
+#include "G4ElasticHNScattering.hh"
 
 class G4FTFModel : public G4VPartonStringModel
 {
@@ -83,16 +85,18 @@ class G4FTFModel : public G4VPartonStringModel
        G4ExcitedStringVector * BuildStrings();
   
   private:     
-       
-       G4FTFParticipants theParticipants;
-       G4ReactionProduct theProjectile;
-       
-       G4DiffractiveExcitation * theExcitation;
 
+       G4ReactionProduct theProjectile;       
+       G4FTFParticipants theParticipants;
+
+       G4FTFParameters  *theParameters;        // Uzhi  29.03.08
+       G4DiffractiveExcitation * theExcitation;
+       G4ElasticHNScattering   * theElastic;   // Uzhi 29.03.08
 
 
 };
 
+// ------------------------------------------------------------
 inline 
 G4V3DNucleus * G4FTFModel::GetWoundedNucleus() const
 {

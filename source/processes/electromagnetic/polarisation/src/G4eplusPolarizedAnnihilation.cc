@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eplusPolarizedAnnihilation.cc,v 1.6 2007/10/02 11:36:44 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4eplusPolarizedAnnihilation.cc,v 1.8 2008/10/30 22:34:23 schaelic Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // -------------------------------------------------------------------
 //
@@ -77,6 +77,7 @@ G4eplusPolarizedAnnihilation::G4eplusPolarizedAnnihilation(const G4String& name)
     theTransverseAsymmetryTable(NULL)
 {
   enableAtRestDoIt = true;
+  SetProcessSubType(fAnnihilation);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

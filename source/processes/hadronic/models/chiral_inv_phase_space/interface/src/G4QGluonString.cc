@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QGluonString.cc,v 1.1 2006/10/30 10:33:38 mkossov Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4QGluonString.cc,v 1.3 2008/10/02 21:10:07 dennis Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 //      ---------------- G4QGluonString class -----------------
 //                 by Mikhail Kossov, December 2003.
@@ -46,13 +46,14 @@ std::vector<G4double> G4QGluonString::ElProbInMat; // SumProbabilityElements in 
 std::vector<std::vector<G4int>*> G4QGluonString::ElIsoN; // N of isotope(j) of Element(i)
 std::vector<std::vector<G4double>*>G4QGluonString::IsoProbInEl;//SumProbabIsotopeInElementI
 
-G4QGluonString::G4QGluonString(const G4String& processName):G4VDiscreteProcess(processName)
+G4QGluonString::G4QGluonString(const G4String& processName):
+ G4VDiscreteProcess(processName, fHadronic)
 {
 #ifdef debug
   G4cout<<"G4QGluonString::Constructor is called"<<G4endl;
 #endif
   if (verboseLevel>0) G4cout<<GetProcessName()<<" process is created by CHIPS"<<G4endl;
-
+  SetProcessSubType(fHadronInelastic);
   G4QCHIPSWorld::Get()->GetParticles(nPartCWorld); // Create CHIPS World with 234 particles
   G4QNucleus::SetParameters(freeNuc,freeDib,clustProb,mediRatio); // Clusterization param's
   G4Quasmon::SetParameters(Temperature,SSin2Gluons,EtaEtaprime);  // Hadronic parameters

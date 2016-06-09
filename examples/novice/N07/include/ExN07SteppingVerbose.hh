@@ -25,7 +25,7 @@
 //
 //
 // $Id: ExN07SteppingVerbose.hh,v 1.1 2006/11/04 19:23:07 asaim Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 //
 

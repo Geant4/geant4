@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4OpenGLStoredX.hh,v 1.7 2006/06/29 21:18:08 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // 
 // Andrew Walkden  10th February 1997

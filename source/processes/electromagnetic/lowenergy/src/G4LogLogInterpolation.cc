@@ -24,15 +24,17 @@
 // ********************************************************************
 //
 //
-// $Id: G4LogLogInterpolation.cc,v 1.7 2006/06/29 19:40:09 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4LogLogInterpolation.cc,v 1.14 2008/12/12 08:50:59 sincerti Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
-//
+//         Sebastian Incerti (incerti@cenbg.in2p3.fr)
+//         Nicolas A. Karakatsanis (knicolas@mail.ntua.gr)
 // History:
 // -----------
 // 31 Jul 2001   MGP        Created
-//
+// 27 Jun 2008   SI         Add check to avoid FPE errors
+// 08 Dec 2008   NAK        Log-Log interpolation math formula streamlined, self-test function
 // -------------------------------------------------------------------
 
 #include "G4LogLogInterpolation.hh"
@@ -56,6 +58,7 @@ G4double G4LogLogInterpolation::Calculate(G4double x, G4int bin,
 					  const G4DataVector& data) const
 {
   G4int nBins = data.size() - 1;
+//G4double oldresult = 0.;
   G4double value = 0.;
   if (x < points[0])
     {
@@ -67,13 +70,37 @@ G4double G4LogLogInterpolation::Calculate(G4double x, G4int bin,
       G4double e2 = points[bin+1];
       G4double d1 = data[bin];
       G4double d2 = data[bin+1];
-      value = (std::log10(d1)*std::log10(e2/x) + std::log10(d2)*std::log10(x/e1)) / std::log10(e2/e1);
-      value = std::pow(10.,value);
+// Check of e1, e2, d1 and d2 values to avoid floating-point errors when estimating the interpolated value below -- S.I., Jun. 2008
+      if ((d1 > 0.) && (d2 > 0.) && (e1 > 0.) && (e2 > 0.))
+        {
+// Streamline the Log-Log Interpolation formula in order to reduce the required number of log10() function calls
+// Variable oldresult contains the result of old implementation of Log-Log interpolation -- M.G.P. Jun. 2001
+//       oldresult = (std::log10(d1)*std::log10(e2/x) + std::log10(d2)*std::log10(x/e1)) / std::log10(e2/e1);
+//       oldresult = std::pow(10.,oldresult);
+// Variable value contains the result of new implementation, after streamlining the math operation -- N.A.K. Oct. 2008
+         value = std::log10(d1)+(std::log10(d2/d1)/std::log10(e2/e1)*std::log10(x/e1));
+         value = std::pow(10.,value);
+// Test of the new implementation result (value variable) against the old one (oldresult) -- N.A.K. Dec. 2008
+//       G4double diffResult = value - oldresult;
+//       G4double relativeDiff = 1e-11;
+// Comparison of the two values based on a max allowable relative difference
+//       if ( std::fabs(diffResult) > relativeDiff*std::fabs(oldresult) )
+//        {
+// Abort comparison when at least one of two results is infinite
+//           if ((!std::isinf(oldresult)) && (!std::isinf(value)))
+//            {
+//              G4cout << "G4LogLogInterpolation> Old Interpolated Value is:" << oldresult << G4endl;
+//              G4cout << "G4LogLogInterpolation> New Interpolated Value is:" << value << G4endl << G4endl;
+//              G4cerr << "G4LogLogInterpolation> Error in Interpolation:" << G4endl;
+//              G4cerr << "The difference between new and old interpolated value is:" << diffResult << G4endl << G4endl;
+//            }
+//        }
+        }
+      else value = 0.;
     }
   else
     {
       value = data[nBins];
     }
-
   return value;
 }

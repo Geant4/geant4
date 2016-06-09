@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4VQCrossSection.cc,v 1.14 2007/11/15 09:36:43 mkossov Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 //
 // CHIPS virtual class: G4VQCrossSection for the collision cross sections

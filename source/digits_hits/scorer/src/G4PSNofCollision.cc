@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4PSNofCollision.cc,v 1.1 2007/07/11 01:31:02 asaim Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // G4PSNofCollision
 #include "G4PSNofCollision.hh"

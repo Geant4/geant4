@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicsVector.icc,v 1.9 2006/06/29 19:02:40 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4PhysicsVector.icc,v 1.17 2008/09/22 08:26:33 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // 
 //---------------------------------------------------------------
@@ -42,13 +42,13 @@
 //
 //---------------------------------------------------------------
 
-
 inline
  G4double G4PhysicsVector::operator[](const size_t binNumber) const
 {
   return dataVector[binNumber];
 }
 
+//---------------------------------------------------------------
 
 inline
  G4double G4PhysicsVector::operator()(const size_t binNumber) const
@@ -56,6 +56,7 @@ inline
   return dataVector[binNumber];
 }
 
+//---------------------------------------------------------------
 
 inline 
  size_t G4PhysicsVector::GetVectorLength() const
@@ -63,74 +64,103 @@ inline
   return numberOfBin;
 }
 
-
+//---------------------------------------------------------------
 
 inline
- G4double G4PhysicsVector::LinearInterpolation(G4double theEnergy, 
-                                               size_t theLocBin)
+ G4double G4PhysicsVector::LinearInterpolation()
 {
-
   // Linear interpolation is used to get the value. If the give energy
   // is in the highest bin, no interpolation will be Done. Because 
   // there is an extra bin hidden from a user at locBin=numberOfBin, 
   // the following interpolation is valid even the current locBin=
   // numberOfBin-1. 
 
-  G4double intplFactor = (theEnergy-binVector[theLocBin]) 
-     / (binVector[theLocBin+1]-binVector[theLocBin]); // Interpolation factor
+  G4double intplFactor = (lastEnergy-binVector[lastBin]) 
+     / (binVector[lastBin+1]-binVector[lastBin]); // Interpolation factor
 
-  return dataVector[theLocBin] +
-         ( dataVector[theLocBin+1]-dataVector[theLocBin] ) * intplFactor;
+  return dataVector[lastBin] +
+         ( dataVector[lastBin+1]-dataVector[lastBin] ) * intplFactor;
 }
 
+//---------------------------------------------------------------
 
 inline
- G4double G4PhysicsVector::GetValue(G4double theEnergy, 
-                                    G4bool& isOutRange) 
+ G4double G4PhysicsVector::SplineInterpolation()
 {
+  // Spline interpolation is used to get the value. If the give energy
+  // is in the highest bin, no interpolation will be Done. Because 
+  // there is an extra bin hidden from a user at locBin=numberOfBin, 
+  // the following interpolation is valid even the current locBin=
+  // numberOfBin-1. 
 
+  if( !secDerivative ) { FillSecondDerivatives(); }
+
+  // check bin value
+  G4double delta = binVector[lastBin+1] - binVector[lastBin];
+
+  G4double a = (binVector[lastBin+1] - lastEnergy)/delta;
+  G4double b = (lastEnergy - binVector[lastBin])/delta;
+   
+  // Final evaluation of cubic spline polynomial for return   
+  G4double y1 = dataVector[lastBin];
+  G4double y2 = dataVector[lastBin+1];
+
+  G4double res = a*y1 + b*y2 + 
+        ((a*a*a - a)*secDerivative[lastBin] +
+         (b*b*b - b)*secDerivative[lastBin+1])*delta*delta/6.0  ;
+
+  return res;
+}
+
+//---------------------------------------------------------------
+
+inline
+ G4double G4PhysicsVector::GetValue(G4double theEnergy, G4bool&) 
+{
   // Use cache for speed up - check if the value 'theEnergy' is same as the 
   // last call. If it is same, then use the last bin location. Also the
   // value 'theEnergy' lies between the last energy and low edge of of the 
   // bin of last call, then the last bin location is used.
 
-  isOutRange = false;                // No range check. 
+  if( theEnergy == lastEnergy ) {
 
-  size_t locBin = 0;
-
-  if( !(theEnergy != lastEnergy) ) {
-     return lastValue;        
-
-  } else if( (theEnergy <  lastEnergy)
-          && (theEnergy >= binVector[lastBin]) ) {
-     locBin = lastBin;
-
+  } else if(theEnergy < lastEnergy && theEnergy >= binVector[lastBin]) {
      lastEnergy = theEnergy;
-     lastValue = LinearInterpolation(theEnergy, locBin);
-     return lastValue;
+     Interpolation();
 
-  } else if( theEnergy < edgeMin ){
+  } else if( theEnergy <= edgeMin ) {
      lastBin = 0;
+     lastEnergy = edgeMin;
+     lastValue  = dataVector[0];
+
+  } else if(theEnergy < lastEnergy && theEnergy >= binVector[lastBin-1]) {
+     lastBin--;
      lastEnergy = theEnergy;
-     lastValue = dataVector[0];
-     return lastValue;
+     Interpolation();
 
   } else if( theEnergy >= edgeMax ){
      lastBin = numberOfBin-1;
-     lastEnergy = theEnergy;
-     lastValue = dataVector[ numberOfBin-1 ];
-     return lastValue;
+     lastEnergy = edgeMax;
+     lastValue  = dataVector[lastBin];
 
-  }  else {
-     locBin = FindBinLocation(theEnergy); 
-
-     lastBin = locBin;
+  } else {
+     lastBin = FindBinLocation(theEnergy); 
      lastEnergy = theEnergy;
-     lastValue = LinearInterpolation(theEnergy, locBin);
-     return lastValue;
+     Interpolation();
   }
-
+  return lastValue;        
 }
+
+//---------------------------------------------------------------
+
+inline 
+ void G4PhysicsVector::Interpolation()
+{
+  if(useSpline) { lastValue = SplineInterpolation(); }
+  else          { lastValue = LinearInterpolation(); }
+}
+
+//---------------------------------------------------------------
 
 inline 
  void G4PhysicsVector::PutValue(size_t binNumber, G4double theValue)
@@ -139,10 +169,11 @@ inline
 
   // Fill the bin which is hidden to user with theValue. This is to 
   // handle correctly when Energy=theEmax in getValue.
-  if(binNumber==numberOfBin-1) {
-    dataVector[binNumber+1] = theValue;
-  }                                 
+
+  if(binNumber==numberOfBin-1) { dataVector[binNumber+1] = theValue; }
 }
+
+//---------------------------------------------------------------
 
 inline 
  G4bool G4PhysicsVector::IsFilledVectorExist() const
@@ -153,6 +184,7 @@ inline
   return status;
 }
 
+//---------------------------------------------------------------
 
 inline 
  void G4PhysicsVector::PutComment(const G4String& theComment)
@@ -160,14 +192,26 @@ inline
   comment = theComment;
 }
 
+//---------------------------------------------------------------
+
 inline 
  const G4String& G4PhysicsVector::GetComment() const
 {
   return comment;
 }
 
+//---------------------------------------------------------------
+
 inline 
  G4PhysicsVectorType G4PhysicsVector::GetType() const
 {
   return type;
+}
+
+//---------------------------------------------------------------
+
+inline 
+ void G4PhysicsVector::SetSpline(G4bool val)
+{
+  useSpline = val;
 }

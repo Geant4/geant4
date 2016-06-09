@@ -57,11 +57,11 @@ G4CollisionOutput G4EvaporationInuclCollider::collide(G4InuclParticle* /*bullet*
   G4double zt = ntarget->getZ();
   G4double eEx = ntarget->getExitationEnergy();
 
-  std::vector<G4double> bmom(4, 0.0);
+  G4CascadeMomentum bmom;
   bmom[3] = convertToTargetRestFrame.getTRSMomentum();
 
   G4InuclNuclei targ(at, zt);
-  std::vector<G4double> tmom(4, 0.0);
+  G4CascadeMomentum tmom;
   targ.setExitationEnergy(eEx);
   targ.setMomentum(tmom);
   targ.setEnergy();

@@ -29,6 +29,7 @@
 //
 // 12-April-06 Enable IC electron emissions T. Koi 
 // 26-January-07 Add G4NEUTRONHP_USE_ONLY_PHOTONEVAPORATION flag
+// 081024 G4NucleiPropertiesTable:: to G4NucleiProperties::
 //
 #include "G4NeutronHPCaptureFS.hh"
 #include "G4Gamma.hh"
@@ -55,7 +56,7 @@
     G4Nucleus aNucleus;
     G4double eps = 0.0001;
     if(targetMass<500*MeV)
-      targetMass = ( G4NucleiPropertiesTable::GetNuclearMass(static_cast<G4int>(theBaseZ+eps), static_cast<G4int>(theBaseA+eps))) /
+      targetMass = ( G4NucleiProperties::GetNuclearMass( static_cast<G4int>(theBaseA+eps) , static_cast<G4int>(theBaseZ+eps) )) /
                      G4Neutron::Neutron()->GetPDGMass();
     G4ThreeVector neutronVelocity = 1./G4Neutron::Neutron()->GetPDGMass()*theNeutron.GetMomentum();
     G4double temperature = theTrack.GetMaterial()->GetTemperature();

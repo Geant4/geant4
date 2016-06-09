@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4ParticleWithCuts.hh,v 1.19 2006/06/29 19:24:38 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // 
 // --------------------------------------------------------

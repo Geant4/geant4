@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4VScoreWriter.hh,v 1.2 2007/11/06 09:41:34 akimura Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 
 #ifndef G4VScoreWriter_h

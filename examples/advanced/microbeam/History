@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: History,v 1.16 2007/08/28 09:48:40 gcosmo Exp $
+$Id: History,v 1.19 2008/10/23 11:12:12 sincerti Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -8,6 +8,16 @@ $Id: History,v 1.16 2007/08/28 09:48:40 gcosmo Exp $
 
                        Package History file
                        --------------------
+
+23 October 2008 - tag microbeam-V09-01-03
+- Corrected typos in zero field region in MicrobeamEMField.cc
+
+20 August 2008 - tag microbeam-V09-01-02
+- Modified process ordering of G4eBremsstrahlung and G4StepLimiter in MicrobeamPhysicstList.cc
+
+16 June 2008 - tag microbeam-V09-01-01
+- Added units in MicrobeamPhantomconfiguration.cc and 
+  MicrobeamSteppingAction.cc
 
 28 August 2007 - tag microbeam-V09-00-03 - G. Cosmo
 - Replaced M_PI constants with CLHEP::pi, and protected usage of G4UItcsh

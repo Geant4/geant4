@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: PhysicsList.cc,v 1.9 2007/10/02 14:42:51 maire Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: PhysicsList.cc,v 1.15 2008/11/16 12:22:54 maire Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -47,7 +47,7 @@
 PhysicsList::PhysicsList(DetectorConstruction* det)
 : G4VUserPhysicsList(), detector(det)
 {
-  defaultCutValue = 10.*km;
+  defaultCutValue = 10*km;
   singleScattering = false;
   registerBrem = false;
   pMessenger = new PhysicsListMessenger(this);
@@ -90,7 +90,8 @@ void PhysicsList::ConstructProcess()
 #include "G4GammaConversion.hh"
 #include "G4PhotoElectricEffect.hh"
 
-#include "G4MultipleScattering.hh"
+#include "G4eMultipleScattering.hh"
+#include "G4hMultipleScattering.hh"
 #include "G4CoulombScattering.hh"
 
 #include "G4eIonisation.hh"
@@ -128,9 +129,9 @@ void PhysicsList::ConstructEM()
     } else if (particleName == "e-") {
 
       if (singleScattering)
-        pmanager->AddProcess(new G4CoulombScattering,  -1, -1,       ++iPost);
+        pmanager->AddProcess(new G4CoulombScattering,   -1, -1,       ++iPost);
         else    
-        pmanager->AddProcess(new G4MultipleScattering, -1, ++iAlong, ++iPost);
+        pmanager->AddProcess(new G4eMultipleScattering, -1, ++iAlong, ++iPost);
       
       G4eIonisation* eIoni = new G4eIonisation();
       eIoni->SetEmModel(new MyMollerBhabhaModel);             
@@ -142,9 +143,9 @@ void PhysicsList::ConstructEM()
     } else if (particleName == "e+") {
     
       if (singleScattering)
-        pmanager->AddProcess(new G4CoulombScattering,  -1, -1,       ++iPost);
+        pmanager->AddProcess(new G4CoulombScattering,   -1, -1,       ++iPost);
         else   
-        pmanager->AddProcess(new G4MultipleScattering, -1, ++iAlong, ++iPost);
+        pmanager->AddProcess(new G4eMultipleScattering, -1, ++iAlong, ++iPost);
       
       G4eIonisation* pIoni = new G4eIonisation();
       pIoni->SetEmModel(new MyMollerBhabhaModel);                   
@@ -158,40 +159,47 @@ void PhysicsList::ConstructEM()
     } else if (particleName == "proton") {
     
       if (singleScattering)
-        pmanager->AddProcess(new G4CoulombScattering,  -1, -1,       ++iPost);
+        pmanager->AddProcess(new G4CoulombScattering,   -1, -1,       ++iPost);
         else   
-        pmanager->AddProcess(new G4MultipleScattering, -1, ++iAlong, ++iPost);
+        pmanager->AddProcess(new G4hMultipleScattering, -1, ++iAlong, ++iPost);
 	
-      pmanager->AddProcess(new G4hIonisation,          -1, ++iAlong, ++iPost);
+      pmanager->AddProcess(new G4hIonisation,           -1, ++iAlong, ++iPost);
     }
   }
-  
+
   // Em options
+  //
+  // Main options and setting parameters are shown here.
+  // Several of them have default values.
   //
   G4EmProcessOptions emOptions;
   
-  //multiple scattering
-  //
-  emOptions.SetMscStepLimitation(fUseDistanceToBoundary);
-  emOptions.SetSkin(2.);
-  
   //physics tables
   //
-  emOptions.SetMinEnergy(100*eV);    
-  emOptions.SetMaxEnergy(10*GeV);  
-  emOptions.SetDEDXBinning(800);  
-  emOptions.SetLambdaBinning(800);
-  
+  emOptions.SetMinEnergy(100*eV);	//default    
+  emOptions.SetMaxEnergy(10*GeV);
+  emOptions.SetDEDXBinning(8*20);	//default=8*7    
+  emOptions.SetLambdaBinning(8*20);	//default=8*7    
+  emOptions.SetSplineFlag(true);	//default
+      
+  //multiple coulomb scattering
+  //
+  emOptions.SetMscStepLimitation(fUseDistanceToBoundary);  //default=fUseSafety
+  emOptions.SetMscRangeFactor(0.02);	//default=0.04
+  emOptions.SetMscGeomFactor (2.5);	//default       
+  emOptions.SetSkin(3.);		//default
+      
   //energy loss
-  //  
-  emOptions.SetStepFunction(0.2, 10*um);
-  emOptions.SetLinearLossLimit(1.e-6);
+  //
+  emOptions.SetStepFunction(0.2, 10*um);	//default=(0.2, 1*mm)   
+  emOptions.SetLinearLossLimit(1.e-2);		//default
+   
           
   //build CSDA range
   //
-  emOptions.SetBuildCSDARange(true);
+  emOptions.SetBuildCSDARange(true);		//default=false
   emOptions.SetMaxEnergyForCSDARange(10*GeV);  
-  emOptions.SetDEDXBinningForCSDARange(800);    
+  emOptions.SetDEDXBinningForCSDARange(8*20);	//default=8*7     
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

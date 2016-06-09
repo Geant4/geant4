@@ -36,11 +36,12 @@
 #include "G4Fancy3DNucleus.hh"
 #include "G4NuclearFermiDensity.hh"
 #include "G4NuclearShellModelDensity.hh"
-#include "G4NucleiPropertiesTable.hh"
+#include "G4NucleiProperties.hh"
 #include "Randomize.hh"
 #include "G4ios.hh"
 #include <algorithm>
 #include "G4HadronicException.hh"
+
 
 G4Fancy3DNucleus::G4Fancy3DNucleus()
  : nucleondistance(0.8*fermi)
@@ -130,10 +131,42 @@ const std::vector<G4Nucleon *> & G4Fancy3DNucleus::GetNucleons()
 	return theRWNucleons;
 }
 
+   bool G4Fancy3DNucleusHelperForSortInZ(const G4Nucleon* nuc1, const G4Nucleon* nuc2)
+{
+	return nuc1->GetPosition().z() < nuc2->GetPosition().z();
+}    
+
+void G4Fancy3DNucleus::SortNucleonsInZ()
+{
+	
+	GetNucleons();   // make sure theRWNucleons is initialised
+
+	if (theRWNucleons.size() < 2 ) return; 
+
+	sort( theRWNucleons.begin(),theRWNucleons.end(),G4Fancy3DNucleusHelperForSortInZ); 
+
+// now copy sorted nucleons to theNucleons array. TheRWNucleons are pointers in theNucleons
+//  so we need to copy to new, and then swap. 
+        G4Nucleon * sortedNucleons = new G4Nucleon[myA];
+	for ( unsigned int i=0; i<theRWNucleons.size(); i++ )
+	{
+	   sortedNucleons[i]= *(theRWNucleons[i]);
+	}
+
+	theRWNucleons.clear();   // about to delete array these point to....
+	delete [] theNucleons;
+	
+	theNucleons=sortedNucleons;
+
+	return;
+}
+
+
 G4double G4Fancy3DNucleus::BindingEnergy()
 {
-	return G4NucleiPropertiesTable::GetBindingEnergy(myZ,myA);
+  return G4NucleiProperties::GetBindingEnergy(myA,myZ);
 }
+
 
 G4double G4Fancy3DNucleus::GetNuclearRadius()
 {
@@ -260,7 +293,7 @@ void G4Fancy3DNucleus::ChoosePositions()
 	places.reserve(myA);
 	G4bool		freeplace;
 	static G4double nd2 = sqr(nucleondistance);
-	G4double maxR=GetNuclearRadius(0.01);   //  there are no nucleons at a
+	G4double maxR=GetNuclearRadius(0.001);   //  there are no nucleons at a
 	                                        //  relative Density of 0.01
 	G4int jr=0;
 	G4int jx,jy;

@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4ComptonScattering52.hh,v 1.4 2007/05/16 14:00:56 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 //------------------ G4ComptonScattering52 physics process -----------------------
 //                   by Michel Maire, April 1996

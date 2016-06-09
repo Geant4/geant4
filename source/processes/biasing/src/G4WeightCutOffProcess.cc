@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4WeightCutOffProcess.cc,v 1.2 2007/06/01 09:16:34 ahoward Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4WeightCutOffProcess.cc,v 1.3 2008/04/21 09:10:29 ahoward Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -37,7 +37,7 @@
 #include "G4WeightCutOffProcess.hh"
 //#include "G4VScorer.hh"
 #include "G4GeometryCellStep.hh"
-#include "G4GCellFinder.hh"
+//#include "G4GCellFinder.hh"
 #include "G4TouchableHandle.hh"
 #include "G4VIStore.hh"
 
@@ -57,7 +57,7 @@ G4WeightCutOffProcess(G4double wsurvival,
                       G4double wlimit,
                       G4double isource,
                       G4VIStore *istore,
-                      const G4VGCellFinder &aGCellFinder,
+		      //                      const G4VGCellFinder &aGCellFinder,
                       const G4String &aName, G4bool para)
   : G4VProcess(aName), 
     fParticleChange(new G4ParticleChange),
@@ -65,7 +65,7 @@ G4WeightCutOffProcess(G4double wsurvival,
     fWeightLimit(wlimit),
     fSourceImportance(isource),
     fIStore(istore),
-    fGCellFinder(aGCellFinder),
+    //    fGCellFinder(aGCellFinder),
    fGhostNavigator(0), fNavigatorID(-1), fFieldTrack('0')
 {
   if (!fParticleChange)
@@ -224,32 +224,70 @@ G4WeightCutOffProcess::PostStepDoIt(const G4Track& aTrack,
 
   }
 
-  G4GeometryCell postCell = fGCellFinder.GetPostGeometryCell(aStep);
-  //  G4GeometryCell postCell = fGCellFinder.GetPostGeometryCell(fGhostStep);
-  G4double R = fSourceImportance;
-  if (fIStore)
-  {
-    G4double i = fIStore->GetImportance(postCell);
-    if (i>0)
-    {
-      R/=i;
-    }
+  if(paraflag) {
+    G4GeometryCell postCell(*(fGhostPostStepPoint->GetPhysicalVolume()), 
+			    fGhostPostStepPoint->GetTouchable()->GetReplicaNumber());
+
+
+    //  G4GeometryCell postCell = fGCellFinder.GetPostGeometryCell(aStep);
+    //  G4GeometryCell postCell = fGCellFinder.GetPostGeometryCell(fGhostStep);
+    G4double R = fSourceImportance;
+    if (fIStore)
+      {
+	G4double i = fIStore->GetImportance(postCell);
+	if (i>0)
+	  {
+	    R/=i;
+	  }
+      }
+    G4double w = aTrack.GetWeight();
+    if (w<R*fWeightLimit)
+      {
+	G4double ws = fWeightSurvival*R;
+	G4double p = w/(ws);
+	if (G4UniformRand()<p)
+	  {
+	    fParticleChange->ProposeTrackStatus(fStopAndKill);
+	  }
+	else
+	  {
+	    fParticleChange->ProposeWeight(ws);
+	  }                  
+      }
+  } else {
+
+    G4GeometryCell postCell(*(aStep.GetPostStepPoint()->GetPhysicalVolume()), 
+			    aStep.GetPostStepPoint()->GetTouchable()->GetReplicaNumber());
+
+    //  G4GeometryCell postCell = fGCellFinder.GetPostGeometryCell(aStep);
+    //  G4GeometryCell postCell = fGCellFinder.GetPostGeometryCell(fGhostStep);
+    G4double R = fSourceImportance;
+    if (fIStore)
+      {
+	G4double i = fIStore->GetImportance(postCell);
+	if (i>0)
+	  {
+	    R/=i;
+	  }
+      }
+    G4double w = aTrack.GetWeight();
+    if (w<R*fWeightLimit)
+      {
+	G4double ws = fWeightSurvival*R;
+	G4double p = w/(ws);
+	if (G4UniformRand()<p)
+	  {
+	    fParticleChange->ProposeTrackStatus(fStopAndKill);
+	  }
+	else
+	  {
+	    fParticleChange->ProposeWeight(ws);
+	  }                  
+      }
   }
-  G4double w = aTrack.GetWeight();
-  if (w<R*fWeightLimit)
-  {
-    G4double ws = fWeightSurvival*R;
-    G4double p = w/(ws);
-    if (G4UniformRand()<p)
-    {
-      fParticleChange->ProposeTrackStatus(fStopAndKill);
-    }
-    else
-    {
-      fParticleChange->ProposeWeight(ws);
-    }                  
-  }
+
   return fParticleChange;
+
 }
 
 const G4String &G4WeightCutOffProcess::GetName() const

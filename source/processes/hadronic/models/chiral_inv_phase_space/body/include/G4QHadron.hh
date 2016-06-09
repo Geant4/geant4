@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4QHadron.hh,v 1.35 2007/08/28 15:42:32 mkossov Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4QHadron.hh,v 1.36 2008/01/09 09:37:24 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 //      ---------------- G4QHadron ----------------
 //             by Mikhail Kossov, Sept 1999.
@@ -41,7 +41,7 @@
 #include "Randomize.hh"
 #include "G4QParticle.hh"
 #include "G4QPartonVector.hh"
-#include <deque>
+#include <list>
 
 class G4QHadron
 {
@@ -150,8 +150,8 @@ private:
   G4int                  theCollisionCount; // ?
   G4bool                 isSplit;           // Flag, that splitting was done
   G4bool                 Direction;         // FALSE=target, TRUE=projectile
-  std::deque<G4QParton*> Color;             // container for quarks & anti-diquarks
-  std::deque<G4QParton*> AntiColor;         // container for anti-quarks & diquarks
+  std::list<G4QParton*> Color;              // container for quarks & anti-diquarks
+  std::list<G4QParton*> AntiColor;          // container for anti-quarks & diquarks
   G4double               bindE;             // Binding energy in nuclear matter
   G4double               formTime;          // Formation time for the hadron
 };

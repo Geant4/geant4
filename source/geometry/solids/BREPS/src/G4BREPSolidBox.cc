@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4BREPSolidBox.cc,v 1.10 2006/06/29 18:41:14 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4BREPSolidBox.cc,v 1.11 2008/01/22 16:03:52 tnikitin Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -52,6 +52,7 @@ G4BREPSolidBox::G4BREPSolidBox(const G4String& name,
   active=1;PlaneSolid=1;
   SurfaceVec = new G4Surface*[6];
   G4Point3DVector PVec(4);
+  G4int sense=0;
 
   PVec[0] = Pt1;
   PVec[1] = Pt2;
@@ -61,7 +62,7 @@ G4BREPSolidBox::G4BREPSolidBox(const G4String& name,
 
   PVec[2] = Pt6;
   PVec[3] = Pt5;  
-  SurfaceVec[1] = new G4FPlane(&PVec);
+  SurfaceVec[1] = new G4FPlane(&PVec,0,sense);
 
   PVec[0] = Pt2;
   PVec[1] = Pt6;
@@ -79,13 +80,13 @@ G4BREPSolidBox::G4BREPSolidBox(const G4String& name,
   PVec[1] = Pt5;
   PVec[2] = Pt8;
   PVec[3] = Pt4;  
-  SurfaceVec[4] = new G4FPlane(&PVec);
+  SurfaceVec[4] = new G4FPlane(&PVec,0,sense);
 
   PVec[0] = Pt5;
   PVec[1] = Pt6;
   PVec[2] = Pt7;
   PVec[3] = Pt8;  
-  SurfaceVec[5] = new G4FPlane(&PVec);
+  SurfaceVec[5] = new G4FPlane(&PVec,0,sense);
 
   // Save the constructor parameters
   constructorParams[0] = Pt1;

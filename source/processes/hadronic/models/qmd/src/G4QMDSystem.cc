@@ -23,6 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// 081120 Add InsertParticipant Method by T. Koi
+
 #include "G4QMDSystem.hh"
 #include <iomanip>
 
@@ -95,4 +97,21 @@ void G4QMDSystem::ShowParticipants()
       i++;
    }
    G4cout << "Sum upped Momentum and mag " << p_sum << " " << p_sum.mag() << G4endl;
+}
+
+
+
+void G4QMDSystem::InsertParticipant ( G4QMDParticipant* particle , G4int n )
+{
+
+   if ( (size_t) n > participants.size()+1 )
+      G4cout << "G4QMDSystem::InsertParticipant size error" << G4endl;
+
+   std::vector< G4QMDParticipant* >::iterator it; 
+   it = participants.begin();
+
+   for ( G4int i = 0; i < n ; i++ )
+      it++;
+
+   participants.insert( it, particle );
 }

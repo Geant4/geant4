@@ -1,4 +1,4 @@
-$Id: History,v 1.53 2007/06/14 15:25:20 allison Exp $
+$Id: History,v 1.54 2008/04/04 13:52:48 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +23,9 @@ committal in the CVS repository !
 
 History file for Ray Tracer category
 ---------------------------------------
+
+4th April 2008  John Allison  (raytracer-V09-01-00)
+ - Fixed gcc-4.3.0 compiler warnings.
 
 14th June 2007  John Allison  (raytracer-V08-03-01)
 - Fixed memory leak in G4RayTracer (wrapper class).

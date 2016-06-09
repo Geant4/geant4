@@ -17,9 +17,9 @@
 # cosine-law incidence
 /gps/ang/type cos
 #  
-# the proton energy is in gaussian profile centered at 4 MeV
+# the proton energy is in gaussian profile centered at 2.5 MeV
 /gps/ene/type Gauss
-/gps/ene/mono 4 MeV
+/gps/ene/mono 2.5 MeV
 /gps/ene/sigma 0.5 MeV
 #
 #
@@ -48,15 +48,16 @@
 #
 # commands below are independent of gps
 #
+#/analysis/filetype root
 /analysis/filename test34.aida
 /analysis/maxeng 5 MeV
 /analysis/mineng 0 MeV
 /analysis/maxpos 10 cm 
 /analysis/minpos -10 cm
-#/event/printModulo 10000
+/event/printModulo 10000
 #
-/control/execute display_vrml.mac
+#/control/execute display.mac
 #
 #/tracking/verbose 1
-/run/beamOn 100
+/run/beamOn 2000
 

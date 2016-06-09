@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // $Id: G4RPGAntiNeutronInelastic.hh,v 1.1 2007/07/18 20:51:36 dennis Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // Author: D. H. Wright
 // Date:   18 June 2007

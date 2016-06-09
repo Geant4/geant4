@@ -28,6 +28,7 @@
 //          Implemented by T. Koi (SLAC/SCCS)
 //          If NeutronHP data do not available for an element, then Low Energy 
 //          Parameterization models handle the interactions of the element.
+// 081024 G4NucleiPropertiesTable:: to G4NucleiProperties::
 //
 
 #include "G4NeutronHPorLFissionData.hh"
@@ -88,7 +89,7 @@ void G4NeutronHPorLFissionData::DumpPhysicsTable(const G4ParticleDefinition& aP)
 
 
 #include "G4Nucleus.hh"
-#include "G4NucleiPropertiesTable.hh"
+#include "G4NucleiProperties.hh"
 #include "G4Neutron.hh"
 #include "G4Electron.hh"
 
@@ -113,7 +114,7 @@ GetCrossSection(const G4DynamicParticle* aP, const G4Element*anE, G4double aT)
   G4double theA = anE->GetN();
   G4double theZ = anE->GetZ();
   G4double eleMass; 
-  eleMass = ( G4NucleiPropertiesTable::GetNuclearMass(static_cast<G4int>(theZ+eps), static_cast<G4int>(theA+eps))
+  eleMass = ( G4NucleiProperties::GetNuclearMass(static_cast<G4int>(theA+eps), static_cast<G4int>(theZ+eps))
 	     ) / G4Neutron::Neutron()->GetPDGMass();
   
   G4ReactionProduct boosted;

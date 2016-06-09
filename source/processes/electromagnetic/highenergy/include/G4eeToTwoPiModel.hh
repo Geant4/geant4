@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eeToTwoPiModel.hh,v 1.3 2007/05/22 17:37:30 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4eeToTwoPiModel.hh,v 1.4 2008/07/10 18:06:39 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // -------------------------------------------------------------------
 //
@@ -75,11 +75,9 @@ public:
   G4PhysicsVector* PhysicsVector(G4double, G4double) const;
 
   virtual void SampleSecondaries(std::vector<G4DynamicParticle*>*,
-              G4double, const G4ThreeVector&) const;
+              G4double, const G4ThreeVector&);
 
 private:
-
-  void Initialise();
 
   // hide assignment operator
   G4eeToTwoPiModel & operator=(const  G4eeToTwoPiModel &right);
@@ -89,7 +87,6 @@ private:
 
   G4double massPi;
   G4double massRho;
-  G4double highEnergy;
 
 };
 
@@ -111,7 +108,7 @@ inline G4double G4eeToTwoPiModel::PeakEnergy() const
 
 inline G4double G4eeToTwoPiModel::ComputeCrossSection(G4double e) const
 {
-  G4double ee = std::min(GeV,e);
+  G4double ee = std::min(HighEnergy(),e);
   return cross->CrossSection2pi(ee);
 }
 

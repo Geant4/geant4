@@ -1,4 +1,4 @@
-$Id: History,v 1.23 2007/05/23 13:39:57 tnikitin Exp $
+$Id: History,v 1.26 2008/05/15 14:10:26 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,16 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+May 15th, 2008  Tatiana Nikitina  -  fieldex02-V09-01-01
+--------------------------------
+- Added handling of units for electric field in messenger.
+
+May 5th, 2008  Tatiana Nikitina  -  fieldex02-V09-01-00
+-------------------------------
+- Fixed setup to correctly handle electric field instead of the inherited
+  setup for magnetic field.
+
 May 23rd, 2007  John Apostolakis  -  fieldex02-V08-03-00
 --------------------------------
 - Taken out FastSimulationManagerProcess, which is not needed.

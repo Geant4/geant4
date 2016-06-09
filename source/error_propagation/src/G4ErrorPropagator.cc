@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // $Id: G4ErrorPropagator.cc,v 1.7 2007/11/14 17:01:14 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file 

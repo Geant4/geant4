@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4MaterialPropertyVector.cc,v 1.15 2006/06/29 19:12:56 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4MaterialPropertyVector.cc,v 1.16 2008/06/05 23:38:51 gum Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // 
 ////////////////////////////////////////////////////////////////////////
@@ -97,7 +97,7 @@ G4MaterialPropertyVector::operator =(const G4MaterialPropertyVector& right)
         // Constructors
         /////////////////
 
-G4MaterialPropertyVector::G4MaterialPropertyVector(G4double *PhotonMomenta,
+G4MaterialPropertyVector::G4MaterialPropertyVector(G4double *PhotonEnergies,
  						   G4double *PropertyValues,
 						   G4int     NumElements)
 {
@@ -105,10 +105,10 @@ G4MaterialPropertyVector::G4MaterialPropertyVector(G4double *PhotonMomenta,
 	CurrentEntry = -1;
 
 	// create a vector filling it with the values
-	// from PhotonMomenta[] and PropertyValues[] 
+	// from PhotonEnergies[] and PropertyValues[] 
 
 	for(G4int i = 0; i < NumElements; i++) {
-		AddElement(PhotonMomenta[i], PropertyValues[i]);
+		AddElement(PhotonEnergies[i], PropertyValues[i]);
         }
 }
 
@@ -140,23 +140,23 @@ G4MaterialPropertyVector::~G4MaterialPropertyVector()
         ////////////
         // Methods
         ////////////
-void G4MaterialPropertyVector::AddElement(G4double aPhotonMomentum,
+void G4MaterialPropertyVector::AddElement(G4double aPhotonEnergy,
 					  G4double aPropertyValue) 
 {
 	G4MPVEntry *newElement;
 	
-	newElement = new G4MPVEntry(aPhotonMomentum, aPropertyValue);
+	newElement = new G4MPVEntry(aPhotonEnergy, aPropertyValue);
 	MPV.push_back(newElement);
 	std::sort(MPV.begin(), MPV.end(), MPVEntry_less());
 	NumEntries++; 
 }
 
-void G4MaterialPropertyVector::RemoveElement(G4double aPhotonMomentum)
+void G4MaterialPropertyVector::RemoveElement(G4double aPhotonEnergy)
 {
 	G4MPVEntry *newElement;
 	G4MPVEntry *success=0;
 
-	newElement = new G4MPVEntry(aPhotonMomentum, DBL_MAX);
+	newElement = new G4MPVEntry(aPhotonEnergy, DBL_MAX);
 
 	std::vector<G4MPVEntry*>::iterator i;
 	for (i = MPV.begin(); i != MPV.end(); i++)
@@ -178,7 +178,7 @@ void G4MaterialPropertyVector::RemoveElement(G4double aPhotonMomentum)
 }
 
 G4double 
-G4MaterialPropertyVector::GetProperty(G4double aPhotonMomentum) const
+G4MaterialPropertyVector::GetProperty(G4double aPhotonEnergy) const
 {
 	G4MPVEntry *target, *temp; 
 	G4int left, right;
@@ -188,16 +188,16 @@ G4MaterialPropertyVector::GetProperty(G4double aPhotonMomentum) const
 	// Establish table range 
 	/////////////////////////
 
-	G4double PMmin   = MPV.front()->GetPhotonMomentum(); 
+	G4double PMmin   = MPV.front()->GetPhotonEnergy(); 
 	G4double minProp = MPV.front()->GetProperty(); 
-	G4double PMmax   = MPV.back() ->GetPhotonMomentum();
+	G4double PMmax   = MPV.back() ->GetPhotonEnergy();
 	G4double maxProp = MPV.back() ->GetProperty();
 
 	///////////////////////////////////////////
 	// Does value fall outside range of table?
 	///////////////////////////////////////////
 
-	if (aPhotonMomentum < PMmin) 
+	if (aPhotonEnergy < PMmin) 
 	{
 		G4cout << "\nWarning: G4MaterialPropertyVector::GetProperty";
 		G4cout << "\n==> attempt to Retrieve Property below range" 
@@ -205,7 +205,7 @@ G4MaterialPropertyVector::GetProperty(G4double aPhotonMomentum) const
 		return minProp; 
 	} 
 
-        if (aPhotonMomentum > PMmax)
+        if (aPhotonEnergy > PMmax)
 	{
 		G4cout << "\nWarning: G4MaterialPropertyVector::GetProperty";
 		G4cout << "\n==> attempt to Retrieve Property above range" 
@@ -213,7 +213,7 @@ G4MaterialPropertyVector::GetProperty(G4double aPhotonMomentum) const
 		return maxProp;
 	} 
 	
-	target = new G4MPVEntry(aPhotonMomentum, 0.0);
+	target = new G4MPVEntry(aPhotonEnergy, 0.0);
 
 	temp = 0;
 	//temp = MPV.find(target);
@@ -235,11 +235,11 @@ G4MaterialPropertyVector::GetProperty(G4double aPhotonMomentum) const
 		// Return interpolated value 
 		//////////////////////////////
 
-		GetAdjacentBins(aPhotonMomentum, &left, &right);
+		GetAdjacentBins(aPhotonEnergy, &left, &right);
 
-                pmleft = MPV[left]->GetPhotonMomentum();
-                pmright = MPV[right]->GetPhotonMomentum();
-                ratio1 = (aPhotonMomentum-pmleft)/(pmright-pmleft);
+                pmleft = MPV[left]->GetPhotonEnergy();
+                pmright = MPV[right]->GetPhotonEnergy();
+                ratio1 = (aPhotonEnergy-pmleft)/(pmright-pmleft);
                 ratio2 = 1 - ratio1;
 		InterpolatedValue = MPV[left]->GetProperty()*ratio2 + 
 				    MPV[right]->GetProperty()*ratio1;
@@ -263,31 +263,31 @@ G4double G4MaterialPropertyVector::GetProperty() const
 	}
 }
 
-G4double G4MaterialPropertyVector::GetPhotonMomentum() const
+G4double G4MaterialPropertyVector::GetPhotonEnergy() const
 {
 // 	For use with G4MaterialPropertyVector iterator
 
 	if(CurrentEntry == -1 || CurrentEntry >= NumEntries) {
-		G4Exception("G4MaterialPropertyVector::GetPhotonMomentum ==>"
-		"Iterator attempted to Retrieve Photon Momentum out of range");
+		G4Exception("G4MaterialPropertyVector::GetPhotonEnergy ==>"
+		"Iterator attempted to Retrieve Photon Energy out of range");
                 return DBL_MAX;
 	}
 	else { 
-		return MPV[CurrentEntry]->GetPhotonMomentum();
+		return MPV[CurrentEntry]->GetPhotonEnergy();
 	}
 }
 
 G4double 
-G4MaterialPropertyVector::GetPhotonMomentum(G4double aProperty) const
+G4MaterialPropertyVector::GetPhotonEnergy(G4double aProperty) const
 {
 // 				***NB*** 
-// Assumes that the property is an increasing function of photon momentum (e.g.
+// Assumes that the property is an increasing function of photon energy (e.g.
 // refraction index)
 // 				***NB*** 
 //
-// Returns the photon momentum corresponding to the property value passed in.
-// If several photon momentum values correspond to the value passed in, the
-// function returns the first photon momentum in the vector that corresponds
+// Returns the photon energy corresponding to the property value passed in.
+// If several photon energy values correspond to the value passed in, the
+// function returns the first photon energy in the vector that corresponds
 // to that value. 
 
 	G4int left, right, mid;
@@ -298,9 +298,9 @@ G4MaterialPropertyVector::GetPhotonMomentum(G4double aProperty) const
 	//////////////////////////
 
 	G4double PropMin = MPV.front()->GetProperty();
-	G4double PMmin   = MPV.front()->GetPhotonMomentum();
+	G4double PMmin   = MPV.front()->GetPhotonEnergy();
 	G4double PropMax = MPV.back() ->GetProperty();
-	G4double PMmax   = MPV.back() ->GetPhotonMomentum();
+	G4double PMmax   = MPV.back() ->GetPhotonEnergy();
 
 	///////////////////////////////////////////
 	// Does value fall outside range of table?
@@ -308,15 +308,15 @@ G4MaterialPropertyVector::GetPhotonMomentum(G4double aProperty) const
 
 	if (aProperty < PropMin) 
 	{
-	  G4cout << "\nWarning: G4MaterialPropertyVector::GetPhotonMomentum";
-	  G4cout << "\n==> attempt to Retrieve Photon Momentum out of range" 
+	  G4cout << "\nWarning: G4MaterialPropertyVector::GetPhotonEnergy";
+	  G4cout << "\n==> attempt to Retrieve Photon Energy out of range" 
 	       << G4endl; 
 	  return PMmin;
 	}
 
 	if (aProperty > PropMax) {
-          G4cout << "\nWarning: G4MaterialPropertyVector::GetPhotonMomentum";
-	  G4cout << "\n==> attempt to Retrieve Photon Momentum out of range" 
+          G4cout << "\nWarning: G4MaterialPropertyVector::GetPhotonEnergy";
+	  G4cout << "\n==> attempt to Retrieve Photon Energy out of range" 
 	       << G4endl;
 	  return PMmax;
 	}
@@ -334,7 +334,7 @@ G4MaterialPropertyVector::GetPhotonMomentum(G4double aProperty) const
 		mid = (left + right)/2;
 		if (MPV[mid]->GetProperty() == aProperty) { 
 
-			// Get first photon momentum value in vector that 
+			// Get first photon energy value in vector that 
 			// corresponds to property value  
 
 			while (mid-1 >= 0 && 
@@ -342,8 +342,8 @@ G4MaterialPropertyVector::GetPhotonMomentum(G4double aProperty) const
 				  mid--;
 			}
 
-			InterpolatedValue = MPV[mid]->GetPhotonMomentum();
-			goto end_GetPhotonMomentum;	
+			InterpolatedValue = MPV[mid]->GetPhotonEnergy();
+			goto end_GetPhotonEnergy;	
 		}
 		if (MPV[mid]->GetProperty() < aProperty)
 			left = mid;
@@ -356,10 +356,10 @@ G4MaterialPropertyVector::GetPhotonMomentum(G4double aProperty) const
 	pright = MPV[right]->GetProperty();
 	ratio1 = (aProperty - pleft) / (pright - pleft);
 	ratio2 = 1 - ratio1;
-	InterpolatedValue = MPV[left]->GetPhotonMomentum()*ratio2 +
-			    MPV[right]->GetPhotonMomentum()*ratio1;
+	InterpolatedValue = MPV[left]->GetPhotonEnergy()*ratio2 +
+			    MPV[right]->GetPhotonEnergy()*ratio1;
 
-end_GetPhotonMomentum:
+end_GetPhotonEnergy:
 
 	return InterpolatedValue;
 }
@@ -391,7 +391,7 @@ G4MPVEntry G4MaterialPropertyVector::GetEntry(G4int i) const
 }
 
 void 
-G4MaterialPropertyVector::GetAdjacentBins(G4double aPhotonMomentum,
+G4MaterialPropertyVector::GetAdjacentBins(G4double aPhotonEnergy,
                                           G4int *left,
 					  G4int *right) const
 {
@@ -400,12 +400,12 @@ G4MaterialPropertyVector::GetAdjacentBins(G4double aPhotonMomentum,
         *left = 0;
         *right = (MPV.size() - 1); // was .entries()
 
-        // find values in bins on either side of aPhotonMomentum
+        // find values in bins on either side of aPhotonEnergy
 
 	do {
         	mid = (*left + *right)/2;
 
-                if (MPV[mid]->GetPhotonMomentum() < aPhotonMomentum) 
+                if (MPV[mid]->GetPhotonEnergy() < aPhotonEnergy) 
 		{
                 	*left = mid;
 		}

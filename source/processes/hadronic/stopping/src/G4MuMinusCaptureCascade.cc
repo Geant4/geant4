@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MuMinusCaptureCascade.cc,v 1.15 2007/07/05 18:19:14 dennis Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4MuMinusCaptureCascade.cc,v 1.16 2008/05/05 09:09:06 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 //   G4MuonMinusCaptureAtRest physics process
 //                   
@@ -183,6 +183,7 @@ void G4MuMinusCaptureCascade::DoBoundMuonMinusDecay(G4double Z,
 {
   // Simulation on Decay of mu- on a K-shell of the muonic atom
   G4double xmax = ( 1.0 + Emass*Emass/ (MuMass*MuMass) );
+  G4double xmin = 2.0*Emass/MuMass;
   G4double KEnergy = GetKShellEnergy(Z);
   /*
   G4cout << "G4MuMinusCaptureCascade::DoBoundMuonMinusDecay" 
@@ -201,10 +202,16 @@ void G4MuMinusCaptureCascade::DoBoundMuonMinusDecay(G4double Z,
   // Calculate electron energy
   do {
     do {
-      x = xmax*G4UniformRand();
+      x = xmin + (xmax-xmin)*G4UniformRand();
     } while (G4UniformRand() > (3.0 - 2.0*x)*x*x );
     Eelect = x*MuMass*0.5;
-    Pelect = std::sqrt( Eelect*Eelect - Emass*Emass );
+    Pelect = 0.0;
+    if(Eelect > Emass) { 
+      Pelect = std::sqrt( Eelect*Eelect - Emass*Emass );
+    } else {
+      Pelect = 0.0;
+      Eelect = Emass;
+    }
     G4ThreeVector e_mom = GetRandomVec();
     EL = G4LorentzVector(Pelect*e_mom,Eelect);
     EL.boost(bst);

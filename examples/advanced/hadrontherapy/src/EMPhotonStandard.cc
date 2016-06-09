@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HadrontherapyPhotonStandard.cc; May 2005
+// $Id: EMPhotonStandard.cc; September 2008
 // ----------------------------------------------------------------------------
 //                 GEANT 4 - Hadrontherapy example
 // ----------------------------------------------------------------------------
@@ -36,6 +36,9 @@
 // (b) National Institute for Nuclear Physics Section of Genova, genova, Italy
 // 
 // * cirrone@lns.infn.it
+//
+// This class manages the electromagnetic processes for photons
+// using the Standard Electromagnetic Models of Geant4
 // ----------------------------------------------------------------------------
 
 #include "EMPhotonStandard.hh"
@@ -46,7 +49,7 @@
 #include "G4GammaConversion.hh"
 #include "G4PhotoElectricEffect.hh"
 #include "G4StepLimiter.hh"
-#include "G4EmProcessOptions.hh"
+
 
 
 EMPhotonStandard::EMPhotonStandard(const G4String& name): 
@@ -72,20 +75,13 @@ void EMPhotonStandard::ConstructProcess()
   // *** Photon ***
   // **************
 
-  G4EmProcessOptions* photonEmProcessOptions = new G4EmProcessOptions();
-  photonEmProcessOptions -> SetDEDXBinning(480);
-   
   G4PhotoElectricEffect* photonPhotoElectricProcess = new G4PhotoElectricEffect();
   G4ComptonScattering* photonComptonProcess = new G4ComptonScattering;
   G4GammaConversion* photonGammaConvProcess = new G4GammaConversion;
-
-  G4StepLimiter* photonStepLimiter = new G4StepLimiter();
 
   G4ParticleDefinition* particle = G4Gamma::Gamma(); 
   G4ProcessManager* processManager = particle -> GetProcessManager();
   processManager -> AddDiscreteProcess(photonPhotoElectricProcess);
   processManager -> AddDiscreteProcess(photonComptonProcess);
   processManager -> AddDiscreteProcess(photonGammaConvProcess);
-  processManager -> AddProcess(photonStepLimiter, -1, -1,  3);
-
 }

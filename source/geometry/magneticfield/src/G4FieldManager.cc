@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4FieldManager.cc,v 1.14 2006/06/29 18:23:55 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4FieldManager.cc,v 1.15 2007/12/07 15:34:10 japost Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // -------------------------------------------------------------------
 
@@ -33,6 +33,7 @@
 #include "G4Field.hh"
 #include "G4MagneticField.hh"
 #include "G4ChordFinder.hh"
+#include "G4FieldManagerStore.hh"
 
 G4FieldManager::G4FieldManager(G4Field       *detectorField, 
 			       G4ChordFinder *pChordFinder, 
@@ -54,6 +55,10 @@ G4FieldManager::G4FieldManager(G4Field       *detectorField,
      fFieldChangesEnergy= detectorField->DoesFieldChangeEnergy();
    else
      fFieldChangesEnergy= fieldChangesEnergy;
+
+   // Add to store
+   G4FieldManagerStore::Register(this);
+
 }
 
 G4FieldManager::G4FieldManager(G4MagneticField *detectorField)
@@ -69,6 +74,8 @@ G4FieldManager::G4FieldManager(G4MagneticField *detectorField)
    fChordFinder= new G4ChordFinder( detectorField );
    fDelta_One_Step_Value= fDefault_Delta_One_Step_Value;
    fDelta_Intersection_Val= fDefault_Delta_Intersection_Val;
+   // Add to store
+   G4FieldManagerStore::Register(this);
 }
 
 void G4FieldManager::ConfigureForTrack( const G4Track * ) 
@@ -82,6 +89,7 @@ G4FieldManager::~G4FieldManager()
    if( fAllocatedChordFinder ){
       delete fChordFinder;
    }
+   G4FieldManagerStore::DeRegister(this);
 }
 
 void

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4DefaultLinearColorMap.cc,v 1.2 2007/11/06 17:17:14 asaim Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4DefaultLinearColorMap.cc,v 1.3 2008/08/29 02:50:05 akimura Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 
 #include "G4DefaultLinearColorMap.hh"
@@ -39,7 +39,11 @@ G4DefaultLinearColorMap::~G4DefaultLinearColorMap()
 
 void G4DefaultLinearColorMap::GetMapColor(G4double val, G4double color[4])
 {
-  G4double value = (val-fMinVal)/(fMaxVal-fMinVal);
+  G4double value;
+  if(fMaxVal == fMinVal) 
+    value = 0.;
+  else
+    value = (val-fMinVal)/(fMaxVal-fMinVal);
 
   if(value > 1.) {value=1.;}
   if(value < 0.) {value=0.;}

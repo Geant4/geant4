@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eIonisation.cc,v 1.53 2007/05/22 17:34:36 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4eIonisation.cc,v 1.56 2008/10/20 08:56:41 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // -------------------------------------------------------------------
 //
@@ -89,9 +89,10 @@ G4eIonisation::G4eIonisation(const G4String& name)
     isElectron(true),
     isInitialised(false)
 {
-  SetStepFunction(0.2, 1*mm);
-  SetIntegral(true);
-  SetVerboseLevel(1);
+  //  SetStepFunction(0.2, 1*mm);
+  // SetIntegral(true);
+  // SetVerboseLevel(1);
+  SetProcessSubType(fIonisation);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -109,8 +110,8 @@ void G4eIonisation::InitialiseEnergyLossProcess(
     if(part == G4Positron::Positron()) isElectron = false;
     SetSecondaryParticle(theElectron);
     if (!EmModel()) SetEmModel(new G4MollerBhabhaModel());
-    EmModel()->SetLowEnergyLimit (100*eV);
-    EmModel()->SetHighEnergyLimit(100*TeV);
+    EmModel()->SetLowEnergyLimit (MinKinEnergy());
+    EmModel()->SetHighEnergyLimit(MaxKinEnergy());
     if (!FluctModel()) SetFluctModel(new G4UniversalFluctuation());
                 
     AddEmModel(1, EmModel(), FluctModel());
@@ -121,12 +122,6 @@ void G4eIonisation::InitialiseEnergyLossProcess(
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void G4eIonisation::PrintInfo()
-{
-  if(EmModel())
-    G4cout << "      Delta cross sections and sampling from " 
-	   << EmModel()->GetName() << " model"
-	   << "\n      Good description from 1 KeV to 100 GeV."
-	   << G4endl;
-}
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

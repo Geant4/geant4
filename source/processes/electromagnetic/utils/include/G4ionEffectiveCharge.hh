@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ionEffectiveCharge.hh,v 1.8 2006/08/15 16:21:39 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4ionEffectiveCharge.hh,v 1.12 2008/09/20 19:39:34 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // -------------------------------------------------------------------
 //
@@ -55,9 +55,10 @@
 #define G4ionEffectiveCharge_h 1
 
 #include "globals.hh"
+#include "G4ParticleDefinition.hh"
 
 class G4Material;
-class G4ParticleDefinition;
+class G4NistManager;
 
 class G4ionEffectiveCharge 
 {
@@ -83,7 +84,15 @@ private:
   G4ionEffectiveCharge & operator=(const G4ionEffectiveCharge &right);
   G4ionEffectiveCharge(const G4ionEffectiveCharge&);
 
+  G4NistManager*              nist;
+
+  const G4ParticleDefinition* lastPart;
+  const G4Material*           lastMat;
+  G4double                    lastKinEnergy;
+
   G4double                    chargeCorrection;
+  G4double                    effCharge;
+
   G4double                    energyHighLimit;
   G4double                    energyLowLimit;
   G4double                    energyBohr;
@@ -99,8 +108,11 @@ inline G4double G4ionEffectiveCharge::EffectiveChargeSquareRatio(
                            const G4Material* material,
 			         G4double kineticEnergy)
 {
-  G4double charge = EffectiveCharge(p,material,kineticEnergy)/eplus;
-  charge *= chargeCorrection;
+  G4double charge = effCharge;
+  if( kineticEnergy != lastKinEnergy || material != lastMat || p != lastPart) {
+    charge = EffectiveCharge(p,material,kineticEnergy);
+  }
+  charge *= chargeCorrection/CLHEP::eplus;
 
   return charge*charge;
 }

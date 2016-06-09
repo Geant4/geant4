@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4UIcmdWith3Vector.hh,v 1.7 2006/06/29 19:07:47 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 //
 

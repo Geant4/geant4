@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicalVolumeSearchScene.hh,v 1.17 2006/06/29 21:30:36 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4PhysicalVolumeSearchScene.hh,v 1.18 2008/01/04 21:59:15 allison Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // 
 // John Allison  10th August 1998.
@@ -82,7 +82,7 @@ public:
 
   virtual void BeginPrimitives (const G4Transform3D&) {}
   virtual void EndPrimitives () {}
-  virtual void BeginPrimitives2D () {}
+  virtual void BeginPrimitives2D (const G4Transform3D&) {}
   virtual void EndPrimitives2D () {}
   virtual void AddPrimitive (const G4Polyline&)   {}
   virtual void AddPrimitive (const G4Scale&)       {}

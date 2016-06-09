@@ -29,7 +29,7 @@
 // Main author:   Riccardo Capra <capra@ge.infn.it>
 //
 // Id:            $Id: RadmonApplicationAnalysisSetup.hh,v 1.3 2006/06/29 16:07:55 gunter Exp $
-// Tag:           $Name: geant4-09-01 $
+// Tag:           $Name: geant4-09-02 $
 //
 // Description:   Radmon application analysis setup
 //

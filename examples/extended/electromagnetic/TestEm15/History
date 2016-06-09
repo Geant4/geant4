@@ -1,4 +1,4 @@
-$Id: History,v 1.9 2007/11/13 14:13:31 maire Exp $
+$Id: History,v 1.14 2008/09/26 19:47:51 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,7 +14,23 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+26-09-08 mma (testem15-V09-01-04)
+- HistoManager : root as default format 
+
+12-06-08 mma (testem15-V09-01-03)
+- Remove AIDA from GNUmakefile 
      
+07-05-08 mma (testem15-V09-01-02)
+- README : update Aida informations     
+     
+07-04-08 mma (testem15-V09-01-01)
+- PhysListEmStandard : replace G4MultipleScattering by G4eMultipleScattering;
+- HistoManager::saveAscii() : redefinition of binEdge
+     
+08-01-08 mma (testem15-V09-01-00) 
+- HistoManager : ascii[0] = flag to control creation of .ascii file
+      
 13-11-07 mma (testem15-V09-00-00) 
 - HistoManager/HistoMessenger : print selected histos on ascii file
      

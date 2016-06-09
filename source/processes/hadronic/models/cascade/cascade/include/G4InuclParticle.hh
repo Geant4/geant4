@@ -32,6 +32,7 @@
 
 #include <iostream>
 #include <vector>
+#include "G4CascadeMomentum.hh"
 
 // Notice: no cc-file for G4InuclParticle
 
@@ -44,17 +45,17 @@ public:
 
   virtual ~G4InuclParticle() { };
  
-  G4InuclParticle(const std::vector<G4double>& mom) {
+  G4InuclParticle(const G4CascadeMomentum& mom) {
     setMomentum(mom);
     setModel(0);
   };
 
-  void setMomentum(const std::vector<G4double>& mom) {
+  void setMomentum(const G4CascadeMomentum& mom) {
     momentum = mom;
   };
 
 
-  std::vector<G4double> getMomentum() const { 
+  const G4CascadeMomentum& getMomentum() const { 
     return momentum; 
   };
 
@@ -83,7 +84,7 @@ public:
   };
 
 protected: 
-  std::vector<G4double> momentum;
+  G4CascadeMomentum momentum;
 
 private:
   G4int modelId; // used to indicate model that created instance of G4InuclParticle
@@ -100,11 +101,3 @@ private:
 };        
 
 #endif // G4INUCL_PARTICLE_HH 
-
-
-
-
-
-
-
-

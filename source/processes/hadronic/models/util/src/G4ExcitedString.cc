@@ -46,6 +46,7 @@ G4ExcitedString::G4ExcitedString(G4Parton* Color, G4Parton* AntiColor, G4int Dir
     {
     thePartons.push_back(Color);
     thePartons.push_back(AntiColor);
+    theTimeOfCreation = 0.;                           // Uzhi 15.05.08
     thePosition = Color->GetPosition();
     theDirection = Direction;
     theTrack=0;
@@ -56,6 +57,7 @@ G4ExcitedString::G4ExcitedString(G4Parton* Color, G4Parton* Gluon,  G4Parton* An
     thePartons.push_back(Color);
     thePartons.push_back(Gluon);
     thePartons.push_back(AntiColor);
+    theTimeOfCreation = 0.;                            // Uzhi 15.05.08
     thePosition = Color->GetPosition();
     theDirection = Direction;
     theTrack=0;
@@ -63,6 +65,7 @@ G4ExcitedString::G4ExcitedString(G4Parton* Color, G4Parton* Gluon,  G4Parton* An
 
 G4ExcitedString::G4ExcitedString(G4KineticTrack * track)
 {
+        theTimeOfCreation = track->GetFormationTime(); // Uzhi 15.05.08
 	thePosition = track->GetPosition();
 	theTrack= track;
 	theDirection=0;

@@ -1,4 +1,4 @@
-$Id: History,v 1.55 2007/10/17 08:53:51 gcosmo Exp $
+$Id: History,v 1.60 2008/10/31 08:35:52 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,23 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+     
+31-10-08 mma (exampleN02-V09-01-04)
+- Use G4hMultipleScattering for muons and protons
+     
+26-10-08 mma (exampleN02-V09-01-03)
+- Update PhysicsList for proton and ions
+     
+22-09-08 mma (exampleN02-V09-01-02)
+- PhysicsList : AddStepMax() for G4StepLimiter
+- DetectorConstruction : SetMaxStep(value)
+- DetectorMessenger : /N02/det/stepMax
+     
+07-05-08 J.Allison (exampleN02-V09-01-01)
+- Protected "/control/execute vis.mac" with G4VIS_USE flag.
+     
+03-05-08 mma (exampleN02-V09-01-00)
+- PhysicsList : replace G4MultipleScattering by G4eMultipleScattering
      
 17-10-07 G.Cosmo (exampleN02-V09-00-02)
 - Explicitely delete allocated parameterisation and step-limit objects

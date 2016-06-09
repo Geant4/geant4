@@ -1,4 +1,4 @@
-$Id: History,v 1.307 2007/11/09 11:35:53 vnivanch Exp $
+$Id: History,v 1.364 2008/11/20 20:32:40 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,217 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+20 November 08: V.Ivant (emutils-V09-01-37)
+G4EmConfigurator - fixed energy interval selection for a model
+G4VMultipleScattering - set process sub-type 10 to distinguish with 
+                        single Coulomb scattering 
+
+13 Novemver 08: A.Schaelicke (emutils-V09-01-36)
+G4LossTableManager - changed default LPM effect to ON again
+G4VEmModel - (VI) add LPM flag and Get/Set methods
+
+12 November 08: V.Ivant (emutils-V09-01-35)
+G4VEmModel - fixed memory leak by destruction G4EmElementSelectors
+G4EmSaturation - activate saturation for energy deposition due to 
+                 photo-electric effect
+
+24 October 08: V.Ivant (emutils-V09-01-34)
+G4EmProcessSubType - moved optical processes enumeration to optical directory
+
+20 October 08: V.Ivant (emutils-V09-01-33)
+G4EnergyLossMessenger - added /process/em/applyCuts command
+
+17 October 08: V.Ivant (emutils-V09-01-32)
+G4VEnergyLossProcess, G4VEmProcess, G4VMultipleScattering set number
+   of bins for tables 7 per decade 
+
+15 October 08: V.Ivant (emutils-V09-01-31)
+G4VEnergyLossProcess, G4VEmProcess, G4VMultipleScattering improved cout
+
+14 October 08: V.Ivant (emutils-V09-01-30)
+G4VEmModel - add secondaryThreshold variable and Get/Set methods
+G4EmCorrections - define the range of correction vector 25 keV - 2.5 MeV,
+                  as it is in ICRU'73 table, use 20 bins
+G4LossTableManager - set spline option "true" and flagLPM "false" by default
+G4VEnergyLossProcess, G4VEmProcess, G4VMultipleScattering set default
+                  table size 0.1 keV - 100 TeV in 60 bins
+G4EmModelManager - included G4EmProcessSubType.hh header
+G4EmTableType.hh - changed enumeration names fIonisation -> fIsIonisation,
+                   fSubIonisation -> fIsSubIonisation to avoid clash with
+                   sub-type enumeration name 
+
+21 September 08: V.Ivant (emutils-V09-01-29)
+G4EmCorrections - do not compute ion corrections if for ions 
+                  G4hIonisation process is used
+
+21 September 08: V.Ivant (emutils-V09-01-28)
+G4ionEffectiveCharge - remove chargeFactor - return to 01-25 
+G4VEnergyLossProcess - fixed initialisation;
+
+12 September 08: V.Ivant (emutils-V09-01-27)
+G4VEmProcess - improved verbose output
+G4VEnergyLossProcess - added pointer to current G4VEmModel;
+                       removed method CorrectionsAlongStep, instead 
+	               corresponding method of a model are used;
+                       improved verbose output
+G4VEmFluctuationModel - added method SetParticleAndCharge
+G4VEmModel - minor optimisations of SelectRandomAtom and SelectIsotope;
+             added methods GetParticleCharge, GetChargeSquareRatio, 
+             CorrectionsAlongStep, ActivateNuclearStopping needed for 
+             simulation of ion transport
+G4EmCorrections - added interfaces to effective charge 
+G4ionEffectiveCharge - added variable chargeFactor to be used for He ions
+
+29 August 08: V.Ivant (emutils-V09-01-26)
+G4VEmProcess, G4VMultipleScattering, G4VEnergyLossProcess - use 
+                   new DumpModelList method from G4EmModelManager
+                   in the verbosity output
+G4EmModelManager - fixed crash in destructor when verbosity > 1;
+                   fixed selection of models per energy;
+                   update printout with DumpModelList method
+
+21 August 08: V.Ivant (emutils-V09-01-25)
+G4VEmModel - add parameter kinEnergy to SetupMaterial method;
+             set pointer currentElement in ComputeCrossSectionPerAtom
+G4EmElementSelector - update usage of methods SetupMaterial and 
+	     ComputeCrossSectionPerAtom
+
+3 August 08: V.Ivant (emutils-V09-01-24)
+G4EmCorrections - dEdx data for ions are initialised at the start of a run for
+                  materials used in geometry; search for ion/material pairs updated
+G4EmCalculator - improved cout
+
+31 July 08: V.Ivant (emutils-V09-01-23)
+G4VEmProcess, G4VMultipleScattering, G4VEnergyLossProcess - use verbosity flag
+    for GetEmModel method
+G4VEmModel - use stl vector for cross sections instead of array
+
+21 July 08: V.Ivant (emutils-V09-01-22)
+G4VEmModel - added vector of G4ElementSelectors, in which vectors
+             of relative cross sections per elements of a compound 
+             material are stored; added new methods:
+             InitialisaElementSelectors and SelectRandomAtom,
+G4LossTableBuilder - remove dependence on G4LossTableManager
+G4LossTableManager - propagated spline flag to G4LossTableBuilder            
+
+15 July 08: V.Ivant (emutils-V09-01-21)
+G4EmConfigurator - a new helper class to add model per particle type,
+                   process, energy range and G4Region
+G4VEmProcess, G4VEnergyLossProcess - renamed and improved method 
+                   "MicroscopicCrossSection" by "CrossSectionPerVolume"
+G4VEmModel, G4VEmProcess, G4VMultipleScattering, G4VEnergyLossProcess 
+                   reodering of members of classes and improved comments:
+                   - separated members fixed at construction, defined at 
+                     ininitialisation, and modified in run time
+                   - improved comments in header files
+G4LossTableManager - added register/deregister mechanism and deletion
+                   at the end of job for G4VEmModel
+G4EmModelManager - does not delete models anymore
+
+9 July 08: V.Ivant (emutils-V09-01-20)
+G4ElectronIonPair - a new helper class to sample number of primary ionisations
+                    in detectors 
+
+8 July 08: V.Ivant (emutils-V09-01-19)
+G4VEmModel - added inline method ComputeCrossSectionPerAtom 
+G4LossTableManager and G4EnergyLossTable - remove call to exit() 
+
+9 June 08: V.Ivant (emutils-V09-01-18)
+G4ionEffectiveCharge - return back Ziegler formula for effective charge of ions;
+                       min effective charge is 1.0 (instead of 0.1)
+G4EmCorrections - a minor change of the scale for external ion data 
+
+2 June 08: V.Ivant (emutils-V09-01-17)
+G4ionEffectiveCharge - use simplified formula for effective charge of ions
+
+28 May 08: V.Ivant (emutils-V09-01-16)
+G4VEmModel - added virtual method SetupForMaterial 
+G4EmElementSelector - helper class to sample random G4Element in a
+                      compound material
+
+28 May 08: V.Ivant (emutils-V09-01-15)
+G4VEnergyLossProcess - fixed problem of subcutoff option for ions (ion 
+                       ranges were wrong)
+G4LossableBuilder - use more precise algorith to compute range for the
+                    case, when spline is used  
+
+20 May 08: V.Ivant (emutils-V09-01-14)
+- G4EmCorrections - computation of the finite size correction is moved to
+                    the Bethe-Bloch model 
+
+11 May 08: V.Ivant (emutils-V09-01-13)
+- G4VMultipleScattering - make AlongStepGetPhysicalInteractionLength 
+  method virtual allowing to overwrite it by a derived class -
+  needed for ion simulation
+- G4EmCalculator - fixed bug in computation for ions
+
+21 April 08: V.Ivant (emutils-V09-01-12)
+- G4VEmModel, G4VEmProcess, G4VMultipleScattering, G4EnergyLossMessenger
+  G4EmProcessOptions - introduced polarAngleLimit parameter and Get/Set
+  methods for single and multiple scattering models
+- G4ionEffectiveCharge - fixed initialisation at first event
+- G4EmCorrections - review and fix computation of high order corrections 
+                    for ions
+- G4EmCalculator - updated computations for ions
+
+08 April 08: V.Ivant (emutils-V09-01-11)
+- G4VEnergyLossProcess, G4VEmProcess, G4VMultipleScattering, 
+  G4LossTableBuilder - introduced spline
+
+25 March 08: V.Ivant (emutils-V09-01-10)
+- G4EmCorrections - precompute EM formfactor for corrections
+- G4VEnergyLossProcess - store bremsstrahlung cross sections
+
+25 March 08: V.Ivant (emutils-V09-01-09)
+- G4EmCorrections - added cut dependence into finite size correction
+- G4VEnergyLossProcess - added cout of linLossLimit
+
+17 March 08: V.Ivant (emutils-V09-01-08)
+- G4EmSaturation - added interface with G4Step 
+     
+14 March 08: mma (emutils-V09-01-07)
+- modifs in G4EmSaturation 
+
+14 March 08: V.Ivant (emutils-V09-01-06)
+- G4EmSaturation - added computation of the average recoil mass,
+                   use Birks coefficient from G4Material
+- G4LossTableManager - fixed logic in compute dedx table for an 
+                       inactive process
+
+10 March 08: V.Ivant (emutils-V09-01-05)
+- G4LossTableManager, G4EmProcessOptions - added Set/Get spline flag
+- G4EnergyLossMessenger - added a command "/process/em/spline"
+- G4VMultipleScattering - SetSkin method does not change 
+                          StepLimitType anymore
+- G4VMscModel - new class to define general msc parameters
+
+21 February 08: V.Ivant (emutils-V09-01-04)
+- G4EmSaturation - fixed initialisation problem
+
+21 February 08: V.Ivant (emutils-V09-01-03)
+- G4EmCorrections - added correction on effective charge for NIST
+  materials in the IonHighOrderCorrections method
+- G4EmSaturation - new helper class
+- G4LossTableManager - added GetEmSaturation method
+
+14 February 08: V.Ivant (emutils-V09-01-02)
+- G4EmCorrections - added IonBarkasCorrection, IonHighOrderCorrections
+  and ComputeIonCorrections methods in order to provide a smooth transition 
+  between low-energy parameterization and Bethe-Bloch model
+- G4ionEffectiveCharge - use precomputed Z^1/3 values, use expantions
+  of exp and pow functions, do not perform recomputation if arguments
+  of methods unchanged
+
+04 February 08: V.Ivant (emutils-V09-01-01)
+- G4VEnergyLossProcess - fixed computation of NIEL at the last step
+  of a particle
+ 
+11 January 08: V.Ivant (emutils-V09-01-00)
+- G4EmCorrections - improve CPU by usage expansions and precalculated
+                    values of Z^0.23
+- G4VEnergyLossProcess - fixed list of "collaborative" processes
+                         needed for sub-cutoff option
 
 09 November 07: V.Ivant (emutils-V09-00-13)
 - G4VMultipleScattering - set at initialisation that scattering may be 

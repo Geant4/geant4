@@ -57,7 +57,7 @@ int main(int argc,char** argv)
   G4RunManager* runManager = new G4RunManager;
 
   // Creation of the analysis manager
-  exrdmAnalysisManager* analysis = exrdmAnalysisManager::getInstance();
+  exrdmAnalysisManager::getInstance();
 
   // set mandatory initialization classes
 
@@ -115,7 +115,7 @@ int main(int argc,char** argv)
 #ifdef G4VIS_USE
   delete visManager;
 #endif
-  delete analysis;
+  exrdmAnalysisManager::dispose();
   delete runManager;
 
   return 0;

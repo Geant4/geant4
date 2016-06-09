@@ -23,16 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4EvaporationProbability.hh,v 1.3 2006/06/29 20:09:57 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+//J.M. Quesada (August2008). Based on:
 //
 // Hadronic Process: Nuclear De-excitations
-// by V. Lara (Oct 1998) 
+// by V. Lara (Oct 1998)
 //
-
-
-
 #ifndef G4EvaporationProbability_h
 #define G4EvaporationProbability_h 1
 
@@ -40,23 +35,29 @@
 #include "G4VEmissionProbability.hh"
 #include "G4VLevelDensityParameter.hh"
 #include "G4EvaporationLevelDensityParameter.hh"
+#include "G4VCoulombBarrier.hh"
+#include "G4CoulombBarrier.hh"
 
 
 class G4EvaporationProbability : public G4VEmissionProbability
 {
 public:
   // Only available constructor
-  G4EvaporationProbability(const G4int anA, const G4int aZ, const G4double aGamma) : 
+  G4EvaporationProbability(const G4int anA, const G4int aZ, const G4double aGamma,G4VCoulombBarrier * aCoulombBarrier) : 
     theA(anA),
     theZ(aZ),
-    Gamma(aGamma) 
+    Gamma(aGamma)
+,  theCoulombBarrierptr(aCoulombBarrier) 
   {
     theEvapLDPptr = new G4EvaporationLevelDensityParameter;
+
+    
   }
 
   ~G4EvaporationProbability() 
   {
     if (theEvapLDPptr != 0) delete theEvapLDPptr;
+
   }
 
 
@@ -66,16 +67,10 @@ public:
   G4double GetA(void) const { return theA;} 
 
 protected:
-
-  void SetExcitationEnergiesPtr(std::vector<G4double> * anExcitationEnergiesPtr) 
-  {ExcitationEnergies = anExcitationEnergiesPtr;}
-
-  void SetExcitationSpinsPtr(std::vector<G4int> * anExcitationSpinsPtr)
-  {ExcitationSpins = anExcitationSpinsPtr;}
-
   
   // Default constructor
   G4EvaporationProbability() {}
+
 private:
   // Copy constructor
   G4EvaporationProbability(const G4EvaporationProbability &right);
@@ -85,15 +80,26 @@ private:
   G4bool operator!=(const G4EvaporationProbability &right) const;
   
 public:
-  G4double EmissionProbability(const G4Fragment & fragment, const G4double anEnergy);
+
+ G4double ProbabilityDistributionFunction( const G4Fragment & aFragment, const G4double K);
+
+ G4double EmissionProbability(const G4Fragment & fragment, const G4double anEnergy);
 
 private:
 
-  G4double CalcProbability(const G4Fragment & fragment, const G4double MaximalKineticEnergy);
-  virtual G4double CCoeficient(const G4double ) const {return 0.0;};
+  G4double CalculateProbability(const G4Fragment & fragment, const G4double MaximalKineticEnergy );
 
-  virtual G4double CalcAlphaParam(const G4Fragment & ) const {return 1.0;}
-  virtual G4double CalcBetaParam(const G4Fragment & ) const {return 1.0;}
+  G4double IntegrateEmissionProbability(const G4Fragment & aFragment, const G4double & Low, const G4double & Up );
+
+protected:
+
+ virtual G4double CrossSection( const  G4Fragment & fragment, const G4double K )= 0;  
+
+ virtual G4double CalcAlphaParam(const G4Fragment & fragment)=0 ;
+ 
+ virtual G4double CalcBetaParam(const G4Fragment & fragment)=0 ;
+
+private:
 
   // Data Members
 
@@ -106,13 +112,13 @@ private:
   // number and S_f is fragment spin
   G4double Gamma;
 
-  // Discrete Excitation Energies 
-  std::vector<G4double> * ExcitationEnergies;
+//The Coulomb Barrier
+         G4VCoulombBarrier * theCoulombBarrierptr;
 
-  //
-  std::vector<G4int> * ExcitationSpins;
 
 };
+
+
 
 
 #endif

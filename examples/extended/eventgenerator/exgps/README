@@ -47,17 +47,18 @@
      This needs to be done before building the executable.  
 
      At the end of an excution, an xml file "exgps.aida" is created by default which contains 
-     histograms and ntuples. User can change the name and type of this output file with the commands
+     histograms and ntuples. User can change the name and format of this output file with the commands
 	
 	/analysis/filetype new-type
 	/analysis/fileName new-filename
 
 	e.g.
 
-	/analysis/filetype hbook
-	/analysis/filename exgps.hbook
+	/analysis/filetype root
+	/analysis/filename myfile.root 
 
-     these change the output file type to "hbook" and name to "exgps.hbbok"
+     these change the output file format to ROOT and output file name to "myfile.root". There are three file 
+     formats to choose from: xml, root or hbook.
 
      The output file conatins 6 histograms and one ntuple:
 
@@ -73,11 +74,10 @@
  
      In the ntuple the following data are recorded for each incident particle:  
 
-	Particle Name
+	Particle ID
 	Incident Position (x,y,z);
 	Incident Angle (theta,phi);
 	Particle weight;
-
 
   7. GETTING STARTED:
 
@@ -85,10 +85,12 @@
      part of the example by: 
 
 	setenv G4ANALYSIS_USE 1
-
-     otherwise make sure the G4ANALYSIS_USE is not defined:
- 
+     
+     otherwise do  
+  
 	unsetenv G4ANALYSIS_USE
+
+     to remove the generation of an output file.
  
      ii) Build the exGPS executable:
 
@@ -105,9 +107,10 @@
 
          $G4BIN/$G4SYSTEM/exGPS exrgps.in
 
-     If G4ANALYSIS_USE is defined, one should see a display of the six histograms. If JAIDA is used, one has 
-     to close the plotter window in order to terminate the execution. After the termination one will find 
-     the "exgps.aida", as well as a vrml file "g4_00.wrl" in the directory.
+     If G4ANALYSIS_USE is defined, and dpends on the particular AIDA system used, e.g. JAIDA, one could see 
+     a display window of the six histograms. It may be neccessary to close the plotter window in order to 
+     terminate the execution. After the termination one will find the "exgps.aida", as well as a vrml file 
+     "g4_00.wrl" in the directory.
 
  8. FURTHER EXAMPLES of MACRO FILES:
 
@@ -118,7 +121,4 @@
 	Please see the README file there for further information.
 
 
- 
 
-
-  

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4CameronTruranHilfPairingCorrections.cc,v 1.3 2006/06/29 20:28:11 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4CameronTruranHilfPairingCorrections.cc,v 1.4 2008/09/19 13:32:54 ahoward Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara

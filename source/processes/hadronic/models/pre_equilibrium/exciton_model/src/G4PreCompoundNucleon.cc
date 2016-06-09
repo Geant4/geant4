@@ -23,10 +23,19 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// by V. Lara
+//J. M. Quesada (August 2008).  
+//Based  on previous work by V. Lara
+//
 
 #include "G4PreCompoundNucleon.hh"
 #include "G4PreCompoundParameters.hh"
+
+G4bool G4PreCompoundNucleon::IsItPossible(const G4Fragment& aFragment) 
+  {
+    G4int pplus = aFragment.GetNumberOfCharged();   
+    G4int pneut = aFragment.GetNumberOfParticles()-pplus;
+    return (pneut >= (GetA()-GetZ()) && pplus >= GetZ());
+  }
 
 
 G4double G4PreCompoundNucleon::
@@ -35,24 +44,25 @@ ProbabilityDistributionFunction(const G4double eKin,
 {
   if ( !IsItPossible(aFragment) ) return 0.0;
 
-  const G4double r0 = G4PreCompoundParameters::GetAddress()->Getr0();
 
   G4double U = aFragment.GetExcitationEnergy();
   G4double P = aFragment.GetNumberOfParticles();
   G4double H = aFragment.GetNumberOfHoles();
   G4double N = P + H;
   
-  // g = (6.0/pi2)*a*A
-  //  G4EvaporationLevelDensityParameter theLDP;
+
+
   G4double g0 = (6.0/pi2)*aFragment.GetA() * 
     G4PreCompoundParameters::GetAddress()->GetLevelDensity();
-  //    theLDP.LevelDensityParameter(static_cast<G4int>(aFragment.GetA()),static_cast<G4int>(aFragment.GetZ()),U);
+ 
   G4double g1 = (6.0/pi2)*GetRestA() * 
     G4PreCompoundParameters::GetAddress()->GetLevelDensity();
-    //    theLDP.LevelDensityParameter(static_cast<G4int>(GetRestA()),static_cast<G4int>(GetRestZ()),U);
+
+
 
   G4double A0 = ((P*P+H*H+P-H)/4.0 - H/2.0)/g0;
-  G4double A1 = (A0*g0 - P/2.0)/g1;
+
+  G4double A1 = (A0 - P/2.0)/g1;
   
   G4double E0 = std::max(0.0,U - A0);
   if (E0 == 0.0) return 0.0;
@@ -60,10 +70,34 @@ ProbabilityDistributionFunction(const G4double eKin,
   if (E1 == 0.0) return 0.0;
 
 
-  G4double Probability = 2.0/(hbarc*hbarc*hbarc) * GetReducedMass() * 
-      GetRj(aFragment.GetNumberOfParticles(), aFragment.GetNumberOfCharged()) * r0 * r0 * std::pow(GetRestA(),2.0/3.0) * GetAlpha() * (eKin + GetBeta()) *
-      P*(N-1.0) * std::pow(g1*E1/(g0*E0),N-2.0)/E0 *
-      g1/(g0*g0);
+ G4double Probability =1.e-25* 1.0/pi2*2.0/(hbarc*hbarc*hbarc) * GetReducedMass()
+* GetRj(aFragment.GetNumberOfParticles(), aFragment.GetNumberOfCharged())  * eKin*CrossSection(eKin) * P*(N-1.0) * std::pow(g1*E1/(g0*E0),N-2.0)/E0 * g1/(g0*g0);
+
+
+if (GetRj(aFragment.GetNumberOfParticles(), aFragment.GetNumberOfCharged())<0.0 || CrossSection(eKin) <0)
+{  std::ostringstream errOs;
+   G4cout<<"WARNING:  NEGATIVE VALUES "<<G4endl;     
+        errOs << "Rj=" << GetRj(aFragment.GetNumberOfParticles(), aFragment.GetNumberOfCharged())<<G4endl;
+        errOs <<"  xsec("<<eKin<<" MeV) ="<<CrossSection(eKin)<<G4endl;
+        errOs <<"  A="<<GetA()<<"  Z="<<GetZ()<<G4endl;
+        throw G4HadronicException(__FILE__, __LINE__, errOs.str());
+              }
 
   return Probability;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

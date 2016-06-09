@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: PhysicsList.cc,v 1.24 2007/12/12 12:00:24 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: PhysicsList.cc,v 1.29 2008/11/20 12:32:16 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 /////////////////////////////////////////////////////////////////////////
 //
@@ -51,6 +51,7 @@
 #include "G4HadronDElasticPhysics.hh"
 #include "G4HadronQElasticPhysics.hh"
 #include "G4HadronHElasticPhysics.hh"
+#include "G4ChargeExchangePhysics.hh"
 #include "G4NeutronTrackingCut.hh"
 #include "G4QStoppingPhysics.hh"
 #include "G4LHEPStoppingPhysics.hh"
@@ -62,6 +63,7 @@
 #include "HadronPhysicsFTFC.hh"
 #include "HadronPhysicsFTFP.hh"
 #include "HadronPhysicsFTFP_BERT.hh"
+#include "HadronPhysicsFTF_BIC.hh"
 #include "HadronPhysicsLHEP.hh"
 #include "HadronPhysicsLHEP_BERT.hh"
 #include "HadronPhysicsLHEP_EMV.hh"
@@ -78,7 +80,6 @@
 
 #include "G4HadronInelasticQLHEP.hh"
 #include "G4IonPhysics.hh"
-#include "G4HadronProcessStore.hh"
 
 #include "G4LossTableManager.hh"
 
@@ -99,6 +100,7 @@ PhysicsList::PhysicsList() : G4VModularPhysicsList()
   cutForElectron  = defaultCutValue;
   cutForPositron  = defaultCutValue;
   dump            = false;
+  verboseLevel    = 1;
 
   pMessenger = new PhysicsListMessenger(this);
 
@@ -138,8 +140,6 @@ void PhysicsList::ConstructProcess()
   for(size_t i=0; i<hadronPhys.size(); i++) {
     hadronPhys[i]->ConstructProcess();
   }
-
-  if(dump) G4HadronProcessStore::Instance()->Dump(1);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
@@ -182,6 +182,12 @@ void PhysicsList::AddPhysicsList(const G4String& name)
     AddPhysicsList("emstandard_opt1");
     AddPhysicsList("FTFP");
 
+  } else if (name == "FTF_BIC") {
+
+    SetBuilderList0();
+    hadronPhys.push_back( new HadronPhysicsFTF_BIC("hadron",true));
+    dump = true;
+
   } else if (name == "LHEP") {
 
     SetBuilderList2();
@@ -211,7 +217,20 @@ void PhysicsList::AddPhysicsList(const G4String& name)
 
     SetBuilderList0();
     hadronPhys.push_back( new G4HadronInelasticQBBC("QBBC",verboseLevel,
-						    false,false,false,false,true));
+						    false,true,false,false,false));
+
+  } else if (name == "QBBCG") {
+
+    SetBuilderList0();
+    hadronPhys.push_back( new G4ChargeExchangePhysics(verboseLevel,false));
+    hadronPhys.push_back( new G4HadronInelasticQBBC("QBBC",verboseLevel,
+						    false,true,false,false,true));
+  } else if (name == "QBBCF") {
+
+    SetBuilderList0();
+    hadronPhys.push_back( new G4ChargeExchangePhysics(verboseLevel,false));
+    hadronPhys.push_back( new G4HadronInelasticQBBC("QBBC",verboseLevel,
+						    false,true,false,false,false));
 
   } else if (name == "QBBC_DEL") {
 
@@ -337,7 +356,7 @@ void PhysicsList::SetBuilderList0(G4bool flagHP)
 						    flagHP));
   hadronPhys.push_back( new G4QStoppingPhysics("stopping",verboseLevel));
   hadronPhys.push_back( new G4IonBinaryCascadePhysics("ionBIC"));
-  hadronPhys.push_back( new G4NeutronTrackingCut("Neutron tracking cut"));
+  hadronPhys.push_back( new G4NeutronTrackingCut("nTackingCut",verboseLevel));
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
@@ -349,7 +368,7 @@ void PhysicsList::SetBuilderList1(G4bool flagHP)
 						    flagHP));
   hadronPhys.push_back( new G4QStoppingPhysics("stopping",verboseLevel));
   hadronPhys.push_back( new G4IonPhysics("ion"));
-  hadronPhys.push_back( new G4NeutronTrackingCut("Neutron tracking cut"));
+  hadronPhys.push_back( new G4NeutronTrackingCut("nTackingCut",verboseLevel));
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
@@ -381,7 +400,7 @@ void PhysicsList::SetBuilderList4(G4bool)
   hadronPhys.push_back( new G4HadronQElasticPhysics("elastic",verboseLevel));
   hadronPhys.push_back( new G4QStoppingPhysics("stopping",verboseLevel));
   hadronPhys.push_back( new G4IonPhysics("ion"));
-  hadronPhys.push_back( new G4NeutronTrackingCut("Neutron tracking cut"));
+  hadronPhys.push_back( new G4NeutronTrackingCut("nTackingCut",verboseLevel));
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
@@ -392,7 +411,7 @@ void PhysicsList::SetBuilderList5(G4bool flagHP)
   hadronPhys.push_back( new G4HadronDElasticPhysics(verboseLevel,flagHP));
   hadronPhys.push_back( new G4QStoppingPhysics("stopping",verboseLevel));
   hadronPhys.push_back( new G4IonBinaryCascadePhysics("ionBIC"));
-  hadronPhys.push_back( new G4NeutronTrackingCut("Neutron tracking cut"));
+  hadronPhys.push_back( new G4NeutronTrackingCut("nTackingCut",verboseLevel));
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
@@ -403,7 +422,7 @@ void PhysicsList::SetBuilderList6(G4bool flagHP)
   hadronPhys.push_back( new G4HadronHElasticPhysics(verboseLevel,flagHP));
   hadronPhys.push_back( new G4QStoppingPhysics("stopping",verboseLevel));
   hadronPhys.push_back( new G4IonBinaryCascadePhysics("ionBIC"));
-  hadronPhys.push_back( new G4NeutronTrackingCut("Neutron tracking cut"));
+  hadronPhys.push_back( new G4NeutronTrackingCut("nTackingCut",verboseLevel));
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
@@ -451,7 +470,7 @@ void PhysicsList::SetCutForPositron(G4double cut)
 
 void PhysicsList::List()
 {
-  G4cout << "### PhysicsLists available: FTFC FTFP FTFP_BERT FTFP_EMV LHEP LHEP_BERT LHEP_EMV "
+  G4cout << "### PhysicsLists available: FTFC FTFP FTFP_BERT FTFP_EMV FTF_BIC LHEP LHEP_BERT LHEP_EMV"
 	 << G4endl;
   G4cout << "                            LHEP_PRECO_HP QBBC QBBC_DEL QBBC_HEL QBBC_HP QGSC "
 	 << G4endl; 

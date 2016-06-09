@@ -77,9 +77,9 @@ gRunManager.SetUserAction(mySA)
 # set particle gun
 pg= myPGA.particleGun
 pg.SetParticleByName("proton")
-pg.SetParticleEnergy(230.*HEPUnit.MeV)
+pg.SetParticleEnergy(230.*MeV)
 pg.SetParticleMomentumDirection(G4ThreeVector(0., 0., 1.))
-pg.SetParticlePosition(G4ThreeVector(0.,0.,-20.)*HEPUnit.cm)
+pg.SetParticlePosition(G4ThreeVector(0.,0.,-20.)*cm)
   
 gRunManager.Initialize()
 

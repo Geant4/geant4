@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4PSCylinderSurfaceFlux.hh,v 1.1 2007/08/14 21:23:51 taso Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 
 #ifndef G4PSCylinderSurfaceFlux_h

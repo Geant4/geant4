@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // $Id: G4ExactHelixStepper.hh,v 1.5 2007/05/18 12:50:31 tnikitin Exp $ 
-// GEANT4 tag $Name: geant4-09-01 $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 //
 // class G4ExactHelixStepper

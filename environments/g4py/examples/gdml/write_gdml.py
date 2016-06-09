@@ -4,23 +4,21 @@
 #
 # ==================================================================
 from Geant4 import *
-from Geant4.G4gdml import *
-
-import Qmaterials, Qgeom
-import ExN01pl, ParticleGun
+import g4py.Qmaterials, g4py.Qgeom
+import g4py.ExN01pl, g4py.ParticleGun
 
 # ==================================================================
 # main
 # ==================================================================
 # set geometry
-Qmaterials.Construct()
-Qgeom.Construct()
+g4py.Qmaterials.Construct()
+g4py.Qgeom.Construct()
 
 # minimal physics list
-ExN01pl.Construct()
+g4py.ExN01pl.Construct()
 
 # set primary generator action
-ParticleGun.Construct()
+g4py.ParticleGun.Construct()
 
 # initialize
 gRunManager.Initialize()
@@ -36,6 +34,8 @@ gApplyUICommand("/vis/viewer/set/viewpointThetaPhi 90. -90.")
 print "\n*** write to a GDML file..."
 navigator= gTransportationManager.GetNavigatorForTracking()
 world_volume= navigator.GetWorldVolume()
-gdml_writer= G4GDMLWriter("GDMLSchema/gdml.xsd", "qgeom.gdml")
-gdml_writer.DumpGeometryInfo(world_volume)
+
+gdml_parser = G4GDMLParser()
+gdml_parser.Write("qgeom.gdml", world_volume)
+
 

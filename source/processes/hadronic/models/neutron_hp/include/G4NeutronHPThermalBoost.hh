@@ -23,6 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// 081024 G4NucleiPropertiesTable:: to G4NucleiProperties::
+//
 #ifndef G4NeutronHPThermalBoost_h
 #define G4NeutronHPThermalBoost_h
 
@@ -30,7 +32,7 @@
 #include "G4Element.hh"
 #include "G4ReactionProduct.hh"
 #include "G4Nucleus.hh"
-#include "G4NucleiPropertiesTable.hh"
+#include "G4NucleiProperties.hh"
 #include "G4Electron.hh"
 #include "G4Neutron.hh"
 
@@ -61,8 +63,7 @@ public:
     G4Nucleus aNuc;
     G4double eps = 0.0001;
     G4double eleMass; 
-    eleMass = ( G4NucleiPropertiesTable::GetNuclearMass(static_cast<G4int>(theZ+eps), static_cast<G4int>(theA+eps))
-  	       ) / G4Neutron::Neutron()->GetPDGMass();
+    eleMass = ( G4NucleiProperties::GetNuclearMass( static_cast<G4int>(theA+eps) , static_cast<G4int>(theZ+eps) ) ) / G4Neutron::Neutron()->GetPDGMass();
   
     G4ReactionProduct aThermalNuc = aNuc.GetBiasedThermalNucleus(eleMass, neuVelo, aT);
     

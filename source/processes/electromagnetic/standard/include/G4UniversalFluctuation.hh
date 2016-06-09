@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UniversalFluctuation.hh,v 1.5 2007/04/03 11:08:36 urban Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4UniversalFluctuation.hh,v 1.6 2008/10/22 16:04:33 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // -------------------------------------------------------------------
 //
@@ -58,6 +58,7 @@
 
 
 #include "G4VEmFluctuationModel.hh"
+#include "G4ParticleDefinition.hh"
 
 class G4UniversalFluctuation : public G4VEmFluctuationModel
 {
@@ -80,6 +81,9 @@ public:
                                 G4double&);
 
   void InitialiseMe(const G4ParticleDefinition*);
+
+  // Initialisation prestep
+  inline void SetParticleAndCharge(const G4ParticleDefinition*, G4double q2);
 
 protected:
 
@@ -120,6 +124,19 @@ private:
   G4double nmaxCont2;
 
 };
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline void 
+G4UniversalFluctuation::SetParticleAndCharge(const G4ParticleDefinition* part,
+					     G4double q2)
+{
+  if(part != particle) {
+    particle       = part;
+    particleMass   = part->GetPDGMass();
+  }
+  chargeSquare = q2;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

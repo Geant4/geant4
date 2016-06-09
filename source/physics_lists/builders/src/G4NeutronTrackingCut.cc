@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NeutronTrackingCut.cc,v 1.4 2006/11/24 16:30:13 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4NeutronTrackingCut.cc,v 1.5 2008/09/17 18:19:15 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 //---------------------------------------------------------------------------
 //
@@ -46,41 +46,44 @@
 
 G4NeutronTrackingCut::G4NeutronTrackingCut(const G4String& name, G4int ver)
   :  G4VPhysicsConstructor(name), verbose(ver), wasActivated(false)
-{}
+{
+  timeLimit          = 10.*microsecond;
+  kineticEnergyLimit = 0.0;
+}
 
 G4NeutronTrackingCut::~G4NeutronTrackingCut()
 {
   if(wasActivated) 
   {
-      delete pNeutronKiller;
+    delete pNeutronKiller;
   }    
 }
 
 void G4NeutronTrackingCut::ConstructParticle()
 {
-
-// G4cout << "G4NeutronTrackingCut::ConstructParticle" << G4endl;
-
   G4Neutron::NeutronDefinition();
 }
 
 void G4NeutronTrackingCut::ConstructProcess()
 {
-  G4double timeLimit     =10*microsecond;
-//  G4double kineticEnergylimit =1*keV;
   if(wasActivated) return;
   wasActivated = true;
 
-  // Add Decay Process
+  // Add Process
+
   pNeutronKiller = new G4NeutronKiller();
   G4ParticleDefinition * particle = G4Neutron::Neutron();
   G4ProcessManager * pmanager = particle->GetProcessManager();
-//      if(verbose > 1)
-        G4cout << "### Adding Neutron tracking cut for " << particle->GetParticleName() << G4endl;
-	G4cout << "###  cut value is " << timeLimit/microsecond << " microseconds" <<  G4endl;
-      pmanager -> AddDiscreteProcess(pNeutronKiller);
-//      pNeutronKiller->SetKinEnergyLimit(kineticEnergylimit);
-      pNeutronKiller->SetTimeLimit(timeLimit);
+
+  if(verbose > 0) {
+    G4cout << "### Adding tracking cuts for " << particle->GetParticleName() 
+	   << "  TimeCut(ns)= " << timeLimit/ns 
+	   << "  KinEnergyCut(MeV)= " <<  kineticEnergyLimit/MeV
+	   <<  G4endl;
+  }
+  pmanager -> AddDiscreteProcess(pNeutronKiller);
+  pNeutronKiller->SetKinEnergyLimit(kineticEnergyLimit);
+  pNeutronKiller->SetTimeLimit(timeLimit);
 }
 
 

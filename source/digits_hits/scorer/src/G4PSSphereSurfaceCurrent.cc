@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4PSSphereSurfaceCurrent.cc,v 1.2 2007/08/14 21:23:52 taso Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // G4PSSphereSurfaceCurrent
 #include "G4PSSphereSurfaceCurrent.hh"

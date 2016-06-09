@@ -25,7 +25,7 @@
 //
 //
 // $Id: RE02DetectorConstruction.hh,v 1.3 2006/11/18 01:37:23 asaim Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 
 #ifndef RE02DetectorConstruction_h

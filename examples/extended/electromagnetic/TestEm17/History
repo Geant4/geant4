@@ -1,4 +1,4 @@
-$Id: History,v 1.4 2007/05/12 16:33:53 vnivanch Exp $
+$Id: History,v 1.9 2008/09/26 20:15:04 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,22 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+24-09-08 mma (testem17-V09-01-04)
+- HistoManager : root as default format 
+
+12-06-08 mma (testem17-V09-01-03)
+- Remove AIDA from GNUmakefile 
+     
+07-05-08 mma (testem17-V09-01-02)
+- PhysListEmStandard : add spline option for physics tables
+- README : update Aida informations
+
+31-03-08 V.Ivant (testem17-V09-01-01)
+- reduce number of string comparisons (10% CPU)
+
+18-03-08 V.Ivant (testem17-V09-01-00)
+- added pion and protons bremsstrahlung and pair production
 
 12-05-07 V.Ivant (testem17-V08-03-00)
 - add mixture material for tests (A.Bogdanov)

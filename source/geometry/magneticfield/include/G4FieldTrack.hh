@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4FieldTrack.hh,v 1.21 2006/11/13 18:24:35 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 //
 // class G4FieldTrack

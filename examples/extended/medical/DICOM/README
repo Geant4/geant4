@@ -112,10 +112,10 @@ As commented before the DICOM files (.dcm) are assumed to describe one Z slice p
 
 There are four possible ways in GEANT4 to treat the navigation in regular voxelised volumes:
 
-- The non-optimised way. It will be very slow because each time a track exits a voxel it has to loop to all other voxels to know which one it may enter
-- The optimisation with G4SmartVoxel: a 3D grid is built, so that the location of voxels is fast, but it requires a lot of memory
+- The 1D optimisation . It will be very slow because each time a track exits a voxel it has to loop to all other voxels to know which one it may enter
+- The 3D optimisation with G4SmartVoxel: a 3D grid is built, so that the location of voxels is fast, but it requires a lot of memory
 - Using G4NestedParameterisation. The search is done hierarchically in X, Y and Z. It is fast and does not require big memory
-- Using G4PhantomParameterisation/G4RegularNavigation: an special algorithm to navigate in regular voxelised geometries (see GEANT4 doc). This is the fastest way without any extra memory requirement (and it is the default in this example). It includes an option (default) to skip frontiers between voxels when they have the same material
+- Using G4PhantomParameterisation/G4RegularNavigation: an special algorithm to navigate in regular voxelised geometries (see GEANT4 doc). This is the fastest way without any extra memory requirement (and it is the default in this example). It includes an option (default) to skip frontiers between voxels when they have the same material. When using this option at each step the energy is all deposited in the last voxel; for properly distribution of the dose (=energy/volume) the G4PSDoseDeposit_RegNav scorer can be used (see below)
 
 You can select amont the four options in the following way:
 
@@ -136,4 +136,17 @@ by
 			kUndefined, nVoxelX*nVoxelY*nVoxelZ, param);
 
 - To use the third option you have to set the enviromental variable DICOM_NESTED_PARAM to 1
+
+
+--->10) Calculating dose in phantom voxels for regular navigation
+
+As mentioned above the regular navigation has the option to keip voxel frontiers when two voxels share the same material, what can make the CPU time several times smaller. But this option makes that all energy deposited is computed in the last voxel, instead of distributing it along the voxels traversed. To properly calculate the dose in each voxel the G4PSDoseDeposit_RegNav scorer can be used.
+It takes into account the fact that,  when the particle travels through the voxels it looses energy and therefore the energy lost per length (dEdx) is bigger and also the effect of the multiple scattering is bigger. 
+The algorithm to make this correction is an iterative one, as the step length increase due multiple scattering (that converts the geometrical step length in what we will call the true step length) and the energy loss are correlated.
+It works in the folloing way: first the total true step length is distributed among the voxels proportionally to their geometrical step length; with these values it is calculated one voxel after another the value of dEdx and then the value of the kinetic energy at the entrance of each voxel; with these values it is calculated the geometrical to true step corrections due to multiple scattering for each voxel; finally these new values are used to recalculate the energy lost in each voxel. It has been demonstrated for dose in a water phantom and in a real phantom that the two-step iteration described is enough to reproduce the dose calcualted when no skipping of voxel frontiers is done.
+
+This scorer is implemented in this examples if the regular navigation option is 
+chosen. It is triggered at the method RegularDicomDetectorConstruction::ConstructPatient() by the call
+
+SetScorer(voxel_logic);
 

@@ -1,4 +1,4 @@
-# $Id: basic.mac,v 1.2 2007/11/05 13:19:16 maire Exp $
+# $Id: basic.mac,v 1.3 2008/04/04 13:10:09 maire Exp $
 #
 /control/verbose 2
 /run/verbose 2
@@ -10,6 +10,8 @@
 #
 /process/inactivate msc
 /process/eLoss/fluct false
+#
+/process/eLoss/StepFunction 0.2 1 um
 #
 /gun/energy 10 keV
 #

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // $Id: G4TypeKeyT.hh,v 1.2 2006/12/13 15:44:14 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // Type key class
 //

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VLongitudinalStringDecay.cc,v 1.8 2007/04/24 14:55:23 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4VLongitudinalStringDecay.cc,v 1.13 2008/06/23 08:35:55 vuzhinsk Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // -----------------------------------------------------------------------------
 //      GEANT 4 class implementation file
@@ -74,7 +74,7 @@ G4VLongitudinalStringDecay::G4VLongitudinalStringDecay()
    SigmaQT = 0.5 * GeV;
    
    StrangeSuppress  = 0.44;    //  27 % strange quarks produced, ie. u:d:s=1:1:0.27
-   DiquarkSuppress  = 0.1;
+   DiquarkSuppress  = 0.07;
    DiquarkBreakProb = 0.1;
    
    //... pspin_meson is probability to create vector meson 
@@ -105,6 +105,9 @@ G4VLongitudinalStringDecay::G4VLongitudinalStringDecay()
    PastInitPhase=false;
    hadronizer = new G4HadronBuilder(pspin_meson,pspin_barion,
 		   		scalarMesonMix,vectorMesonMix);
+   Kappa = 1.0 * GeV/fermi;
+
+
 }
    
 
@@ -113,7 +116,7 @@ G4VLongitudinalStringDecay::~G4VLongitudinalStringDecay()
    delete hadronizer;
    }
 
-//=============================================================================================-------------
+//=============================================================================
 
 // Operators
 
@@ -121,7 +124,7 @@ G4VLongitudinalStringDecay::~G4VLongitudinalStringDecay()
 //    {
 //    }
 
-//----------------------------------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
 
 int G4VLongitudinalStringDecay::operator==(const G4VLongitudinalStringDecay &) const
     {
@@ -129,7 +132,7 @@ int G4VLongitudinalStringDecay::operator==(const G4VLongitudinalStringDecay &) c
 	return false;
     }
 
-//----------------------------------------------------------------------------------------------------------
+//-------------------------------------------------------------------------------------
 
 int G4VLongitudinalStringDecay::operator!=(const G4VLongitudinalStringDecay &) const
     {
@@ -137,119 +140,260 @@ int G4VLongitudinalStringDecay::operator!=(const G4VLongitudinalStringDecay &) c
 	return true;
     }
 
-//==========================================================================================================
+//***********************************************************************************
 
-G4int G4VLongitudinalStringDecay::SampleQuarkFlavor(void)
-   {
-   return (1 + (int)(G4UniformRand()/StrangeSuppress));
-   }
+// For changing Mass Cut used for selection of very small mass strings
+void G4VLongitudinalStringDecay::SetMassCut(G4double aValue){MassCut=aValue;}
 
-//----------------------------------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
 
-G4VLongitudinalStringDecay::pDefPair G4VLongitudinalStringDecay::CreatePartonPair(G4int NeedParticle,G4bool AllowDiquarks)
+// For handling a string with very low mass
+
+G4KineticTrackVector* G4VLongitudinalStringDecay::LightFragmentationTest(const
+		G4ExcitedString * const string)
 {
-//  NeedParticle = +1 for Particle, -1 for Antiparticle
+   // Check string decay threshold
+		
+	G4KineticTrackVector * result=0;  // return 0 when string exceeds the mass cut
+	
+	pDefPair hadrons((G4ParticleDefinition *)0,(G4ParticleDefinition *)0);
 
-    if ( AllowDiquarks && G4UniformRand() < DiquarkSuppress )
-    {
-      // Create a Diquark - AntiDiquark pair , first in pair is anti to IsParticle
-      G4int q1  = SampleQuarkFlavor();
-      G4int q2  = SampleQuarkFlavor();
-      G4int spin = (q1 != q2 && G4UniformRand() <= 0.5)? 1 : 3;
-                                     //   convention: quark with higher PDG number is first
-      G4int PDGcode = (std::max(q1,q2) * 1000 + std::min(q1,q2) * 100 + spin) * NeedParticle;
-      return pDefPair (FindParticle(-PDGcode),FindParticle(PDGcode));
-      
+	G4FragmentingString aString(*string);
 
-    } else {
-      // Create a Quark - AntiQuark pair, first in pair  IsParticle
-      G4int PDGcode=SampleQuarkFlavor()*NeedParticle;
-      return pDefPair (FindParticle(PDGcode),FindParticle(-PDGcode));
-    }
+	if ( sqr(FragmentationMass(&aString,0,&hadrons)+MassCut) < aString.Mass2()) {
+		return 0;
+	}
 
+// The string mass is very low ---------------------------
+	
+	result=new G4KineticTrackVector;
+        
+	if ( hadrons.second ==0 )
+	{
+// Substitute string by light hadron, Note that Energy is not conserved here!
+
+/*		 
+#ifdef DEBUG_LightFragmentationTest
+	       G4cout << "VlongSF Warning replacing string by single hadron " <<G4endl;
+	       G4cout << hadrons.first->GetParticleName() 
+		      << "string .. " << string->Get4Momentum() << " " 
+		      << string->Get4Momentum().m() << G4endl;
+#endif		      
+G4cout << "VlongSF Warning replacing string by single hadron " <<G4endl;
+G4cout << hadrons.first->GetParticleName() << " string .. " <<G4endl;
+G4cout << string->Get4Momentum() << " " << string->Get4Momentum().m() << G4endl;
+*/
+	       G4ThreeVector   Mom3 = string->Get4Momentum().vect();
+	       G4LorentzVector Mom(Mom3, 
+	       			   std::sqrt(Mom3.mag2() + 
+                                             sqr(hadrons.first->GetPDGMass())));
+               result->push_back(new G4KineticTrack(hadrons.first, 0, 
+                                                  string->GetPosition(),
+                                                          Mom));
+	} else 
+	{
+//... string was qq--qqbar type: Build two stable hadrons,
+
+#ifdef DEBUG_LightFragmentationTest
+	       G4cout << "VlongSF Warning replacing qq-qqbar string by TWO hadrons " 
+		      << hadrons.first->GetParticleName() << " / " 
+		      << hadrons.second->GetParticleName()
+		      << "string .. " << string->Get4Momentum() << " " 
+		      << string->Get4Momentum().m() << G4endl;
+#endif		      
+
+// Uzhi Formation time in the case???
+
+	       G4LorentzVector  Mom1, Mom2;
+	       Sample4Momentum(&Mom1, hadrons.first->GetPDGMass(), 
+			       &Mom2,hadrons.second->GetPDGMass(),
+			       string->Get4Momentum().mag());
+
+	       result->push_back(new G4KineticTrack(hadrons.first, 0, 
+                                                    string->GetPosition(), 
+                                                            Mom1));
+	       result->push_back(new G4KineticTrack(hadrons.second, 0, 
+                                                    string->GetPosition(), 
+                                                    Mom2));
+
+               G4ThreeVector Velocity = string->Get4Momentum().boostVector();
+               result->Boost(Velocity);          
+	}
+
+	return result;
+	
 }
 
-//----------------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
 
-// G4ThreeVector G4VLongitudinalStringDecay::SampleQuarkPt()
-//    {
-//    G4double width_param= 2.0 * GeV*GeV;
-//    G4double R = G4UniformRand();
-//    G4double Pt = std::sqrt(width_param*R/(1-R));
-//    G4double phi = 2.*pi*G4UniformRand();
-//    return G4ThreeVector(Pt * std::cos(phi),Pt * std::sin(phi),0);
-//    }
-G4ThreeVector G4VLongitudinalStringDecay::SampleQuarkPt()
+G4double G4VLongitudinalStringDecay::FragmentationMass(
+            const G4FragmentingString *	const string,
+		Pcreate build, pDefPair * pdefs       )
+{
+	
+        G4double mass;
+        static G4bool NeedInit(true);
+	static std::vector<double> nomix;
+	static G4HadronBuilder * minMassHadronizer;
+	if ( NeedInit ) 
+	{
+	   NeedInit = false;
+	   nomix.resize(6);
+	   for ( G4int i=0; i<6 ; i++ ) nomix[i]=0;
+
+//	   minMassHadronizer=new G4HadronBuilder(pspin_meson,pspin_barion,nomix,nomix);
+	   minMassHadronizer=hadronizer;
+	}
+
+	if ( build==0 ) build=&G4HadronBuilder::BuildLowSpin;
+
+        G4ParticleDefinition *Hadron1, *Hadron2=0;
+
+        if (!string->FourQuarkString() )
+        {
+           // spin 0 meson or spin 1/2 barion will be built
+
+           Hadron1 = (minMassHadronizer->*build)(string->GetLeftParton(),
+			                         string->GetRightParton());
+           mass= (Hadron1)->GetPDGMass();
+        } else
+        {
+           //... string is qq--qqbar: Build two stable hadrons,
+           //...    with extra uubar or ddbar quark pair
+	   G4int iflc = (G4UniformRand() < 0.5)? 1 : 2;
+	   if (string->GetLeftParton()->GetPDGEncoding() < 0) iflc = -iflc;
+
+	   //... theSpin = 4; spin 3/2 baryons will be built
+	   Hadron1 = (minMassHadronizer->*build)(string->GetLeftParton(),
+                                                 FindParticle(iflc)       );
+	   Hadron2 = (minMassHadronizer->*build)(string->GetRightParton(),
+                                                 FindParticle(-iflc)      );
+           mass = (Hadron1)->GetPDGMass() + (Hadron2)->GetPDGMass();
+        }
+	
+	if ( pdefs != 0 ) 
+	{ // need to return hadrons as well....
+	   pdefs->first  = Hadron1;
+	   pdefs->second = Hadron2;
+	}
+	   
+        return mass;
+}
+
+//----------------------------------------------------------------------------
+
+G4ParticleDefinition* G4VLongitudinalStringDecay::FindParticle(G4int Encoding) 
    {
-   G4double Pt = -std::log(G4UniformRand());
-   Pt = SigmaQT * std::sqrt(Pt);
-   G4double phi = 2.*pi*G4UniformRand();
-   return G4ThreeVector(Pt * std::cos(phi),Pt * std::sin(phi),0);
+   G4ParticleDefinition* ptr = G4ParticleTable::GetParticleTable()->FindParticle(Encoding);
+      if (ptr == NULL)
+       {
+       G4cout << "Particle with encoding "<<Encoding<<" does not exist!!!"<<G4endl;
+       throw G4HadronicException(__FILE__, __LINE__, "Check your particle table");
+       }
+   return ptr;    
    }
 
-//----------------------------------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
+//   virtual void Sample4Momentum(G4LorentzVector* Mom,     G4double Mass, 
+//                                G4LorentzVector* AntiMom, G4double AntiMass, 
+//                                G4double InitialMass)=0; 
+//-----------------------------------------------------------------------------
 
-void G4VLongitudinalStringDecay::CalculateHadronTimePosition(G4double theInitialStringMass, G4KineticTrackVector* Hadrons)
-   {
-   // `yo-yo` formation time
-   const G4double kappa = 1.0 * GeV/fermi;
-   for(size_t c1 = 0; c1 < Hadrons->size(); c1++)
-      {
-      G4double SumPz = 0; 
-      G4double SumE  = 0;
-      for(size_t c2 = 0; c2 < c1; c2++)
-         {
-         SumPz += Hadrons->operator[](c2)->Get4Momentum().pz();
-         SumE  += Hadrons->operator[](c2)->Get4Momentum().e();   
-         } 
-      G4double HadronE  = Hadrons->operator[](c1)->Get4Momentum().e();
-      G4double HadronPz = Hadrons->operator[](c1)->Get4Momentum().pz();
-      Hadrons->operator[](c1)->SetFormationTime((theInitialStringMass - 2.*SumPz + HadronE - HadronPz)/(2.*kappa));
-      G4ThreeVector aPosition(0, 0,     (theInitialStringMass - 2.*SumE  - HadronE + HadronPz)/(2.*kappa));
-      Hadrons->operator[](c1)->SetPosition(aPosition);
-      } 
-   }
+//*********************************************************************************
+//   For decision on continue or stop string fragmentation
+//   virtual G4bool StopFragmenting(const G4FragmentingString  * const string)=0;
+//   virtual G4bool IsFragmentable(const G4FragmentingString * const string)=0;
 
-//----------------------------------------------------------------------------------------------------------
+//   If a string can not fragment, make last break into 2 hadrons
+//   virtual G4bool SplitLast(G4FragmentingString * string, 
+//                            G4KineticTrackVector * LeftVector,
+//                            G4KineticTrackVector * RightVector)=0;
+//-----------------------------------------------------------------------------
+//
+//   If a string fragments, do the following
+//
+//   For transver of a string to its CMS frame
+//-----------------------------------------------------------------------------
 
-/*
-void G4VLongitudinalStringDecay::CalculateHadronTimePosition(G4double theInitialStringMass, G4KineticTrackVector* Hadrons)
-   {
-   // 'constituent' formation time 
-   const G4double kappa = 1.0 * GeV/fermi;
-   for(G4int c1 = 0; c1 < Hadrons->length(); c1++)
-      {
-      G4double SumPz = 0; 
-      G4double SumE  = 0;
-      for(G4int c2 = 0; c2 <= c1; c2++)
-         {
-         SumPz += Hadrons->at(c2)->Get4Momentum().pz();
-         SumE  += Hadrons->at(c2)->Get4Momentum().e();   
-         } 
-      Hadrons->at(c1)->SetFormationTime((theInitialStringMass - 2.*SumPz)/(2.*kappa));
-      G4ThreeVector aPosition(0, 0,     (theInitialStringMass - 2.*SumE)/(2.*kappa));
-      Hadrons->at(c1)->SetPosition(aPosition);
-      } 
-   c1 = Hadrons->length()-1;   
-   Hadrons->at(c1)->SetFormationTime(Hadrons->at(c1-1)->GetFormationTime());
-   Hadrons->at(c1)->SetPosition(Hadrons->at(c1-1)->GetPosition());
-   }
-*/
+G4ExcitedString *G4VLongitudinalStringDecay::CPExcited(const G4ExcitedString & in)
+{
+	G4Parton *Left=new G4Parton(*in.GetLeftParton());
+	G4Parton *Right=new G4Parton(*in.GetRightParton());
+	return new G4ExcitedString(Left,Right,in.GetDirection());
+}
 
-//----------------------------------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
+
+G4KineticTrack * G4VLongitudinalStringDecay::Splitup(
+		        G4FragmentingString *string, 
+			G4FragmentingString *&newString)
+{
+//G4cout<<"In G4VLong String Dec######################"<<G4endl;
+
+       //... random choice of string end to use for creating the hadron (decay)   
+       SideOfDecay = (G4UniformRand() < 0.5)? 1: -1;
+       if (SideOfDecay < 0)
+       {
+	  string->SetLeftPartonStable();
+       } else
+       {
+          string->SetRightPartonStable();
+       }
+
+       G4ParticleDefinition *newStringEnd;
+       G4ParticleDefinition * HadronDefinition;
+       if (string->DecayIsQuark())
+       {
+       	   HadronDefinition= QuarkSplitup(string->GetDecayParton(), newStringEnd);
+       } else {
+           HadronDefinition= DiQuarkSplitup(string->GetDecayParton(), newStringEnd);
+       }      
+// create new String from old, ie. keep Left and Right order, but replace decay
+
+       newString=new G4FragmentingString(*string,newStringEnd); // To store possible
+                                                                // quark containt of new string
+       G4LorentzVector* HadronMomentum=SplitEandP(HadronDefinition, string, newString);
+
+       delete newString; newString=0;                          // Uzhi 20.06.08
+	
+       G4KineticTrack * Hadron =0;
+       if ( HadronMomentum != 0 ) {    
+
+	   G4ThreeVector   Pos;
+	   Hadron = new G4KineticTrack(HadronDefinition, 0,Pos, *HadronMomentum);
+ 
+	   newString=new G4FragmentingString(*string,newStringEnd,
+	   				HadronMomentum);
+
+//G4cout<<"Out G4VLong String Dec######################"<<G4endl;	   
+//G4cout<<"newString 4Mom"<<newString->Get4Momentum()<<G4endl;
+//G4cout<<"newString Pl  "<<newString->LightConePlus()<<G4endl;
+//G4cout<<"newString Mi  "<<newString->LightConeMinus()<<G4endl;
+//G4cout<<"newString Pts "<<newString->StablePt()<<G4endl;
+//G4cout<<"newString Ptd "<<newString->DecayPt()<<G4endl;
+//G4cout<<"newString M2  "<<newString->Mass2()<<G4endl;
+//G4cout<<"newString M2  "<<newString->Mass()<<G4endl;
+	   delete HadronMomentum;
+       }      
+       return Hadron;
+}
+
+//--------------------------------------------------------------------------------------
 
 G4ParticleDefinition *
 		G4VLongitudinalStringDecay::QuarkSplitup(G4ParticleDefinition*
 		decay, G4ParticleDefinition *&created)
 {
-    G4int IsParticle=(decay->GetPDGEncoding()>0) ? -1 : +1; // if we have a quark, we need antiquark (or diquark)
+    G4int IsParticle=(decay->GetPDGEncoding()>0) ? -1 : +1; // if we have a quark, 
+                                                            // we need antiquark 
+                                                            // (or diquark)
     pDefPair QuarkPair = CreatePartonPair(IsParticle);
     created = QuarkPair.second;
     return hadronizer->Build(QuarkPair.first, decay);
     
 }
 
-//----------------------------------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
 
 G4ParticleDefinition *G4VLongitudinalStringDecay::DiQuarkSplitup(
 							G4ParticleDefinition* decay,
@@ -297,180 +441,112 @@ G4ParticleDefinition *G4VLongitudinalStringDecay::DiQuarkSplitup(
    }
 }
 
-//-----------------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
 
-G4KineticTrack * G4VLongitudinalStringDecay::Splitup(
-		        G4FragmentingString *string, 
-			G4FragmentingString *&newString)
-{
-
-       //... random choice of string end to use for creating the hadron (decay)   
-       SideOfDecay = (G4UniformRand() < 0.5)? 1: -1;
-       if (SideOfDecay < 0)
-       {
-	  string->SetLeftPartonStable();
-       } else
-       {
-          string->SetRightPartonStable();
-       }
-
-       G4ParticleDefinition *newStringEnd;
-       G4ParticleDefinition * HadronDefinition;
-       if (string->DecayIsQuark())
-       {
-       	   HadronDefinition= QuarkSplitup(string->GetDecayParton(), newStringEnd);
-       } else {
-           HadronDefinition= DiQuarkSplitup(string->GetDecayParton(), newStringEnd);
-       }      
-// create new String from old, ie. keep Left and Right order, but replace decay
-       G4LorentzVector* HadronMomentum=SplitEandP(HadronDefinition, string);
-	
-       G4KineticTrack * Hadron =0;
-       if ( HadronMomentum != 0 ) {    
-
-	   G4ThreeVector   Pos;
-	   Hadron = new G4KineticTrack(HadronDefinition, 0,Pos, *HadronMomentum);
- 
-	   newString=new G4FragmentingString(*string,newStringEnd,
-	   				HadronMomentum);
-	   
-	   delete HadronMomentum;
-       }      
-       return Hadron;
-}
-
-//----------------------------------------------------------------------------------------------------------
-
-G4ExcitedString *G4VLongitudinalStringDecay::CPExcited(const G4ExcitedString & in)
-{
-	G4Parton *Left=new G4Parton(*in.GetLeftParton());
-	G4Parton *Right=new G4Parton(*in.GetRightParton());
-	return new G4ExcitedString(Left,Right,in.GetDirection());
-}
-
-G4double G4VLongitudinalStringDecay::FragmentationMass(
-		const G4FragmentingString *
-		const string,
-		Pcreate build,
-		pDefPair * pdefs)
-{
-	
-        G4double mass;
-        static G4bool NeedInit(true);
-	static std::vector<double> nomix;
-	static G4HadronBuilder * minMassHadronizer;
-	if ( NeedInit ) 
-	{
-	   NeedInit = false;
-	   nomix.resize(6);
-	   for ( G4int i=0; i<6 ; i++ ) nomix[i]=0;
-//	   minMassHadronizer=new G4HadronBuilder(pspin_meson,pspin_barion,nomix,nomix);
-	   minMassHadronizer=hadronizer;
-	}
-
-	if ( build==0 ) build=&G4HadronBuilder::BuildLowSpin;
-
-        G4ParticleDefinition *Hadron1, *Hadron2=0;
-
-        if (!string->FourQuarkString() )
-        {
-           // spin 0 meson or spin 1/2 barion will be built
-
-           Hadron1 = (minMassHadronizer->*build)(string->GetLeftParton(),
-			              string->GetRightParton());
-           mass= (Hadron1)->GetPDGMass();
-        } else
-        {
-           //... string is qq--qqbar: Build two stable hadrons,
-           //...    with extra uubar or ddbar quark pair
-	   G4int iflc = (G4UniformRand() < 0.5)? 1 : 2;
-	   if (string->GetLeftParton()->GetPDGEncoding() < 0) iflc = -iflc;
-
-	   //... theSpin = 4; spin 3/2 baryons will be built
-	   Hadron1 = (minMassHadronizer->*build)(string->GetLeftParton(),FindParticle(iflc));
-	   Hadron2 =(minMassHadronizer->*build)(string->GetRightParton(),FindParticle(-iflc));
-           mass = (Hadron1)->GetPDGMass() + (Hadron2)->GetPDGMass();
-        }
-	
-	if ( pdefs != 0 ) 
-	{ // need to return hadrons as well....
-	   pdefs->first  = Hadron1;
-	   pdefs->second = Hadron2;
-	}
-	   
-        return mass;
-}
-
-G4KineticTrackVector* G4VLongitudinalStringDecay::LightFragmentationTest(const
-		G4ExcitedString * const string)
-{
-   // Check string decay threshold
-		
-	G4KineticTrackVector * result=0;  // return 0 when string exceeds the mass cut
-	
-	pDefPair hadrons((G4ParticleDefinition *)0,(G4ParticleDefinition *)0);
-	G4FragmentingString aString(*string);
-	if ( sqr(FragmentationMass(&aString,0,&hadrons)+MassCut) < aString.Mass2()) {
-		return 0;
-	}
-	
-	result=new G4KineticTrackVector;
-        
-	if ( hadrons.second ==0 )
-	{
-	      	 // Substitute string by light hadron, Note that Energy is not conserved here!
-		 
-#ifdef DEBUG_LightFragmentationTest
-	       G4cout << "VlongSF Warning replacing string by single hadron " 
-		      << hadrons.first->GetParticleName() 
-		      << "string .. " << string->Get4Momentum() << " " 
-		      << string->Get4Momentum().m() << G4endl;
-#endif		      
-
-	       G4ThreeVector Mom3 = string->Get4Momentum().vect();
-	       G4LorentzVector Mom(Mom3, 
-	       			   std::sqrt(Mom3.mag2() + sqr(hadrons.first->GetPDGMass())));
-               result->push_back(new G4KineticTrack(hadrons.first, 0, string->GetPosition(), Mom));
-	} else 
-	{
-	   //... string was qq--qqbar type: Build two stable hadrons,
-
-#ifdef DEBUG_LightFragmentationTest
-	       G4cout << "VlongSF Warning replacing qq-qqbar string by TWO hadrons " 
-		      << hadrons.first->GetParticleName() << " / " 
-		      << hadrons.second->GetParticleName()
-		      << "string .. " << string->Get4Momentum() << " " 
-		      << string->Get4Momentum().m() << G4endl;
-#endif		      
-
-	       G4LorentzVector  Mom1, Mom2;
-	       Sample4Momentum(&Mom1, hadrons.first->GetPDGMass(), 
-			       &Mom2,hadrons.second->GetPDGMass(),
-			        string->Get4Momentum().mag());
-	       result->push_back(new G4KineticTrack(hadrons.first, 0, string->GetPosition(), Mom1));
-	       result->push_back(new G4KineticTrack(hadrons.second, 0, string->GetPosition(), Mom2));
-               G4ThreeVector Velocity = string->Get4Momentum().boostVector();
-               result->Boost(Velocity);          
-	}
-
-	return result;
-	
-}
-
-//----------------------------------------------------------------------------------------------------------
-
-G4ParticleDefinition* G4VLongitudinalStringDecay::FindParticle(G4int Encoding) 
+G4int G4VLongitudinalStringDecay::SampleQuarkFlavor(void)
    {
-   G4ParticleDefinition* ptr = G4ParticleTable::GetParticleTable()->FindParticle(Encoding);
-      if (ptr == NULL)
-       {
-       G4cout << "Particle with encoding "<<Encoding<<" does not exist!!!"<<G4endl;
-       throw G4HadronicException(__FILE__, __LINE__, "Check your particle table");
-       }
-   return ptr;    
+   return (1 + (int)(G4UniformRand()/StrangeSuppress));
    }
 
-//----------------------------------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
+
+G4VLongitudinalStringDecay::pDefPair G4VLongitudinalStringDecay::CreatePartonPair(G4int NeedParticle,G4bool AllowDiquarks)
+{
+//  NeedParticle = +1 for Particle, -1 for Antiparticle
+
+    if ( AllowDiquarks && G4UniformRand() < DiquarkSuppress )
+    {
+      // Create a Diquark - AntiDiquark pair , first in pair is anti to IsParticle
+      G4int q1  = SampleQuarkFlavor();
+      G4int q2  = SampleQuarkFlavor();
+      G4int spin = (q1 != q2 && G4UniformRand() <= 0.5)? 1 : 3;
+                                     //   convention: quark with higher PDG number is first
+      G4int PDGcode = (std::max(q1,q2) * 1000 + std::min(q1,q2) * 100 + spin) * NeedParticle;
+      return pDefPair (FindParticle(-PDGcode),FindParticle(PDGcode));
+      
+
+    } else {
+      // Create a Quark - AntiQuark pair, first in pair  IsParticle
+      G4int PDGcode=SampleQuarkFlavor()*NeedParticle;
+      return pDefPair (FindParticle(PDGcode),FindParticle(-PDGcode));
+    }
+
+}
+
+//-----------------------------------------------------------------------------
+
+// G4ThreeVector G4VLongitudinalStringDecay::SampleQuarkPt()
+//    {
+//    G4double width_param= 2.0 * GeV*GeV;
+//    G4double R = G4UniformRand();
+//    G4double Pt = std::sqrt(width_param*R/(1-R));
+//    G4double phi = 2.*pi*G4UniformRand();
+//    return G4ThreeVector(Pt * std::cos(phi),Pt * std::sin(phi),0);
+//    }
+
+G4ThreeVector G4VLongitudinalStringDecay::SampleQuarkPt()
+   {
+   G4double Pt = -std::log(G4UniformRand());
+   Pt = SigmaQT * std::sqrt(Pt);
+   G4double phi = 2.*pi*G4UniformRand();
+   return G4ThreeVector(Pt * std::cos(phi),Pt * std::sin(phi),0);
+   }
+
+//******************************************************************************
+
+void G4VLongitudinalStringDecay::CalculateHadronTimePosition(G4double theInitialStringMass, G4KineticTrackVector* Hadrons)
+   {
+
+   // `yo-yo` formation time
+//   const G4double kappa = 1.0 * GeV/fermi/4.;      // Uzhi String tension 1.06.08
+     G4double kappa = GetStringTensionParameter();
+//G4cout<<"Kappa "<<kappa<<G4endl;                   // Uzhi 20.06.08
+//G4int Uzhi; G4cin>>Uzhi;                           // Uzhi 20.06.08
+   for(size_t c1 = 0; c1 < Hadrons->size(); c1++)
+      {
+      G4double SumPz = 0; 
+      G4double SumE  = 0;
+      for(size_t c2 = 0; c2 < c1; c2++)
+         {
+         SumPz += Hadrons->operator[](c2)->Get4Momentum().pz();
+         SumE  += Hadrons->operator[](c2)->Get4Momentum().e();   
+         } 
+      G4double HadronE  = Hadrons->operator[](c1)->Get4Momentum().e();
+      G4double HadronPz = Hadrons->operator[](c1)->Get4Momentum().pz();
+      Hadrons->operator[](c1)->SetFormationTime((theInitialStringMass - 2.*SumPz + HadronE - HadronPz)/(2.*kappa));
+      G4ThreeVector aPosition(0, 0,     (theInitialStringMass - 2.*SumE  - HadronE + HadronPz)/(2.*kappa));
+      Hadrons->operator[](c1)->SetPosition(aPosition);
+      } 
+   }
+
+//-----------------------------------------------------------------------------
+
+/*
+void G4VLongitudinalStringDecay::CalculateHadronTimePosition(G4double theInitialStringMass, G4KineticTrackVector* Hadrons)
+   {
+   // 'constituent' formation time 
+   const G4double kappa = 1.0 * GeV/fermi;
+   for(G4int c1 = 0; c1 < Hadrons->length(); c1++)
+      {
+      G4double SumPz = 0; 
+      G4double SumE  = 0;
+      for(G4int c2 = 0; c2 <= c1; c2++)
+         {
+         SumPz += Hadrons->at(c2)->Get4Momentum().pz();
+         SumE  += Hadrons->at(c2)->Get4Momentum().e();   
+         } 
+      Hadrons->at(c1)->SetFormationTime((theInitialStringMass - 2.*SumPz)/(2.*kappa));
+      G4ThreeVector aPosition(0, 0,     (theInitialStringMass - 2.*SumE)/(2.*kappa));
+      Hadrons->at(c1)->SetPosition(aPosition);
+      } 
+   c1 = Hadrons->length()-1;   
+   Hadrons->at(c1)->SetFormationTime(Hadrons->at(c1-1)->GetFormationTime());
+   Hadrons->at(c1)->SetPosition(Hadrons->at(c1-1)->GetPosition());
+   }
+*/
+
+
+//*****************************************************************************
 
 void G4VLongitudinalStringDecay::SetSigmaTransverseMomentum(G4double aValue)
 {
@@ -502,6 +578,8 @@ void G4VLongitudinalStringDecay::SetDiquarkSuppression(G4double aValue)
 		DiquarkSuppress = aValue;
 	}
 }
+
+//----------------------------------------------------------------------------------------
 
 void G4VLongitudinalStringDecay::SetDiquarkBreakProbability(G4double aValue)
 {
@@ -581,5 +659,12 @@ void G4VLongitudinalStringDecay::SetVectorMesonMixings(std::vector<G4double> aVe
 		   		scalarMesonMix,vectorMesonMix);
   
 	}
+}
+
+//-------------------------------------------------------------------------------------------
+void G4VLongitudinalStringDecay::SetStringTensionParameter(G4double aValue)// Uzhi 20 June 08
+{
+          Kappa = aValue * GeV/fermi;
 }	
-//*******************************************************************************************************
+//**************************************************************************************
+

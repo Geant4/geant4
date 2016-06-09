@@ -1,5 +1,5 @@
-# $Id: GNUmakefile,v 1.1 2006/02/27 09:29:42 kmura Exp $
-# $Name: geant4-09-01 $
+# $Id: GNUmakefile,v 1.2 2008/12/03 07:43:41 kmura Exp $
+# $Name: geant4-09-02 $
 # ===========================================================
 #   Makefile for building Geant4Py
 # ===========================================================
@@ -20,5 +20,4 @@ clean:
 
 uninstall:
 	@-\rm -f -r $(Q_LIBDIR)
-	@-\rm -f -r $(Q_INCDIR)
 

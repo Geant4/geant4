@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: exampleN04.cc,v 1.16 2007/07/02 13:28:34 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: exampleN04.cc,v 1.17 2008/05/07 10:01:53 allison Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -114,8 +114,9 @@ int main(int argc,char** argv)
 #else
       session = new G4UIterminal();
 #endif
-
+#ifdef G4VIS_USE
       UI->ApplyCommand("/control/execute vis.mac");     
+#endif
       session->SessionStart();
       delete session;
      

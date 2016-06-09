@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4BezierSurface.cc,v 1.9 2006/06/29 18:41:48 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4BezierSurface.cc,v 1.10 2008/03/13 14:18:57 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -849,11 +849,15 @@ void G4BezierSurface::MapSurface(G4Surface*)
   for(G4int a=0; a<size;a++)
   {
     if ( lower != 0)
+    {
       for ( i = 0,  o_ptr = oslo_m; 
 	    i < lower; 
-	    i++,  o_ptr = o_ptr->GetNextNode());
+	    i++,  o_ptr = o_ptr->GetNextNode()){;}
+    }
     else
+    {
       o_ptr = oslo_m;
+    }
     
     if(!dir)// Direction ROW
     {

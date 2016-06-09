@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HepRepFileSceneHandler.cc,v 1.65 2007/11/16 20:29:04 perl Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4HepRepFileSceneHandler.cc,v 1.66 2008/01/04 22:11:31 allison Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 //
 // Joseph Perl  27th January 2002
@@ -119,12 +119,13 @@ void G4HepRepFileSceneHandler::EndModeling() {
 	G4VSceneHandler::EndModeling();  // Required: see G4VSceneHandler.hh.
 }
 
-void G4HepRepFileSceneHandler::BeginPrimitives2D () {
+void G4HepRepFileSceneHandler::BeginPrimitives2D
+(const G4Transform3D& objectTransformation) {
 #ifdef G4HEPREPFILEDEBUG
 	G4cout << "G4HepRepFileSceneHandler::BeginPrimitives2D() " << G4endl;
 #endif
 	inPrimitives2D = true;
-	G4VSceneHandler::BeginPrimitives2D();
+	G4VSceneHandler::BeginPrimitives2D(objectTransformation);
 }
 
 void G4HepRepFileSceneHandler::EndPrimitives2D () {

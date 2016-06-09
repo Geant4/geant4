@@ -41,6 +41,7 @@
 #include "G4VParticleChange.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4GHEKinematicsVector.hh"
+#include "G4HadronicProcessType.hh"
 
 class G4AntiNeutronAnnihilationAtRest : public G4VRestProcess
  

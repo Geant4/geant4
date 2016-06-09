@@ -1,4 +1,4 @@
-$Id: History,v 1.128 2007/12/12 16:51:31 gcosmo Exp $
+$Id: History,v 1.150 2008/11/21 09:26:53 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,100 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+21-Nov-2008, G.Cosmo (geom-specific-V09-01-19)
+- Added missing accessors to G4EllipticalCone, required for detector
+  persistency.
+
+13-Nov-2008, G.Cosmo (geom-specific-V09-01-18)
+- Corrected initialisation of algorithm in G4TriangularFacet constructor.
+
+30-Oct-2008, I.Hrivnacova (geom-specific-V09-01-17)
+- G4ExtrudedSolid: fixed bug in the decomposition of polygonal sides for
+  quadrangular facets in MakeFacets(). Addresses problem report #1029.
+
+23-Sep-2008, T.Nikitina (geom-specific-V09-01-16)
+- Corrected algorithm in G4TriangularFacet::GetPointOnFace() according to
+  suggestion advanced in problem report #1025. Fixes a problem of false
+  overlaps detection related to G4ExtrudedSolid and G4TessellatedSolid.
+
+12-Sep-2008, G.Cosmo (geom-specific-V09-01-15)
+- G4VFacet: corrected increment of indeces in operator==(), following
+  problem report #1024.
+
+25-Jul-2008, I.Hrivnacova (geom-specific-V09-01-14)
+- G4ExtrudedSolid: fix in polygon decomposition; systematically use
+  half kCarTolerance instead of kCarTolerance; added solid name in the
+  error messages coming from fatal exceptions.
+
+16-Jul-2008, T.Nikitina (geom-specific-V09-01-13)
+- G4Paraboloid: revised DistanceToOut(p,v,...) in answer to problem report
+  #1015. Fixed precision problem when solving quadratic equation; apply
+  comparison with kCarTolerance and not with zero; fixed logic problem in
+  algoritm for points on surface and direction inside, relative to directions
+  along Z, (0,0,Vz).
+
+22-May-2008, G.Cosmo (geom-specific-V09-01-12)
+- Removed left-over debug printout in G4VCSGFaceted::DistanceToIn().
+
+15-May-2008, T.Nikitina (geom-specific-V09-01-11)
+- Enhanced GetPointOnSurface() for generic G4Polycone and G4Polyhedra
+  constructs; the method uses new triangulation algorithm for G4PolyPhiFace.
+- G4ExtrudedSolid: added missing 'std' namespace to standard mathematical
+  function calls.
+
+28-Apr-2008, T.Nikitina (geom-specific-V09-01-10)
+- Added kCarTolerance in definition of "low" and "high" cone limits in R
+  and in Z in order to protect against numerical errors. This fixes cases of
+  DistanceToIn(p,v) returning 'kInfinity' when p+t*v cross intersection
+  between two cones.
+
+25-Apr-2008, T.Nikitina (geom-specific-V09-01-09)
+- Added protection against NaN in G4IntersectingCone::LineHitsCone1() in
+  case of configuration where a conic section becomes a tube.
+- G4EllipticalCone: removed some debug printouts.
+
+14-Apr-2008, T.Nikitina (geom-specific-V09-01-08)
+- G4Hype: refined polyhedron representation for correct visualization of
+  the shape. Coworks with tag "greps-V09-01-04".
+
+13-Mar-2008, G.Cosmo (geom-specific-V09-01-07)
+- Cleared compilation warnings in G4Paraboloid and G4TessellatedSolid
+  on gcc-4.3.0 for ambiguous use of parentheses in condition statements.
+
+28-Feb-2008, I.Hrivnacova (geom-specific-V09-01-06)
+- Correction to previous fix in G4ExtrudedSolid: testing on the edges has
+  to be limited to the line segment, for this purpose a new internal method
+  IsSameLineSegment() has been introduced for use instead of IsSameLine().
+- Updated and extended unit test testG4ExtrudedSolid.cc.
+
+27-Feb-2008, I.Hrivnacova (geom-specific-V09-01-05)
+- Fix in G4TessellatedSolid::DistanceToOut(p,v,..) to compute normal only
+  if specified by flag in input.
+- Fix in G4ExtrudedSolid::Inside(p) for correctly handling the case of
+  points located on the edges of triangles which are not the outline edges
+  of the polygon.
+
+21-Feb-2008, T.Nikitina (geom-specific-V09-01-04)
+- G4Polyhedra: fixed problem of out-of-bound access to vectors in
+  GetPointOnSurface().
+
+20-Feb-2008, I.Hrivnacova (geom-specific-V09-01-03)
+- G4TessellatedSolid: fixed bug in copy-constructor and internal method
+  CopyObjects() for cloning of facets.
+
+05-Feb-2008, I.Hrivnacova (geom-specific-V09-01-02)
+- G4ExtrudedSolid: bug fix in MakeFacets() to fill 'fTriangles' also in case
+  of polygon with 3 or 4 vertices, as they are needed for Inside(p).
+
+02-Feb-2008, I.Hrivnacova (geom-specific-V09-01-01)
+- Corrected triangularization of polygon, now correctly handling case
+  of concave shapes.
+- Corrected order of arguments in G4Paraboloid constructor.  
+
+16-Jan-2008, I.Hrivnacova (geom-specific-V09-01-00)
+- In G4ExtrudedSolid::MakeFacets(), now adding triangular facets before quadrangular
+  ones, following logic behind G4TessellatedSolid.
 
 12-Dec-2007, G.Cosmo (geom-specific-V09-00-08a)
 - Remove use of global static constant from singleton initialisation in

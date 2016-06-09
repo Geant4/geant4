@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLQtExportDialog.cc,v 1.4 2007/11/13 17:48:51 lgarnier Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4OpenGLQtExportDialog.cc,v 1.9 2008/10/24 14:17:10 lgarnier Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // 
 
@@ -44,14 +44,16 @@
 #include <qradiobutton.h>
 #include <qimage.h>
 #include <qlineedit.h>
+#include <qbuttongroup.h>
 
 G4OpenGLQtExportDialog::G4OpenGLQtExportDialog(
  QWidget* parent
-,QString nomFich
+,QString format
  ,int aHeight
  ,int aWidth
 )
-  : QDialog( parent )
+  : QDialog( parent ),
+    isChangingSize(false)
 {
 #if QT_VERSION < 0x040000
   setCaption( tr( " Export options" ));
@@ -69,33 +71,227 @@ G4OpenGLQtExportDialog::G4OpenGLQtExportDialog(
   BWButton = NULL;
 
   // global layout
-#if QT_VERSION < 0x040000
   QVBoxLayout* globalVLayout = new QVBoxLayout(this);
-#else
-  QVBoxLayout* globalVLayout = new QVBoxLayout();
-#endif
-
+  globalVLayout->setMargin(10);
+  globalVLayout->setSpacing(10);
   
-  if (nomFich.endsWith(".jpg") || 
-      nomFich.endsWith(".jepg")) {
+
+
+  // FIXME : L. Garnier 4/12/07
+  // Not implented. Should deal with alpha channel
+
+//   if((format == "tif") ||
+//      (format == "tiff") ||
+//      (format == "jpg") ||
+//      (format == "jpeg") ||
+//      (format == "png") ||
+//      (format == "xpm")) {
+
+//     QGroupBox *transparencyGroupBox = new QGroupBox(tr("Transparency"),this);
+//     QVBoxLayout *transparencyGroupBoxLayout = new QVBoxLayout(transparencyGroupBox);
+
+//     boxTransparency = new QCheckBox("Save transparency",transparencyGroupBox);
+//     boxTransparency->setChecked( false );
+
+//     transparencyGroupBoxLayout->addWidget(boxTransparency);    
+// #if QT_VERSION >= 0x040000
+//     transparencyGroupBox->setLayout(transparencyGroupBoxLayout);
+// #endif
+//     globalVLayout->addWidget(transparencyGroupBox);
+
+//   }
+
+  // FIXME : L. Garnier 4/12/07
+  // This is not working for PS and PDF images, it does nothing.
+  // Image is staying in color mode
+  //  if ((format == "ps") || (format == "pdf") || (format == "eps")) {
+
+
+  // size box
+
+  QWidget * sizeWidget = new QWidget(this); // widget containing group button
+  QVBoxLayout * sizeWidgetLayout = new QVBoxLayout(sizeWidget);
+  sizeWidgetLayout->setMargin (10); 
+
+  // original and modify radiobuttons
+#if QT_VERSION < 0x040000
+  QButtonGroup * sizeButtonGroupBox = new QButtonGroup ( 2,Qt::Vertical, tr("Size"),this);
+  sizeButtonGroupBox->setInsideMargin (15); 
+
+  original = new QRadioButton("Original",sizeButtonGroupBox);
+  modify = new QRadioButton("Modify",sizeButtonGroupBox);
+
+  sizeButtonGroupBox->insert(original);
+  sizeButtonGroupBox->insert(modify);
+  sizeButtonGroupBox->setExclusive(true);
+  sizeWidgetLayout->add(sizeButtonGroupBox);
+
+  connect( sizeButtonGroupBox, SIGNAL( clicked(int) ), this, SLOT( changeSizeBox()) );
+#else
+  
+  sizeGroupBox = new QGroupBox(tr("Size"));
+  QVBoxLayout *sizeGroupBoxLayout = new QVBoxLayout(sizeGroupBox);
+  QButtonGroup * sizeButtonGroupBox = new QButtonGroup();
+  sizeGroupBoxLayout->setMargin (15); 
+
+  original = new QRadioButton("Original");
+  modify = new QRadioButton("Modify");
+
+  sizeButtonGroupBox->addButton(original);
+  sizeButtonGroupBox->addButton(modify);
+  sizeButtonGroupBox->setExclusive(true);
+
+  sizeGroupBoxLayout->addWidget(original);    
+  sizeGroupBoxLayout->addWidget(modify);    
+
+  sizeGroupBox->setLayout(sizeGroupBoxLayout);
+  sizeWidgetLayout->addWidget(sizeGroupBox);
+  
+  connect( sizeButtonGroupBox, SIGNAL( buttonClicked(QAbstractButton*) ), this, SLOT( changeSizeBox()) );
+#endif
+  original->setChecked( true );
+
+
+  // height
+  heightWidget = new QWidget(sizeWidget);
+
+  QHBoxLayout *heightLineLayout = new QHBoxLayout(heightWidget);
+
+  QString tmp;
+ 
+  heightLineLayout->addWidget(new QLabel("Height",heightWidget));
+  height = new QLineEdit(tmp.setNum(originalHeight),heightWidget);
+  height->setMaxLength(5);
+#if QT_VERSION < 0x040000
+  heightLineLayout->add(height);
+#else
+  heightLineLayout->addWidget(height);
+#endif
+
+#if QT_VERSION >= 0x040000
+  heightWidget->setLayout(heightLineLayout);
+#endif
+
+#if QT_VERSION < 0x040000
+  sizeWidgetLayout->add(heightWidget);
+#else
+  sizeWidgetLayout->addWidget(heightWidget);
+#endif
+  connect( height, SIGNAL( textChanged ( const QString& ) ), this, SLOT( textHeightChanged(const QString &) ) );
+
+
+  // width
+  widthWidget = new QWidget(sizeWidget);
+
+  QHBoxLayout *widthLineLayout = new QHBoxLayout(widthWidget);
+
+#if QT_VERSION < 0x040000
+  widthLineLayout->add(new QLabel("Width ",widthWidget));
+#else
+  widthLineLayout->addWidget(new QLabel("Width ",widthWidget));
+#endif
+  width = new QLineEdit(tmp.setNum(originalWidth),widthWidget);
+  width->setMaxLength(5);
+#if QT_VERSION < 0x040000
+  widthLineLayout->add(width);
+#else
+  widthLineLayout->addWidget(width);
+#endif
+#if QT_VERSION >= 0x040000
+  widthWidget->setLayout(widthLineLayout);
+#endif
+#if QT_VERSION < 0x040000
+  sizeWidgetLayout->add(widthWidget);
+#else
+  sizeWidgetLayout->addWidget(widthWidget);
+#endif
+  connect( width, SIGNAL( textChanged ( const QString& ) ), this, SLOT( textWidthChanged(const QString &) ) );
+
+
+
+  // ratio check box
+
+  ratioCheckBox = new QCheckBox( "Keep ratio",sizeWidget);
+  ratioCheckBox->setChecked( true );
+
+#if QT_VERSION < 0x040000
+  sizeWidgetLayout->add(ratioCheckBox);
+#else
+  sizeWidgetLayout->addWidget(ratioCheckBox);
+#endif
+
+#if QT_VERSION < 0x040000
+  ratioCheckBox->setEnabled ( false );
+  heightWidget->setEnabled ( false );
+  widthWidget->setEnabled ( false );
+#else
+  ratioCheckBox->hide();
+  heightWidget->hide();
+  widthWidget->hide();
+#endif
+
+#if QT_VERSION >= 0x040000
+  sizeWidget->setLayout(sizeWidgetLayout);
+#endif
+  globalVLayout->addWidget(sizeWidget);
+
+ if (format == "eps") {
+
+   QGroupBox *EPSWidgetGroupBox = new QGroupBox(tr("EPS options"),this); // widget containing group button
+
+
+#if QT_VERSION < 0x040000
+
+    EPSWidgetGroupBox->setInsideMargin (15); 
+
+    //    QButtonGroup * EPSColorButtonGroupBox = new QButtonGroup( 2,Qt::Vertical, tr("EPS options"),this);
+    //    EPSGroupBoxLayout = new QVBoxLayout(EPSColorButtonGroupBox);
+    //     colorButton = new QRadioButton("Color",EPSColorButtonGroupBox);
+    //     BWButton = new QRadioButton("Grayscale",EPSColorButtonGroupBox);
+    //     EPSColorButtonGroupBox->setInsideMargin (15); 
+    //     EPSColorButtonGroupBox->insert(colorButton);
+    //     EPSColorButtonGroupBox->insert(BWButton);
+    //     EPSColorButtonGroupBox->setExclusive(true);
+    //     EPSWidgetGroupBox->add(EPSColorButtonGroupBox);
+
+    vectorEPSCheckBox = new QCheckBox( "Vector EPS File",EPSWidgetGroupBox);
+
+#else
+    QVBoxLayout * EPSGroupBoxLayout = new QVBoxLayout(EPSWidgetGroupBox);
+     EPSGroupBoxLayout->setMargin (15); 
+
+//     colorButton = new QRadioButton("Color",EPSWidgetGroupBox);
+//     BWButton = new QRadioButton("Grayscale",EPSWidgetGroupBox);
+
+//     QButtonGroup * EPSColorButtonGroupBox = new QButtonGroup();
+//     EPSColorButtonGroupBox->addButton(colorButton);
+//     EPSColorButtonGroupBox->addButton(BWButton);
+//     EPSColorButtonGroupBox->setExclusive(true);
+
+//     EPSGroupBoxLayout->addWidget(colorButton);    
+//     EPSGroupBoxLayout->addWidget(BWButton);    
+
+    vectorEPSCheckBox = new QCheckBox( "Vector EPS File",EPSWidgetGroupBox);
+    EPSGroupBoxLayout->addWidget(vectorEPSCheckBox);
+
+    EPSWidgetGroupBox->setLayout(EPSGroupBoxLayout);
+#endif
+    //    colorButton->setChecked( true );
+    vectorEPSCheckBox->setChecked( true );
     
-    QGroupBox *imageGroupBox = new QGroupBox(tr("Image quality"));
-#if QT_VERSION < 0x040000
-    QVBoxLayout *imageGroupBoxLayout = new QVBoxLayout(imageGroupBox);
-#else
-    QVBoxLayout *imageGroupBoxLayout = new QVBoxLayout;
-#endif
-    QWidget *sliderBox = new QWidget;
+    globalVLayout->addWidget(EPSWidgetGroupBox);
+    connect( vectorEPSCheckBox, SIGNAL( clicked() ), this, SLOT( changeVectorEPS()) );
 
-#if QT_VERSION < 0x040000
-    QHBoxLayout *hSlider = new QHBoxLayout(sliderBox);
-#else
-    QHBoxLayout *hSlider = new QHBoxLayout;
-#endif
+  }
 
-    //    qualityLabel =  new QLabel( tr( "Image quality" ) );
-    //    imageGroupBoxLayout->addWidget(qualityLabel);
-    qualitySlider= new QSlider(Qt::Horizontal,0);
+  if ((format == "jpg") || 
+      (format == "jpeg")) {
+    
+    QGroupBox *imageGroupBox = new QGroupBox(tr("Image quality"),this);
+    QHBoxLayout *hSliderLayout = new QHBoxLayout(imageGroupBox);
+    hSliderLayout->setMargin (15); 
+
+    qualitySlider= new QSlider(Qt::Horizontal,imageGroupBox);
 #if QT_VERSION < 0x040000
     qualitySlider->setMinValue(0);
     qualitySlider->setMaxValue(100);
@@ -106,185 +302,38 @@ G4OpenGLQtExportDialog::G4OpenGLQtExportDialog(
     qualitySlider->setTickPosition(QSlider::TicksBelow);
 #endif
     qualitySlider->setValue(60);
-    hSlider->addWidget(new QLabel("low",0));
-    hSlider->addWidget(qualitySlider);
-    hSlider->addWidget(new QLabel("Maximum",0));
+    hSliderLayout->addWidget(new QLabel("Low ",imageGroupBox));
+    hSliderLayout->addWidget(qualitySlider);
+    hSliderLayout->addWidget(new QLabel(" Maximum",imageGroupBox));
+    
 #if QT_VERSION >= 0x040000
-    sliderBox->setLayout(hSlider);
+    imageGroupBox->setLayout(hSliderLayout);
 #endif
-    imageGroupBoxLayout->addWidget(sliderBox);
 
-#if QT_VERSION >= 0x040000
-    imageGroupBox->setLayout(imageGroupBoxLayout);
-#endif
     globalVLayout->addWidget(imageGroupBox);
   }
-  
-  if(nomFich.endsWith(".eps")) {
-    QGroupBox *EPSGroupBox = new QGroupBox(tr("EPS options"));
 
-#if QT_VERSION < 0x040000
-    QVBoxLayout *EPSGroupBoxLayout = new QVBoxLayout(EPSGroupBox);
-#else
-    QVBoxLayout *EPSGroupBoxLayout = new QVBoxLayout;
-#endif
-
-    //    transparencyEPS = new QCheckBox( "transparencyEPS" );
-    //    transparencyEPS->setText( "save background" );
-    //    transparencyEPS->setChecked( true );
-
-    colorButton = new QRadioButton("Color",0);
-    BWButton = new QRadioButton("Grayscale",0);
-    colorButton->setChecked( true );
-    BWButton->setChecked( false );
-
-
-    //    EPSGroupBoxLayout->addWidget(transparencyEPS);    
-    EPSGroupBoxLayout->addWidget(colorButton);    
-    EPSGroupBoxLayout->addWidget(BWButton);    
-#if QT_VERSION >= 0x040000
-    EPSGroupBox->setLayout(EPSGroupBoxLayout);
-#endif
-    globalVLayout->addWidget(EPSGroupBox);
-
-  }
-
-  if(nomFich.endsWith(".tif") ||
-     nomFich.endsWith(".tiff") ||
-     nomFich.endsWith(".jpg") ||
-     nomFich.endsWith(".png") ||
-     nomFich.endsWith(".xpm")) {
-
-    QGroupBox *transparencyGroupBox = new QGroupBox(tr("Transparency"));
-#if QT_VERSION < 0x040000
-    QVBoxLayout *transparencyGroupBoxLayout = new QVBoxLayout(transparencyGroupBox);
-#else
-    QVBoxLayout *transparencyGroupBoxLayout = new QVBoxLayout;
-#endif
-
-    boxTransparency = new QCheckBox("Save transparency",0);
-    boxTransparency->setChecked( false );
-    //    boxTransparency->setEnabled(false);
-
-    transparencyGroupBoxLayout->addWidget(boxTransparency);    
-#if QT_VERSION >= 0x040000
-    transparencyGroupBox->setLayout(transparencyGroupBoxLayout);
-#endif
-    globalVLayout->addWidget(transparencyGroupBox);
-
-  }
-
-  // size box
-  QGroupBox *sizeGroupBox = new QGroupBox(tr("Size"));
-  QWidget* modifyAndRatioWidget = new QWidget;
-
-#if QT_VERSION < 0x040000
-  QHBoxLayout *modifyAndRatioLayout = new QHBoxLayout(modifyAndRatioWidget);
-  QVBoxLayout *sizeGroupBoxLayout = new QVBoxLayout(sizeGroupBox);
-#else
-  QHBoxLayout *modifyAndRatioLayout = new QHBoxLayout;
-  QVBoxLayout *sizeGroupBoxLayout = new QVBoxLayout;
-#endif
-
-  // original button
-  original = new QRadioButton("Original",0);
-  original->setChecked( true );
-  sizeGroupBoxLayout->addWidget(original);
-
-  // modify and ratio
-  modify = new QRadioButton("Modify",0);
-  modify->setChecked( false );
-
-  ratioCheckBox = new QCheckBox( "Keep ratio",0 );
-  ratioCheckBox->setChecked( true );
-
-  modifyAndRatioLayout->addWidget(modify);
-  modifyAndRatioLayout->addWidget(ratioCheckBox);
-#if QT_VERSION >= 0x040000
-  modifyAndRatioWidget->setLayout(modifyAndRatioLayout);
-#endif
-  sizeGroupBoxLayout->addWidget(modifyAndRatioWidget);
-  if (modify->isChecked()) {
-    ratioCheckBox->show();
-  } else {
-    ratioCheckBox->hide();
-  }
-
-  connect( original, SIGNAL( clicked(bool) ), this, SLOT( changeSizeBox(true)) );
-  connect( modify, SIGNAL( clicked(bool) ), this, SLOT( changeSizeBox(false) ) );
-
-  // height
-  heightWidget = new QWidget;
-
-#if QT_VERSION < 0x040000
-  QHBoxLayout *heightLineLayout = new QHBoxLayout(heightWidget);
-#else
-  QHBoxLayout *heightLineLayout = new QHBoxLayout;
-#endif
-
-  QString tmp;
- 
-  heightLineLayout->addWidget(new QLabel("Height",0));
-  height = new QLineEdit(tmp.setNum(originalHeight),0);
-  height->setMaxLength(5);
-  heightLineLayout->addWidget(height);
-#if QT_VERSION >= 0x040000
-  heightWidget->setLayout(heightLineLayout);
-#endif
-  sizeGroupBoxLayout->addWidget(heightWidget);
-  connect( height, SIGNAL( textChanged ( const QString& ) ), this, SLOT( textHeightChanged(const QString &) ) );
-
-
-  // width
-  widthWidget = new QWidget;
-
-#if QT_VERSION < 0x040000
-  QHBoxLayout *widthLineLayout = new QHBoxLayout(widthWidget);
-#else
-  QHBoxLayout *widthLineLayout = new QHBoxLayout;
-#endif
-
-  widthLineLayout->addWidget(new QLabel("Width ",0));
-  width = new QLineEdit(tmp.setNum(originalWidth),0);
-  width->setMaxLength(5);
-  widthLineLayout->addWidget(width);
-#if QT_VERSION >= 0x040000
-  widthWidget->setLayout(widthLineLayout);
-#endif
-  sizeGroupBoxLayout->addWidget(widthWidget);
-  connect( width, SIGNAL( textChanged ( const QString& ) ), this, SLOT( textWidthChanged(const QString &) ) );
-
-#if QT_VERSION >= 0x040000
-  sizeGroupBox->setLayout(sizeGroupBoxLayout);
-#endif
-  globalVLayout->addWidget(sizeGroupBox);
-
-  heightWidget->hide();
-  widthWidget->hide();
 
   // button ok/cancel box
 
-  QGroupBox *buttonGroupBox = new QGroupBox();
+  QWidget *buttonBox = new QWidget(this);
 
-#if QT_VERSION < 0x040000
-  QHBoxLayout *buttonGroupBoxLayout = new QHBoxLayout(buttonGroupBox);
-#else
-  QHBoxLayout *buttonGroupBoxLayout = new QHBoxLayout;
-#endif
+  QHBoxLayout *buttonBoxLayout = new QHBoxLayout(buttonBox);
 
-  buttonOk = new QPushButton( tr( "&OK" ),0 );
+  buttonOk = new QPushButton( tr( "&OK" ),buttonBox );
   buttonOk->setAutoDefault( TRUE );
   buttonOk->setDefault( TRUE );
-  buttonGroupBoxLayout->addWidget(buttonOk);
+  buttonBoxLayout->addWidget(buttonOk);
 
-  buttonCancel = new QPushButton( tr( "&Cancel" ),0 );
+  buttonCancel = new QPushButton( tr( "&Cancel" ),buttonBox );
   buttonCancel->setAutoDefault( TRUE );
-  buttonGroupBoxLayout->addWidget(buttonCancel);
+  buttonBoxLayout->addWidget(buttonCancel);
 
 #if QT_VERSION >= 0x040000
-  buttonGroupBox->setLayout(buttonGroupBoxLayout);
+  buttonBox->setLayout(buttonBoxLayout);
 #endif
-  globalVLayout->addWidget(buttonGroupBox);
+  globalVLayout->addWidget(buttonBox);
+
 
 
 #if QT_VERSION >= 0x040000
@@ -306,17 +355,17 @@ int G4OpenGLQtExportDialog::getSliderValue()
 
 int G4OpenGLQtExportDialog::getHeight()
 {
-  if (!height) return -1;
+  if (!height) return originalHeight;
   return height->text().toInt();
 }
 
 int G4OpenGLQtExportDialog::getWidth()
 {
-  if (!width) return -1;
+  if (!width) return originalWidth;
   return width->text().toInt();
 }
 
-bool G4OpenGLQtExportDialog::getTransparency()
+int G4OpenGLQtExportDialog::getTransparency()
 {
   if (!boxTransparency) return -1;
   return boxTransparency->isChecked();
@@ -324,6 +373,7 @@ bool G4OpenGLQtExportDialog::getTransparency()
 
 int G4OpenGLQtExportDialog::getNbColor()
 {
+  if (!colorButton) return -1;
   // Black and white
   if (!colorButton->isChecked())
     return 1;
@@ -331,32 +381,89 @@ int G4OpenGLQtExportDialog::getNbColor()
   return 3;
 }
 
-
-void G4OpenGLQtExportDialog::changeSizeBox(bool aClick)
+bool G4OpenGLQtExportDialog::getVectorEPS()
 {
-  if (aClick) {
-    modify->toggle();
+  if (!vectorEPSCheckBox) return 0;
+  return vectorEPSCheckBox->isChecked();
+}
+
+
+void G4OpenGLQtExportDialog::changeVectorEPS()
+{
+  if (!vectorEPSCheckBox) return;
+  if (vectorEPSCheckBox->isChecked()) {
+#if QT_VERSION < 0x040000
+    original->setEnabled ( true );
+    modify->setEnabled ( true );
+#else
+    sizeGroupBox->show();
+    original->show();
+    modify->show();
+#endif
+    changeSizeBox();
   } else {
-    original->toggle();
-  }
-  if ( original->isChecked()) {
+#if QT_VERSION < 0x040000
+    original->setEnabled ( false );
+    modify->setEnabled ( false );
+    ratioCheckBox->setEnabled ( false );
+    heightWidget->setEnabled ( false );
+    widthWidget->setEnabled ( false );
+#else
+    sizeGroupBox->hide();
+    original->hide();
+    modify->hide();
+    ratioCheckBox->hide();
     heightWidget->hide();
     widthWidget->hide();
+#endif
+  }
+}
+
+
+void G4OpenGLQtExportDialog::changeSizeBox()
+{
+  if (!original) return;
+  if (!heightWidget) return;
+  if (!widthWidget) return;
+  if (!ratioCheckBox) return;
+
+  if ( original->isChecked()) {
+#if QT_VERSION < 0x040000
+    ratioCheckBox->setEnabled ( false );
+    heightWidget->setEnabled ( false );
+    widthWidget->setEnabled ( false );
+#else
     ratioCheckBox->hide();
+    heightWidget->hide();
+    widthWidget->hide();
+#endif
   } else {
+#if QT_VERSION < 0x040000
+    ratioCheckBox->setEnabled ( true );
+    heightWidget->setEnabled ( true );
+    widthWidget->setEnabled ( true );
+#else
     heightWidget->show();
     widthWidget->show();
     ratioCheckBox->show();
+#endif
   }
 }
+
 
 void G4OpenGLQtExportDialog::textWidthChanged(
  const QString & s
  )
 {
+  if (!ratioCheckBox) return;
+  if (!width) return;
+  if (isChangingSize == true) return; // exclusive slot
+
   if (ratioCheckBox->isChecked()){
+    isChangingSize = true;
     QString tmp;
-    width->setText(tmp.setNum(s.toInt()*originalHeight/originalHeight));
+  height->setText(tmp.setNum((int)(s.toInt()*(double)((double)originalHeight/(double)originalWidth))));
+  isChangingSize = false;
   }
 }
 
@@ -364,9 +471,15 @@ void G4OpenGLQtExportDialog::  textHeightChanged(
  const QString & s
 )
 {
+  if (!ratioCheckBox) return;
+  if (!width) return;
+  if (isChangingSize == true) return; // exclusive slot
+
   if (ratioCheckBox->isChecked()){
+  isChangingSize = true;
     QString tmp;
-    width->setText(tmp.setNum(s.toInt()*originalWidth/originalWidth));
+    width->setText(tmp.setNum(s.toInt()*originalWidth/originalHeight));
+  isChangingSize = false;
   }
 } 
 

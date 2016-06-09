@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronInelasticQBBC.cc,v 1.7 2007/11/26 19:31:16 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4HadronInelasticQBBC.cc,v 1.15 2008/11/21 18:42:36 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 //---------------------------------------------------------------------------
 //
@@ -56,6 +56,7 @@
 #include "G4TheoFSGenerator.hh"
 #include "G4QStringChipsParticleLevelInterface.hh"
 #include "G4StringChipsInterface.hh"
+#include "G4GeneratorPrecompoundInterface.hh"
 #include "G4QGSMFragmentation.hh"
 #include "G4LundStringFragmentation.hh"
 #include "G4ExcitedStringDecay.hh"
@@ -70,7 +71,6 @@
 #include "G4NeutronHPFission.hh"
 #include "G4NeutronHPCapture.hh"
 
-#include "G4HadronProcessStore.hh"
 #include "G4UInelasticCrossSection.hh"
 
 G4HadronInelasticQBBC::G4HadronInelasticQBBC(const G4String& name, 
@@ -78,29 +78,34 @@ G4HadronInelasticQBBC::G4HadronInelasticQBBC(const G4String& name,
   : G4VPhysicsConstructor(name), verbose(ver), ftfFlag(ftf), bertFlag(bert), 
     chipsFlag(chips), hpFlag(hp), glFlag(glauber), wasActivated(false)
 {
-  if(verbose > -1) G4cout << "### HadronInelasticQBBC" << G4endl;
-  store = G4HadronProcessStore::Instance();
+  if(verbose > 1) G4cout << "### HadronInelasticQBBC bertFlag= " <<  bertFlag <<G4endl;
   theHPXSecI = 0;
   theHPXSecC = 0;
   theHPXSecF = 0;
   theCascade = 0;
+  preCompound = 0;
   theCHIPSCascade   = 0;
   theQuasiElastic   = 0;
   theQGStringDecay  = 0;
   theQGStringModel  = 0;
-  theFTFStringDecay = 0;
-  theFTFStringModel = 0;
+  theFTFBStringDecay = 0;
+  theFTFBStringModel = 0;
+  theFTFCStringDecay = 0;
+  theFTFCStringModel = 0;
 }
 
 G4HadronInelasticQBBC::~G4HadronInelasticQBBC()
 {
   delete theCascade;
+  delete preCompound;
   delete theCHIPSCascade;
   delete theQuasiElastic;
   delete theQGStringDecay;
   delete theQGStringModel;
-  delete theFTFStringDecay;
-  delete theFTFStringModel;
+  delete theFTFBStringDecay;
+  delete theFTFCStringDecay;
+  delete theFTFBStringModel;
+  delete theFTFCStringModel;
   delete theHPXSecI;
   delete theHPXSecC;
   delete theHPXSecF;
@@ -121,11 +126,14 @@ void G4HadronInelasticQBBC::ConstructProcess()
   wasActivated = true;
 
   if(verbose > 1) 
-    G4cout << "### HadronInelasticQBBC Construct Process" << G4endl;
+    G4cout << "### HadronInelasticQBBC Construct Process"
+           << " ftfFlag= " << ftfFlag << "  bertFlag= " << bertFlag
+	   << G4endl;
 
-  G4double minEstring  = 6.0*GeV;
-  G4double maxEcascade = 9.0*GeV;
-  //  G4double minFtf      = 7.5*GeV;
+  G4double minEstring  = 9.5*GeV;
+  G4double maxEcascade = 7.5*GeV;
+  G4double minFTF      = 4.5*GeV;
+  G4double maxFTF      = 25.*GeV;
 
   //Binary
   G4HadronicInteraction* theBIC = new G4BinaryCascade();
@@ -143,31 +151,44 @@ void G4HadronInelasticQBBC::ConstructProcess()
   theCHIPS->SetMaxEnergy(maxEcascade);
 
   //QGS
-  //theCascade = new G4BinaryCascade;
+  theCascade = new G4BinaryCascade();
+  preCompound = new G4GeneratorPrecompoundInterface();
+
   theCHIPSCascade = new G4QStringChipsParticleLevelInterface;
-  G4TheoFSGenerator* theQGSModel = new G4TheoFSGenerator();
+  G4TheoFSGenerator* theQGSModel = new G4TheoFSGenerator("QGSP");
   theQGStringModel  = new G4QGSModel< G4QGSParticipants >;
   theQGStringDecay  = new G4ExcitedStringDecay(new G4QGSMFragmentation());
   theQGStringModel->SetFragmentationModel(theQGStringDecay);
-  theQGSModel->SetTransport(theCHIPSCascade);
+  theQGSModel->SetTransport(preCompound);
 
-  theQuasiElastic = new G4QuasiElasticChannel;
+  theQuasiElastic = new G4QuasiElasticChannel();
   theQGSModel->SetQuasiElasticChannel(theQuasiElastic);
   theQGSModel->SetHighEnergyGenerator(theQGStringModel);
   theQGSModel->SetMinEnergy(minEstring);
   theQGSModel->SetMaxEnergy(100*TeV);
 
-  //FTF
-  G4TheoFSGenerator* theFTFModel = new G4TheoFSGenerator();
-  theFTFStringModel = new G4FTFModel();
-  theFTFStringDecay = new G4ExcitedStringDecay(new G4LundStringFragmentation());
-  theFTFStringModel->SetFragmentationModel(theFTFStringDecay);
-  theFTFModel->SetTransport(theCHIPSCascade);
-  //theFTFModel->SetTransport(theCascade);
-  theFTFModel->SetHighEnergyGenerator(theFTFStringModel);
-  theFTFModel->SetMinEnergy(minEstring);
-  theFTFModel->SetMaxEnergy(100*TeV);
-  theFTFModel->SetQuasiElasticChannel(theQuasiElastic);
+  //FTFB
+  G4TheoFSGenerator* theFTFBModel = new G4TheoFSGenerator("FTFP");
+  theFTFBStringModel = new G4FTFModel();
+  theFTFBStringDecay = new G4ExcitedStringDecay(new G4LundStringFragmentation());
+  theFTFBStringModel->SetFragmentationModel(theFTFBStringDecay);
+
+  //  theFTFBModel->SetTransport(theCascade);
+  theFTFBModel->SetTransport(preCompound);
+  theFTFBModel->SetHighEnergyGenerator(theFTFBStringModel);
+  theFTFBModel->SetMinEnergy(minFTF);
+  theFTFBModel->SetMaxEnergy(100*TeV);
+
+  //FTFP
+  G4TheoFSGenerator* theFTFCModel = new G4TheoFSGenerator("FTFP");
+  theFTFCStringModel = new G4FTFModel();
+  theFTFCStringDecay = new G4ExcitedStringDecay(new G4LundStringFragmentation());
+  theFTFCStringModel->SetFragmentationModel(theFTFCStringDecay);
+
+  theFTFCModel->SetTransport(preCompound);
+  theFTFCModel->SetHighEnergyGenerator(theFTFCStringModel);
+  theFTFCModel->SetMinEnergy(minFTF);
+  theFTFCModel->SetMaxEnergy(maxFTF);
 
   theParticleIterator->reset();
   while( (*theParticleIterator)() ) {
@@ -204,19 +225,24 @@ void G4HadronInelasticQBBC::ConstructProcess()
 
       if(pname == "proton") {
 	hp->AddDataSet(&theXSecP);
-        if(ftfFlag) Register(particle,hp,theFTFModel,"FTF");
-	else        Register(particle,hp,theQGSModel,"QGS");
 
-	if(bertFlag) Register(particle,hp,theBERT,"Bertini");
-	else         Register(particle,hp,theBIC,"Binary");
+	hp->RegisterMe(theQGSModel);
+        hp->RegisterMe(theFTFCModel);
+        //if(ftfFlag) hp->RegisterMe(theFTFCModel);
+	//else        hp->RegisterMe(theQGSModel);
+ 
+	if(bertFlag) hp->RegisterMe(theBERT);
+	else         hp->RegisterMe(theBIC);
       
         if(glFlag)
 	  hp->AddDataSet(new G4BGGNucleonInelasticXS(particle));
 
       } else if(pname == "neutron") {
 	hp->AddDataSet(&theXSecN);
-        if(ftfFlag) Register(particle,hp,theFTFModel,"FTF");
-	else        Register(particle,hp,theQGSModel,"QGS");
+	hp->RegisterMe(theQGSModel);
+        hp->RegisterMe(theFTFCModel);
+        //if(ftfFlag) hp->RegisterMe(theFTFCModel);
+	//else        hp->RegisterMe(theQGSModel);
 
 	G4HadronCaptureProcess* theNeutronCapture = 
 	  new G4HadronCaptureProcess("nCapture");
@@ -234,46 +260,39 @@ void G4HadronInelasticQBBC::ConstructProcess()
 	  hp->AddDataSet(theHPXSecI);
 	  theNeutronCapture->AddDataSet(theHPXSecC);
 	  theNeutronFission->AddDataSet(theHPXSecF);
-          G4NeutronHPInelastic* hpi = new G4NeutronHPInelastic();
-          G4NeutronHPCapture* hpc = new G4NeutronHPCapture();
-          G4NeutronHPFission* hpf = new G4NeutronHPFission();
-	  Register(particle,hp,hpi,"HP");
-	  Register(particle,theNeutronCapture,hpc,"HP");
-	  Register(particle,theNeutronFission,hpf,"HP");
+	  hp->RegisterMe(new G4NeutronHPInelastic());
+	  theNeutronCapture->RegisterMe(new G4NeutronHPCapture());
+	  theNeutronFission->RegisterMe(new G4NeutronHPFission());
 	}
 
         G4HadronicInteraction* theB;
-        G4String s;
-	if(bertFlag) {
-	  theB = new G4CascadeInterface();
-          s = "Bertini";
-	} else {
-	  theB = new G4BinaryCascade();
-          s = "Binary";
-	}
+	if(bertFlag) theB = new G4CascadeInterface();
+	else         theB = new G4BinaryCascade();
 	theB->SetMinEnergy(emin);
 	theB->SetMaxEnergy(maxEcascade);
-	Register(particle,hp,theB,s);
+	hp->RegisterMe(theB);
 
         if(glFlag)
 	  hp->AddDataSet(new G4BGGNucleonInelasticXS(particle));
-	
-	G4HadronicInteraction* theC = new G4LCapture();
-	theC->SetMinEnergy(emin);
-	Register(particle,theNeutronCapture,theC,"LCapture");
 
-	G4HadronicInteraction* theF = new G4LFission();
+        G4HadronicInteraction* theC = new G4LCapture();       	
+	theC->SetMinEnergy(emin);
+	theNeutronCapture->RegisterMe(theC);
+
+        G4HadronicInteraction* theF = new G4LFission();
 	theF->SetMinEnergy(emin);
-	Register(particle,theNeutronFission,theF,"LFission");
+	theNeutronFission->RegisterMe(theF);
 
       } else if(pname == "pi-" || pname == "pi+") {
 	hp->AddDataSet(&thePiCross);
-        if(ftfFlag) Register(particle,hp,theFTFModel,"FTF");
-	else        Register(particle,hp,theQGSModel,"QGS");
+	hp->RegisterMe(theQGSModel);
+        hp->RegisterMe(theFTFCModel);
+        //if(ftfFlag) hp->RegisterMe(theFTFCModel);
+	//else        hp->RegisterMe(theQGSModel);
 
-        Register(particle,hp,theBERT,"Bertini");
-        //if(bertFlag) Register(particle,hp,theBERT,"Bertini");
-	//else         Register(particle,hp,theBIC,"Binary");
+        hp->RegisterMe(theBERT);
+        //if(bertFlag) hp->RegisterMe(theBERT);
+	//else         hp->RegisterMe(theBIC);
 
 	if(glFlag) 
 	  hp->AddDataSet(new G4BGGPionInelasticXS(particle));
@@ -282,8 +301,8 @@ void G4HadronInelasticQBBC::ConstructProcess()
 		pname == "kaon+"     || 
 		pname == "kaon0S"    || 
 		pname == "kaon0L") {
-        Register(particle,hp,theFTFModel,"FTF");
-        Register(particle,hp,theBERT,"Bertini");
+        hp->RegisterMe(theFTFBModel);
+        hp->RegisterMe(theBERT);
 	//hp->AddDataSet(new G4UInelasticCrossSection(particle));
 
       } else if(pname == "lambda"    || 
@@ -292,18 +311,18 @@ void G4HadronInelasticQBBC::ConstructProcess()
 		pname == "xi-"       || 
 		pname == "xi0") {
 
-	Register(particle,hp,theFTFModel,"FTF");
-	Register(particle,hp,theBERT,"Bertini");
+	hp->RegisterMe(theFTFBModel);
+	hp->RegisterMe(theBERT);
 	//hp->AddDataSet(new G4UInelasticCrossSection(particle));
 
       } else if(pname == "anti_proton" || pname == "anti_neutron") {
-	Register(particle,hp,theFTFModel,"FTF");
-        Register(particle,hp,theCHIPS,"CHIPS");
+	hp->RegisterMe(theFTFBModel);
+        hp->RegisterMe(theCHIPS);
 	//hp->AddDataSet(new G4UInelasticCrossSection(particle));
 
       } else {
-	Register(particle,hp,theFTFModel,"FTF");
-        Register(particle,hp,theCHIPS,"CHIPS");
+	hp->RegisterMe(theFTFBModel);
+        hp->RegisterMe(theCHIPS);
 	//hp->AddDataSet(new G4UInelasticCrossSection(particle));
       }
 
@@ -312,19 +331,4 @@ void G4HadronInelasticQBBC::ConstructProcess()
 	       << " added for " << pname << G4endl;
     }
   }
-  store->Dump(verbose);
-}
-
-void G4HadronInelasticQBBC::Register(G4ParticleDefinition* p, 
-				     G4HadronicProcess* hp, 
-				     G4HadronicInteraction* hi, 
-				     const G4String& m)
-{
-  hp->RegisterMe(hi);
-  store->Register(hp,p,hi,m);
-  if(verbose > 1)
-    G4cout << "### QBBC: Register new model " << m 
-	   << " for " << p->GetParticleName() << " and " << hp->GetProcessName()
-	   << " E(GeV) " << hi->GetMinEnergy()/GeV 
-	   << " - " << hi->GetMaxEnergy()/GeV << G4endl;
 }

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpWLS.cc,v 1.9 2007/10/30 03:53:36 gum Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4OpWLS.cc,v 1.13 2008/10/24 19:50:50 gum Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 ////////////////////////////////////////////////////////////////////////
 // Optical Photon WaveLength Shifting (WLS) Class Implementation
@@ -45,6 +45,8 @@
 ////////////////////////////////////////////////////////////////////////
 
 #include "G4ios.hh"
+#include "G4OpProcessSubType.hh"
+
 #include "G4OpWLS.hh"
 #include "G4WLSTimeGeneratorProfileDelta.hh"
 #include "G4WLSTimeGeneratorProfileExponential.hh"
@@ -60,6 +62,8 @@
 G4OpWLS::G4OpWLS(const G4String& processName, G4ProcessType type)
   : G4VDiscreteProcess(processName, type)
 {
+  SetProcessSubType(fOpWLS);
+
   theIntegralTable = 0;
  
   if (verboseLevel>0) {
@@ -160,14 +164,14 @@ G4OpWLS::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
   
   for (G4int i = 0; i < NumPhotons; i++) {
     
-    // Determine photon momentum
+    // Determine photon energy
     
     G4double CIIvalue = G4UniformRand()*CIImax;
-    G4double sampledMomentum = 
+    G4double sampledEnergy = 
       WLSIntegral->GetEnergy(CIIvalue);
     
     if (verboseLevel>1) {
-      G4cout << "sampledMomentum = " << sampledMomentum << G4endl;
+      G4cout << "sampledEnergy = " << sampledEnergy << G4endl;
       G4cout << "CIIvalue =        " << CIIvalue << G4endl;
     }
     
@@ -216,7 +220,7 @@ G4OpWLS::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
        photonPolarization.y(),
        photonPolarization.z());
     
-    aWLSPhoton->SetKineticEnergy(sampledMomentum);
+    aWLSPhoton->SetKineticEnergy(sampledEnergy);
     
     // Generate new G4Track object:
     
@@ -229,8 +233,9 @@ G4OpWLS::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
 
     G4Track* aSecondaryTrack = 
       new G4Track(aWLSPhoton,aSecondaryTime,aSecondaryPosition);
-    
-    aSecondaryTrack->SetTouchableHandle((G4VTouchable*)0);
+   
+    aSecondaryTrack->SetTouchableHandle(aTrack.GetTouchableHandle()); 
+    // aSecondaryTrack->SetTouchableHandle((G4VTouchable*)0);
     
     aSecondaryTrack->SetParentID(aTrack.GetTrackID());
     
@@ -284,7 +289,7 @@ void G4OpWLS::BuildThePhysicsTable()
 	if (theWLSVector) {
 	  
 	  // Retrieve the first intensity point in vector
-	  // of (photon momentum, intensity) pairs
+	  // of (photon energy, intensity) pairs
 	  
 	  theWLSVector->ResetIterator();
 	  ++(*theWLSVector);	// advance to 1st entry 
@@ -294,10 +299,10 @@ void G4OpWLS::BuildThePhysicsTable()
 	  
 	  if (currentIN >= 0.0) {
 
-	    // Create first (photon momentum) 
+	    // Create first (photon energy) 
 	   
 	    G4double currentPM = theWLSVector->
-	      GetPhotonMomentum();
+	      GetPhotonEnergy();
 	    
 	    G4double currentCII = 0.0;
 	    
@@ -310,13 +315,13 @@ void G4OpWLS::BuildThePhysicsTable()
 	    G4double prevCII = currentCII;
 	    G4double prevIN  = currentIN;
 	    
-	    // loop over all (photon momentum, intensity)
+	    // loop over all (photon energy, intensity)
 	    // pairs stored for this material
 	    
 	    while(++(*theWLSVector))
 	      {
 		currentPM = theWLSVector->
-		  GetPhotonMomentum();
+		  GetPhotonEnergy();
 		
 		currentIN=theWLSVector->
 		  GetProperty();
@@ -354,7 +359,7 @@ G4double G4OpWLS::GetMeanFreePath(const G4Track& aTrack,
   const G4DynamicParticle* aParticle = aTrack.GetDynamicParticle();
   const G4Material* aMaterial = aTrack.GetMaterial();
 
-  G4double thePhotonMomentum = aParticle->GetTotalMomentum();
+  G4double thePhotonEnergy = aParticle->GetTotalEnergy();
 
   G4MaterialPropertiesTable* aMaterialPropertyTable;
   G4MaterialPropertyVector* AttenuationLengthVector;
@@ -368,7 +373,7 @@ G4double G4OpWLS::GetMeanFreePath(const G4Track& aTrack,
       GetProperty("WLSABSLENGTH");
     if ( AttenuationLengthVector ){
       AttenuationLength = AttenuationLengthVector->
-	GetProperty (thePhotonMomentum);
+	GetProperty (thePhotonEnergy);
     }
     else {
       //             G4cout << "No WLS absorption length specified" << G4endl;

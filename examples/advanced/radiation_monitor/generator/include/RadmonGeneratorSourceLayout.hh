@@ -29,7 +29,7 @@
 // Main author:   Riccardo Capra <capra@ge.infn.it>
 //
 // Id:            $Id: RadmonGeneratorSourceLayout.hh,v 1.3 2006/06/29 16:15:19 gunter Exp $
-// Tag:           $Name: geant4-09-01 $
+// Tag:           $Name: geant4-09-02 $
 //
 // Description:   Container for the data of a particles source
 //

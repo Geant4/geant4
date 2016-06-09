@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ErrorPropagationNavigator.hh,v 1.1 2007/05/16 12:49:18 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4ErrorPropagationNavigator.hh,v 1.2 2008/10/24 14:00:03 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 //
 // --------------------------------------------------------------------
@@ -63,7 +63,8 @@ class G4ErrorPropagationNavigator : public G4Navigator
       // if the distance to surface is smaller than the proposed step
 
     G4double ComputeSafety(const G4ThreeVector &globalpoint,
-                           const G4double pProposedMaxLength = DBL_MAX);
+                           const G4double pProposedMaxLength = DBL_MAX,
+                           const G4bool keepState = false);
       // Calls the navigation in the detector geometry and then checks
       // if the distance to surface is smaller than the proposed safety
 

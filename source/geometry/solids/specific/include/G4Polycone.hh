@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Polycone.hh,v 1.20 2007/04/26 06:18:20 tnikitin Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4Polycone.hh,v 1.22 2008/05/15 13:45:15 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // 
 // --------------------------------------------------------------------
@@ -115,7 +115,7 @@ class G4Polycone : public G4VCSGfaceted
   G4double DistanceToIn( const G4ThreeVector &p ) const;
 
   G4ThreeVector GetPointOnSurface() const;
-  
+
   void ComputeDimensions(       G4VPVParameterisation* p,
                           const G4int n,
                           const G4VPhysicalVolume* pRep );

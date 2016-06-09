@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4TrackTerminator.hh,v 1.3 2006/06/29 21:10:30 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4TrackTerminator.hh,v 1.4 2007/06/01 07:53:26 ahoward Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // ----------------------------------------------------------------------
 // Class G4TrackTerminator

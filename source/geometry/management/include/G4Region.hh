@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Region.hh,v 1.19 2007/04/28 01:48:29 asaim Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4Region.hh,v 1.20 2008/07/10 09:46:01 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // class G4Region
 //
@@ -74,7 +74,7 @@ class G4Region
       // Equality defined by address only.
 
     void AddRootLogicalVolume(G4LogicalVolume* lv);
-    void RemoveRootLogicalVolume(G4LogicalVolume* lv);
+    void RemoveRootLogicalVolume(G4LogicalVolume* lv, G4bool scan=true);
       // Add/remove root logical volumes and set/reset their
       // daughters flags as regions. They also recompute the
       // materials list for the region.

@@ -27,8 +27,8 @@
 //34567890123456789012345678901234567890123456789012345678901234567890123456789012345678901
 //
 //
-// $Id: G4QEnvironment.cc,v 1.135 2007/11/28 13:42:13 mkossov Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4QEnvironment.cc,v 1.137 2008/03/31 20:30:00 dennis Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 //      ---------------- G4QEnvironment ----------------
 //             by Mikhail Kossov, August 2000.
@@ -6638,11 +6638,13 @@ G4QHadronVector* G4QEnvironment::FSInteraction()
       G4cout<<"G4QEnv::FSI: Isonucleus decay result h#="<<hd<<", outPDG="<<hPDG<<G4endl;
 #endif
     }
-	   else if(hBN>1 && (hBN==hCG&&!hST || !hCG&&!hST || !hCG&&hST==hBN)) //(n*P, n*N, or n*L)
-	   {
+      else if ( hBN > 1 && 
+               ( (hBN == hCG && !hST) || 
+                 (!hCG && !hST) || 
+                 (!hCG && hST==hBN) ) ) //(n*P, n*N, or n*L)
+      {
       // *** Temporary Correction *** (To find out where is the error)
-      if(hPDG==90000003 && fabs(curHadr->Get4Momentum().m()-mNeut-mNeut)<.1)
-	     {
+      if(hPDG==90000003 && fabs(curHadr->Get4Momentum().m()-mNeut-mNeut)<.1) {
         hPDG=90000002;
         hBN=2;
         G4cout<<"--Warning--G4QEnv::FSI:3->2 neutrons conversion (***Check it***)"<<G4endl;
@@ -6661,7 +6663,7 @@ G4QHadronVector* G4QEnvironment::FSInteraction()
         theQHadrons.push_back(secHadr);    // (del.eq.- user is responsible for del)
         //theFragments->push_back(secHadr);// (del.equiv. - user is responsible for that)
       }
-    }
+      }
     else if(hST<0 && hBN>0) // AntistrangeNucleus (@@ see above, already done)
 	   {
       G4LorentzVector r4M=curHadr->Get4Momentum(); // Real 4-mom of theAntiStrangeNucleus
@@ -6983,8 +6985,10 @@ G4QHadronVector* G4QEnvironment::FSInteraction()
       G4int brn=curHadr->GetBaryonNumber();
       bfContSum+=brn;
       G4int str=curHadr->GetStrangeness();
-      if(brn>1&&(!str&&(chg==brn||!chg) || !chg&&str==brn)) // Check for multibaryon(split)
-	     {
+      if ( brn > 1 && 
+           ( (!str && (chg == brn || !chg)) || 
+             (!chg && str == brn) ) ) // Check for multibaryon(split)
+      {
         G4int             bPDG=90000001; // Prototype: multineutron
         if     (chg==brn) bPDG=90001000; // Multyproton
         else if(str==brn) bPDG=91000000; // Multilambda
@@ -7707,8 +7711,10 @@ G4bool G4QEnvironment::CheckGroundState(G4Quasmon* quasm, G4bool corFlag)
   G4LorentzVector reTLV=quasm->Get4Momentum();  // Prototyoe 4-Mom of the Residual Nucleus
   G4double reTM=reTLV.m();                      // Real mass of the Quasmon
   G4int envPDG=theEnvironment.GetPDG();
-  if(resB>1 && (!resS && (resC==resB && reTM>resC*mProt || !resC && reTM>resB*mNeut)
-	            || resS==resB && reTM>resS*mLamb) ) // Immediate Split(@@Decay) MultiBaryon
+
+  if ( resB > 1 && 
+       ( (!resS && ((resC == resB && reTM > resC*mProt) || (!resC && reTM > resB*mNeut) ) ) ||
+          (resS == resB && reTM > resS*mLamb) ) ) // Immediate Split(@@Decay) MultiBaryon
   {
 #ifdef chdebug
     G4cout<<"G4QE::CGS:*MultyBar*E="<<envPDG<<",B="<<resB<<",C="<<resC<<",S"<<resS<<G4endl;
@@ -7798,7 +7804,7 @@ G4bool G4QEnvironment::CheckGroundState(G4Quasmon* quasm, G4bool corFlag)
         <<" || rEM="<<resEMa<<"=0 & "<<!bsCond<<"=1) & n="<<nOfOUT<<">0 & F="<<corFlag
         <<" then the correction must be done for PDG="<<reTPDG<<G4endl;
 #endif
-  if((resTMa<resSMa || !resEMa&&!bsCond) && nOfOUT>0 && corFlag) // *** CORRECTION ***
+  if ( (resTMa < resSMa || (!resEMa && !bsCond) ) && nOfOUT > 0 && corFlag) // *** CORRECTION ***
   {
     G4QHadron*  theLast = theQHadrons[nOfOUT-1];
     G4int cNf=theLast->GetNFragments();
@@ -7988,8 +7994,9 @@ G4bool G4QEnvironment::CheckGroundState(G4Quasmon* quasm, G4bool corFlag)
                             <<",+#"<<npip<<",-#"<<npim<<",0#"<<npiz<<",E="<<envPDG<<G4endl;
 #endif
           //if(npip>=0&&resQPDG==89998004 || npim>=0&&resQPDG==90003998)// D+D+pi->N+N+pi
-          if(envPDG==90000000&&!resS&&resB>1&&(npip>=0&&resC==-2||npim>=0&&resC-resB==2))
-			       {
+          if (envPDG == 90000000 && !resS && resB > 1 && 
+              ((npip >= 0 && resC == -2) || (npim >= 0 && resC-resB == 2)) )
+	  {
             G4int npi=npip;               // (Delta-)+(Delta-)+k*n+(pi+)->(k+2)*n+(pi-)
             G4int piPD=-211;
             G4int nuPD=2112;
@@ -8206,8 +8213,8 @@ G4bool G4QEnvironment::CheckGroundState(G4Quasmon* quasm, G4bool corFlag)
 																				else G4cout<<"***G4QE::CGS:DecIn3 CurH+ResQ+Pion dM="<<ttM-chM<<G4endl;
 #endif
                   }
-                  if(reTCH<0&&chCH>0 || reTCH>reTBN&&chCH<chBN) // Isoexchange can help
-			               {
+                  if ( (reTCH < 0 && chCH > 0) || (reTCH > reTBN && chCH < chBN) ) // Isoexchange can help
+		  {
                     G4QContent chQC=curHadr->GetQC(); // QuarkCont of the CurrentHadron
                     if(reTCH<0)chQC+=pimQC;           // Add the negativPion QC to CurHadr
                     else       chQC+=pipQC;           // Add the positivePion QC to CurHadr
@@ -8306,7 +8313,7 @@ G4bool G4QEnvironment::CheckGroundState(G4Quasmon* quasm, G4bool corFlag)
                         G4int tcS=tcQC.GetStrangeness();            // Total Strangeness
                         G4int tcC=tcQC.GetCharge();                 // Total Charge
                         G4int tcBN=tcQC.GetBaryonNumber();          // Total Baryon Number
-                        if(tcBN==2|| !tcS&&!tcC||tcS==tcBN||tcC==tcBN)//dec DiBar or MulBar
+                        if ( tcBN == 2 || (!tcS && !tcC) || tcS == tcBN || tcC == tcBN ) //dec DiBar or MulBar
                         {
                           if(tcBN==2) theEnvironment.DecayDibaryon(tcH,&theQHadrons); // DB
                           else     theEnvironment.DecayMultyBaryon(tcH,&theQHadrons); // MB

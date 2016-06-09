@@ -1,4 +1,4 @@
-$Id: History,v 1.30 2006/10/20 16:47:47 maire Exp $
+$Id: History,v 1.32 2008/09/18 16:42:07 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,15 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+     
+18-09-08 mma (testem6-V09-01-02)
+- RunAction : change default histogram format (root)
+
+12-06-08 mma (testem6-V09-01-01)
+- Remove AIDA from GNUmakefile 
+     
+06-05-08 mma (testem6-V09-01-00)
+- README : update Aida informations
      
 20-10-06 mma (testem6-V08-01-00) 
 - GNUmakefile : LOADLIBS

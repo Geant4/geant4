@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4EqEMFieldWithSpin.hh,v 1.1 2007/08/30 23:34:01 gum Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4EqEMFieldWithSpin.hh,v 1.3 2008/11/14 13:37:09 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 //
 // class G4EqEMFieldWithSpin
@@ -43,7 +43,8 @@
 #define G4EQEMFIELDWITHSPIN_hh
 
 #include "G4EquationOfMotion.hh"
-#include "G4ElectroMagneticField.hh"
+
+class G4ElectroMagneticField;
 
 class G4EqEMFieldWithSpin : public G4EquationOfMotion
 {
@@ -51,7 +52,7 @@ class G4EqEMFieldWithSpin : public G4EquationOfMotion
 
     G4EqEMFieldWithSpin(G4ElectroMagneticField *emField );
 
-    ~G4EqEMFieldWithSpin() {;} 
+    ~G4EqEMFieldWithSpin();
 
     void  SetChargeMomentumMass(G4double particleCharge, // in e+ units
                                 G4double MomentumXc,
@@ -63,10 +64,14 @@ class G4EqEMFieldWithSpin : public G4EquationOfMotion
       // Given the value of the electromagnetic field, this function 
       // calculates the value of the derivative dydx.
 
+    inline void SetAnomaly(G4double a) { anomaly = a; }
+    inline G4double GetAnomaly() const { return anomaly; }
+      // set/get magnetic anomaly
+
   private:
 
-    G4double        fElectroMagCof ;
-    G4double        fMassCof;
+    G4double fElectroMagCof ;
+    G4double fMassCof;
 
     G4double omegac;
     G4double anomaly;
@@ -77,4 +82,4 @@ class G4EqEMFieldWithSpin : public G4EquationOfMotion
 
 };
 
-#endif
+#endif /* G4EQEMFIELDWITHSPIN */

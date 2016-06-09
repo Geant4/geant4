@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4AttDefStore.cc,v 1.11 2007/04/03 13:58:08 allison Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// GEANT4 tag $Name: geant4-09-02 $
 
 #include "G4AttDefStore.hh"
 

@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4VTree.cc,v 1.5 2006/06/29 21:25:09 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // 
 // John Allison  5th April 2001

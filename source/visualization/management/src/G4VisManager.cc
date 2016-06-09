@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VisManager.cc,v 1.114 2007/11/10 14:59:46 allison Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4VisManager.cc,v 1.115 2008/01/04 22:03:46 allison Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // 
 // GEANT4 Visualization Manager - John Allison 02/Jan/1996.
@@ -504,11 +504,78 @@ void G4VisManager::Draw (const G4Text& text,
   }
 }
 
-void G4VisManager::Draw2D (const G4Text& text)
+void G4VisManager::Draw2D (const G4Circle& circle,
+			   const G4Transform3D& objectTransform)
 {
   if (IsValidView()) {
     ClearTransientStoreIfMarked();
-    fpSceneHandler -> BeginPrimitives2D();
+    fpSceneHandler -> BeginPrimitives2D(objectTransform);
+    fpSceneHandler -> AddPrimitive(circle);
+    fpSceneHandler -> EndPrimitives2D();
+  }
+}
+
+void G4VisManager::Draw2D (const G4NURBS& nurbs,
+			   const G4Transform3D& objectTransform)
+{
+  if (IsValidView()) {
+    ClearTransientStoreIfMarked();
+    fpSceneHandler -> BeginPrimitives2D(objectTransform);
+    fpSceneHandler -> AddPrimitive(nurbs);
+    fpSceneHandler -> EndPrimitives2D();
+  }
+}
+
+void G4VisManager::Draw2D (const G4Polyhedron& polyhedron,
+			   const G4Transform3D& objectTransform)
+{
+  if (IsValidView()) {
+    ClearTransientStoreIfMarked();
+    fpSceneHandler -> BeginPrimitives2D(objectTransform);
+    fpSceneHandler -> AddPrimitive(polyhedron);
+    fpSceneHandler -> EndPrimitives2D();
+  }
+}
+
+void G4VisManager::Draw2D (const G4Polyline& line,
+			   const G4Transform3D& objectTransform)
+{
+  if (IsValidView()) {
+    ClearTransientStoreIfMarked();
+    fpSceneHandler -> BeginPrimitives2D(objectTransform);
+    fpSceneHandler -> AddPrimitive(line);
+    fpSceneHandler -> EndPrimitives2D();
+  }
+}
+
+void G4VisManager::Draw2D (const G4Polymarker& polymarker,
+			   const G4Transform3D& objectTransform)
+{
+  if (IsValidView()) {
+    ClearTransientStoreIfMarked();
+    fpSceneHandler -> BeginPrimitives2D(objectTransform);
+    fpSceneHandler -> AddPrimitive(polymarker);
+    fpSceneHandler -> EndPrimitives2D();
+  }
+}
+
+void G4VisManager::Draw2D (const G4Square& square,
+			   const G4Transform3D& objectTransform)
+{
+  if (IsValidView()) {
+    ClearTransientStoreIfMarked();
+    fpSceneHandler -> BeginPrimitives2D(objectTransform);
+    fpSceneHandler -> AddPrimitive(square);
+    fpSceneHandler -> EndPrimitives2D();
+  }
+}
+
+void G4VisManager::Draw2D (const G4Text& text,
+			   const G4Transform3D& objectTransform)
+{
+  if (IsValidView()) {
+    ClearTransientStoreIfMarked();
+    fpSceneHandler -> BeginPrimitives2D(objectTransform);
     fpSceneHandler -> AddPrimitive(text);
     fpSceneHandler -> EndPrimitives2D();
   }

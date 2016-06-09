@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PVDivision.hh,v 1.12 2006/06/29 18:18:07 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4PVDivision.hh,v 1.14 2008/12/03 16:41:45 arce Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 // 
 // class G4PVDivision
 //

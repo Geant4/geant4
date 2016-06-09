@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4VertexCode.hh,v 1.3 2006/06/29 20:55:33 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 #ifndef G4VertexCode_h
 #define G4VertexCode_h 1

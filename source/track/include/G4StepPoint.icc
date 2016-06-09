@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4StepPoint.icc,v 1.13 2007/03/11 07:19:06 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4StepPoint.icc,v 1.14 2008/10/24 08:22:20 kurasige Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 //
 
@@ -172,7 +172,7 @@
    { return fpProcessDefinedStep; }
      // If the pointer is 0, this means the Step is defined
      // by the user defined limit in the current volume.
-   inline void G4StepPoint::SetProcessDefinedStep(G4VProcess* aValue)
+   inline void G4StepPoint::SetProcessDefinedStep(const G4VProcess* aValue)
    { fpProcessDefinedStep = aValue; }
 
    inline G4double G4StepPoint::GetMass() const

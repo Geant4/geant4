@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4ElementVector.hh,v 1.6 2006/06/29 19:11:00 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // 
 // ------------------------------------------------------------

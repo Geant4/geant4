@@ -60,6 +60,7 @@ class G4CollisionManager;
 class G4Track;
 class G4KineticTrack;
 class G43DNucleus;
+class G4Scatterer;
 
 class G4BinaryCascade : public G4VIntraNuclearTransportModel
 {
@@ -136,6 +137,8 @@ private:
 
   G4ExcitationHandler * theExcitationHandler;
   G4CollisionManager * theCollisionMgr;
+  
+  G4Scatterer * theH1Scatterer;
 
   std::vector<G4BCAction *> theImR;
   G4BCDecay * theDecay;

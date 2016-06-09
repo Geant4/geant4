@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HadrontherapyMaterial.cc; May 2005
+// $Id: HadrontherapyMaterial.cc; Last modified: G.A.P.Cirrone, March 2008;
 // ----------------------------------------------------------------------------
 //                 GEANT 4 - Hadrontherapy example
 // ----------------------------------------------------------------------------
@@ -43,6 +43,7 @@
 #include "G4Element.hh"
 #include "G4ElementTable.hh"
 #include "HadrontherapyMaterial.hh"
+#include "G4NistManager.hh"
 
 HadrontherapyMaterial::HadrontherapyMaterial():
   matW(0), matAl(0), matSi(0), matTa(0), matCu(0),
@@ -83,8 +84,27 @@ void HadrontherapyMaterial::DefineMaterials()
   G4double fractionmass; // Fraction in mass of an element in a material
   G4int nAtoms; // Number of atoms in a molecuule
 
+  /////////////////////////////////////////////////////////////////////////////
+  // MATERIA DEFINITION FOLLOWING THE NIST DATABASE
+
+  // Pointer to the G4Nist manager
+  // for the material definition following
+  // the NIST database.
+  // It recommended to use this when 
+  // the Standard models for electromagnetic physic
+  // are called
+
+  G4NistManager* nistMaterialManager = G4NistManager::Instance();
+  G4bool isotopes = false;
+
+  // Material NIST definition
+  nistMaterialManager -> FindOrBuildMaterial("G4_AIR"  , isotopes);
+  nistMaterialManager -> FindOrBuildMaterial("G4_WATER", isotopes);
+  nistMaterialManager -> FindOrBuildMaterial("G4_PMMA", isotopes);
+  nistMaterialManager -> FindOrBuildMaterial("G4_MYLAR", isotopes);
+  /////////////////////////////////////////////////////////////////////////////
+
   // Elements 
- 
   a = 1.01*g/mole;
   G4Element* elH = new G4Element ("Hydrogen","H",z = 1.,a);
   
@@ -211,7 +231,7 @@ void HadrontherapyMaterial::DefineMaterials()
   matAir -> AddElement(elN,0.7);
   matAir -> AddElement(elO,0.3);
 
-  // Water
+  // Water by "hand"
   d = 1.000*g/cm3;
   nComponents = 2;
   matH2O = new G4Material("Water", d, nComponents);
@@ -220,7 +240,8 @@ void HadrontherapyMaterial::DefineMaterials()
   matH2O -> GetIonisation()->SetMeanExcitationEnergy(75.0*eV);
   matH2O -> SetChemicalFormula("H_2O");
   G4cout << "-----------> CHEMICAL FORMULA FOR WATER FIXED <----------"<< G4endl;
-
+ 
+ 
   //soft tissue(http://www.nist.gov)
   d = 1.0*g/cm3;
   nComponents = 13;
@@ -245,7 +266,7 @@ void HadrontherapyMaterial::DefineMaterials()
   d = 19.32*g/cm3;
   gold = new G4Material("gold", z, a, d);
 
-  // Compact bone (http://www.NIST.gov)
+  // Compact bone 
   d = 1.85*g/cm3;
   nComponents = 8;
   bone = new G4Material("bone", d, nComponents);
@@ -258,7 +279,7 @@ void HadrontherapyMaterial::DefineMaterials()
   bone -> AddElement(elS,0.002);
   bone -> AddElement(elCa,0.147);
 
-  //muscle(http://www.NIST.gov)
+  //muscle
   nComponents = 9;
   muscle = new G4Material("muscle", d, nComponents);
   muscle -> AddElement(elH,0.101997);

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIXm.cc,v 1.14 2006/06/29 19:09:49 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4UIXm.cc,v 1.15 2008/11/14 16:21:42 lgarnier Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // G.Barrand
 
@@ -152,7 +152,7 @@ G4UIXm::G4UIXm (
   XtAddCallback(clearButton,XmNactivateCallback,
 		clearButtonCallback,(XtPointer)text);
   XtAddCallback(command,XmNcommandEnteredCallback,
-		commandEnteredCallback,(XtPointer)this);
+		CommandEnteredCallback,(XtPointer)this);
 
   Widget commandText = XmCommandGetChild(command,XmDIALOG_COMMAND_TEXT);
   XtAddEventHandler(commandText,KeyPressMask,False,keyHandler,(XtPointer)this);
@@ -356,7 +356,7 @@ G4String G4UIXm::GetCommand (
 /***************************************************************************/
 /***************************************************************************/
 /***************************************************************************/
-void G4UIXm::commandEnteredCallback (
+void G4UIXm::CommandEnteredCallback (
  Widget    a_widget
 ,XtPointer a_tag
 ,XtPointer a_data

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSolid.hh,v 1.26 2007/05/11 13:30:12 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4VSolid.hh,v 1.29 2008/09/10 13:18:42 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // 
 // class G4VSolid
@@ -229,6 +229,10 @@ class G4VSolid
       // persistency for clients requiring preallocation of memory for
       // persistifiable objects.
 
+    G4VSolid(const G4VSolid& rhs);
+    G4VSolid& operator=(const G4VSolid& rhs); 
+      // Copy constructor and assignment operator.
+
   protected:  // with description
 
     void CalculateClippedPolygonExtent(G4ThreeVectorList& pPolygon,
@@ -293,11 +297,11 @@ class G4VSolid
       // Accuracy is limited by the second argument or the statistics
       // expressed by the first argument.
 
-protected:
+  protected:
 
     G4double kCarTolerance;      // Cached geometrical tolerance
 
-private:
+  private:
 
     void ClipPolygonToSimpleLimits(G4ThreeVectorList& pPolygon,
 				   G4ThreeVectorList& outputPolygon,

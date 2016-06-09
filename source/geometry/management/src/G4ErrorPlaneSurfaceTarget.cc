@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4ErrorPlaneSurfaceTarget.cc,v 1.2 2007/06/19 11:28:39 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 //
 // --------------------------------------------------------------------

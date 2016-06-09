@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eplusAnnihilation.cc,v 1.27 2007/10/02 10:17:12 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4eplusAnnihilation.cc,v 1.29 2008/10/15 17:53:44 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // -------------------------------------------------------------------
 //
@@ -67,6 +67,7 @@ using namespace std;
 G4eplusAnnihilation::G4eplusAnnihilation(const G4String& name)
   : G4VEmProcess(name), isInitialised(false)
 {
+  SetProcessSubType(fAnnihilation);
   enableAtRestDoIt = true;
 }
 
@@ -84,14 +85,9 @@ void G4eplusAnnihilation::InitialiseProcess(const G4ParticleDefinition*)
     SetBuildTableFlag(true);
     SetStartFromNullFlag(false);
     SetSecondaryParticle(G4Gamma::Gamma());
-    G4double emin = 0.1*keV;
-    G4double emax = 100.*TeV;
-    SetLambdaBinning(120);
-    SetMinKinEnergy(emin);
-    SetMaxKinEnergy(emax);
-    if(!Model()) SetModel(new G4eeToTwoGammaModel);
-    Model()->SetLowEnergyLimit(emin);
-    Model()->SetHighEnergyLimit(emax);
+    if(!Model()) SetModel(new G4eeToTwoGammaModel());
+    Model()->SetLowEnergyLimit(MinKinEnergy());
+    Model()->SetHighEnergyLimit(MaxKinEnergy());
     AddEmModel(1, Model());
   }
 }
@@ -99,11 +95,7 @@ void G4eplusAnnihilation::InitialiseProcess(const G4ParticleDefinition*)
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void G4eplusAnnihilation::PrintInfo()
-{
-  G4cout
-    << "      Sampling according " << Model()->GetName() << " model"   
-    << G4endl;
-} 
+{} 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

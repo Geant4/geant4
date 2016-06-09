@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4MaterialPropertiesTable.cc,v 1.19 2007/04/25 15:46:55 gum Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4MaterialPropertiesTable.cc,v 1.20 2008/06/05 23:38:34 gum Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // 
 ////////////////////////////////////////////////////////////////////////
@@ -85,7 +85,7 @@ void G4MaterialPropertiesTable::AddConstProperty(const char     *key,
 }
 
 void G4MaterialPropertiesTable::AddProperty(const char     *key,
-					    G4double *PhotonMomenta,
+					    G4double *PhotonEnergies,
 					    G4double *PropertyValues,
 					    G4int     NumEntries)
 {
@@ -93,7 +93,7 @@ void G4MaterialPropertiesTable::AddProperty(const char     *key,
 //      Table given a pair of numbers and a key
 
 	G4MaterialPropertyVector *mpv = 
-			new G4MaterialPropertyVector(PhotonMomenta, 
+			new G4MaterialPropertyVector(PhotonEnergies, 
 					  	     PropertyValues, 
 						     NumEntries);
 	MPT [G4String(key)] = mpv;
@@ -164,7 +164,7 @@ G4MaterialPropertyVector* G4MaterialPropertiesTable::GetProperty(const char *key
 }
 
 void G4MaterialPropertiesTable::AddEntry(const char     *key,
-					 G4double  aPhotonMomentum,
+					 G4double  aPhotonEnergy,
 					 G4double  aPropertyValue)
 
 //      Allows to add an entry pair directly to the Material Property Vector
@@ -173,7 +173,7 @@ void G4MaterialPropertiesTable::AddEntry(const char     *key,
 {
 	G4MaterialPropertyVector *targetVector=MPT [G4String(key)];
 	if (targetVector != 0) {
-		targetVector->AddElement(aPhotonMomentum, aPropertyValue);
+		targetVector->AddElement(aPhotonEnergy, aPropertyValue);
 	}
 	else {
 		G4Exception("G4MaterialPropertiesTable::AddEntry ==> "
@@ -182,14 +182,14 @@ void G4MaterialPropertiesTable::AddEntry(const char     *key,
 }
 
 void G4MaterialPropertiesTable::RemoveEntry(const char *key,  
-					    G4double  aPhotonMomentum)
+					    G4double  aPhotonEnergy)
 {
 //      Allows to remove an entry pair directly from the Material Property Vector
 //      given a key
 
         G4MaterialPropertyVector *targetVector=MPT [G4String(key)];
 	if (targetVector) {
-		targetVector->RemoveElement(aPhotonMomentum);
+		targetVector->RemoveElement(aPhotonEnergy);
  	}
         else {
                 G4Exception("G4MaterialPropertiesTable::RemoveEntry ==> "
@@ -237,7 +237,7 @@ G4MaterialPropertyVector* G4MaterialPropertiesTable::SetGROUPVEL()
                                                                                 
   // fill GROUPVEL vector using RINDEX values
   // rindex built-in "iterator" was advanced to first entry above
-  G4double E0 = rindex->GetPhotonMomentum();
+  G4double E0 = rindex->GetPhotonEnergy();
   G4double n0 = rindex->GetProperty();
 
   if (E0 <= 0. ) G4Exception("G4MaterialPropertiesTable::SetGROUPVEL ==> "
@@ -246,7 +246,7 @@ G4MaterialPropertyVector* G4MaterialPropertiesTable::SetGROUPVEL()
   if ( ++*rindex ) {
     // good, we have at least two entries in RINDEX
     // get next energy/value pair
-    G4double E1 = rindex->GetPhotonMomentum();
+    G4double E1 = rindex->GetPhotonEnergy();
     G4double n1 = rindex->GetProperty();
 
     if (E1 <= 0. ) G4Exception("G4MaterialPropertiesTable::SetGROUPVEL ==> "
@@ -267,7 +267,7 @@ G4MaterialPropertyVector* G4MaterialPropertiesTable::SetGROUPVEL()
       if (!(++*rindex)) break;
       E0 = E1;
       n0 = n1;
-      E1 = rindex->GetPhotonMomentum();
+      E1 = rindex->GetPhotonEnergy();
       n1 = rindex->GetProperty();
 
       if (E1 <= 0. ) G4Exception("G4MaterialPropertiesTable::SetGROUPVEL ==> "

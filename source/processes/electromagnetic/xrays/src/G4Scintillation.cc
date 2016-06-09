@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Scintillation.cc,v 1.26 2006/06/29 19:56:11 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4Scintillation.cc,v 1.30 2008/10/22 01:19:11 gum Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 ////////////////////////////////////////////////////////////////////////
 // Scintillation Light Class Implementation
@@ -63,6 +63,8 @@
 ////////////////////////////////////////////////////////////////////////
 
 #include "G4ios.hh"
+#include "G4EmProcessSubType.hh"
+
 #include "G4Scintillation.hh"
 
 using namespace std;
@@ -87,6 +89,8 @@ G4Scintillation::G4Scintillation(const G4String& processName,
                                        G4ProcessType type)
                   : G4VRestDiscreteProcess(processName, type)
 {
+        SetProcessSubType(fScintillation);
+
 	fTrackSecondariesFirst = false;
 
         YieldFactor = 1.0;
@@ -100,6 +104,8 @@ G4Scintillation::G4Scintillation(const G4String& processName,
 	}
 
 	BuildThePhysicsTable();
+
+        emSaturation = NULL;
 }
 
         ////////////////
@@ -179,24 +185,40 @@ G4Scintillation::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
 
         G4double ScintillationYield = aMaterialPropertiesTable->
                                       GetConstProperty("SCINTILLATIONYIELD");
+        ScintillationYield *= YieldFactor;
+
         G4double ResolutionScale    = aMaterialPropertiesTable->
                                       GetConstProperty("RESOLUTIONSCALE");
 
-        ScintillationYield = YieldFactor * ScintillationYield;
+        // Birks law saturation:
 
-	G4double MeanNumberOfPhotons = ScintillationYield * TotalEnergyDeposit;
+        G4double constBirks = 0.0;
+
+        constBirks = aMaterial->GetIonisation()->GetBirksConstant();
+
+        G4double MeanNumberOfPhotons;
+
+        if (emSaturation) {
+           MeanNumberOfPhotons = ScintillationYield*
+                              (emSaturation->VisibleEnergyDeposition(&aStep));
+        } else {
+           MeanNumberOfPhotons = ScintillationYield*TotalEnergyDeposit;
+        }
 
         G4int NumPhotons;
-        if (MeanNumberOfPhotons > 10.) {
+
+        if (MeanNumberOfPhotons > 10.)
+        {
           G4double sigma = ResolutionScale * sqrt(MeanNumberOfPhotons);
           NumPhotons = G4int(G4RandGauss::shoot(MeanNumberOfPhotons,sigma)+0.5);
         }
-        else {
+        else
+        {
           NumPhotons = G4int(G4Poisson(MeanNumberOfPhotons));
         }
 
-	if (NumPhotons <= 0) {
-
+	if (NumPhotons <= 0)
+        {
 	   // return unchanged particle and no secondaries 
 
 	   aParticleChange.SetNumberOfSecondaries(0);
@@ -273,14 +295,14 @@ G4Scintillation::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
 		
 	    for (G4int i = 0; i < Num; i++) {
 
-		// Determine photon momentum
+		// Determine photon energy
 
                 G4double CIIvalue = G4UniformRand()*CIImax;
-		G4double sampledMomentum = 
+		G4double sampledEnergy = 
                               ScintillationIntegral->GetEnergy(CIIvalue);
 
 		if (verboseLevel>1) {
-                   G4cout << "sampledMomentum = " << sampledMomentum << G4endl;
+                   G4cout << "sampledEnergy = " << sampledEnergy << G4endl;
 		   G4cout << "CIIvalue =        " << CIIvalue << G4endl;
 		}
 
@@ -329,7 +351,7 @@ G4Scintillation::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
 				      photonPolarization.y(),
 				      photonPolarization.z());
 
-		aScintillationPhoton->SetKineticEnergy(sampledMomentum);
+		aScintillationPhoton->SetKineticEnergy(sampledEnergy);
 
                 // Generate new G4Track object:
 
@@ -357,7 +379,9 @@ G4Scintillation::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
 		G4Track* aSecondaryTrack = 
 		new G4Track(aScintillationPhoton,aSecondaryTime,aSecondaryPosition);
 
-                aSecondaryTrack->SetTouchableHandle((G4VTouchable*)0);
+                aSecondaryTrack->SetTouchableHandle(
+                                 aStep.GetPreStepPoint()->GetTouchableHandle());
+                // aSecondaryTrack->SetTouchableHandle((G4VTouchable*)0);
 
                 aSecondaryTrack->SetParentID(aTrack.GetTrackID());
 
@@ -416,7 +440,7 @@ void G4Scintillation::BuildThePhysicsTable()
 		   if (theFastLightVector) {
 		
 		      // Retrieve the first intensity point in vector
-		      // of (photon momentum, intensity) pairs 
+		      // of (photon energy, intensity) pairs 
 
 		      theFastLightVector->ResetIterator();
 		      ++(*theFastLightVector);	// advance to 1st entry 
@@ -426,11 +450,11 @@ void G4Scintillation::BuildThePhysicsTable()
 
 		      if (currentIN >= 0.0) {
 
-			 // Create first (photon momentum, Scintillation 
+			 // Create first (photon energy, Scintillation 
                          // Integral pair  
 
 			 G4double currentPM = theFastLightVector->
-			 			 GetPhotonMomentum();
+			 			 GetPhotonEnergy();
 
 			 G4double currentCII = 0.0;
 
@@ -443,13 +467,13 @@ void G4Scintillation::BuildThePhysicsTable()
 			 G4double prevCII = currentCII;
                 	 G4double prevIN  = currentIN;
 
-			 // loop over all (photon momentum, intensity)
+			 // loop over all (photon energy, intensity)
 			 // pairs stored for this material  
 
 			 while(++(*theFastLightVector))
 			 {
 				currentPM = theFastLightVector->
-						GetPhotonMomentum();
+						GetPhotonEnergy();
 
 				currentIN=theFastLightVector->	
 						GetProperty();
@@ -476,7 +500,7 @@ void G4Scintillation::BuildThePhysicsTable()
                    if (theSlowLightVector) {
 
                       // Retrieve the first intensity point in vector
-                      // of (photon momentum, intensity) pairs
+                      // of (photon energy, intensity) pairs
 
                       theSlowLightVector->ResetIterator();
                       ++(*theSlowLightVector);  // advance to 1st entry
@@ -486,11 +510,11 @@ void G4Scintillation::BuildThePhysicsTable()
 
                       if (currentIN >= 0.0) {
 
-                         // Create first (photon momentum, Scintillation
+                         // Create first (photon energy, Scintillation
                          // Integral pair
 
                          G4double currentPM = theSlowLightVector->
-                                                 GetPhotonMomentum();
+                                                 GetPhotonEnergy();
 
                          G4double currentCII = 0.0;
 
@@ -503,13 +527,13 @@ void G4Scintillation::BuildThePhysicsTable()
                          G4double prevCII = currentCII;
                          G4double prevIN  = currentIN;
 
-                         // loop over all (photon momentum, intensity)
+                         // loop over all (photon energy, intensity)
                          // pairs stored for this material
 
                          while(++(*theSlowLightVector))
                          {
                                 currentPM = theSlowLightVector->
-                                                GetPhotonMomentum();
+                                                GetPhotonEnergy();
 
                                 currentIN=theSlowLightVector->
                                                 GetProperty();

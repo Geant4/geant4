@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4ParameterisedNavigation.hh,v 1.6 2007/11/09 16:06:02 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // 
 // class G4ParameterisedNavigation

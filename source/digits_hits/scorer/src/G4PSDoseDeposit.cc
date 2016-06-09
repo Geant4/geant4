@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4PSDoseDeposit.cc,v 1.1 2007/07/11 01:31:02 asaim Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // G4PSDoseDeposit
 #include "G4PSDoseDeposit.hh"

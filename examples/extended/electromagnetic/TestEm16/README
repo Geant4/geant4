@@ -1,4 +1,4 @@
-$Id: README,v 1.3 2007/01/18 09:07:20 hbu Exp $
+$Id: README,v 1.5 2008/09/26 20:05:13 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -119,6 +119,9 @@ $Id: README,v 1.3 2007/01/18 09:07:20 hbu Exp $
 	make histclean
 	make
 
-  By default the histograms are saved as testem16.hbook
+  By default the histograms are saved as testem16.root
   It is possible to choose the format of the histogram file (hbook, root, XML)
   and the binning using /testem/histo/ command, see run01.mac
+	 
+  To use histograms, at least one of the AIDA implementations should be 
+  available. See InstallAida.txt

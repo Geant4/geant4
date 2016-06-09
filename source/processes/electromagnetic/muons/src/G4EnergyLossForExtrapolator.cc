@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EnergyLossForExtrapolator.cc,v 1.13 2007/07/28 13:44:25 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4EnergyLossForExtrapolator.cc,v 1.18 2008/11/13 14:14:07 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 //---------------------------------------------------------------------------
 //
@@ -66,6 +66,8 @@
 #include "G4MuPairProductionModel.hh"
 #include "G4MuBremsstrahlungModel.hh"
 #include "G4ProductionCuts.hh"
+#include "G4LossTableManager.hh"
+#include "G4WentzelVIModel.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -87,6 +89,7 @@ G4EnergyLossForExtrapolator:: ~G4EnergyLossForExtrapolator()
   delete invRangeElectron;
   delete invRangePositron;
   delete invRangeProton;
+  delete mscElectron;
   delete cuts;
 }
 
@@ -99,8 +102,8 @@ G4double G4EnergyLossForExtrapolator::EnergyAfterStep(G4double kinEnergy,
 {
   if(!isInitialised) Initialisation();
   G4double kinEnergyFinal = kinEnergy;
-  if(mat && part) {
-    G4double step = ComputeTrueStep(mat,part,kinEnergy,stepLength);
+  if(SetupKinematics(part, mat, kinEnergy)) {
+    G4double step = TrueStepLength(kinEnergy,stepLength,mat,part);
     G4double r  = ComputeRange(kinEnergy,part);
     if(r <= step) {
       kinEnergyFinal = 0.0;
@@ -124,8 +127,8 @@ G4double G4EnergyLossForExtrapolator::EnergyBeforeStep(G4double kinEnergy,
   if(!isInitialised) Initialisation();
   G4double kinEnergyFinal = kinEnergy;
 
-  if(mat && part) {
-    G4double step = ComputeTrueStep(mat,part,kinEnergy,stepLength);
+  if(SetupKinematics(part, mat, kinEnergy)) {
+    G4double step = TrueStepLength(kinEnergy,stepLength,mat,part);
     G4double r  = ComputeRange(kinEnergy,part);
 
     if(step < linLossLimit*r) {
@@ -140,10 +143,34 @@ G4double G4EnergyLossForExtrapolator::EnergyBeforeStep(G4double kinEnergy,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4EnergyLossForExtrapolator::ComputeTrueStep(const G4Material* mat, 
-						      const G4ParticleDefinition* part,
-						      G4double kinEnergy, G4double stepLength)
+G4double G4EnergyLossForExtrapolator::TrueStepLength(G4double kinEnergy, 
+						     G4double stepLength,
+						     const G4Material* mat, 
+						     const G4ParticleDefinition* part)
 {
+  G4double res = stepLength;
+  if(!isInitialised) Initialisation();
+  if(SetupKinematics(part, mat, kinEnergy)) {
+    if(part == electron || part == positron) {
+      G4double x = stepLength*ComputeValue(kinEnergy, mscElectron);
+      if(x < 0.2) res *= (1.0 + 0.5*x + x*x/3.0);
+      else if(x < 0.9999) res = -std::log(1.0 - x)*stepLength/x;
+      else res = ComputeRange(kinEnergy,part);
+    
+    } else {
+      res = ComputeTrueStep(mat,part,kinEnergy,stepLength);
+    }
+  }
+  return res;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4bool G4EnergyLossForExtrapolator::SetupKinematics(const G4ParticleDefinition* part, 
+						    const G4Material* mat, 
+						    G4double kinEnergy)
+{
+  if(!part || !mat || kinEnergy < keV) return false;
   if(!isInitialised) Initialisation();
   G4bool flag = false;
   if(part != currentParticle) {
@@ -181,8 +208,7 @@ G4double G4EnergyLossForExtrapolator::ComputeTrueStep(const G4Material* mat,
     }
     if(tmax > maxEnergyTransfer) tmax = maxEnergyTransfer;
   }
-  G4double theta = ComputeScatteringAngle(stepLength);
-  return stepLength*std::sqrt(1.0 + 0.625*theta*theta);
+  return true;
 } 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -230,6 +256,7 @@ void G4EnergyLossForExtrapolator::Initialisation()
   invRangePositron = PrepareTable();
   invRangeMuon     = PrepareTable();
   invRangeProton   = PrepareTable();
+  mscElectron      = PrepareTable();
 
   G4LossTableBuilder builder; 
 
@@ -261,6 +288,7 @@ void G4EnergyLossForExtrapolator::Initialisation()
   builder.BuildRangeTable(dedxProton, rangeProton);  
   builder.BuildInverseRangeTable(rangeProton, invRangeProton);  
 
+  ComputeTrasportXS(electron, mscElectron);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -272,6 +300,7 @@ G4PhysicsTable* G4EnergyLossForExtrapolator::PrepareTable()
   for(G4int i=0; i<nmat; i++) {  
 
     G4PhysicsVector* v = new G4PhysicsLogVector(emin, emax, nbins);
+    v->SetSpline(G4LossTableManager::Instance()->SplineFlag());
     table->push_back(v);
   }
   return table;
@@ -483,6 +512,47 @@ void G4EnergyLossForExtrapolator::ComputeProtonDEDX(const G4ParticleDefinition* 
     }
   }
   delete ioni;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4EnergyLossForExtrapolator::ComputeTrasportXS(const G4ParticleDefinition* part, 
+						    G4PhysicsTable* table)
+{
+  G4DataVector v;
+  G4WentzelVIModel* msc = new G4WentzelVIModel();
+  msc->SetPolarAngleLimit(CLHEP::pi);
+  msc->Initialise(part, v);
+
+  mass    = part->GetPDGMass();
+  charge2 = 1.0;
+  currentParticle = part;
+
+  const G4MaterialTable* mtable = G4Material::GetMaterialTable();
+
+  if(0<verbose) {
+    G4cout << "G4EnergyLossForExtrapolator::ComputeProtonDEDX for " << part->GetParticleName() 
+           << G4endl;
+  }
+ 
+  for(G4int i=0; i<nmat; i++) {  
+
+    const G4Material* mat = (*mtable)[i];
+    if(1<verbose)
+      G4cout << "i= " << i << "  mat= " << mat->GetName() << G4endl;
+    G4PhysicsVector* aVector = (*table)[i];
+    for(G4int j=0; j<nbins; j++) {
+        
+       G4double e = aVector->GetLowEdgeEnergy(j);
+       G4double xs = msc->CrossSectionPerVolume(mat,part,e);
+       aVector->PutValue(j,xs);
+       if(1<verbose) {
+         G4cout << "j= " << j << "  e(MeV)= " << e/MeV  
+                << " xs(1/mm)= " << xs*mm << G4endl;
+       }
+    }
+  }
+  delete msc;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

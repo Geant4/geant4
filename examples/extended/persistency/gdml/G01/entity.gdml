@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE gdml [ 
+<!ENTITY materials SYSTEM "materials.xml">
+]>
+<gdml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://service-spi.web.cern.ch/service-spi/app/releases/GDML/schema/gdml.xsd">
+
+ <define>
+  <position name="det_163517544inWorld_163515704p" unit="mm" x="0" y="0" z="0" />
+ </define>
+
+ <!-- the content of the materials.xml file will be included here -->
+
+ &materials; 
+
+ <solids>
+  <box aunit="radian" lunit="mm" name="world_163515648" x="10000" y="10000" z="10000" />
+  <box aunit="radian" lunit="mm" name="det_163515856" x="2000" y="2000" z="2000" />
+ </solids>
+ <structure>
+  <volume name="Detector_163517456" >
+   <materialref ref="Air_163514448" />
+   <solidref ref="det_163515856" />
+  </volume>
+  <volume name="World_163515704" >
+   <materialref ref="Air_163514448" />
+   <solidref ref="world_163515648" />
+   <physvol>
+    <volumeref ref="Detector_163517456" />
+    <positionref ref="det_163517544inWorld_163515704p" />
+   </physvol>
+  </volume>
+ </structure>
+ <setup name="Default" version="1.0" >
+  <world ref="World_163515704" />
+ </setup>
+</gdml>

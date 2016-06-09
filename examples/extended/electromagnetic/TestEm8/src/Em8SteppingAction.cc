@@ -25,7 +25,7 @@
 //
 //
 // $Id: Em8SteppingAction.cc,v 1.10 2007/11/12 10:54:49 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // 
 

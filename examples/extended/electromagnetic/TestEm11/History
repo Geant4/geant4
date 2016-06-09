@@ -1,4 +1,4 @@
-$Id: History,v 1.16 2007/11/07 17:22:15 maire Exp $
+$Id: History,v 1.27 2008/11/16 21:13:50 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,37 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+     
+16-11-08 mma (testem11-V09-01-07)
+- Em options: 20bins/decade  LinLossLimit=default=0.01
+     
+30-10-08 mma (testem11-V09-01-06)
+- update PhysListEmStandard : options and hMultipleScattering for muon
+     
+24-10-08 mma (testem11-V09-01-05)
+- update PhysListEmStandard and README
+     
+22-09-08 mma (testem11-V09-01-04)
+- HistoManager : root format by default
+
+12-06-08 mma (testem11-V09-01-03)
+- Remove AIDA from GNUmakefile
+      
+07-05-08 mma (testem11-V09-01-02)
+- README : update Aida informations
+     
+11-04-08 mma
+- HistoManager::Scale() : suppress warning
+     
+07-04-08 mma (testem11-V09-01-01)
+- PhysListEmStandard : add G4eMultipleScattering;
+- HistoManager::saveAscii() : redefinition of binEdge
+
+10-01-08 j.jacquemier (testem11-V09-01-00)
+- add setfileOption in HistoMessenger
+
+06-12-07 mma
+- new subdirectory sandia (from O. Kadri)
      
 07-11-07 mma (testem11-V09-00-01) 
 - HistoManager/HistoMessenger : print selected histos on ascii file

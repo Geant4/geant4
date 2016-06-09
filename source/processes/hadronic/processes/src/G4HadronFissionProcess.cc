@@ -38,62 +38,25 @@
 // 19-MAY-98 FWJ: variant G4HadronFission process for
 // G4CrossSectionDataSet/DataStore class design.
 // 29-JUN-98 FWJ: default data set G4HadronCrossSections
+// 01-SEP-2008 V.Ivanchenko: use methods from the base class
 //
 
-
 #include "G4HadronFissionProcess.hh"
+#include "G4HadronFissionDataSet.hh"
+#include "G4Neutron.hh"
 
-//unsigned 
-//G4HadronicFissionProcessHashFun(const G4ParticleDefinition& aParticleDefinition)
-//{
-//   return aParticleDefinition.GetParticleName().hash();
-//}
-
-G4HadronFissionProcess::
-G4HadronFissionProcess(const G4String& processName) : 
-   G4HadronicProcess(processName)
+G4HadronFissionProcess::G4HadronFissionProcess(const G4String& processName) : 
+  G4HadronicProcess(processName)
 {
-   AddDataSet(new G4HadronFissionDataSet);
+  SetProcessSubType(fFission);
+  AddDataSet(new G4HadronFissionDataSet());
 }
 
 G4HadronFissionProcess::~G4HadronFissionProcess()
 {
 }
  
-
-void 
-G4HadronFissionProcess::BuildThePhysicsTable(G4ParticleDefinition& aParticleType)
-{
-   if (!G4HadronicProcess::GetCrossSectionDataStore()) {
-      G4Exception("G4HadronFissionProcess", "007", FatalException,
-                  "no cross section data set");
-      return;
-   }
-   G4HadronicProcess::GetCrossSectionDataStore()->BuildPhysicsTable(aParticleType);
-}
-
-
-G4double 
-G4HadronFissionProcess::GetMicroscopicCrossSection(const G4DynamicParticle* aParticle,
-                                       const G4Element* anElement, G4double aTemp)
-{
-   // gives the microscopic cross section in GEANT4 internal units
-   if (!G4HadronicProcess::GetCrossSectionDataStore()) {
-      G4Exception("G4HadronFissionProcess", "007", FatalException,
-                  "no cross section data Store");
-      return DBL_MIN;
-   }
-   return G4HadronicProcess::GetCrossSectionDataStore()->GetCrossSection(aParticle, anElement, aTemp);
-}
-
-void
-G4HadronFissionProcess::
-DumpPhysicsTable(const G4ParticleDefinition& aParticleType)
-{
-   if (!G4HadronicProcess::GetCrossSectionDataStore()) {
-      G4Exception("G4HadronFissionProcess", "111", JustWarning,
-                  "no cross section data set");
-      return;
-   }
-   G4HadronicProcess::GetCrossSectionDataStore()->DumpPhysicsTable(aParticleType);
+G4bool G4HadronFissionProcess::IsApplicable(const G4ParticleDefinition& p)
+{ 
+  return (&p == G4Neutron::Neutron());
 }

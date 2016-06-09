@@ -23,7 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: Hadrontherapy.cc Main of the Hadrontherapy example; Version 4.0 May 2005
+// $Id: Hadrontherapy.cc Main of the Hadrontherapy example; 
+// Last modified: G.A.P.Cirrone March 2008;
+// 
+// See more at: http://geant4infn.wikispaces.com/
+//
 // ----------------------------------------------------------------------------
 //                 GEANT 4 - Hadrontherapy example
 // ----------------------------------------------------------------------------
@@ -50,7 +54,7 @@
 #include "HadrontherapyEventAction.hh"
 #include "HadrontherapyDetectorConstruction.hh"
 #include "HadrontherapyPhysicsList.hh"
-#include "HadrontherapyPhantomSD.hh"
+#include "HadrontherapyDetectorSD.hh"
 #include "HadrontherapyPrimaryGeneratorAction.hh"
 #include "HadrontherapyRunAction.hh"
 #include "HadrontherapyMatrix.hh"

@@ -23,12 +23,19 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// by V. Lara
+//J. M. Quesada (August 2008).  
+//Based  on previous work by V. Lara
+//
 
 #include "G4PreCompoundIon.hh"
 #include "G4PreCompoundParameters.hh"
-//#include "G4EvaporationLevelDensityParameter.hh"
 
+ G4bool G4PreCompoundIon::IsItPossible(const G4Fragment& aFragment) 
+  {
+    G4int pplus = aFragment.GetNumberOfCharged();   
+    G4int pneut = aFragment.GetNumberOfParticles()-pplus;
+    return (pneut >= (GetA()-GetZ()) && pplus >= GetZ());
+  }
 
 G4double G4PreCompoundIon::
 ProbabilityDistributionFunction(const G4double eKin, 
@@ -42,40 +49,46 @@ ProbabilityDistributionFunction(const G4double eKin,
   G4double P = aFragment.GetNumberOfParticles();
   G4double H = aFragment.GetNumberOfHoles();
   G4double N = P + H;
-  
-  // g = (6.0/pi2)*a*A
-  //  G4EvaporationLevelDensityParameter theLDP;
+
   G4double g0 = (6.0/pi2)*aFragment.GetA() * 
     G4PreCompoundParameters::GetAddress()->GetLevelDensity();
-  //    theLDP.LevelDensityParameter(static_cast<G4int>(aFragment.GetA()),static_cast<G4int>(aFragment.GetZ()),U);
+ 
   G4double g1 = (6.0/pi2)*GetRestA() * 
     G4PreCompoundParameters::GetAddress()->GetLevelDensity();
-  //    theLDP.LevelDensityParameter(GetRestA(),GetRestZ(),U);
-  //no longer used:  G4double gj = (6.0/pi2)*GetA() *
-  //  -----"-----    G4PreCompoundParameters::GetAddress()->GetLevelDensity();
-  //    theLDP.LevelDensityParameter(GetA(),GetZ(),U);
 
-  G4double A0 = ((P*P+H*H+P-H)/4.0 - H/2.0)/g0;
-  G4double A1 = std::max(0.0,(A0*g0 + GetA()*(GetA()-2.0*P-1.0)/4.0)/g1);
-  G4double Aj = GetA()*(GetA()+1.0)/4.0;
+  G4double gj = (6.0/pi2)*GetA() *
+    G4PreCompoundParameters::GetAddress()->GetLevelDensity();
+
+  G4double A0 = ((P*P+H*H+P-H)/4.0 - H/2.0)/g0; 
+
+  G4double A1 = std::max(0.0,(A0*g0 + GetA()*(GetA()-2.0*P-1.0)/4.0)/g1); 
+
+  G4double Aj = GetA()*(GetA()+1.0)/4.0/gj; 
+
 
   G4double E0 = std::max(0.0,U - A0);
   if (E0 == 0.0) return 0.0;
-  //  G4double E1 = std::max(0.0,GetMaximalKineticEnergy() + GetCoulombBarrier() - eKin - A1);
-  G4double E1 = (std::max(0.0,GetMaximalKineticEnergy() - eKin - A1))/g1; //JMQ fix
-  //  G4double Ej = std::max(0.0,U + GetBindingEnergy() - Aj);
-  G4double Ej = std::max(0.0,eKin + GetBindingEnergy() - Aj); //JMQ fix
 
-  G4double pA = (3.0/4.0) * std::sqrt(std::max(0.0, 2.0/(GetReducedMass()*(eKin+GetBindingEnergy()))))*
-      GetAlpha()*(eKin+GetBeta())/(r0*std::pow(GetRestA(),1.0/3.0)) *
-      CoalescenceFactor(aFragment.GetA()) * FactorialFactor(N,P);
+  G4double E1 = (std::max(0.0,GetMaximalKineticEnergy() - eKin - A1)); 
+
+  G4double Ej = std::max(0.0,eKin + GetBindingEnergy() -Aj); 
+
+
+ G4double pA = 1.e-25*(3.0/4.0) * std::sqrt(std::max(0.0, 2.0/(GetReducedMass()*
+(eKin+GetBindingEnergy()))))/(pi * r0 * r0 * std::pow(GetRestA(),2.0/3.0) )* eKin*CrossSection(eKin) /(r0*std::pow(GetRestA(),1.0/3.0)) * CoalescenceFactor(aFragment.GetA()) * FactorialFactor(N,P)* GetRj(aFragment.GetNumberOfParticles(), aFragment.GetNumberOfCharged())  ;
 
   G4double pB = std::pow((g1*E1)/(g0*E0),N-GetA()-1.0)*(g1/g0);
+ 
+  G4double pC = std::pow((gj*Ej)/(g0*E0),GetA()-1.0)*(gj/g0)/E0; 
 
-  //  G4double pC = std::pow((gj*Ej)/(g0*E0),GetA()-1.0)*(gj/g0)/E0;
-  G4double pC = std::pow((g1*Ej)/(g0*E0),GetA()-1.0)*(g1/g0)/E0; //JMQ fix
 
-  G4double Probability = pA * pB * pC * GetRj(aFragment.GetNumberOfParticles(), aFragment.GetNumberOfCharged());
+  G4double Probability = pA * pB * pC;
 
   return Probability;
 }
+
+
+
+
+
+

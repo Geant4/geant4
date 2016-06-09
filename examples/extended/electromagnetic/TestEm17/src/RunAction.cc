@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RunAction.cc,v 1.2 2006/06/29 16:49:17 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: RunAction.cc,v 1.4 2008/03/31 10:22:59 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -138,22 +138,23 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   
   //compute theoritical predictions
   //
-  totalCrossSection = 0.;
-  for (size_t i=0; i< ProcCounter->size();i++) {
-     G4String procName = (*ProcCounter)[i]->GetName();
-     if (procName != "Transportation")
-       totalCrossSection += ComputeTheory(procName, NbOfEvents);
+  if(particle == "mu+" || particle == "mu-") { 
+    totalCrossSection = 0.;
+    for (size_t i=0; i< ProcCounter->size();i++) {
+      G4String procName = (*ProcCounter)[i]->GetName();
+      if (procName != "Transportation")
+	totalCrossSection += ComputeTheory(procName, NbOfEvents);
+    }
+  
+    MeanFreePath     = 1./totalCrossSection;
+    massCrossSection = totalCrossSection/density;
+  
+    G4cout << " Theory:     "
+	   <<    "total CrossSection = " << totalCrossSection*cm << " /cm"
+	   << "\t MeanFreePath = "       << G4BestUnit(MeanFreePath,"Length")
+	   << "\t massicCrossSection = " << massCrossSection*g/cm2 << " cm2/g"
+	   << G4endl;
   }
-  
-  MeanFreePath     = 1./totalCrossSection;
-  massCrossSection = totalCrossSection/density;
-  
-  G4cout << " Theory:     "
-         <<    "total CrossSection = " << totalCrossSection*cm << " /cm"
-         << "\t MeanFreePath = "       << G4BestUnit(MeanFreePath,"Length")
-         << "\t massicCrossSection = " << massCrossSection*g/cm2 << " cm2/g"
-         << G4endl;
-	 	 
 	 	 	               	                           
   G4cout.setf(mode,std::ios::floatfield);
   G4cout.precision(prec);         
@@ -182,11 +183,15 @@ G4double RunAction::ComputeTheory(G4String process, G4int NbOfMu)
   MuCrossSections crossSections;
 
   G4int id = 0; G4double cut = 0.;
-  if (process == "muIoni")     {id = 1; cut =    GetEnergyCut(material,1); }
-  if (process == "muPairProd") {id = 2; cut = 2*(GetEnergyCut(material,1) 
+  if (process == "muIoni")          {id = 1; cut =    GetEnergyCut(material,1);}
+  else if (process == "muPairProd") {id = 2; cut = 2*(GetEnergyCut(material,1) 
                                                       + electron_mass_c2); }
-  if (process == "muBrems")    {id = 3; cut =    GetEnergyCut(material,0); }
-  if (process == "muNucl")      id = 4;
+  else if (process == "muBrems")    {id = 3; cut =    GetEnergyCut(material,0);}
+  else if (process == "muNucl")      id = 4;
+  else if (process == "hIoni")      {id = 5; cut =    GetEnergyCut(material,1);}
+  else if (process == "hPairProd")  {id = 6; cut = 2*(GetEnergyCut(material,1) 
+                                                      + electron_mass_c2); }
+  else if (process == "hBrems")     {id = 7; cut =    GetEnergyCut(material,0);}
   if (id == 0) return 0.;
   
   G4int nbOfBins = 100;

@@ -42,7 +42,9 @@
 //    or through the GeneralParticleSource  messenger class.
 //
 #include "UltraPrimaryGeneratorAction.hh"
+#include "UltraDetectorConstruction.hh"
 
+#include "G4RunManager.hh"
 #include "G4Event.hh"
 #include "G4GeneralParticleSource.hh"
 #include "G4SPSAngDistribution.hh"
@@ -128,8 +130,39 @@ void UltraPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
     G4cout << particleGun->GetCurrentSource()->GetEneDist()->GetEnergyDisType() << " " ;
     G4cout << particleGun->GetCurrentSource()->GetPosDist()->GetPosDisType()    << G4endl ;
 
+
+// Check if optical photon wavelength is within limits set for material optical properties tables. 
+
+   
+
+
 }
   particleGun->GeneratePrimaryVertex(anEvent);
+
+    if (particleGun->GetParticleDefinition()->GetParticleName() == "opticalphoton"){
+     
+     	const UltraDetectorConstruction * detector =  
+     	dynamic_cast<const UltraDetectorConstruction *>((G4RunManager::GetRunManager())->GetUserDetectorConstruction()) ;
+
+	G4double lambda_min = detector->GetLambdaMin() ;
+	G4double lambda_max = detector->GetLambdaMax() ;
+
+       	G4double energy = particleGun->GetParticleEnergy() ;
+
+	if (h_Planck*c_light/energy > lambda_max || h_Planck*c_light/energy < lambda_min){
+	       G4cerr << "Error ! Optical photon energy (" << energy/eV << " eV) out of limits set by material optical properties tables. \n" 
+              << "Please check that photon wavelength is within the following interval: [" 
+              << lambda_min/nm << "," 
+              << lambda_max/nm << "] nm" 
+              << ", i.e., ["
+              << h_Planck*c_light/lambda_max/eV << ","
+              << h_Planck*c_light/lambda_min/eV << "] eV"
+              << G4endl ;
+	
+             G4Exception("") ;
+	}
+ }
+
 }
 
 

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleTable.cc,v 1.29 2007/10/06 06:49:29 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4ParticleTable.cc,v 1.33 2008/06/08 12:55:45 kurasige Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // class G4ParticleTable
 //
@@ -56,10 +56,9 @@
 #include "G4IonTable.hh"
 #include "G4ShortLivedTable.hh"
 
-
 ////////////////////
 G4ParticleTable::G4ParticleTable()
-     :verboseLevel(0),fParticleMessenger(0),
+     :verboseLevel(1),fParticleMessenger(0),
       noName(" "),
       readyToUse(false)
 {
@@ -99,11 +98,12 @@ G4ParticleTable::~G4ParticleTable()
   }
 
   if(fDictionary){
+    if (fIterator!=0 )delete fIterator;
+    fIterator =0;
+
     fDictionary->clear();
     delete fDictionary;
     fDictionary =0;
-    if (fIterator!=0 )delete fIterator;
-    fIterator =0;
   }
 
   if (fParticleMessenger!=0) delete fParticleMessenger;  
@@ -155,10 +155,34 @@ void G4ParticleTable::DeleteMessenger()
     //UI messenger
     delete fParticleMessenger;
     fParticleMessenger= 0;
-    // remove all items from G4ParticleTable
-    // temporaly comment out 
-    // RemoveAllParticles();
   }
+
+}
+
+////////////////////
+void G4ParticleTable::DeleteAllParticles()
+{
+
+#ifdef G4VERBOSE
+  if (verboseLevel>1){
+    G4cout << "G4ParticleTable::DeleteAllParticles() " << G4endl;
+  }
+#endif
+
+  // delete all particles 
+  G4PTblDicIterator *piter = fIterator; 
+  piter -> reset();
+  while( (*piter)() ){
+#ifdef G4VERBOSE
+    if (verboseLevel>2){
+      G4cout << "Delete " << (piter->value())->GetParticleName() 
+	     << " " << (piter->value()) << G4endl;
+    }
+#endif
+    delete (piter->value());
+  }
+
+  RemoveAllParticles();
 }
 
 ////////////////////
@@ -170,42 +194,26 @@ void G4ParticleTable::RemoveAllParticles()
     G4cout << "G4ParticleTable::RemoveAllParticles() " << G4endl;
   }
 #endif
-  // delete all particles 
-  G4PTblDicIterator *piter = fIterator; 
-  piter -> reset();
-  while( (*piter)() ){
-    delete (piter->value());
-  }
 
-  //delete Ion Table and contents
+  //remove all contnts in Ion Table
   if (fIonTable!=0) {
-    delete fIonTable;
-    fIonTable = 0;
+    fIonTable->clear();
   }
 
-  // delete Short Lived table and contents
+  // remomve all contents in hort Lived table 
   if (fShortLivedTable!=0) {
-    delete fShortLivedTable;
-    fShortLivedTable = 0;
+    fShortLivedTable->clear();
   }
 
-  // delete dictionary for encoding
-  if (fEncodingDictionary)
-    {
+  // clear dictionary for encoding
+  if (fEncodingDictionary) {
       fEncodingDictionary->clear();
-      delete fEncodingDictionary;
-      fEncodingDictionary = 0;
-    }
+  }
 
-  // delete dictionary
-  if (fDictionary)
-    {
-      if (fIterator!=0 )delete fIterator;
-      fIterator =0;
-      fDictionary->clear();
-      delete fDictionary;
-      fDictionary = 0;
-    }
+  // clear dictionary
+  if (fDictionary) {
+    fDictionary->clear();
+  }
 }
 
 ////////////////////
@@ -238,11 +246,13 @@ G4ParticleDefinition* G4ParticleTable::Insert(G4ParticleDefinition *particle)
       G4PTblDictionary *pdic =  fDictionary;
       G4PTblEncodingDictionary *pedic =  fEncodingDictionary;  
 
-      (*pdic)[GetKey(particle)] = particle;
+      // insert into Dictionary
+      pdic->insert( std::pair<G4String, G4ParticleDefinition*>(GetKey(particle), particle) );
+
       // insert into EncodingDictionary
       G4int code = particle->GetPDGEncoding();
       if (code !=0 ) {
-       (*pedic)[code] = particle;
+        pedic->insert( std::pair<G4int, G4ParticleDefinition*>(code ,particle) );
       }       
 
       // insert it in IonTable if "nucleus"
@@ -254,6 +264,16 @@ G4ParticleDefinition* G4ParticleTable::Insert(G4ParticleDefinition *particle)
       if (particle->IsShortLived() ){
 	fShortLivedTable->Insert(particle);
       }
+
+      // set Verbose Level same as ParticleTable
+      particle->SetVerboseLevel(verboseLevel);
+
+#ifdef G4VERBOSE
+      if (verboseLevel>3){
+        G4cout << "The particle "<< particle->GetParticleName() 
+	       << " is inserted in the ParticleTable " << G4endl;
+      }
+#endif
 
       return particle;
     }
@@ -285,6 +305,14 @@ G4ParticleDefinition* G4ParticleTable::Remove(G4ParticleDefinition* particle)
   if (particle->IsShortLived() ){
     fShortLivedTable->Remove(particle);
   }
+
+#ifdef G4VERBOSE
+  if (verboseLevel>3){
+    G4cout << "The particle "<< particle->GetParticleName()
+           << " is removed from the ParticleTable " << G4endl;
+  }
+#endif
+
   return particle;
 }
 
@@ -351,9 +379,9 @@ G4ParticleDefinition* G4ParticleTable::GetParticle(G4int index)
       if ( counter == index ) return piter->value();
       counter++;
     }
-  }
+  } 
 #ifdef G4VERBOSE
-  if (verboseLevel>0){
+  if (verboseLevel>1){
     G4cout << " G4ParticleTable::GetParticle";
     G4cout << " invalid index (=" << index << ")" << G4endl;
   }
@@ -364,7 +392,7 @@ G4ParticleDefinition* G4ParticleTable::GetParticle(G4int index)
 ////////////////////
 G4ParticleDefinition* G4ParticleTable::FindParticle(const G4ParticleDefinition *particle)
 {
-   CheckReadiness();
+  CheckReadiness();
   G4String key = GetKey(particle);
   return FindParticle(key);
 }
@@ -376,13 +404,13 @@ G4ParticleDefinition* G4ParticleTable::FindParticle(G4int aPDGEncoding )
     // check aPDGEncoding is valid
     if (aPDGEncoding == 0){ 
 #ifdef G4VERBOSE
-      if (verboseLevel>0){
+      if (verboseLevel>1){
         G4cout << "PDGEncoding  [" <<  aPDGEncoding << "] is not valid " << G4endl;
       }
 #endif
       return 0;
     }
-
+    
     G4PTblEncodingDictionary *pedic =  fEncodingDictionary;
     G4ParticleDefinition* particle =0;  
 
@@ -392,7 +420,7 @@ G4ParticleDefinition* G4ParticleTable::FindParticle(G4int aPDGEncoding )
     }
 
 #ifdef G4VERBOSE
-    if ((particle == 0) && (verboseLevel>0) ){
+    if ((particle == 0) && (verboseLevel>1) ){
       G4cout << "CODE:" << aPDGEncoding << " does not exist in ParticleTable " << G4endl;
     }
 #endif
@@ -439,6 +467,7 @@ void G4ParticleTable::CheckReadiness()
               "PartMan0000",FatalException,msg);
   }
 }
+
 
 
 

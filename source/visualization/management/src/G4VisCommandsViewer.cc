@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsViewer.cc,v 1.68 2007/01/11 16:41:30 allison Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4VisCommandsViewer.cc,v 1.70 2008/04/30 10:07:28 allison Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 
 // /vis/viewer commands - John Allison  25th October 1998
 
@@ -404,13 +404,13 @@ void G4VisCommandViewerClone::SetNewValue (G4UIcommand*, G4String newValue) {
   // Need to handle the possibility that the names contain embedded
   // blanks within quotation marks...
   char c;
-  while (is.get(c) && c == ' ');
+  while (is.get(c) && c == ' '){}
   if (c == '"') {
-    while (is.get(c) && c != '"') originalName += c;
+    while (is.get(c) && c != '"') {originalName += c;}
   }
   else {
     originalName += c;
-    while (is.get(c) && c != ' ') originalName += c;
+    while (is.get(c) && c != ' ') {originalName += c;}
   }
   originalName = originalName.strip (G4String::both, ' ');
   originalName = originalName.strip (G4String::both, '"');
@@ -426,13 +426,13 @@ void G4VisCommandViewerClone::SetNewValue (G4UIcommand*, G4String newValue) {
   }
   originalName = originalViewer->GetName();  // Ensures long name.
 
-  while (is.get(c) && c == ' ');
+  while (is.get(c) && c == ' '){}
   if (c == '"') {
-    while (is.get(c) && c != '"') cloneName += c;
+    while (is.get(c) && c != '"') {cloneName += c;}
   }
   else {
     cloneName += c;
-    while (is.get(c) && c != ' ') cloneName += c;
+    while (is.get(c) && c != ' ') {cloneName += c;}
   }
   cloneName = cloneName.strip (G4String::both, ' ');
   cloneName = cloneName.strip (G4String::both, '"');
@@ -563,13 +563,13 @@ void G4VisCommandViewerCreate::SetNewValue (G4UIcommand*, G4String newValue) {
   // Now need to handle the possibility that the second string
   // contains embedded blanks within quotation marks...
   char c;
-  while (is.get(c) && c == ' ');
+  while (is.get(c) && c == ' '){}
   if (c == '"') {
-    while (is.get(c) && c != '"') newName += c;
+    while (is.get(c) && c != '"') {newName += c;}
   }
   else {
     newName += c;
-    while (is.get(c) && c != ' ') newName += c;
+    while (is.get(c) && c != ' ') {newName += c;}
   }
   newName = newName.strip (G4String::both, ' ');
   newName = newName.strip (G4String::both, '"');

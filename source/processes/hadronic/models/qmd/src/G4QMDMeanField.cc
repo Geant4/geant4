@@ -23,6 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// 081120 Add Update by T. Koi
+//
 #include "G4QMDMeanField.hh"
 #include "G4QMDParameters.hh"
 
@@ -860,7 +862,7 @@ std::vector< G4QMDNucleus* > G4QMDMeanField::DoClusterJudgment()
        = sorted_cluster_map.rbegin() ; it != sorted_cluster_map.rend()  ; it ++) 
    {
 
-      //std::cout << "Add Participants to cluseter " << it->second << std::endl;
+      //G4cout << "Add Participants to cluseter " << it->second << G4endl;
 
       if ( it->first != 0 ) 
       {
@@ -872,7 +874,7 @@ std::vector< G4QMDNucleus* > G4QMDMeanField::DoClusterJudgment()
             if ( it->second == itt->first )
             {
                nucleus->SetParticipant( system->GetParticipant ( itt->second ) );
-               //std::cout << "Add Participants " << itt->second << " "  << system->GetParticipant ( itt->second )->GetPosition() << std::endl;
+               //G4cout << "Add Participants " << itt->second << " "  << system->GetParticipant ( itt->second )->GetPosition() << G4endl;
              }
 
          }
@@ -891,4 +893,11 @@ std::vector< G4QMDNucleus* > G4QMDMeanField::DoClusterJudgment()
    
    return result;
    
+}
+
+
+
+void G4QMDMeanField::Update() 
+{ 
+   SetSystem( system ); 
 }

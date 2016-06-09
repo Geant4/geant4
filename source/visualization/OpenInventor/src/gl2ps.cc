@@ -29,7 +29,7 @@
  * GL2PS, an OpenGL to PostScript Printing Library
  * Copyright (C) 1999-2003  Christophe Geuzaine 
  *
- * $Id: gl2ps.cc,v 1.11 2006/06/29 21:23:09 gunter Exp $
+ * $Id: gl2ps.cc,v 1.12 2008/04/30 10:05:31 allison Exp $
  *
  * E-mail: geuz@geuz.org
  * URL: http://www.geuz.org/gl2ps/
@@ -1344,7 +1344,7 @@ void gl2psPrintPostScriptPixmap(GLfloat x, GLfloat y, GLsizei width, GLsizei hei
   typedef unsigned char Uchar;
   int status = 1, nbhex, nbyte;
   int row, col, ibyte,icase;
-  float dr, dg, db, fgrey;
+  float dr = 0, dg = 0, db = 0, fgrey = 0;
   Uchar red, green, blue, b, grey;
   /* Options */
   int shade = 0;

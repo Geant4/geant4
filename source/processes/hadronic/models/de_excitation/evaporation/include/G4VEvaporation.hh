@@ -24,13 +24,16 @@
 // ********************************************************************
 //
 //
-// $Id: G4VEvaporation.hh,v 1.3 2006/06/29 20:10:15 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4VEvaporation.hh,v 1.4 2008/09/19 13:32:54 ahoward Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Oct 1998) written from G4Evaporation.hh (May 1998)
 //
-
+// Modif (03 September 2008) by J. M. Quesada for external choice of inverse 
+// cross section option
+// JMQ (06 September 2008) Also external choices have been added for 
+// superimposed Coulomb barrier (if useSICBis set true, by default is false) 
 
 
 #ifndef G4VEvaporation_h
@@ -55,6 +58,13 @@ private:
 public:
   virtual G4FragmentVector * BreakItUp(const G4Fragment &theNucleus) = 0;
 
+  // for inverse cross section choice
+  inline void SetOPTxs(G4int opt) { OPTxs = opt;} 
+  // for superimposed Coulomb Barrier for inverse cross sections 	
+  inline void UseSICB(G4bool use) { useSICB = use; }	
+protected:
+   G4int OPTxs;
+   G4bool useSICB;
 
 };
 

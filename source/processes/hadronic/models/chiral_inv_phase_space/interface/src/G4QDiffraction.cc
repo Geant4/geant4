@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QDiffraction.cc,v 1.3 2007/10/02 10:00:37 mkossov Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4QDiffraction.cc,v 1.5 2008/10/02 21:10:07 dennis Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 //      ---------------- G4QDiffraction class -----------------
 //                 by Mikhail Kossov, Aug 2007.
@@ -50,13 +50,14 @@ std::vector<std::vector<G4int>*> G4QDiffraction::ElIsoN;// N of isotope(j), E(i)
 std::vector<std::vector<G4double>*>G4QDiffraction::IsoProbInEl;//SumProbIsotE(i)
 
 // Constructor
-G4QDiffraction::G4QDiffraction(const G4String& processName):G4VDiscreteProcess(processName)
+G4QDiffraction::G4QDiffraction(const G4String& processName):
+ G4VDiscreteProcess(processName, fHadronic)
 {
 #ifdef debug
   G4cout<<"G4QDiffraction::Constructor is called processName="<<processName<<G4endl;
 #endif
   if (verboseLevel>0) G4cout << GetProcessName() << " process is created "<< G4endl;
-
+  SetProcessSubType(fHadronInelastic);
   G4QCHIPSWorld::Get()->GetParticles(nPartCWorld); // Create CHIPS World (234 part. max)
 }
 

@@ -23,41 +23,19 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4CrossSectionIonisationBornPartial.hh,v 1.1 2007/10/22 09:12:58 pia Exp $
-// GEANT4 tag $Name: geant4-09-01 $
-// 
-// Contact Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
-//
-// History:
-// -----------
-// Date         Name              Modification
-// 28 Apr 2007  M.G. Pia          Created in compliance with design described in TNS paper
-//
-// -------------------------------------------------------------------
-
-// Class description:
-// Geant4-DNA Cross total cross section for ionisation cross section in water
-// Reference: TNS Geant4-DNA paper
-// S. Chauvie et al., Geant4 physics processes for microdosimetry simulation:
-// design foundation and implementation of the first set of models,
-// IEEE Trans. Nucl. Sci., vol. 54, no. 6, Dec. 2007.
-// Reference for implementation model: NIM. 155, pp. 145-156, 1978
-// Further documentation available from http://www.ge.infn.it/geant4/dna
-
-// -------------------------------------------------------------------
-
+// $Id: G4CrossSectionIonisationBornPartial.hh,v 1.2 2008/07/14 20:47:34 sincerti Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 
 #ifndef G4CROSSSECTIONIONISATIONBORNPARTIAL_HH
 #define G4CROSSSECTIONIONISATIONBORNPARTIAL_HH 1
  
-#include "globals.hh"
-#include <map>
-#include <functional>
 #include "G4DNACrossSectionDataSet.hh"
+#include "G4Electron.hh"
+#include "G4Proton.hh"
+#include "G4Track.hh"
+#include "G4LogLogInterpolation.hh"
+#include "Randomize.hh"
  
-class G4Track;
-
 class G4CrossSectionIonisationBornPartial
 {
 public:
@@ -66,20 +44,14 @@ public:
   
   ~G4CrossSectionIonisationBornPartial();
   
-  // Partial cross section 
-  // G4double CrossSection(G4double energy, const G4String& particle);
   G4double CrossSection(const G4Track& track);
 			
-  // Sum of partial cross sections at a given energy value for a particle type
   G4double Sum(G4double energy, const G4String& particle);
 
   G4int RandomSelect(G4double energy,const G4String& particle );
   
-  // Copy constructor and assignment operator to be added here
-    
 private:
    
-  G4String name;  
   G4double lowEnergyLimitDefault;
   G4double highEnergyLimitDefault;
 
@@ -92,10 +64,6 @@ private:
   typedef std::map<G4String,G4DNACrossSectionDataSet*,std::less<G4String> > MapData;
   MapData tableData;
 
-
-
-  // G4DNACrossSectionDataSet* table;
- 
 };
 
 #endif

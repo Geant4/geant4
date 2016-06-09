@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // $Id: SoG4LineSet.h,v 1.2 2006/12/13 15:49:51 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // John Allison  26th October 2006
 // Extended SoLineSet to include G4Atts.

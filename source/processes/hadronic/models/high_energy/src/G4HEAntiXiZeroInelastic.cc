@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4HEAntiXiZeroInelastic.cc,v 1.14 2006/06/29 20:30:12 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4HEAntiXiZeroInelastic.cc,v 1.15 2008/03/17 20:49:17 dennis Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 //
 
@@ -433,15 +433,15 @@ G4HEAntiXiZeroInelastic::FirstIntInCasAntiXiZero( G4bool &inElastic,
                          // calculate first the sum of all constants, check for numerical problems.   
            G4double test, dum, anpn = 0.0;
 
-           for( nt=1; nt<=numSec; nt++ ) 
-             {
-               test = std::exp( std::min( expxu, std::max( expxl, -(pi/4.0)*(nt*nt)/(n*n) ) ) );
-               dum = pi*nt/(2.0*n*n);
-               if( std::fabs(dum) < 1.0 ) 
-                 if( test >= 1.0e-10 )anpn += dum*test;
-               else 
-                 anpn += dum*test;
+           for (nt=1; nt<=numSec; nt++) {
+             test = std::exp( std::min( expxu, std::max( expxl, -(pi/4.0)*(nt*nt)/(n*n) ) ) );
+             dum = pi*nt/(2.0*n*n);
+             if (std::fabs(dum) < 1.0) { 
+               if( test >= 1.0e-10 )anpn += dum*test;
+             } else { 
+               anpn += dum*test;
              }
+           }
    
            G4double ran = G4UniformRand();
            G4double excs = 0.0;
@@ -457,23 +457,24 @@ G4HEAntiXiZeroInelastic::FirstIntInCasAntiXiZero( G4bool &inElastic,
                               if( ++counter < numMul ) 
                                 {
                                   nt = np+nm+nz;
-                                  if( (nt>0) && (nt<=numSec) ) 
-                                    {
-                                      test = std::exp( std::min( expxu, std::max( expxl, -(pi/4.0)*(nt*nt)/(n*n) ) ) );
-                                      dum = (pi/anpn)*nt*protmul[counter]*protnorm[nt-1]/(2.0*n*n);
-                                      if( std::fabs(dum) < 1.0 ) 
-                                            if( test >= 1.0e-10 )excs += dum*test;
-                                       else 
-                                            excs += dum*test;
-                                       if (ran < excs) goto outOfLoop;      //----------------------->
-                                    }   
+                                  if ( (nt>0) && (nt<=numSec) ) {
+                                    test = std::exp( std::min( expxu, std::max( expxl, -(pi/4.0)*(nt*nt)/(n*n) ) ) );
+                                    dum = (pi/anpn)*nt*protmul[counter]*protnorm[nt-1]/(2.0*n*n);
+                                    if (std::fabs(dum) < 1.0) { 
+                                      if( test >= 1.0e-10 )excs += dum*test;
+                                    } else { 
+                                      excs += dum*test;
+			            }
+
+                                    if (ran < excs) goto outOfLoop;      //----------------------->
+                                  }   
                                 }    
                             }     
                        }                                                                                  
                   }
        
-                                              // 3 previous loops continued to the end
-               inElastic = false;                 // quasi-elastic scattering   
+                                // 3 previous loops continued to the end
+               inElastic = false;         // quasi-elastic scattering   
                return;
              }
            else   
@@ -488,16 +489,17 @@ G4HEAntiXiZeroInelastic::FirstIntInCasAntiXiZero( G4bool &inElastic,
                               if( ++counter < numMul ) 
                                 {
                                   nt = np+nm+nz;
-                                  if( (nt>0) && (nt<=numSec) ) 
-                                    {
-                                      test = std::exp( std::min( expxu, std::max( expxl, -(pi/4.0)*(nt*nt)/(n*n) ) ) );
-                                      dum = (pi/anpn)*nt*neutmul[counter]*neutnorm[nt-1]/(2.0*n*n);
-                                      if( std::fabs(dum) < 1.0 ) 
-                                          if( test >= 1.0e-10 )excs += dum*test;
-                                      else 
+                                  if ( (nt>0) && (nt<=numSec) ) {
+                                    test = std::exp( std::min( expxu, std::max( expxl, -(pi/4.0)*(nt*nt)/(n*n) ) ) );
+                                    dum = (pi/anpn)*nt*neutmul[counter]*neutnorm[nt-1]/(2.0*n*n);
+                                    if (std::fabs(dum) < 1.0) { 
+                                      if( test >= 1.0e-10 )excs += dum*test;
+                                    } else { 
                                       excs += dum*test;
-                                      if (ran < excs) goto outOfLoop;       // -------------------------->
-                                    }
+			            }
+
+                                    if (ran < excs) goto outOfLoop;       // -------------------------->
+                                  }
                                 }
                             }
                        }
@@ -612,15 +614,15 @@ G4HEAntiXiZeroInelastic::FirstIntInCasAntiXiZero( G4bool &inElastic,
                       //   calculate first the sum of all constants, check for numerical problems.   
            G4double test, dum, anpn = 0.0;
 
-           for( nt=2; nt<=numSec; nt++ ) 
-             {
-               test = std::exp( std::min( expxu, std::max( expxl, -(pi/4.0)*(nt*nt)/(n*n) ) ) );
-               dum = pi*nt/(2.0*n*n);
-               if( std::fabs(dum) < 1.0 ) 
-                 if( test >= 1.0e-10 )anpn += dum*test;
-               else 
-                 anpn += dum*test;
+           for (nt=2; nt<=numSec; nt++) {
+             test = std::exp( std::min( expxu, std::max( expxl, -(pi/4.0)*(nt*nt)/(n*n) ) ) );
+             dum = pi*nt/(2.0*n*n);
+             if (std::fabs(dum) < 1.0) { 
+               if( test >= 1.0e-10 )anpn += dum*test;
+             } else { 
+               anpn += dum*test;
              }
+           }
    
            G4double ran = G4UniformRand();
            G4double excs = 0.0;
@@ -635,25 +637,26 @@ G4HEAntiXiZeroInelastic::FirstIntInCasAntiXiZero( G4bool &inElastic,
                         if( ++counter < numMulAn ) 
                           {
                             nt = np+nm+nz;
-                            if( (nt>1) && (nt<=numSec) ) 
-                              {
-                                test = std::exp( std::min( expxu, std::max( expxl, -(pi/4.0)*(nt*nt)/(n*n) ) ) );
-                                dum = (pi/anpn)*nt*protmulAn[counter]*protnormAn[nt-1]/(2.0*n*n);
-                                if( std::fabs(dum) < 1.0 ) 
-                                     if( test >= 1.0e-10 )excs += dum*test;
-                                else 
-                                     excs += dum*test;
-                                if (ran < excs) goto outOfLoopAn;      //----------------------->
-                              }   
+                            if ( (nt>1) && (nt<=numSec) ) {
+                              test = std::exp( std::min( expxu, std::max( expxl, -(pi/4.0)*(nt*nt)/(n*n) ) ) );
+                              dum = (pi/anpn)*nt*protmulAn[counter]*protnormAn[nt-1]/(2.0*n*n);
+                              if (std::fabs(dum) < 1.0) { 
+                                if( test >= 1.0e-10 )excs += dum*test;
+                              } else { 
+                                excs += dum*test;
+		      	      }
+
+                              if (ran < excs) goto outOfLoopAn;      //----------------------->
+                            }   
                           }    
                       }     
                  }                                                                                  
-                                              // 3 previous loops continued to the end
-               inElastic = false;                 // quasi-elastic scattering   
+                                      // 3 previous loops continued to the end
+               inElastic = false;            // quasi-elastic scattering   
                return;
              }
            else   
-             {                                         // target must be a neutron
+             {                                // target must be a neutron
                counter = -1;
                for( np=0; np<numSec/3; np++ ) 
                  { 
@@ -663,16 +666,16 @@ G4HEAntiXiZeroInelastic::FirstIntInCasAntiXiZero( G4bool &inElastic,
                         if( ++counter < numMulAn ) 
                           {
                             nt = np+nm+nz;
-                            if( (nt>1) && (nt<=numSec) ) 
-                              {
-                                test = std::exp( std::min( expxu, std::max( expxl, -(pi/4.0)*(nt*nt)/(n*n) ) ) );
-                                dum = (pi/anpn)*nt*neutmulAn[counter]*neutnormAn[nt-1]/(2.0*n*n);
-                                if( std::fabs(dum) < 1.0 ) 
-                                    if( test >= 1.0e-10 )excs += dum*test;
-                                else 
+                            if ( (nt>1) && (nt<=numSec) ) {
+                              test = std::exp( std::min( expxu, std::max( expxl, -(pi/4.0)*(nt*nt)/(n*n) ) ) );
+                              dum = (pi/anpn)*nt*neutmulAn[counter]*neutnormAn[nt-1]/(2.0*n*n);
+                              if (std::fabs(dum) < 1.0) { 
+                                if( test >= 1.0e-10 )excs += dum*test;
+                              } else { 
                                 excs += dum*test;
-                                if (ran < excs) goto outOfLoopAn;       // -------------------------->
-                              }
+		      	      }
+                              if (ran < excs) goto outOfLoopAn;       // -------------------------->
+                            }
                           }
                       }
                  }

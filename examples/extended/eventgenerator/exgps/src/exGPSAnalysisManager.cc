@@ -36,8 +36,9 @@ exGPSAnalysisManager* exGPSAnalysisManager::instance = 0;
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 exGPSAnalysisManager::exGPSAnalysisManager(): 
-fileName("exgps.aida"),fileType("xml"),analysisFactory(0), hFactory(0), tFactory(0),
-minpos(-10.),maxpos(10),mineng(0.),maxeng(1000.)
+fileName("exgps.aida"),fileType("xml"),analysisFactory(0), tree(0),plotter(0),
+minpos(-10.),maxpos(10),mineng(0.),maxeng(1000.),
+enerHisto(0),posiXY(0),posiXZ(0),posiYZ(0),anglCTP(0),anglTP(0),tuple(0)
 {
   // Define the messenger and the analysis system
   analysisMessenger = new exGPSAnalysisMessenger(this);
@@ -54,33 +55,7 @@ exGPSAnalysisManager::~exGPSAnalysisManager() {
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 
-IHistogramFactory* exGPSAnalysisManager::getHistogramFactory()
-{
-  return hFactory;
-}
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-
-ITupleFactory* exGPSAnalysisManager::getTupleFactory()
-{
-  return tFactory;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-IPlotter* exGPSAnalysisManager::createPlotter()
-{
-#ifdef JAIDA_HOME 
-  if (analysisFactory)
-  {
-    IPlotterFactory* pf = analysisFactory->createPlotterFactory(0,0);
-    if (pf) return pf->create("Plotter");
-  }
-#endif
-  return 0;
-}
-
 
 ////////////////////////////////////////////////////////////////////////////////
 //
@@ -107,12 +82,14 @@ void exGPSAnalysisManager::Fill(G4String pname, G4double e,
 				G4double x, G4double y, G4double z,
 				G4double t, G4double p, G4double w)
 {
-  enerHisto->fill(e/MeV,w);
-  posiXY->fill(x/cm,y/cm,w);
-  posiXZ->fill(x/cm,z/cm,w);
-  posiYZ->fill(y/cm,z/cm,w);
-  anglCTP->fill(p/deg,std::cos(t),w);
-  anglTP->fill(p/deg,t/deg,w);
+  if(enerHisto) {
+    enerHisto->fill(e/MeV,w);
+    posiXY->fill(x/cm,y/cm,w);
+    posiXZ->fill(x/cm,z/cm,w);
+    posiYZ->fill(y/cm,z/cm,w);
+    anglCTP->fill(p/deg,std::cos(t),w);
+    anglTP->fill(p/deg,t/deg,w);
+  }
 
   if (plotter) plotter->refresh();
 
@@ -140,22 +117,35 @@ void exGPSAnalysisManager::Fill(G4String pname, G4double e,
 */
 void exGPSAnalysisManager::BeginOfRun() 
 { 
+  tree = 0;
+  plotter = 0;
+
+  enerHisto =0;
+  posiXY = posiXZ = posiYZ = anglCTP =anglTP = 0;
+  tuple = 0;
 
   // Hooking an AIDA compliant analysis system.
   analysisFactory = AIDA_createAnalysisFactory();
-  if(analysisFactory){
-    ITreeFactory* treeFactory = analysisFactory->createTreeFactory();
+  if(!analysisFactory) //Have to check that, it can fail.
+  {
+    G4cout << "exGPSAnalysisManager::BeginOfRun: can't get AIDA." << G4endl; 
+    return;
+  }
+  AIDA::ITreeFactory* treeFactory = analysisFactory->createTreeFactory();
+  if(treeFactory) 
+  {
     tree = treeFactory->create(fileName,fileType,false,true,"compress=yes");
-    hFactory = analysisFactory->createHistogramFactory(*tree);
-    tFactory = analysisFactory->createTupleFactory(*tree);
+    if(!tree) //Have to check that, it can fail.
+    {
+      G4cout << "exGPSAnalysisManager::BeginOfRun:"
+             << " can't create the AIDA::ITree : " << fileName << G4endl; 
+      return;
+    }
+
     delete treeFactory; // Will not delete the ITree.
   }
-  //
-  enerHisto =0;
-  posiXY = posiXZ = posiYZ = anglCTP =anglTP = 0;
-  plotter = 0;
-  tuple = 0;
-  //
+
+  AIDA::IHistogramFactory* hFactory = analysisFactory->createHistogramFactory(*tree);
   if (hFactory)
   {
     // Create the energy histogram
@@ -172,30 +162,35 @@ void exGPSAnalysisManager::BeginOfRun()
 						   , 100, -1, 1);
     anglTP = hFactory->createHistogram2D("Source phi-theta distribution",360,0,360
 						  ,180,0,180);
-#ifdef JAIDA_HOME
-    plotter = createPlotter();
-
-    if (plotter)
-    {
-       plotter->createRegions(2,3);
-       plotter->region(0)->plot(*enerHisto);
-       plotter->region(1)->plot(*posiXY);
-       plotter->region(2)->plot(*posiXZ);
-       plotter->region(3)->plot(*posiYZ);
-       plotter->region(4)->plot(*anglCTP);
-       plotter->region(5)->plot(*anglTP);
-       plotter->show();
-     }
-#endif
+    delete hFactory;
   }
 
   // Create a Tuple
 
+  AIDA::ITupleFactory* tFactory = analysisFactory->createTupleFactory(*tree);
   if (tFactory)
   {
-     tuple = tFactory->create("MyTuple","MyTuple","std::string Pname, std::double Energy, X, Y, Z, Theta, Phi, Weight","");
+     tuple = tFactory->create("MyTuple","MyTuple","string Pname, double Energy, X, Y, Z, Theta, Phi, Weight","");
+     delete tFactory;
   }
-
+  
+  AIDA::IPlotterFactory* pf = analysisFactory->createPlotterFactory(0,0);
+  if(pf) 
+  {
+    plotter = pf->create();
+    if (plotter)
+    {
+       plotter->createRegions(2,3);
+       if(enerHisto) plotter->region(0)->plot(*enerHisto);
+       if(posiXY) plotter->region(1)->plot(*posiXY);
+       if(posiXZ) plotter->region(2)->plot(*posiXZ);
+       if(posiYZ) plotter->region(3)->plot(*posiYZ);
+       if(anglCTP) plotter->region(4)->plot(*anglCTP);
+       if(anglTP) plotter->region(5)->plot(*anglTP);
+       plotter->show();
+    }
+    delete pf;
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -209,12 +204,20 @@ void exGPSAnalysisManager::EndOfRun()
   {
     if (!tree->commit()) G4cout << "Commit failed: no AIDA file produced!" << G4endl;
     delete tree;
-    delete tFactory;
-    delete hFactory;
+    tree = 0;
     //    G4cout << "Warning: Geant4 will NOT continue unless you close the JAS-AIDA window." << G4endl;
-    delete analysisFactory;
+
+    delete plotter;
+    plotter = 0;
+
+    delete analysisFactory; //cleanup all AIDA related things.
+    analysisFactory = 0;
+
+    enerHisto = 0;
+    posiXY = posiXZ = posiYZ = anglCTP =anglTP = 0;
+    tuple = 0;
+
   }
-  //  dispose();
 }
 
 

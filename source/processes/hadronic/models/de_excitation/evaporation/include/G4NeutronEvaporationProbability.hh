@@ -23,52 +23,60 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4NeutronEvaporationProbability.hh,v 1.4 2006/06/29 20:10:05 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+//J.M. Quesada (August2008). Based on:
 //
 // Hadronic Process: Nuclear De-excitations
-// by V. Lara (Nov 1999) 
+// by V. Lara (Oct 1998)
 //
-
-
 
 #ifndef G4NeutronEvaporationProbability_h
 #define G4NeutronEvaporationProbability_h 1
 
 
 #include "G4EvaporationProbability.hh"
-
+#include "G4NeutronCoulombBarrier.hh"
 
 class G4NeutronEvaporationProbability : public G4EvaporationProbability
 {
 public:
-  // Only available constructor
+ 
   G4NeutronEvaporationProbability();
 		
   ~G4NeutronEvaporationProbability() {}
 private:  
-  // Copy constructor
+  
   G4NeutronEvaporationProbability(const G4NeutronEvaporationProbability &right);
 
   const G4NeutronEvaporationProbability & operator=(const G4NeutronEvaporationProbability &right);
   G4bool operator==(const G4NeutronEvaporationProbability &right) const;
   G4bool operator!=(const G4NeutronEvaporationProbability &right) const;
-  
 
 private:
 
-  virtual G4double CalcAlphaParam(const G4Fragment & fragment) const 
-  { return 0.76+2.2/std::pow(static_cast<G4double>(fragment.GetA()-GetA()),1.0/3.0);}
-	
-  virtual G4double CalcBetaParam(const G4Fragment & fragment) const 
-  { return (2.12/std::pow(static_cast<G4double>(fragment.GetA()-GetA()),2.0/3.0) - 0.05)*MeV/
-      CalcAlphaParam(fragment); }
+  virtual G4double CrossSection(const  G4Fragment & fragment, const  G4double K);
 
-  // Excitation energy levels 
-  std::vector<G4double> ExcitEnergies;
-  // Spin of excitation energy levels 
-  std::vector<G4int> ExcitSpins;
+  G4double GetOpt12(const G4double K);
+  G4double GetOpt34(const G4double K);
+
+ virtual G4double CalcAlphaParam(const G4Fragment & fragment);
+ 
+ virtual G4double CalcBetaParam(const G4Fragment & fragment);
+ 
+  
+//data members
+
+      G4NeutronCoulombBarrier theCoulombBarrier; 
+
+      G4double ResidualA;
+      G4double ResidualZ; 
+      G4double theA;
+      G4double theZ;
+      G4double ResidualAthrd;
+      G4double FragmentA;
+      G4double FragmentAthrd;
+
+
+
 
 };
 

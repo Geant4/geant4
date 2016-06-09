@@ -25,7 +25,7 @@
 //
 //
 // $Id: G3toG4.hh,v 1.9 2006/06/29 18:12:33 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // modified by I.Hrivnacova, 27 Sep 99
 

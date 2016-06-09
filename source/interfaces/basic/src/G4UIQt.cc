@@ -24,12 +24,10 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIQt.cc,v 1.12 2007/11/15 18:24:27 lgarnier Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4UIQt.cc,v 1.24 2008/11/24 13:50:34 lgarnier Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // L. Garnier
-
-//#define DEBUG
 
 #ifdef G4UI_BUILD_QT_SESSION
 
@@ -69,6 +67,7 @@
 #include <qheader.h>
 #include <qlistview.h>
 #include <qpopupmenu.h>
+#include <qwidgetlist.h>
 #endif
 
 
@@ -105,36 +104,79 @@ G4UIQt::G4UIQt (
 )
   :fHelpDialog(NULL)
 {
-#ifdef GEANT4_QT_DEBUG
-  printf("G4UIQt::Initialise %d %s\n",argc,argv[0]);
-#endif
   G4Qt* interactorManager = G4Qt::getInstance (argc,argv,(char*)"Qt");
+  if (!(QApplication*)interactorManager->GetMainInteractor()) {
+    G4cout        << "G4UIQt : Unable to init Qt. Aborted" << G4endl;
+  }
+  
   G4UImanager* UI = G4UImanager::GetUIpointer();
   if(UI!=NULL) UI->SetSession(this);
 
+  // Check if already define in external app QMainWindow
+  bool found = false;
+#if QT_VERSION < 0x040000
+  // theses lines does nothing exept this one "GLWindow = new QDialog(0..."
+  // but if I comment them, it doesn't work...
+  QWidgetList  *list = QApplication::allWidgets();
+  QWidgetListIt it( *list );         // iterate over the widgets
+  QWidget * widget;
+  while ( (widget=it.current()) != 0 ) {  // for each widget...
+    ++it;
+    if ((found== false) && (widget->inherits("QMainWindow"))) {
+      found = true;
+    }
+  }
+  delete list;                      // delete the list, not the widgets
+#else
+  foreach (QWidget *widget, QApplication::allWidgets()) {
+    if ((found== false) && (widget->inherits("QMainWindow"))) {
+      found = true;
+    }
+  }
+#endif
+
+  if (found) {
+    G4cout        << "G4UIQt : Found an external App with a QMainWindow already defined. Aborted" << G4endl;
+    return ;
+  }
   fMainWindow = new QMainWindow();
 
-#ifdef GEANT4_QT_DEBUG
+#ifdef G4DEBUG
   printf("G4UIQt::Initialise after main window creation\n");
 #endif
 #if QT_VERSION < 0x040000
   fMainWindow->setCaption( tr( "G4UI Session" ));
-  fMainWindow->resize(800,600); 
+  fMainWindow->resize(900,600); 
   fMainWindow->move(50,100);
 #else
   fMainWindow->setWindowTitle( tr("G4UI Session") ); 
-  fMainWindow->resize(800,600); 
+  fMainWindow->resize(900,600); 
   fMainWindow->move(QPoint(50,100));
 #endif
 
-  QSplitter *splitter = new QSplitter(Qt::Vertical);
-  fTextArea = new QTextEdit(fMainWindow);
-  QPushButton *clearButton = new QPushButton("clear",fMainWindow);
+  QSplitter *splitter = new QSplitter(Qt::Vertical,fMainWindow);
+
+  // Set layouts
+
+  QWidget* topWidget = new QWidget(splitter);
+  QWidget* bottomWidget = new QWidget(splitter);
+
+  QVBoxLayout *layoutTop = new QVBoxLayout(topWidget);
+  QVBoxLayout *layoutBottom = new QVBoxLayout(bottomWidget);
+
+  // fill them
+
+  fTextArea = new QTextEdit(topWidget);
+  QPushButton *clearButton = new QPushButton("clear",topWidget);
   connect(clearButton, SIGNAL(clicked()), SLOT(ClearButtonCallback()));
 
 #if QT_VERSION < 0x040000
-  fCommandHistoryArea = new QListView();
+
+  fCommandHistoryArea = new QListView(bottomWidget);
+  fCommandHistoryArea->setSorting (-1, FALSE);
   fCommandHistoryArea->setSelectionMode(QListView::Single);
+  fCommandHistoryArea->addColumn("");
+  fCommandHistoryArea->header()->hide();
   connect(fCommandHistoryArea, SIGNAL(selectionChanged()), SLOT(CommandHistoryCallback()));
 #else
   fCommandHistoryArea = new QListWidget();
@@ -142,9 +184,9 @@ G4UIQt::G4UIQt (
   connect(fCommandHistoryArea, SIGNAL(itemSelectionChanged()), SLOT(CommandHistoryCallback()));
 #endif
   fCommandHistoryArea->installEventFilter(this);
-  fCommandLabel = new QLabel("",fMainWindow);
+  fCommandLabel = new QLabel("",bottomWidget);
 
-  fCommandArea = new QLineEdit(fMainWindow);
+  fCommandArea = new QLineEdit(bottomWidget);
   fCommandArea->installEventFilter(this);
 #if QT_VERSION < 0x040000
   fCommandArea->setActiveWindow();
@@ -160,25 +202,6 @@ G4UIQt::G4UIQt (
   fCommandArea->setFocus(Qt::TabFocusReason);
 #endif
   fTextArea->setReadOnly(true);
-
-
-  // Set layouts
-
-#if QT_VERSION < 0x040000
-  QWidget* topWidget = new QWidget(splitter);
-  QWidget* bottomWidget = new QWidget(splitter);
-
-  QVBoxLayout *layoutTop = new QVBoxLayout(topWidget);
-  QVBoxLayout *layoutBottom = new QVBoxLayout(bottomWidget);
-#else
-  QWidget* topWidget = new QWidget();
-  QWidget* bottomWidget = new QWidget();
-
-  QVBoxLayout *layoutTop = new QVBoxLayout;
-  QVBoxLayout *layoutBottom = new QVBoxLayout;
-#endif
-
-
 
   layoutTop->addWidget(fTextArea);
   layoutTop->addWidget(clearButton);
@@ -204,7 +227,7 @@ G4UIQt::G4UIQt (
 
   // Add a quit subMenu
   QPopupMenu *fileMenu = new QPopupMenu( fMainWindow);
-  fileMenu->insertItem( "&Quitter",  this, SLOT(ExitSession()), CTRL+Key_Q );
+  fileMenu->insertItem( "&Quit",  this, SLOT(ExitSession()), CTRL+Key_Q );
   fMainWindow->menuBar()->insertItem( QString("&File"), fileMenu );
 
   // Add a Help menu
@@ -217,7 +240,7 @@ G4UIQt::G4UIQt (
 
   // Add a quit subMenu
   QMenu *fileMenu = fMainWindow->menuBar()->addMenu("File");
-  fileMenu->addAction("Quitter", this, SLOT(ExitSession()));
+  fileMenu->addAction("Quit", this, SLOT(ExitSession()));
 
   // Add a Help menu
   QMenu *helpMenu = fMainWindow->menuBar()->addMenu("Help");
@@ -277,11 +300,10 @@ G4UIsession* G4UIQt::SessionStart (
   exitSession = false;
 
 
-#ifdef GEANT4_QT_DEBUG
-  printf("disable secondary loop\n");
-#endif
   interactorManager->DisableSecondaryLoop (); // TO KEEP
-  ((QApplication*)interactorManager->GetMainInteractor())->exec(); 
+  if ((QApplication*)interactorManager->GetMainInteractor())
+    ((QApplication*)interactorManager->GetMainInteractor())->exec();
+
   // on ne passe pas le dessous ? FIXME ????
   // je ne pense pas 13/06
 
@@ -292,9 +314,6 @@ G4UIsession* G4UIQt::SessionStart (
   //   } // TO KEEP
 
   interactorManager->EnableSecondaryLoop ();
-#ifdef GEANT4_QT_DEBUG
-  printf("enable secondary loop\n");
-#endif
   return this;
 }
 
@@ -338,9 +357,6 @@ void G4UIQt::PauseSessionStart (
 {
   if (!aState) return;
 
-#ifdef GEANT4_QT_DEBUG
-  printf("G4UIQt::PauseSessionStart\n");
-#endif
   if(aState=="G4_pause> ") {  // TO KEEP
     SecondaryLoop ("Pause, type continue to exit this state"); // TO KEEP
   } // TO KEEP
@@ -363,9 +379,6 @@ void G4UIQt::SecondaryLoop (
 {
   if (!aPrompt) return;
 
-#ifdef GEANT4_QT_DEBUG
-  printf("G4UIQt::SecondaryLoop\n");
-#endif
   G4Qt* interactorManager = G4Qt::getInstance (); // TO KEEP ?
   Prompt(aPrompt); // TO KEEP
   exitPause = false; // TO KEEP
@@ -399,7 +412,8 @@ G4int G4UIQt::ReceiveG4cout (
   fTextArea->append(QString((char*)aString.data()).trimmed());
   fTextArea->verticalScrollBar()->setSliderPosition(fTextArea->verticalScrollBar()->maximum());
 #endif
-  interactorManager->FlushAndWaitExecution();
+  fTextArea->repaint();
+  //  interactorManager->FlushAndWaitExecution();
   return 0;
 }
 
@@ -430,7 +444,8 @@ G4int G4UIQt::ReceiveG4cerr (
   fTextArea->setTextColor(previousColor);
   fTextArea->verticalScrollBar()->setSliderPosition(fTextArea->verticalScrollBar()->maximum());
 #endif
-  interactorManager->FlushAndWaitExecution();
+  fTextArea->repaint();
+  //  interactorManager->FlushAndWaitExecution();
   return 0;
 }
 
@@ -486,14 +501,22 @@ void G4UIQt::AddButton (
   if(parent==NULL) return;
   
   QSignalMapper *signalMapper = new QSignalMapper(this);
-#if QT_VERSION < 0x040000
+#if QT_VERSION < 0x030200
+  QAction *action = new QAction(QString(aLabel),QString(aLabel),QKeySequence::QKeySequence (),signalMapper, SLOT(map()));
+  action->addTo(parent);
+ connect(action,SIGNAL(activated()),signalMapper,SLOT(map()));
+
+#elif QT_VERSION < 0x040000
   QAction *action = new QAction(QString(aLabel),QKeySequence::QKeySequence (),signalMapper, SLOT(map()));
   action->addTo(parent);
+ connect(action,SIGNAL(activated()),signalMapper,SLOT(map()));
+
 #else
   QAction *action = parent->addAction(aLabel, signalMapper, SLOT(map()));
+
 #endif
-  signalMapper->setMapping(action, QString(aCommand));
   connect(signalMapper, SIGNAL(mapped(const QString &)),this, SLOT(ButtonCallback(const QString&)));
+  signalMapper->setMapping(action, QString(aCommand));
 }
 
 
@@ -513,99 +536,104 @@ void G4UIQt::TerminalHelp(
   // Create the help dialog
   if (!fHelpDialog) {
 #if QT_VERSION < 0x040000
-    fHelpDialog = new QDialog(fMainWindow,0,FALSE,Qt::WStyle_Title | Qt::WStyle_SysMenu | Qt::WStyle_MinMax );
+    fHelpDialog = new QDialog(0,0,FALSE,Qt::WStyle_Title | Qt::WStyle_SysMenu | Qt::WStyle_MinMax );
 #else
-    fHelpDialog = new QDialog(fMainWindow,Qt::WindowTitleHint | Qt::WindowSystemMenuHint | Qt::WindowMinMaxButtonsHint);
+    fHelpDialog = new QDialog(0,Qt::WindowTitleHint | Qt::WindowSystemMenuHint | Qt::WindowMinMaxButtonsHint);
 #endif
-    QSplitter *splitter = new QSplitter(Qt::Horizontal);
-    QPushButton *exitButton = new QPushButton("Exit",fMainWindow);
+    QVBoxLayout *vLayout = new QVBoxLayout(fHelpDialog);
+    QWidget *helpWidget = new QWidget(fHelpDialog);
+    QSplitter *splitter = new QSplitter(Qt::Horizontal,fHelpDialog);
+    QPushButton *exitButton = new QPushButton("Exit",fHelpDialog);
+    exitButton->setAutoDefault(false);
     connect(exitButton, SIGNAL(clicked()), fHelpDialog,SLOT(close()));
+    
+    QHBoxLayout *helpLayout = new QHBoxLayout(helpWidget);
+#if QT_VERSION < 0x040000
+    helpLayout->add(new QLabel("Search :",helpWidget));
+#else
+    helpLayout->addWidget(new QLabel("Search :",helpWidget));
+#endif
+    helpLine = new QLineEdit(fHelpDialog);
+#if QT_VERSION < 0x040000
+    helpLayout->add(helpLine);
+    connect( helpLine, SIGNAL( returnPressed () ), this, SLOT( lookForHelpStringCallback() ) );
+#else
+    helpLayout->addWidget(helpLine);
+    connect( helpLine, SIGNAL( editingFinished () ), this, SLOT( lookForHelpStringCallback() ) );
+#endif
 
     // the help tree
-    G4UImanager* UI = G4UImanager::GetUIpointer();
-    if(UI==NULL) return;
-    G4UIcommandTree * treeTop = UI->GetTree();
-
-    // build widget
 #if QT_VERSION < 0x040000
     fHelpTreeWidget = new QListView(splitter);
-    fHelpTreeWidget->setSelectionMode(QListView::Single);
-    fHelpTreeWidget->addColumn("Command");
-    fHelpTreeWidget->addColumn("Description");
-    fHelpTreeWidget->hideColumn(1);
-    fHelpTreeWidget->header()->setResizeEnabled(FALSE,1);
-    //    QList<QListViewItem *> items;
 #else
     fHelpTreeWidget = new QTreeWidget();
-    fHelpTreeWidget->setSelectionMode(QAbstractItemView::SingleSelection);
-    fHelpTreeWidget->setColumnCount(2);
-    fHelpTreeWidget->setColumnHidden(1,true);
-    QStringList labels;
-    labels << QString("Command") << QString("Description");
-    fHelpTreeWidget->setHeaderLabels(labels);
-    //    QList<QTreeWidgetItem *> items;
 #endif
+    fHelpTreeWidget = CreateHelpTree();
 
-#if QT_VERSION < 0x040000
     fHelpArea = new QTextEdit(splitter);
-#else
-    fHelpArea = new QTextEdit();
-#endif
     fHelpArea->setReadOnly(true);
-
-    G4int treeSize = treeTop->GetTreeEntry();
-#if QT_VERSION < 0x040000
-    QListViewItem * newItem;
-#else
-    QTreeWidgetItem * newItem;
-#endif
-    for (int a=0;a<treeSize;a++) {
-      // Creating new item
-
-#if QT_VERSION < 0x040000
-      newItem = new QListViewItem(fHelpTreeWidget);
-      newItem->setText(0,QString((char*)(treeTop->GetTree(a+1)->GetPathName()).data()).simplifyWhiteSpace());
-      newItem->setText(1,QString((char*)(treeTop->GetTree(a+1)->GetTitle()).data()).simplifyWhiteSpace());
-#else
-                                                                                                   //FIXME : Qt 4.2
-                                                                                                   //      QStringList stringList;
-                                                                                                   //      stringList << QString((char*)(treeTop->GetTree(a+1)->GetPathName()).data()).trimmed()  ;
-                                                                                                   //      stringList << QString((char*)(treeTop->GetTree(a+1)->GetTitle()).data()).trimmed()  ;
-                                                                                                   //      newItem = new QTreeWidgetItem(stringList);
-                                                                                                   // FIXME : Qt 4.0
-      newItem = new QTreeWidgetItem(fHelpTreeWidget);
-      newItem->setText(0,QString((char*)(treeTop->GetTree(a+1)->GetPathName()).data()).trimmed());
-      newItem->setText(1,QString((char*)(treeTop->GetTree(a+1)->GetTitle()).data()).trimmed());
-#endif
-
-
-      // look for childs
-      CreateChildTree(newItem,treeTop->GetTree(a+1));
-      //      items.append(newItem);
-    }
-
-    connect(fHelpTreeWidget, SIGNAL(itemSelectionChanged ()),this, SLOT(HelpTreeClicCallback()));  
-    connect(fHelpTreeWidget, SIGNAL(itemDoubleClicked (QTreeWidgetItem*,int)),this, SLOT(HelpTreeDoubleClicCallback(QTreeWidgetItem*,int)));  
 
     // Set layouts
 
-#if QT_VERSION < 0x040000
-    QVBoxLayout *vLayout = new QVBoxLayout(fHelpDialog);
-#else
-    QVBoxLayout *vLayout = new QVBoxLayout;
-    splitter->addWidget(fHelpTreeWidget);
+#if QT_VERSION >= 0x040000
+    if (fHelpTreeWidget)
+      splitter->addWidget(fHelpTreeWidget);
     splitter->addWidget(fHelpArea);
 #endif
 
 
-    vLayout->addWidget(splitter);
+#if QT_VERSION >= 0x040000
+    vLayout->addWidget(helpWidget);
+    vLayout->addWidget(splitter,1);
     vLayout->addWidget(exitButton);
+#else
+    vLayout->addWidget(helpWidget);
+    vLayout->addWidget(splitter,1);
+    vLayout->addWidget(exitButton);
+#endif
+
+    // set the splitter size
+#if QT_VERSION >= 0x040000
+    QList<int> list;
+#else
+    QValueList<int> list;
+#endif
+    list.append( 400 );
+    list.append( 400 );
+    splitter->setSizes(list);
+
 #if QT_VERSION >= 0x040000
     fHelpDialog->setLayout(vLayout);
 #endif
 
   }
 
+  ActivateCommand(newCommand);
+
+#if QT_VERSION < 0x040000
+  fHelpDialog->setCaption( tr( "Help on commands" ));
+#else
+  fHelpDialog->setWindowTitle(tr("Help on commands")); 
+#endif
+  fHelpDialog->resize(800,600); 
+  fHelpDialog->move(QPoint(400,150));
+  fHelpDialog->show();
+  fHelpDialog->raise();
+#if QT_VERSION < 0x040000
+  fHelpDialog->setActiveWindow();
+#else
+  fHelpDialog->activateWindow();
+#endif
+}
+
+
+void G4UIQt::ActivateCommand(
+ G4String newCommand
+)
+{
+  if (!fHelpTreeWidget) {
+    return;
+  }
   // Look for the choosen command "newCommand"
   size_t i = newCommand.index(" ");
   G4String targetCom="";
@@ -703,20 +731,73 @@ void G4UIQt::TerminalHelp(
       HelpTreeClicCallback();
     }
   }
+}
+
+
+
+/**
+   Create the help tree widget
+   @param parent : parent of tree widget
+   @return the widget containing the tree or NULL if it could not have beeen created
+ */
+
 #if QT_VERSION < 0x040000
-  fHelpDialog->setCaption( tr( "Help on commands" ));
+QListView * G4UIQt::CreateHelpTree()
 #else
-  fHelpDialog->setWindowTitle(tr("Help on commands")); 
+QTreeWidget * G4UIQt::CreateHelpTree()
 #endif
-  fHelpDialog->resize(800,600); 
-  fHelpDialog->move(QPoint(400,150));
-  fHelpDialog->show();
-  fHelpDialog->raise();
+{
+  G4UImanager* UI = G4UImanager::GetUIpointer();
+  if(UI==NULL) return NULL;
+  G4UIcommandTree * treeTop = UI->GetTree();
+
+
+  // build widget
 #if QT_VERSION < 0x040000
-  fHelpDialog->setActiveWindow();
+  fHelpTreeWidget->setSelectionMode(QListView::Single);
+  fHelpTreeWidget->setRootIsDecorated(true);
+  fHelpTreeWidget->addColumn("Command");
+  fHelpTreeWidget->header()->setResizeEnabled(FALSE,1);
 #else
-  fHelpDialog->activateWindow();
+  fHelpTreeWidget->setSelectionMode(QAbstractItemView::SingleSelection);
+  QStringList labels;
+  labels << QString("Command");
+  fHelpTreeWidget->setHeaderLabels(labels);
 #endif
+
+  G4int treeSize = treeTop->GetTreeEntry();
+#if QT_VERSION < 0x040000
+  QListViewItem * newItem;
+#else
+  QTreeWidgetItem * newItem;
+#endif
+  for (int a=0;a<treeSize;a++) {
+    // Creating new item
+
+#if QT_VERSION < 0x040000
+    newItem = new QListViewItem(fHelpTreeWidget);
+    newItem->setText(0,QString((char*)(treeTop->GetTree(a+1)->GetPathName()).data()).simplifyWhiteSpace());
+#else
+    newItem = new QTreeWidgetItem(fHelpTreeWidget);
+    newItem->setText(0,QString((char*)(treeTop->GetTree(a+1)->GetPathName()).data()).trimmed());
+#endif
+
+
+    // look for childs
+    CreateChildTree(newItem,treeTop->GetTree(a+1));
+    //      items.append(newItem);
+  }
+
+
+#if QT_VERSION < 0x040000
+  connect(fHelpTreeWidget, SIGNAL(selectionChanged ()),this, SLOT(HelpTreeClicCallback()));  
+  connect(fHelpTreeWidget, SIGNAL(doubleClicked (QListViewItem*)),this, SLOT(HelpTreeDoubleClicCallback()));
+#else
+  connect(fHelpTreeWidget, SIGNAL(itemSelectionChanged ()),this, SLOT(HelpTreeClicCallback()));  
+  connect(fHelpTreeWidget, SIGNAL(itemDoubleClicked (QTreeWidgetItem*,int)),this, SLOT(HelpTreeDoubleClicCallback()));  
+#endif
+
+  return fHelpTreeWidget;
 }
 
 
@@ -753,12 +834,10 @@ void G4UIQt::CreateChildTree(
 #if QT_VERSION < 0x040000
       newItem = new QListViewItem(aParent);
       newItem->setText(0,QString((char*)(aCommandTree->GetTree(a+1)->GetPathName()).data()).simplifyWhiteSpace());
-      newItem->setText(1,QString((char*)(aCommandTree->GetTree(a+1)->GetTitle()).data()).simplifyWhiteSpace());
 
 #else
     newItem = new QTreeWidgetItem(aParent);
     newItem->setText(0,QString((char*)(aCommandTree->GetTree(a+1)->GetPathName()).data()).trimmed());
-    newItem->setText(1,QString((char*)(aCommandTree->GetTree(a+1)->GetTitle()).data()).trimmed());
 #endif
 
     CreateChildTree(newItem,aCommandTree->GetTree(a+1));
@@ -774,13 +853,11 @@ void G4UIQt::CreateChildTree(
 #if QT_VERSION < 0x040000
     newItem = new QListViewItem(aParent);
     newItem->setText(0,QString((char*)(aCommandTree->GetCommand(a+1)->GetCommandPath()).data()).simplifyWhiteSpace());
-    newItem->setText(1,QString((char*)(aCommandTree->GetCommand(a+1)->GetCommandPath()).data()).simplifyWhiteSpace());
     newItem->setOpen(false);
 
 #else
     newItem = new QTreeWidgetItem(aParent);
     newItem->setText(0,QString((char*)(aCommandTree->GetCommand(a+1)->GetCommandPath()).data()).trimmed());
-    newItem->setText(1,QString((char*)(aCommandTree->GetCommand(a+1)->GetCommandPath()).data()).trimmed());
 #if QT_VERSION < 0x040202
    	fHelpTreeWidget->setItemExpanded(newItem,false); 
 #else
@@ -910,7 +987,7 @@ G4bool G4UIQt::GetHelpChoice(
  G4int& aInt
 )
 {
-#ifdef GEANT4_QT_DEBUG
+#ifdef G4DEBUG
   printf("G4UIQt::GetHelpChoice SHOULD NEVER GO HERE");
 #endif
   return true;
@@ -922,7 +999,7 @@ G4bool G4UIQt::GetHelpChoice(
 void G4UIQt::ExitHelp(
 )
 {
-#ifdef GEANT4_QT_DEBUG
+#ifdef G4DEBUG
   printf("G4UIQt::ExitHelp SHOULD NEVER GO HERE");
 #endif
 }
@@ -1080,6 +1157,14 @@ void G4UIQt::CommandEnteredCallback (
 
     QListViewItem *newItem = new QListViewItem(fCommandHistoryArea);
     newItem->setText(0,fCommandArea->text());
+    fCommandHistoryArea->insertItem(newItem);
+    // now we have to arrange 
+    QListViewItem *temp= fCommandHistoryArea->lastItem();
+    for (int i=0; i<fCommandHistoryArea->childCount()-1;i++) {
+      fCommandHistoryArea->takeItem(temp);
+      fCommandHistoryArea->insertItem(temp);
+      temp= fCommandHistoryArea->lastItem();
+    }
 #else
   G4String command (fCommandArea->text().toStdString().c_str());
   if (fCommandArea->text().trimmed() != "") {
@@ -1098,9 +1183,6 @@ void G4UIQt::CommandEnteredCallback (
     } else {
       TerminalHelp(command);
     }
-#ifdef GEANT4_QT_DEBUG
-    printf("after \n");
-#endif
     if(exitSession==true) 
       SessionTerminate();
   }
@@ -1132,7 +1214,6 @@ void G4UIQt::ButtonCallback (
 void G4UIQt::HelpTreeClicCallback (
 )
 {
-  //  printf("G4UIQt::HelpTreeClicCallback");
 #if QT_VERSION < 0x040000
   QListViewItem* item =  NULL;
 #else
@@ -1158,11 +1239,18 @@ void G4UIQt::HelpTreeClicCallback (
   G4UImanager* UI = G4UImanager::GetUIpointer();
   if(UI==NULL) return;
   G4UIcommandTree * treeTop = UI->GetTree();
+
+
+
+  std::string itemText;
 #if QT_VERSION < 0x040000
-  G4UIcommand* command = treeTop->FindPath(item->text (1).ascii());
+  itemText = std::string(item->text(0).ascii());
 #else
-  G4UIcommand* command = treeTop->FindPath(item->text (1).toStdString().c_str());
+  itemText = std::string(item->text(0).toStdString());
 #endif
+
+  G4UIcommand* command = treeTop->FindPath(itemText.c_str());
+
   if (command) {
 #if QT_VERSION >= 0x040000
 #if QT_VERSION < 0x040200
@@ -1174,38 +1262,56 @@ void G4UIQt::HelpTreeClicCallback (
 #else
     fHelpArea->setText(GetCommandList(command));
 #endif
-  } else {
-    // this is not a command, this is a sub directory
-    // We display the Title
+  } else {  // this is a command
+    G4UIcommandTree* path = treeTop->FindCommandTree(itemText.c_str());
+    if ( path) {
+      // this is not a command, this is a sub directory
+      // We display the Title
 #if QT_VERSION >= 0x040000
 #if QT_VERSION < 0x040200
-    fHelpArea->clear();
-    fHelpArea->append(item->text (1));
+      fHelpArea->clear();
+      fHelpArea->append(path->GetTitle().data());
 #else
-    fHelpArea->setText(item->text (1));
+      fHelpArea->setText(path->GetTitle().data());
 #endif
 #else
-    fHelpArea->setText(item->text (1));
+      fHelpArea->setText(path->GetTitle().data());
 #endif
+    }
   }
 }
-
+ 
 /**   This callback is activated when user double clic on a item in the help tree
 */
 void G4UIQt::HelpTreeDoubleClicCallback (
-#if QT_VERSION < 0x040000
-QListViewItem* item
-#else
-QTreeWidgetItem* item
-#endif
- ,int nb
 )
 {
-#ifdef GEANT4_QT_DEBUG
-  printf("G4UIQt::HelpTreeDoubleClicCallback");
-#endif
   HelpTreeClicCallback();
-  fCommandArea->setText(item->text (1));
+
+#if QT_VERSION < 0x040000
+  QListViewItem* item =  NULL;
+#else
+  QTreeWidgetItem* item =  NULL;
+#endif
+  if (!fHelpTreeWidget)
+    return ;
+
+  if (!fHelpArea)
+    return;
+  
+#if QT_VERSION < 0x040000
+  item =fHelpTreeWidget->selectedItem();
+#else
+  QList<QTreeWidgetItem *> list =fHelpTreeWidget->selectedItems();
+  if (list.isEmpty())
+    return;
+  item = list.first();
+#endif
+  if (!item)
+    return;
+
+  fCommandArea->clear();
+  fCommandArea->setText(item->text(0));
 }
 
 
@@ -1225,7 +1331,7 @@ void G4UIQt::CommandHistoryCallback(
 
   
 #if QT_VERSION < 0x040000
-  item =fHelpTreeWidget->selectedItem();
+  item =fCommandHistoryArea->selectedItem();
 #else
   QList<QListWidgetItem *> list =fCommandHistoryArea->selectedItems();
   if (list.isEmpty())
@@ -1242,4 +1348,258 @@ void G4UIQt::CommandHistoryCallback(
 
 }
 
+
+/**   Callback called when user give a new string to look for<br>
+   Display a list of matching commands descriptions. If no string is set,
+   will display the complete help tree
+*/
+void G4UIQt::lookForHelpStringCallback(
+)
+{
+#if QT_VERSION < 0x040200
+  fHelpArea->clear();
+#else
+  fHelpArea->setText("");
+#endif
+  if (helpLine->text() =="") {
+    // clear old help tree
+    fHelpTreeWidget->clear();
+#if QT_VERSION < 0x040000
+    fHelpTreeWidget->removeColumn(1);
+    fHelpTreeWidget->removeColumn(0);
+#endif
+    CreateHelpTree();
+    return;
+  }
+
+  // the help tree
+  G4UImanager* UI = G4UImanager::GetUIpointer();
+  if(UI==NULL) return;
+  G4UIcommandTree * treeTop = UI->GetTree();
+  
+  G4int treeSize = treeTop->GetTreeEntry();
+
+  // clear old help tree
+  fHelpTreeWidget->clear();
+#if QT_VERSION < 0x040000
+  fHelpTreeWidget->removeColumn(1);
+  fHelpTreeWidget->removeColumn(0);
+#endif
+
+  // look for new items
+
+  int tmp = 0;
+#if QT_VERSION < 0x040000
+  int multFactor = 1000; // factor special for having double keys in Qt3
+  int doubleKeyAdd = 0;  // decay for doubleKeys in Qt3
+#endif
+
+  QMap<int,QString> commandResultMap;
+  QMap<int,QString> commandChildResultMap;
+
+  for (int a=0;a<treeSize;a++) {
+    G4UIcommand* command = treeTop->FindPath(treeTop->GetTree(a+1)->GetPathName().data());
+#if QT_VERSION > 0x040000
+    tmp = GetCommandList (command).count(helpLine->text(),Qt::CaseInsensitive);
+#else
+    tmp = GetCommandList (command).contains(helpLine->text(),false);
+#endif
+    if (tmp >0) {
+#if QT_VERSION > 0x040000
+      commandResultMap.insertMulti(tmp,QString((char*)(treeTop->GetTree(a+1)->GetPathName()).data()));
+#else // tricky thing for Qt3...
+      doubleKeyAdd = 0;
+      while (commandResultMap.find( tmp*multFactor+doubleKeyAdd) != commandResultMap.end()) {
+        doubleKeyAdd ++;
+      }
+      commandResultMap.insert( tmp*multFactor+doubleKeyAdd,QString((char*)(treeTop->GetTree(a+1)->GetPathName()).data()) );
+#endif
+    }
+    // look for childs
+    commandChildResultMap = LookForHelpStringInChildTree(treeTop->GetTree(a+1),helpLine->text());
+    // insert new childs
+    if (!commandChildResultMap.empty()) {
+#if QT_VERSION > 0x040000
+      QMap<int,QString>::const_iterator i = commandChildResultMap.constBegin();
+      while (i != commandChildResultMap.constEnd()) {
+        commandResultMap.insertMulti(i.key(),i.value());
+#else // tricky thing for Qt3...
+      QMap<int,QString>::const_iterator i = commandChildResultMap.begin();
+      while (i != commandChildResultMap.end()) {
+        doubleKeyAdd = 0;
+        while (commandResultMap.find( i.key()*multFactor+doubleKeyAdd) != commandResultMap.end()) {
+          doubleKeyAdd ++;
+        }
+        commandResultMap.insert(i.key()*multFactor+doubleKeyAdd,i.data());
+#endif
+        i++;
+      }
+      commandChildResultMap.clear();
+    }
+  }
+
+  // build new help tree
+#if QT_VERSION < 0x040000
+  fHelpTreeWidget->setSelectionMode(QListView::Single);
+  fHelpTreeWidget->setRootIsDecorated(true);
+  fHelpTreeWidget->addColumn("Command");
+  fHelpTreeWidget->addColumn("Match");
+  //  fHelpTreeWidget->header()->setResizeEnabled(FALSE,1);
+#else
+  fHelpTreeWidget->setSelectionMode(QAbstractItemView::SingleSelection);
+  fHelpTreeWidget->setColumnCount(2);
+  QStringList labels;
+  labels << QString("Command") << QString("Match");
+  fHelpTreeWidget->setHeaderLabels(labels);
+#endif
+
+  if (commandResultMap.empty()) {
+#if QT_VERSION < 0x040200
+    fHelpArea->clear();
+    fHelpArea->append("No match found");
+#else
+    fHelpArea->setText("No match found");
+#endif
+    return;
+  }
+
+#if QT_VERSION > 0x040000
+  QMap<int,QString>::const_iterator i = commandResultMap.constEnd();
+#else
+  QMap<int,QString>::const_iterator i = commandResultMap.end();
+#endif
+  i--;
+  // 10 maximum progress values
+  float multValue = 10.0/(float)(i.key());
+  QString progressChar = "|";
+  QString progressStr = "|";
+
+#if QT_VERSION < 0x040000
+  QListViewItem * newItem;
+#else
+  QTreeWidgetItem * newItem;
+#endif
+  bool end = false;
+  while (!end) {
+#if QT_VERSION > 0x040000
+    if (i == commandResultMap.constBegin()) {
+#else
+    if (i == commandResultMap.begin()) {
+#endif
+      end = true;
+    }
+    for(int a=0;a<int(i.key()*multValue);a++) {
+      progressStr += progressChar;
+    }
+#if QT_VERSION < 0x040000
+    newItem = new QListViewItem(fHelpTreeWidget);
+    newItem->setText(0,i.data().simplifyWhiteSpace());
+#else
+    newItem = new QTreeWidgetItem(fHelpTreeWidget);
+    newItem->setText(0,i.value().trimmed());
+#endif
+    newItem->setText(1,progressStr);
+    
+#if QT_VERSION >= 0x040200
+    newItem->setForeground ( 1, QBrush(Qt::blue) );
+#endif
+    progressStr = "|";
+    i--;
+  }
+  // FIXME :  to be checked on Qt3
+#if QT_VERSION < 0x040000
+  fHelpTreeWidget->setColumnWidthMode (1,QListView::Maximum);
+  fHelpTreeWidget->setSorting(1,false);
+#else
+  fHelpTreeWidget->resizeColumnToContents (0);
+  fHelpTreeWidget->sortItems(1,Qt::DescendingOrder);
+  //  fHelpTreeWidget->setColumnWidth(1,10);//resizeColumnToContents (1);
+#endif
+}
+
+
+
+
+QMap<int,QString> G4UIQt::LookForHelpStringInChildTree(
+ G4UIcommandTree *aCommandTree
+,const QString & text
+ )
+{
+  QMap<int,QString> commandResultMap;
+  if (aCommandTree == NULL) return commandResultMap;
+  
+#if QT_VERSION < 0x040000
+  int multFactor = 1000; // factor special for having double keys in Qt3
+  int doubleKeyAdd = 0;  // decay for doubleKeys in Qt3
+#endif
+
+  // Get the Sub directories
+  int tmp = 0;
+  QMap<int,QString> commandChildResultMap;
+  
+  for (int a=0;a<aCommandTree->GetTreeEntry();a++) {
+    const G4UIcommand* command = aCommandTree->GetGuidance();
+#if QT_VERSION > 0x040000
+    tmp = GetCommandList (command).count(text,Qt::CaseInsensitive);
+#else
+    tmp = GetCommandList (command).contains(text,false);
+#endif
+    if (tmp >0) {
+#if QT_VERSION > 0x040000
+      commandResultMap.insertMulti(tmp,QString((char*)(aCommandTree->GetTree(a+1)->GetPathName()).data()));
+#else // tricky thing for Qt3...
+      doubleKeyAdd = 0;
+      while (commandResultMap.find( tmp*multFactor+doubleKeyAdd) != commandResultMap.end()) {
+        doubleKeyAdd ++;
+      }
+      commandResultMap.insert(tmp*multFactor+doubleKeyAdd,QString((char*)(aCommandTree->GetTree(a+1)->GetPathName()).data()));
+#endif
+    }
+    // look for childs
+    commandChildResultMap = LookForHelpStringInChildTree(aCommandTree->GetTree(a+1),text);
+    
+    if (!commandChildResultMap.empty()) {
+      // insert new childs
+#if QT_VERSION > 0x040000
+      QMap<int,QString>::const_iterator i = commandChildResultMap.constBegin();
+      while (i != commandChildResultMap.constEnd()) {
+        commandResultMap.insertMulti(i.key(),i.value());
+#else // tricky thing for Qt3...
+      QMap<int,QString>::const_iterator i = commandChildResultMap.begin();
+      while (i != commandChildResultMap.end()) {
+        doubleKeyAdd = 0;
+        while (commandResultMap.find( i.key()*multFactor+doubleKeyAdd) != commandResultMap.end()) {
+          doubleKeyAdd ++;
+        }
+        commandResultMap.insert(i.key()*multFactor+doubleKeyAdd,i.data());
+#endif
+        i++;
+      }
+      commandChildResultMap.clear();
+    }
+  }
+  // Get the Commands
+  
+  for (int a=0;a<aCommandTree->GetCommandEntry();a++) {
+    const G4UIcommand* command = aCommandTree->GetCommand(a+1);
+#if QT_VERSION > 0x040000
+    tmp = GetCommandList (command).count(text,Qt::CaseInsensitive);
+#else
+    tmp = GetCommandList (command).contains(text,false);
+#endif
+    if (tmp >0) {
+#if QT_VERSION > 0x040000
+      commandResultMap.insertMulti(tmp,QString((char*)(aCommandTree->GetCommand(a+1)->GetCommandPath()).data()));
+#else // tricky thing for Qt3...
+      doubleKeyAdd = 0;
+      while (commandResultMap.find( tmp*multFactor+doubleKeyAdd) != commandResultMap.end()) {
+        doubleKeyAdd ++;
+      }
+      commandResultMap.insert(tmp*multFactor+doubleKeyAdd,QString((char*)(aCommandTree->GetCommand(a+1)->GetCommandPath()).data()));
+#endif
+    }
+    
+  }
+  return commandResultMap;
+}
 #endif

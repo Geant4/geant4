@@ -45,7 +45,6 @@
 #include "G4HadronElasticProcess.hh"
 #include "G4CascadeElasticInterface.hh"
 
-
 HEHadronIonBertiniElastic::HEHadronIonBertiniElastic(const G4String& name): 
   G4VPhysicsConstructor(name)
 {
@@ -59,12 +58,11 @@ HEHadronIonBertiniElastic::HEHadronIonBertiniElastic(const G4String& name):
 
 HEHadronIonBertiniElastic::~HEHadronIonBertiniElastic()
 {}
-
+/////////////////////////////////////////////////////////////////////////////
 void HEHadronIonBertiniElastic::ConstructProcess()
 {
   G4ParticleDefinition* particle = 0;
   G4ProcessManager* processManager = 0;
-
 
   // **********************************************
   // *** Proton, Neutron, Pion plus, Pion minus ***
@@ -90,7 +88,6 @@ void HEHadronIonBertiniElastic::ConstructProcess()
   processManager = particle -> GetProcessManager();
   processManager -> AddDiscreteProcess(hadronElasticProcess); 
 
- 
   // *******************************
   // *** Deuteron, Triton, Alpha ***
   // *******************************

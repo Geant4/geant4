@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EvaporationInuclCollider.hh,v 1.1 2007/05/24 17:41:20 miheikki Exp $
+// $Id: G4EvaporationInuclCollider.hh,v 1.2 2008/06/29 23:56:03 dennis Exp $
 #ifndef G4EVAPORATIONINUCL_COLLIDER_HH
 #define G4EVAPORATIONINUCL_COLLIDER_HH
  
@@ -41,7 +41,7 @@
 
 using namespace G4InuclSpecialFunctions;
 
-class G4EvaporationInuclCollider : public G4Collider {
+class G4EvaporationInuclCollider {
 
 public:
 
@@ -63,8 +63,8 @@ public:
     theBigBanger = bigbanger;   
   };
  
-  virtual G4CollisionOutput collide(G4InuclParticle* bullet, G4InuclParticle* target);
-
+  G4CollisionOutput collide(G4InuclParticle* bullet, G4InuclParticle* target);
+  
 private: 
 
   G4int verboseLevel;

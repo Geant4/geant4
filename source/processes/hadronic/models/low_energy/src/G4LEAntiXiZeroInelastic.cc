@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4LEAntiXiZeroInelastic.cc,v 1.11 2006/06/29 20:44:55 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// GEANT4 tag $Name: geant4-09-02 $
 //
  // Hadronic Process: AntiXiZero Inelastic Process
  // J.L. Chuma, TRIUMF, 20-Feb-1997

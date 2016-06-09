@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eeCrossSections.hh,v 1.2 2006/06/29 19:32:22 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4eeCrossSections.hh,v 1.3 2008/07/10 18:06:38 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // -------------------------------------------------------------------
 //
@@ -69,9 +69,15 @@ public:
 
   G4double CrossSection3pi(G4double);
 
+  G4double CrossSectionPi0G(G4double);
+
+  G4double CrossSectionEtaG(G4double);
+
   G4double CrossSection2Kcharged(G4double);
 
   G4double CrossSection2Kneutral(G4double);
+
+  std::complex<G4double> DpRho(G4double e); 
 
 private:
 
@@ -94,12 +100,9 @@ private:
 
   G4double WidthPhi(G4double e);
 
-  std::complex<G4double> DpRho(G4double e); 
-
   std::complex<G4double> DpOm(G4double e);
 
   std::complex<G4double> DpPhi(G4double e);
-
 
   // hide assignment operator
   G4eeCrossSections & operator=(const  G4eeCrossSections &right);

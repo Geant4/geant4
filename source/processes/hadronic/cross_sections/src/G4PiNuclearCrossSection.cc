@@ -26,7 +26,7 @@
  #include "G4PiNuclearCrossSection.hh"
  #include "G4HadronicException.hh"
  #include "G4HadTmpUtil.hh"
- #include "G4ping.hh"
+// #include "G4ping.hh"
 
  // by J.P Wellisch, Sun Sep 15 2002.
  // corrected G.Folger 17-8-2006: inel. Ca pim was missing two number, 
@@ -349,7 +349,7 @@ GetIsoZACrossSection(const G4DynamicParticle* particle, G4double ZZ,
                      G4double /*AA*/, G4double /*temperature*/)
 {
   // precondition
-  G4ping debug("debug_PiNuclearCrossSection");
+  //  G4ping debug("debug_PiNuclearCrossSection");
   using namespace std;
   G4bool ok = false;
   if(particle->GetDefinition() == G4PionMinus::PionMinus()) ok=true;
@@ -367,13 +367,13 @@ GetIsoZACrossSection(const G4DynamicParticle* particle, G4double ZZ,
 
   G4double result = 0;
   G4int Z=G4lrint(ZZ);
-  debug.push_back(Z);
+  //  debug.push_back(Z);
   size_t it = 0;
 
   while(it<theZ.size() && Z>theZ[it]) it++;
 
-  debug.push_back(theZ[it]);
-  debug.push_back(kineticEnergy);
+  //  debug.push_back(theZ[it]);
+  //  debug.push_back(kineticEnergy);
 
   if(Z > theZ[it]) 
   {
@@ -389,9 +389,9 @@ GetIsoZACrossSection(const G4DynamicParticle* particle, G4double ZZ,
       result = thePimData[it]->ReactionXSection(kineticEnergy);
       fTotalXsc = thePimData[it]->TotalXSection(kineticEnergy);
 
-      debug.push_back("D1 ");
-      debug.push_back(result);
-      debug.push_back(fTotalXsc);
+      //      debug.push_back("D1 ");
+      //      debug.push_back(result);
+      //      debug.push_back(fTotalXsc);
     }
     else
     {
@@ -405,15 +405,15 @@ GetIsoZACrossSection(const G4DynamicParticle* particle, G4double ZZ,
       result = Interpolate(Z1, Z2, Z, x1, x2);
       fTotalXsc = Interpolate(Z1, Z2, Z, xt1, xt2);
 
-      debug.push_back("D2 ");
-      debug.push_back(x1);
-      debug.push_back(x2);
-      debug.push_back(xt1);
-      debug.push_back(xt2);
-      debug.push_back(Z1);
-      debug.push_back(Z2);
-      debug.push_back(result);
-      debug.push_back(fTotalXsc);
+      //      debug.push_back("D2 ");
+      //      debug.push_back(x1);
+      //      debug.push_back(x2);
+      //      debug.push_back(xt1);
+      //      debug.push_back(xt2);
+      //      debug.push_back(Z1);
+      //      debug.push_back(Z2);
+      //      debug.push_back(result);
+      //      debug.push_back(fTotalXsc);
     }
   }
   else
@@ -429,9 +429,9 @@ GetIsoZACrossSection(const G4DynamicParticle* particle, G4double ZZ,
       result = theData->operator[](it)->ReactionXSection(kineticEnergy);
       fTotalXsc = theData->operator[](it)->TotalXSection(kineticEnergy);
 
-      debug.push_back("D3 ");
-      debug.push_back(result);
-      debug.push_back(fTotalXsc);
+      //      debug.push_back("D3 ");
+      //      debug.push_back(result);
+      //      debug.push_back(fTotalXsc);
     }
     else
     {
@@ -455,18 +455,18 @@ GetIsoZACrossSection(const G4DynamicParticle* particle, G4double ZZ,
       result = Interpolate(Z1, Z2, Z, x1, x2);
       fTotalXsc = Interpolate(Z1, Z2, Z, xt1, xt2);
 
-      debug.push_back("D4 ");
-      debug.push_back(x1);
-      debug.push_back(xt1);
-      debug.push_back(x2);
-      debug.push_back(xt2);
-      debug.push_back(Z1);
-      debug.push_back(Z2);
-      debug.push_back(result);
-      debug.push_back(fTotalXsc);
+      //      debug.push_back("D4 ");
+      //      debug.push_back(x1);
+      //      debug.push_back(xt1);
+      //      debug.push_back(x2);
+      //      debug.push_back(xt2);
+      //      debug.push_back(Z1);
+      //      debug.push_back(Z2);
+      //      debug.push_back(result);
+      //      debug.push_back(fTotalXsc);
     }
   }
-  debug.dump();
+  //  debug.dump();
 
   fElasticXsc = fTotalXsc - result;
   if( fElasticXsc < 0.) fElasticXsc = 0.;

@@ -1,0 +1,8 @@
+# B- meson with default Pythia6 decay
+/tracking/verbose 1
+/run/beamOn 1
+
+# B- meson with forced kSemiElectronic Pythia6 decay
+/pythia6Decayer/forceDecayType 0
+/tracking/verbose 1
+/run/beamOn 1

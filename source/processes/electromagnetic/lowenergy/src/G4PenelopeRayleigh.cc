@@ -26,7 +26,7 @@
 // --------------------------------------------------------------------
 //
 // $Id: G4PenelopeRayleigh.cc,v 1.15 2007/09/03 09:43:14 pandola Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // Author: L. Pandola (luciano.pandola@cern.ch)
 //

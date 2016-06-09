@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: GammaRayTelPrimaryGeneratorAction.cc,v 1.10 2006/06/29 15:56:58 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: GammaRayTelPrimaryGeneratorAction.cc,v 1.11 2007/11/09 16:33:34 flongo Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file
 //      CERN Geneva Switzerland
@@ -68,26 +68,20 @@ GammaRayTelPrimaryGeneratorAction::GammaRayTelPrimaryGeneratorAction()
 
   G4int n_particle = 1;
 
-  if (sourceGun)
-    {
-      particleGun  = new G4ParticleGun(n_particle);     
+  particleGun  = new G4ParticleGun(n_particle);     
       // default particle kinematic
-      
-      G4ParticleTable* particleTable = G4ParticleTable::GetParticleTable();
-      G4String particleName;
-      G4ParticleDefinition* particle
-	= particleTable->FindParticle(particleName="e-");
-      particleGun->SetParticleDefinition(particle);
-      particleGun->SetParticleMomentumDirection(G4ThreeVector(0.,0.,-1.));
-      particleGun->SetParticleEnergy(30.*MeV);
-      G4double position = 0.5*(GammaRayTelDetector->GetWorldSizeZ());
-      particleGun->SetParticlePosition(G4ThreeVector(0.*cm,0.*cm,position));
-    }
-  else
-    {
-      particleSource = new G4GeneralParticleSource();
-    }
   
+  G4ParticleTable* particleTable = G4ParticleTable::GetParticleTable();
+  G4String particleName;
+  G4ParticleDefinition* particle
+    = particleTable->FindParticle(particleName="e-");
+  particleGun->SetParticleDefinition(particle);
+  particleGun->SetParticleMomentumDirection(G4ThreeVector(0.,0.,-1.));
+  particleGun->SetParticleEnergy(30.*MeV);
+  G4double position = 0.5*(GammaRayTelDetector->GetWorldSizeZ());
+  particleGun->SetParticlePosition(G4ThreeVector(0.*cm,0.*cm,position));
+  particleSource = new G4GeneralParticleSource();
+   
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

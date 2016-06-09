@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MuBremsstrahlungModel.hh,v 1.17 2007/10/11 09:25:31 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4MuBremsstrahlungModel.hh,v 1.21 2008/07/22 16:11:34 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // -------------------------------------------------------------------
 //
@@ -44,14 +44,16 @@
 // 13-02-03 Add name (V.Ivanchenko)
 // 10-02-04 Add lowestKinEnergy (V.Ivanchenko)
 // 08-04-05 Major optimisation of internal interfaces (V.Ivantchenko)
-// 13-02-06 add ComputeCrossSectionPerAtom (mma)
+// 13-02-06 Add ComputeCrossSectionPerAtom (mma)
 // 11-10-07 Add ignoreCut flag (V.Ivanchenko) 
+// 28-02-08 Reorganized protected methods and members (V.Ivanchenko) 
+// 06-03-08 Remove obsolete methods and members (V.Ivanchenko) 
 //
 
 //
 // Class Description:
 //
-// Implementation of energy loss for gamma emission by muons
+// Implementation of bremssrahlung by muons
 
 // -------------------------------------------------------------------
 //
@@ -60,6 +62,7 @@
 #define G4MuBremsstrahlungModel_h 1
 
 #include "G4VEmModel.hh"
+#include "G4NistManager.hh"
 
 class G4Element;
 class G4ParticleChangeForLoss;
@@ -78,8 +81,6 @@ public:
 
   void Initialise(const G4ParticleDefinition*, const G4DataVector&);
 
-  void SetLowestKineticEnergy(G4double e) {lowestKinEnergy = e;};
-
   G4double MinEnergyCut(const G4ParticleDefinition*,
                         const G4MaterialCutsCouple*);
 			      
@@ -89,13 +90,7 @@ public:
 				 G4double Z, G4double A,
 				 G4double cutEnergy,
 				 G4double maxEnergy);
-				 
-  virtual G4double CrossSectionPerVolume(const G4Material*,
-                         const G4ParticleDefinition*,
-                               G4double kineticEnergy,
-                               G4double cutEnergy,
-                               G4double maxEnergy);
-			       
+				 			       
   virtual G4double ComputeDEDXPerVolume(const G4Material*,
                                 const G4ParticleDefinition*,
                                 G4double kineticEnergy,
@@ -107,87 +102,98 @@ public:
 			 G4double tmin,
 			 G4double maxEnergy);
 
+  inline void SetLowestKineticEnergy(G4double e);
+
 protected:
+
+  G4double ComputMuBremLoss(G4double Z, G4double tkin, G4double cut);
+  
+  G4double ComputeMicroscopicCrossSection(G4double tkin,
+					  G4double Z,
+					  G4double cut);
+
+  virtual G4double ComputeDMicroscopicCrossSection(G4double tkin,
+						   G4double Z,
+						   G4double gammaEnergy);
 
   G4double MaxSecondaryEnergy(const G4ParticleDefinition*,
 			      G4double kineticEnergy);
 
-public:
-
- G4double ComputMuBremLoss(G4double Z, G4double A, G4double tkin, G4double cut);
-
- G4double ComputeMicroscopicCrossSection(G4double tkin,
-                                           G4double Z,
-                                           G4double A,
-                                           G4double cut);
-
- G4double ComputeDMicroscopicCrossSection(G4double tkin,
-                                          G4double Z,
-                                          G4double A,
-                                          G4double gammaEnergy);
-
-  inline void SetIgnoreCutFlag(G4bool);
-
-  inline G4bool IgnoreCutFlag() const;
-
 private:
 
- G4DataVector* ComputePartialSumSigma(const G4Material* material,
-				      G4double tkin, G4double cut);
+  G4DataVector* ComputePartialSumSigma(const G4Material* material,
+				       G4double tkin, G4double cut);
 
- const G4Element* SelectRandomAtom(const G4MaterialCutsCouple* couple) const;
-
- void MakeSamplingTables();
-
+  const G4Element* SelectRandomAtom(const G4MaterialCutsCouple* couple) const;
 
   // hide assignment operator
   G4MuBremsstrahlungModel & operator=(const  G4MuBremsstrahlungModel &right);
   G4MuBremsstrahlungModel(const  G4MuBremsstrahlungModel&);
 
-  G4ParticleDefinition*       theGamma;
+protected:
+
   const G4ParticleDefinition* particle;
+  G4NistManager* nist;
+  G4double mass;
+  G4double rmass;
+  G4double cc;
+  G4double coeff;
+  G4double sqrte;
+  G4double bh;
+  G4double bh1;
+  G4double btf;
+  G4double btf1;
+
+private:
+
+  G4ParticleDefinition*       theGamma;
   G4ParticleChangeForLoss*    fParticleChange;
 
   G4double highKinEnergy;
   G4double lowKinEnergy;
   G4double lowestKinEnergy;
   G4double minThreshold;
-  G4double mass;
-
-  // tables for sampling
-  G4int nzdat,ntdat,NBIN;
-  static G4double zdat[5],adat[5],tdat[8];
-  G4double ya[1001], proba[5][8][1001];
-  G4double cutFixed;
-
-  G4bool  ignoreCut;
 
   std::vector<G4DataVector*> partialSumSigma;
-  G4bool  samplingTablesAreFilled;
-
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-inline G4double G4MuBremsstrahlungModel::MaxSecondaryEnergy(
-                                 const G4ParticleDefinition*,
-				 G4double kineticEnergy)
+inline 
+G4double G4MuBremsstrahlungModel::MaxSecondaryEnergy(const G4ParticleDefinition*,
+						     G4double kineticEnergy)
 {
   return kineticEnergy;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-inline void G4MuBremsstrahlungModel::SetIgnoreCutFlag(G4bool val)
+inline void G4MuBremsstrahlungModel::SetLowestKineticEnergy(G4double e) 
 {
-  ignoreCut = val;
+  lowestKinEnergy = e;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-inline G4bool G4MuBremsstrahlungModel::IgnoreCutFlag() const
+inline
+G4double G4MuBremsstrahlungModel::MinEnergyCut(const G4ParticleDefinition*,
+                                               const G4MaterialCutsCouple*)
 {
-  return ignoreCut;
+  return minThreshold;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+inline
+void G4MuBremsstrahlungModel::SetParticle(const G4ParticleDefinition* p)
+{
+  if(!particle) {
+    particle = p;
+    mass = particle->GetPDGMass();
+    rmass=mass/electron_mass_c2 ;
+    cc=classic_electr_radius/rmass ;
+    coeff= 16.*fine_structure_const*cc*cc/3. ;
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

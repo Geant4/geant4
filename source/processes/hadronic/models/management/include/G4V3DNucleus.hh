@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4V3DNucleus.hh,v 1.5 2006/06/29 20:45:37 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4V3DNucleus.hh,v 1.6 2008/05/16 14:02:37 gunter Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 #ifndef G4V3DNucleus_h
 #define G4V3DNucleus_h 1
@@ -68,6 +68,8 @@ class G4V3DNucleus
       virtual void DoLorentzContraction(const G4ThreeVector & theBeta) = 0;
       virtual void DoTranslation(const G4ThreeVector & theShift) = 0;
       virtual const G4VNuclearDensity * GetNuclearDensity() const = 0;
+      virtual void SortNucleonsInZ() = 0;
+
   public:
       std::pair<G4double, G4double> ChooseImpactXandY(G4double maxImpact);
       std::pair<G4double, G4double> RefetchImpactXandY(){return theImpactParameter;}

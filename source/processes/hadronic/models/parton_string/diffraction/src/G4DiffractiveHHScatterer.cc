@@ -29,6 +29,7 @@
 #include "G4LundStringFragmentation.hh"
 #include "G4KineticTrack.hh"
 #include "G4DiffractiveSplitableHadron.hh"
+#include "G4FTFParameters.hh"                            // Uzhi 21.04.08
 
 G4DiffractiveHHScatterer::G4DiffractiveHHScatterer()
 :
@@ -36,6 +37,7 @@ G4DiffractiveHHScatterer::G4DiffractiveHHScatterer()
   theStringFragmentation(new G4LundStringFragmentation())
 {}
 
+// -------------------------------------------------------------------
 G4KineticTrackVector * G4DiffractiveHHScatterer::
 Scatter(const G4KineticTrack & aTrack, const G4KineticTrack & bTrack)
 {
@@ -43,7 +45,12 @@ Scatter(const G4KineticTrack & aTrack, const G4KineticTrack & bTrack)
 
   G4DiffractiveSplitableHadron aHadron(& aTrack);
   G4DiffractiveSplitableHadron bHadron(& bTrack);
-  if ( ! theExcitation->ExciteParticipants(& aHadron, & bHadron)) 
+  theParameters = new G4FTFParameters(aHadron.GetDefinition(), // -------- Uzhi 21.04.08
+                                          1.,1., 100.);
+                                          //s);// ------------------------- Uzhi 21.04.08
+  if ( ! theExcitation->ExciteParticipants(& aHadron, 
+                                           & bHadron, 
+                                           theParameters))     // -------- Uzhi 21.04.08
   {
 	return NULL;
   }

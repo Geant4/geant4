@@ -23,49 +23,16 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4CrossSectionExcitationMillerGreenPartial.cc,v 1.1 2007/11/08 19:57:23 pia Exp $
-// GEANT4 tag $Name: geant4-09-01 $
-// 
-// Contact Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
-//
-// Reference: TNS Geant4-DNA paper
-// Reference for implementation model: NIM. 155, pp. 145-156, 1978
-
-// History:
-// -----------
-// Date         Name              Modification
-// 28 Apr 2007  M.G. Pia          Created in compliance with design described in TNS paper
-//
-// -------------------------------------------------------------------
-
-// Class description:
-// Geant4-DNA Cross total cross section for electron elastic scattering in water
-// Reference: TNS Geant4-DNA paper
-// S. Chauvie et al., Geant4 physics processes for microdosimetry simulation:
-// design foundation and implementation of the first set of models,
-// IEEE Trans. Nucl. Sci., vol. 54, no. 6, Dec. 2007.
-// Further documentation available from http://www.ge.infn.it/geant4/dna
-
-// -------------------------------------------------------------------
-
+// $Id: G4CrossSectionExcitationMillerGreenPartial.cc,v 1.2 2008/07/14 20:47:34 sincerti Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 
 #include "G4CrossSectionExcitationMillerGreenPartial.hh"
-#include "G4Track.hh"
-#include "G4DynamicParticle.hh"
-#include "G4ParticleDefinition.hh"
-#include "G4Proton.hh"
-#include "G4DNAGenericIonsManager.hh"
-#include "G4CrossSectionExcitationEmfietzoglouPartial.hh"
-#include "Randomize.hh"
-#include <deque>
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4CrossSectionExcitationMillerGreenPartial::G4CrossSectionExcitationMillerGreenPartial()
 {
-
   nLevels = waterExcitation.NumberOfLevels();
-  //G4cout << "Water excitation energy: number of levels = " << nLevels << G4endl;
   
   //PROTON
   kineticEnergyCorrection[0] = 1.;
@@ -105,9 +72,13 @@ G4CrossSectionExcitationMillerGreenPartial::G4CrossSectionExcitationMillerGreenP
   
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 G4CrossSectionExcitationMillerGreenPartial::~G4CrossSectionExcitationMillerGreenPartial()
-{ }
+{}
  
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 G4double G4CrossSectionExcitationMillerGreenPartial::CrossSection(G4double k, G4int excitationLevel, 
 								  const G4ParticleDefinition* particleDefinition)
 {
@@ -143,7 +114,6 @@ G4double G4CrossSectionExcitationMillerGreenPartial::CrossSection(G4double k, G4
   G4double tCorrected;
   tCorrected = k * kineticEnergyCorrection[particleTypeIndex];
 
-  // Assume that the material is water; proper algorithm to calculate correctly for any material to be inserted here
   G4int z = 10;
 
   G4double numerator;
@@ -167,6 +137,8 @@ G4double G4CrossSectionExcitationMillerGreenPartial::CrossSection(G4double k, G4
   return cross;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 G4int G4CrossSectionExcitationMillerGreenPartial::RandomSelect(G4double k, 
 							       const G4ParticleDefinition* particle)
 {
@@ -174,7 +146,7 @@ G4int G4CrossSectionExcitationMillerGreenPartial::RandomSelect(G4double k,
   G4double value = 0.;
   std::deque<double> values;
   
-  // ---- MGP ---- The following algorithm is wrong: it works is the cross section 
+  // ---- MGP ---- The following algorithm is wrong: it works if the cross section 
   // is a monotone increasing function.
   // The algorithm should be corrected by building the cumulative function 
   // of the cross section and comparing a random number in the range 0-1 against
@@ -186,37 +158,35 @@ G4int G4CrossSectionExcitationMillerGreenPartial::RandomSelect(G4double k,
   // ELECTRON CORRECTION
  
   if ( particle == instance->GetIon("alpha++"))
-    {  while (i > 0)
-      {
+  {  while (i > 0)
+     {
 	i--;
 	G4double partial = CrossSection(k,i,particle);
 	values.push_front(partial);
 	value += partial;
-      }
+     }
 
-    value *= G4UniformRand();
+     value *= G4UniformRand();
     
-    i = nLevels;
+     i = nLevels;
 
-    while (i > 0)
-      {
+     while (i > 0)
+     {
 	i--;
 	if (values[i] > value) return i;
 	value -= values[i];
-      }
-    } 
+     }
+  } 
 
-  //
   // add ONE or TWO electron-water excitation for alpha+ and helium
    
   if ( particle == instance->GetIon("alpha+") 
        ||
        particle == instance->GetIon("helium")
-       ) 
+     ) 
+  {
+    while (i>0)
     {
-
-      while (i>0)
-	{
 	  i--;
          
 	  G4CrossSectionExcitationEmfietzoglouPartial* excitationXS = 
@@ -231,35 +201,39 @@ G4int G4CrossSectionExcitationMillerGreenPartial::RandomSelect(G4double k,
 	  values.push_front(partial);
 	  value += partial;
 	  delete excitationXS;
-	}
+    }
   
-      value*=G4UniformRand();
+    value*=G4UniformRand();
   
-      i=5;
-      while (i>0)
-	{
+    i=5;
+    while (i>0)
+    {
 	  i--;
    
 	  if (values[i]>value) return i;
   
 	  value-=values[i];
-	}
-    }    
+    }
+  }    
   //	
+
   return 0;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4double G4CrossSectionExcitationMillerGreenPartial::Sum(G4double k, const G4ParticleDefinition* particle)
 {
   G4double totalCrossSection = 0.;
 
   for (G4int i=0; i<nLevels; i++)
-    {
-      totalCrossSection += CrossSection(k,i,particle);
-    }
+  {
+    totalCrossSection += CrossSection(k,i,particle);
+  }
   return totalCrossSection;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4double G4CrossSectionExcitationMillerGreenPartial::S_1s(G4double t,
 							  G4double energyTransferred,
@@ -276,6 +250,8 @@ G4double G4CrossSectionExcitationMillerGreenPartial::S_1s(G4double t,
 }
 
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 G4double G4CrossSectionExcitationMillerGreenPartial::S_2s(G4double t,
 							  G4double energyTransferred,
 							  G4double slaterEffectiveCharge,
@@ -291,6 +267,7 @@ G4double G4CrossSectionExcitationMillerGreenPartial::S_2s(G4double t,
  
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4double G4CrossSectionExcitationMillerGreenPartial::S_2p(G4double t,
 							  G4double energyTransferred,
@@ -306,6 +283,7 @@ G4double G4CrossSectionExcitationMillerGreenPartial::S_2p(G4double t,
   return value;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4double G4CrossSectionExcitationMillerGreenPartial::R(G4double t,
 						       G4double energyTransferred,

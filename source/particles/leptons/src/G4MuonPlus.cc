@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4MuonPlus.cc,v 1.13 2007/03/15 06:53:58 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4MuonPlus.cc,v 1.15 2008/11/13 08:23:12 kurasige Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // 
 // ----------------------------------------------------------------------
@@ -67,7 +67,7 @@ G4MuonPlus* G4MuonPlus::Definition()
   //             stable         lifetime    decay table
   //             shortlived      subType    anti_encoding
   anInstance = new G4ParticleDefinition(
-                 name,   0.1056584*GeV, 2.99591e-16*MeV,   +1.*eplus, 
+                 name,   0.1056584*GeV, 3.01594e-16*MeV,   +1.*eplus, 
 		    1,               0,             0,          
 		    0,               0,             0,             
 	     "lepton",              -1,             0,         -13,
@@ -77,7 +77,7 @@ G4MuonPlus* G4MuonPlus::Definition()
    // Bohr Magnetron
    G4double muB =  0.5*eplus*hbar_Planck/(0.1056584*GeV/c_squared) ;
    
-   anInstance->SetPDGMagneticMoment( muB * 1.0011659208);
+   anInstance->SetPDGMagneticMoment( muB * 2.* 1.0011659208);
 
   //create Decay Table 
   G4DecayTable* table = new G4DecayTable();

@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4RegularNavigation.hh,v 1.2 2007/10/18 14:18:36 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 //
 // class G4RegularNavigation

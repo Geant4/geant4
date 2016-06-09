@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4NeutronHPArbitaryTab.hh,v 1.12 2007/06/06 12:45:13 ahoward Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 #ifndef G4NeutronHPArbitaryTab_h
 #define G4NeutronHPArbitaryTab_h 1

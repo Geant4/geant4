@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gdml_simple_extension xmlns:gdml_simple_extension="http://www.example.org"
+		       xmlns:xs="http://www.w3.org/2001/XMLSchema-instance"          
+		       xs:noNamespaceSchemaLocation="./SimpleExtensionSchema/SimpleExtension.xsd"> 
+
+    <extension>
+      <color name="test_color"  R="0.1"  G="0.2"  B="0.3"  A="1.0" />	
+    </extension>
+
+    <define>      
+      <!-- world -->
+      <constant name="world_side" value="10000" />
+      <constant name="world_x" value="world_side" />
+      <constant name="world_y" value="world_side" />
+      <constant name="world_z" value="world_side" />
+
+      <!-- test volume -->
+      <constant name="test_box_size" value="100.0"/>
+      <position name="test_position"/>
+
+    </define>
+
+    <materials>
+
+      <!-- elements -->
+      <element name="Argon_e" Z="18.0" N="40" >
+	<atom type="A" unit="g/mol" value="39.9480" />
+      </element>
+
+      <element  name="Nitrogen_e"  Z="7.0"  N="14" >
+	<atom type="A" unit="g/mol" value=" 14.0100" />
+      </element>
+
+      <element  name="Oxygen_e"  Z="8.0"  N="16" >
+	<atom type="A" unit="g/mol" value=" 16.0000" />
+      </element>
+
+      <!-- materials -->
+      <material  name="Air"  >
+	<D type="density" unit="g/cm3" value="0.0012"/>
+	<fraction n="0.7803"  ref="Nitrogen_e"/>
+	<fraction n="0.2103"  ref="Oxygen_e"/>
+	<fraction n="0.0094"  ref="Argon_e"/>
+      </material>
+    </materials>
+
+    <solids>
+
+      <!-- world -->
+      <box lunit="mm" 
+	   aunit="degree"
+	   name="world_box"
+	   x="world_x"  
+	   y="world_y"  
+	   z="world_z" />
+
+      <!-- test volume -->
+      <box lunit="mm"
+	   name="test_box"
+	   x="test_box_size"
+	   y="test_box_size"
+	   z="test_box_size"/>
+
+    </solids>
+
+    <structure>
+
+      <volume name="test_volume">
+	<materialref ref="Air"/>
+	<solidref ref="test_box"/>
+	<!-- color extension element -->	
+	<colorref ref="test_color"/> 
+      </volume>
+      
+      <volume name="world">
+	<materialref ref="Air"/>
+	<solidref ref="world_box"/>
+	<physvol>
+	  <volumeref ref="test_volume"/>
+	  <positionref ref="test_position"/>
+	</physvol>
+      </volume>
+    </structure>
+
+    <setup name="Default" version="1.0">
+      <world ref="world"/>
+    </setup>
+
+</gdml_simple_extension>

@@ -1,4 +1,4 @@
-$Id: History,v 1.23 2007/12/12 12:00:23 vnivanch Exp $
+$Id: History,v 1.28 2008/11/20 12:32:16 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,21 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+20-11-08  V.Ivant (exhadr01-V09-01-04)
+- added charge exchange
+
+17-09-08  V.Ivant (exhadr01-V09-01-03)
+- improved Physics List output
+
+25-06-08  V.Ivant (exhadr01-V09-01-02)
+
+13-06-08  V.Ivant (exhadr01-V09-01-01)
+- remove usage of AIDA in GNUmakefile
+- added FTF_BIC Physics Lists
+
+19-05-08  V.Ivant (exhadr01-V09-01-00)
+- remove usage of obsolete G4HadronProcessStore
 
 12-12-07  V.Ivant (exhadr01-V09-00-03)
 - remove experimental PhysLists: QGS_BIC, QGSP_CASC

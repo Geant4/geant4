@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BraggIonModel.hh,v 1.8 2007/05/22 17:34:36 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4BraggIonModel.hh,v 1.11 2008/10/22 16:00:57 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // -------------------------------------------------------------------
 //
@@ -42,12 +42,15 @@
 // 11-05-05 Major optimisation of internal interfaces (V.Ivantchenko)
 // 15-02-06 ComputeCrossSectionPerElectron, ComputeCrossSectionPerAtom (mma)
 // 25-04-06 Add stopping data from ASTAR (V.Ivanchenko)
+// 12-08-08 Added methods GetParticleCharge, GetChargeSquareRatio, 
+//          CorrectionsAlongStep needed for ions(V.Ivanchenko)
 
 //
 // Class Description:
 //
 // Implementation of energy loss and delta-electron production
-// by heavy slow charged particles using eveluated data
+// by heavy slow charged particles using ICRU'49 and NIST evaluated data 
+// for He4 ions
 
 // -------------------------------------------------------------------
 //
@@ -59,6 +62,7 @@
 #include "G4ASTARStopping.hh"
 
 class G4ParticleChangeForLoss;
+class G4EmCorrections;
 
 class G4BraggIonModel : public G4VEmModel
 {
@@ -105,6 +109,22 @@ public:
 				 G4double tmin,
 				 G4double maxEnergy);
 
+  // Compute ion charge 
+  virtual G4double GetChargeSquareRatio(const G4ParticleDefinition*,
+					const G4Material*,
+					G4double kineticEnergy);
+
+  virtual G4double GetParticleCharge(const G4ParticleDefinition* p,
+				     const G4Material* mat,
+				     G4double kineticEnergy);
+
+  // add correction to energy loss and ompute non-ionizing energy loss
+  virtual void CorrectionsAlongStep(const G4MaterialCutsCouple*,
+				    const G4DynamicParticle*,
+				    G4double& eloss,
+				    G4double& niel,
+				    G4double length);
+
 protected:
 
   G4double MaxSecondaryEnergy(const G4ParticleDefinition*,
@@ -132,6 +152,8 @@ private:
 
   G4double DEDX(const G4Material* material, G4double kineticEnergy);
 
+  G4EmCorrections*            corr;
+
   const G4ParticleDefinition* particle;
   G4ParticleDefinition*       theElectron;
   G4ParticleChangeForLoss*    fParticleChange;
@@ -143,16 +165,16 @@ private:
   G4double chargeSquare;
   G4double massRate;
   G4double ratio;
-  G4double highKinEnergy;
-  G4double lowKinEnergy;
   G4double lowestKinEnergy;
   G4double HeMass;
   G4double massFactor;
+  G4double corrFactor;
   G4double rateMassHe2p;
   G4double theZieglerFactor;
 
   G4int    iMolecula;          // index in the molecula's table
   G4bool   isIon;
+  G4bool   isInitialised;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

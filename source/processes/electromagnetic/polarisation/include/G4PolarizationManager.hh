@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // $Id: G4PolarizationManager.hh,v 1.1 2006/09/21 21:35:10 vnivanch Exp $
-// tag $Name: geant4-09-01 $
+// tag $Name: geant4-09-02 $
 //
 // GEANT4 Class header file
 //

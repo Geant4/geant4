@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4HEVector.cc,v 1.20 2006/11/22 23:52:32 dennis Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 //
 

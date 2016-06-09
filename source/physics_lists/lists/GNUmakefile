@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.1 2006/10/31 11:34:03 gunter Exp $
+# $Id: GNUmakefile,v 1.2 2008/05/30 11:01:37 vnivanch Exp $
 # ---------------------------------------------------------------------------
 # GNUmakefile for physics_lists/lists library.  Gunter Folger 25-Oct-2006.
 # ---------------------------------------------------------------------------
@@ -39,6 +39,7 @@ CPPFLAGS += -I$(G4BASE)/global/management/include \
             -I$(G4BASE)/processes/optical/include \
             -I$(G4BASE)/processes/transportation/include \
             -I$(G4BASE)/processes/electromagnetic/lowenergy/include \
+            -I$(G4BASE)/processes/electromagnetic/highenergy/include \
             -I$(G4BASE)/processes/electromagnetic/standard/include \
             -I$(G4BASE)/processes/electromagnetic/muons/include \
             -I$(G4BASE)/processes/electromagnetic/utils/include \

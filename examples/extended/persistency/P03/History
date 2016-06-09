@@ -1,0 +1,43 @@
+$Id: History,v 1.5 2008/12/09 17:55:01 arce Exp $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                    Example P03 History file
+                    ------------------------
+This file should be used by the G4 example coordinator to briefly
+summarize all major modifications introduced in the code and keep
+track of all tags.
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+9 December 2008 - P Arce (exampleP03-V09-01-04)
+--------------------------
+- SUBS -> SUBTRACTION, INTERS -> INTERSECTION
+     
+21 November 2008 - G.Cosmo (exampleP03-V09-01-03)
+--------------------------
+- Replaced VRML with OGLIX as default visualization.
+- Corrected README.
+
+20 November 2008 - P.Arce (exampleP03-V09-01-02)
+-------------------------
+- Extended to match developments in "ascii-V09-01-02".
+
+18 November 2008 - P.Arce (exampleP03-V09-01-01)
+-------------------------
+- Fixed run-time errors.
+
+03 November 2008 - G.Cosmo (exampleP03-V09-01-00)
+--------------------------
+- First version from original code by P.Arce.
+
+03 November 2008 - G.Cosmo (exampleP03-V09-01-01)
+--------------------------
+- Correction of compilation warning in ExTGRCDetectorBuilder constructor
+
+
+

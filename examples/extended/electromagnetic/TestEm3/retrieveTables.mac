@@ -1,4 +1,4 @@
-# $Id: retrieveTables.mac,v 1.4 2007/05/18 19:00:44 vnivanch Exp $
+# $Id: retrieveTables.mac,v 1.5 2008/09/14 17:14:54 vnivanch Exp $
 #
 # Macro file for "exampleN03.cc"
 # 
@@ -13,6 +13,8 @@
 #
 /run/particle/retrievePhysicsTable physdata
 /run/initialize
+/process/eLoss/verbose 1
+/process/eLoss/CSDARange true
 #
 /gun/particle e-
 /gun/energy 1 GeV

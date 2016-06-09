@@ -1,4 +1,4 @@
-$Id: History,v 1.150 2007/11/16 16:20:39 gcosmo Exp $
+$Id: History,v 1.155 2008/11/13 09:35:03 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,22 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Nov 13th, 2008      G.Cosmo - geomvol-V09-01-03
+- Corrected singleton definition for G4ReflectionFactory.
+- Return 'const G4String&' instead of copy in GetVolumesNameExtension().
+
+Aug 19th, 2008      G.Cosmo - geomvol-V09-01-02
+- Restored names of methods DumpInfo() to G4LogicalSkinSurface and
+  G4LogicalBorderSurface.
+
+Jul 16th, 2008      P.Gumplinger - geomvol-V09-01-01
+- Change the name of the method DumpInfo() to DumpTableInfo()
+  in G4LogicalSkinSurface and G4LogicalBorderSurface.
+
+Feb 4th, 2008       I.Hrivnacova - geomvol-V09-01-00
+- Fixed problem of double-deletion of rotation matrix in destructor
+  of G4AssemblyVolume.
 
 Nov 16th, 2007      G.Cosmo - geomvol-V09-00-01
 - Added inline specification to methods in G4AssemblyTriplet class.

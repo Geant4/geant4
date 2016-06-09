@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4CrossSectionElasticScreenedRutherford.cc,v 1.1 2007/10/12 23:11:41 pia Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// GEANT4 tag $Name: geant4-09-02 $
 // 
 // Contact Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
 //

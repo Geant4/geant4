@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4PDGCodeChecker.hh,v 1.9 2007/09/14 07:04:09 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // 
 // ------------------------------------------------------------

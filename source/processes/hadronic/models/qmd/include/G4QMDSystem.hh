@@ -33,6 +33,9 @@
 // 
 //      Creation date: 29 March 2007
 // -----------------------------------------------------------------------------
+//
+// 080602 Fix memory leaks by T. Koi 
+// 081120 Add EraseParticipant and InsertParticipant Methods by T. Koi
 
 #ifndef G4QMDSystem_hh
 #define G4QMDSystem_hh
@@ -50,7 +53,9 @@ class G4QMDSystem
 
       void SubtractSystem ( G4QMDSystem* );
 
-      void DeleteParticipant( G4int i ) { participants.erase( std::find ( participants.begin() , participants.end() , participants[ i ] ) ); };
+      G4QMDParticipant* EraseParticipant( G4int i ) { G4QMDParticipant* particle =  participants[ i ]; participants.erase( std::find ( participants.begin() , participants.end() , participants[ i ] ) ) ; return particle; };
+      void DeleteParticipant( G4int i ) { delete participants[ i ] ; participants.erase( std::find ( participants.begin() , participants.end() , participants[ i ] ) ); };
+      void InsertParticipant( G4QMDParticipant* particle , G4int j );
 
       G4int GetTotalNumberOfParticipant() { return participants.size(); };
 

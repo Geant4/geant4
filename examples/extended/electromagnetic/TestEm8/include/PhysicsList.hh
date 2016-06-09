@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: PhysicsList.hh,v 1.2 2006/06/29 16:59:46 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: PhysicsList.hh,v 1.3 2008/11/21 12:39:24 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //
@@ -39,6 +39,7 @@
 
 #include "G4VModularPhysicsList.hh"
 #include "globals.hh"
+#include "G4EmConfigurator.hh"
 
 class G4VPhysicsConstructor;
 class StepMax;
@@ -48,37 +49,48 @@ class PhysicsListMessenger;
 
 class PhysicsList: public G4VModularPhysicsList
 {
-  public:
-    PhysicsList();
-   ~PhysicsList();
+public:
+  PhysicsList();
+  virtual ~PhysicsList();
 
-    void ConstructParticle();
+  void ConstructParticle();
     
-    void SetCuts();
-    void SetCutForGamma(G4double);
-    void SetCutForElectron(G4double);
-    void SetCutForPositron(G4double);
+  void SetCuts();
+  void SetCutForGamma(G4double);
+  void SetCutForElectron(G4double);
+  void SetCutForPositron(G4double);
         
-    void AddPhysicsList(const G4String& name);
-    void ConstructProcess();
+  void AddPhysicsList(const G4String& name);
+  void ConstructProcess();
     
-    void AddStepMax();       
-    StepMax* GetStepMaxProcess() {return stepMaxProcess;};
+  void AddStepMax();       
+  //StepMax* GetStepMaxProcess() {return stepMaxProcess;};
 
-  private:
-    G4double cutForGamma;
-    G4double cutForElectron;
-    G4double cutForPositron;
+private:
 
-    G4VPhysicsConstructor*  emPhysicsList;
-    G4VPhysicsConstructor*  generalPhysicsList;
-    G4VPhysicsConstructor*  particleList;
-    std::vector<G4VPhysicsConstructor*>  hadronPhys;
-    G4String emName;
+  void  AddPAIModel(const G4String&);
+  void  NewPAIModel(const G4ParticleDefinition*, const G4String& modname, 
+		    const G4String& procname);
+
+  G4EmConfigurator em_config;
+
+  G4double cutForGamma;
+  G4double cutForElectron;
+  G4double cutForPositron;
+
+  G4VPhysicsConstructor*  emPhysicsList;
+  G4VPhysicsConstructor*  generalPhysicsList;
+  G4VPhysicsConstructor*  particleList;
+  std::vector<G4VPhysicsConstructor*>  hadronPhys;
+  G4String emName;
     
-    StepMax* stepMaxProcess;
+  StepMax* stepMaxProcess;
     
-    PhysicsListMessenger* pMessenger;
+  PhysicsListMessenger* pMessenger;
+
+  G4VEmModel* em_model;
+  G4VEmFluctuationModel* fm_model;
+
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

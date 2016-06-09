@@ -1,4 +1,4 @@
-# $Id: TestEm5.in,v 1.19 2007/07/31 16:51:29 maire Exp $
+# $Id: TestEm5.in,v 1.21 2008/09/13 17:05:40 maire Exp $
 #
 # macro file for TestEm5.cc
 #
@@ -9,7 +9,7 @@
 /testem/det/setAbsThick 20 um
 /testem/det/setAbsYZ    50 um
 #
-/testem/phys/addPhysics  standard
+/testem/phys/addPhysics  emstandard_opt2
 #
 /testem/phys/setGCut 2.13 mm
 /testem/phys/setECut 7.0  um
@@ -22,7 +22,7 @@
 /gun/energy 5 GeV
 #
 /testem/histo/setFileName testem5
-/testem/histo/setFileType hbook
+/testem/histo/setFileType root
 /testem/histo/setHisto 13 100 -0.25 0.25 mrad 
 #
 /run/beamOn 100000

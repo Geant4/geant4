@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BGGPionElasticXS.hh,v 1.1 2007/03/13 15:19:30 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4BGGPionElasticXS.hh,v 1.2 2008/12/01 16:50:23 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // -------------------------------------------------------------------
 //
@@ -59,6 +59,7 @@
 
 class G4GlauberGribovCrossSection;
 class G4UPiNuclearCrossSection;
+class G4HadronNucleonXsc;
 
 class G4BGGPionElasticXS : public G4VCrossSectionDataSet
 {
@@ -92,30 +93,39 @@ private:
 
   void Initialise();
 
-  G4double thEnergy;  // threshold of Glauber model
-  G4double theFac[93];
+  G4double CoulombFactor(G4double kinEnergy, G4double A);
+
+  G4double fGlauberEnergy;  
+  G4double fLowEnergy;  
+  G4double theGlauberFac[93];
+  G4double theCoulombFac[93];
 
   const G4ParticleDefinition*     particle;
   G4GlauberGribovCrossSection*    fGlauber;
   G4UPiNuclearCrossSection*       fPion;
+  G4HadronNucleonXsc*             fHadron;
+  G4bool                          isPiplus;
+  G4bool                          isInitialized;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 inline
-G4bool G4BGGPionElasticXS::IsApplicable(const G4DynamicParticle* dp, 
-					const G4Element*  elm)
+G4bool G4BGGPionElasticXS::IsApplicable(const G4DynamicParticle*, 
+					const G4Element*)
 {
-  return IsZAApplicable(dp, elm->GetZ(), elm->GetN());
+  return true;
+  //return IsZAApplicable(dp, elm->GetZ(), elm->GetN());
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 inline
-G4bool G4BGGPionElasticXS::IsZAApplicable(const G4DynamicParticle* dp, 
-					  G4double Z, G4double/* A*/)
+G4bool G4BGGPionElasticXS::IsZAApplicable(const G4DynamicParticle*, 
+					  G4double /*Z*/, G4double/* A*/)
 {
-  return (dp->GetDefinition() == particle && Z > 1.5);
+  return true;
+  //  return (dp->GetDefinition() == particle);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

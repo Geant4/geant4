@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4LPhysicsFreeVector.cc,v 1.12 2007/05/14 10:27:06 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4LPhysicsFreeVector.cc,v 1.22 2008/09/22 08:26:33 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // 
 // --------------------------------------------------------------------
@@ -35,35 +35,32 @@
 //
 // F.W. Jones, TRIUMF, 04-JUN-96
 //
-// 27-MAR-97 FWJ: first version for Alpha release
+// --------------------------------------------------------------------
 
 #include "G4LPhysicsFreeVector.hh"
 
 #include "G4ios.hh"
 
+// --------------------------------------------------------------------
+
 G4LPhysicsFreeVector::G4LPhysicsFreeVector()
-   : verboseLevel(0)
+   : G4PhysicsVector(), verboseLevel(0)
 {
    type = T_G4LPhysicsFreeVector;
-
-   edgeMin = 0.0;
-   edgeMax = 0.0;
-   numberOfBin = 0;
 }
+
+// --------------------------------------------------------------------
 
 G4LPhysicsFreeVector::G4LPhysicsFreeVector(size_t nbin,
                                            G4double binmin,
                                            G4double binmax)
-   : verboseLevel(0)
+  : G4PhysicsVector(), verboseLevel(0)
 {
    type = T_G4LPhysicsFreeVector;
-
+   
    edgeMin = binmin;
    edgeMax = binmax;
    numberOfBin = nbin;
-   lastEnergy = 0.;
-   lastValue = 0.;
-   lastBin = 0;
    binVector.reserve(nbin+1);
    dataVector.reserve(nbin+1);
    for (size_t i=0; i<=numberOfBin; i++)
@@ -73,9 +70,37 @@ G4LPhysicsFreeVector::G4LPhysicsFreeVector(size_t nbin,
    }
 }  
 
+// --------------------------------------------------------------------
+
 G4LPhysicsFreeVector::~G4LPhysicsFreeVector()
 {
 }
+
+// --------------------------------------------------------------------
+
+G4LPhysicsFreeVector::G4LPhysicsFreeVector(const G4LPhysicsFreeVector& right)
+  : G4PhysicsVector(right)
+{
+  verboseLevel = right.verboseLevel;
+}
+
+// --------------------------------------------------------------------
+
+G4LPhysicsFreeVector& 
+G4LPhysicsFreeVector::operator=(const G4LPhysicsFreeVector& right)
+{
+  // Check assignment to self
+  //
+  if(this == &right) { return *this; }
+
+  DeleteData();
+  CopyData(right);
+
+  verboseLevel = right.verboseLevel;
+  return *this;
+}
+
+// --------------------------------------------------------------------
 
 void G4LPhysicsFreeVector::DumpValues()
 {

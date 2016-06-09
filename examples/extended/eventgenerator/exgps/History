@@ -11,6 +11,46 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+06/12/2008 F.Lei (exgps-V09-01-02)
+- updated g4mac files in ./macros
+
+05/12/2008 G.Barrand
+- exGPSAnalysisManager : have a comment in case the 
+  AIDA_createAnalysisFactory or the AIDA::ITree creation
+  fails ; which is something that may happen.
+- exGPSAnalysisManager : have the creation of the AIDA::IPlotter
+  on the same footing than other AIDA objects. Remove then
+  the createPlotter method.
+- exGPSAnalysisManager : have t,hFactories local in BeginOfRun
+  and then rm getHistogram,getTupleFactories.
+
+04/12/2008 F.Lei (exgps-V09-01-01)
+- updated README
+- tag Guy's changes
+
+04/12/2008 G.Barrand
+- exGPSAnalysisManager.hh : have the destructor private.
+- exGPS.cc : then use the exGPSAnalysisManager::dispose() method.
+- exGPS.cc : rm the aMgr which is no more used.
+- exGPSAnalysisManager::createPlotter : rm the "Plotter" string
+  and then ask to the AIDA implementation the default plotter.
+- exGPSAnalysisManager::EndOfRun : reset the variable after the deletions.
+- exGPS.cc and exGPSEventAction : use #ifdef G4VIS_USE in case
+  somone want to build without the G4 vis system.
+- exGPSAnalysisManager.cc : revisit : createPlotter : delete
+  of plotterFactory and plotter where lacking. (Seen with the
+  OpenScientist object decount).
+- exGPSRunAction : #ifdef G4VIS_USE.
+
+02/12/2008 F.Lei (exgps-V09-01-00)
+- updated exGPSAnalysisManager class to improve the AIDA output
+- removed AIDA setup from GNUmakefile (use G4 default one)
+- removed the ROOT file option
+
+21/12/2006 F.Lei (exgps-V08-02-00)
+-  Added the option for output results in .root file
+-  Changed particle_name to PDGcode in the ntuple
+
 19/07/2005 F.Lei (exgps-V07-01-00)
 -  Changing in GNUmakefile 
    LOADLIBS += `aida-config --lib`

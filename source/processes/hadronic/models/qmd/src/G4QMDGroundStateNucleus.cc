@@ -23,6 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// 081024 G4NucleiPropertiesTable:: to G4NucleiProperties::
+//
 #include "G4QMDGroundStateNucleus.hh"
 
 #include "G4NucleiProperties.hh"
@@ -118,7 +120,7 @@ void G4QMDGroundStateNucleus::packNucleons()
 
    //std::cout << "G4QMDGroundStateNucleus::packNucleons" << std::endl;
 
-   ebini = - ( G4NucleiPropertiesTable::GetBindingEnergy( GetAtomicNumber() , GetMassNumber() ) ) / GetMassNumber();
+   ebini = - G4NucleiProperties::GetBindingEnergy( GetMassNumber() , GetAtomicNumber() ) / GetMassNumber();
 
    G4double ebin00 = ebini * 0.001;
 

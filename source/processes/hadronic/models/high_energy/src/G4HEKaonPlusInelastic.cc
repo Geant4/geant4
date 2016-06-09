@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4HEKaonPlusInelastic.cc,v 1.13 2006/06/29 20:30:18 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4HEKaonPlusInelastic.cc,v 1.14 2008/03/17 20:49:17 dennis Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 //
 
@@ -367,15 +367,15 @@ G4HEKaonPlusInelastic::FirstIntInCasKaonPlus( G4bool &inElastic,
 //                    calculate first the sum of all constants, check for numerical problems.   
        G4double test, dum, anpn = 0.0;
 
-       for( nt=1; nt<=numSec; nt++ ) 
-         {
-           test = std::exp( Amin( expxu, Amax( expxl, -(pi/4.0)*(nt*nt)/(n*n) ) ) );
-           dum = pi*nt/(2.0*n*n);
-           if( std::fabs(dum) < 1.0 ) 
-             if( test >= 1.0e-10 )anpn += dum*test;
-           else 
-             anpn += dum*test;
-         }
+       for (nt=1; nt<=numSec; nt++) {
+         test = std::exp( Amin( expxu, Amax( expxl, -(pi/4.0)*(nt*nt)/(n*n) ) ) );
+         dum = pi*nt/(2.0*n*n);
+         if (std::fabs(dum) < 1.0) { 
+           if( test >= 1.0e-10 )anpn += dum*test;
+         } else { 
+           anpn += dum*test;
+	 }
+       }
    
        G4double ran = G4UniformRand();
        G4double excs = 0.0;
@@ -386,27 +386,25 @@ G4HEKaonPlusInelastic::FirstIntInCasKaonPlus( G4bool &inElastic,
               {
                 for( nm=Imax(0,np-2); nm<=np; nm++ ) 
                    {
-                     for( nz=0; nz<numSec/3; nz++ ) 
-                        {
-                          if( ++counter < numMul ) 
-                            {
-                              nt = np+nm+nz;
-                              if( (nt>0) && (nt<=numSec) ) 
-                                {
-                                  test = std::exp( Amin( expxu, Amax( expxl, -(pi/4.0)*(nt*nt)/(n*n) ) ) );
-                                  dum = (pi/anpn)*nt*protmul[counter]*protnorm[nt-1]/(2.0*n*n);
-                                  if( std::fabs(dum) < 1.0 ) 
-                                        if( test >= 1.0e-10 )excs += dum*test;
-                                   else 
-                                        excs += dum*test;
-                                   if (ran < excs) goto outOfLoop;      //----------------------->
-                                }   
-                            }    
-                        }     
+                     for (nz=0; nz<numSec/3; nz++) {
+                       if (++counter < numMul) {
+                         nt = np+nm+nz;
+                         if ( (nt>0) && (nt<=numSec) ) {
+                           test = std::exp( Amin( expxu, Amax( expxl, -(pi/4.0)*(nt*nt)/(n*n) ) ) );
+                           dum = (pi/anpn)*nt*protmul[counter]*protnorm[nt-1]/(2.0*n*n);
+                           if (std::fabs(dum) < 1.0) { 
+                             if( test >= 1.0e-10 )excs += dum*test;
+                           } else { 
+                             excs += dum*test;
+	                   }
+                           if (ran < excs) goto outOfLoop;      //----------------------->
+                         }   
+                       }    
+                     }     
                    }                                                                                  
               }
        
-                                              // 3 previous loops continued to the end
+                             // 3 previous loops continued to the end
            inElastic = false;                 // quasi-elastic scattering   
            return;
          }
@@ -417,26 +415,24 @@ G4HEKaonPlusInelastic::FirstIntInCasKaonPlus( G4bool &inElastic,
               {
                 for( nm=Imax(0,np-1); nm<=(np+1); nm++ ) 
                    {
-                     for( nz=0; nz<numSec/3; nz++ ) 
-                        {
-                          if( ++counter < numMul ) 
-                            {
-                              nt = np+nm+nz;
-                              if( (nt>=1) && (nt<=numSec) ) 
-                                {
-                                  test = std::exp( Amin( expxu, Amax( expxl, -(pi/4.0)*(nt*nt)/(n*n) ) ) );
-                                  dum = (pi/anpn)*nt*neutmul[counter]*neutnorm[nt-1]/(2.0*n*n);
-                                  if( std::fabs(dum) < 1.0 ) 
-                                      if( test >= 1.0e-10 )excs += dum*test;
-                                  else 
-                                      excs += dum*test;
-                                  if (ran < excs) goto outOfLoop;       // -------------------------->
-                                }
-                            }
-                        }
+                     for (nz=0; nz<numSec/3; nz++) {
+                       if (++counter < numMul) {
+                         nt = np+nm+nz;
+                         if ( (nt>=1) && (nt<=numSec) ) {
+                           test = std::exp( Amin( expxu, Amax( expxl, -(pi/4.0)*(nt*nt)/(n*n) ) ) );
+                           dum = (pi/anpn)*nt*neutmul[counter]*neutnorm[nt-1]/(2.0*n*n);
+                           if (std::fabs(dum) < 1.0) { 
+                             if( test >= 1.0e-10 )excs += dum*test;
+                           } else { 
+                             excs += dum*test;
+	          	   }
+                           if (ran < excs) goto outOfLoop;       // -------------------------->
+                         }
+                       }
+                     }
                    }
               }
-                                                  // 3 previous loops continued to the end
+                                   // 3 previous loops continued to the end
            inElastic = false;                     // quasi-elastic scattering.
            return;
          }

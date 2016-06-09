@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.87 2007/05/12 15:47:21 gcosmo Exp $
+# $Id: GNUmakefile,v 1.89 2008/12/03 13:37:02 gcosmo Exp $
 # -----------------------------------------------------------------
 # "gmake" makes default libraries for each subdomain.
 # "gmake global" makes global libraries for each subdomain.
@@ -72,9 +72,9 @@ kernel:
 
 libmap: liblist
 	@$(ECHO) "Libmap stage. Searching for GNUmakefiles and sorting ..."
-	@find . \
+	@$(FIND) . \
 	  -name GNUmakefile -exec $(GREP) -l '^ *name *:=' {} \; \
-	  | sort \
+	  | $(SORT) \
 	  > /tmp/G4_all_lib_makefiles.$(unique);
 	@$(ECHO) "Weeding out paths and files ..."
 	@for i in `$(CAT) /tmp/G4_all_lib_makefiles.$(unique)`; \
@@ -84,7 +84,7 @@ libmap: liblist
 	  $(ECHO) $$i >> /tmp/G4_granlib_makefiles.$(unique); \
 	done
 	@$(ECHO) "Making libname.map starter file ..."
-	@touch /tmp/G4libname.map.starter.$(unique);
+	@$(TOUCH) /tmp/G4libname.map.starter.$(unique);
 	@for i in `$(CAT) /tmp/G4_granlib_makefiles.$(unique)`; \
 	do \
 	  $(GREP) '^ *name *:=' $$i | $(CUT) -d \  -f 3 \
@@ -149,8 +149,8 @@ endif
 
 banner:
 	@$(ECHO) "*************************************************************"
-	@$(ECHO) " Installation Geant4 version $$Name: geant4-09-01 $ "
-	@$(ECHO) " Copyright (C) 1994-2007 Geant4 Collaboration                            "
+	@$(ECHO) " Installation Geant4 version $$Name: geant4-09-02 $ "
+	@$(ECHO) " Copyright (C) 1994-2008 Geant4 Collaboration                            "
 	@$(ECHO) "*************************************************************"
 
 clean_libs::

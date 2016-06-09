@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UniversalFluctuation.cc,v 1.15 2007/07/13 11:01:50 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4UniversalFluctuation.cc,v 1.16 2008/10/22 16:04:33 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // -------------------------------------------------------------------
 //
@@ -106,10 +106,10 @@ void G4UniversalFluctuation::InitialiseMe(const G4ParticleDefinition* part)
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4double G4UniversalFluctuation::SampleFluctuations(const G4Material* material,
-                                                const G4DynamicParticle* dp,
-				                      G4double& tmax,
-					              G4double& length,
-                                                      G4double& meanLoss)
+						    const G4DynamicParticle* dp,
+						    G4double& tmax,
+						    G4double& length,
+						    G4double& meanLoss)
 {
 // Calculate actual loss from the mean loss.
 // The model used to get the fluctuations is essentially the same

@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eeCrossSections.cc,v 1.6 2006/06/29 19:32:42 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4eeCrossSections.cc,v 1.7 2008/07/10 18:06:39 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // -------------------------------------------------------------------
 //
@@ -38,7 +38,7 @@
 // Creation date: 25.10.2003
 //
 // Modifications:
-//
+// 10.07.2008 Updated for PDG Jour. Physics, G33, 1 (2006)
 //
 // -------------------------------------------------------------------
 //
@@ -51,6 +51,7 @@
 #include "G4PionPlus.hh"
 #include "G4PionMinus.hh"
 #include "G4PionZero.hh"
+#include "G4Eta.hh"
 #include "G4KaonPlus.hh"
 #include "G4KaonMinus.hh"
 #include "G4KaonZeroLong.hh"
@@ -79,22 +80,22 @@ void G4eeCrossSections::Initialise()
 {
   MsPi = G4PionPlus::PionPlus()->GetPDGMass();
   MsPi0= G4PionZero::PionZero()->GetPDGMass();
-  MsEta= 547.30*MeV;
+  MsEta= G4Eta::Eta()->GetPDGMass();
   MsEtap=957.78*MeV;
   MsKs = G4KaonZeroLong::KaonZeroLong()->GetPDGMass();
-  MsKc=G4KaonPlus::KaonPlus()->GetPDGMass();
-  MsRho= 770.0*MeV;
-  MsOm = 781.94*MeV;
+  MsKc = G4KaonPlus::KaonPlus()->GetPDGMass();
+  MsRho= 775.5*MeV;
+  MsOm = 782.62*MeV;
   MsF0 = 980.0*MeV;
-  MsA0 = 983.4*MeV;
-  MsPhi= 1019.413*MeV;
+  MsA0 = 984.7*MeV;
+  MsPhi= 1019.46*MeV;
   MsK892 = 891.66*MeV;
-  MsK0892 = 896.10*MeV;
-  GRho = 150.7*MeV;
-  GOm = 8.41*MeV;
-  GPhi = 4.43*MeV;
+  MsK0892 = 896.0*MeV;
+  GRho = 149.4*MeV;
+  GOm = 8.49*MeV;
+  GPhi = 4.26*MeV;
   GK892 = 50.8*MeV;
-  GK0892 = 50.5*MeV;
+  GK0892 = 50.3*MeV;
   PhRho = 0.0;
   PhOm = 0.0;
   PhPhi = 155.0*degree;
@@ -102,29 +103,29 @@ void G4eeCrossSections::Initialise()
       
   BrRhoPiG = 4.5e-4;
   BrRhoPi0G= 6.8e-4;
-  BrRhoEtaG= 2.4e-4;
-  BrRhoEe = 4.49e-5;
-  BrOm3Pi = 0.888;
-  BrOmPi0G= 0.085;
-  BrOmEtaG= 6.5e-4;
-  BrOm2Pi = 0.0221;
+  BrRhoEtaG= 2.95e-4;
+  BrRhoEe = 4.7e-5;
+  BrOm3Pi = 0.891;
+  BrOmPi0G= 0.089;
+  BrOmEtaG= 4.9e-4;
+  BrOm2Pi = 0.017;
   PhOm2Pi = 90.0;
-  BrOmEe = 7.07e-5;
-  BrPhi2Kc = 0.491;
-  BrPhiKsKl= 0.341;
-  BrPhi3Pi = 0.155;
-  BrPhiPi0G= 1.31e-3;
-  BrPhiEtaG= 1.26e-2;
-  BrPhi2Pi = 8.e-5;
+  BrOmEe = 7.18e-5;
+  BrPhi2Kc = 0.492;
+  BrPhiKsKl= 0.34;
+  BrPhi3Pi = 0.153;
+  BrPhiPi0G= 1.25e-3;
+  BrPhiEtaG= 1.301e-2;
+  BrPhi2Pi = 7.3e-5;
   PhPhi2Pi = -20.0*degree;
-  BrPhiEe = 2.99e-4;
+  BrPhiEe = 2.97e-4;
 
   MsRho3 = MsRho*MsRho*MsRho;
   MsOm3  = MsOm*MsOm*MsOm;
   MsPhi3 = MsPhi*MsPhi*MsPhi;
 
   MeVnb = 3.8938e+11*nanobarn;
-  Alpha = 1.0/137.036;
+  Alpha = fine_structure_const;
 
   AOmRho = 3.0;
   ARhoPRho = 0.72;
@@ -133,10 +134,10 @@ void G4eeCrossSections::Initialise()
   gsig = 500.*MeV;
   brsigpipi = 1.;
 
-  msrho1450 = 1465.*MeV;
-  msrho1700 = 1700.*MeV;
-  grho1450 = 310.*MeV;
-  grho1700 = 240.*MeV;
+  msrho1450 = 1459.*MeV;
+  msrho1700 = 1688.8*MeV;
+  grho1450 = 171.*MeV;
+  grho1700 = 161.*MeV;
   arhoompi0 = 1.;
   arho1450ompi0 = 1.;
   arho1700ompi0 = 1.;
@@ -189,8 +190,7 @@ void G4eeCrossSections::Initialise()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4double G4eeCrossSections::CrossSection2pi(G4double e) 
-{
- 
+{ 
   complex<G4double> xr(cos(PhRho),sin(PhRho));
   complex<G4double> xo(cos(PhOm2Pi),sin(PhOm2Pi));
   complex<G4double> xf(cos(PhPhi2Pi),sin(PhPhi2Pi));
@@ -204,6 +204,97 @@ G4double G4eeCrossSections::CrossSection2pi(G4double e)
       sqrt(Width2p(s,MsRho,GRho,1.0,MsPi)*MsRho3*BrRhoEe*GRho)*xr/drho
     + sqrt(Width2p(s,MsOm,GOm,BrOm2Pi,MsPi)*MsOm3*BrOmEe*GOm)*xo/dom
     + sqrt(Width2p(s,MsPhi,GPhi,BrPhi2Pi,MsPi)*MsPhi3*BrPhiEe*GPhi)*xf/dphi;
+
+  G4double cross = 12.0*pi*MeVnb*norm(amp)/(e*s);
+
+  return cross;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4double G4eeCrossSections::CrossSection3pi(G4double e) 
+{ 
+  complex<G4double> xf(cos(PhPhi2Pi),sin(PhPhi));
+
+  G4double s = e*e;
+  complex<G4double> dom  = DpOm(e);
+  complex<G4double> dphi = DpPhi(e);
+
+  complex<G4double> amp = 
+    sqrt(Width3p(s,MsOm,GOm,BrOm3Pi)*MsOm3*BrOmEe*GOm)/dom
+    + sqrt(Width3p(s,MsPhi,GPhi,BrPhi3Pi)*MsPhi3*BrPhiEe*GPhi)*xf/dphi;
+
+  G4double cross = 12.0*pi*MeVnb*norm(amp)/(e*s);
+
+  return cross;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4double G4eeCrossSections::CrossSectionPi0G(G4double e) 
+{ 
+  complex<G4double> xf(cos(PhPhi),sin(PhPhi));
+
+  G4double s = e*e;
+  complex<G4double> drho = DpRho(e);
+  complex<G4double> dom  = DpOm(e);
+  complex<G4double> dphi = DpPhi(e);
+
+  complex<G4double> amp = 
+      sqrt(WidthPg(s,MsRho,GRho,BrRhoPi0G,MsPi0)*MsRho3*BrRhoEe*GRho)/drho
+    + sqrt(WidthPg(s,MsOm,GOm,BrOmPi0G,MsPi0)*MsOm3*BrOmEe*GOm)/dom
+    + sqrt(WidthPg(s,MsPhi,GPhi,BrPhiPi0G,MsPi0)*MsPhi3*BrPhiEe*GPhi)*xf/dphi;
+
+  G4double cross = 12.0*pi*MeVnb*norm(amp)/(e*s);
+
+  return cross;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4double G4eeCrossSections::CrossSectionEtaG(G4double e) 
+{ 
+  complex<G4double> xf(cos(PhPhi),sin(PhPhi));
+
+  G4double s = e*e;
+  complex<G4double> drho = DpRho(e);
+  complex<G4double> dom  = DpOm(e);
+  complex<G4double> dphi = DpPhi(e);
+
+  complex<G4double> amp = 
+      sqrt(WidthPg(s,MsRho,GRho,BrRhoEtaG,MsEta)*MsRho3*BrRhoEe*GRho)/drho
+    + sqrt(WidthPg(s,MsOm,GOm,BrOmEtaG,MsEta)*MsOm3*BrOmEe*GOm)/dom
+    + sqrt(WidthPg(s,MsPhi,GPhi,BrPhiEtaG,MsEta)*MsPhi3*BrPhiEe*GPhi)*xf/dphi;
+
+  G4double cross = 12.0*pi*MeVnb*norm(amp)/(e*s);
+
+  return cross;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4double G4eeCrossSections::CrossSection2Kcharged(G4double e) 
+{ 
+  G4double s = e*e;
+  complex<G4double> dphi = DpPhi(e);
+
+  complex<G4double> amp = 
+    sqrt(Width2p(s,MsPhi,GPhi,BrPhi2Kc,MsKc)*MsPhi3*BrPhiEe*GPhi)/dphi;
+
+  G4double cross = 12.0*pi*MeVnb*norm(amp)/(e*s);
+
+  return cross;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4double G4eeCrossSections::CrossSection2Kneutral(G4double e) 
+{ 
+  G4double s = e*e;
+  complex<G4double> dphi = DpPhi(e);
+
+  complex<G4double> amp = 
+    sqrt(Width2p(s,MsPhi,GPhi,BrPhiKsKl,MsKs)*MsPhi3*BrPhiEe*GPhi)/dphi;
 
   G4double cross = 12.0*pi*MeVnb*norm(amp)/(e*s);
 
@@ -237,7 +328,10 @@ G4double G4eeCrossSections::Width3p(G4double s, G4double mres,
 
 G4double G4eeCrossSections::PhaseSpace3p(G4double e) 
 {
-  
+  //     E.A.Kuraev, Z.K.Silagadze.
+  //  Once more about the omega->3 pi contact term.
+  //  Yadernaya Phisica, 1995, V58, N9, p.1678-1694.  
+
   //  G4bool b;
   //  G4double x = ph3p->GetValue(e, b);
   G4double x = 1.0; 

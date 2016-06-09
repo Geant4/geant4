@@ -1,0 +1,49 @@
+$Id: History,v 1.6 2008/12/09 17:53:13 arce Exp $
+-------------------------------------------------------------------
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                      Category History file
+                      ---------------------
+This file should be used by G4 developers and category coordinators
+to briefly summarize all major modifications introduced in the code
+and keep track of all category-tags.
+It DOES NOT substitute the  CVS log-message one should put at every
+committal in the CVS repository !
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+9 December, 08 P.Arce (ascii-V09-01-06)
+- SUBS -> SUBTRACTION, INTERS -> INTERSECTION
+- add FindG4PhysVol, delete FindLVs (declared but not defined)
+
+3 December, 08 P.Arce (ascii-V09-01-05)
+- Include possibility of placements inside divisions
+- Correct rotation matrix in circular parameterisations
+- Small output messages changes
+
+26 November, 08  G.Cosmo (ascii-V09-01-04)
+- Fixed compilation warnings for uninitialised variables.
+
+21 November, 08  G.Cosmo (ascii-V09-01-03)
+- Corrected GNUmakefile to have ':=' instead of '=' for definition
+  of library name. Required in order to correctly build libname.map!
+- Use "const G4String&" where possible.
+- Added missing CVS headers, some code cleanup and formatting...
+
+21 November, 08  P.Arce (ascii-V09-01-02)
+- Added handling of G4EllipticalCone.
+- Use G4UIcommand::ConvertToString() in place of custom itoa().
+- Corrected GNUmakefile to add path to BREPS module.
+
+20 November, 08  P.Arce (ascii-V09-01-01)
+- Added BREPS reading, support for any kind of parameterisations and
+  dumping abilities.
+- Corrected handling on strings in error/warnings printouts.
+
+23 October, 08  G.Cosmo (ascii-V09-01-00)
+- Created from original implementation by P.Arce (CIEMAT).
+- Reviewed code and formatting. First release.

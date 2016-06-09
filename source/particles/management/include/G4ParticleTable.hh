@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleTable.hh,v 1.19 2007/09/14 07:04:09 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4ParticleTable.hh,v 1.21 2008/03/22 06:03:40 kurasige Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // 
 // ------------------------------------------------------------
@@ -44,6 +44,7 @@
 //      modified FindIon/GetIon methods  17 AUg., 99 H.Kurashige
 //      implement new version for using STL map instaed of RW PtrHashedDictionary
 //                                       28 ct., 99  H.Kurashige
+//      modified implementation of Remove 21 Mar.,08  H.Kurashige
 
 #ifndef G4ParticleTable_h
 #define G4ParticleTable_h 1
@@ -152,26 +153,6 @@ class G4ParticleTable
    void DumpTable(const G4String &particle_name = "ALL");
    // dump information of particles specified by name 
 
- public: 
-   G4ParticleDefinition* Insert(G4ParticleDefinition *particle);
-   // insert the particle into ParticleTable 
-   // return value is same as particle if successfully inserted
-   //              or pointer to another G4ParticleDefinition object 
-   //                   which has same name of particle
-   //              or 0 if fail to insert by another reason
-
- protected:
-   G4ParticleDefinition* Remove(G4ParticleDefinition *particle);
-   // Remove Particle
-
-   G4PTblDictionary* GetDictionary();
-
-   const G4String& GetKey(const G4ParticleDefinition *particle) const;
-   // return key value of the particle (i.e. particle name)
-
-   const G4PTblEncodingDictionary* GetEncodingDictionary();
-   // return the pointer to EncodingDictionary
-
  public: //With Description
 
    G4IonTable* GetIonTable();
@@ -180,15 +161,36 @@ class G4ParticleTable
    const G4ShortLivedTable* GetShortLivedTable();
    // return the pointer to G4ShortLivedTable object
  
+ public: // With Description
+   G4ParticleDefinition* Insert(G4ParticleDefinition *particle);
+   // insert the particle into ParticleTable 
+   // return value is same as particle if successfully inserted
+   //              or pointer to another G4ParticleDefinition object 
+   //                   which has same name of particle
+   //              or 0 if fail to insert by another reason
+
+   G4ParticleDefinition* Remove(G4ParticleDefinition *particle);
+   // Remove the particle from the table (not delete)
+
+   void RemoveAllParticles();
+   // remove all particles from G4ParticleTable 
+
+   void DeleteAllParticles();
+   // remove and delete all particles from G4ParticleTable  
+
  public:
    G4UImessenger*       CreateMessenger();
    void                 DeleteMessenger();
   // create/delete messenger for the particle table 
  
- protected:  
-   void RemoveAllParticles();
-   // remove all particles from G4ParticleTable and 
-   // delete them if they were created dynamically  (i.e. not static objects) 
+ protected:
+   G4PTblDictionary* GetDictionary();
+
+   const G4String& GetKey(const G4ParticleDefinition *particle) const;
+   // return key value of the particle (i.e. particle name)
+
+   const G4PTblEncodingDictionary* GetEncodingDictionary();
+   // return the pointer to EncodingDictionary
 
  private:
    G4int verboseLevel;

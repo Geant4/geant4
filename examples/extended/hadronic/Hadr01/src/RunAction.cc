@@ -39,7 +39,6 @@
 #include "HistoManager.hh"
 #include "G4UImanager.hh"
 #include "G4VVisManager.hh"
-#include "G4HadronProcessStore.hh"
 #include "G4NistManager.hh"
 #include "G4Element.hh"
 

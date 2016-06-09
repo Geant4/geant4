@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ReflectionFactory.cc,v 1.6 2007/05/11 13:58:35 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4ReflectionFactory.cc,v 1.9 2008/11/13 09:33:20 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // 
 // Class G4ReflectionFactory Implementation
@@ -74,8 +74,8 @@ G4ReflectionFactory* G4ReflectionFactory::Instance()
   // Static singleton access method.
   // ---
 
-  if (!fInstance) new G4ReflectionFactory();
-  
+  if (!fInstance) { fInstance = new G4ReflectionFactory(); }
+
   return fInstance;
 }  
 
@@ -97,6 +97,7 @@ G4ReflectionFactory::G4ReflectionFactory()
 
 G4ReflectionFactory::~G4ReflectionFactory()
 {
+  delete fInstance;
 }
 
 //
@@ -861,7 +862,7 @@ void G4ReflectionFactory::SetVolumesNameExtension(const G4String& nameExtension)
           
 //_____________________________________________________________________________
 
-G4String G4ReflectionFactory::GetVolumesNameExtension() const
+const G4String& G4ReflectionFactory::GetVolumesNameExtension() const
 {
   return fNameExtension;
 }

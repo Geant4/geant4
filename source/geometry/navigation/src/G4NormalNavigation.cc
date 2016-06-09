@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4NormalNavigation.cc,v 1.9 2007/05/11 13:43:59 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 //
 // class G4NormalNavigation Implementation

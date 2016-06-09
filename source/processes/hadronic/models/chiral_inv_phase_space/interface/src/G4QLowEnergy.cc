@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QLowEnergy.cc,v 1.4 2007/11/15 09:36:43 mkossov Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4QLowEnergy.cc,v 1.7 2008/10/02 21:10:07 dennis Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 //      ---------------- G4QLowEnergy class -----------------
 //                 by Mikhail Kossov, Aug 2007.
@@ -51,13 +51,13 @@ std::vector<std::vector<G4double>*>G4QLowEnergy::IsoProbInEl;//SumProbIsotE(i)
 
 // Constructor
 G4QLowEnergy::G4QLowEnergy(const G4String& processName):
-  G4VDiscreteProcess(processName), evaporate(true)
+  G4VDiscreteProcess(processName, fHadronic), evaporate(true)
 {
 #ifdef debug
   G4cout<<"G4QLowEnergy::Constructor is called processName="<<processName<<G4endl;
 #endif
   if (verboseLevel>0) G4cout<<GetProcessName()<<" process is created "<<G4endl;
-
+  SetProcessSubType(fHadronInelastic);
   G4QCHIPSWorld::Get()->GetParticles(nPartCWorld); // Create CHIPS World (234 part. max)
 }
 
@@ -464,32 +464,48 @@ G4VParticleChange* G4QLowEnergy::PostStepDoIt(const G4Track& track, const G4Step
     mass[1] = targQPDG.GetNuclMass(totZ,totN-1,0); // gamma+neutron
     mass[2] = targQPDG.GetNuclMass(totZ-1,totN,0); // gamma+proton
   }
-  if (totZ>0&&totN>1||totN>0&&totZ>1) mass[3] = targQPDG.GetNuclMass(totZ-1,totN-1,0);//g+d
-  if (totZ>0&&totN>2||totN>1&&totZ>1) mass[4] = targQPDG.GetNuclMass(totZ-1,totN-2,0);//g+t
-  if (totZ>2&&totN>0||totN>1&&totZ>1) mass[5] = targQPDG.GetNuclMass(totZ-2,totN-1,0);//g+3
-  if (totZ>2&&totN>1||totN>2&&totZ>1) mass[6] = targQPDG.GetNuclMass(totZ-2,totN-2,0);//g+a
-  if (totZ>0&&totN>1||totN>2) mass[7] = targQPDG.GetNuclMass(totZ,totN-2,0); // n+n
+  if ( (totZ > 0 && totN > 1) || (totN > 0 && totZ > 1) ) 
+     mass[3] = targQPDG.GetNuclMass(totZ-1,totN-1,0); //g+d
+  if ( (totZ > 0 && totN > 2) || (totN > 1 && totZ > 1) ) 
+     mass[4] = targQPDG.GetNuclMass(totZ-1,totN-2,0); //g+t
+  if ( (totZ > 2 && totN > 0) || (totN > 1 && totZ > 1) ) 
+     mass[5] = targQPDG.GetNuclMass(totZ-2,totN-1,0); //g+3
+  if ( (totZ > 2 && totN > 1) || (totN > 2 && totZ > 1) ) 
+     mass[6] = targQPDG.GetNuclMass(totZ-2,totN-2,0); //g+a
+  if ( (totZ > 0 && totN > 1) || totN > 2 ) 
+     mass[7] = targQPDG.GetNuclMass(totZ,totN-2,0); // n+n
   mass[ 8] = mass[3]; // neutron+proton (the same as a deuteron)
-  if (totZ>1&&totN>0||totZ>2) mass[9] = targQPDG.GetNuclMass(totZ-2,totN,0); // p+p
+  if ( (totZ > 1 && totN > 0) || totZ > 2 ) 
+     mass[9] = targQPDG.GetNuclMass(totZ-2,totN,0); // p+p
   mass[10] = mass[5]; // proton+deuteron (the same as He3)
   mass[11] = mass[4]; // neutron+deuteron (the same as t)
   mass[12] = mass[6]; // deuteron+deuteron (the same as alpha)
   mass[13] = mass[6]; // proton+tritium (the same as alpha)
-  if (totN>3||totN>2&&totZ>0) mass[14] = targQPDG.GetNuclMass(totZ-1,totN-3,0); // n+t
-  if (totZ>3||totZ>2&&totN>0) mass[15] = targQPDG.GetNuclMass(totZ-3,totN-1,0); // He3+p
+  if ( totN > 3 || (totN > 2 && totZ > 0) ) 
+     mass[14] = targQPDG.GetNuclMass(totZ-1,totN-3,0); // n+t
+  if ( totZ > 3 || (totZ > 2 && totN > 0) ) 
+     mass[15] = targQPDG.GetNuclMass(totZ-3,totN-1,0); // He3+p
   mass[16] = mass[6]; // neutron+He3 (the same as alpha)
-  if (totZ>3&&totN>1||totZ>2&&totN>2) mass[17] = targQPDG.GetNuclMass(totZ-3,totN-2,0);//pa
-  if (totZ>1&&totN>3||totZ>2&&totN>2) mass[18] = targQPDG.GetNuclMass(totZ-2,totN-3,0);//na
+  if ( (totZ > 3 && totN > 1) || (totZ > 2 && totN > 2) ) 
+    mass[17] = targQPDG.GetNuclMass(totZ-3,totN-2,0); // pa
+  if ( (totZ > 1 && totN > 3) || (totZ > 2 && totN > 2) ) 
+    mass[18] = targQPDG.GetNuclMass(totZ-2,totN-3,0); // na
   if(pL>0)
   {
     G4int pL1=pL-1;
     if(totN>0||totZ>0) mass[19] = targQPDG.GetNuclMass(totZ  ,totN  ,pL1);// Lambda+gamma
-    if(totN>0&&totZ>0||        totZ>1)mass[20]=targQPDG.GetNuclMass(totZ-1,totN  ,pL1);//Lp
-    if(totN>0&&totZ>0||totN>0        )mass[21]=targQPDG.GetNuclMass(totZ  ,totN-1,pL1);//Ln
-    if(totN>1&&totZ>0||totN>0&&totZ>1)mass[22]=targQPDG.GetNuclMass(totZ-1,totN-1,pL1);//Ld
-    if(totN>2&&totZ>0||totN>1&&totZ>1)mass[23]=targQPDG.GetNuclMass(totZ-1,totN-2,pL1);//Lt
-    if(totN>0&&totZ>2||totN>1&&totZ>1)mass[24]=targQPDG.GetNuclMass(totZ-2,totN-1,pL1);//L3
-    if(totN>1&&totZ>2||totN>2&&totZ>1)mass[25]=targQPDG.GetNuclMass(totZ-2,totN-2,pL1);//La
+    if( (totN > 0 && totZ > 0) ||        totZ > 1 ) 
+      mass[20]=targQPDG.GetNuclMass(totZ-1,totN  ,pL1);//Lp
+    if( (totN > 0 && totZ > 0) || totN > 0        ) 
+      mass[21]=targQPDG.GetNuclMass(totZ  ,totN-1,pL1);//Ln
+    if( (totN > 1 && totZ > 0) || (totN > 0 && totZ > 1) ) 
+      mass[22]=targQPDG.GetNuclMass(totZ-1,totN-1,pL1);//Ld
+    if( (totN > 2 && totZ > 0) || (totN > 1 && totZ > 1) ) 
+      mass[23]=targQPDG.GetNuclMass(totZ-1,totN-2,pL1);//Lt
+    if( (totN > 0 && totZ > 2) || (totN > 1 && totZ > 1) ) 
+      mass[24]=targQPDG.GetNuclMass(totZ-2,totN-1,pL1);//L3
+    if( (totN > 1 && totZ > 2) || (totN > 2 && totZ > 1) ) 
+      mass[25]=targQPDG.GetNuclMass(totZ-2,totN-2,pL1);//La
   }
 #ifdef debug
   G4cout<<"G4QLowEn::PSDI: Residual masses are calculated"<<G4endl;

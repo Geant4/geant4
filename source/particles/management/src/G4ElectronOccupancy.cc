@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4ElectronOccupancy.cc,v 1.9 2006/06/29 19:25:24 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // 
 // ----------------------------------------------------------------------

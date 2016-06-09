@@ -1,6 +1,8 @@
-#! /bin/sh -
+#! /bin/bash -
 # ======================================================================
 #  A script for Geant4 packaging
+#
+#  Version 2.2 Dec 2008
 #
 # ======================================================================
 export LANG=C
@@ -10,6 +12,20 @@ IFS='
 
 PATH=/bin:/usr/bin
 export PATH
+
+# ======================================================================
+# testing the echo features
+# ======================================================================
+if `(echo "testing\c"; echo 1,2,3) | grep c > /dev/null` ; then
+  if `(echo -n testing; echo 1,2,3) | sed s/-n/xn/ | grep xn > /dev/null`; then
+    ac_n= ac_c='
+' ac_t='        '
+  else
+    ac_n=-n ac_c= ac_t=
+  fi
+else
+  ac_n= ac_c='\c' ac_t=
+fi
 
 # ======================================================================
 # help message
@@ -126,11 +142,11 @@ done
 
 # check something
 shlib=so
-if [ $g4system == Darwin-g++ ]; then
+if [ $g4system = Darwin-g++ ]; then
   shlib=dylib
 fi
 
-echo -n "Checking for G4 dir ..."
+echo $ac_n "Checking for G4 dir ...$ac_c"
 if [ ! -d $g4dir ]; then
   echo "no"
   echo "### $g4dir does not exist."
@@ -138,7 +154,7 @@ if [ ! -d $g4dir ]; then
 fi
 echo $g4dir
 
-echo -n "Checking for CLHEP dir ..."
+echo $ac_n "Checking for CLHEP dir ...$ac_c"
 if [ ! -d $clhepdir ]; then
   echo "no"
   echo "### $clhepdir does not exist."
@@ -146,7 +162,7 @@ if [ ! -d $clhepdir ]; then
 fi
 echo $clhepdir
 
-echo -n "Checking for G4SYSTEM ..."
+echo $ac_n "Checking for G4SYSTEM ...$ac_c"
 if [ ! -e $g4dir/config/sys/$g4system.gmk ]; then
   echo "no"
   echo "### $g4system is invalid."
@@ -154,8 +170,8 @@ if [ ! -e $g4dir/config/sys/$g4system.gmk ]; then
 fi
 echo $g4system
 
-if [ $enable_lib == 1 ]; then
-  echo -n "Checking for lib dir ..."
+if [ $enable_lib = 1 ]; then
+  echo $ac_n "Checking for lib dir ...$ac_c"
   if [ ! -d $g4dir/$libdir ]; then
     echo "no"
     echo "### $libdir is invalid."
@@ -164,8 +180,8 @@ if [ $enable_lib == 1 ]; then
   echo $libdir
 fi
 
-if [ $enable_glib == 1 ]; then
-  echo -n "Checking for glib dir ..."
+if [ $enable_glib = 1 ]; then
+  echo $ac_n "Checking for glib dir ...$ac_c"
   if [ ! -d $g4dir/$glibdir ]; then
     echo "no"
     echo "### $glibdir is invalid."
@@ -174,8 +190,8 @@ if [ $enable_glib == 1 ]; then
   echo $glibdir
 fi
 
-if [ $enable_slib == 1 ]; then
-  echo -n "Checking for glib dir ..."
+if [ $enable_slib = 1 ]; then
+  echo $ac_n "Checking for slib dir ...$ac_c"
   if [ ! -d $g4dir/$slibdir ]; then
     echo "no"
     echo "### $slibdir is invalid."
@@ -210,33 +226,33 @@ cp -pR $g4dir/include $g4packdir/include/
 mv $g4packdir/include/include $g4packdir/include/Geant4
 rm $g4packdir/include/Geant4/README
 
-if [ $enable_glib == 1 ]; then
+if [ $enable_glib = 1 ]; then
   cp -pR $g4dir/$glibdir/$g4system/lib* $g4packdir/lib
 fi
 
-if [ $enable_slib == 1 ]; then
+if [ $enable_slib = 1 ]; then
   cp -pR $g4dir/$slibdir/$g4system/lib* $g4packdir/lib    
 
-  if [ $g4system == Darwin-g++ ]; then
-    if [ $enable_glib == 0 ]; then
+  if [ $g4system = Darwin-g++ ]; then
+    if [ $enable_glib = 0 ]; then
       echo "### gobal static library is required for the operation."
       exit -1
     fi
-    pushd $g4packdir/lib >& /dev/null
+    pushd $g4packdir/lib > /dev/null 2>&1
     rebuild_sharedlib
-    popd >& /dev/null
+    popd > /dev/null 2>&1
   fi
 fi
 
-if [ $enable_lib == 1 ]; then
+if [ $enable_lib = 1 ]; then
   cp -pR $g4dir/$libdir/$g4system/lib* $g4packdir/lib
 fi
 
 # CLHEP links
-pushd $g4packdir/lib >& /dev/null
-ln -s libCLHEP-[12]*.a libCLHEP.a
-ln -s libCLHEP-[12]*.$shlib libCLHEP.$shlib
-popd >& /dev/null
+pushd $g4packdir/lib > /dev/null 2>&1
+ln -s libCLHEP-*.a libCLHEP.a
+ln -s libCLHEP-*.$shlib libCLHEP.$shlib
+popd > /dev/null 2>&1
 
 exit 0
 

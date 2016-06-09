@@ -3,7 +3,7 @@
      ==========================================================
      Geant4 - an Object-Oriented Toolkit for Physics Simulation
      ==========================================================
-$Id: History,v 1.9 2007/12/04 09:52:49 gcosmo Exp $
+$Id: History,v 1.17 2008/11/06 10:11:27 kaitanie Exp $
 ---------------------------------------------------------------------
 
            History file for the Liege cascade INCL Model
@@ -16,10 +16,91 @@ code and to keep track of all tags.
    * Please list in reverse chronological order (last date on top)
    ---------------------------------------------------------------
 
+06 November 2008 - Pekka Kaitaniemi (hadr-incl-V09-01-05)
+---------------------------------------------------------
+- Fixed GCC 4.3.2 "src/G4Incl.cc:1712: warning: array subscript is above array
+  bounds" problem. The problem occured because array size was used as an
+  index.
+
+06 November 2008 - Gabriele Cosmo (hadr-incl-V09-01-04)
+-------------------------------------------------------
+- Fix for compilation errors on Windows-VC++; include <time.h> in
+  G4AblaFission and G4AblaFissionSimfis18 translation units to make them
+  self-consistent.
+
+24 October 2008 - Dennis Wright (hadr-incl-V09-01-03)
+-----------------------------------------------------
+- use GetNuclearMass() instead of GetAtomicMass() in G4AblaEvaporation.cc
+
+12 September 2008 - Pekka Kaitaniemi (hadr-incl-V09-01-02)
+------------------------------------
+- Bug fixes in INCL cascade:
+  o Fixed target nucleus initialization for targets with A >= 0.19 and
+  A <= 28.
+  o Fixed target nucleus radius calculation for targets 6 <= A < 19.
+  o Fixed conditional statements to avoid uninitialized variables.
+  o Several array index handling (off-by-one) bugs fixed.
+  o Several possible double/integer datatype problems fixed.
+
+25 June 2008 - Pekka Kaitaniemi (hadr-incl-V09-01-01)
+------------------------------
+- Portability fixes and code clean-up:
+  o Removed all assert() calls.
+  o Removed all isnan() and isinf() calls.
+  o All math functions now use std:: namespace.
+  o Silenced the fission models.
+
+26 May 2008 - Pekka Kaitaniemi (hadr-incl-V09-01-00)
+------------------------------
+- Bug fixes:
+  o Fixed serious data reading bug affecting the reading of data
+  files: flalpha.dat, frldm.dat and vgsld.dat.
+- Fission reorganization:
+  o Two fission models are provided. By default GSI SimFis3 fission is
+  used. Optional SimFis18 is provided.
+
+22 April 2008 - Pekka Kaitaniemi
+-----------------------------------
+- INCL/ABLA changes:
+  o Fix: Partial fix to the Alpha evaporation energies.
+  o Fix: Neutron energies.
+  o Fix: Moved remnant direction calculation block and added safeguards.
+  o ABLA bugfix: switched the transformation matrix indices.
+
+27 February 2008 - Pekka Kaitaniemi
+-----------------------------------
+- INCL/ABLA changes since Geant4 9.1:
+  o Initialized variables to zero and improved coding style.
+  o Variable "bet" needs to be part of G4Fiss.
+  o Fixed a variable definition. Variable "homega" is part of "G4Fiss".
+  o Fixed an index off-by-one bug in G4Abla.
+  o Fix an infinite loop.
+  o Move the stored event number to the class definition.
+  o Added a possible (commented) fix for ABLA output off-by-one problem.
+  o Cleaned up G4Abla::qrot comments.
+- Changes to the test suite since Geant4 9.1:
+  o Added more tests.
+  o New test system.
+  o Compare FORTRAN and C++ results.
+  o Preliminary GUI for running plotting scripts.
+
 04 December 2007 - Gabriele Cosmo (hadr-incl-V09-00-09)
 ---------------------------------
 - Again commented out call to isnan() in G4Incl.cc for allow
   porting to platforms other than Linux....
+
+03 December 2007 - Pekka Kaitaniemi
+-----------------------------------
+- Added bugfixes to INCL nucleon array handling. Several off-by-one
+  bugs were fixed. These fixes help with INCL neutron energy spectra. 
+- 4-momentum conservation problem was noticed to be mainly ABLA
+  related. 
+  o INCL alone violates energy conservation only by less than 20 MeV.
+  o ABLA has problems with baryon number conservation. Some produced
+  nucleons are not given back to INCL and Geant4. This is probably the
+  main reason for 4-momentum conservation violations.
+- Added 4-momentum and baryon number conservation checking code to the
+  interfaces (behind flag DEBUGINCL).
 
 15 November 2007 - Pekka Kaitaniemi
 -----------------------------------

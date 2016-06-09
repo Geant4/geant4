@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4LowEnergyPolarizedCompton.hh,v 1.9 2006/06/29 19:36:05 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4LowEnergyPolarizedCompton.hh,v 1.10 2008/05/02 13:04:41 flongo Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // ------------------------------------------------------------
 //      GEANT 4 class header file
@@ -56,6 +56,12 @@
 
 #include "globals.hh"
 #include "G4VDiscreteProcess.hh"
+
+// Doppler Broadening
+
+#include "G4ShellData.hh"
+#include "G4DopplerProfile.hh"
+
 
 class G4Track;
 class G4Step;
@@ -124,6 +130,12 @@ private:
   void SystemOfRefChange(G4ThreeVector& direction0, G4ThreeVector& direction1, 
 			 G4ThreeVector& polarization0, G4ThreeVector& polarization1);
   
+  // Doppler Broadening
+ 
+  G4ShellData shellData;
+  G4DopplerProfile profileData;
+
+
 };
 
 #endif

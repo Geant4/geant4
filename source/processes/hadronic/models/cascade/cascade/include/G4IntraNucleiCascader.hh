@@ -35,7 +35,7 @@
 using namespace G4InuclSpecialFunctions;
 using namespace G4CascadSpecialFunctions;
 
-class G4IntraNucleiCascader : public G4Collider {
+class G4IntraNucleiCascader {
 
 public:
 
@@ -45,8 +45,8 @@ public:
     theElementaryParticleCollider = ecollider;   
   };
   
-  virtual G4CollisionOutput collide(G4InuclParticle* bullet,
-				  G4InuclParticle* target);
+  G4CollisionOutput collide(G4InuclParticle* bullet,
+			    G4InuclParticle* target);
 
   void setInteractionCase(G4int intcase) { 
     inter_case = intcase; 

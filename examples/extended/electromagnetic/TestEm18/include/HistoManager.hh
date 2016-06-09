@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // $Id: HistoManager.hh,v 1.2 2007/11/13 16:43:59 maire Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

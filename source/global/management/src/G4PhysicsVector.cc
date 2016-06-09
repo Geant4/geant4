@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicsVector.cc,v 1.17 2006/06/29 19:04:25 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4PhysicsVector.cc,v 1.27 2008/10/16 12:14:36 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // 
 // --------------------------------------------------------------
@@ -41,62 +41,107 @@
 //    11 Nov. 2000, H.Kurashige : use STL vector for dataVector and binVector
 //    18 Jan. 2001, H.Kurashige : removed ptrNextTable
 //    09 Mar. 2001, H.Kurashige : added G4PhysicsVector type 
+//    05 Sep. 2008, V.Ivanchenko : added protections for zero-length vector
 // --------------------------------------------------------------
 
 #include "G4PhysicsVector.hh"
 #include <iomanip>
 
-G4PhysicsVector::G4PhysicsVector()
+// --------------------------------------------------------------
+
+G4PhysicsVector::G4PhysicsVector(G4bool spline)
  : type(T_G4PhysicsVector),
    edgeMin(0.), edgeMax(0.), numberOfBin(0),
-   lastEnergy(0.), lastValue(0.), lastBin(0)
-{
-}
+   lastEnergy(0.), lastValue(0.), lastBin(0), 
+   secDerivative(0), useSpline(spline)
+{}
+
+// --------------------------------------------------------------
 
 G4PhysicsVector::~G4PhysicsVector() 
 {
-  dataVector.clear();
-  binVector.clear();
-  type = T_G4PhysicsVector;
+  DeleteData();
 }
+
+// --------------------------------------------------------------
 
 G4PhysicsVector::G4PhysicsVector(const G4PhysicsVector& right)
 {
-  *this=right;
+  CopyData(right);
 }
+
+// --------------------------------------------------------------
 
 G4PhysicsVector& G4PhysicsVector::operator=(const G4PhysicsVector& right)
 {
   if (&right==this)  { return *this; }
   if (type != right.type)  { return *this; }
 
-  type = right.type;
-  edgeMin = right.edgeMin;
-  edgeMax = right.edgeMax;
-  numberOfBin = right.numberOfBin;
-  lastEnergy = right.lastEnergy;
-  lastValue = right.lastValue;
-  lastBin = right.lastBin;
-  dataVector = right.dataVector;
-  binVector = right.binVector;
-  comment = right.comment;
+  DeleteData();
+  CopyData(right);
+
   return *this;
 }
+
+// --------------------------------------------------------------
 
 G4int G4PhysicsVector::operator==(const G4PhysicsVector &right) const
 {
   return (this == &right);
 }
 
+// --------------------------------------------------------------
+
 G4int G4PhysicsVector::operator!=(const G4PhysicsVector &right) const
 {
   return (this != &right);
 }
 
+// --------------------------------------------------------------
+
+void G4PhysicsVector::DeleteData()
+{
+  delete [] secDerivative;
+  secDerivative = 0;
+}
+
+// --------------------------------------------------------------
+
+void G4PhysicsVector::CopyData(const G4PhysicsVector& vec)
+{
+  type = vec.type;
+  edgeMin = vec.edgeMin;
+  edgeMax = vec.edgeMax;
+  numberOfBin = vec.numberOfBin;
+  lastEnergy = vec.lastEnergy;
+  lastValue = vec.lastValue;
+  lastBin = vec.lastBin;
+  dataVector = vec.dataVector;
+  binVector = vec.binVector;
+  useSpline = vec.useSpline;
+  comment = vec.comment;
+  if (vec.secDerivative)
+  {
+    secDerivative = new G4double [numberOfBin];
+    for (size_t i=0; i<numberOfBin; i++)
+    {
+       secDerivative[i] = vec.secDerivative[i];
+    }
+  }
+  else
+  {
+    secDerivative = 0;
+  }
+}
+
+// --------------------------------------------------------------
+
 G4double G4PhysicsVector::GetLowEdgeEnergy(size_t binNumber) const
 {
   return binVector[binNumber];
 }
+
+// --------------------------------------------------------------
 
 G4bool G4PhysicsVector::Store(std::ofstream& fOut, G4bool ascii)
 {
@@ -129,6 +174,8 @@ G4bool G4PhysicsVector::Store(std::ofstream& fOut, G4bool ascii)
   return true;
 }
 
+// --------------------------------------------------------------
+
 G4bool G4PhysicsVector::Retrieve(std::ifstream& fIn, G4bool ascii)
 {
   // clear properties;
@@ -152,9 +199,12 @@ G4bool G4PhysicsVector::Retrieve(std::ifstream& fIn, G4bool ascii)
 
     binVector.reserve(size);
     dataVector.reserve(size);
+    G4double vBin, vData;
+
     for(size_t i = 0; i < size ; i++)
     {
-      G4double vBin=0., vData=0.;
+      vBin = 0.;
+      vData= 0.;
       fIn >> vBin >> vData;
       if (fIn.fail())  { return false; }
       binVector.push_back(vBin);
@@ -175,21 +225,52 @@ G4bool G4PhysicsVector::Retrieve(std::ifstream& fIn, G4bool ascii)
  
   G4double* value = new G4double[2*size];
   fIn.read((char*)(value),  2*size*(sizeof(G4double)) );
-  if (G4int(fIn.gcount()) != G4int(2*size*(sizeof(G4double))) ){
+  if (G4int(fIn.gcount()) != G4int(2*size*(sizeof(G4double))) )
+  {
     delete [] value;
     return false;
   }
 
   binVector.reserve(size);
   dataVector.reserve(size);
-  for(size_t i = 0; i < size; i++) {
+  for(size_t i = 0; i < size; i++)
+  {
     binVector.push_back(value[2*i]);
     dataVector.push_back(value[2*i+1]);
   }
   delete [] value;
   return true;
 }
-    
+
+// --------------------------------------------------------------
+
+void G4PhysicsVector::FillSecondDerivatives()
+{  
+  secDerivative = new G4double [numberOfBin];
+
+  size_t n = numberOfBin-1;
+
+  // cannot compute derivatives for less than 3 points
+  if(3 > numberOfBin)
+  {
+    secDerivative[0] = 0.0;
+    secDerivative[n] = 0.0;
+    return;
+  }
+
+  for(size_t i=1; i<n; i++)
+  {
+    secDerivative[i] = 
+      3.0*((dataVector[i+1]-dataVector[i])/(binVector[i+1]-binVector[i]) -
+           (dataVector[i]-dataVector[i-1])/(binVector[i]-binVector[i-1]))
+      /(binVector[i+1]-binVector[i-1]);
+  }
+  secDerivative[n] = secDerivative[n-1];
+  secDerivative[0] = secDerivative[1];
+}
+   
+// --------------------------------------------------------------
+
 std::ostream& operator<<(std::ostream& out, const G4PhysicsVector& pv)
 {
   // binning

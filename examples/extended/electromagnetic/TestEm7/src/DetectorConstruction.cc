@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: DetectorConstruction.cc,v 1.8 2007/01/11 15:41:46 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: DetectorConstruction.cc,v 1.10 2008/04/21 13:13:30 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -44,8 +44,11 @@
 #include "G4SolidStore.hh"
 
 #include "G4NistManager.hh"
-
 #include "G4UnitsTable.hh"
+
+#include "G4FieldManager.hh"
+#include "G4TransportationManager.hh"
+#include "G4RunManager.hh" 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -116,6 +119,13 @@ void DetectorConstruction::DefineMaterials()
     new G4Material("Air"  , density= 1.290*mg/cm3, ncomponents=2);
   Air->AddElement(N, fractionmass=0.7);
   Air->AddElement(O, fractionmass=0.3);
+
+  density     = 1.e-5*g/cm3;
+  pressure    = 2.e-2*bar;
+  temperature = STP_Temperature;  // From PhysicalConstants.h .
+  G4Material* vac = new G4Material( "TechVacuum", density, 1,
+                           kStateGas, temperature, pressure );
+  vac->AddMaterial( Air, 1. );
 
   density     = universe_mean_density;    //from PhysicalConstants.h
   pressure    = 3.e-18*pascal;
@@ -234,6 +244,7 @@ void DetectorConstruction::PrintParameters()
 void DetectorConstruction::SetSizeX(G4double value)
 {
   absorSizeX = value; worldSizeX = 1.2*absorSizeX;
+  G4RunManager::GetRunManager()->GeometryHasBeenModified();
 }
   
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -242,6 +253,7 @@ void DetectorConstruction::SetSizeYZ(G4double value)
 {
   absorSizeYZ = value; 
   worldSizeYZ = 1.2*absorSizeYZ;
+  G4RunManager::GetRunManager()->GeometryHasBeenModified();
 }  
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -251,13 +263,16 @@ void DetectorConstruction::SetMaterial(G4String materialChoice)
   // search the material by its name   
   G4Material* pttoMaterial =
     G4NistManager::Instance()->FindOrBuildMaterial(materialChoice);
-  if (pttoMaterial) absorMaterial = pttoMaterial;
+  if (pttoMaterial) {
+    absorMaterial = pttoMaterial;
+    if(lAbsor) {
+      lAbsor->SetMaterial(absorMaterial);
+      G4RunManager::GetRunManager()->PhysicsHasBeenModified();
+    }
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-#include "G4FieldManager.hh"
-#include "G4TransportationManager.hh"
 
 void DetectorConstruction::SetMagField(G4double fieldValue)
 {
@@ -284,6 +299,7 @@ void DetectorConstruction::SetMagField(G4double fieldValue)
 void DetectorConstruction::SetTallySize(G4ThreeVector value)
 {
   tallySize = value;
+  G4RunManager::GetRunManager()->GeometryHasBeenModified();
 }  
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -293,7 +309,13 @@ void DetectorConstruction::SetTallyMaterial(G4String materialChoice)
   // search the material by its name   
   G4Material* pttoMaterial =
     G4NistManager::Instance()->FindOrBuildMaterial(materialChoice);
-  if (pttoMaterial) tallyMaterial = pttoMaterial;
+  if (pttoMaterial) {
+    tallyMaterial = pttoMaterial;
+    if(lTally) {
+      lTally->SetMaterial(tallyMaterial);
+      G4RunManager::GetRunManager()->PhysicsHasBeenModified();
+    }
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -304,15 +326,15 @@ void DetectorConstruction::SetTallyPosition(G4ThreeVector value)
     tallyPosition[tallyNumber] = value; 
     tallyNumber++;
   }
+  G4RunManager::GetRunManager()->GeometryHasBeenModified();
 }  
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-#include "G4RunManager.hh" 
  
 void DetectorConstruction::UpdateGeometry()
 {
-G4RunManager::GetRunManager()->DefineWorldVolume(ConstructVolumes());
+  G4RunManager::GetRunManager()->PhysicsHasBeenModified();
+  G4RunManager::GetRunManager()->DefineWorldVolume(ConstructVolumes());
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

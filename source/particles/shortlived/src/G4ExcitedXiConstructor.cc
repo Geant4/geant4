@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ExcitedXiConstructor.cc,v 1.7 2006/06/29 19:27:12 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4ExcitedXiConstructor.cc,v 1.8 2008/09/18 08:37:27 kurasige Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // 
 // --------------------------------------------------------------
@@ -289,7 +289,7 @@ const char* G4ExcitedXiConstructor::name[] = {
 };
 
 const G4double G4ExcitedXiConstructor::mass[] = {
- 1.5318*GeV, 1.690*GeV, 1.823*GeV, 1.950*GeV,  2.025*GeV 
+ 1.5334*GeV, 1.690*GeV, 1.823*GeV, 1.950*GeV,  2.025*GeV 
 };
 
 const G4double G4ExcitedXiConstructor::width[] = {

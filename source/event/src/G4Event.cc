@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4Event.cc,v 1.14 2007/03/07 02:44:16 asaim Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 
 // G4Event

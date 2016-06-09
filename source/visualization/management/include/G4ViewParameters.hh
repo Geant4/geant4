@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ViewParameters.hh,v 1.26 2007/04/03 13:33:16 allison Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4ViewParameters.hh,v 1.28 2008/04/28 16:14:12 allison Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // 
 // John Allison  19th July 1996
@@ -210,6 +210,9 @@ public: // With description
   void SetLightsMoveWithCamera (G4bool moves);
   void SetPan                  (G4double right, G4double up);
   void IncrementPan            (G4double right, G4double up);
+  // Increment currentTarget point perpendicular to viewpoint direction.
+  void IncrementPan            (G4double right, G4double up, G4double forward);
+  // Increment currentTarget point also along viewpoint direction.
   void SetDefaultVisAttributes (const G4VisAttributes&);
   void SetDefaultTextVisAttributes (const G4VisAttributes&);
   void SetDefaultMarker        (const G4VMarker& defaultMarker);

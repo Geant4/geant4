@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MuPairProduction.cc,v 1.48 2007/05/22 17:35:58 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4MuPairProduction.cc,v 1.51 2008/10/16 13:37:04 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // -------------------------------------------------------------------
 //
@@ -88,7 +88,9 @@ G4MuPairProduction::G4MuPairProduction(const G4String& name)
     theBaseParticle(0),
     lowestKinEnergy(1.*GeV),
     isInitialised(false)
-{}
+{
+  SetProcessSubType(fPairProdByCharged);
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -97,8 +99,9 @@ G4MuPairProduction::~G4MuPairProduction()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4MuPairProduction::InitialiseEnergyLossProcess(const G4ParticleDefinition* part,
-                                                     const G4ParticleDefinition*)
+void G4MuPairProduction::InitialiseEnergyLossProcess(
+                         const G4ParticleDefinition* part,
+			 const G4ParticleDefinition*)
 {
   if (!isInitialised) {
     isInitialised = true;
@@ -109,9 +112,9 @@ void G4MuPairProduction::InitialiseEnergyLossProcess(const G4ParticleDefinition*
 
     G4MuPairProductionModel* em = new G4MuPairProductionModel();
     em->SetLowestKineticEnergy(lowestKinEnergy);
-    G4VEmFluctuationModel* fm = new G4UniversalFluctuation();
-    em->SetLowEnergyLimit(0.1*keV);
-    em->SetHighEnergyLimit(100.0*TeV);
+    G4VEmFluctuationModel* fm = 0;
+    em->SetLowEnergyLimit(MinKinEnergy());
+    em->SetHighEnergyLimit(MaxKinEnergy());
     AddEmModel(1, em, fm);
   }
 }
@@ -119,10 +122,7 @@ void G4MuPairProduction::InitialiseEnergyLossProcess(const G4ParticleDefinition*
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void G4MuPairProduction::PrintInfo()
-{
-  G4cout << "      Parametrised model "
-         << G4endl;
-}
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

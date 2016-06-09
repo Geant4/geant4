@@ -14,6 +14,44 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+24 October 2008 Dennis Wright (hadr-mod-util-V09-01-07)
+-------------------------------------------------------
+- replace G4NucleiPropertiesTable::GetBindingEnergy with 
+  G4NucleiProperties::GetBindingEnergy in G4Fancy3DNucleus
+
+19 June 2008 G.Folger (hadr-mod-util-V09-01-06)
+-----------------------------------------------
+-  Attempt to fix memory leak in G4Fancy3DNucleus::SortNucleonsInZ().
+-   remove debug introduced code by VU
+
+19 June 2008 G. Cosmo (hadr-mod-util-V09-01-05)
+-----------------------------------------------
+-  Fixed noisy compilation warning in G4ExcitedString.hh for
+   unnecessary const qualifier to function return argument.
+
+19 June 2008 V. Uzhinsky (hadr-mod-util-V09-01-04)
+-------------------------------------------------
+-  Update of include/G4ExcitedString.hh
+
+18 June 2008 V. Uzhinsky (hadr-mod-util-V09-01-03)
+--------------------------------------------------
+-  G4ExcitedString::GetTimeOfCreation() const;
+-  G4ExcitedString::SetTimeOfCreation(G4double aTime);
+   Two new methods for operations with Time of a string Creation
+
+14 May 2008 G.Folger      (hadr-mod-util-V09-01-02)
+---------------------------------------------------
+-  G4Fancy3DNucleus::SortNucleonsInZ() new method to sort nucleons 
+     using z-coordinate 
+
+5 May 2008 G.Folger       (hadr-mod-util-V09-01-01)
+---------------------------------------------------
+- correct logic bug in CalculateExcitationEnergy() introduced by gcc-4.3 fix.
+
+21 Mar 2008 Dennis Wright (hadr-mod-util-V09-01-00)
+---------------------------------------------------
+- fix gcc-4.3 compiler warnings for G4Fragment.cc
+
 16 Nov 2007 Dennis Wright (hadr-mod-util-V09-00-02)
 ---------------------------------------------------
 - remove initialization by random number of angular momentum vector 

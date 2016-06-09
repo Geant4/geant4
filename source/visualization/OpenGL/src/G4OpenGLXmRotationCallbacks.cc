@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLXmRotationCallbacks.cc,v 1.14 2006/06/29 21:19:56 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4OpenGLXmRotationCallbacks.cc,v 1.16 2008/07/28 15:36:45 lgarnier Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // 
 // Andrew Walkden  16th April 1997
@@ -63,6 +63,13 @@ void G4OpenGLXmViewer::rotate_in_theta (XtPointer clientData,
 {
   //theta spin stuff here
   G4OpenGLXmViewer* pView = (G4OpenGLXmViewer*) clientData;
+
+  if (pView->rotate_right) {
+    pView->rotateScene((G4double)pView->rot_sens,0,1);
+  } else {
+    pView->rotateScene(-(G4double)pView->rot_sens,0,1);
+  }
+  /*
   G4double delta_theta;
 
   if (pView->fVP.GetLightsMoveWithCamera()) {
@@ -99,6 +106,7 @@ void G4OpenGLXmViewer::rotate_in_theta (XtPointer clientData,
   G4Vector3D viewPoint = vp + delta;
 
   pView->fVP.SetViewAndLights (viewPoint);  
+  */
 
   pView->SetView ();
   pView->ClearView ();
@@ -131,9 +139,15 @@ void G4OpenGLXmViewer::rotate_in_phi (XtPointer clientData,
 				    XtIntervalId* timer_id)
 {
   //phi spin stuff here
-  G4double delta_alpha;
+  //  G4double delta_alpha;
   G4OpenGLXmViewer* pView = (G4OpenGLXmViewer*) clientData;
 
+  if (pView -> rotate_up) {
+    pView->rotateScene(0,-(G4double)pView->rot_sens,1);
+  } else {
+    pView->rotateScene(0,(G4double)pView->rot_sens,1);
+  }
+  /*
   if (pView->fVP.GetLightsMoveWithCamera()) {
     if (pView -> rotate_up) {
       delta_alpha = -((G4double)pView->rot_sens);
@@ -166,6 +180,7 @@ void G4OpenGLXmViewer::rotate_in_phi (XtPointer clientData,
     pView->fVP.SetUpVector(new_up);
   }
 
+  */
   pView->SetView ();
   pView->ClearView ();
   pView->DrawView ();

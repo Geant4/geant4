@@ -1,4 +1,4 @@
-$Id: README,v 1.4 2007/11/13 14:13:31 maire Exp $
+$Id: README,v 1.6 2008/09/26 19:47:51 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -75,7 +75,7 @@ $Id: README,v 1.4 2007/11/13 14:13:31 maire Exp $
  	One can control the name and the type of the histograms file with 
 	the commands:
  	/testem/histo/setFileName  name  (default testem15)
-   	/testem/histo/setFileType  name  (default hbook)
+   	/testem/histo/setFileType  name  (default root)
 	
         It is also possible to print selected histograms on an ascii file:
         /testem/histo/printHisto id
@@ -126,45 +126,4 @@ $Id: README,v 1.4 2007/11/13 14:13:31 maire Exp $
   	gmake
 	 
   To use histograms, at least one of the AIDA implementations should be 
-  available (see http://aida.freehep.org).
-  
- 8a - PI 
-
-  A package including AIDA and extended interfaces also using Python is PI, 
-  available from: http://cern.ch/pi
-
-  Once installed PI or PI-Lite in a specified local area $MYPY, it is required 
-  to add the installation path to $PATH, i.e. for example, for release 1.2.1 of 
-  PI:
-  setenv PATH ${PATH}:$MYPI/1.2.1/app/releases/PI/PI_1_2_1/rh73_gcc32/bin
-
-  CERN users can use the PATH to the LCG area on AFS.
-  Before running the example the command should be issued:
-  eval `aida-config --runtime csh`
-
- 8b -  OpenScientist
-
-  OpenScientist is available at http://OpenScientist.lal.in2p3.fr.
-
-  You have to "setup" the OpenScientist AIDA implementation before compiling
-  (then with G4ANALYSIS_USE set) and running your Geant4 application.
-
- On UNIX you setup, with a csh flavoured shell : 
-	csh> source <<OpenScientist install path>/aida-setup.csh 
-        or with a sh flavoured shell : 
-	sh> . <<OpenScientist install path>/aida-setup.sh
- On Windows : 
-	DOS> call <<OpenScientist install path>/aida-setup.bat 
-
-  You can use various file formats for writing (AIDA-XML, hbook, root).
-  These formats are readable by the Lab onx interactive program
-  or the OpenPAW application. See the web pages.
-
-
-  With OpenPAW, on a run.hbook file, one can view the histograms
-  with something like :
-	OS> opaw 
-        opaw> h/file 1 run.hbook  ( or opaw> h/file 1 run.aida or run.root)  
-	opaw> zone 2 2 
-	opaw> h/plot 1 
-	opaw> h/plot 2
+  available. See InstallAida.txt

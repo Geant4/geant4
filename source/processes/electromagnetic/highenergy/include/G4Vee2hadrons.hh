@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Vee2hadrons.hh,v 1.3 2007/05/22 17:37:30 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4Vee2hadrons.hh,v 1.4 2008/07/10 18:06:38 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // -------------------------------------------------------------------
 //
@@ -62,7 +62,7 @@ class G4Vee2hadrons
 
 public:
 
-  G4Vee2hadrons() {};
+  G4Vee2hadrons() : lowEnergy(0.0), highEnergy(1.1*GeV) {};
 
   virtual ~G4Vee2hadrons() {};
 
@@ -75,13 +75,24 @@ public:
   virtual G4PhysicsVector* PhysicsVector(G4double, G4double) const = 0;
 
   virtual void SampleSecondaries(std::vector<G4DynamicParticle*>*,
-                      G4double, const G4ThreeVector&) const = 0;
+				 G4double, const G4ThreeVector&) = 0;
+
+  void SetLowEnergy(G4double val) {lowEnergy = val;};
+
+  G4double LowEnergy() const {return lowEnergy;};
+
+  void SetHighEnergy(G4double val) {highEnergy = val;};
+
+  G4double HighEnergy() const {return highEnergy;};
 
 private:
 
   // hide assignment operator
   G4Vee2hadrons & operator=(const  G4Vee2hadrons &right);
   G4Vee2hadrons(const  G4Vee2hadrons&);
+
+  G4double lowEnergy;
+  G4double highEnergy;
 
 };
 

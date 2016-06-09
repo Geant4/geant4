@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4MaterialPropertiesTable.hh,v 1.18 2006/06/29 19:11:15 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4MaterialPropertiesTable.hh,v 1.19 2008/06/05 23:38:03 gum Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // 
 ////////////////////////////////////////////////////////////////////////
@@ -100,7 +100,7 @@ public: // With description
         // Add a new property to the table by giving a key-name and value 
 
 	void AddProperty(const char     *key,
-		         G4double *PhotonMomenta,
+		         G4double *PhotonEnergies,
 		         G4double *PropertyValues,
 		         G4int     NumEntries);
         // Add a new property to the table by giving a key-name and the
@@ -125,11 +125,11 @@ public: // With description
 	G4MaterialPropertyVector* GetProperty(const char *key);
         // Get the property from the table corresponding to the key-name.
 
-	void AddEntry(const char *key, G4double aPhotonMomentum,
+	void AddEntry(const char *key, G4double aPhotonEnergy,
                                  G4double  aPropertyValue);
         // Add a new entry (pair of numbers) to the table for a given key.
 
-	void RemoveEntry(const char *key, G4double  aPhotonMomentum);
+	void RemoveEntry(const char *key, G4double  aPhotonEnergy);
         // Remove an entry from the table for a given key and x-value.
 
 	void DumpTable();

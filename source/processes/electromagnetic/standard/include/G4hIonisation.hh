@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4hIonisation.hh,v 1.37 2007/05/23 08:47:34 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4hIonisation.hh,v 1.41 2008/09/14 17:11:48 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // -------------------------------------------------------------------
 //
@@ -62,6 +62,7 @@
 // 08-11-04 Migration to new interface of Store/Retrieve tables (V.Ivantchenko)
 // 08-04-05 Major optimisation of internal interfaces (V.Ivantchenko)
 // 11-04-04 Move MaxSecondaryEnergy to models (V.Ivanchenko)
+// 12-09-08 Removed CorrectionsAlongStep (VI)
 //
 // Class Description:
 //
@@ -79,8 +80,6 @@
 #include "G4Electron.hh"
 #include "G4Positron.hh"
 #include "globals.hh"
-#include "G4VEmModel.hh"
-#include "G4EmCorrections.hh"
 
 class G4Material;
 
@@ -101,13 +100,9 @@ public:
   // Print out of the class parameters
   virtual void PrintInfo();
 
-protected:
+  void ActivateNuclearStopping(G4bool);
 
-  void CorrectionsAlongStep(
-                           const G4MaterialCutsCouple*,
-	             	   const G4DynamicParticle*,
-			         G4double& eloss,
-			         G4double& length);
+protected:
 
   virtual void InitialiseEnergyLossProcess(const G4ParticleDefinition*,
 					   const G4ParticleDefinition*);
@@ -118,18 +113,12 @@ private:
   G4hIonisation & operator=(const G4hIonisation &right);
   G4hIonisation(const G4hIonisation&);
 
+  G4bool     isInitialised;
+  G4bool     nuclearStopping;
+
   G4double   mass;
   G4double   ratio;
-
-  const G4ParticleDefinition* theParticle;
-  const G4ParticleDefinition* theBaseParticle;
-  G4EmCorrections*            corr;
-
-  G4bool                      isInitialised;
-
-  G4double                    eth;
-  G4double                    massratio;
-
+  G4double   eth;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -148,23 +137,15 @@ inline G4double G4hIonisation::MinPrimaryEnergy(const G4ParticleDefinition*,
 						G4double cut)
 {
   G4double x = 0.5*cut/electron_mass_c2;
-  G4double y = electron_mass_c2/mass;
-  G4double g = x*y + std::sqrt((1. + x)*(1. + x*y*y));
+  G4double g = x*ratio + std::sqrt((1. + x)*(1. + x*ratio*ratio));
   return mass*(g - 1.0);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline void G4hIonisation::CorrectionsAlongStep(
-                           const G4MaterialCutsCouple* couple,
-	             	   const G4DynamicParticle* dp,
-			         G4double& eloss,
-                                 G4double& s)
+inline void G4hIonisation::ActivateNuclearStopping(G4bool val)
 {
-  G4double kinEnergy = dp->GetKineticEnergy();
-  if(eloss < kinEnergy && kinEnergy*massratio < eth) 
-    eloss += s*corr->NuclearDEDX(theParticle,couple->GetMaterial(),
-				 kinEnergy - eloss*0.5);
+  nuclearStopping = val;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

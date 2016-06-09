@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4DefaultLinearColorMap.hh,v 1.1 2007/11/04 04:06:08 asaim Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 
 #ifndef G4DefaultLinearColorMap_h

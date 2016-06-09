@@ -26,7 +26,7 @@
 // -------------------------------------------------------------------
 //
 // $Id: G4PolarizationMessenger.hh,v 1.2 2006/12/13 15:44:33 gunter Exp $
-// tag $Name: geant4-09-01 $
+// tag $Name: geant4-09-02 $
 //
 // GEANT4 Class header file
 //

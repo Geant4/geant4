@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // $Id: G4ErrorFreeTrajParam.cc,v 1.3 2007/09/24 16:24:45 arce Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file 

@@ -24,8 +24,10 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPContAngularPar.hh,v 1.12 2007/06/06 12:45:13 ahoward Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4NeutronHPContAngularPar.hh,v 1.13 2008/07/21 23:26:29 tkoi Exp $
+// GEANT4 tag $Name: geant4-09-02 $
+//
+// 080718 Add ClearHistories method and related class member
 //
 #ifndef G4NeutronHPContAngularPar_h
 #define G4NeutronHPContAngularPar_h 1
@@ -46,6 +48,7 @@ class G4NeutronHPContAngularPar
   {
     theAngular = 0;
     currentMeanEnergy = -2;
+     fresh = true;
   }
   ~G4NeutronHPContAngularPar()
   {
@@ -147,5 +150,12 @@ class G4NeutronHPContAngularPar
   G4ReactionProduct * thePrimary;
   
   G4double currentMeanEnergy;
+
+//080718
+   public:
+      void ClearHistories(){ fresh = true; };
+   private:
+      G4bool fresh; 
+      G4double remaining_energy; // represent energy rest of cascade chain
 };
 #endif

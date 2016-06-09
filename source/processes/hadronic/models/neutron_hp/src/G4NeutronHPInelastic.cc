@@ -32,10 +32,11 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4NeutronHPInelastic.cc,v 1.23 2007/06/22 09:23:48 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4NeutronHPInelastic.cc,v 1.24 2008/12/03 22:28:48 tkoi Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
-// 070523 bug fix for G4FPE_DEBUG on by A. Howard ( and T. Koi)
+// 070523 bug fix for G4FPE_DEBUG on by A. Howard (and T. Koi)
+// 081203 limit maximum trial for creating final states add protection for 1H isotope case by T. Koi
 //
 #include "G4NeutronHPInelastic.hh"
 
@@ -57,6 +58,7 @@
     for (G4int i=0; i<numEle; i++)
     { 
       theInelastic[i].Init((*(G4Element::GetElementTable()))[i], dirName);
+      G4int itry = 0;
       do
       {
 	theInelastic[i].Register(&theNFS, "F01"); // has
@@ -96,8 +98,21 @@
 	theInelastic[i].Register(&thePTFS, "F35");
 	theInelastic[i].Register(&theDAFS, "F36");
 	theInelastic[i].RestartRegistration();
+        itry++;
       }
-      while(!theInelastic[i].HasDataInAnyFinalState());
+      //while(!theInelastic[i].HasDataInAnyFinalState());
+      while( !theInelastic[i].HasDataInAnyFinalState() && itry < 6 );
+                                                              // 6 is corresponding to the value(5) of G4NeutronHPChannel. TK  
+      if ( itry == 6 ) 
+      {
+         // No Final State at all.
+         G4bool exceptional = false;
+         if ( (*(G4Element::GetElementTable()))[i]->GetNumberOfIsotopes() == 1 )
+         {
+            if ( (*(G4Element::GetElementTable()))[i]->GetIsotope( 0 )->GetZ() == 1 && (*(G4Element::GetElementTable()))[i]->GetIsotope( 0 )->GetN() == 1 ) exceptional = true;  //1H
+         } 
+         if ( !exceptional ) throw G4HadronicException(__FILE__, __LINE__, "Channel: Do not know what to do with this element");
+      }
     }
   }
 

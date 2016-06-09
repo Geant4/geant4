@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MscModel71.cc,v 1.5 2007/05/22 17:34:36 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4MscModel71.cc,v 1.6 2008/03/13 17:20:07 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // -------------------------------------------------------------------
 //
@@ -560,12 +560,12 @@ G4double G4MscModel71::SampleCosineTheta(G4double trueStepLength, G4double Kinet
   G4double cth = 1. ;
   G4double tau = trueStepLength/lambda0 ;
 
-  if(trueStepLength >= currentRange*dtrl)
+  if(trueStepLength >= currentRange*dtrl) {
     if(par1*trueStepLength < 1.)
       tau = -par2*log(1.-par1*trueStepLength) ;
     else
       tau = taubig ;
-
+  }
   currentTau = tau ;
 
   if(trueStepLength < stepmin)

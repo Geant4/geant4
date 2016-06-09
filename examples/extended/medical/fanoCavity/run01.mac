@@ -1,4 +1,4 @@
-# $Id: run01.mac,v 1.5 2007/10/29 17:09:53 maire Exp $
+# $Id: run01.mac,v 1.6 2008/09/28 16:04:01 maire Exp $
 #
 /control/verbose 2
 /run/verbose 2
@@ -8,7 +8,7 @@
 /testem/phys/crossSectionFactor 1000
 #
 /testem/histo/setFileName fanocavity
-/testem/histo/setFileType hbook
+/testem/histo/setFileType root
 /testem/histo/setHisto  1 120 -6 +6 mm		#interaction point
 /testem/histo/setHisto  2 125  0  1250 keV	#energy spectrum
 /testem/histo/setHisto  3 100  0  100 deg	#theta distribution

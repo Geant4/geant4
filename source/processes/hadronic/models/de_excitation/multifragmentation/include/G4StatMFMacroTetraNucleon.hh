@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4StatMFMacroTetraNucleon.hh,v 1.3 2006/06/29 20:24:23 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4StatMFMacroTetraNucleon.hh,v 1.4 2008/10/24 23:03:23 dennis Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara
@@ -34,7 +34,7 @@
 #define G4StatMFMacroTetraNucleon_h 1
 
 #include "G4VStatMFMacroCluster.hh"
-#include "G4NucleiPropertiesTable.hh"
+#include "G4NucleiProperties.hh"
 
 class G4StatMFMacroTetraNucleon : public G4VStatMFMacroCluster {
 

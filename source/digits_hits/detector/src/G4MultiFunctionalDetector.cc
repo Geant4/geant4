@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4MultiFunctionalDetector.cc,v 1.4 2006/06/29 18:05:47 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4MultiFunctionalDetector.cc,v 1.5 2008/03/06 23:31:12 asaim Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // G4MultiFunctionalDetector
 #include "G4MultiFunctionalDetector.hh"
@@ -43,7 +43,7 @@ G4bool G4MultiFunctionalDetector::ProcessHits(G4Step* aStep,G4TouchableHistory* 
 {
    G4int nPrim = primitives.size();
    for(G4int iPrim=0;iPrim<nPrim;iPrim++)
-   { primitives[iPrim]->HitPrimitive(aStep,aTH); }
+   { if(aStep->GetStepLength()>0.) primitives[iPrim]->HitPrimitive(aStep,aTH); }
    return true;
 }
 

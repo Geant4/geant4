@@ -25,7 +25,7 @@
 //
 //
 // $Id: globals.hh,v 1.27 2006/06/29 19:03:51 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 //
 // Global Constants and typedefs

@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4PhaseSpaceDecayChannel.cc,v 1.13 2007/10/06 06:49:29 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // 
 // ------------------------------------------------------------

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4SteppingManager2.cc,v 1.29 2006/06/29 21:16:05 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4SteppingManager2.cc,v 1.35 2008/12/05 22:15:04 asaim Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 //---------------------------------------------------------------
 //
@@ -169,42 +169,54 @@ void G4SteppingManager::GetProcessNumber()
 #endif
 
      switch (fCondition) {
-     case ExclusivelyForced:
-       (*fSelectedPostStepDoItVector)[np] = ExclusivelyForced;
-       fStepStatus = fExclusivelyForcedProc;
-	   fStep->GetPostStepPoint()
-				 ->SetProcessDefinedStep(fCurrentProcess);
-       break;
-     case Conditionally:
-       (*fSelectedPostStepDoItVector)[np] = Conditionally;
-       break;
-     case Forced:
-       (*fSelectedPostStepDoItVector)[np] = Forced;
-       break;
-     case StronglyForced:
-       (*fSelectedPostStepDoItVector)[np] = StronglyForced;
-       break;
-     default:
-       (*fSelectedPostStepDoItVector)[np] = InActivated;
-       if(physIntLength < PhysicalStep ){
-         PhysicalStep = physIntLength;
-	 fStepStatus = fPostStepDoItProc;
-	 fPostStepDoItProcTriggered = G4int(np);
-         fStep->GetPostStepPoint()
-              ->SetProcessDefinedStep(fCurrentProcess);
-       }
+	 case ExclusivelyForced:
+	     (*fSelectedPostStepDoItVector)[np] = ExclusivelyForced;
+	     fStepStatus = fExclusivelyForcedProc;
+	     fStep->GetPostStepPoint()
+		 ->SetProcessDefinedStep(fCurrentProcess);
+	     break;
+	 case Conditionally:
+	     (*fSelectedPostStepDoItVector)[np] = Conditionally;
+	     break;
+	 case Forced:
+	     (*fSelectedPostStepDoItVector)[np] = Forced;
+	     break;
+	 case StronglyForced:
+	     (*fSelectedPostStepDoItVector)[np] = StronglyForced;
+	     break;
+	 default:
+	     (*fSelectedPostStepDoItVector)[np] = InActivated;
+	     break;
      }
+       
+
+
      if (fCondition==ExclusivelyForced) { 
-	 for(size_t nrest=np+1; nrest < MAXofPostStepLoops; nrest++){ 
-	     (*fSelectedPostStepDoItVector)[nrest] = InActivated; 
-	 } 
+ 	 for(size_t nrest=np+1; nrest < MAXofPostStepLoops; nrest++){ 
+ 	     (*fSelectedPostStepDoItVector)[nrest] = InActivated; 
+ 	 } 
 	 return;  // Take note the 'return' at here !!! 
      } 
+     else{
+	 if(physIntLength < PhysicalStep ){
+	     PhysicalStep = physIntLength;
+	     fStepStatus = fPostStepDoItProc;
+	     fPostStepDoItProcTriggered = G4int(np);
+	     fStep->GetPostStepPoint()
+		 ->SetProcessDefinedStep(fCurrentProcess);
+	 }
+     }
+     
+
    }
 
-   if(fPostStepDoItProcTriggered<MAXofPostStepLoops)
-     (*fSelectedPostStepDoItVector)[fPostStepDoItProcTriggered] = NotForced;
-
+   if (fPostStepDoItProcTriggered<MAXofPostStepLoops) {
+       if ((*fSelectedPostStepDoItVector)[fPostStepDoItProcTriggered] == 
+	   InActivated) {
+	   (*fSelectedPostStepDoItVector)[fPostStepDoItProcTriggered] = 
+	       NotForced;
+       }
+   }
 
 // GPIL for AlongStep
    proposedSafety = DBL_MAX;
@@ -334,7 +346,6 @@ void G4SteppingManager::InvokeAtRestDoItProcs()
        G4int    num2ndaries;
 
        num2ndaries = fParticleChange->GetNumberOfSecondaries();
-       fN2ndariesAtRestDoIt += num2ndaries;
 
        for(G4int DSecLoop=0 ; DSecLoop< num2ndaries; DSecLoop++){
          tempSecondaryTrack = fParticleChange->GetSecondary(DSecLoop);
@@ -355,11 +366,13 @@ void G4SteppingManager::InvokeAtRestDoItProcs()
 	   if (pm->GetAtRestProcessVector()->entries()>0){
 	     tempSecondaryTrack->SetTrackStatus( fStopButAlive );
 	     fSecondary->push_back( tempSecondaryTrack );
+             fN2ndariesAtRestDoIt++;
 	   } else {
 	     delete tempSecondaryTrack;
 	   }
 	 } else {
 	   fSecondary->push_back( tempSecondaryTrack );
+           fN2ndariesAtRestDoIt++;
 	 }	
        } //end of loop on secondary 
 
@@ -408,7 +421,6 @@ void G4SteppingManager::InvokeAlongStepDoItProcs()
      G4int    num2ndaries;
 
      num2ndaries = fParticleChange->GetNumberOfSecondaries();
-     fN2ndariesAlongStepDoIt += num2ndaries;
 
      for(G4int DSecLoop=0 ; DSecLoop< num2ndaries; DSecLoop++){
          tempSecondaryTrack = fParticleChange->GetSecondary(DSecLoop);
@@ -429,11 +441,13 @@ void G4SteppingManager::InvokeAlongStepDoItProcs()
 	   if (pm->GetAtRestProcessVector()->entries()>0){
 	     tempSecondaryTrack->SetTrackStatus( fStopButAlive );
 	     fSecondary->push_back( tempSecondaryTrack );
+             fN2ndariesAlongStepDoIt++;
 	   } else {
 	     delete tempSecondaryTrack;
 	   }
 	 } else {
 	   fSecondary->push_back( tempSecondaryTrack );
+           fN2ndariesAlongStepDoIt++;
 	 }
      } //end of loop on secondary 
      
@@ -519,7 +533,6 @@ void G4SteppingManager::InvokePSDIP(size_t np)
          G4int    num2ndaries;
 
          num2ndaries = fParticleChange->GetNumberOfSecondaries();
-         fN2ndariesPostStepDoIt += num2ndaries;
 
          for(G4int DSecLoop=0 ; DSecLoop< num2ndaries; DSecLoop++){
             tempSecondaryTrack = fParticleChange->GetSecondary(DSecLoop);
@@ -540,11 +553,13 @@ void G4SteppingManager::InvokePSDIP(size_t np)
 	      if (pm->GetAtRestProcessVector()->entries()>0){
 		tempSecondaryTrack->SetTrackStatus( fStopButAlive );
 		fSecondary->push_back( tempSecondaryTrack );
+                fN2ndariesPostStepDoIt++;
  	      } else {
 		delete tempSecondaryTrack;
 	      }
 	    } else {
 	      fSecondary->push_back( tempSecondaryTrack );
+              fN2ndariesPostStepDoIt++;
 	    }
          } //end of loop on secondary 
 

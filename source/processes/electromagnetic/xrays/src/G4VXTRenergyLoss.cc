@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4VXTRenergyLoss.cc,v 1.44 2007/09/29 17:49:34 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // History:
 // 2001-2002 R&D by V.Grichine

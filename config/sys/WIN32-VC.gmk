@@ -18,10 +18,13 @@ ifeq ($(G4SYSTEM),WIN32-VC)
   SHEXT := dll
   AR := LIB
   ECHO := /usr/bin/echo -e
+  FIND := /usr/bin/find
+  SORT := /usr/bin/sort
   GREP := /usr/bin/grep
   SED  := /usr/bin/sed
   CAT  := /usr/bin/cat
   CUT  := /usr/bin/cut
+  TOUCH := /usr/bin/touch
 
   FC := g77
 #  FCLIBS := -lf2c
@@ -33,6 +36,32 @@ ifeq ($(G4SYSTEM),WIN32-VC)
   endif
   ifndef UI32LIBS
     UI32LIBS  := gdi32.lib user32.lib
+  endif
+  ifndef QTHOME
+    QTHOME    := /usr
+  endif
+  ifndef QTFLAGS
+    QTFLAGS   := -I$(QTHOME)/include/Qt -I$(QTHOME)/include
+  endif
+  ifndef QTMOC
+    QTMOC     := $(QTHOME)/bin/moc
+  endif
+
+  QT_VERSION  := $(shell test -f $(QTHOME)/lib/Qt3Support4.lib && echo QT4 || echo QT3)
+
+  ifndef QTLIBS
+    ifeq ($(QT_VERSION),QT3)
+      QTLIBS   := -L$(QTHOME)/lib -lqt-mt
+    else
+      QTLIBS   := -L$(QTHOME)/lib QtCore4.lib QtGui4.lib
+    endif
+  endif
+  ifndef GLQTLIBS
+    ifeq ($(QT_VERSION),QT3)
+      QTLIBS   := -L$(QTHOME)/lib -lqt-mt
+    else
+      QTLIBS   := -L$(QTHOME)/lib QtCore4.lib QtGui4.lib QtOpenGL4.lib
+    endif
   endif
 
 #

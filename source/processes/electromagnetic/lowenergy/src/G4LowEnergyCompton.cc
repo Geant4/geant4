@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LowEnergyCompton.cc,v 1.41 2006/06/29 19:40:15 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4LowEnergyCompton.cc,v 1.47 2008/12/18 13:01:28 gunter Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // Author: A. Forti
 //         Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -64,6 +64,7 @@
 #include "G4LogLogInterpolation.hh"
 #include "G4VRangeTest.hh"
 #include "G4RangeTest.hh"
+#include "G4RangeNoTest.hh"
 #include "G4MaterialCutsCouple.hh"
 
 
@@ -89,7 +90,10 @@ G4LowEnergyCompton::G4LowEnergyCompton(const G4String& processName)
 
   meanFreePathTable = 0;
 
-  rangeTest = new G4RangeTest;
+  rangeTest = new G4RangeNoTest;
+
+  // For Doppler broadening
+  shellData.SetOccupancyData();
 
    if (verboseLevel > 0)
      {
@@ -118,6 +122,10 @@ void G4LowEnergyCompton::BuildPhysicsTable(const G4ParticleDefinition& )
 
   delete meanFreePathTable;
   meanFreePathTable = crossSectionHandler->BuildMeanFreePathForMaterials();
+
+  // For Doppler broadening
+  G4String file = "/doppler/shell-doppler";
+  shellData.LoadData(file);
 }
 
 G4VParticleChange* G4LowEnergyCompton::PostStepDoIt(const G4Track& aTrack,
@@ -153,17 +161,15 @@ G4VParticleChange* G4LowEnergyCompton::PostStepDoIt(const G4Track& aTrack,
 
   G4double e0m = photonEnergy0 / electron_mass_c2 ;
   G4ParticleMomentum photonDirection0 = incidentPhoton->GetMomentumDirection();
-
-  // Select randomly one element in the current material
-  const G4MaterialCutsCouple* couple = aTrack.GetMaterialCutsCouple();
-  G4int Z = crossSectionHandler->SelectRandomAtom(couple,photonEnergy0);
-
   G4double epsilon0 = 1. / (1. + 2. * e0m);
   G4double epsilon0Sq = epsilon0 * epsilon0;
   G4double alpha1 = -std::log(epsilon0);
   G4double alpha2 = 0.5 * (1. - epsilon0Sq);
-
   G4double wlPhoton = h_Planck*c_light/photonEnergy0;
+
+  // Select randomly one element in the current material
+  const G4MaterialCutsCouple* couple = aTrack.GetMaterialCutsCouple();
+  G4int Z = crossSectionHandler->SelectRandomAtom(couple,photonEnergy0);
 
   // Sample the energy of the scattered photon
   G4double epsilon;
@@ -195,16 +201,71 @@ G4VParticleChange* G4LowEnergyCompton::PostStepDoIt(const G4Track& aTrack,
   G4double cosTheta = 1. - oneCosT;
   G4double sinTheta = std::sqrt (sinT2);
   G4double phi = twopi * G4UniformRand() ;
-  G4double dirx = sinTheta * std::cos(phi);
-  G4double diry = sinTheta * std::sin(phi);
-  G4double dirz = cosTheta ;
+  G4double dirX = sinTheta * std::cos(phi);
+  G4double dirY = sinTheta * std::sin(phi);
+  G4double dirZ = cosTheta ;
+
+  // Doppler broadening -  Method based on:
+  // Y. Namito, S. Ban and H. Hirayama, 
+  // "Implementation of the Doppler Broadening of a Compton-Scattered Photon Into the EGS4 Code" 
+  // NIM A 349, pp. 489-494, 1994
+  
+  // Maximum number of sampling iterations
+  G4int maxDopplerIterations = 1000;
+  G4double bindingE = 0.;
+  G4double photonEoriginal = epsilon * photonEnergy0;
+  G4double photonE = -1.;
+  G4int iteration = 0;
+  G4double eMax = photonEnergy0;
+  do
+    {
+      iteration++;
+      // Select shell based on shell occupancy
+      G4int shell = shellData.SelectRandomShell(Z);
+      bindingE = shellData.BindingEnergy(Z,shell);
+      
+      eMax = photonEnergy0 - bindingE;
+     
+      // Randomly sample bound electron momentum (memento: the data set is in Atomic Units)
+      G4double pSample = profileData.RandomSelectMomentum(Z,shell);
+      // Rescale from atomic units
+      G4double pDoppler = pSample * fine_structure_const;
+      G4double pDoppler2 = pDoppler * pDoppler;
+      G4double var2 = 1. + oneCosT * e0m;
+      G4double var3 = var2*var2 - pDoppler2;
+      G4double var4 = var2 - pDoppler2 * cosTheta;
+      G4double var = var4*var4 - var3 + pDoppler2 * var3;
+      if (var > 0.)
+	{
+	  G4double varSqrt = std::sqrt(var);        
+	  G4double scale = photonEnergy0 / var3;  
+          // Random select either root
+ 	  if (G4UniformRand() < 0.5) photonE = (var4 - varSqrt) * scale;               
+	  else photonE = (var4 + varSqrt) * scale;
+	} 
+      else
+	{
+	  photonE = -1.;
+	}
+   } while ( iteration <= maxDopplerIterations && 
+	     (photonE < 0. || photonE > eMax || photonE < eMax*G4UniformRand()) );
+ 
+  // End of recalculation of photon energy with Doppler broadening
+  // Revert to original if maximum number of iterations threshold has been reached
+  if (iteration >= maxDopplerIterations)
+    {
+      photonE = photonEoriginal;
+      bindingE = 0.;
+    }
 
   // Update G4VParticleChange for the scattered photon
 
-  G4ThreeVector photonDirection1(dirx,diry,dirz);
+  G4ThreeVector photonDirection1(dirX,dirY,dirZ);
   photonDirection1.rotateUz(photonDirection0);
-  aParticleChange.ProposeMomentumDirection(photonDirection1) ;
-  G4double photonEnergy1 = epsilon * photonEnergy0;
+  aParticleChange.ProposeMomentumDirection(photonDirection1);
+ 
+  G4double photonEnergy1 = photonE;
+  //G4cout << "--> PHOTONENERGY1 = " << photonE/keV << G4endl;
 
   if (photonEnergy1 > 0.)
     {
@@ -217,7 +278,22 @@ G4VParticleChange* G4LowEnergyCompton::PostStepDoIt(const G4Track& aTrack,
     }
 
   // Kinematics of the scattered electron
-  G4double eKineticEnergy = photonEnergy0 - photonEnergy1;
+  G4double eKineticEnergy = photonEnergy0 - photonEnergy1 - bindingE;
+  G4double eTotalEnergy = eKineticEnergy + electron_mass_c2;
+
+  G4double electronE = photonEnergy0 * (1. - epsilon) + electron_mass_c2; 
+  G4double electronP2 = electronE*electronE - electron_mass_c2*electron_mass_c2;
+  G4double sinThetaE = -1.;
+  G4double cosThetaE = 0.;
+  if (electronP2 > 0.)
+    {
+      cosThetaE = (eTotalEnergy + photonEnergy1 )* (1. - epsilon) / std::sqrt(electronP2);
+      sinThetaE = -1. * std::sqrt(1. - cosThetaE * cosThetaE); 
+    }
+  
+  G4double eDirX = sinThetaE * std::cos(phi);
+  G4double eDirY = sinThetaE * std::sin(phi);
+  G4double eDirZ = cosThetaE;
 
   // Generate the electron only if with large enough range w.r.t. cuts and safety
 
@@ -225,19 +301,19 @@ G4VParticleChange* G4LowEnergyCompton::PostStepDoIt(const G4Track& aTrack,
 
   if (rangeTest->Escape(G4Electron::Electron(),couple,eKineticEnergy,safety))
     {
-      G4double eMomentum = std::sqrt(eKineticEnergy*(eKineticEnergy+2.*electron_mass_c2));
-      G4ThreeVector eDirection((photonEnergy0 * photonDirection0 -
-				photonEnergy1 * photonDirection1) * (1./eMomentum));
-      G4DynamicParticle* electron = new G4DynamicParticle (G4Electron::Electron(),
-							   eDirection,eKineticEnergy) ;
+      G4ThreeVector eDirection(eDirX,eDirY,eDirZ);
+      eDirection.rotateUz(photonDirection0);
+
+      G4DynamicParticle* electron = new G4DynamicParticle (G4Electron::Electron(),eDirection,eKineticEnergy) ;
       aParticleChange.SetNumberOfSecondaries(1);
       aParticleChange.AddSecondary(electron);
-      aParticleChange.ProposeLocalEnergyDeposit(0.);
+      // Binding energy deposited locally
+      aParticleChange.ProposeLocalEnergyDeposit(bindingE);
     }
   else
     {
       aParticleChange.SetNumberOfSecondaries(0);
-      aParticleChange.ProposeLocalEnergyDeposit(eKineticEnergy);
+      aParticleChange.ProposeLocalEnergyDeposit(eKineticEnergy + bindingE);
     }
 
   return G4VDiscreteProcess::PostStepDoIt( aTrack, aStep);

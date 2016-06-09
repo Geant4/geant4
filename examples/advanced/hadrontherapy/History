@@ -1,12 +1,89 @@
------------------------------------------------------------
-$Id: History, v 1.6 2004/02/27  G.A.P. Cirrone
------------------------------------------------------------
+-------------------------------------------------------------------------------
+$Id: History, 2004/02/27  G.A.P. Cirrone, 
+	                  cirrone@lns.infn.it
+			  http://geant4infn.wikispaces.com/
+-------------------------------------------------------------------------------
+
 
      ====================================================
-                     Geant4 - Hadrontherapy
+                    Geant4 - Hadrontherapy
      ====================================================
 
                       Category History file
+20.11.2008: G.A.P.Cirrone and M.Russo; Tag: hadrontherapy-V09-01-11
+	   - Fixed path of macro files
+
+20.11.2008: G.A.P.Cirrone; Tag: hadrontherapy-V09-01-10
+           - Updated the History file
+           - Corrected cross sections definitions for ions
+           - Revised the definition and use of the electromagnetic options
+             for the use with the Standard models
+             
+20.11.2008: G.A.P.Cirrone and M.Russo; Tag: hadrontherapy-V09-01-09
+           - Updated readme and improved the comments. 
+
+20.11.2008: G.A.P.Cirrone and M.Russo; Tag: hadrontherapy-V09-01-08
+	   - Add new approach for the choice of the physic models.
+             Now packaged physic lists can be used alternatively 
+             to the the physic models implemented in the class files
+             EM, HE and HI. 
+           - Improved the electromagnetic models for the generic ions
+
+22.09.2008 G.A.P.Cirrone; Tag: hadrontherapy-V09-01-07
+           - Corrected the G4eBremsstrahlung() process in the file 
+             EMElectronStandard.cc;
+           - Updated the head of the History file;
+
+17.09.2008 A.Lechner; Tag: hadrontherapy-V09-01-06
+           - Corrections in the Low Energy Electromagnetic physic lists.
+
+15.06.2008 G.A.P.Cirrone; Tag: hadrontherapy-V09-01-05
+	   - Removed AIDA call from GNUmakefile 
+
+19.05.2008 G.A.P.Cirrone tag hadrontherapy-V09-01-04
+           - Added in the beam line the MOPI detector. MOPI is a microstrip
+             detector that, in the real case, is able to check during
+             the treatment, the beam simmetry of the therapy beam.
+             Its physical structure is here exactly simulated so that 
+             the its contribute to the energy loss can be take into account;
+             A detailed description if the detector can be found in 
+             NIM A 572 (2007) 1094-1101 and its references.
+	   - Corrected the position of the Phantom and Detector;
+           - Added variables to the HadrontherapyBeamLine.cc file;
+           - Added comments to the HadrontherapyBeamLine.cc file
+             to improve the clearness.
+           - Updated the README file.
+           - Changed the default dimensions of histogram bins 
+             (from 200 um to 100 um).
+
+09.03.2008 G.A.P.Cirrone tag hadrontherapy-V09-01-03
+	   - Completed the update of the new beam line
+
+09.03.2008 G.A.P.Cirrone tag hadrontherapy-V09-01-02
+	   - Added comments to the PhysicsList class;
+	   - Eliminated not used production cuts in PhysicsList;
+	   - Added NIST definition materials in Material class;
+	   - Code review of the DetectorConstruction class;
+           - Changed name of the volume where the energy deposited is collected
+             from "phantom" to "detector". "Detector" is a more appropiate 
+             name.
+	   - Changed name of the volume where the detector is inserted from 
+	     "patient" to the more appropriate "Water Phantom";
+
+03.03.2008 G.A.P.Cirrone tag hadrontherapy-V09-01-01
+           - Added the generation of .root file;
+	   - Removed a segmentation due to an uncorect pointer
+	     in the EMHadronIonStandard class;
+	   - Added options for an accurate use of Standard electromagnetic models
+	     in the EMHadronIonStandard, EMElectronStandard, 
+	     EMPositronStandard, EMPhotonStandard  and EMMuonStandard classes;
+	   - Added a macro file (physicsElectromagneticStandard.mac) 
+ 	     for the use of Hadrontherapy with the Standard Electromagnetic models;
+	   - Corrected in the defaultMacro.mac, a wrong command for the 
+ 	     activation of the Standard Electromagnetic models;
+         
+29.02.2007 G.A.P.Cirrone tag hadrontherapy-V09-01-00
+	   - Updated README
 
 16.11.2007 Anton Lechner tag hadrontherapy-V09-00-00
            Updated physics commands in macro files
@@ -30,8 +107,8 @@ $Id: History, v 1.6 2004/02/27  G.A.P. Cirrone
 	 - Improved the modulator geometry and fixed a bug on its rotation; 
 
 07.05.2007 G.A.P. Cirrone (hadrontherapy-V08-02-02)
-	 - Geometry upgrade(hadrontherapyBeamLine class) according to the experimental CATANA 
-	    proton therapy beam line; 
+	 - Geometry upgrade(hadrontherapyBeamLine class) according 
+           to the experimental CATANA proton therapy beam line; 
 
 23.04.2007 S. Guatelli (hadrontherapy-V08-02-01)
          - Compilation error corrected - human error of Susanna Guatelli.

@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ASTARStopping.hh,v 1.5 2006/06/29 19:49:58 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4ASTARStopping.hh,v 1.6 2008/11/13 12:04:37 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 
 #ifndef G4ASTARStopping_h
 #define G4ASTARStopping_h 1
@@ -85,7 +85,6 @@ private:
   G4double currentE, res;
   G4double e[74][78], kinE[78];
   G4double effZ[74]; 
-  G4int Znum[74];
 };
 
 inline G4double G4ASTARStopping::GetElectronicDEDX(const G4Material* mat, 

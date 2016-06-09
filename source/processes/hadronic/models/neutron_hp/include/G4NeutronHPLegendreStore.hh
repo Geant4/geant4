@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPLegendreStore.hh,v 1.11 2006/06/29 20:48:25 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4NeutronHPLegendreStore.hh,v 1.12 2008/06/13 00:29:26 tkoi Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 #ifndef G4NeutronHPLegendreStore_h
 #define G4NeutronHPLegendreStore_h 1
@@ -71,6 +71,7 @@ class G4NeutronHPLegendreStore
   inline G4double GetTemperature(G4int i){return theCoeff[i].GetTemperature();}
   inline G4int GetNumberOfPoly(G4int i) {return theCoeff[i].GetNumberOfPoly();}
   
+  G4double SampleDiscreteTwoBody (G4double anEnergy);
   G4double SampleElastic (G4double anEnergy);
   G4double Sample (G4double energy);
   G4double SampleMax (G4double energy);

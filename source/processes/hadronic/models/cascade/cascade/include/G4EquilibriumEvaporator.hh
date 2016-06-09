@@ -33,7 +33,7 @@
 
 using namespace G4InuclSpecialFunctions;
 
-class G4EquilibriumEvaporator : public G4Collider {
+class G4EquilibriumEvaporator {
 
 public:
 
@@ -47,8 +47,8 @@ public:
     theBigBanger = banger;
   };
 
-  virtual G4CollisionOutput collide(G4InuclParticle* bullet,
-				    G4InuclParticle* target);
+  G4CollisionOutput collide(G4InuclParticle* bullet,
+			    G4InuclParticle* target);
 
 private: 
 G4int verboseLevel;

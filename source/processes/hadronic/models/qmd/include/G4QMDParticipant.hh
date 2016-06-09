@@ -33,6 +33,8 @@
 // 
 //      Creation date: 29 March 2007
 // -----------------------------------------------------------------------------
+//
+// 081120 Add hit flag and related methods
 
 #ifndef G4QMDParticipant_hh
 #define G4QMDParticipant_hh
@@ -69,6 +71,10 @@ class G4QMDParticipant
       G4int GetChargeInUnitOfEplus() { return int ( definition->GetPDGCharge()/eplus ); };
 
       void UnsetInitialMark() { projectile = false; target = false; }
+      void UnsetHitMark() { hit = false; }
+      G4bool IsThisHit() { return hit; }
+      void SetHitMark() { hit = true; }
+
       void SetProjectile() { projectile = true; }
       void SetTarget() { target = true; }
       G4bool IsThisProjectile() { return projectile; }
@@ -81,6 +87,7 @@ class G4QMDParticipant
 
       G4bool projectile; 
       G4bool target; 
+      G4bool hit; 
 };
 
 #endif

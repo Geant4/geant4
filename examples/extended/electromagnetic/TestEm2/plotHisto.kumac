@@ -1,0 +1,13 @@
+macro plotHisto.kumac
+*
+h/file 1 testem2.hbook
+*
+h/list
+*
+opt stat
+h/pl 1
+*
+opt grid
+h/pl 4
+*
+return

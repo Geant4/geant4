@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4MuNuclearInteraction.cc,v 1.7 2006/11/04 02:15:05 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4MuNuclearInteraction.cc,v 1.11 2008/10/02 21:04:54 dennis Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // $Id: 
 // --------------------------------------------------------------
@@ -41,6 +41,7 @@
 //
 #include "G4MuNuclearInteraction.hh"
 #include "G4UnitsTable.hh"
+#include "G4HadronicProcessStore.hh"
 
 // static members ........
 G4int G4MuNuclearInteraction::nzdat =  5 ;
@@ -65,39 +66,51 @@ G4MuNuclearInteraction::G4MuNuclearInteraction(const G4String& processName)
     theMuonMinus ( G4MuonMinus::MuonMinus() ),
     theMuonPlus ( G4MuonPlus::MuonPlus() ),
     thePionZero (G4PionZero::PionZero() )
-{  }
+{  
+  SetProcessSubType(fHadronInelastic);
+  G4HadronicProcessStore::Instance()->RegisterExtraProcess(this);
+}
  
 G4MuNuclearInteraction::~G4MuNuclearInteraction()
 {
-   if (theMeanFreePathTable) {
-      theMeanFreePathTable->clearAndDestroy();
-      delete theMeanFreePathTable;
-   }
-   if (theCrossSectionTable) {
-      theCrossSectionTable->clearAndDestroy();
-      delete theCrossSectionTable;
-   }
+  if (theMeanFreePathTable) {
+    theMeanFreePathTable->clearAndDestroy();
+    delete theMeanFreePathTable;
+  }
+  if (theCrossSectionTable) {
+    theCrossSectionTable->clearAndDestroy();
+    delete theCrossSectionTable;
+  }
 
-   if (&PartialSumSigma) {
-      PartialSumSigma.clearAndDestroy();
-   }
+  if (&PartialSumSigma) {
+    PartialSumSigma.clearAndDestroy();
+  }
 }
  
 void G4MuNuclearInteraction::SetPhysicsTableBining(G4double lowE,
-                                                  G4double highE, G4int nBins)
+						   G4double highE, G4int nBins)
 {
   LowestKineticEnergy = lowE; HighestKineticEnergy = highE ; TotBin = nBins ;
+}
+
+void G4MuNuclearInteraction::PreparePhysicsTable(
+                                    const G4ParticleDefinition& aParticleType)
+{
+  G4HadronicProcessStore::Instance()
+    ->RegisterParticleForExtraProcess(this, &aParticleType);
 }
 
 void G4MuNuclearInteraction::BuildPhysicsTable(
                                     const G4ParticleDefinition& aParticleType)
 {
+  G4HadronicProcessStore::Instance()->PrintInfo(&aParticleType);
+
   G4double LowEdgeEnergy , Value;
   G4PhysicsLogVector* ptrVector;
    
   if (theCrossSectionTable) {
-      theCrossSectionTable->clearAndDestroy() ;
-      delete theCrossSectionTable ;
+    theCrossSectionTable->clearAndDestroy() ;
+    delete theCrossSectionTable ;
   }
 
   // make tables for the sampling at initialization
@@ -110,7 +123,7 @@ void G4MuNuclearInteraction::BuildPhysicsTable(
   for (size_t J=0; J < G4Element::GetNumberOfElements(); J++ )
   {
     ptrVector = new G4PhysicsLogVector(LowestKineticEnergy,
-                                         HighestKineticEnergy,TotBin) ;
+				       HighestKineticEnergy,TotBin) ;
     AtomicNumber = (*theElementTable )[J]->GetZ() ;
     AtomicWeight = (*theElementTable )[J]->GetA() ;
 
@@ -118,8 +131,8 @@ void G4MuNuclearInteraction::BuildPhysicsTable(
     {
       LowEdgeEnergy = ptrVector->GetLowEdgeEnergy(i) ;
       Value = ComputeMicroscopicCrossSection(&aParticleType,
-                                                 LowEdgeEnergy,
-                                                 AtomicNumber,AtomicWeight) ;
+					     LowEdgeEnergy,
+					     AtomicNumber,AtomicWeight) ;
       ptrVector->PutValue(i,Value) ;
     }
 
@@ -129,8 +142,8 @@ void G4MuNuclearInteraction::BuildPhysicsTable(
   G4double FixedEnergy = (LowestKineticEnergy + HighestKineticEnergy)/2. ;
   const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable() ;
   if (theMeanFreePathTable) {
-     theMeanFreePathTable->clearAndDestroy();
-     delete theMeanFreePathTable;
+    theMeanFreePathTable->clearAndDestroy();
+    delete theMeanFreePathTable;
   }
   theMeanFreePathTable = new G4PhysicsTable(G4Material::GetNumberOfMaterials());
 
@@ -141,8 +154,8 @@ void G4MuNuclearInteraction::BuildPhysicsTable(
   for (size_t K=0 ; K < G4Material::GetNumberOfMaterials(); K++ )  
   { 
     ptrVector = new G4PhysicsLogVector(LowestKineticEnergy,
-                                         HighestKineticEnergy,
-                                         TotBin ) ;
+				       HighestKineticEnergy,
+				       TotBin ) ;
 
     const G4Material* material= (*theMaterialTable)[K];
 
@@ -166,8 +179,8 @@ void G4MuNuclearInteraction::BuildPhysicsTable(
 
 void G4MuNuclearInteraction::ComputePartialSumSigma(
                                    const G4ParticleDefinition* ParticleType,
-                                               G4double KineticEnergy,
-                                               const G4Material* aMaterial)
+				   G4double KineticEnergy,
+				   const G4Material* aMaterial)
 
 // Build the table of cross section per element. The table is built for MATERIALS.
 // This table is used by DoIt to select randomly an element in the material. 
@@ -182,13 +195,13 @@ void G4MuNuclearInteraction::ComputePartialSumSigma(
    G4double SIGMA = 0. ;
 
    for ( G4int Ielem=0 ; Ielem < NbOfElements ; Ielem++ )
-      {             
-        SIGMA += theAtomNumDensityVector[Ielem] * 
-               ComputeMicroscopicCrossSection( ParticleType, KineticEnergy,
-                                        (*theElementVector)[Ielem]->GetZ(),
-                                        (*theElementVector)[Ielem]->GetA()) ;
-        PartialSumSigma[Imate]->push_back(SIGMA);
-      }
+     {             
+       SIGMA += theAtomNumDensityVector[Ielem] * 
+	 ComputeMicroscopicCrossSection( ParticleType, KineticEnergy,
+					 (*theElementVector)[Ielem]->GetZ(),
+					 (*theElementVector)[Ielem]->GetA()) ;
+       PartialSumSigma[Imate]->push_back(SIGMA);
+     }
 }
 
 G4double G4MuNuclearInteraction::ComputeMicroscopicCrossSection(
@@ -528,17 +541,21 @@ G4Element* G4MuNuclearInteraction::SelectRandomAtom(G4Material* aMaterial) const
 {
   // select randomly 1 element within the material
 
-  const G4int Index = aMaterial->GetIndex();
-  const G4int NumberOfElements = aMaterial->GetNumberOfElements();
+  G4int Index = aMaterial->GetIndex();
+  G4int NumberOfElements = aMaterial->GetNumberOfElements();
   const G4ElementVector* theElementVector = aMaterial->GetElementVector();
+  if(1 == NumberOfElements) return ((*theElementVector)[0]);
 
   G4double rval = G4UniformRand()*((*PartialSumSigma[Index])[NumberOfElements-1]);
-  for ( G4int i=0; i < NumberOfElements; i++ )
+  for ( G4int i=0; i < NumberOfElements; i++ ) {
     if (rval <= (*PartialSumSigma[Index])[i]) return ((*theElementVector)[i]);
-  G4cout << " WARNING !!! - The Material '"<< aMaterial->GetName()
-       << "' has no elements, NULL pointer returned." << G4endl;
-  return 0;
+  }
+  G4cout << "G4MuNuclearInteraction WARNING !!! no element selected for '"
+	 << aMaterial->GetName()
+	 << " 1st element returned." << G4endl;
+  return ((*theElementVector)[0]);
 }
+
 void G4MuNuclearInteraction::PrintInfoDefinition()
 {
   G4String comments = "cross sections from R. Kokoulin \n ";

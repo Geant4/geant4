@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4PreCompoundParameters.cc,v 1.3 2006/06/29 20:59:29 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // by V. Lara
 

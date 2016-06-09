@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenInventorSceneHandler.cc,v 1.53 2007/04/03 13:35:48 allison Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4OpenInventorSceneHandler.cc,v 1.54 2008/04/04 13:40:04 allison Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // 
 // Jeff Kallenbach 01 Aug 1996
@@ -529,18 +529,18 @@ void G4OpenInventorSceneHandler::AddPrimitive (const G4NURBS& nurb) {
   G4float *u_knot_array, *u_knot_array_ptr;
   u_knot_array = u_knot_array_ptr = new G4float [nurb.GetnbrKnots(G4NURBS::U)];
   G4NURBS::KnotsIterator u_iterator (nurb, G4NURBS::U);
-  while (u_iterator.pick (u_knot_array_ptr++));
+  while (u_iterator.pick (u_knot_array_ptr++)){}
 
   G4float *v_knot_array, *v_knot_array_ptr;
   v_knot_array = v_knot_array_ptr = new G4float [nurb.GetnbrKnots(G4NURBS::V)];
   G4NURBS::KnotsIterator v_iterator (nurb, G4NURBS::V);
-  while (v_iterator.pick (v_knot_array_ptr++));
+  while (v_iterator.pick (v_knot_array_ptr++)){}
 
   G4float *ctrl_pnt_array, *ctrl_pnt_array_ptr;
   ctrl_pnt_array = ctrl_pnt_array_ptr =
     new G4float [nurb.GettotalnbrCtrlPts () * G4NURBS::NofC*sizeof(G4float)];
   G4NURBS::CtrlPtsCoordsIterator c_p_iterator (nurb);
-  while (c_p_iterator.pick (ctrl_pnt_array_ptr++));
+  while (c_p_iterator.pick (ctrl_pnt_array_ptr++)){}
   
   SoSeparator *surfSep = new SoSeparator();
 

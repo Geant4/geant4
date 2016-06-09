@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // $Id: G4PolarizationHelper.hh,v 1.2 2007/11/01 17:30:25 schaelic Exp $
-// tag $Name: geant4-09-01 $
+// tag $Name: geant4-09-02 $
 //
 // GEANT4 Class header file
 //

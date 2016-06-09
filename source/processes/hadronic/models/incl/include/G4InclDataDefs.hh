@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4InclDataDefs.hh,v 1.2 2007/09/11 13:18:43 miheikki Exp $ 
+// $Id: G4InclDataDefs.hh,v 1.5 2008/06/25 17:20:04 kaitanie Exp $ 
 // Translation of INCL4.2/ABLA V3 
 // Pekka Kaitaniemi, HIP (translation)
 // Christelle Schmidt, IPNL (fission code)
@@ -563,6 +563,184 @@ public:
   ~G4VarNtp() {};
 
   /**
+   * Clear and initialize all variables and arrays.
+   */
+  void clear() {
+    particleIndex = 0;
+    projType = 0;
+    projEnergy = 0.0;
+    targetA = 0;
+    targetZ = 0;
+    massini = 0;
+    mzini = 0;
+    exini = 0;
+    pcorem = 0;
+    mcorem = 0;
+    pxrem = 0;
+    pyrem = 0;
+    pzrem = 0;
+    mulncasc = 0;
+    mulnevap = 0;
+    mulntot = 0;
+    bimpact = 0.0;
+    jremn = 0;
+    kfis = 0;
+    estfis = 0;
+    izfis = 0;
+    iafis = 0;
+    ntrack = 0;
+    for(G4int i = 0; i < VARNTPSIZE; i++) {
+      itypcasc[i] = 0;
+      avv[i] = 0;
+      zvv[i] = 0;
+      enerj[i] = 0.0;
+      plab[i] = 0.0;
+      tetlab[i] = 0.0;
+      philab[i] = 0.0;
+      full[i] = false;
+    }
+  }
+
+  void addParticle(G4double A, G4double Z, G4double E, G4double P, G4double theta, G4double phi) {
+    if(full[particleIndex]) {
+      G4cout <<"G4VarNtp: Error. Index i = " << particleIndex << " is already occupied by particle:" << G4endl;
+      G4cout <<"A = " << avv[particleIndex] << " Z = " << zvv[particleIndex] << G4endl;
+      G4cout <<"Tried to replace it with:" << G4endl;
+      G4cout <<"A = " << Z << " Z = " << Z << G4endl;
+    } else {
+      avv[particleIndex] = (int) A;
+      zvv[particleIndex] = (int) Z;
+      enerj[particleIndex] = E;
+      plab[particleIndex] = P;
+      tetlab[particleIndex] = theta;
+      philab[particleIndex] = phi;
+      full[particleIndex] = true;
+      ntrack = particleIndex + 1;
+      particleIndex++;
+    }
+  }
+
+  /**
+   * Baryon number conservation check.
+   */
+  G4int getTotalBaryonNumber() {
+    G4int baryonNumber = 0;
+    for(G4int i = 0; i < ntrack; i++) {
+      if(avv[i] > 0) {
+	baryonNumber += avv[i];
+      }
+    }
+    return baryonNumber;
+  }
+
+  /**
+   * Return total energy.
+   */
+  G4double getTotalEnergy() {
+    G4double energy = 0.0;
+    for(G4int i = 0; i < ntrack; i++) {
+      energy += std::sqrt(std::pow(plab[i], 2) + std::pow(getMass(i), 2)); // E^2 = p^2 + m^2
+    }
+
+    return energy;
+  }
+
+  /**
+   * Return total three momentum.
+   */
+  G4double getTotalThreeMomentum() {
+    G4double momentum = 0;
+    for(G4int i = 0; i < ntrack; i++) {
+      momentum += plab[i];
+    }
+    return momentum;
+  }
+
+  G4double getMomentumSum() {
+    G4double momentum = 0;
+    for(G4int i = 0; i < ntrack; i++) {
+      momentum += plab[i];
+    }
+    return momentum;
+  }
+
+  G4double getMass(G4int particle) {
+    const G4double protonMass = 938.272;
+    const G4double neutronMass = 939.565;
+    const G4double pionMass = 139.57;
+
+    G4double mass = 0.0;
+    if(avv[particle] ==  1 && zvv[particle] ==  1) mass = protonMass;
+    if(avv[particle] ==  1 && zvv[particle] ==  0) mass = neutronMass;
+    if(avv[particle] == -1)                        mass = pionMass;
+    if(avv[particle] > 1)
+      mass = avv[particle] * protonMass + zvv[particle] * neutronMass;
+    return mass;
+  }
+
+  /**
+   * Dump debugging output.
+   */
+  void dump() {
+    G4int nProton = 0, nNeutron = 0;
+    G4int nPiPlus = 0, nPiZero = 0, nPiMinus = 0;
+    G4int nH2 = 0, nHe3 = 0, nAlpha = 0;
+    G4int nFragments = 0;
+    G4int nParticles = 0;
+    G4cout <<"Particles produced in the event (" << ntrack << "):" << G4endl;
+    G4cout <<"A \t Z \t Ekin \t Ptot \t Theta \t Phi" << G4endl;
+    for(G4int i = 0; i < ntrack; i++) {
+      nParticles++;
+      if(avv[i] ==  1 && zvv[i] ==  1) nProton++;  // Count multiplicities
+      if(avv[i] ==  1 && zvv[i] ==  0) nNeutron++;
+      if(avv[i] == -1 && zvv[i] ==  1) nPiPlus++;
+      if(avv[i] == -1 && zvv[i] ==  0) nPiZero++;
+      if(avv[i] == -1 && zvv[i] == -1) nPiMinus++;
+      if(avv[i] ==  2 && zvv[i] ==  1) nH2++;
+      if(avv[i] ==  3 && zvv[i] ==  2) nHe3++;
+      if(avv[i] ==  4 && zvv[i] ==  2) nAlpha++;
+      if(                zvv[i] >   2) nFragments++;
+
+      G4cout << i << " \t " << avv[i] << " \t " << zvv[i] << " \t " << enerj[i] << " \t " 
+             << plab[i] << " \t " << tetlab[i] << " \t " << philab[i] << G4endl;
+    }
+
+    G4cout <<"Summary of event: " << G4endl;
+    G4cout <<"Projectile type: " << projType <<" Energy: " << projEnergy << G4endl;
+    G4cout <<"Target A = " << targetA << " Z = " << targetZ << G4endl;
+    G4cout <<"Remnant from cascade: " << G4endl;
+    G4cout <<"A = " << massini << " Z = " << mzini << " excitation E = " << exini << G4endl;
+    G4cout <<"Particle multiplicities:" << G4endl;
+    G4cout <<"Protons: " << nProton << " Neutrons:  " << nNeutron << G4endl;
+    G4cout <<"pi+: " << nPiPlus << " pi0: " << nPiZero << " pi-: " << nPiMinus << G4endl;
+    G4cout <<"H2: " << nH2 << " He3: " << nHe3 << " Alpha: " << nAlpha << G4endl;
+    G4cout <<"Nucleus fragments = " << nFragments << G4endl;
+    G4cout <<"Conservation laws:" << G4endl;
+    G4cout <<"Baryon number = " <<  getTotalBaryonNumber() << G4endl;
+    G4cout <<"Number of particles = " << nParticles << G4endl;
+  }
+
+  /**
+   * Projectile type.
+   */
+  G4int projType;
+
+  /**
+   * Projectile energy.
+   */
+  G4double projEnergy;
+
+  /**
+   * Target mass number.
+   */
+  G4int targetA;
+
+  /**
+   * Target charge number.
+   */
+  G4int targetZ;
+
+  /**
    * A of the remnant.
    */
   G4double massini;
@@ -576,6 +754,8 @@ public:
    * Excitation energy.
    */
   G4double exini;
+
+  G4double pcorem, mcorem, pxrem, pyrem, pzrem;
 
   /**
    * Cascade n multip.
@@ -628,6 +808,13 @@ public:
   G4int ntrack;
 
   /**
+   * The state of the index:
+   * true = reserved
+   * false = free
+   */
+  G4bool full[VARNTPSIZE];
+
+  /**
    * emitted in cascade (0) or evaporation (1).
    */
   G4int itypcasc[VARNTPSIZE];
@@ -662,6 +849,9 @@ public:
    * Phi angle.
    */
   G4double philab[VARNTPSIZE];
+
+private:
+  G4int particleIndex;
 };
 
 /**

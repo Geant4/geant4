@@ -24,13 +24,12 @@
 // ********************************************************************
 //
 //
-// $Id: G4AlphaEvaporationChannel.hh,v 1.3 2006/06/29 20:09:43 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4AlphaEvaporationChannel.hh,v 1.8 2008/09/19 13:32:54 ahoward Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Nov. 1999)
 //
-
 
 #ifndef G4AlphaEvaporationChannel_h
 #define G4AlphaEvaporationChannel_h 1
@@ -61,8 +60,8 @@ public:
 
 private:
 
-  G4AlphaCoulombBarrier theCoulombBarrier;
-	
+  G4AlphaCoulombBarrier theCoulombBarrier;	
+
   G4AlphaEvaporationProbability theEvaporationProbability;
 
 };

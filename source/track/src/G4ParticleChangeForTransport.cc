@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4ParticleChangeForTransport.cc,v 1.19 2006/11/03 17:45:04 japost Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // 
 // --------------------------------------------------------------

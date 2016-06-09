@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysicsList.cc,v 1.15 2007/07/04 11:14:33 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: PhysicsList.cc,v 1.16 2008/06/11 15:17:57 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 //---------------------------------------------------------------------------
 //
@@ -49,6 +49,7 @@
 #include "G4EmStandardPhysics.hh"
 #include "G4EmStandardPhysics_option1.hh"
 #include "G4EmStandardPhysics_option2.hh"
+#include "G4EmStandardPhysics_option3.hh"
 #include "PhysListEmLivermore.hh"
 #include "PhysListEmPenelope.hh"
 #include "G4StepLimiterBuilder.hh"
@@ -146,6 +147,11 @@ void PhysicsList::AddPhysicsList(const G4String& name)
 
   } else if (name == "emstandard_opt2" && !emBuilderIsRegisted) {
     RegisterPhysics(new G4EmStandardPhysics_option2());
+    emBuilderIsRegisted = true;
+    G4cout << "PhysicsList::AddPhysicsList <" << name << ">" << G4endl;
+
+  } else if (name == "emstandard_opt3" && !emBuilderIsRegisted) {
+    RegisterPhysics(new G4EmStandardPhysics_option3());
     emBuilderIsRegisted = true;
     G4cout << "PhysicsList::AddPhysicsList <" << name << ">" << G4endl;
 

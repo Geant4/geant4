@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4BREPSolid.cc,v 1.36 2006/10/19 15:35:36 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4BREPSolid.cc,v 1.37 2008/03/13 14:18:57 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -986,6 +986,7 @@ G4double G4BREPSolid::DistanceToOut(register const G4ThreeVector& P,
         //
         G4double surfDistance = SurfaceVec[a]->GetDistance();
         if( surfDistance < ShortestDistance )
+        {
           if( surfDistance > sqrHalfTolerance )
           {
             ShortestDistance = surfDistance;
@@ -994,6 +995,7 @@ G4double G4BREPSolid::DistanceToOut(register const G4ThreeVector& P,
           {
             // The point is within the boundary: ignore it
           }
+        }
       }
     }
   }

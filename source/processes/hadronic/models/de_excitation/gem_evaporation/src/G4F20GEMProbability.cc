@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4F20GEMProbability.cc,v 1.5 2006/06/29 20:22:03 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Nov 1999)

@@ -7,7 +7,7 @@
 # ==================================================================
 from Geant4 import *
 import demo_wp
-import MedicalBeam
+import g4py.MedicalBeam
 import ROOT
 
 # ==================================================================
@@ -190,7 +190,7 @@ gRunManager.SetUserAction(myEA)
 #pg.SetParticlePosition(G4ThreeVector(0.,0.,-50.)*cm)
 
 # medical beam
-beam= MedicalBeam.Construct()
+beam= g4py.MedicalBeam.Construct()
 beam.particle= "proton"
 beam.kineticE= 230.*MeV
 #beam.particle= "gamma"

@@ -97,42 +97,31 @@ G4double G4UPiNuclearCrossSection::GetInelasticCrossSection(
 G4double G4UPiNuclearCrossSection::Interpolate(
 	 G4double Z, G4double A, G4double ekin, G4PhysicsTable* table)
 {
+  G4double res = 0.0;
   G4bool b;
   G4int idx;
   G4int iz = G4int(Z + 0.5);
-  for(idx=0; idx<NZ-1; idx++) {if(theZ[idx] >= iz) break;}
+  if(iz > 92) iz = 92;
+  for(idx=0; idx<NZ; idx++) {if(theZ[idx] >= iz) break;}
+  if(idx >= NZ) idx = NZ - 1;
+  G4int iz2 = theZ[idx];
 
-  G4double x = (((*table)[idx])->GetValue(ekin, b));
+  G4double x2 = (((*table)[idx])->GetValue(ekin, b))*APower[iz]/APower[iz2];
 
-  // one of elements in the table
-  if(iz >= theZ[idx]) {
-    G4double A1 = theA[idx];
-    x *= std::pow(A/A1,aPower);
+  // use only one Z
+  if(iz >= theZ[idx] || idx == 0) {
+    res = x2;
 
   // Interpolation between Z
   } else {
 
-    G4double x2 = x;
-    G4double x1 = x;
-    if(idx == 0) {
-      idx++;
-      x2 = (((*table)[idx])->GetValue(ekin, b));
-    } else {
-      x1 = (((*table)[idx-1])->GetValue(ekin, b));
-    }
-    G4double A1 = theA[idx-1];
-    G4double A2 = theA[idx];
-    G4double w1 = A - A1;
-    G4double w2 = A2 - A;
-    G4double y1 = x1*std::pow(A/A1,aPower);
-    if(w1 <= 0.0) x = y1;
-    else {
-      G4double y2 = x2*std::pow(A/A2,aPower);
-      if(w2 <= 0.0) x = y2;
-      else  x = (w2*y1 + w1*y2)/(w1 + w2); 
-    }
+    G4int iz1 = theZ[idx-1];
+    G4double x1 = (((*table)[idx-1])->GetValue(ekin, b))*APower[iz]/APower[iz1];
+    G4double w1 = A - theA[idx-1];
+    G4double w2 = theA[idx] - A;
+    res = (w1*x1 + w2*x2)/(w1 + w2); 
   }
-  return x;
+  return res;
 }
 
 void G4UPiNuclearCrossSection::AddDataSet(const G4String& p, 
@@ -142,7 +131,9 @@ void G4UPiNuclearCrossSection::AddDataSet(const G4String& p,
 					  G4int n)
 {
   G4LPhysicsFreeVector* pvin = new G4LPhysicsFreeVector(n,e[0]*GeV,e[n-1]*GeV);
+  //pvin->SetSpline(true);
   G4LPhysicsFreeVector* pvel = new G4LPhysicsFreeVector(n,e[0]*GeV,e[n-1]*GeV);
+  //pvel->SetSpline(true);
   for(G4int i=0; i<n; i++) { 
     pvin->PutValues(i,e[i]*GeV,in[i]*millibarn); 
     pvel->PutValues(i,e[i]*GeV,std::max(0.0,(tot[i]-in[i])*millibarn)); 
@@ -187,9 +178,13 @@ void G4UPiNuclearCrossSection::Initialise()
   NZ = n;
 
   G4NistManager* nist = G4NistManager::Instance();
-  for(G4int i=0; i<n; i++) {
+  G4int i;
+  for(i=0; i<n; i++) {
     theZ.push_back(iz[i]);
     theA.push_back(nist->GetAtomicMassAmu(iz[i]));
+  }
+  for(i=1; i<92; i++) {
+    APower[i] = std::pow(nist->GetAtomicMassAmu(i),aPower);
   }
 
   piPlusElastic    = new G4PhysicsTable();

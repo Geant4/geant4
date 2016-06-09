@@ -1,4 +1,4 @@
-$Id: History,v 1.21 2007/06/06 14:50:38 gcosmo Exp $
+$Id: History,v 1.22 2008/03/02 10:52:55 kurasige Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+Mar. 2nd, 2008  -  H.Kurashige (procuts-V09-01-00) 
+- Add ProductionCutsMessenger
+- Suppress 'too big cut value' messsage for higher verbosity
 
 June 6th, 2007 -  L.Urban (procuts-V08-03-01)
 - Fix in G4VRangeToEnergyConverter::convert(), range-energu conversion,

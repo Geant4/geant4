@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4StatMFMacroNucleon.cc,v 1.5 2006/06/29 20:25:19 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4StatMFMacroNucleon.cc,v 1.6 2008/07/25 11:20:47 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara
@@ -71,13 +71,12 @@ G4double G4StatMFMacroNucleon::CalcMeanMultiplicity(const G4double FreeVol, cons
     G4double exponent_proton = (mu+nu-Coulomb)/T;
     G4double exponent_neutron = mu/T;
 
-    if (exponent_neutron > 700.0) exponent_proton = 700.0;
+    if (exponent_neutron > 700.0) exponent_neutron = 700.0;
     if (exponent_proton > 700.0) exponent_proton = 700.0;
 
-    _NeutronMeanMultiplicity = (degeneracy*FreeVol/lambda3)*std::exp(mu/T);
+    _NeutronMeanMultiplicity = (degeneracy*FreeVol/lambda3)*std::exp(exponent_neutron);
 	
-    _ProtonMeanMultiplicity = (degeneracy*FreeVol/lambda3)*
-	std::exp((mu+nu-Coulomb)/T);
+    _ProtonMeanMultiplicity = (degeneracy*FreeVol/lambda3)*std::exp(exponent_proton);
 
 	
 
@@ -91,7 +90,7 @@ G4double G4StatMFMacroNucleon::CalcEnergy(const G4double T)
     const G4double Coulomb = (3./5.)*(elm_coupling/G4StatMFParameters::Getr0())*
 	(1.0 - 1.0/std::pow(1.0+G4StatMFParameters::GetKappaCoulomb(),1./3.));
 									
-    return _Energy = Coulomb * theZARatio + (3./2.) * T;
+    return _Energy = Coulomb * theZARatio * theZARatio + (3./2.) * T;
 							
 }
 

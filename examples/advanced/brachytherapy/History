@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: History,v 1.21 2006/11/15 10:03:37 guatelli Exp $
+$Id: History,v 1.26 2008/11/24 14:53:28 cirrone Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -8,6 +8,19 @@ $Id: History,v 1.21 2006/11/15 10:03:37 guatelli Exp $
 
                       Category History file
                       ---------------------
+24.11.2008 -- G.A.P.Cirrone; tag: brachy-V09-01-03
+              Updated macro files
+21.11.2008 -- G.A.P.Cirrone; Tag: brachy-V09-01-02
+              Corrected and updated macro files
+
+15.06.2008 -- G.A.P.Cirrone; Tag: brachy-V09-01-01
+              Removed no more necessary AIDA commands from GNUmakefile
+
+05th June 2008: G.A.P.Cirrone (cirrone@lns.infn.it). Tag version: brachy-V09-01-00
+- Compilation error corrected in the BrachyAnalysiManager
+- Bad type assignment in BrachyAnalysismanager
+- Activated the generation .root files for output 
+
 15th November 2006 Susanna Guatelli (brachy-V08-01-01)
 - Physics list cleaned. The cut is fixed to a value lower than the 
   1 keV limit. 

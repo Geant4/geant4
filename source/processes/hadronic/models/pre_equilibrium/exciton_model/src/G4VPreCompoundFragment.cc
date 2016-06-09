@@ -24,10 +24,9 @@
 // ********************************************************************
 //
 //
-// $Id: G4VPreCompoundFragment.cc,v 1.4 2007/07/23 09:56:40 ahoward Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+//J. M. Quesada (August 2008).  
+//Based  on previous work by V. Lara
 //
-// by V. Lara
  
 #include "G4VPreCompoundFragment.hh"
 #include "G4PreCompoundParameters.hh"
@@ -141,8 +140,7 @@ Initialize(const G4Fragment & aFragment)
 
   if ((theRestNucleusA < theRestNucleusZ) ||
       (theRestNucleusA < theA) ||
-      (theRestNucleusZ < theZ) ||
-      (aFragment.GetNumberOfCharged() < theZ)) // AH last argument from JMQ
+      (theRestNucleusZ < theZ)) 
     {
       // In order to be sure that emission probability will be 0.
       theMaximalKineticEnergy = 0.0;
@@ -154,7 +152,8 @@ Initialize(const G4Fragment & aFragment)
   theCoulombBarrier = theCoulombBarrierPtr->
     GetCoulombBarrier(static_cast<G4int>(theRestNucleusA),static_cast<G4int>(theRestNucleusZ),
 		      aFragment.GetExcitationEnergy());
-  
+
+
   // Compute Binding Energies for fragments 
   // (needed to separate a fragment from the nucleus)
   
@@ -163,11 +162,12 @@ Initialize(const G4Fragment & aFragment)
     G4NucleiProperties::GetMassExcess(static_cast<G4int>(aFragment.GetA()),static_cast<G4int>(aFragment.GetZ()));
   
   // Compute Maximal Kinetic Energy which can be carried by fragments after separation
+  // This is the true (assimptotic) maximal kinetic energy
   G4double m = aFragment.GetMomentum().m();
   G4double rm = GetRestNuclearMass();
   G4double em = GetNuclearMass();
   theMaximalKineticEnergy = ((m - rm)*(m + rm) + em*em)/(2.0*m) - em;
-  // - theCoulombBarrier;
+ 
   
   return;
 }

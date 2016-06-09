@@ -23,15 +23,15 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: pyG4VPhysicalVolume.cc,v 1.6 2006/11/21 06:03:22 kmura Exp $
-// $Name: geant4-09-01 $
+// $Id: pyG4VPhysicalVolume.cc,v 1.7 2008/03/13 07:32:18 kmura Exp $
+// $Name: geant4-09-02 $
 // ====================================================================
 //   pyG4VPhysicalVolume.cc
 //
 //                                         2005 Q
 // ====================================================================
 #include <boost/python.hpp>
-#include "pyG4Version.hh"
+#include "G4Version.hh"
 #include "G4VPhysicalVolume.hh"
 #include "G4LogicalVolume.hh"
 #include "G4VPVParameterisation.hh"

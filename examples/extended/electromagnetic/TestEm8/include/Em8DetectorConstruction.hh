@@ -25,7 +25,7 @@
 //
 //
 // $Id: Em8DetectorConstruction.hh,v 1.9 2007/10/02 10:12:47 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // 
 

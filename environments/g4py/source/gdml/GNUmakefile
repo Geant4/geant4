@@ -1,5 +1,5 @@
-# $Id: GNUmakefile,v 1.1 2007/11/13 10:03:33 kmura Exp $
-# $Name: geant4-09-01 $
+# $Id: GNUmakefile,v 1.4 2008/12/01 09:20:25 kmura Exp $
+# $Name: geant4-09-02 $
 # ===========================================================
 #   Makefile for building Geant4Py modules
 # ===========================================================

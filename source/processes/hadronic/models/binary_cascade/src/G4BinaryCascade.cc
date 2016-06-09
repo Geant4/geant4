@@ -85,7 +85,8 @@
 //  C O N S T R U C T O R S   A N D   D E S T R U C T O R S
 //
 
-G4BinaryCascade::G4BinaryCascade() : G4VIntraNuclearTransportModel()
+G4BinaryCascade::G4BinaryCascade() : 
+G4VIntraNuclearTransportModel("Binary Cascade")
 {
   // initialise the resonance sector
   G4ShortLivedConstructor ShortLived;
@@ -96,6 +97,7 @@ G4BinaryCascade::G4BinaryCascade() : G4VIntraNuclearTransportModel()
   theLateParticle= new G4BCLateParticle;
   theImR.push_back(theDecay);
   G4Scatterer * aSc=new G4Scatterer;
+  theH1Scatterer = new G4Scatterer;
   theImR.push_back(aSc);
   G4MesonAbsorption * aAb=new G4MesonAbsorption;
   theImR.push_back(aAb);
@@ -110,14 +112,14 @@ G4BinaryCascade::G4BinaryCascade() : G4VIntraNuclearTransportModel()
   SetDeExcitation(new G4PreCompoundModel(theExcitationHandler));
   SetMinEnergy(0.0*GeV);
   SetMaxEnergy(10.1*GeV);
-  PrintWelcomeMessage();
+  //PrintWelcomeMessage();
   thePrimaryEscape = true;
   thePrimaryType = 0;
 }
 
 
 G4BinaryCascade::G4BinaryCascade(const G4BinaryCascade& )
-: G4VIntraNuclearTransportModel()
+: G4VIntraNuclearTransportModel("Binary Cascade")
 {
 }
 
@@ -133,6 +135,7 @@ G4BinaryCascade::~G4BinaryCascade()
   std::for_each(theImR.begin(), theImR.end(), Delete<G4BCAction>());
   delete theLateParticle;
   delete theExcitationHandler;
+  delete theH1Scatterer;
 }
 
 //----------------------------------------------------------------------------
@@ -2439,7 +2442,7 @@ G4ReactionProductVector * G4BinaryCascade::Propagate1H1(
     G4KineticTrack aTarget(aHTarg, 0., pos, mom);
     G4bool done(false);
     std::vector<G4KineticTrack *>::iterator iter, jter;
-    static G4Scatterer theScatterer;
+// data member    static G4Scatterer theH1Scatterer;
 //G4cout << " start 1H1 for " << (*secondaries).front()->GetDefinition()->GetParticleName()
 //       << " on " << aHTarg->GetParticleName() << G4endl;  
     G4int tryCount(0);
@@ -2450,7 +2453,7 @@ G4ReactionProductVector * G4BinaryCascade::Propagate1H1(
        std::for_each(secs->begin(), secs->end(), DeleteKineticTrack());
        delete secs;
       }
-      secs = theScatterer.Scatter(*(*secondaries).front(), aTarget);
+      secs = theH1Scatterer->Scatter(*(*secondaries).front(), aTarget);
       for(size_t ss=0; secs && ss<secs->size(); ss++)
       {
 //        G4cout << "1H1 " << (*secs)[ss]->GetDefinition()->GetParticleName()

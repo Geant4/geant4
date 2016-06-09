@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleMessenger.cc,v 1.9 2007/03/15 06:53:27 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4ParticleMessenger.cc,v 1.10 2008/06/08 12:43:19 kurasige Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 //
 //---------------------------------------------------------------
@@ -89,6 +89,16 @@ G4ParticleMessenger::G4ParticleMessenger(G4ParticleTable* pTable)
   findCmd->SetDefaultValue(0);
   findCmd->SetParameterName("encoding", false);
 
+  // -- particle/property/Verbose ---
+  verboseCmd = new G4UIcmdWithAnInteger("/particle/verbose",this);
+  verboseCmd->SetGuidance("Set Verbose level of particle table.");
+  verboseCmd->SetGuidance(" 0 : Silent (default)");
+  verboseCmd->SetGuidance(" 1 : Display warning messages");
+  verboseCmd->SetGuidance(" 2 : Display more");
+  verboseCmd->SetParameterName("verbose_level",true);
+  verboseCmd->SetDefaultValue(0);
+  verboseCmd->SetRange("verbose_level >=0");
+
   currentParticle = 0;
 
   //UI messenger for Particle Properties
@@ -99,10 +109,13 @@ G4ParticleMessenger::G4ParticleMessenger(G4ParticleTable* pTable)
 G4ParticleMessenger::~G4ParticleMessenger()
 {
   delete fParticlePropertyMessenger;
+
   delete listCmd; 
   delete selectCmd;
-  delete thisDirectory;
   delete findCmd;
+  delete verboseCmd;
+
+  delete thisDirectory;
 }
 
 
@@ -153,6 +166,9 @@ void G4ParticleMessenger::SetNewValue(G4UIcommand * command,G4String newValues)
       G4cout << tmp->GetParticleName() << G4endl;
       tmp->DumpTable();
     }
+  } else if( command==verboseCmd ) {
+    //Commnad   /particle/verbose
+    theParticleTable->SetVerboseLevel(verboseCmd->GetNewIntValue(newValues));
   }    
 }
 
@@ -178,6 +194,9 @@ G4String G4ParticleMessenger::GetCurrentValue(G4UIcommand * command)
     } else {
       return currentParticle->GetParticleName();
     }
+  } else if( command==verboseCmd ){
+    //Commnad   /particle/verbose
+    return verboseCmd->ConvertToString(theParticleTable->GetVerboseLevel());
   }
   return "";
 }

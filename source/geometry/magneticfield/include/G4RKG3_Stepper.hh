@@ -26,7 +26,7 @@
 //
 //
 // $Id: G4RKG3_Stepper.hh,v 1.13 2007/05/18 12:44:02 tnikitin Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 //
 //

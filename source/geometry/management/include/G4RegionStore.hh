@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4RegionStore.hh,v 1.10 2006/11/30 10:39:28 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // class G4RegionStore
 //

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Cons.hh,v 1.18 2007/05/18 07:38:00 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4Cons.hh,v 1.21 2008/11/06 11:04:00 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 //
 // --------------------------------------------------------------------
@@ -53,6 +53,8 @@
 //  fSPhi  starting angle of the segment in radians
 //  fDPhi  delta angle of the segment in radians
 //
+//  fPhiFullCone   Boolean variable used for indicate the Phi Section
+//
 //   Note:
 //      Internally fSPhi & fDPhi are adjusted so that fDPhi<=2PI,
 //      and fDPhi+fSPhi<=2PI. This enables simpler comparisons to be
@@ -72,123 +74,137 @@ class G4Cons : public G4CSGSolid
 {
   public:  // with description
 
-        G4Cons(const G4String& pName,
-                     G4double pRmin1, G4double pRmax1,
-                     G4double pRmin2, G4double pRmax2,
-                     G4double pDz,
-                     G4double pSPhi, G4double pDPhi);
+    G4Cons(const G4String& pName,
+                 G4double pRmin1, G4double pRmax1,
+                 G4double pRmin2, G4double pRmax2,
+                 G4double pDz,
+                 G4double pSPhi, G4double pDPhi);
          
-        virtual ~G4Cons() ;
+    virtual ~G4Cons() ;
 
-  // Accessors
+    // Accessors
 
-        inline G4double    GetInnerRadiusMinusZ() const;
-        inline G4double    GetOuterRadiusMinusZ() const;
-        inline G4double    GetInnerRadiusPlusZ()  const;
-        inline G4double    GetOuterRadiusPlusZ()  const;
+    inline G4double    GetInnerRadiusMinusZ() const;
+    inline G4double    GetOuterRadiusMinusZ() const;
+    inline G4double    GetInnerRadiusPlusZ()  const;
+    inline G4double    GetOuterRadiusPlusZ()  const;
   
-        inline G4double    GetZHalfLength()       const;
+    inline G4double    GetZHalfLength()       const;
   
-        inline G4double    GetStartPhiAngle () const;
-        inline G4double    GetDeltaPhiAngle () const;
+    inline G4double    GetStartPhiAngle () const;
+    inline G4double    GetDeltaPhiAngle () const;
   
-  // Modifiers
+    // Modifiers
 
-        inline void    SetInnerRadiusMinusZ( G4double Rmin1 );
-        inline void    SetOuterRadiusMinusZ( G4double Rmax1 );
-        inline void    SetInnerRadiusPlusZ ( G4double Rmin2 );
-        inline void    SetOuterRadiusPlusZ ( G4double Rmax2 );
+    inline void    SetInnerRadiusMinusZ( G4double Rmin1 );
+    inline void    SetOuterRadiusMinusZ( G4double Rmax1 );
+    inline void    SetInnerRadiusPlusZ ( G4double Rmin2 );
+    inline void    SetOuterRadiusPlusZ ( G4double Rmax2 );
          
-        inline void    SetZHalfLength      ( G4double newDz );
-        inline void    SetStartPhiAngle    ( G4double newSPhi);
-        inline void    SetDeltaPhiAngle    ( G4double newDPhi);
+    inline void    SetZHalfLength      ( G4double newDz );
+    inline void    SetStartPhiAngle    ( G4double newSPhi);
+    inline void    SetDeltaPhiAngle    ( G4double newDPhi);
 
-  // Other methods for solid
+    // Other methods for solid
 
-        inline G4double    GetCubicVolume();
-        inline G4double    GetSurfaceArea();
+    inline G4double    GetCubicVolume();
+    inline G4double    GetSurfaceArea();
 
-        void ComputeDimensions(G4VPVParameterisation* p,
-                               const G4int n,
-                               const G4VPhysicalVolume* pRep);
+    void ComputeDimensions(G4VPVParameterisation* p,
+                           const G4int n,
+                           const G4VPhysicalVolume* pRep);
 
-        G4bool CalculateExtent(const EAxis pAxis,
-                               const G4VoxelLimits& pVoxelLimit,
-                               const G4AffineTransform& pTransform,
-                                     G4double& pmin, G4double& pmax) const;         
+    G4bool CalculateExtent(const EAxis pAxis,
+                           const G4VoxelLimits& pVoxelLimit,
+                           const G4AffineTransform& pTransform,
+                                 G4double& pmin, G4double& pmax) const;         
 
-        EInside Inside(const G4ThreeVector& p) const;
+    EInside Inside(const G4ThreeVector& p) const;
 
-        G4ThreeVector SurfaceNormal(const G4ThreeVector& p) const;
+    G4ThreeVector SurfaceNormal(const G4ThreeVector& p) const;
 
-        G4double DistanceToIn(const G4ThreeVector& p,
-                               const G4ThreeVector& v) const;
-        G4double DistanceToIn(const G4ThreeVector& p) const;
-        G4double DistanceToOut(const G4ThreeVector& p,
-                               const G4ThreeVector& v,
-                               const G4bool calcNorm=G4bool(false),
-                                     G4bool *validNorm=0,
-                                     G4ThreeVector *n=0) const;             
-        G4double DistanceToOut(const G4ThreeVector& p) const;
+    G4double DistanceToIn (const G4ThreeVector& p,
+                           const G4ThreeVector& v) const;
+    G4double DistanceToIn (const G4ThreeVector& p) const;
+    G4double DistanceToOut(const G4ThreeVector& p,
+                           const G4ThreeVector& v,
+                           const G4bool calcNorm=G4bool(false),
+                                 G4bool *validNorm=0,
+                                 G4ThreeVector *n=0) const;             
+    G4double DistanceToOut(const G4ThreeVector& p) const;
 
-        G4GeometryType  GetEntityType() const;
+    G4GeometryType  GetEntityType() const;
         
-        G4ThreeVector GetPointOnSurface() const; 
+    G4ThreeVector GetPointOnSurface() const; 
         
-        std::ostream& StreamInfo(std::ostream& os) const;
+    std::ostream& StreamInfo(std::ostream& os) const;
 
-  // Visualisation functions
+    // Visualisation functions
 
-        void          DescribeYourselfTo( G4VGraphicsScene& scene ) const;
-        G4Polyhedron* CreatePolyhedron() const;
-        G4NURBS*      CreateNURBS() const;
+    void          DescribeYourselfTo( G4VGraphicsScene& scene ) const;
+    G4Polyhedron* CreatePolyhedron() const;
+    G4NURBS*      CreateNURBS() const;
 
   public:  // without description
        
-        G4Cons(__void__&);
-          // Fake default constructor for usage restricted to direct object
-          // persistency for clients requiring preallocation of memory for
-          // persistifiable objects.
+    G4Cons(__void__&);
+      //
+      // Fake default constructor for usage restricted to direct object
+      // persistency for clients requiring preallocation of memory for
+      // persistifiable objects.
 
-        //  Old access functions
+    //  Old access functions
 
-        inline G4double    GetRmin1() const;
-        inline G4double    GetRmax1() const;
-        inline G4double    GetRmin2() const;
-        inline G4double    GetRmax2() const;
+    inline G4double    GetRmin1() const;
+    inline G4double    GetRmax1() const;
+    inline G4double    GetRmin2() const;
+    inline G4double    GetRmax2() const;
   
-        inline G4double    GetDz()    const;
+    inline G4double    GetDz()    const;
   
-        inline G4double    GetSPhi() const;
-        inline G4double    GetDPhi() const;
+    inline G4double    GetSPhi() const;
+    inline G4double    GetDPhi() const;
 
   protected:
  
-        G4ThreeVectorList*
-        CreateRotatedVertices(const G4AffineTransform& pTransform) const;
+    G4ThreeVectorList*
+    CreateRotatedVertices(const G4AffineTransform& pTransform) const;
   
-        // Used by distanceToOut
+    G4double fRmin1, fRmin2, fRmax1, fRmax2, fDz, fSPhi, fDPhi;
+    G4bool fPhiFullCone;
+
+    // Used by distanceToOut
   
-        enum ESide {kNull,kRMin,kRMax,kSPhi,kEPhi,kPZ,kMZ};
+    enum ESide {kNull,kRMin,kRMax,kSPhi,kEPhi,kPZ,kMZ};
   
-        // used by normal
+    // used by normal
   
-        enum ENorm {kNRMin,kNRMax,kNSPhi,kNEPhi,kNZ};
+    enum ENorm {kNRMin,kNRMax,kNSPhi,kNEPhi,kNZ};
 
   private:
 
-        G4ThreeVector ApproxSurfaceNormal(const G4ThreeVector& p) const;
-          // Algorithm for SurfaceNormal() following the original
-          // specification for points not on the surface
+    inline void Initialise();
+      // Reset relevant values to zero
+
+    inline void InitializeTrigonometry();
+      //
+      // Recompute relevant trigonometric values and cache them
+
+    G4ThreeVector ApproxSurfaceNormal(const G4ThreeVector& p) const;
+      //
+      // Algorithm for SurfaceNormal() following the original
+      // specification for points not on the surface
 
   private:
 
-        G4double kRadTolerance, kAngTolerance;
+    G4double kRadTolerance, kAngTolerance;
+      //
+      // Radial and angular tolerances
 
-        G4double fRmin1,fRmin2,
-                 fRmax1,fRmax2,
-                 fDz,
-                 fSPhi,fDPhi;
+    G4double sinCPhi, cosCPhi, cosHDPhiOT, cosHDPhiIT,
+             sinSPhi, cosSPhi, sinEPhi, cosEPhi;
+      //
+      // Cached trigonometric values
 };
 
 #include "G4Cons.icc"

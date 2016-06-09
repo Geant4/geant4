@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4SandiaTable.hh,v 1.21 2007/10/02 10:13:33 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// GEANT4 tag $Name: geant4-09-02 $
 
 // class description
 //

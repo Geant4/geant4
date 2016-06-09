@@ -24,11 +24,17 @@
 // ********************************************************************
 //
 //
-// $Id: G4StatMFMacroMultiNucleon.cc,v 1.5 2006/06/29 20:25:06 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4StatMFMacroMultiNucleon.cc,v 1.7 2008/11/19 14:33:31 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara
+//
+// Modified:
+// 25.07.08 I.Pshenichnov (in collaboration with Alexander Botvina and Igor 
+//          Mishustin (FIAS, Frankfurt, INR, Moscow and Kurchatov Institute, 
+//          Moscow, pshenich@fias.uni-frankfurt.de) fixed computation of the 
+//          symmetry energy 
 
 #include "G4StatMFMacroMultiNucleon.hh"
 
@@ -127,7 +133,7 @@ G4double G4StatMFMacroMultiNucleon::CalcEnergy(const G4double T)
     G4double EVol = static_cast<G4double>(theA) * (T*T/_InvLevelDensity - G4StatMFParameters::GetE0());
 	
     // Symmetry term
-//	G4double ESym = static_cast<G4double>(theA) * G4StatMFParameters::GetGamma0() *(1. - 2.* theZARatio * theZARatio);
+    G4double ESym = static_cast<G4double>(theA) * G4StatMFParameters::GetGamma0() *(1. - 2.* theZARatio) * (1. - 2.* theZARatio);
 	
     // Surface term
     G4double ESurf = A23*(G4StatMFParameters::Beta(T) - T*G4StatMFParameters::DBetaDT(T));
@@ -138,8 +144,8 @@ G4double G4StatMFMacroMultiNucleon::CalcEnergy(const G4double T)
     // Translational term
     G4double ETrans = (3./2.)*T;
 	
-	
-    return _Energy = EVol + ESurf + ECoul + ETrans; // + ESym; 
+       
+    return _Energy = EVol + ESurf + ECoul + ETrans + ESym;
 }
 
 

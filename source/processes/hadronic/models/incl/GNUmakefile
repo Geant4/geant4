@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.3 2007/10/11 07:25:55 gcosmo Exp $
+# $Id: GNUmakefile,v 1.8 2008/07/11 08:25:37 gcosmo Exp $
 # -----------------------------------------------------------
 # GNUmakefile for hadronic library.  Gabriele Cosmo, 18/9/96.
 # -----------------------------------------------------------
@@ -6,7 +6,7 @@
 name := G4hadronic_incl_cascade
 
 ifndef G4INSTALL
-  G4INSTALL = ../../../../../..
+  G4INSTALL = ../../../../..
 endif
 
 include $(G4INSTALL)/config/architecture.gmk
@@ -25,8 +25,6 @@ CPPFLAGS += -I$(G4BASE)/global/management/include \
             -I$(G4BASE)/processes/hadronic/cross_sections/include \
 	    -I$(G4BASE)/processes/hadronic/models/management/include \
 	    -I$(G4BASE)/processes/hadronic/models/util/include \
-	    -I$(G4BASE)/processes/hadronic/models/cascade/cascade/include \
-	    -I$(G4BASE)/processes/hadronic/models/cascade/utils/include \
             -I$(G4BASE)/processes/hadronic/models/de_excitation/evaporation/include \
 	    -I$(G4BASE)/particles/management/include \
             -I$(G4BASE)/particles/leptons/include \

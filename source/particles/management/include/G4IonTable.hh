@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4IonTable.hh,v 1.25 2007/09/14 07:04:09 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4IonTable.hh,v 1.26 2008/03/20 02:23:30 kurasige Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // 
 // ------------------------------------------------------------
@@ -34,6 +34,7 @@
 //	History: first implementation, 
 //      based on object model of June 27, 98 H.Kurashige
 // ------------------------------------------------------------
+//      added clear()			20 Mar., 08 H.Kurashige
 //      modified GetIon                 02 Aug., 98 H.Kurashige
 //      added Remove()                  06 Nov.,98 H.Kurashige
 //      add GetNucleusMass              15 Mar. 99  H.Kurashige
@@ -189,6 +190,12 @@ class G4IonTable
    void                  Remove(G4ParticleDefinition* particle);
    // Insert/Remove an ion in the table
 
+   void                  clear();
+   // erase all contents in the list (not delete just remove)
+
+   G4int                 size() const;
+   //  Return number of ions in the table
+
     void DumpTable(const G4String &particle_name = "ALL") const;
    // dump information of particles specified by name 
 
@@ -241,6 +248,16 @@ inline G4bool  G4IonTable::Contains(const G4ParticleDefinition* particle) const
 inline G4int G4IonTable::Entries() const
 {
   return fIonList->size();
+}
+
+inline G4int G4IonTable::size() const
+{
+  return fIonList->size();
+}
+
+inline void G4IonTable::clear()
+{
+  fIonList->clear();
 }
 
 inline G4ParticleDefinition*  G4IonTable::GetParticle(G4int index) const

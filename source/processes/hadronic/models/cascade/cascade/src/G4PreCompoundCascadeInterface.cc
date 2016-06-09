@@ -129,7 +129,7 @@ G4HadFinalState* G4PreCompoundCascadeInterface::ApplyYourself(const G4HadProject
   toZ.rotateY(-projectileMomentum.theta());
   G4LorentzRotation toLabFrame = toZ.inverse();
 
-  std::vector<G4double> momentumBullet(4);
+  G4CascadeMomentum momentumBullet;
   momentumBullet[0] =0.;
   momentumBullet[1] =0;
   momentumBullet[2] =0;
@@ -152,7 +152,7 @@ G4HadFinalState* G4PreCompoundCascadeInterface::ApplyYourself(const G4HadProject
   // and outcoming particles
   G4DynamicParticle* cascadeParticle = 0;
 
-  std::vector<G4double> targetMomentum(4, 0.0);
+  G4CascadeMomentum targetMomentum;
 
   G4double theNucleusA = theNucleus.GetN();
 
@@ -162,9 +162,9 @@ G4HadFinalState* G4PreCompoundCascadeInterface::ApplyYourself(const G4HadProject
 				theNucleus.GetZ());
     target->setEnergy();
 
-    std::vector<G4double>  bmom = bullet->getMomentum();
+    const G4CascadeMomentum& bmom = bullet->getMomentum();
     eInit = std::sqrt(bmom[0] * bmom[0]);
-    std::vector<G4double> tmom = target->getMomentum();
+    const G4CascadeMomentum& tmom = target->getMomentum();
     eInit += std::sqrt(tmom[0] * tmom[0]);
 
     sumBaryon += theNucleusA;
@@ -239,9 +239,9 @@ G4HadFinalState* G4PreCompoundCascadeInterface::ApplyYourself(const G4HadProject
 
     sumBaryon += 1;
 
-    std::vector<G4double> bmom = bullet->getMomentum();
+    const G4CascadeMomentum& bmom = bullet->getMomentum();
     eInit = std::sqrt(bmom[0] * bmom[0]);
-    std::vector<G4double> tmom = targetH->getMomentum();
+    const G4CascadeMomentum& tmom = targetH->getMomentum();
     eInit += std::sqrt(tmom[0] * tmom[0]);
 
     if (verboseLevel > 2) {
@@ -289,7 +289,7 @@ G4HadFinalState* G4PreCompoundCascadeInterface::ApplyYourself(const G4HadProject
 
     for (ipart = particles.begin(); ipart != particles.end(); ipart++) {
       outgoingParticle = ipart->type();
-      std::vector<G4double> mom = ipart->getMomentum();
+      const G4CascadeMomentum& mom = ipart->getMomentum();
       eTot   += std::sqrt(mom[0] * mom[0]);
 
       G4double ekin = ipart->getKineticEnergy() * GeV;
@@ -420,7 +420,7 @@ G4HadFinalState* G4PreCompoundCascadeInterface::ApplyYourself(const G4HadProject
     for (ifrag = nucleiFragments.begin(); ifrag != nucleiFragments.end(); ifrag++) 
       {
 	G4double eKin = ifrag->getKineticEnergy() * GeV;
-	std::vector<G4double> mom = ifrag->getMomentum();
+	const G4CascadeMomentum& mom = ifrag->getMomentum();
         eTot   += std::sqrt(mom[0] * mom[0]);
 
 	G4ThreeVector aMom(mom[1], mom[2], mom[3]);

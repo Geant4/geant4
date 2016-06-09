@@ -23,7 +23,12 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HadrontherapyPhantomSD.cc; May 2005
+//
+// $Id: HadrontherapyMatrix.cc;
+// Last modified: G.A.P.Cirrone, May 2008;
+//
+// See more at: http://geant4infn.wikispaces.com/HadrontherapyExample
+//
 // ----------------------------------------------------------------------------
 //                 GEANT 4 - Hadrontherapy example
 // ----------------------------------------------------------------------------
@@ -46,9 +51,9 @@
 HadrontherapyMatrix::HadrontherapyMatrix()
 {  
   // Number of the voxels of the phantom
-  numberVoxelX = 200;
-  numberVoxelY = 200;
-  numberVoxelZ = 200; 
+  numberVoxelX = 400;
+  numberVoxelY = 1;
+  numberVoxelZ = 1; 
  
   // Create the matrix
   matrix = new G4double[numberVoxelX*numberVoxelY*numberVoxelZ];
@@ -94,20 +99,20 @@ void HadrontherapyMatrix::TotalEnergyDeposit()
   
   if (matrix)
     {  
-	for(G4int l = 0; l < numberVoxelZ; l++) 
-	  {
-	    k = l;
-	    
-	    for(G4int m = 0; m < numberVoxelY; m++) 
-	      { 
-		j = m * numberVoxelZ + k; 
+      for(G4int l = 0; l < numberVoxelZ; l++) 
+	{
+	  k = l;
+	  
+	  for(G4int m = 0; m < numberVoxelY; m++) 
+	    { 
+	      j = m * numberVoxelZ + k; 
 		
 		for(G4int n = 0; n <  numberVoxelX; n++)
 		  {
 		    i =  n* numberVoxelZ * numberVoxelY + j;
 		    if(matrix[i] != 0)
 		      {	
-					
+		       	
 #ifdef G4ANALYSIS_USE 	
 			HadrontherapyAnalysisManager* analysis = 
 			  HadrontherapyAnalysisManager::getInstance();

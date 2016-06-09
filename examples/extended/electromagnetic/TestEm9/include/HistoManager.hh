@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HistoManager.hh,v 1.8 2007/04/24 14:20:04 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: HistoManager.hh,v 1.11 2008/09/24 10:38:46 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 
 #ifndef HistoManager_h
 #define HistoManager_h 1
@@ -109,7 +109,7 @@ public: // Without description
   G4double  GetMaxEnergy() const {return maxEnergy;};
   void SetThresholdEnergy(G4double val) {thKinE = val;};
   void SetThresholdZ(G4double val) {thPosZ = val;};
-  void AddStep() {n_step++;};
+  void AddStep() {n_step += 1.0;};
 
   // Acceptance parameters
   void SetEdepAndRMS(G4int, G4ThreeVector);
@@ -132,15 +132,16 @@ private:
   G4double thPosZ;
 
   G4double trackLength;
+  G4double n_step;
+  G4double n_step_target;
   G4bool trackAbs;        // Track is in absorber
   G4int n_evt;
   G4int n_elec;
   G4int n_posit;
   G4int n_gam;
-  G4int n_step;
   G4int n_gamph;
   G4int n_gam_tar;
-  G4int n_step_target;
+  G4int n_lowe;
   G4int nBinsE, nBinsEA, nBinsED;
   G4bool nTuple;
 
@@ -152,11 +153,11 @@ private:
   G4double  edeptrue[3];
   G4double  rmstrue[3];
   G4double  limittrue[3];
-  G4double  edep[3];
-  G4double  erms[3];
-  G4double  edeptr[3];
-  G4double  ermstr[3];
-  G4int     stat[3];
+  G4double  edep[6];
+  G4double  erms[6];
+  G4double  edeptr[6];
+  G4double  ermstr[6];
+  G4int     stat[6];
   G4int     nmax;
 
   Histo*    histo;

@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4SimplexDownhill.hh,v 1.3 2007/06/21 15:04:12 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // Class description:
 //

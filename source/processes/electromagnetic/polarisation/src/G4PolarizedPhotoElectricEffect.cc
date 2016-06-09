@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PolarizedPhotoElectricEffect.cc,v 1.1 2007/11/01 17:29:09 schaelic Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4PolarizedPhotoElectricEffect.cc,v 1.3 2008/10/30 22:34:23 schaelic Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 //
 //------------------ G4PolarizedPhotoElectricEffect physics process --
@@ -45,7 +45,9 @@ using namespace std;
 G4PolarizedPhotoElectricEffect::G4PolarizedPhotoElectricEffect(const G4String& processName,
   G4ProcessType type):G4VEmProcess (processName, type),
     isInitialised(false)
-{}
+{
+  SetProcessSubType(fPhotoElectricEffect);
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

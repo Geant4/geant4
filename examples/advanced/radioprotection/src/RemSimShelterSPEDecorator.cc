@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // $Id: RemSimShelterSPEDecorator.cc,v 1.3 2006/06/29 16:24:21 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // Code developed by: S.Guatelli, guatelli@ge.infn.it
 //

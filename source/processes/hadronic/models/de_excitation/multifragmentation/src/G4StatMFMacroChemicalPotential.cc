@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4StatMFMacroChemicalPotential.cc,v 1.5 2006/06/29 20:24:53 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4StatMFMacroChemicalPotential.cc,v 1.6 2008/07/25 11:20:47 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara
@@ -93,8 +93,11 @@ G4double G4StatMFMacroChemicalPotential::CalcChemicalPotentialNu(void)
       new G4Solver<G4StatMFMacroChemicalPotential>(100,1.e-4);
     theSolver->SetIntervalLimits(ChemPa,ChemPb);
     //    if (!theSolver->Crenshaw(*this)) 
-    if (!theSolver->Brent(*this)) 
+    if (!theSolver->Brent(*this)){
+      G4cerr <<"G4StatMFMacroChemicalPotential:"<<" ChemPa="<<ChemPa<<" ChemPb="<<ChemPb<< G4endl;
+      G4cerr <<"G4StatMFMacroChemicalPotential:"<<" fChemPa="<<fChemPa<<" fChemPb="<<fChemPb<< G4endl;
       throw G4HadronicException(__FILE__, __LINE__, "G4StatMFMacroChemicalPotential::CalcChemicalPotentialNu: I couldn't find the root.");
+    }
     _ChemPotentialNu = theSolver->GetRoot();
     delete theSolver;
     return _ChemPotentialNu;

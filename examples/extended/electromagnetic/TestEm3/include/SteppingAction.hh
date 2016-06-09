@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: SteppingAction.hh,v 1.8 2006/06/29 16:52:16 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: SteppingAction.hh,v 1.9 2008/03/14 15:40:03 maire Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -51,7 +51,7 @@ class SteppingAction : public G4UserSteppingAction
 
     void UserSteppingAction(const G4Step*);
     
-    G4double BirkAttenuation(const G4Step*);
+    G4double BirksAttenuation(const G4Step*);
     
   private:
     DetectorConstruction* detector;

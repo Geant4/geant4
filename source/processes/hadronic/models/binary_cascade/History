@@ -13,6 +13,27 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+8-Dec-2008 Gunter Folger		 had-binary-V09-01-03
+  G4BinaryCascade: previous tag inadvertedly added developement; 
+  moved development to branch, and re-add data member initialisation.
+
+5-Dec-2008 Gunter Folger		 had-binary-V09-01-02
+  G4BinaryCascade: make static instance of G4Scatterer in 1H1... data 
+   member, to avoid bad late destruction of static instance
+   ( found by GC using valgrind )
+
+17-Nov-2008 Vladimir Ivanchenko          had-binary-V09-01-01
+G4BinaryCascade, G4BinaryLightIonReaction - added name of the model,
+  comment out welcome message
+
+27-Oct-2008 Dennis Wright                had-binary-V09-01-00
+- replace G4NucleiPropertiesTable::GetBindingEnergy(Z,A) with 
+  G4NucleiProperties::GetBindingEnergy(A,Z)  in 
+    G4AntiProtonField.cc, G4KaonMinusField.cc, G4KaonPlusField.cc,
+    G4KaonZeroField.cc, G4PionMinusField.cc, G4PionPlusField.cc,
+    G4PionZeroField.cc, G4SigmaMinusField.cc, G4SigmaPlusField.cc,
+    G4SigmaZeroField.cc, G4KM_OpticalEqRhs.cc
+
 16-Nov-2007 Gunter Folger                had-binary-V09-00-05
 -   Correction in G4BinaryCascade for memory leak.
 

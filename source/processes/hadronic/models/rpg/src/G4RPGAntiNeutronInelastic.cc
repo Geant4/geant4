@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // $Id: G4RPGAntiNeutronInelastic.cc,v 1.1 2007/07/18 21:04:20 dennis Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// GEANT4 tag $Name: geant4-09-02 $
 //
  
 #include "G4RPGAntiNeutronInelastic.hh"

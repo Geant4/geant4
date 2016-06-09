@@ -41,7 +41,7 @@
 #include "globals.hh"
 #include "G4ThreeVector.hh"
 #include "G4LorentzVector.hh"
-#include "G4NucleiPropertiesTable.hh"
+#include "G4NucleiProperties.hh"
 #include "G4Fragment.hh"
 #include "G4ExcitationHandler.hh"
 #include "G4DynamicParticleVector.hh"
@@ -68,27 +68,16 @@ G4ReactionProductVector* G4StopTheoDeexcitation::BreakUp(G4double A, G4double Z,
   // theHandler.SetMaxAandZForFermiBreakUp(16, 10);
   //  theHandler.SetMaxAandZForFermiBreakUp(2, 1);
   // Min excitation energy (per nucleon) for use MultiFrag
-  // theHandler.SetMinEForMultiFrag(3*MeV);
+
   theHandler.SetMinEForMultiFrag(300*GeV);
 
   // Deexcite the nucleus 
 
-  G4double atomicMass = G4NucleiPropertiesTable::GetAtomicMass(static_cast<G4int>(Z),static_cast<G4int>(A));
+  G4double atomicMass = G4NucleiProperties::GetNuclearMass(static_cast<G4int>(A),static_cast<G4int>(Z));
   G4double m = atomicMass + excitation;
   G4double pMag = p.mag();
   G4LorentzVector initialMomentum(p.x(),p.y(),p.z(),std::sqrt(pMag*pMag + m*m));
   G4Fragment theExcitedNucleus(static_cast<G4int>(A),static_cast<G4int>(Z),initialMomentum);
-
-  //  theExcitedNucleus.SetA(A);
-  //  theExcitedNucleus.SetZ(Z);
-  //  theExcitedNucleus.SetExcitationEnergy(excitation); 
-  //  theExcitedNucleus.SetMomentum(initialMomentum);
-
-  //  G4cout << "Theo input " << A << " " << Z << " " 
-  //	 << pMag << " " << atomicMass << G4endl
-  //	 << "Theo -     " << excitation << " " << initialMomentum.mag() << G4endl
-  //	 << "Fragment - " << theExcitedNucleus.GetExcitationEnergy() << " "
-  //	 << theExcitedNucleus.GetMomentum().mag() << G4endl;
 
   return theHandler.BreakItUp(theExcitedNucleus);
 }

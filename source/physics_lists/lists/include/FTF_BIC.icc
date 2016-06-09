@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: FTF_BIC.icc,v 1.1 2007/11/16 16:52:55 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: FTF_BIC.icc,v 1.2 2008/06/19 08:08:22 gunter Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 //---------------------------------------------------------------------------
 //
@@ -33,6 +33,7 @@
 // Author: 2007 Gunter Folger
 //
 // Modified:
+// 19.06.2008 G.Folger: don't use chips quasielastic in FTF
 //
 //----------------------------------------------------------------------------
 //
@@ -68,7 +69,7 @@ template<class T> TFTF_BIC<T>::TFTF_BIC(G4int ver):  T()
   // defaultCutValue = 1.0*mm;
 
   G4DataQuestionaire it(photon);
-  G4cout << "<<< Geant4 Physics List simulation engine: FTF_BIC 1.0"<<G4endl;
+  G4cout << "<<< Geant4 Physics List simulation engine: FTF_BIC 1.1"<<G4endl;
   G4cout <<G4endl;
 
   this->defaultCutValue = 0.7*mm;  
@@ -91,7 +92,7 @@ template<class T> TFTF_BIC<T>::TFTF_BIC(G4int ver):  T()
 
    // Hadron Physics
    G4bool quasiElastic;
-  this->RegisterPhysics(  new HadronPhysicsFTF_BIC("hadron",quasiElastic=true));
+  this->RegisterPhysics(  new HadronPhysicsFTF_BIC("hadron",quasiElastic=false));
 
   // Stopping Physics
   this->RegisterPhysics( new G4QStoppingPhysics("stopping"));

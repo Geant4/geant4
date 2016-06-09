@@ -46,11 +46,11 @@
 
 class G4VPhysicalVolume;
 class G4LogicalVolume;
-class HadrontherapyPhantomROGeometry;
+class HadrontherapyDetectorROGeometry;
 class HadrontherapyBeamLine;
 class HadrontherapyDetectorMessenger;
 class HadrontherapyModulator;
-class HadrontherapyPhantomSD;
+class HadrontherapyDetectorSD;
 class HadrontherapyMaterial;
 
 class HadrontherapyDetectorConstruction : public G4VUserDetectorConstruction
@@ -69,7 +69,7 @@ private:
   // This method allows to define the beam line geometry in the
   // experimental set-up
 
- void ConstructPhantom(); 
+ void ConstructDetector(); 
  // This method allows to define the phantom geometry in the
  // experimental set-up
  
@@ -109,14 +109,14 @@ public:
   // This method allows to change the material 
   // of the range shifter through UI command.
 
-  G4double ComputeVoxelSize() {return phantomSizeX/numberOfVoxelsAlongX;};
+  G4double ComputeVoxelSize() {return detectorSizeX/numberOfVoxelsAlongX;};
   // Returns the size of the voxel along the X axis
  
 private:
   
-  HadrontherapyPhantomSD* phantomSD; // Pointer to sensitive detector
+  HadrontherapyDetectorSD* detectorSD; // Pointer to sensitive detector
 
-  HadrontherapyPhantomROGeometry* phantomROGeometry; // Pointer to ROGeometry 
+  HadrontherapyDetectorROGeometry* detectorROGeometry; // Pointer to ROGeometry 
 
   HadrontherapyBeamLine* beamLine; // Pointer to the beam line 
                                    // geometry component
@@ -126,15 +126,15 @@ private:
 
   G4VPhysicalVolume* physicalTreatmentRoom;
   G4VPhysicalVolume* patientPhysicalVolume;
-  G4LogicalVolume* phantomLogicalVolume;
-  G4VPhysicalVolume* phantomPhysicalVolume;
+  G4LogicalVolume* detectorLogicalVolume;
+  G4VPhysicalVolume* detectorPhysicalVolume;
   
   HadrontherapyDetectorMessenger* detectorMessenger; 
   HadrontherapyMaterial* material;
 
-  G4double phantomSizeX; 
-  G4double phantomSizeY; 
-  G4double phantomSizeZ;
+  G4double detectorSizeX; 
+  G4double detectorSizeY; 
+  G4double detectorSizeZ;
    
   G4int numberOfVoxelsAlongX; 
   G4int numberOfVoxelsAlongY;

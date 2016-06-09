@@ -1,4 +1,4 @@
-$Id: History,v 1.28 2007/10/30 03:14:18 gum Exp $
+$Id: History,v 1.34 2008/11/14 15:55:47 kurasige Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,27 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+-Sep. 19 2008   H.Kurashige (decay-V09-01-04)
+- modify process sub type enumeration
+
+- Aug. 22,  08 P.Gumplinger (decay-V09-01-03)
+- fix a bug in G4DecayWithSpin.cc: there is a memory overwrite when the
+  GetFieldValue being called initializes a fieldValue array of size 6
+  when the array is only defined of size 3 in the calling program.
+  Thanks to Kamil Sedlak (PSI) for pointing this out and suggesting this
+  fix.
+ 
+- Apr. 16,  08 H.Kurashige  (decay-V09-01-02)
+- fix a bug when shortlived particles has finite  pre-assigned proper time
+ 
+- Apr. 11,  08 P.Gumplinger (decay-V09-01-01)
+- modify G4DecayWithSpin::DecayIt to allow spin precession also for EM Fields;
+  e.g. fields that do "DoesFieldChangeEnergy()" but only if the B-field
+  component is > 0. (thanks to Kamil Sedlak, Toni Shiroka from PSI)
+
+- Dec. 15,  07 H.Kurashige (decay-V09-01-00)
+- add G4DecayProcessType
+- define process sub type
 
 - Oct. 29,  07 P.Gumplinger (decay-V09-00-02)
 - add G4PionDecayMakeSpin class

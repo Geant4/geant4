@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProductionCutsTable.hh,v 1.8 2007/03/15 04:06:40 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4ProductionCutsTable.hh,v 1.9 2008/03/02 10:52:55 kurasige Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // 
 // ------------------------------------------------------------
@@ -45,7 +45,8 @@
 //   Modified                      20 Aug. 2004 H.Kurashige
 //    Modify RetrieveCutsTable to allow materials and 
 //    couples can be different from one in file (i.e. at storing)
-//
+//   Modified                      2 Mar. 2008 H.Kurashige
+//    add messenger
 // ------------------------------------------------------------
 
 #ifndef G4ProductionCutsTable_h 
@@ -56,6 +57,8 @@ class G4VRangeToEnergyConverter;
 class G4LogicalVolume;
 class G4VPhysicalVolume;
 class G4ProductionCuts;
+
+class G4ProductionCutsTableMessenger;
 
 #include "globals.hh"
 #include <cmath>
@@ -226,7 +229,8 @@ class G4ProductionCutsTable
       //  2: More
 
   private:
-   G4int verboseLevel;
+    G4int verboseLevel;
+    G4ProductionCutsTableMessenger* fMessenger;
 
 };
 
@@ -336,12 +340,6 @@ G4int G4ProductionCutsTable:: GetCoupleIndex(const G4Material* aMat,
 {
   const G4MaterialCutsCouple* aCouple = GetMaterialCutsCouple(aMat,aCut);
   return GetCoupleIndex(aCouple);
-}
-
-inline 
- void G4ProductionCutsTable::SetVerboseLevel(G4int value)
-{
-   verboseLevel = value;
 }
 
 inline 

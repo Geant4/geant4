@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParameterisationTrd.cc,v 1.14 2006/06/29 18:18:48 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4ParameterisationTrd.cc,v 1.16 2008/12/18 12:57:20 gunter Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // class G4ParameterisationTrd Implementation file
 //
@@ -90,16 +90,16 @@ G4ParameterisationTrdX( EAxis axis, G4int nDiv,
   G4Trd* msol = (G4Trd*)(fmotherSolid);
   if( divType == DivWIDTH )
   {
-    fnDiv = CalculateNDiv( 2*msol->GetXHalfLength1(),
+    fnDiv = CalculateNDiv( msol->GetXHalfLength1()+msol->GetXHalfLength2(),
                            width, offset );
   }
   else if( divType == DivNDIV )
   {
-    fwidth = CalculateWidth( 2*msol->GetXHalfLength1(), nDiv, offset );
+    fwidth = CalculateWidth( msol->GetXHalfLength1()+msol->GetXHalfLength2(), nDiv, offset );
   }
 
 #ifdef G4DIVDEBUG
-  if( verbose >= -1 )
+  if( verbose >= 1 )
   {
     G4cout << " G4ParameterisationTrdX - ## divisions " << fnDiv << " = "
            << nDiv << G4endl
@@ -107,6 +107,13 @@ G4ParameterisationTrdX( EAxis axis, G4int nDiv,
            << " Width " << fwidth << " = " << width << G4endl;
   }
 #endif
+
+  G4double mpDx1 = msol->GetXHalfLength1();
+  G4double mpDx2 = msol->GetXHalfLength2();
+  if( std::fabs(mpDx1 - mpDx2) > kCarTolerance )
+  {
+    bDivInTrap = true;
+  }
 }
 
 //------------------------------------------------------------------------
@@ -118,7 +125,7 @@ G4ParameterisationTrdX::~G4ParameterisationTrdX()
 G4double G4ParameterisationTrdX::GetMaxParameter() const
 {
   G4Trd* msol = (G4Trd*)(fmotherSolid);
-  return 2*msol->GetXHalfLength1();
+  return (msol->GetXHalfLength1()+msol->GetXHalfLength2());
 }
 
 //------------------------------------------------------------------------
@@ -128,11 +135,17 @@ ComputeTransformation( const G4int copyNo,
                        G4VPhysicalVolume *physVol ) const
 {
   G4Trd* msol = (G4Trd*)(fmotherSolid );
-  G4double mdx = msol->GetXHalfLength1();
+  G4double mdx = ( msol->GetXHalfLength1() + msol->GetXHalfLength2() ) / 2.;
 
   //----- translation 
   G4ThreeVector origin(0.,0.,0.); 
-  G4double posi = -mdx + foffset + (copyNo+0.5)*fwidth;
+  G4double posi;
+  if( !bDivInTrap ) {
+    posi = -mdx + foffset + (copyNo+0.5)*fwidth;
+  } else {
+    G4double aveHL = (msol->GetXHalfLength1()+msol->GetXHalfLength2())/2.;
+    posi = - aveHL + foffset + (copyNo+0.5)*aveHL/fnDiv*2;
+  }
   if( faxis == kXAxis )
   {
     origin.setX( posi ); 
@@ -145,9 +158,9 @@ ComputeTransformation( const G4int copyNo,
   }
 
 #ifdef G4DIVDEBUG
-  if( verbose >= -2 )
+  if( verbose >= 2 )
   {
-    G4cout << std::setprecision(8) << " G4ParameterisationTrdX: "
+    G4cout << std::setprecision(8) << " G4ParameterisationTrdX::ComputeTransformation "
            << copyNo << G4endl
            << " Position: " << origin << " - Axis: " << faxis << G4endl;
   }
@@ -168,14 +181,65 @@ ComputeDimensions( G4Trd& trd, const G4int, const G4VPhysicalVolume* ) const
   G4double pDy2 = msol->GetYHalfLength2();
   G4double pDz = msol->GetZHalfLength();
   G4double pDx = fwidth/2.;
- 
+  
   trd.SetAllParameters ( pDx, pDx, pDy1, pDy2, pDz );
 
 #ifdef G4DIVDEBUG
-  if( verbose >= -2 )
+  if( verbose >= 2 )
   {
-     G4cout << " G4ParameterisationTrdX::ComputeDimensions():" << G4endl;
+    G4cout << " G4ParameterisationTrdX::ComputeDimensions():" << copyNo << G4endl;
      trd.DumpInfo();
+  }
+#endif
+}
+
+G4VSolid* G4ParameterisationTrdX::
+ComputeSolid(const G4int i, G4VPhysicalVolume * pv)
+{
+  if( bDivInTrap ) 
+  {
+    return G4VDivisionParameterisation::ComputeSolid(i, pv);
+  } 
+  else 
+  {
+    return theTrap;
+  }
+}
+
+
+//--------------------------------------------------------------------------
+void
+G4ParameterisationTrdX::
+ComputeDimensions( G4Trap& trap, const G4int copyNo, const G4VPhysicalVolume* ) const
+{
+  G4Trd* msol = (G4Trd*)(fmotherSolid);
+  G4double pDy1 = msol->GetYHalfLength1();
+  G4double pDy2 = msol->GetYHalfLength2();
+  G4double pDz = msol->GetZHalfLength();
+  G4double pDx1 = msol->GetXHalfLength1()/fnDiv; 
+  G4double pDx2 = msol->GetXHalfLength2()/fnDiv; 
+
+  G4double cxy1 = -msol->GetXHalfLength1() + foffset + (copyNo+0.5)*pDx1*2;// centre of the side at y=-pDy1
+  G4double cxy2 = -msol->GetXHalfLength2() + foffset + (copyNo+0.5)*pDx2*2;// centre of the side at y=+pDy1
+  G4double alp = std::atan( (cxy2-cxy1)/pDz );
+  
+  trap.SetAllParameters ( pDz,
+			  0.,
+			  0.,
+			  pDy1,
+			  pDx1,
+			  pDx2,
+			  alp,
+			  pDy2,
+			  pDx1,
+			  pDx2,
+			  alp);
+
+#ifdef G4DIVDEBUG
+  if( verbose >= 2 )
+  {
+    G4cout << " G4ParameterisationTrdX::ComputeDimensions():" << copyNo << G4endl;
+     trap.DumpInfo();
   }
 #endif
 }
@@ -189,9 +253,12 @@ void G4ParameterisationTrdX::CheckParametersValidity()
 
   G4double mpDx1 = msol->GetXHalfLength1();
   G4double mpDx2 = msol->GetXHalfLength2();
+  bDivInTrap = false;
 
   if( std::fabs(mpDx1 - mpDx2) > kCarTolerance )
   {
+    return;
+
     G4cerr << "ERROR - G4ParameterisationTrdX::CheckParametersValidity()"
            << G4endl
            << "        Making a division of a TRD along axis X," << G4endl
@@ -202,6 +269,12 @@ void G4ParameterisationTrdX::CheckParametersValidity()
                 "IllegalConstruct", FatalException,
                 "Invalid solid specification. NOT supported.");
   }
+}
+
+//--------------------------------------------------------------------------
+void G4ParameterisationTrdX::
+ComputeTrapParams()
+{
 }
 
 //--------------------------------------------------------------------------
@@ -260,6 +333,7 @@ ComputeTransformation( const G4int copyNo, G4VPhysicalVolume* physVol ) const
   //----- translation 
   G4ThreeVector origin(0.,0.,0.); 
   G4double posi = -mdy + foffset + (copyNo+0.5)*fwidth;
+
   if( faxis == kYAxis )
   {
     origin.setY( posi ); 
@@ -274,7 +348,7 @@ ComputeTransformation( const G4int copyNo, G4VPhysicalVolume* physVol ) const
 #ifdef G4DIVDEBUG
   if( verbose >= 2 )
   {
-    G4cout << std::setprecision(8) << " G4ParameterisationTrdY " << copyNo
+    G4cout << std::setprecision(8) << " G4ParameterisationTrdY::ComputeTransformation " << copyNo
            << " pos " << origin << " rot mat " << " axis " << faxis << G4endl;
   }
 #endif

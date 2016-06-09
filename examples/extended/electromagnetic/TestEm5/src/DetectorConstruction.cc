@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: DetectorConstruction.cc,v 1.13 2006/09/25 17:06:29 maire Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: DetectorConstruction.cc,v 1.14 2008/03/17 18:22:00 maire Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -124,6 +124,7 @@ lAr->AddElement(Ar, natoms=1);
 
 new G4Material("Iron",     z=26, a= 55.85*g/mole, density= 7.870*g/cm3);
 new G4Material("Copper",   z=29, a= 63.55*g/mole, density= 8.960*g/cm3);
+new G4Material("Germanium",z=32, a= 72.61*g/mole, density= 5.323*g/cm3);
 new G4Material("Silver",   z=47, a=107.87*g/mole, density= 10.50*g/cm3);
 new G4Material("Tungsten", z=74, a=183.85*g/mole, density= 19.30*g/cm3);
 new G4Material("Gold",     z=79, a=196.97*g/mole, density= 19.32*g/cm3);

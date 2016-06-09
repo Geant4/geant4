@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4BezierSurface.hh,v 1.7 2006/06/29 18:38:20 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // ----------------------------------------------------------------------
 // Class G4BezierSurface

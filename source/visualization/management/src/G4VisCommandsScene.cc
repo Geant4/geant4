@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsScene.cc,v 1.67 2007/11/10 15:03:56 allison Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4VisCommandsScene.cc,v 1.68 2008/04/28 16:12:38 allison Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 
 // /vis/scene commands - John Allison  9th August 1998
 
@@ -243,7 +243,10 @@ void G4VisCommandSceneEndOfEventAction::SetNewValue (G4UIcommand*,
       else G4cout << "up to " << maxNumberOfKeptEvents;
       G4cout << " events.";
       if (maxNumberOfKeptEvents > 1 || maxNumberOfKeptEvents < 0)
-	G4cout << "\n  This may use a lot of memory.";
+	G4cout <<
+	  "\n  This may use a lot of memory."
+	  "\n  It may be changed with, e.g., "
+	  "\"/vis/scene/endOfEventAction accumulate 10\".";
     }
     G4cout << G4endl;
   }

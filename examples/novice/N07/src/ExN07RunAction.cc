@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: ExN07RunAction.cc,v 1.7 2007/05/04 01:49:28 asaim Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: ExN07RunAction.cc,v 1.8 2007/05/12 20:02:58 asaim Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 
 #include "ExN07RunAction.hh"
@@ -115,18 +115,19 @@ void ExN07RunAction::EndOfRunAction(const G4Run* aRun)
     G4cout
     << "------------------------------------------------------------" << G4endl;
     G4cout << "Scores in parallel geometry" << G4endl;
-    G4cout << "layer  eDep/evt   nGamma/evt   nElec/evt   nPosi/evt   stepLen/evt   nStep/evt"
+    G4cout << "layer   eDep/evt  nGamma/evt nElec/evt  nPosi/evt  stpLen/evt nStep/evt"
            << G4endl;
     for(size_t k=0;k<20;k++)
     {
-      G4cout << "  " << k;
+      G4cout << std::setw(8) << k;
       for(size_t j=0;j<6;j++)
-      { G4cout << "  " << (theRun->GetParaValue(i,j,k))/nEvt; }
+      { G4cout << " " << std::setw(10) << (theRun->GetParaValue(i,j,k))/nEvt; }
       G4cout << G4endl;
     }
     G4cout
     << "############################################################" << G4endl;
   }
+  G4cout << "CPU Time spent by each region" << G4cout;
   ExN07SteppingVerbose* sv = (ExN07SteppingVerbose*)(G4VSteppingVerbose::GetInstance());
   sv->Report();
 }

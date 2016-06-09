@@ -465,14 +465,14 @@ G4RotationMatrix
   while (place < rotation.size()) {
 
         G4double angle;
-        char* p;
-
-        angle = strtod(rotation.substr(place+1).c_str(),&p) * deg;
-        G4cout << "Angle: " << angle/deg << "deg " << G4endl;
-
+        char* p(0);
+	G4String current=rotation.substr(place+1);
+        angle = strtod(current.c_str(),&p) * deg;
+             
         if (!p || (*p != ',' && *p != '\0')) {
-           G4cerr << "Invalid rotation specification: " << 
+          G4cerr << "Invalid rotation specification: " << 
                                                   rotation.c_str() << G4endl;
+
            return rot;
         }
 

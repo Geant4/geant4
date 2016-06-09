@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<gdml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://service-spi.web.cern.ch/service-spi/app/releases/GDML/schema/gdml.xsd">
+
+   <define>
+      <constant name="XLength" value="100"/>
+      <constant name="YLength" value="200"/>
+      <constant name="ZLength" value="300"/>
+      <position name="XBoxPos" x="XLength/2"/>
+      <position name="YBoxPos" y="YLength/2"/>
+      <position name="ZBoxPos" z="ZLength/2"/>
+      <position name="XArrowPos" x="XLength"/>
+      <position name="YArrowPos" y="YLength"/>
+      <position name="ZArrowPos" z="ZLength"/>
+      <rotation name="XArrowRot" y="-90" unit="deg"/>
+      <rotation name="YArrowRot" x="90" unit="deg"/>
+      <rotation name="ZArrowRot" unit="deg"/>
+      <position name="v1" x="+10" y="+10" z="0"/>
+      <position name="v2" x="-10" y="+10" z="0"/>
+      <position name="v3" x="-10" y="-10" z="0"/>
+      <position name="v4" x="+10" y="-10" z="0"/>
+      <position name="v5" x="0" y="0" z="30"/>
+   </define>
+
+   <materials>
+      <material Z="1.0" name="AIR" state="gas">
+         <D value="1e-24"/>
+         <atom value="1.00794"/>
+      </material>
+      <material name="ALU" state="solid" Z="13.0">
+         <D value="2.70"/>
+         <atom value="26.98"/>
+      </material>
+   </materials>
+
+   <solids>
+      <box name="WorldBox" x="700" y="700" z="700"/>
+      <box name="XBox" x="100" y="005" z="005"/>
+      <box name="YBox" x="005" y="200" z="005"/>
+      <box name="ZBox" x="005" y="005" z="300"/>
+      <box name="Origin" x="10" y="10" z="10"/>
+      <tessellated name="Arrow">
+         <quadrangular vertex1="v1" vertex2="v2" vertex3="v3" vertex4="v4"/>
+         <triangular vertex1="v1" vertex2="v2" vertex3="v5"/>
+         <triangular vertex1="v2" vertex2="v3" vertex3="v5"/>
+         <triangular vertex1="v3" vertex2="v4" vertex3="v5"/>
+         <triangular vertex1="v4" vertex2="v1" vertex3="v5"/>
+      </tessellated>
+   </solids>
+
+   <structure>
+      <volume name="vXBox">
+         <materialref ref="ALU"/>
+         <solidref ref="XBox"/>
+      </volume>
+      <volume name="vYBox">
+         <materialref ref="ALU"/>
+         <solidref ref="YBox"/>
+      </volume>
+      <volume name="vZBox">
+         <materialref ref="ALU"/>
+         <solidref ref="ZBox"/>
+      </volume>
+      <volume name="vOrigin">
+         <materialref ref="ALU"/>
+         <solidref ref="Origin"/>
+      </volume>
+      <volume name="vArrow">
+         <materialref ref="ALU"/>
+         <solidref ref="Arrow"/>
+      </volume>
+      <volume name="TOP">
+         <materialref ref="AIR"/>
+         <solidref ref="WorldBox"/>
+         <physvol name="pvXAxis">
+            <volumeref ref="vXBox"/>
+            <positionref ref="XBoxPos"/>
+	 </physvol>
+         <physvol>
+            <volumeref ref="vYBox"/>
+            <positionref ref="YBoxPos"/>
+         </physvol>
+         <physvol>
+            <volumeref ref="vZBox"/>
+            <positionref ref="ZBoxPos"/>
+         </physvol>
+         <physvol>
+            <volumeref ref="vOrigin"/>
+         </physvol>
+         <physvol>
+            <volumeref ref="vArrow"/>
+            <positionref ref="XArrowPos"/>
+            <rotationref ref="XArrowRot"/>
+         </physvol>
+         <physvol>
+            <volumeref ref="vArrow"/>
+            <positionref ref="YArrowPos"/>
+            <rotationref ref="YArrowRot"/>
+         </physvol>
+         <physvol>
+            <volumeref ref="vArrow"/>
+            <positionref ref="ZArrowPos"/>
+            <rotationref ref="ZArrowRot"/>
+         </physvol>
+      </volume>
+   </structure>
+
+   <setup version="1.0" name="Default">
+      <world ref="TOP"/>
+   </setup>
+
+</gdml>

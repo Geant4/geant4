@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // -------------------------------------------------------------------
-// $Id: MicrobeamEMField.cc,v 1.6 2007/07/06 06:52:54 sincerti Exp $
+// $Id: MicrobeamEMField.cc,v 1.7 2008/10/23 11:12:12 sincerti Exp $
 // -------------------------------------------------------------------
 
 #include "MicrobeamEMField.hh"
@@ -522,13 +522,13 @@ if (z>=-1400*mm & z <-200*mm)
 // ZERO FIELD REGIONS
 
 if (
-(Bfield[0]==0. &
-Bfield[1]==0. &
-Bfield[2]==0. &
-Bfield[4]==0. &
-Bfield[5]==0. &
-Bfield[6]==0. )
-)
+     (Bfield[0]==0. &&
+      Bfield[1]==0. &&
+      Bfield[2]==0. &&
+      Bfield[3]==0. &&
+      Bfield[4]==0. &&
+      Bfield[5]==0. )
+   )
 {
 
 G4FieldManager *pFieldMgr;

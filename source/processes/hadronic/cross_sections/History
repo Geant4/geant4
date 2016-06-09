@@ -14,6 +14,61 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+01 December 2008 Vladimir Ivantchenko (hadr-cross-V09-01-07)
+------------------------------------------------------------
+G4BGGPionElasticXS, G4BGGPionInelasticXS, G4BGGNucleonInelasticXS,
+G4BGGNucleonElasticXS, G4UPiNuclearCrossSection - added proper
+   Coulomb barrier and cleanup implementations
+
+24 October 2008 Dennis Wright (hadr-cross-V09-01-06)
+----------------------------------------------------
+- replace G4NucleiPropertiesTable::IsInTable with 
+  G4NucleiProperties::IsInStableTable for G4PhotoNuclearCrossSection
+  and G4ElectroNuclearCrossSection
+
+24 September 2008 Vladimir Ivantchenko (hadr-cross-V09-01-05)
+------------------------------------------------------------
+- G4GlauberGribovCrossSection provides a smooth transition from 
+  Barashenkov cross sections at 90 GeV; set threshold 90 GeV
+  in classes, where this cross section is used 
+
+16 September 2008 Dennis Wright (hadr-cross-V09-01-04)
+------------------------------------------------------
+- G4PiNuclearCrossSection.cc: comment out G4ping and its instances
+  following result of Pete Elmer who showed G4ping is very slow
+
+01 September 2008 Vladimir Ivantchenko (hadr-cross-V09-01-03)
+------------------------------------------------------------
+- G4CrossSectionDataStore - added method SampleZandA, which
+    return G4Element and fill G4Nucleaus
+
+28 April 2008 Dennis Wright (hadr-cross-V09-01-02)
+--------------------------------------------------
+- T. Koi added capability to use element-based cross section data 
+  sets if no isotope-based ones are available.  This is required to 
+  get the HP neutron code to work within the cross section framework 
+  introduced in version 9.0.
+  Files affected: G4CrossSectionDataStore.hh, .cc.  Added method 
+  whichDataSetInCharge().
+
+- DHW: G4NeutronInelasticCrossSection.cc : fix bug which returned 
+  zero cross section for 3He
+
+- G4TripathiLightCrossSection::IsApplicable(): bug fix from T. Koi:
+  changed theTarget->GetA() to theTarget->GetN()
+
+31 March 2008 Dennis Wright (hadr-cross-V09-01-01)
+--------------------------------------------------
+- G4GlauberGribovCrossSection.cc and G4HadronNucleonXsc.cc - put () 
+  around && in || in order to fix gcc-4.3 compiler warnings.
+
+17 January 2008 Vladimir Ivantchenko (hadr-cross-V09-01-00)
+----------------------------------------------------------
+- G4PhotoNuclearCrossSection and G4ElectroNuclearCrossSection - move 
+   compicate inlined method with many returns to source; fixed one wrong 
+   return value (was zero instead of pseudo-inf) and comment out 
+   extra warning which tell nothing useful to users
+
 28 June 2007 Dennis Wright (hadr-cross-V09-00-00)
 -------------------------------------------------
 - V. Grichine changed log to std::log in G4HadronNucleonXsc.cc and

@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4OpenGLImmediateXViewer.cc,v 1.16 2006/07/03 16:38:13 allison Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // 
 // Andrew Walkden  7th February 1997

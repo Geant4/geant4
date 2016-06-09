@@ -25,7 +25,7 @@
 //
 //
 // $Id: SoG4Polyhedron.h,v 1.3 2007/09/17 16:08:00 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // John Allison  26th October 2006
 // Extended Geant4_SoPolyhedron to include G4Atts.

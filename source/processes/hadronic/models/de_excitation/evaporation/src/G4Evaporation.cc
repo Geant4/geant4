@@ -24,14 +24,19 @@
 // ********************************************************************
 //
 //
-// $Id: G4Evaporation.cc,v 1.7 2007/02/14 13:37:49 ahoward Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4Evaporation.cc,v 1.12 2008/12/09 17:57:36 ahoward Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Oct 1998)
 //
 // Alex Howard - added protection for negative probabilities in the sum, 14/2/07
 //
+// Modif (03 September 2008) by J. M. Quesada for external choice of inverse 
+// cross section option
+// JMQ (06 September 2008) Also external choices have been added for 
+// superimposed Coulomb barrier (if useSICBis set true, by default is false) 
+
 #include "G4Evaporation.hh"
 #include "G4EvaporationFactory.hh"
 #include "G4EvaporationGEMFactory.hh"
@@ -88,7 +93,6 @@ void G4Evaporation::SetGEMChannel()
   theChannels = theChannelFactory->GetChannel();
 }
 
-
 G4FragmentVector * G4Evaporation::BreakItUp(const G4Fragment &theNucleus)
 {
     G4FragmentVector * theResult = new G4FragmentVector;
@@ -104,15 +108,20 @@ G4FragmentVector * G4Evaporation::BreakItUp(const G4Fragment &theNucleus)
 
     // Number of channels
     G4int TotNumberOfChannels = theChannels->size();  
-	
 
     // Starts loop over evaporated particles
     for (;;) 
-      {
+ 
+   {    
 	// loop over evaporation channels
 	std::vector<G4VEvaporationChannel*>::iterator i;
 	for (i=theChannels->begin(); i != theChannels->end(); i++) 
 	  {
+  // for inverse cross section choice
+            (*i)->SetOPTxs(OPTxs);
+  // for superimposed Coulomb Barrier for inverse cross sections
+            (*i)->UseSICB(useSICB);
+
 	    (*i)->Initialize(theResidualNucleus);
 	  }
 	// Can't use this form beacuse Initialize is a non const member function
@@ -171,6 +180,12 @@ G4FragmentVector * G4Evaporation::BreakItUp(const G4Fragment &theNucleus)
 			
 	    if( j >= TotNumberOfChannels ) 
 	      {
+		G4cerr << " Residual A: " << theResidualNucleus.GetA() << " Residual Z: " << theResidualNucleus.GetZ() << " Excitation Energy: " << theResidualNucleus.GetExcitationEnergy() << G4endl;
+		G4cerr << " j has not chosen a channel, j = " << j << " TotNumberOfChannels " << TotNumberOfChannels << " Total Probability: " << TotalProbability << G4endl;
+		for (j=0; j < TotNumberOfChannels; j++) 
+		  {
+		    G4cerr << " j: " << j << " EmissionProbChannel: " << EmissionProbChannel[j] << " and shoot: " << shoot << " (<ProbChannel?) " << G4endl;
+		  }		
 		throw G4HadronicException(__FILE__, __LINE__,  "G4Evaporation::BreakItUp: Can't define emission probability of the channels!" );
 	      } 
 	    else 
@@ -215,6 +230,7 @@ G4FragmentVector * G4Evaporation::BreakItUp(const G4Fragment &theNucleus)
 #ifdef PRECOMPOUND_TEST
 		  theResidualNucleus.SetCreatorModel(G4String("ResidualNucleus"));
 #endif
+
 		}
 	      }
 	  }

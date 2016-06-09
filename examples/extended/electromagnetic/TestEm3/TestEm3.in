@@ -1,4 +1,4 @@
-# $Id: TestEm3.in,v 1.25 2007/06/22 16:20:14 vnivanch Exp $
+# $Id: TestEm3.in,v 1.26 2008/09/13 13:08:39 maire Exp $
 #
 # Macro file for "exampleN03.cc"
 # (can be run in batch, without graphic)
@@ -18,7 +18,7 @@
 /gun/energy 1 GeV
 #
 /testem/histo/setFileName testem3
-/testem/histo/setFileType hbook
+/testem/histo/setFileType root
 /testem/histo/setHisto 1 100 700. 1000. MeV	#edep in absor1
 /testem/histo/setHisto 2 100   0.  300. MeV	#edep in absor2
 /testem/histo/setHisto 11 52   0.   52.  none	#long. profile in absor1

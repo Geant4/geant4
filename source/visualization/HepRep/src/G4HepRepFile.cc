@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // $Id: G4HepRepFile.cc,v 1.11 2007/05/22 17:05:26 allison Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // 
 // Joseph Perl  1 October 2001

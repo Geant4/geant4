@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // -------------------------------------------------------------------
-// $Id: MicrobeamPhysicsList.cc,v 1.6 2006/11/23 12:24:20 sincerti Exp $
+// $Id: MicrobeamPhysicsList.cc,v 1.7 2008/08/20 11:08:29 sincerti Exp $
 // -------------------------------------------------------------------
 
 #include "G4ParticleDefinition.hh"
@@ -154,7 +154,7 @@ void MicrobeamPhysicsList::ConstructEM()
       
       pmanager->AddDiscreteProcess(new G4LowEnergyRayleigh());
       
-      pmanager->AddProcess(new G4StepLimiter(), -1, -1, 3);
+      pmanager->AddProcess(new G4StepLimiter(), -1, -1, 5);
 
       
     } else if (particleName == "e-") {
@@ -169,19 +169,20 @@ void MicrobeamPhysicsList::ConstructEM()
 
       G4LowEnergyBremsstrahlung * LeBrprocess = new G4LowEnergyBremsstrahlung();
       pmanager->AddProcess(LeBrprocess, -1, -1, 3);
-      pmanager->AddProcess(new G4StepLimiter(), -1, -1, 3);
+
+      pmanager->AddProcess(new G4StepLimiter(), -1, -1, 4);
       
     } else if (particleName == "e+") {
 
-      pmanager->AddProcess(new G4MultipleScattering,-1, 1,1);
+      pmanager->AddProcess(new G4MultipleScattering,-1, 1, 1);
       
-      pmanager->AddProcess(new G4eIonisation,      -1, 2,2);
+      pmanager->AddProcess(new G4eIonisation,      -1, 2, 2);
       
-      pmanager->AddProcess(new G4eBremsstrahlung,   -1,-1,3);
+      pmanager->AddProcess(new G4eBremsstrahlung,   -1, 3, 3);
       
-      pmanager->AddProcess(new G4eplusAnnihilation,  0,-1,4);
+      pmanager->AddProcess(new G4eplusAnnihilation,  0, -1, 4);
       
-      pmanager->AddProcess(new G4StepLimiter(), -1, -1, 3);
+      pmanager->AddProcess(new G4StepLimiter(), -1, -1, 5);
 
     } else if( particleName == "mu+" || 
                particleName == "mu-"    ) {
@@ -191,10 +192,10 @@ void MicrobeamPhysicsList::ConstructEM()
 	       (particle->GetParticleName() != "chargedgeantino")) {
      
       //pmanager->AddProcess(new G4MultipleScattering(),-1,1,1);
-      pmanager->AddProcess(new G4hMultipleScattering(),-1,1,1);
+      pmanager->AddProcess(new G4hMultipleScattering(),-1, 1, 1);
       
       G4hLowEnergyIonisation* hLowEnergyIonisation = new G4hLowEnergyIonisation();
-      pmanager->AddProcess(hLowEnergyIonisation,-1,2,2);
+      pmanager->AddProcess(hLowEnergyIonisation,-1, 2, 2);
 
       hLowEnergyIonisation->SetElectronicStoppingPowerModel(particle,"ICRU_R49He");
       hLowEnergyIonisation->SetNuclearStoppingOn();

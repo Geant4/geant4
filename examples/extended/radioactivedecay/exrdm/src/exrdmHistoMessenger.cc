@@ -48,7 +48,7 @@ exrdmHistoMessenger::exrdmHistoMessenger(exrdmHisto* manager)
   factoryCmd->AvailableForStates(G4State_PreInit,G4State_Idle); 
 
   fileCmd = new G4UIcmdWithAString("/histo/fileType",this);
-  fileCmd->SetGuidance("set type (hbook, XML) for the histograms file");
+  fileCmd->SetGuidance("set type (aida, hbook or root) for the histograms file");
   fileCmd->AvailableForStates(G4State_PreInit,G4State_Idle); 
 
   histoCmd = new G4UIcommand("/histo/setHisto",this);

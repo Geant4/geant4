@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4LEAlphaInelastic.hh,v 1.10 2007/02/24 06:06:38 dennis Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// GEANT4 tag $Name: geant4-09-02 $
 //
  // Hadronic Process: Low Energy Alpha Inelastic Process
  // J.L. Chuma, TRIUMF, 21-Feb-1997

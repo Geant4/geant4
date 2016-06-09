@@ -23,15 +23,15 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: pyG4Material.cc,v 1.5 2006/12/01 02:10:08 kmura Exp $
-// $Name: geant4-09-01 $
+// $Id: pyG4Material.cc,v 1.7 2008/12/04 08:55:25 kmura Exp $
+// $Name: geant4-09-02 $
 // ====================================================================
 //   pyG4Material.cc
 //
 //                                         2005 Q
 // ====================================================================
 #include <boost/python.hpp>
-#include "pyG4Version.hh"
+#include "G4Version.hh"
 #include "G4Material.hh"
 
 using namespace boost::python;
@@ -119,9 +119,17 @@ void export_G4Material()
     .def("AddElement",          f1_AddElement)
     .def("AddElement",          f2_AddElement)
     .def("AddMaterial",         &G4Material::AddMaterial)
+#if G4VERSION_NUMBER >= 920
+    .def("GetName",             &G4Material::GetName,
+         return_value_policy<reference_existing_object>())
+    .def("GetChemicalFormula",  &G4Material::GetChemicalFormula,
+         return_value_policy<reference_existing_object>())
+    .def("SetName",             &G4Material::SetName)
+#else
     .def("GetName",             &G4Material::GetName)
-    .def("SetChemicalFormula",  &G4Material::SetChemicalFormula)
     .def("GetChemicalFormula",  &G4Material::GetChemicalFormula)
+#endif
+    .def("SetChemicalFormula",  &G4Material::SetChemicalFormula)
     .def("GetDensity",          &G4Material::GetDensity)
     .def("GetState",            &G4Material::GetState)
     .def("GetTemperature",      &G4Material::GetTemperature)

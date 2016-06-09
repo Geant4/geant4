@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4OpenGLStoredQt.hh,v 1.1 2007/09/28 14:44:13 lgarnier Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // 
 // OpenGLStoredQt graphics system factory.

@@ -25,8 +25,6 @@
 //
 #ifdef G4ANALYSIS_USE
 
-#include <AIDA/AIDA.h>
-
 #include "exGPSAnalysisMessenger.hh"
 #include "exGPSAnalysisManager.hh"
 

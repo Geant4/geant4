@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.6 2004/06/03 13:55:20 gcosmo Exp $
+# $Id: GNUmakefile,v 1.7 2008/01/15 11:04:26 lgarnier Exp $
 # -----------------------------------------------------------------------
 # GNUmakefile for interfaces.  John Allison, 5/7/98.
 # -----------------------------------------------------------------------
@@ -12,6 +12,9 @@ ifndef G4INSTALL
 endif
 
 GLOBLIBS = libG4intercoms.lib libG4global.lib
+
+# Definition of macro for moc files (for Qt use only)
+MOC_MACRO = -DG4UI_BUILD_QT_SESSION
 
 include $(G4INSTALL)/config/architecture.gmk
 include $(G4INSTALL)/config/G4UI_BUILD.gmk

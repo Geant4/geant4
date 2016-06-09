@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4DiffuseElastic.hh,v 1.13 2007/11/06 17:01:20 grichine Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 //
 // G4 Model: optical elastic scattering with 4-momentum balance 

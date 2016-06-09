@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4CompetitiveFission.cc,v 1.5 2006/06/29 20:13:33 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4CompetitiveFission.cc,v 1.9 2008/11/20 13:46:27 dennis Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Oct 1998)
@@ -340,7 +340,7 @@ G4int G4CompetitiveFission::FissionCharge(const G4double A,
     const G4double sigma = 0.6;
     G4double DeltaZ = 0.0;
     if (Af >= 134.0) DeltaZ = -0.45;                    //                      134 <= Af
-    else if (A <= (A-134.0)) DeltaZ = 0.45;             // Af <= (A-134) 
+    else if (Af <= (A-134.0)) DeltaZ = 0.45;             // Af <= (A-134) 
     else DeltaZ = -0.45*(Af-(A/2.0))/(134.0-(A/2.0));   //       (A-134) < Af < 134
 
     G4double Zmean = (Af/A)*Z + DeltaZ;

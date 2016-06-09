@@ -57,7 +57,7 @@ namespace AIDA{
   class IHistogramFactory;
   class IAnalysisFactory;
   class ITreeFactory;
-};
+}
 #endif
 
 class UltraAnalysisManager

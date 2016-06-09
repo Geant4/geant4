@@ -50,6 +50,7 @@ G4KaonMinusAbsorptionAtRest::G4KaonMinusAbsorptionAtRest(const G4String& process
   if (verboseLevel>0) {
     G4cout << GetProcessName() << " is created "<< G4endl;
   }
+  SetProcessSubType(fHadronAtRest);
 
   // see Cohn et al, PLB27(1968) 527;
   //     Davis et al, PLB1(1967) 434; 
@@ -181,16 +182,13 @@ G4VParticleChange* G4KaonMinusAbsorptionAtRest::AtRestDoIt
   G4double newZ = nucleus->GetZ();
   G4double newA = nucleus->GetN();
 
-  G4double bDiff = G4NucleiPropertiesTable::GetBindingEnergy(static_cast<G4int>(Z),static_cast<G4int>(A)) - 
-    G4NucleiPropertiesTable::GetBindingEnergy(static_cast<G4int>(newZ), static_cast<G4int>(newA));
+  G4double bDiff = G4NucleiProperties::GetBindingEnergy(static_cast<G4int>(A),static_cast<G4int>(Z)) - 
+    G4NucleiProperties::GetBindingEnergy(static_cast<G4int>(newA), static_cast<G4int>(newZ));
 
-  //  G4double mass = G4NucleiPropertiesTable::GetAtomicMass(static_cast<G4int>(newZ),static_cast<G4int>(newA));
   G4double pNucleus = pProducts.mag();
   
   G4StopDeexcitationAlgorithm* nucleusAlgorithm = new G4StopTheoDeexcitation();
   G4StopDeexcitation stopDeexcitation(nucleusAlgorithm);
-
-  // G4double difference = G4KaonMinus::KaonMinus()->GetPDGMass() - productEnergy - bDiff;
 
   nucleus->AddExcitationEnergy(bDiff);
    
@@ -396,19 +394,12 @@ G4DynamicParticleVector* G4KaonMinusAbsorptionAtRest::KaonNucleonReaction()
   
   // Modify the Kaon mass to take nuclear binding energy into account  
   // .. using mas formula ..
-  //   G4double nucleonBindingEnergy =  nucleus->AtomicMass(iniA,iniZ)
-  //                                  - nucleus->AtomicMass(newA,newZ)
-  //                                  - nucleonMass;
   // .. using mass table ..
-  //   G4double nucleonBindingEnergy =  
-  //            G4NucleiPropertiesTable::GetAtomicMass(iniZ,iniA)
-  //           -G4NucleiPropertiesTable::GetAtomicMass(newZ,newA)
-  //           -nucleonMass;
   // equivalent to -'initialBindingEnergy+nucleus.GetBindingEnergy' !
 
   G4double nucleonBindingEnergy = 
-    -G4NucleiPropertiesTable::GetBindingEnergy(static_cast<G4int>(iniZ), static_cast<G4int>(iniA) )
-    +G4NucleiPropertiesTable::GetBindingEnergy(static_cast<G4int>(newZ), static_cast<G4int>(newA) );
+    -G4NucleiProperties::GetBindingEnergy(static_cast<G4int>(iniA), static_cast<G4int>(iniZ) )
+    +G4NucleiProperties::GetBindingEnergy(static_cast<G4int>(newA), static_cast<G4int>(newZ) );
   
   G4DynamicParticle modifiedHadron = (*stoppedHadron);
   modifiedHadron.SetMass(stoppedHadron->GetMass() + nucleonBindingEnergy);   
@@ -522,22 +513,10 @@ G4DynamicParticle* G4KaonMinusAbsorptionAtRest::SigmaLambdaConversion(G4DynamicP
   // Binding energy of nucleus has changed. This will change the
   // ExcitationEnergy.
   // .. using mass formula ..
-  //   G4double massDifference =   nucleus->AtomicMass(A,Z)
-  //                           - nucleus->AtomicMass(A,newZ)
-  //                           - nucleonMassDifference;
   // .. using mass table ..
-  // G4double massDifference = 
-  //            G4NucleiPropertiesTable::GetAtomicMass(Z,A)
-  //           -G4NucleiPropertiesTable::GetAtomicMass(newZ,A)
-  //           -nucleonMass;
   // equivalent to -'initialBindingEnergy+nucleus.GetBindingEnergy' !
-  //G4double massDifference =
-  //  -G4NucleiPropertiesTable::GetBindingEnergy(Z,A)
-  //  +G4NucleiPropertiesTable::GetBindingEnergy(newZ,A);
-  
-  
+
   // Add energy and momentum to nucleus, change Z,A 
-  //  nucleus->AddExcitationEnergy(outNucleon->GetKineticEnergy()+massDifference);
   nucleus->AddExcitationEnergy(outNucleon.GetKineticEnergy());
   nucleus->AddMomentum(outNucleon.GetMomentum());
   nucleus->SetParameters(A,newZ);

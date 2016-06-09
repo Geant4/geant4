@@ -25,7 +25,7 @@
 //
 //
 // $Id: ExN02MagneticField.hh,v 1.2 2006/06/29 17:34:12 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 //
 //    A class for control of the Magnetic Field of the detector.

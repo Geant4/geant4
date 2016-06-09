@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4eIonisationParameters.cc,v 1.23 2006/06/29 19:42:02 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
 //

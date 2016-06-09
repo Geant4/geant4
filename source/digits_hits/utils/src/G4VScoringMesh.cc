@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VScoringMesh.cc,v 1.34 2007/11/07 04:12:07 akimura Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4VScoringMesh.cc,v 1.35 2008/03/23 14:32:13 akimura Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 
 #include "G4VScoringMesh.hh"
@@ -157,11 +157,7 @@ G4VPrimitiveScorer * G4VScoringMesh::GetPrimitiveScorer(G4String & name) {
   return NULL;
 }
 void G4VScoringMesh::List() const {
-  G4cout << " Size: ("
-	 << fSize[0]/cm << ", "
-	 << fSize[1]/cm << ", "
-	 << fSize[2]/cm << ") [cm]"
-	 << G4endl;
+
   G4cout << " # of segments: ("
 	 << fNSegment[0] << ", "
 	 << fNSegment[1] << ", "

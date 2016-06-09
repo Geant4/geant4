@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MuonMinusCaptureAtRest.cc,v 1.48 2007/11/19 16:49:25 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4MuonMinusCaptureAtRest.cc,v 1.53 2008/10/02 20:57:52 dennis Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 //   G4MuonMinusCaptureAtRest physics process
 //   Larry Felawka (TRIUMF) and Art Olin (TRIUMF)
@@ -52,6 +52,7 @@
 #include "G4GHEKinematicsVector.hh"
 #include "G4Fancy3DNucleus.hh"
 #include "G4ExcitationHandler.hh"
+#include "G4HadronicProcessStore.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -60,11 +61,13 @@ G4MuonMinusCaptureAtRest::G4MuonMinusCaptureAtRest(const G4String& processName,
   G4VRestProcess (processName, aType), nCascade(0), targetZ(0), targetA(0), 
   isInitialised(false)
 {
+  SetProcessSubType(fHadronAtRest);
   Cascade    = new G4GHEKinematicsVector [17];
   pSelector  = new G4StopElementSelector();
   pEMCascade = new G4MuMinusCaptureCascade();
   theN       = new G4Fancy3DNucleus();
   theHandler = new G4ExcitationHandler();
+  G4HadronicProcessStore::Instance()->RegisterExtraProcess(this);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -83,6 +86,20 @@ G4MuonMinusCaptureAtRest::~G4MuonMinusCaptureAtRest()
 G4bool G4MuonMinusCaptureAtRest::IsApplicable(const G4ParticleDefinition& p)
 {
   return ( &p == G4MuonMinus::MuonMinus() );
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4MuonMinusCaptureAtRest::PreparePhysicsTable(const G4ParticleDefinition& p) 
+{
+  G4HadronicProcessStore::Instance()->RegisterParticleForExtraProcess(this, &p);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4MuonMinusCaptureAtRest::BuildPhysicsTable(const G4ParticleDefinition& p) 
+{
+  G4HadronicProcessStore::Instance()->PrintInfo(&p);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

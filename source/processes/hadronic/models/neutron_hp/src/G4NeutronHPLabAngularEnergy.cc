@@ -27,6 +27,8 @@
 // J.P. Wellisch, Nov-1996
 // A prototype of the low energy neutron transport model.
 //
+// 080808 Bug fix in serching mu bin and index for theBuff2b by T. Koi
+//
 #include "G4NeutronHPLabAngularEnergy.hh"
 #include "G4Gamma.hh"
 #include "G4Electron.hh"
@@ -110,10 +112,13 @@ G4ReactionProduct * G4NeutronHPLabAngularEnergy::Sample(G4double anEnergy, G4dou
    for(i=0; i<nEnergies; i++)
    {
      it = i;
-     if(anEnergy<theEnergies[i]) break;
+     if ( anEnergy < theEnergies[i] ) break;
    }
-   if(it==0 || it == nEnergies-1) // it marks the energy bin
+   //080808
+   //if ( it == 0 || it == nEnergies-1 ) // it marks the energy bin
+   if ( it == 0 ) // it marks the energy bin
    {
+if(it==0) G4cout << "080808 Something unexpected is happen in G4NeutronHPLabAngularEnergy " << G4endl;
      // integrate the prob for each costh, and select theta.
      G4double * running = new G4double [nCosTh[it]];
      running[0]=0;
@@ -129,16 +134,21 @@ G4ReactionProduct * G4NeutronHPLabAngularEnergy::Sample(G4double anEnergy, G4dou
        ith = i;
        if(random<running[i]) break;
      }
-     if(ith==0 || ith==nCosTh[it]-1)
+     //080807
+     //if ( ith == 0 || ith == nCosTh[it]-1 ) //ith marks the angluar bin
+     if ( ith == 0 ) //ith marks the angluar bin
      {
-       cosTh = theData[it][ith].GetLabel();
-       secEnergy = theData[it][ith].Sample();
-       currentMeanEnergy = theData[it][ith].GetMeanX();
+        cosTh = theData[it][ith].GetLabel();
+        secEnergy = theData[it][ith].Sample();
+        currentMeanEnergy = theData[it][ith].GetMeanX();
      }
      else
      {
-       G4double x1 = theData[it][ith-1].GetIntegral();
-       G4double x2 = theData[it][ith].GetIntegral();
+       //080808
+       //G4double x1 = theData[it][ith-1].GetIntegral();
+       //G4double x2 = theData[it][ith].GetIntegral();
+       G4double x1 = running [ ith-1 ];
+       G4double x2 = running [ ith ];
        G4double x = random;
        G4double y1 = theData[it][ith-1].GetLabel();
        G4double y2 = theData[it][ith].GetLabel();
@@ -156,6 +166,7 @@ G4ReactionProduct * G4NeutronHPLabAngularEnergy::Sample(G4double anEnergy, G4dou
          mu = theData[it][ith-1].GetX(i);
          y1 = theData[it][ith-1].GetY(i);
          y2 = theData[it][ith].GetY(mu);
+
          y = theInt.Interpolate(theSecondManager[it].GetScheme(ith), 
                                 cosTh, x1,x2,y1,y2);
          theBuff1.SetData(i, mu, y);
@@ -297,11 +308,16 @@ G4ReactionProduct * G4NeutronHPLabAngularEnergy::Sample(G4double anEnergy, G4dou
      }
      G4NeutronHPVector theBuff2b;
      theBuff2b.SetInterpolationManager(theData[it][i2].GetInterpolationManager());
-     for(i=0;i<theData[it][i1].GetVectorLength(); i++)
+     //080808  i1 -> i2
+     //for(i=0;i<theData[it][i1].GetVectorLength(); i++)
+     for(i=0;i<theData[it][i2].GetVectorLength(); i++)
      {
-       E = theData[it][i1].GetX(i);
-       y1 = theData[it][i1-1].GetY(E);
-       y2 = theData[it][i1].GetY(i);
+       //E = theData[it][i1].GetX(i);
+       //y1 = theData[it][i1-1].GetY(E);
+       //y2 = theData[it][i1].GetY(i);
+       E = theData[it][i2].GetX(i);
+       y1 = theData[it][i2-1].GetY(E);
+       y2 = theData[it][i2].GetY(i);
        y = theInt.Lin(x, x1,x2,y1,y2);
        theBuff2b.SetData(i, E, y); // wrong E, right theta.
      }
@@ -338,7 +354,7 @@ G4ReactionProduct * G4NeutronHPLabAngularEnergy::Sample(G4double anEnergy, G4dou
      secEnergy = theOne.Sample();
      currentMeanEnergy = theOne.GetMeanX();
    }
-   
+
 // now do random direction in phi, and fill the result.
 
    result->SetKineticEnergy(secEnergy);

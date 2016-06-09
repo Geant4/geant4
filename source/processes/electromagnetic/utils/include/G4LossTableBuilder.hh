@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LossTableBuilder.hh,v 1.7 2006/06/29 19:54:37 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4LossTableBuilder.hh,v 1.8 2008/07/22 15:55:15 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 //
 // -------------------------------------------------------------------
@@ -39,8 +39,8 @@
 // Creation date: 03.01.2002
 //
 // Modifications: 
-// 08-11-04 Migration to new interface of Store/Retrieve tables (V.Ivantchenko)
-//
+// 08-11-04 Migration to new interface of Store/Retrieve tables (V.Ivanchenko)
+// 17-07-08 Added splineFlag (V.Ivanchenko)
 //
 // Class Description: 
 //
@@ -55,7 +55,6 @@
 #include <vector>
 #include "globals.hh"
 #include "G4PhysicsTable.hh"
-
 
 class G4LossTableBuilder
 {
@@ -74,13 +73,22 @@ public:
   void BuildInverseRangeTable(const G4PhysicsTable* rangeTable,
 			      G4PhysicsTable* invRangeTable,
 			      G4bool isIonisation = false);
+
+  inline void SetSplineFlag(G4bool flag);
  
 private:
 
   G4LossTableBuilder & operator=(const  G4LossTableBuilder &right);
   G4LossTableBuilder(const  G4LossTableBuilder&);
 
+  G4bool splineFlag;
+
 };
+
+inline void G4LossTableBuilder::SetSplineFlag(G4bool flag)
+{
+  splineFlag = flag;
+}
 
 //....oooOO0OOooo.......oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

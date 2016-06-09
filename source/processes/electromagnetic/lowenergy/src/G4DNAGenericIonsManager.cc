@@ -23,15 +23,16 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4DNAGenericIonsManager.cc,v 1.4 2006/06/29 19:39:24 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4DNAGenericIonsManager.cc,v 1.5 2008/07/16 19:01:07 sincerti Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 
 #include "G4DNAGenericIonsManager.hh"
 #include "G4Alpha.hh"
 #include "G4Ions.hh"
 
-G4DNAGenericIonsManager *                G4DNAGenericIonsManager :: Instance(void)
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4DNAGenericIonsManager * G4DNAGenericIonsManager :: Instance(void)
 {
  if (!theInstance)
   theInstance=new G4DNAGenericIonsManager;
@@ -39,19 +40,21 @@ G4DNAGenericIonsManager *                G4DNAGenericIonsManager :: Instance(voi
  return theInstance;
 }
 
-G4ParticleDefinition *                   G4DNAGenericIonsManager :: GetIon(const G4String & name)
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4ParticleDefinition * G4DNAGenericIonsManager :: GetIon(const G4String & name)
 {
  IonsMap::const_iterator i(map.find(name));
  
  if (i==map.end())
   return 0;
   
-// return map[name];
-
  return i->second;
 }
 
-                                         G4DNAGenericIonsManager :: G4DNAGenericIonsManager()
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4DNAGenericIonsManager :: G4DNAGenericIonsManager()
 {
  //               name             mass          width         charge
  //             2*spin           parity  C-conjugation
@@ -59,10 +62,11 @@ G4ParticleDefinition *                   G4DNAGenericIonsManager :: GetIon(const
  //               type    lepton number  baryon number   PDG encoding
  //             stable         lifetime    decay table
 
-
  G4Ions *helium;
  G4Ions *hydrogen;
  G4Ions *alphaPlus;
+ G4Ions *positronium1s;
+ G4Ions *positronium2s;
 
  helium=     new G4Ions("helium",    3.727417*GeV,       0.0*MeV,  +0.0*eplus,
                                0,              +1,             0,
@@ -82,15 +86,33 @@ G4ParticleDefinition *                   G4DNAGenericIonsManager :: GetIon(const
                                0,              +1,             0,
                                0,               0,             0,
                        "nucleus",              +1,            +1,           0,
-		      true,            -1.0,             0, false,
+		        true,            -1.0,             0, false,
+			      "",               0,             0.0);
+
+ positronium1s= new G4Ions("Ps-1s",   2*electron_mass_c2,      0.0*MeV,  +0.0*eplus,
+                               0,               0,             0,
+                               0,               0,             0,
+                       "nucleus",               0,             0,           0,
+		            true,            -1.0,             0, false,
+			      "",               0,             0.0);
+
+ positronium2s= new G4Ions("Ps-2s",   2*electron_mass_c2,      0.0*MeV,  +0.0*eplus,
+                               0,               0,             0,
+                               0,               0,             0,
+                       "nucleus",               0,             0,           0,
+		            true,            -1.0,             0, false,
 			      "",               0,             0.0);
 
  map["helium"]=helium;
  map["hydrogen"]=hydrogen;
  map["alpha+"]=alphaPlus;
  map["alpha++"]=G4Alpha::Alpha();
+ map["Ps-1s"]=positronium1s;
+ map["Ps-2s"]=positronium2s;
+
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4DNAGenericIonsManager *                G4DNAGenericIonsManager::theInstance(0);
+G4DNAGenericIonsManager * G4DNAGenericIonsManager::theInstance(0);
    

@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysListEmStandard.cc,v 1.2 2006/06/29 16:49:09 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: PhysListEmStandard.cc,v 1.4 2008/05/07 13:57:56 maire Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
@@ -34,11 +34,17 @@
 #include "G4ParticleDefinition.hh"
 #include "G4MuonPlus.hh"
 #include "G4MuonMinus.hh"
+#include "G4PionPlus.hh"
+#include "G4PionMinus.hh"
+#include "G4Proton.hh"
 
 #include "G4ProcessManager.hh"
 #include "G4MuIonisation.hh"
 #include "G4MuBremsstrahlung.hh"
 #include "G4MuPairProduction.hh"
+#include "G4hIonisation.hh"
+#include "G4hBremsstrahlung.hh"
+#include "G4hPairProduction.hh"
 #include "G4LossTableManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -56,32 +62,49 @@ PhysListEmStandard::~PhysListEmStandard()
 
 void PhysListEmStandard::ConstructProcess()
 {
-  // Common processes for mu+ and mu-
-  //
-  G4MuIonisation*       muioni = new G4MuIonisation();
-  G4MuBremsstrahlung*   mubrem = new G4MuBremsstrahlung();
-  G4MuPairProduction*   mupair = new G4MuPairProduction();
-
+  // mu+
   G4ParticleDefinition* particle = G4MuonPlus::MuonPlus();
   G4ProcessManager* pmanager = particle->GetProcessManager();    
-  //
-  pmanager->AddProcess(muioni, -1, 2,2);
-  pmanager->AddProcess(mubrem, -1,-1,3);
-  pmanager->AddProcess(mupair, -1,-1,4);
+  pmanager->AddProcess(new G4MuIonisation(),     -1, 2, 2);
+  pmanager->AddProcess(new G4MuBremsstrahlung(), -1, 3, 3);
+  pmanager->AddProcess(new G4MuPairProduction(), -1, 4, 4);
 
+  // mu-
   particle = G4MuonMinus::MuonMinus();
   pmanager = particle->GetProcessManager();    
-  //
-  pmanager->AddProcess(muioni, -1, 2,2);
-  pmanager->AddProcess(mubrem, -1,-1,3);
-  pmanager->AddProcess(mupair, -1,-1,4);
-    
+  pmanager->AddProcess(new G4MuIonisation(),     -1, 2, 2);
+  pmanager->AddProcess(new G4MuBremsstrahlung(), -1, 3, 3);
+  pmanager->AddProcess(new G4MuPairProduction(), -1, 4, 4);
+
+  // pi+
+  particle = G4PionPlus::PionPlus();
+  pmanager = particle->GetProcessManager();    
+  pmanager->AddProcess(new G4hIonisation(),     -1, 2, 2);
+  pmanager->AddProcess(new G4hBremsstrahlung(), -1, 3, 3);
+  pmanager->AddProcess(new G4hPairProduction(), -1, 4, 4);
+
+  // pi-
+  particle = G4PionMinus::PionMinus();
+  pmanager = particle->GetProcessManager();    
+  pmanager->AddProcess(new G4hIonisation(),     -1, 2, 2);
+  pmanager->AddProcess(new G4hBremsstrahlung(), -1, 3, 3);
+  pmanager->AddProcess(new G4hPairProduction(), -1, 4, 4);
+
+  // proton
+  particle = G4Proton::Proton();
+  pmanager = particle->GetProcessManager();    
+  pmanager->AddProcess(new G4hIonisation(),     -1, 2, 2);
+  pmanager->AddProcess(new G4hBremsstrahlung(), -1, 3, 3);
+  pmanager->AddProcess(new G4hPairProduction(), -1, 4, 4);
+
   //extend binning of PhysicsTables
   //
-  G4LossTableManager::Instance()->SetMaxEnergy(1000.0*PeV);
-  G4LossTableManager::Instance()->SetDEDXBinning(220);
-  G4LossTableManager::Instance()->SetLambdaBinning(220);
-  G4LossTableManager::Instance()->SetVerbose(0);
+  G4LossTableManager::Instance()->SetMinEnergy(100*eV);  
+  G4LossTableManager::Instance()->SetMaxEnergy(1000*PeV);
+  G4LossTableManager::Instance()->SetDEDXBinning(160);
+  G4LossTableManager::Instance()->SetLambdaBinning(160);
+  G4LossTableManager::Instance()->SetSplineFlag(true);  
+  G4LossTableManager::Instance()->SetVerbose(1);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

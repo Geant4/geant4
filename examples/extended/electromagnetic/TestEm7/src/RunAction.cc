@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RunAction.cc,v 1.20 2007/06/12 14:01:13 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: RunAction.cc,v 1.24 2008/08/22 18:30:27 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -41,30 +41,21 @@
 #include "G4ios.hh"
 
 #include "Randomize.hh"
-
-#ifdef G4ANALYSIS_USE
-#include "AIDA/AIDA.h"
-#endif
+#include "Histo.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 RunAction::RunAction(DetectorConstruction* det, PhysicsList* phys,
                      PrimaryGeneratorAction* kin)
-:detector(det), physics(phys), kinematic(kin), af(0), tree(0)
+:detector(det), physics(phys), kinematic(kin)
 { 
   tallyEdep = new G4double[MaxTally];
   binLength = offsetX = 0.;
-  histo[0] = 0;
-  
-#ifdef G4ANALYSIS_USE
-  // Creating the analysis factory
-  af = AIDA_createAnalysisFactory();
-  if(!af) {
-    G4cout << "RunAction::RunAction() :" 
-	   << " problem creating the AIDA analysis factory."
-	   << G4endl;
-  } 	   
-#endif  
+  histo = new Histo();
+  histo->setFileName("testem7");
+  histo->add1D("1","Edep (MeV/mm) along absorber (mm)", 100, 0, 100);
+  histo->add1D("2","Edep (MeV/mm) along absorber zoomed (mm)", 100, 0, 100);
+  histo->add1D("3","Projectile range (mm)", 100, 0, 100);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -72,74 +63,14 @@ RunAction::RunAction(DetectorConstruction* det, PhysicsList* phys,
 RunAction::~RunAction()
 {
   delete [] tallyEdep;
-  
-#ifdef G4ANALYSIS_USE
-  delete af;  
-#endif      
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void RunAction::bookHisto()
-{
-  length  = detector->GetAbsorSizeX();
-  G4double stepMax = physics->GetStepMaxProcess()->GetMaxStep();
-  const G4int nbmin = 100;
-  G4int nbBins = (int)(0.5 + length/stepMax);
-  if (nbBins < nbmin) nbBins = nbmin;
-  binLength = length/nbBins;
-  offsetX   = 0.5*length;
- 
-#ifdef G4ANALYSIS_USE
-  if (!af) return;
-
-  // Create a tree mapped to an hbook file.
-  G4bool readOnly  = false;
-  G4bool createNew = true;
-  G4String options = "--noErrors uncompress";
-  AIDA::ITreeFactory* tf  = af->createTreeFactory();  
-  tree = tf->create("testem7.hbook","hbook", readOnly, createNew, options);
-  //tree = tf->create("testem7.root", "root",readOnly, createNew, options);
-  //tree = tf->create("testem7.XML" , "XML" ,readOnly, createNew, options);
-  delete tf;
-  if (!tree) {
-    G4cout << "RunAction::bookHisto()" << G4endl;
-    return;
-  }
-
-  // Create a histogram factory, whose histograms will be handled by the tree
-  AIDA::IHistogramFactory* hf = af->createHistogramFactory(*tree);
-  
-  // Create histogram
-  histo[0] = hf->createHistogram1D("1","Edep (MeV/mm) along absorber (mm)",
-             nbBins, 0, length/mm);
-	     
-  delete hf;	     
-  G4cout << "\n----> Histogram Tree opened" << G4endl;
-#endif
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void RunAction::cleanHisto()
-{
-#ifdef G4ANALYSIS_USE
-  tree->commit();       // Writing the histograms to the file
-  tree->close();        // and closing the tree (and the file)
-  delete tree;
-  tree = 0;
-  
-  G4cout << "\n----> Histogram Tree saved" << G4endl;  
-#endif
+  delete histo;  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void RunAction::FillHisto(G4int ih, G4double x, G4double weight)
 {
-#ifdef G4ANALYSIS_USE
-  if(histo[ih]) histo[ih]->fill(x, weight);
-#endif
+  histo->fill(ih, x, weight);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -155,10 +86,26 @@ void RunAction::BeginOfRunAction(const G4Run* aRun)
   //initialize projected range, tallies, Ebeam, and book histograms
   //
   nPrimarySteps = 0;
+  nRange = 0;
   projRange = projRange2 = 0.;
+  edeptot = eniel = 0.;
   for (G4int j=0; j<MaxTally; j++) tallyEdep[j] = 0.;
   kinematic->ResetEbeamCumul();
-  bookHisto();      
+
+  // define "1" histogram binning
+  length  = detector->GetAbsorSizeX();
+  G4double stepMax = physics->GetStepMaxProcess()->GetMaxStep();
+  const G4int nbmin = 100;
+  G4int nbBins = (G4int)(0.5 + length/stepMax);
+  if (nbBins < nbmin) nbBins = nbmin;
+  binLength = length/nbBins;
+  offsetX   = 0.5*length;
+   
+  // histogram "1" is defined by the length of the target
+  // zoomed histograms are defined by UI command
+  histo->setHisto1D(0, nbBins, 0, length, mm);
+ 
+  histo->book();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -184,17 +131,29 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
 	 
   //compute projected range and straggling
   //
-  projRange /= NbofEvents; projRange2 /= NbofEvents;
+  if(nRange > 0) {
+    projRange /= nRange; 
+    projRange2 /= nRange;
+  }
   G4double rms = projRange2 - projRange*projRange;        
   if (rms>0.) rms = std::sqrt(rms); else rms = 0.;
 
   G4double nstep = G4double(nPrimarySteps)/G4double(NbofEvents);
 
   G4cout.precision(6);       
-  G4cout << "\n projected Range= "<< G4BestUnit(projRange,"Length")
+  G4cout << "\n Projected Range= "<< G4BestUnit(projRange,"Length")
          << "   rms= "            << G4BestUnit( rms,"Length")
          << G4endl;
-  G4cout << " mean number of primary steps = "<< nstep << G4endl;
+  G4cout << " Mean number of primary steps = "<< nstep << G4endl;
+
+  //compute energy deposition and NIEL
+  //
+  edeptot /= NbofEvents; 
+  G4cout << " Total energy deposit= "<< G4BestUnit(edeptot,"Energy")
+         << G4endl;
+  eniel /= NbofEvents; 
+  G4cout << " NIEL energy deposit = "<< G4BestUnit(eniel,"Energy")
+         << G4endl;
      
   //print dose in tallies
   //
@@ -216,15 +175,12 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
     G4cout << G4endl; 
   }
 
-#ifdef G4ANALYSIS_USE
   // normalize histogram
   G4double fac = (mm/MeV)/(NbofEvents *  binLength);
-  histo[0]->scale(fac);
-#endif
-  
+  for (G4int j=0; j<3; j++) {histo->scale(j, fac);}
  
   // save and clean histo
-  cleanHisto();
+  histo->save();
  
   // show Rndm status
   CLHEP::HepRandom::showEngineStatus();

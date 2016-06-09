@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: F02FieldMessenger.cc,v 1.6 2006/06/29 17:18:08 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: F02FieldMessenger.cc,v 1.8 2008/05/14 15:27:13 tnikitin Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // 
 
@@ -35,6 +35,7 @@
 #include "G4UIdirectory.hh"
 #include "G4UIcmdWithAString.hh"
 #include "G4UIcmdWithAnInteger.hh"
+#include "G4UIcmdWithADouble.hh"
 #include "G4UIcmdWithADoubleAndUnit.hh"
 #include "G4UIcmdWithoutParameter.hh"
 
@@ -59,16 +60,16 @@ F02FieldMessenger::F02FieldMessenger(F02ElectricFieldSetup* pEMfield)
   UpdateCmd->SetGuidance("if you changed geometrical value(s).");
   UpdateCmd->AvailableForStates(G4State_Idle);
       
-  MagFieldCmd = new G4UIcmdWithADoubleAndUnit("/field/setFieldZ",this);  
-  MagFieldCmd->SetGuidance("Define magnetic field.");
-  MagFieldCmd->SetGuidance("Magnetic field will be in Z direction.");
-  MagFieldCmd->SetParameterName("Bz",false,false);
-  MagFieldCmd->SetDefaultUnit("tesla");
-  MagFieldCmd->AvailableForStates(G4State_Idle); 
+  ElFieldCmd = new G4UIcmdWithADoubleAndUnit("/field/setFieldZ",this);  
+  ElFieldCmd->SetGuidance("Define uniform Electric field.");
+  ElFieldCmd->SetGuidance("Electric field will be in Z direction.");
+  ElFieldCmd->SetGuidance("Value of Electric field has to be given in volt/m");
+  ElFieldCmd->SetParameterName("Ez",false,false);
+  ElFieldCmd->SetDefaultUnit("volt/m");
+  ElFieldCmd->AvailableForStates(G4State_Idle); 
  
   MinStepCmd = new G4UIcmdWithADoubleAndUnit("/field/setMinStep",this);  
   MinStepCmd->SetGuidance("Define minimal step");
-  MinStepCmd->SetGuidance("Magnetic field will be in Z direction.");
   MinStepCmd->SetParameterName("min step",false,false);
   MinStepCmd->SetDefaultUnit("mm");
   MinStepCmd->AvailableForStates(G4State_Idle);  
@@ -87,7 +88,7 @@ F02FieldMessenger::F02FieldMessenger(F02ElectricFieldSetup* pEMfield)
 F02FieldMessenger::~F02FieldMessenger()
 {
   delete StepperCmd;
-  delete MagFieldCmd;
+  delete ElFieldCmd;
   delete MinStepCmd;
   delete F02detDir;
   delete UpdateCmd;
@@ -109,9 +110,9 @@ void F02FieldMessenger::SetNewValue( G4UIcommand* command, G4String newValue)
   { 
     fEFieldSetup->UpdateField(); 
   }
-  if( command == MagFieldCmd )
+  if( command == ElFieldCmd )
   { 
-    fEFieldSetup->SetFieldValue(MagFieldCmd->GetNewDoubleValue(newValue));
+    fEFieldSetup->SetFieldValue(ElFieldCmd->GetNewDoubleValue(newValue));
   }
   if( command == MinStepCmd )
   { 

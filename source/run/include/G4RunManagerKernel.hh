@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4RunManagerKernel.hh,v 1.9 2007/05/30 00:42:09 asaim Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // 
 

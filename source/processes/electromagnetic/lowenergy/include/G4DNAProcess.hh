@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4DNAProcess.hh,v 1.5 2007/11/09 16:20:04 pia Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // Author:  Maria Grazia Pia (Maria.Grazia.Pia@ge.infn.it)
 //

@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QDiscProcessMixer.cc,v 1.2 2007/08/31 09:36:57 mkossov Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4QDiscProcessMixer.cc,v 1.4 2008/10/02 21:10:07 dennis Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 //      ---------------- G4QDiscProcessMixer class -----------------
 //                 by Mikhail Kossov, Aug 2007.

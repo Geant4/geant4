@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CascadeInterface.hh,v 1.12 2007/05/23 12:25:54 miheikki Exp $
+// $Id: G4CascadeInterface.hh,v 1.13 2008/10/18 16:04:40 vnivanch Exp $
 // Defines an interface to Bertini (BERT) cascade
 // based on INUCL  intra-nuclear transport.models 
 // with bullet hadron energy ~< 10 GeV
@@ -43,10 +43,9 @@
 class G4CascadeInterface : public G4VIntraNuclearTransportModel {
 
 public:
-  G4CascadeInterface();
+  G4CascadeInterface(const G4String& name = "Bertini Cascade");
 
-  ~G4CascadeInterface(){
-  }
+  virtual ~G4CascadeInterface();
 
   G4ReactionProductVector* Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus);
 

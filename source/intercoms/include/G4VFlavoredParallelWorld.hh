@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4VFlavoredParallelWorld.hh,v 1.5 2006/11/03 17:44:40 mverderi Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // 
 // Abstract interface for GEANT4 Flavored Parallel World.

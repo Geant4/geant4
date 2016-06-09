@@ -25,8 +25,8 @@
 //
 //
 //
-// $Id: G4ElectroNuclearReaction.hh,v 1.23 2006/06/29 20:07:46 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4ElectroNuclearReaction.hh,v 1.25 2008/09/01 19:04:54 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 //
 // GEANT4 physics class: G4ElectroNuclearReaction -- header file
@@ -34,53 +34,66 @@
 // The last update: J.P. Wellisch, 06-June-02
 //
 #ifndef G4ElectroNuclearReaction_h
-#define G4ElectroNuclearReaction_h
+#define G4ElectroNuclearReaction_h 1
 
 #include "globals.hh"
 #include "G4HadronicInteraction.hh"
 #include "G4ChiralInvariantPhaseSpace.hh"
 #include "G4ElectroNuclearCrossSection.hh"
 #include "G4PhotoNuclearCrossSection.hh"
+#include "G4GammaParticipants.hh"
+#include "G4QGSModel.hh"
+#include "G4QGSMFragmentation.hh"
+#include "G4Nucleus.hh"
+#include "G4HadFinalState.hh"
+#include "G4HadProjectile.hh"
 #include "G4Electron.hh"
 #include "G4Positron.hh"
 #include "G4Gamma.hh"
-#include "G4GammaParticipants.hh"
-#include "G4QGSModel.hh"
 #include "G4TheoFSGenerator.hh"
 #include "G4GeneratorPrecompoundInterface.hh"
-#include "G4QGSMFragmentation.hh"
 #include "G4ExcitedStringDecay.hh"
-
+ 
 class G4ElectroNuclearReaction : public G4HadronicInteraction
 {
-  public: 
-    virtual ~G4ElectroNuclearReaction(){}
-    G4ElectroNuclearReaction()
-    {
-      SetMinEnergy(0*GeV);
-      SetMaxEnergy(30*TeV);
-      
-      theHEModel = new G4TheoFSGenerator;
-      theCascade = new G4GeneratorPrecompoundInterface;
-    }
-    
-    virtual G4HadFinalState* ApplyYourself(const G4HadProjectile& aTrack, 
-    G4Nucleus& aTargetNucleus);
+public: 
 
-  private:
-    G4ChiralInvariantPhaseSpace theLEModel;
-    G4TheoFSGenerator * theHEModel;
-    G4GeneratorPrecompoundInterface * theCascade;
-    G4QGSModel< G4GammaParticipants > theStringModel;
-    G4QGSMFragmentation theFragmentation;
-    G4ExcitedStringDecay * theStringDecay;
-    G4ElectroNuclearCrossSection theElectronData;
-    G4PhotoNuclearCrossSection thePhotonData;
-    G4HadFinalState theResult;
+  G4ElectroNuclearReaction():G4HadronicInteraction("CHIPS")
+  {
+    SetMinEnergy(0*GeV);
+    SetMaxEnergy(30*TeV);
+      
+    theHEModel = new G4TheoFSGenerator;
+    theCascade = new G4GeneratorPrecompoundInterface;
+    theHEModel->SetTransport(theCascade);
+    theHEModel->SetHighEnergyGenerator(&theStringModel);
+    theStringDecay = new G4ExcitedStringDecay(&theFragmentation);
+    theStringModel.SetFragmentationModel(theStringDecay);
+    theHEModel->SetMinEnergy(2.5*GeV);
+    theHEModel->SetMaxEnergy(100*TeV);
+  }
+
+  virtual ~G4ElectroNuclearReaction() {};
+    
+  G4HadFinalState* ApplyYourself(const G4HadProjectile& aTrack, 
+				 G4Nucleus& aTargetNucleus);
+
+private:
+
+  G4ChiralInvariantPhaseSpace theLEModel;
+  G4TheoFSGenerator * theHEModel;
+  G4GeneratorPrecompoundInterface * theCascade;
+  G4QGSModel< G4GammaParticipants > theStringModel;
+  G4QGSMFragmentation theFragmentation;
+  G4ExcitedStringDecay * theStringDecay;
+  G4ElectroNuclearCrossSection theElectronData;
+  G4PhotoNuclearCrossSection thePhotonData;
+  G4HadFinalState theResult;
 };
 
-inline G4HadFinalState* G4ElectroNuclearReaction::
-ApplyYourself(const G4HadProjectile& aTrack, G4Nucleus& aTargetNucleus)
+inline   
+G4HadFinalState* G4ElectroNuclearReaction::ApplyYourself(const G4HadProjectile& aTrack, 
+							 G4Nucleus& aTargetNucleus)
 {
   theResult.Clear();
   static const G4double dM=G4Proton::Proton()->GetPDGMass()+G4Neutron::Neutron()->GetPDGMass(); // Mean double nucleon mass = m_n+m_p (@@ no binding)
@@ -197,13 +210,6 @@ ApplyYourself(const G4HadProjectile& aTrack, G4Nucleus& aTargetNucleus)
   else 
   {
     // G4cout << "0) Getting a high energy electro-nuclear reaction"<<G4endl;
-    theHEModel->SetTransport(theCascade);
-    theHEModel->SetHighEnergyGenerator(&theStringModel);
-    theStringDecay = new G4ExcitedStringDecay(&theFragmentation);
-    theStringModel.SetFragmentationModel(theStringDecay);
-    theHEModel->SetMinEnergy(2.5*GeV);
-    theHEModel->SetMaxEnergy(100*TeV);
-
     G4HadFinalState * aResult = theHEModel->ApplyYourself(localTrack, aTargetNucleus);
     for(G4int all = 0; all < aResult->GetNumberOfSecondaries(); all++)
     {

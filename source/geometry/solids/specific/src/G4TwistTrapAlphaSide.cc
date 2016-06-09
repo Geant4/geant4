@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4TwistTrapAlphaSide.cc,v 1.8 2007/05/23 13:26:06 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // 
 // --------------------------------------------------------------------

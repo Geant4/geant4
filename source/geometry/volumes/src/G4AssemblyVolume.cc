@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4AssemblyVolume.cc,v 1.10 2006/06/29 18:57:50 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4AssemblyVolume.cc,v 1.11 2008/02/03 09:12:50 ivana Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // 
 // Class G4AssemblyVolume - implementation
@@ -77,11 +77,6 @@ G4AssemblyVolume::~G4AssemblyVolume()
   {
     for( unsigned int j = 0; j < howmany; j++ )
     {
-      G4RotationMatrix* pRotToClean = fPVStore[j]->GetRotation();
-      if( pRotToClean != 0 )
-      {
-        delete pRotToClean;
-      }
       delete fPVStore[j];
     }
   }

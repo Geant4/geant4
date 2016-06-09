@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Scintillation.hh,v 1.13 2006/06/29 19:55:39 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4Scintillation.hh,v 1.15 2008/06/13 01:04:49 gum Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // 
 ////////////////////////////////////////////////////////////////////////
@@ -70,6 +70,8 @@
 #include "G4PhysicsTable.hh"
 #include "G4MaterialPropertiesTable.hh"
 #include "G4PhysicsOrderedFreeVector.hh"
+
+#include "G4EmSaturation.hh"
 
 // Class Description:
 // RestDiscrete Process - Generation of Scintillation Photons.
@@ -169,10 +171,16 @@ public: // With description
         G4PhysicsTable* GetSlowIntegralTable() const;
         // Returns the address of the slow scintillation integral table.
 
+        void AddSaturation(G4EmSaturation* sat) { emSaturation = sat; }
+        // Adds Birks Saturation to the process.
+
+        G4EmSaturation* GetSaturation() const { return emSaturation; }
+        // Returns the Birks Saturation.
+
         void DumpPhysicsTable() const;
         // Prints the fast and slow scintillation integral tables.
 
-private:
+protected:
 
         void BuildThePhysicsTable();
         // It builds either the fast or slow scintillation integral table; 
@@ -182,18 +190,21 @@ private:
         // Class Data Members
         ///////////////////////
 
-protected:
 
         G4PhysicsTable* theSlowIntegralTable;
         G4PhysicsTable* theFastIntegralTable;
 
-private:
+
 
 	G4bool fTrackSecondariesFirst;
 
         G4double YieldFactor;
 
         G4double ExcitationRatio;
+
+private:
+
+        G4EmSaturation* emSaturation;
 
 };
 

@@ -4,9 +4,7 @@
 #
 # ==================================================================
 from Geant4 import *
-from Geant4.G4gdml import *
-
-import ExN01pl, ParticleGun
+import g4py.ExN01pl, g4py.ParticleGun
 
 # ==================================================================
 # user actions in python
@@ -17,24 +15,16 @@ class MyDetectorConstruction(G4VUserDetectorConstruction):
   def __init__(self):
     G4VUserDetectorConstruction.__init__(self)
     self.world= None
-    self.sxp= SAXProcessor()
-    self.config= ProcessingConfigurator()
+    self.gdml_parser= G4GDMLParser()
 
   # -----------------------------------------------------------------
   def __del__(self):
-    self.sxp.Finalize()
+    pass
     
   # -----------------------------------------------------------------
   def Construct(self):
-    self.sxp.Initialize()
-
-    self.config.SetURI("qgeom.gdml")
-    self.config.SetSetupName("Default")
-
-    self.sxp.Configure(self.config)
-    self.sxp.Run()
-
-    self.world= GDMLProcessor.GetInstance().GetWorldVolume()
+    self.gdml_parser.Read("qgeom.gdml")
+    self.world= self.gdml_parser.GetWorldVolume()
 
     return self.world
 
@@ -47,10 +37,10 @@ myDC= MyDetectorConstruction()
 gRunManager.SetUserInitialization(myDC)
 
 # minimal physics list
-ExN01pl.Construct()
+g4py.ExN01pl.Construct()
 
 # set primary generator action
-ParticleGun.Construct()
+g4py.ParticleGun.Construct()
 
 # initialize
 gRunManager.Initialize()

@@ -1,4 +1,4 @@
-$Id: History,v 1.103 2007/11/16 20:34:17 perl Exp $
+$Id: History,v 1.112 2008/11/21 21:51:14 perl Exp $
 
 -------------------------------------------------------------------
 
@@ -25,6 +25,33 @@ committal in the CVS repository !
 
 History file for visualization management sub-category
 ------------------------------------------------------
+
+27th July 2008  John Allison (visman-V09-01-05)
+- G4VisCommands.cc: Trap recursive use of /vis/reviewKeptEvents.
+
+30th April 2008  John Allison  (visman-V09-01-04)
+- Fixes more gcc-4.3.0 compiler warnings.
+
+28th April 2008  John Allison  (visman-V09-01-03)
+- G4VisCommandsScene.cc: Improve warning message.
+- G4ViewParameters.hh: Improve commenting for Software Ref. Man.
+
+4th April 2008  John Allison  (visman-V09-01-02)
+ - Fixed gcc-4.3.0 compiler warnings.
+
+5th February 2008, Laurent Garnier
+ - Implemented a function in order to IncrementPan with X,Y,Z values 
+
+29th January 2008  John Allison  (visman-V09-01-01)
+ - G4VisExecutive.icc: Re-instated G4DAWNFILE (somehow got lost!!)
+
+4th January 2008  John Allison  (visman-V09-01-00)
+- Implemented extended 2D interface.
+
+30th November 2007  Laurent Garnier
+- G4VisExecutive.icc : Add a #ifdef G4VIS_USE_DAWN directive in order
+ not to add a 'new G4DAWNFILE' if G4VIS_USE_DAWN is not set
+#endif
 
 16th November 2007  Joseph Perl  (visman-V09-00-02)
 - G4VisCommandsCompound.cc: Replace references to Wired3.

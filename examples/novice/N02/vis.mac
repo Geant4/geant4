@@ -12,6 +12,9 @@
 #
 /vis/open OGLIX 600x600-0+0
 #
+####/vis/open OGLSXm
+####/vis/open HepRepXML
+#
 ####/vis/open DAWNFILE
 #
 # draw scene

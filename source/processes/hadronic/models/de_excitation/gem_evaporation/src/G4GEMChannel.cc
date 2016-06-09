@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4GEMChannel.cc,v 1.5 2006/06/29 20:22:07 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4GEMChannel.cc,v 1.6 2008/11/18 18:26:30 ahoward Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Oct 1998)
@@ -122,8 +122,10 @@ void G4GEMChannel::Initialize(const G4Fragment & fragment)
     ZResidual = aZ - Z;
     
     // Effective excitation energy
+    //    G4double ExEnergy = fragment.GetExcitationEnergy() -
+    //      G4PairingCorrection::GetInstance()->GetPairingCorrection(anA,aZ);
     G4double ExEnergy = fragment.GetExcitationEnergy() -
-      G4PairingCorrection::GetInstance()->GetPairingCorrection(anA,aZ);
+      G4PairingCorrection::GetInstance()->GetPairingCorrection(AResidual,ZResidual);
     
     // We only take into account channels which are physically allowed
     if (AResidual <= 0 || ZResidual <= 0 || AResidual < ZResidual ||

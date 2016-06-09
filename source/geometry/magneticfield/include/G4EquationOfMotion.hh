@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4EquationOfMotion.hh,v 1.10 2006/06/29 18:22:05 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 //
 // class G4EquationOfMotion

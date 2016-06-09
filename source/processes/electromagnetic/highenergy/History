@@ -1,4 +1,4 @@
-$Id: History,v 1.22 2007/11/13 18:36:29 vnivanch Exp $
+$Id: History,v 1.30 2008/10/16 14:29:48 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,32 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+16 October 08: V.Ivanchenko (emhighenergy-V09-01-06)
+- Updated processes enumeration and printout
+
+21 July 08:  V.Ivanchenko (emhighenergy-V09-01-05)
+- G4hBremsstrahlungModel, G4hPairProductionModel - do not use A in
+                          the CrossSectionPerAtom
+
+10 July 08:  V.Ivanchenko (emhighenergy-V09-01-04)
+- G4eeCrossSections - migrated to PDG 2006
+- G4eeToHadronsMultiModel - added main reaction channels for omega and 
+                            phi resonances
+- New models: G4eeTo3PiModel, G4eeToPGammaModel, G4ee2KChargedModel, 
+  G4ee2KNeutralModel
+
+8 July 08:  V.Ivanchenko (emhighenergy-V09-01-03)
+- G4GammaConversionToMuons - all exit() substituted by warnings 
+
+4 April 08:  V.Ivanchenko (emhighenergy-V09-01-02)
+- G4hBremsstrahlungModel - remove static const
+
+14 March 08:  V.Ivanchenko (emhighenergy-V09-01-01)
+06 March 08:  V.Ivanchenko (emhighenergy-V09-01-00)
+- G4hBremsstrahlungModel, G4hBremsstrahlung, G4hPairProductionModel,
+  G4hPairProduction are added
+- SubType for all processes is initialized
 
 13 November 07:  V.Ivanchenko (emhighenergy-V09-00-01)
 - G4mplIonisationModel - introduced theoretical asymtotic low-energy 

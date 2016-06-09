@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ShortLivedTable.cc,v 1.14 2006/06/29 19:26:16 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4ShortLivedTable.cc,v 1.16 2008/06/08 12:55:45 kurasige Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // 
 // --------------------------------------------------------------
@@ -88,11 +88,12 @@ void G4ShortLivedTable::Remove(G4ParticleDefinition* particle)
     for (idx = fShortLivedList->begin(); idx!= fShortLivedList->end(); ++idx) {
       if ( particle == *idx) {
         fShortLivedList->erase(idx);
+        break;
       }
     }
   } else {
 #ifdef G4VERBOSE
-    if (GetVerboseLevel()>0) {
+    if (GetVerboseLevel()>1) {
       G4cout << "G4ShortLivedTable::Remove :" << particle->GetParticleName() ;
       G4cout << " is not short lived" << G4endl; 
     }

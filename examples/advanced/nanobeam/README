@@ -1,0 +1,176 @@
+-------------------------------------------------------------------
+$Id: README,v 1.8 2008/06/02 10:00:40 sincerti Exp $
+-------------------------------------------------------------------
+
+     =========================================================
+ 		  Geant4 - Nanobeam example
+     =========================================================
+
+                                README file
+                          ----------------------
+
+                           CORRESPONDING AUTHOR 
+
+S. Incerti (a, *) et al.
+a. Centre d'Etudes Nucleaires de Bordeaux-Gradignan 
+(CENBG), IN2P3 / CNRS / Bordeaux 1 University, 33175 Gradignan, France
+* e-mail:incerti@cenbg.in2p3.fr
+
+Last modified by S. Incerti, 10/04/2008
+
+---->1. INTRODUCTION.                                                    
+                                                                       
+The nanobeam example simulates the beam optics of the nanobeam line installed 
+on the AIFIRA electrostatic accelerator facility located at CENBG, 
+Bordeaux-Gradignan, France. For more information on this facility, 
+please visit :
+http://www.cenbg.in2p3.fr/
+
+The code can be used to calculate : 
+1) intrinsic aberration coefficients of the nanobeam line
+2) beam image from a relasitic primary emittance distribution
+3) grid shadow images
+
+Three quadrupole field models can be used :
+- a simple square field model
+- a 3D mesh field model computed from OPERA3D
+- an analytical model based on Enge's model
+
+---->2. GEOMETRY SET-UP.
+ 
+The full magnetic configuration of the nanobeam line is simulated.
+This configuration is made of a combination of a doublet and triplet of 
+5 Oxford Microbeams Ltd. OM50 quadrupoles. 
+
+More details on the experimental setup and its simulation with Geant4 can 
+be found in the following papers, which may be found on the SLAC-SPIRES
+online database (http://www.slac.stanford.edu/spires/) :
+
+- A DETAILED RAY-TRACING SIMULATION OF THE HIGH RESOLUTION MICROBEAM AT THE
+AIFIRA FACILITY
+F. Andersson, Ph. Barberet, S. Incerti, Ph. Moretto (CENBG, Gradignan) . Dec 2007.
+In press in Nucl.Instrum.Meth.B266:1653-1658, 2008
+
+- MONTE CARLO SIMULATION OF THE CENBG MICROBEAM AND NANOBEAM LINES WITH THE
+GEANT4 TOOLKIT
+By S. Incerti, Q. Zhang, F. Andersson, Ph. Moretto, G.W. Grime, 
+M.J. Merchant, D.T. Nguyen, C. Habchi, T. Pouthier and H. Seznec
+In press in Nucl.Instrum.Meth.B260:20-27, 2007
+
+- GEANT4 SIMULATION OF THE NEW CENBG MICRO AND NANO PROBES FACILITY
+By S. Incerti, C. Habchi, Ph. Moretto, J. Olivier and H. Seznec. May 2006. 5pp.
+Published in Nucl.Instrum.Meth.B249:738-742, 2006
+
+- A COMPARISON OF RAY-TRACING SOFTWARE FOR THE DESIGN OF QUADRUPOLE MICROBEAM 
+SYSTEMS
+By S. Incerti et al., 
+Published in Nucl.Instrum.Meth.B231:76-85, 2005
+
+---->3. SET-UP 
+                                                                        
+- a standard Geant4 example GNUmakefile is provided                     
+
+setup with:                                                             
+compiler = gcc-3.4.6
+G4SYSTEM = linux-g++                                                    
+
+The following section gives the necessary environment variables.                     
+
+------->>3.1  ENVIRONMENT VARIABLES
+
+All variables are defined with their default value.
+
+ - G4SYSTEM = Linux-g++
+
+ - G4INSTALL              points to the installation directory of GEANT4;
+
+ - G4LIB                  point to the compiled libraries of GEANT4;
+
+ - G4WORKDIR              points to the work directory;
+
+ - CLHEP_BASE_DIR         points to the installation directory of CHLEP; 
+
+ - G4LEDATA               points to the low energy electromagnetic libraries;
+
+ - LD_LIBRARY_PATH = $CLHEP_BASE_DIR/lib
+
+ - G4LEVELGAMMADATA       points to the photoevaporation library;
+
+ - G4NEUTRONHPDATA	  points to the neutron data files;
+
+ - G4RADIOACTIVEDATA      points to the libraries for radio-active decay 
+                          hadronic processes;
+ 
+ - G4ABLADATA		  points to the libraries fo ablation processes;
+
+However, the 
+$G4LEDATA, 
+$G4LEVELGAMMADATA, 
+$G4NEUTRONHPDATA, 
+$G4RADIOACTIVEDATA
+and $G4ABLADATA
+variables do not need to be defined for this example.
+
+Once these variables have been set, simply type gmake to compile the Nanobeam
+example. 
+
+------->>3.2  VISUALIZATION
+
+Visualization has not been implemented. 
+All results are stored in text files and can be displayed with the provided
+ROOT macro file plot.C. 
+
+This macro file shows :
+- the beam profile along the nanobeam line (only for the computation of intrinsic 
+  coefficients)
+- the beam image (Y vs X) on target
+- the beam emittance (THETA vs X) and (PHY vs Y) on target
+- the grid shadow image 
+
+---->4. HOW TO RUN THE EXAMPLE                                         
+
+The code can be run with :
+
+> $G4WORDIR/bin/$G4SYSTEM/Nanobeam 
+
+The macro file default.mac is read by default.
+
+It can be one of the following macro files :
+
+1) for the computation of intrinsic aberration coefficients :
+coef-square.mac : using square magnetic field model (=default.mac)
+coef-map.mac : using 3D map magnetic field model
+coef-enge.mac : using Enge's analytical field model
+
+2) for the simulation of the beam image with a realistic emittance :
+image-square.mac : using square magnetic field model
+image-map.mac : using 3D map magnetic field model
+image-enge.mac : using Enge's analytical field model
+
+3) for the simulation of grid shadow images
+grid-square.mac : using square magnetic field model
+grid-map.mac : using 3D map magnetic field model
+grid-enge.mac : using Enge's analytical field model
+
+These macros files are stored in the ./macros directory.
+
+---->5. PHYSICS
+
+The example runs with protons with fluctuationg energies around 3 MeV.
+Standard electromagnetic processes are activated by default. 
+
+---->6. SIMULATION OUTPUT AND RESULT ANALYZIS                                    
+
+The output results consists in several .txt files. 
+
+These files can be easily analyzed using for example the provided ROOT macro 
+file plot.C; to do so :
+* be sure to have ROOT installed on your machine
+* be sure to be in the nanobeam directory
+* launch ROOT by typing root
+* under your ROOT session, type in : .X plot.C to execute the macro file
+
+---------------------------------------------------------------------------
+
+Should you have any enquiry, please do not hesitate to contact: 
+incerti@cenbg.in2p3.fr

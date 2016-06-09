@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.9 2007/06/22 12:44:42 maire Exp $
+# $Id: GNUmakefile,v 1.11 2008/09/21 16:03:10 vnivanch Exp $
 # --------------------------------------------------------------
 # GNUmakefile for examples module.  Gabriele Cosmo, 06/04/98.
 # --------------------------------------------------------------
@@ -16,17 +16,7 @@ all: lib bin
 
 #### G4ANALYSIS_USE := true
 
-ifdef G4ANALYSIS_USE
-  CPPFLAGS += -DG4ANALYSIS_USE
-endif
-
 include $(G4INSTALL)/config/architecture.gmk
-
-ifdef G4ANALYSIS_USE
-  # for the aida-config command see the README file
-  CPPFLAGS += `aida-config --include`
-  LOADLIBS += `aida-config --lib`
-endif
 
 include $(G4INSTALL)/config/binmake.gmk
 
@@ -35,4 +25,4 @@ visclean:
 	rm -f .DAWN_*
 
 histclean:
-	rm ${G4WORKDIR}/tmp/${G4SYSTEM}/${G4TARGET}/RunAction.o
+	rm ${G4WORKDIR}/tmp/${G4SYSTEM}/${G4TARGET}/Histo.o

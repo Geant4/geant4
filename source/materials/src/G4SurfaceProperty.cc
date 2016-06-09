@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4SurfaceProperty.cc,v 1.1 2007/04/25 16:19:26 gum Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4SurfaceProperty.cc,v 1.5 2008/12/11 10:23:54 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // 
 ////////////////////////////////////////////////////////////////////////
@@ -51,6 +51,29 @@
 G4SurfacePropertyTable G4SurfaceProperty::theSurfacePropertyTable;
 
 //
+// Constructor and destructor
+//
+G4SurfaceProperty::G4SurfaceProperty( const G4String& name,
+			                    G4SurfaceType type )
+  : theName(name), theType(type)
+{
+  theSurfacePropertyTable.push_back(this);
+}
+
+//
+// Dummy constructor
+//
+G4SurfaceProperty::G4SurfaceProperty()
+  : theName("Dielectric"), theType(dielectric_metal)
+{
+  theSurfacePropertyTable.push_back(this);
+}
+
+G4SurfaceProperty::~G4SurfaceProperty()
+{
+}
+
+//
 // Methods
 //
 
@@ -66,7 +89,7 @@ size_t G4SurfaceProperty::GetNumberOfSurfaceProperties()
 
 // Dump info for known surface properties
 //
-void G4SurfaceProperty::DumpInfo()
+void G4SurfaceProperty::DumpTableInfo()
 {
   G4cout << "***** Surface Property Table : Nb of Surface Properties = "
          << GetNumberOfSurfaceProperties() << " *****" << G4endl;
@@ -84,7 +107,7 @@ void G4SurfaceProperty::DumpInfo()
 
 void G4SurfaceProperty::CleanSurfacePropertyTable()
 {
-  DumpInfo();
+  DumpTableInfo();
   G4SurfacePropertyTable::iterator pos;
   for(pos=theSurfacePropertyTable.begin();
       pos!=theSurfacePropertyTable.end(); pos++)
@@ -92,5 +115,5 @@ void G4SurfaceProperty::CleanSurfacePropertyTable()
     if (*pos) delete *pos;
   }
   theSurfacePropertyTable.clear();
-  DumpInfo();
+  DumpTableInfo();
 }

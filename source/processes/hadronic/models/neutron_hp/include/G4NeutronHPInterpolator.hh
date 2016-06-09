@@ -24,8 +24,11 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPInterpolator.hh,v 1.19 2006/06/29 20:48:13 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4NeutronHPInterpolator.hh,v 1.20 2008/08/12 00:42:31 tkoi Exp $
+// GEANT4 tag $Name: geant4-09-02 $
+//
+// 080809 Change interpolation scheme of "histogram", now using LinearLinear
+//        For multidimensional interpolations By T. Koi
 //
 #ifndef G4NeutronHPInterpolator_h
 #define G4NeutronHPInterpolator_h 1
@@ -90,7 +93,9 @@ Interpolate(G4InterpolationScheme aScheme,
   switch(theScheme)
   {
     case 1:
-      result = Histogram(x, x1, x2, y1, y2);
+      //080809
+      //result = Histogram(x, x1, x2, y1, y2);
+      result = LinearLinear(x, x1, x2, y1, y2);
       break;
     case 2:
       result = LinearLinear(x, x1, x2, y1, y2);

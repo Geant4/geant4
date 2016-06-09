@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ExtrudedSolid.cc,v 1.7 2007/05/02 14:59:31 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4ExtrudedSolid.cc,v 1.18 2008/10/30 11:47:45 ivana Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 //
 // --------------------------------------------------------------------
@@ -61,33 +61,35 @@ G4ExtrudedSolid::G4ExtrudedSolid( const G4String& pName,
 {
   // General constructor 
 
+  G4String errorDescription = "InvalidSetup in \"";
+  errorDescription += pName;
+  errorDescription += "\"";
+
   // First check input parameters
 
-  if ( fNv < 3 ) {
-    G4Exception(
-      "G4ExtrudedSolid::G4ExtrudedSolid()", "InvalidSetup",
-      FatalException, "Number of polygon vertices < 3");
+  if ( fNv < 3 )
+  {
+    G4Exception("G4ExtrudedSolid::G4ExtrudedSolid()", errorDescription,
+                FatalException, "Number of polygon vertices < 3");
   }
      
-  if ( fNz < 2 ) {
-    G4Exception(
-      "G4ExtrudedSolid::G4ExtrudedSolid()", "InvalidSetup",
-      FatalException, "Number of z-sides < 2");
+  if ( fNz < 2 )
+  {
+    G4Exception("G4ExtrudedSolid::G4ExtrudedSolid()", errorDescription,
+                FatalException, "Number of z-sides < 2");
   }
      
   for ( G4int i=0; i<fNz-1; ++i ) 
   {
     if ( zsections[i].fZ > zsections[i+1].fZ ) 
     {
-      G4Exception(
-        "G4ExtrudedSolid::G4ExtrudedSolid()", "InvalidSetup",
+      G4Exception("G4ExtrudedSolid::G4ExtrudedSolid()", errorDescription,
         FatalException, 
         "Z-sections have to be ordered by z value (z0 < z1 < z2 ...)");
     }
-    if ( std::fabs( zsections[i+1].fZ - zsections[i].fZ ) < kCarTolerance ) 
+    if ( std::fabs( zsections[i+1].fZ - zsections[i].fZ ) < kCarTolerance * 0.5 ) 
     {
-      G4Exception(
-        "G4ExtrudedSolid::G4ExtrudedSolid()", "InvalidSetup",
+      G4Exception("G4ExtrudedSolid::G4ExtrudedSolid()", errorDescription,
         FatalException, 
         "Z-sections with the same z position are not supported.");
     }
@@ -105,7 +107,7 @@ G4ExtrudedSolid::G4ExtrudedSolid( const G4String& pName,
   G4bool result = MakeFacets();
   if (!result)
   {   
-    G4Exception("G4ExtrudedSolid::G4ExtrudedSolid()", "InvalidSetup",
+    G4Exception("G4ExtrudedSolid::G4ExtrudedSolid()", errorDescription,
                 FatalException, "Making facets failed.");
   }
   fIsConvex = IsConvex();
@@ -133,11 +135,15 @@ G4ExtrudedSolid::G4ExtrudedSolid( const G4String& pName,
 {
   // Special constructor for solid with 2 z-sections
 
+  G4String errorDescription = "InvalidSetup in \"";
+  errorDescription += pName;
+  errorDescription += "\"";
+
   // First check input parameters
   //
   if ( fNv < 3 )
   {
-    G4Exception("G4ExtrudedSolid::G4ExtrudedSolid()", "InvalidSetup",
+    G4Exception("G4ExtrudedSolid::G4ExtrudedSolid()", errorDescription,
                 FatalException, "Number of polygon vertices < 3");
   }
      
@@ -153,7 +159,7 @@ G4ExtrudedSolid::G4ExtrudedSolid( const G4String& pName,
   G4bool result = MakeFacets();
   if (!result)
   {   
-    G4Exception("G4ExtrudedSolid::G4ExtrudedSolid()", "InvalidSetup",
+    G4Exception("G4ExtrudedSolid::G4ExtrudedSolid()", errorDescription,
                 FatalException, "Making facets failed.");
   }
   fIsConvex = IsConvex();
@@ -264,11 +270,31 @@ G4bool G4ExtrudedSolid::IsSameLine(G4TwoVector p,
 
   if ( l1.x() == l2.x() )
   {
-    return std::fabs(p.x() - l1.x()) < kCarTolerance; 
+    return std::fabs(p.x() - l1.x()) < kCarTolerance * 0.5; 
   }
+
   return std::fabs (p.y() - l1.y() - ((l2.y() - l1.y())/(l2.x() - l1.x()))
-                                    *(p.x() - l1.x())) < kCarTolerance;
+                                    *(p.x() - l1.x())) < kCarTolerance * 0.5;
  }
+
+//_____________________________________________________________________________
+
+G4bool G4ExtrudedSolid::IsSameLineSegment(G4TwoVector p,  
+                                   G4TwoVector l1, G4TwoVector l2) const
+{
+  // Return true if p is on the line through l1, l2 and lies between
+  // l1 and l2 
+
+  if ( p.x() < std::min(l1.x(), l2.x()) - kCarTolerance * 0.5 || 
+       p.x() > std::max(l1.x(), l2.x()) + kCarTolerance * 0.5 ||
+       p.y() < std::min(l1.y(), l2.y()) - kCarTolerance * 0.5 || 
+       p.y() > std::max(l1.y(), l2.y()) + kCarTolerance * 0.5 )
+  {
+    return false;
+  }
+
+  return IsSameLine(p, l1, l2);
+}
 
 //_____________________________________________________________________________
 
@@ -288,7 +314,8 @@ G4bool G4ExtrudedSolid::IsSameSide(G4TwoVector p1, G4TwoVector p2,
 G4bool G4ExtrudedSolid::IsPointInside(G4TwoVector a, G4TwoVector b,
                                       G4TwoVector c, G4TwoVector p) const
 {
-  // Return true if p is inside of triangle abc, else returns false 
+  // Return true if p is inside of triangle abc or on its edges, 
+  // else returns false 
 
   // Check extent first
   //
@@ -297,10 +324,35 @@ G4bool G4ExtrudedSolid::IsPointInside(G4TwoVector a, G4TwoVector b,
        ( p.y() < a.y() && p.y() < b.y() && p.y() < c.y() ) || 
        ( p.y() > a.y() && p.y() > b.y() && p.y() > c.y() ) ) return false;
   
-  return   IsSameSide(p, a, b, c)
-        && IsSameSide(p, b, a, c)
-        && IsSameSide(p, c, a, b);
+  G4bool inside 
+    = IsSameSide(p, a, b, c)
+      && IsSameSide(p, b, a, c)
+      && IsSameSide(p, c, a, b);
+
+  G4bool onEdge
+    = IsSameLineSegment(p, a, b)
+      || IsSameLineSegment(p, b, c)
+      || IsSameLineSegment(p, c, a);
+      
+  return inside || onEdge;    
 }     
+
+//_____________________________________________________________________________
+
+G4double 
+G4ExtrudedSolid::GetAngle(G4TwoVector po, G4TwoVector pa, G4TwoVector pb) const
+{
+  // Return the angle of the vertex in po
+
+  G4TwoVector t1 = pa - po;
+  G4TwoVector t2 = pb - po;
+  
+  G4double result = (std::atan2(t1.y(), t1.x()) - std::atan2(t2.y(), t2.x()));
+
+  if ( result < 0 ) result += 2*pi;
+
+  return result;
+}
 
 //_____________________________________________________________________________
 
@@ -397,6 +449,27 @@ G4bool G4ExtrudedSolid::AddGeneralPolygonFacets()
     //        << c1->second << "  " << c2->second
     //        << "  " << c3->second << G4endl;  
 
+    // skip concave vertices
+    //
+    G4double angle = GetAngle(c2->first, c3->first, c1->first);
+
+    if ( angle > pi )
+    {
+      // G4cout << "Skipping concave vertex " << c2->second << G4endl;
+
+      // try next three consecutive vertices
+      //
+      c1 = c2;
+      c2 = c3;
+      ++c3; 
+      if ( c3 == verticesToBeDone.end() ) { c3 = verticesToBeDone.begin(); }
+
+      // G4cout << "Looking at triangle : "
+      //        << c1->second << "  " << c2->second
+      //        << "  " << c3->second << G4endl;  
+
+    }
+
     G4bool good = true;
     std::vector< Vertex >::iterator it;
     for ( it=verticesToBeDone.begin(); it != verticesToBeDone.end(); ++it )
@@ -404,6 +477,7 @@ G4bool G4ExtrudedSolid::AddGeneralPolygonFacets()
       // skip vertices of tested triangle
       //
       if ( it == c1 || it == c2 || it == c3 ) { continue; }
+
       if ( IsPointInside(c1->first, c2->first, c3->first, it->first) )
       {
         // G4cout << "Point " << it->second << " is inside" << G4endl;
@@ -460,6 +534,55 @@ G4bool G4ExtrudedSolid::MakeFacets()
 
   G4bool good;
   
+  // Decomposition of polygonal sides in the facets
+  //
+  if ( fNv == 3 )
+  {
+    good = AddFacet( new G4TriangularFacet( GetVertex(0, 0), GetVertex(0, 1),
+                                            GetVertex(0, 2), ABSOLUTE) );
+    if ( ! good ) { return false; }
+
+    good = AddFacet( new G4TriangularFacet( GetVertex(fNz-1, 2), GetVertex(fNz-1, 1),
+                                            GetVertex(fNz-1, 0), ABSOLUTE) );
+    if ( ! good ) { return false; }
+    
+    std::vector<G4int> triangle(3);
+    triangle[0] = 0;
+    triangle[1] = 1;
+    triangle[2] = 2;
+    fTriangles.push_back(triangle);
+  }
+  
+  else if ( fNv == 4 )
+  {
+    good = AddFacet( new G4QuadrangularFacet( GetVertex(0, 0),GetVertex(0, 1),
+                                              GetVertex(0, 2),GetVertex(0, 3),
+                                              ABSOLUTE) );
+    if ( ! good ) { return false; }
+
+    good = AddFacet( new G4QuadrangularFacet( GetVertex(fNz-1, 3), GetVertex(fNz-1, 2), 
+                                              GetVertex(fNz-1, 1), GetVertex(fNz-1, 0),
+                                              ABSOLUTE) );
+    if ( ! good ) { return false; }
+
+    std::vector<G4int> triangle1(3);
+    triangle1[0] = 0;
+    triangle1[1] = 1;
+    triangle1[2] = 2;
+    fTriangles.push_back(triangle1);
+
+    std::vector<G4int> triangle2(3);
+    triangle2[0] = 0;
+    triangle2[1] = 2;
+    triangle2[2] = 3;
+    fTriangles.push_back(triangle2);
+  }  
+  else
+  {
+    good = AddGeneralPolygonFacets();
+    if ( ! good ) { return false; }
+  }
+    
   // The quadrangular sides
   //
   for ( G4int iz = 0; iz < fNz-1; ++iz ) 
@@ -474,37 +597,6 @@ G4bool G4ExtrudedSolid::MakeFacets()
     }
   }  
 
-  // Decomposition of polygonal sides in the facets
-  //
-  if ( fNv == 3 )
-  {
-    good = AddFacet( new G4TriangularFacet( GetVertex(0, 0), GetVertex(0, 1),
-                                            GetVertex(0, 2), ABSOLUTE) );
-    if ( ! good ) { return false; }
-
-    good = AddFacet( new G4TriangularFacet( GetVertex(fNz-1, 2), GetVertex(fNz-1, 1),
-                                            GetVertex(fNz-1, 0), ABSOLUTE) );
-    if ( ! good ) { return false; }
-  }
-  
-  else if ( fNv == 4 )
-  {
-    good = AddFacet( new G4QuadrangularFacet( GetVertex(0, 0),GetVertex(0, 1),
-                                              GetVertex(0, 2),GetVertex(0, 3),
-                                              ABSOLUTE) );
-    if ( ! good ) { return false; }
-
-    good = AddFacet( new G4QuadrangularFacet( GetVertex(fNz-1, 3), GetVertex(fNz-1, 2), 
-                                              GetVertex(fNz-1, 1), GetVertex(1, 0),
-                                              ABSOLUTE) );
-    if ( ! good ) { return false; }
-  }  
-  else
-  {
-    good = AddGeneralPolygonFacets();
-    if ( ! good ) { return false; }
-  }
-    
   SetSolidClosed(true);
 
   return good;
@@ -550,12 +642,12 @@ EInside G4ExtrudedSolid::Inside (const G4ThreeVector &p) const
 
   // Check first if outside extent
   //
-  if ( p.x() < GetMinXExtent() - kCarTolerance ||
-       p.x() > GetMaxXExtent() + kCarTolerance ||
-       p.y() < GetMinYExtent() - kCarTolerance ||
-       p.y() > GetMaxYExtent() + kCarTolerance ||
-       p.z() < GetMinZExtent() - kCarTolerance ||
-       p.z() > GetMaxZExtent() + kCarTolerance )
+  if ( p.x() < GetMinXExtent() - kCarTolerance * 0.5 ||
+       p.x() > GetMaxXExtent() + kCarTolerance * 0.5 ||
+       p.y() < GetMinYExtent() - kCarTolerance * 0.5 ||
+       p.y() > GetMaxYExtent() + kCarTolerance * 0.5 ||
+       p.z() < GetMinZExtent() - kCarTolerance * 0.5 ||
+       p.z() > GetMaxZExtent() + kCarTolerance * 0.5 )
   {
     // G4cout << "G4ExtrudedSolid::Outside extent: " << p << G4endl;
     return kOutside;
@@ -594,8 +686,8 @@ EInside G4ExtrudedSolid::Inside (const G4ThreeVector &p) const
   {
     // Check if on surface of z sides
     //
-    if ( std::fabs( p.z() - fZSections[0].fZ ) < kCarTolerance ||
-         std::fabs( p.z() - fZSections[fNz-1].fZ ) < kCarTolerance )
+    if ( std::fabs( p.z() - fZSections[0].fZ ) < kCarTolerance * 0.5 ||
+         std::fabs( p.z() - fZSections[fNz-1].fZ ) < kCarTolerance * 0.5 )
     {
       // G4cout << "G4ExtrudedSolid::Inside return Surface (on z side)"
       //        << G4endl;

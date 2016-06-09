@@ -30,16 +30,19 @@
 
 # SETTING FOR THE PHYSICS MODELS
 /physics/addPhysics Decay
-/physics/addPhysics EM-Photon-EPDL
-/physics/addPhysics EM-Electron-EEDL
+/physics/addPhysics EM-Photon-Standard
+/physics/addPhysics EM-Electron-Standard
 /physics/addPhysics EM-Positron-Standard
-/physics/addPhysics EM-HadronIon-LowE
+/physics/addPhysics EM-HadronIon-Standard
 /physics/addPhysics EM-Muon-Standard
+
 /physics/addPhysics HadronicEl-HadronIon-LElastic
 /physics/addPhysics HadronicInel-ProtonNeutron-LEP
 /physics/addPhysics HadronicInel-Ion-LEP
 /physics/addPhysics HadronicInel-Pion-LEP
 /physics/addPhysics HadronicAtRest-MuonMinus-Capture
+
+/run/initialize
 
 # FIX THE FOLLOWIG PARAMETERS
 # TO SET THE RANGE SHIFTER
@@ -53,7 +56,7 @@
 /tracking/storeTrajectory 1
 /vis/scene/endOfEventAction accumulate
 /vis/viewer/update
-/run/beamOn 100
+/run/beamOn 300
 
 
 

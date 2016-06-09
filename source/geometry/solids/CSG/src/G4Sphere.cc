@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Sphere.cc,v 1.57 2007/05/18 07:38:01 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4Sphere.cc,v 1.68 2008/07/07 09:35:16 grichine Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // class G4Sphere
 //
@@ -33,6 +33,7 @@
 //
 // History:
 //
+// 12.06.08 V.Grichine: fix for theta intersections in DistanceToOut(p,v,...)
 // 22.07.05 O.Link    : Added check for intersection with double cone
 // 03.05.05 V.Grichine: SurfaceNormal(p) according to J. Apostolakis proposal
 // 16.09.04 V.Grichine: bug fixed in SurfaceNormal(p), theta normals
@@ -46,7 +47,7 @@
 // 18.11.99 V.Grichine: side = kNull in Distance ToOut(p,v,...)
 // 25.11.98 V.Grichine: bug fixed in DistanceToIn(p,v), phi intersections
 // 12.11.98 V.Grichine: bug fixed in DistanceToIn(p,v), theta intersections
-// 09.10.98 V.Grichine: modifications in Distance ToOut(p,v,...)
+// 09.10.98 V.Grichine: modifications in DistanceToOut(p,v,...)
 // 17.09.96 V.Grichine: final modifications to commit
 // 28.03.94 P.Kent: old C++ code converted to tolerant geometry
 // --------------------------------------------------------------------
@@ -607,17 +608,26 @@ G4ThreeVector G4Sphere::SurfaceNormal( const G4ThreeVector& p ) const
       distSTheta = std::fabs(pTheta-fSTheta); 
       distETheta = std::fabs(pTheta-fSTheta-fDTheta);
  
-      nTs = G4ThreeVector(-std::cos(fSTheta)*std::cos(pPhi),
-                        -std::cos(fSTheta)*std::sin(pPhi),
-                         std::sin(fSTheta)               );
-      nTe = G4ThreeVector( std::cos(fSTheta+fDTheta)*std::cos(pPhi),
-                         std::cos(fSTheta+fDTheta)*std::sin(pPhi),
-                        -std::sin(fSTheta+fDTheta)               );    
+      nTs = G4ThreeVector(-std::cos(fSTheta)*p.x()/rho, //  *std::cos(pPhi),
+                          -std::cos(fSTheta)*p.y()/rho, //  *std::sin(pPhi),
+                           std::sin(fSTheta)                   );
+
+      nTe = G4ThreeVector( std::cos(fSTheta+fDTheta)*p.x()/rho, // *std::cos(pPhi),
+                           std::cos(fSTheta+fDTheta)*p.y()/rho, // *std::sin(pPhi),
+                          -std::sin(fSTheta+fDTheta)                  );    
     }
     else if( !fRmin )
     {
-      if ( fSTheta )                distSTheta = 0.;
-      if ( fSTheta + fDTheta < pi ) distETheta = 0.;
+      if ( fSTheta )  
+      {              
+        distSTheta = 0.;
+	nTs = G4ThreeVector(0.,0.,-1.);
+      }
+      if ( fSTheta + fDTheta < pi ) // distETheta = 0.;
+      {              
+        distETheta = 0.;
+	nTe = G4ThreeVector(0.,0.,1.);
+      }
     }    
   }
   if( rad )  nR = G4ThreeVector(p.x()/rad,p.y()/rad,p.z()/rad);
@@ -1422,18 +1432,19 @@ G4double G4Sphere::DistanceToIn( const G4ThreeVector& p,
       {
         d = std::sqrt(d2) ;
         s = -b - d ;    // First root
+        zi    = p.z() + s*v.z();
 
-        if ( s < 0 )
+        if ( s < 0 || zi*(fSTheta - halfpi) > 0 )
         {
-          s=-b+d;    // Second root
+          s = -b+d;    // Second root
         }
         if (s >= 0 && s < snxt)
         {
-          xi    = p.x() + s*v.x() ;
-          yi    = p.y() + s*v.y() ;
-          zi    = p.z() + s*v.z() ;
-          rhoi2 = xi*xi + yi*yi   ;
-          radi2 = rhoi2 + zi*zi   ;
+          xi    = p.x() + s*v.x();
+          yi    = p.y() + s*v.y();
+          zi    = p.z() + s*v.z();
+          rhoi2 = xi*xi + yi*yi;
+          radi2 = rhoi2 + zi*zi;
           if ( (radi2 <= tolORMax2)
             && (radi2 >= tolORMin2)
             && (zi*(fSTheta - halfpi) <= 0) )
@@ -1500,9 +1511,10 @@ G4double G4Sphere::DistanceToIn( const G4ThreeVector& p,
         }
       }
     }  
-    else if (pTheta > tolETheta) 
-    { // dist2ETheta<-kRadTolerance*0.5 && dist2STheta>0)
-      // Inside (theta>etheta+tol) e theta cone
+    else if ( pTheta > tolETheta ) 
+    { 
+      // dist2ETheta<-kRadTolerance*0.5 && dist2STheta>0)
+      // Inside (theta > etheta+tol) e-theta cone
       // First root of etheta cone, second if first root `imaginary'
 
       t1 = 1 - v.z()*v.z()*(1 + tanETheta2) ;
@@ -1516,7 +1528,9 @@ G4double G4Sphere::DistanceToIn( const G4ThreeVector& p,
       {
         d = std::sqrt(d2) ;
         s = -b - d ;    // First root
-        if (s < 0)
+        zi    = p.z() + s*v.z();
+
+        if (s < 0 || zi*(fSTheta + fDTheta - halfpi) > 0)
         {
           s = -b + d ;           // second root
         }
@@ -1958,25 +1972,25 @@ G4double G4Sphere::DistanceToOut( const G4ThreeVector& p,
   G4double cosHDPhiOT,cosHDPhiIT;
 
   G4bool segTheta;                             // Theta flag and precals
-  G4double tanSTheta=0.,tanETheta, rhoSecTheta;
+  G4double tanSTheta=0.,tanETheta=0., rhoSecTheta;
   G4double tanSTheta2=0.,tanETheta2=0.;
-  G4double dist2STheta,dist2ETheta;
+  G4double dist2STheta, dist2ETheta, distTheta;
   G4double d2,s;
 
   // General Precalcs
 
-  rho2=p.x()*p.x()+p.y()*p.y();
-  rad2=rho2+p.z()*p.z();
+  rho2 = p.x()*p.x()+p.y()*p.y();
+  rad2 = rho2+p.z()*p.z();
   //  G4double rad=std::sqrt(rad2);
 
-  pTheta=std::atan2(std::sqrt(rho2),p.z());
+  pTheta = std::atan2(std::sqrt(rho2),p.z());
 
-  pDotV2d=p.x()*v.x()+p.y()*v.y();
-  pDotV3d=pDotV2d+p.z()*v.z();
+  pDotV2d = p.x()*v.x()+p.y()*v.y();
+  pDotV3d = pDotV2d+p.z()*v.z();
 
   // Set phi divided flag and precalcs
 
-  if(fDPhi<twopi)
+  if( fDPhi < twopi )
   {
     segPhi=true;
     hDPhi=0.5*fDPhi;    // half delta phi
@@ -1995,16 +2009,14 @@ G4double G4Sphere::DistanceToOut( const G4ThreeVector& p,
 
   // Theta precalcs
     
-  if (fDTheta < pi)
+  if ( fDTheta < pi )
   {
-    segTheta=true;
-    tolSTheta=fSTheta-kAngTolerance*0.5;
-    tolETheta=fSTheta+fDTheta+kAngTolerance*0.5;
+    segTheta  = true;
+    tolSTheta = fSTheta - kAngTolerance*0.5;
+    tolETheta = fSTheta + fDTheta + kAngTolerance*0.5;
   }
-  else
-  {
-    segTheta=false;
-  }
+  else segTheta = false;
+
     
   // Radial Intersections from G4Sphere::DistanceToIn
   //
@@ -2023,12 +2035,15 @@ G4double G4Sphere::DistanceToOut( const G4ThreeVector& p,
   // => s=-pDotV3d+-std::sqrt(pDotV3d^2-(rad2-R^2))
   //
   // const G4double  fractionTolerance = 1.0e-12;
-  const G4double  flexRadMaxTolerance = // kRadTolerance;
+
+  const G4double  flexRadMaxTolerance =            // kRadTolerance;
     std::max(kRadTolerance, fEpsilon * fRmax);
 
   const G4double  Rmax_plus = fRmax + flexRadMaxTolerance*0.5;
+
   const G4double  flexRadMinTolerance = std::max(kRadTolerance, 
                      fEpsilon * fRmin);
+
   const G4double  Rmin_minus= (fRmin > 0) ? fRmin-flexRadMinTolerance*0.5 : 0 ;
 
   if(rad2 <= Rmax_plus*Rmax_plus && rad2 >= Rmin_minus*Rmin_minus)
@@ -2062,8 +2077,8 @@ G4double G4Sphere::DistanceToOut( const G4ThreeVector& p,
       }
       else 
       {
-        snxt=-pDotV3d+std::sqrt(d2);    // second root since inside Rmax
-        side = kRMax ; 
+        snxt = -pDotV3d+std::sqrt(d2);    // second root since inside Rmax
+        side =  kRMax ; 
       }
     }
 
@@ -2076,23 +2091,21 @@ G4double G4Sphere::DistanceToOut( const G4ThreeVector& p,
       c  = rad2 - fRmin*fRmin;
       d2 = pDotV3d*pDotV3d - c;
 
-      if (c >- flexRadMinTolerance*fRmin) // 2.0 * (0.5*kRadTolerance) * fRmin
+      if ( c >- flexRadMinTolerance*fRmin ) // 2.0 * (0.5*kRadTolerance) * fRmin
       {
         if( c < flexRadMinTolerance*fRmin && 
             d2 >= flexRadMinTolerance*fRmin && pDotV3d < 0 ) // leaving from Rmin
         {
-          if(calcNorm)
-          {
-            *validNorm = false ;   // Rmin surface is concave
-          }
-          return snxt = 0 ;
+          if(calcNorm)  *validNorm = false ;   // Rmin surface is concave         
+                       return snxt = 0 ;
         }
         else
         {  
-          if (d2 >= 0)
+          if ( d2 >= 0. )
           {
-            s = -pDotV3d-std::sqrt(d2) ;
-            if (s>=0)     // Always intersect Rmin first
+            s = -pDotV3d-std::sqrt(d2);
+
+            if ( s >= 0. )     // Always intersect Rmin first
             {
               snxt = s ;
               side = kRMin ;
@@ -2128,6 +2141,9 @@ G4double G4Sphere::DistanceToOut( const G4ThreeVector& p,
     //
     // => s^2(1-vz^2(1+tan^2(t))+2s(pdotv2d-pzvztan^2(t))+(rho2-pz^2tan^2(t))=0
     //
+  
+    /* ////////////////////////////////////////////////////////
+
     tanSTheta=std::tan(fSTheta);
     tanSTheta2=tanSTheta*tanSTheta;
     tanETheta=std::tan(fSTheta+fDTheta);
@@ -2287,16 +2303,309 @@ G4double G4Sphere::DistanceToOut( const G4ThreeVector& p,
             {
               s = kInfinity ;  // wrong cone
             }
-            if (s < stheta)
-            {
-              stheta = s ;
-              sidetheta = kETheta ;
-            }
+          }
+          if (s < stheta)
+          {
+            stheta = s ;
+            sidetheta = kETheta ;
           }
         }
       }
     }  
-  }
+    */  ////////////////////////////////////////////////////////////
+
+    if(fSTheta) // intersection with first cons
+    {
+
+      tanSTheta = std::tan(fSTheta);
+
+      if( std::fabs(tanSTheta) > 5./kAngTolerance ) // kons is plane z=0
+      {
+        if( v.z() > 0. ) 
+        {
+          if ( std::fabs( p.z() ) <= flexRadMaxTolerance*0.5 )
+          {
+            if(calcNorm)
+            {
+              *validNorm = true;
+              *n = G4ThreeVector(0.,0.,1.);
+            }
+            return snxt = 0 ;
+          }  
+          // s = -p.z()/v.z();
+          stheta    = -p.z()/v.z();
+          sidetheta = kSTheta;
+        }
+      }
+      else // kons is not plane 
+      {
+        tanSTheta2  = tanSTheta*tanSTheta;
+        t1          = 1-v.z()*v.z()*(1+tanSTheta2);
+        t2          = pDotV2d-p.z()*v.z()*tanSTheta2;  // ~vDotN if p on cons
+        dist2STheta = rho2-p.z()*p.z()*tanSTheta2;      // t3
+
+        // distTheta = std::sqrt(std::fabs(dist2STheta/(1+tanSTheta2)));
+        distTheta = std::sqrt(rho2)-p.z()*tanSTheta;
+
+        if( std::fabs(t1) < 0.5*kAngTolerance ) // 1st order equation, v parallel to kons
+        {
+          if( v.z() > 0. )
+          {
+            if(std::fabs(distTheta) < flexRadMaxTolerance*0.5) // p on surface
+            {
+              if( fSTheta < halfpi && p.z() > 0. )
+              {
+                if( calcNorm ) *validNorm = false;
+                              return snxt = 0.;
+              }
+              else if( fSTheta > halfpi && p.z() <= 0)
+              {
+                if( calcNorm ) 
+                {
+                  *validNorm = true;
+                  if (rho2)
+                  {
+                    rhoSecTheta = std::sqrt(rho2*(1+tanSTheta2));
+                   
+                    *n = G4ThreeVector( p.x()/rhoSecTheta,   
+                                        p.y()/rhoSecTheta,
+                                        std::sin(fSTheta)  );
+                  }
+                  else *n = G4ThreeVector(0.,0.,1.);
+                }
+                return snxt = 0.;               
+              }
+            }
+            // s = -0.5*dist2STheta/t2;
+
+            stheta    = -0.5*dist2STheta/t2;
+            sidetheta = kSTheta;
+          }  
+        }
+        else   // 2nd order equation, 1st root of fSTheta cone, 2nd if 1st root -ve
+        {
+          if( std::fabs(distTheta) < flexRadMaxTolerance*0.5) // && t2 >= 0.) surface
+          {
+            if( fSTheta > halfpi && t2 >= 0. ) // leave
+            {
+              if( calcNorm ) 
+              {
+                *validNorm = true;
+                if (rho2)
+                {
+                    rhoSecTheta = std::sqrt(rho2*(1+tanSTheta2));
+                   
+                    *n = G4ThreeVector( p.x()/rhoSecTheta,   
+                                        p.y()/rhoSecTheta,
+                                        std::sin(fSTheta)  );
+                }
+                else *n = G4ThreeVector(0.,0.,1.);
+              }                           
+              return snxt = 0.;
+            }
+            else if( fSTheta < halfpi  && t2 < 0. && p.z() >=0. ) // leave
+            {
+                if( calcNorm )   *validNorm = false;                                                 
+                return snxt = 0.;
+            }                               
+          }
+          b  = t2/t1;
+          c  = dist2STheta/t1;
+          d2 = b*b - c ;
+
+          if ( d2 >= 0. )
+          {
+            d = std::sqrt(d2);
+
+            if( fSTheta > halfpi )
+            {
+              s = -b - d;         // First root
+
+              if( (std::fabs(s) < flexRadMaxTolerance*0.5 && t2 < 0.) ||
+                              s < 0.  ||
+                  ( s > 0. && p.z() + s*v.z() > 0.)                   ) 
+              {
+                s = -b + d ; // 2nd root
+              }
+              if( s >  flexRadMaxTolerance*0.5 && p.z() + s*v.z() <= 0.)  
+              {
+                stheta    = s;
+                sidetheta = kSTheta;
+              }
+            }
+            else // sTheta < pi/2, concave surface, no normal
+            {
+              s = -b - d;         // First root
+
+              if( (std::fabs(s) < flexRadMaxTolerance*0.5 && t2 >= 0.) ||
+                              s < 0.                                   ||
+                  ( s > 0. && p.z() + s*v.z() < 0.)                      )
+              {
+                s = -b + d ; // 2nd root
+              }
+              if( s >  flexRadMaxTolerance*0.5 && p.z() + s*v.z() >= 0.)  
+              {
+                stheta    = s;
+                sidetheta = kSTheta;
+              }            
+            }
+          }
+        }
+      }
+    }
+    if (fSTheta + fDTheta < pi) // intersection with second cons
+    {
+
+      tanETheta = std::tan(fSTheta+fDTheta);
+
+      if( std::fabs(tanETheta) > 5./kAngTolerance ) // kons is plane z=0
+      {
+        if( v.z() < 0. ) 
+        {
+          if ( std::fabs( p.z() ) <= flexRadMaxTolerance*0.5 )
+          {
+            if(calcNorm)
+            {
+              *validNorm = true;
+              *n = G4ThreeVector(0.,0.,-1.);
+            }
+            return snxt = 0 ;
+          }  
+          s = -p.z()/v.z();
+
+          if( s < stheta)
+          {
+            stheta    = s;
+            sidetheta = kETheta;
+          }
+        }
+      }
+      else // kons is not plane 
+      {
+        tanETheta2  = tanETheta*tanETheta;
+        t1          = 1-v.z()*v.z()*(1+tanETheta2);
+        t2          = pDotV2d-p.z()*v.z()*tanETheta2;  // ~vDotN if p on cons
+        dist2ETheta = rho2-p.z()*p.z()*tanETheta2;      // t3
+
+        // distTheta = std::sqrt(std::fabs(dist2ETheta/(1+tanETheta2)));
+        distTheta = std::sqrt(rho2)-p.z()*tanETheta;
+
+        if( std::fabs(t1) < 0.5*kAngTolerance ) // 1st order equation, v parallel to kons
+        {
+          if( v.z() < 0. )
+          {
+            if(std::fabs(distTheta) < flexRadMaxTolerance*0.5) // p on surface
+            {
+              if( fSTheta+fDTheta > halfpi && p.z() < 0. )
+              {
+                if( calcNorm ) *validNorm = false;
+                              return snxt = 0.;
+              }
+              else if( fSTheta+fDTheta < halfpi && p.z() >= 0)
+              {
+                if( calcNorm ) 
+                {
+                  *validNorm = true;
+                  if (rho2)
+                  {
+                    rhoSecTheta = std::sqrt(rho2*(1+tanETheta2));
+                   
+                    *n = G4ThreeVector( p.x()/rhoSecTheta,   
+                                        p.y()/rhoSecTheta,
+                                        -std::sin(fSTheta+fDTheta)  );
+                  }
+                  else *n = G4ThreeVector(0.,0.,-1.);
+                }
+                return snxt = 0.;               
+              }
+            }
+            s = -0.5*dist2ETheta/t2;
+
+            if( s < stheta)
+            {
+              stheta    = s;
+              sidetheta = kETheta;
+            }
+          }  
+        }
+        else   // 2nd order equation, 1st root of fSTheta cone, 2nd if 1st root -ve
+        {
+          if( std::fabs(distTheta) < flexRadMaxTolerance*0.5) // && t2 >= 0.) surface
+          {
+            if( fSTheta+fDTheta < halfpi && t2 >= 0. ) // leave
+            {
+              if( calcNorm ) 
+              {
+                *validNorm = true;
+                if (rho2)
+                {
+                    rhoSecTheta = std::sqrt(rho2*(1+tanETheta2));
+                   
+                    *n = G4ThreeVector( p.x()/rhoSecTheta,   
+                                        p.y()/rhoSecTheta,
+                                        -std::sin(fSTheta+fDTheta)  );
+                }
+                else *n = G4ThreeVector(0.,0.,-1.);
+              }                           
+              return snxt = 0.;
+            }
+            else if( fSTheta+fDTheta > halfpi  && t2 < 0. && p.z() <=0. ) // leave
+            {
+                if( calcNorm )   *validNorm = false;                                                 
+                return snxt = 0.;
+            }                               
+          }
+          b  = t2/t1;
+          c  = dist2ETheta/t1;
+          d2 = b*b - c ;
+
+          if ( d2 >= 0. )
+          {
+            d = std::sqrt(d2);
+
+            if( fSTheta+fDTheta < halfpi )
+            {
+              s = -b - d;         // First root
+
+              if( (std::fabs(s) < flexRadMaxTolerance*0.5 && t2 < 0.) ||
+                              s < 0. ) 
+              {
+                s = -b + d ; // 2nd root
+              }
+              if( s >  flexRadMaxTolerance*0.5 )  
+              {
+                if( s < stheta )
+                {
+                  stheta    = s;
+                  sidetheta = kETheta;
+                }
+              }
+            }
+            else // sTheta+fDTheta > pi/2, concave surface, no normal
+            {
+              s = -b - d;         // First root
+
+              if( (std::fabs(s) < flexRadMaxTolerance*0.5 && t2 >= 0.) ||
+                              s < 0.                                   ||
+                  ( s > 0. && p.z() + s*v.z() > 0.)                      )
+              {
+                s = -b + d ; // 2nd root
+              }
+              if( s >  flexRadMaxTolerance*0.5 && p.z() + s*v.z() <= 0.)  
+              {
+                if( s < stheta )
+                {
+                  stheta    = s;
+                  sidetheta = kETheta;
+                }
+              }            
+            }
+          }
+        }
+      }
+    }
+
+  } // end theta intersections
 
   // Phi Intersection
     
@@ -2577,61 +2886,67 @@ G4double G4Sphere::DistanceToOut( const G4ThreeVector& p,
         *n=G4ThreeVector(xi/fRmax,yi/fRmax,zi/fRmax);
         *validNorm=true;
         break;
+
       case kRMin:
         *validNorm=false;  // Rmin is concave
         break;
+
       case kSPhi:
-        if (fDPhi<=pi)     // Normal to Phi-
+        if ( fDPhi <= pi )     // Normal to Phi-
         {
           *n=G4ThreeVector(std::sin(fSPhi),-std::cos(fSPhi),0);
           *validNorm=true;
         }
         else *validNorm=false;
         break ;
+
       case kEPhi:
-        if (fDPhi<=pi)      // Normal to Phi+
+        if ( fDPhi <= pi )      // Normal to Phi+
         {
           *n=G4ThreeVector(-std::sin(fSPhi+fDPhi),std::cos(fSPhi+fDPhi),0);
           *validNorm=true;
         }
         else *validNorm=false;
         break;
+
       case kSTheta:
-        if( fSTheta == pi*0.5 )
+        if( fSTheta == halfpi )
         {
-          *n=G4ThreeVector(0,0,1);
+          *n=G4ThreeVector(0.,0.,1.);
           *validNorm=true;
         }
-        else if ( fSTheta > pi )
+        else if ( fSTheta > halfpi )
         {
-          xi=p.x()+snxt*v.x();
-          yi=p.y()+snxt*v.y();
-          rhoSecTheta = std::sqrt((xi*xi+yi*yi)*(1+tanSTheta2)) ;
-          *n = G4ThreeVector(-xi/rhoSecTheta,   // N-
-                             -yi/rhoSecTheta,
-                             tanSTheta/std::sqrt(1+tanSTheta2)) ;
+          xi = p.x() + snxt*v.x();
+          yi = p.y() + snxt*v.y();
+          rhoSecTheta = std::sqrt((xi*xi+yi*yi)*(1+tanSTheta2));
+          *n = G4ThreeVector( xi/rhoSecTheta,   // N-
+                              yi/rhoSecTheta,
+                              -tanSTheta/std::sqrt(1+tanSTheta2));
           *validNorm=true;
         }
         else *validNorm=false;  // Concave STheta cone
         break;
+
       case kETheta:
-        if( ( fSTheta + fDTheta ) == pi*0.5 )
+        if( ( fSTheta + fDTheta ) == halfpi )
         {
-          *n         = G4ThreeVector(0,0,-1);
-          *validNorm = true ;
+          *n         = G4ThreeVector(0.,0.,-1.);
+          *validNorm = true;
         }
-        else if ( ( fSTheta + fDTheta ) < pi )
+        else if ( ( fSTheta + fDTheta ) < halfpi)
         {
           xi=p.x()+snxt*v.x();
           yi=p.y()+snxt*v.y();
-          rhoSecTheta = std::sqrt((xi*xi+yi*yi)*(1+tanETheta2)) ;
+          rhoSecTheta = std::sqrt((xi*xi+yi*yi)*(1+tanETheta2));
           *n = G4ThreeVector( xi/rhoSecTheta,   // N+
                               yi/rhoSecTheta,
-                              -tanSTheta/std::sqrt(1+tanSTheta2) ) ;
+                              -tanETheta/std::sqrt(1+tanETheta2) );
           *validNorm=true;
         }
         else *validNorm=false;   // Concave ETheta cone
         break;
+
       default:
         G4cout.precision(16);
         G4cout << G4endl;
@@ -2974,7 +3289,7 @@ G4ThreeVector G4Sphere::GetPointOnSurface() const
   costheta = std::cos(theta);
   sintheta = std::sqrt(1.-sqr(costheta));
 
-  if( (fSPhi==0) && (fDPhi==2.*pi) || (fDPhi==2.*pi) ) {aFiv = 0;}
+  if( ((fSPhi==0) && (fDPhi==2.*pi)) || (fDPhi==2.*pi) ) {aFiv = 0;}
   if(fSTheta == 0)  {aThr=0;}
   if(fDTheta + fSTheta == pi) {aFou = 0;}
   if(fSTheta == 0.5*pi) {aThr = pi*(fRmax*fRmax-fRmin*fRmin);}

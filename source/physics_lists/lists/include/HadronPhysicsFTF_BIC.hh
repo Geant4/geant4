@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HadronPhysicsFTF_BIC.hh,v 1.1 2007/11/16 16:52:55 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: HadronPhysicsFTF_BIC.hh,v 1.3 2008/06/19 08:08:23 gunter Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 //---------------------------------------------------------------------------
 //
@@ -33,6 +33,7 @@
 // Author: 2007 Gunter Folger
 //
 // Modified:
+// 19.06.2008 G.Folger: change default for QE to NOT use Chips QE
 //
 //----------------------------------------------------------------------------
 //
@@ -63,7 +64,7 @@
 class HadronPhysicsFTF_BIC : public G4VPhysicsConstructor
 {
   public: 
-    HadronPhysicsFTF_BIC(const G4String& name ="hadron",G4bool quasiElastic=true);
+    HadronPhysicsFTF_BIC(const G4String& name ="hadron",G4bool quasiElastic=false);
     virtual ~HadronPhysicsFTF_BIC();
 
   public: 
@@ -83,7 +84,6 @@ class HadronPhysicsFTF_BIC : public G4VPhysicsConstructor
     G4FTFBinaryPiKBuilder * theFTFBinaryPiK;
     
     G4ProtonBuilder * thePro;
-    G4LEPProtonBuilder * theLEPPro;
     G4FTFBinaryProtonBuilder * theFTFBinaryPro; 
     G4BinaryProtonBuilder * theBinaryPro;
     

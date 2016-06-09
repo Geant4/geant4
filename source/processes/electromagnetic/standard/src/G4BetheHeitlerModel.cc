@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BetheHeitlerModel.cc,v 1.11 2007/05/22 17:34:36 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4BetheHeitlerModel.cc,v 1.12 2008/10/15 15:54:57 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // -------------------------------------------------------------------
 //
@@ -60,6 +60,7 @@
 #include "G4DataVector.hh"
 #include "G4PhysicsLogVector.hh"
 #include "G4ParticleChangeForGamma.hh"
+#include "G4LossTableManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -69,8 +70,9 @@ G4BetheHeitlerModel::G4BetheHeitlerModel(const G4ParticleDefinition*,
 					 const G4String& nam)
   : G4VEmModel(nam),
     theCrossSectionTable(0),
-    nbins(200)
+    nbins(10)
 {
+  fParticleChange = 0;
   theGamma    = G4Gamma::Gamma();
   thePositron = G4Positron::Positron();
   theElectron = G4Electron::Electron();
@@ -91,10 +93,13 @@ G4BetheHeitlerModel::~G4BetheHeitlerModel()
 void G4BetheHeitlerModel::Initialise(const G4ParticleDefinition*,
 				     const G4DataVector&)
 {
-  if(pParticleChange)
-    fParticleChange = reinterpret_cast<G4ParticleChangeForGamma*>(pParticleChange);
-  else
-    fParticleChange = new G4ParticleChangeForGamma();
+  if(!fParticleChange) {
+    if(pParticleChange) {
+      fParticleChange = reinterpret_cast<G4ParticleChangeForGamma*>(pParticleChange);
+    } else {
+      fParticleChange = new G4ParticleChangeForGamma();
+    }
+  }
 
   if(theCrossSectionTable) {
     theCrossSectionTable->clearAndDestroy();
@@ -107,11 +112,14 @@ void G4BetheHeitlerModel::Initialise(const G4ParticleDefinition*,
   G4PhysicsLogVector* ptrVector;
   G4double emin = LowEnergyLimit();
   G4double emax = HighEnergyLimit();
+  G4int n = nbins*G4int(log10(emax/emin));
+  G4bool spline = G4LossTableManager::Instance()->SplineFlag(); 
   G4double e, value;
 
   for(size_t j=0; j<nvect ; j++) { 
 
-    ptrVector  = new G4PhysicsLogVector(emin, emax, nbins);
+    ptrVector  = new G4PhysicsLogVector(emin, emax, n);
+    ptrVector->SetSpline(spline);
     G4double Z = (*theElementTable)[j]->GetZ();
     G4int   iz = G4int(Z);
     indexZ[iz] = j;

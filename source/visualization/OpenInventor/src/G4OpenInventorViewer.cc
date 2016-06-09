@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // $Id: G4OpenInventorViewer.cc,v 1.59 2007/04/03 13:35:48 allison Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// GEANT4 tag $Name: geant4-09-02 $
 
 #ifdef G4VIS_BUILD_OI_DRIVER
 

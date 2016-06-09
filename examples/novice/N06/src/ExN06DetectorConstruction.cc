@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: ExN06DetectorConstruction.cc,v 1.15 2006/06/29 17:54:17 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: ExN06DetectorConstruction.cc,v 1.17 2008/07/17 00:32:34 gum Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -147,6 +147,10 @@ G4VPhysicalVolume* ExN06DetectorConstruction::Construct()
   
   Water->SetMaterialPropertiesTable(myMPT1);
 
+  // Set the Birks Constant for the Water scintillator
+
+  Water->GetIonisation()->SetBirksConstant(0.126*mm/MeV);
+
 //
 // Air
 //
@@ -224,8 +228,10 @@ G4VPhysicalVolume* ExN06DetectorConstruction::Construct()
 	  new G4LogicalSkinSurface("AirSurface", bubbleAir_log, OpAirSurface);
 
   if(AirSurface->GetLogicalVolume() == bubbleAir_log) G4cout << "Equal" << G4endl;
-  ((G4OpticalSurface*)
-  (AirSurface->GetSurface(bubbleAir_log)->GetSurfaceProperty()))->DumpInfo();
+  G4OpticalSurface* opticalSurface = dynamic_cast <G4OpticalSurface*>
+        (AirSurface->GetSurface(bubbleAir_log)->GetSurfaceProperty());
+
+  if (opticalSurface) opticalSurface->DumpInfo();
 
 //
 // Generate & Add Material Properties Table attached to the optical surfaces

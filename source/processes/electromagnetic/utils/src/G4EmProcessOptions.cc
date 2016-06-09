@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmProcessOptions.cc,v 1.22 2007/11/07 18:38:49 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4EmProcessOptions.cc,v 1.24 2008/04/17 10:33:27 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // -------------------------------------------------------------------
 //
@@ -476,9 +476,35 @@ void G4EmProcessOptions::SetMscGeomFactor(G4double val)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
+void G4EmProcessOptions::SetPolarAngleLimit(G4double val)
+{
+  const std::vector<G4VMultipleScattering*>& u =
+        theManager->GetMultipleScatteringVector();
+  std::vector<G4VMultipleScattering*>::const_iterator itm;
+  for(itm = u.begin(); itm != u.end(); itm++) {
+    if(*itm) (*itm)->SetPolarAngleLimit(val);
+  }
+  const std::vector<G4VEmProcess*>& w =
+        theManager->GetEmProcessVector();
+  std::vector<G4VEmProcess*>::const_iterator itp;
+  for(itp = w.begin(); itp != w.end(); itp++) {
+    G4VEmProcess* q = *itp;
+    if(q) q->SetPolarAngleLimit(val);
+  }
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 void G4EmProcessOptions::SetLPMFlag(G4bool val)
 {
   theManager->SetLPMFlag(val);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4EmProcessOptions::SetSplineFlag(G4bool val)
+{
+  theManager->SetSplineFlag(val);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

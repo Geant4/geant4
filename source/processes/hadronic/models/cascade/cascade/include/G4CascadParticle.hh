@@ -48,7 +48,7 @@ public:
     reflectionCounter = 0;   
   };
 
-  void updateParticleMomentum(const std::vector<G4double>& mom) {
+  void updateParticleMomentum(const G4CascadeMomentum& mom) {
     theParticle.setMomentum(mom);
   };
 
@@ -80,7 +80,7 @@ public:
   G4double getPathToTheNextZone(G4double rz_in, 
 				G4double rz_out);
 
-  std::vector<G4double> getMomentum() const { 
+  const G4CascadeMomentum& getMomentum() const { 
     return theParticle.getMomentum(); 
   };
 
@@ -88,7 +88,7 @@ public:
     return theParticle; 
   };
 
-  std::vector<G4double> getPosition() const { 
+  const std::vector<G4double>& getPosition() const { 
     return position; 
   };
 

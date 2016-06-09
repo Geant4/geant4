@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UrbanMscModel.cc,v 1.77 2007/11/30 13:53:02 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4UrbanMscModel.cc,v 1.86 2008/10/29 14:15:30 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // -------------------------------------------------------------------
 //
@@ -165,6 +165,7 @@
 #include "G4UrbanMscModel.hh"
 #include "Randomize.hh"
 #include "G4Electron.hh"
+
 #include "G4LossTableManager.hh"
 #include "G4ParticleChangeForMSC.hh"
 #include "G4TransportationManager.hh"
@@ -176,19 +177,8 @@
 
 using namespace std;
 
-G4UrbanMscModel::G4UrbanMscModel(G4double m_facrange, G4double m_dtrl, 
-				 G4double m_lambdalimit, 
-				 G4double m_facgeom,G4double m_skin, 
-				 G4bool m_samplez, G4MscStepLimitType m_stepAlg, 
-				 const G4String& nam)
-  : G4VEmModel(nam),
-    dtrl(m_dtrl),
-    lambdalimit(m_lambdalimit),
-    facrange(m_facrange),
-    facgeom(m_facgeom),
-    skin(m_skin),
-    steppingAlgorithm(m_stepAlg),
-    samplez(m_samplez),
+G4UrbanMscModel::G4UrbanMscModel(const G4String& nam)
+  : G4VMscModel(nam),
     isInitialized(false)
 {
   masslimite  = 0.6*MeV;
@@ -200,7 +190,6 @@ G4UrbanMscModel::G4UrbanMscModel(G4double m_facrange, G4double m_dtrl,
   currentTau    = taulim;
   tlimitminfix  = 1.e-6*mm;            
   stepmin       = tlimitminfix;
-  skindepth     = skin*stepmin;
   smallstep     = 1.e10;
   currentRange  = 0. ;
   frscaling2    = 0.25;
@@ -212,7 +201,6 @@ G4UrbanMscModel::G4UrbanMscModel(G4double m_facrange, G4double m_dtrl,
   geommin       = 1.e-3*mm;
   geomlimit     = geombig;
   presafety     = 0.*mm;
-  facsafety     = 0.25;
   Zeff          = 1.;
   particle      = 0;
   theManager    = G4LossTableManager::Instance(); 
@@ -231,7 +219,9 @@ G4UrbanMscModel::~G4UrbanMscModel()
 void G4UrbanMscModel::Initialise(const G4ParticleDefinition* p,
 				 const G4DataVector&)
 {
+  skindepth = skin*stepmin;
   if(isInitialized) return;
+
   // set values of some data members
   SetParticle(p);
 
@@ -243,6 +233,8 @@ void G4UrbanMscModel::Initialise(const G4ParticleDefinition* p,
   safetyHelper = G4TransportationManager::GetTransportationManager()
     ->GetSafetyHelper();
   safetyHelper->InitialiseHelper();
+
+  isInitialized = true;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -390,14 +382,13 @@ G4double G4UrbanMscModel::ComputeCrossSectionPerAtom(
 
   G4double eKineticEnergy = KineticEnergy;
 
-  if((particle->GetParticleName() != "e-") &&
-     (particle->GetParticleName() != "e+") )
+  if(mass > electron_mass_c2)
   {
-     G4double TAU = KineticEnergy/mass ;
-     G4double c = mass*TAU*(TAU+2.)/(electron_mass_c2*(TAU+1.)) ;
-     G4double w = c-2. ;
-     G4double tau = 0.5*(w+sqrt(w*w+4.*c)) ;
-     eKineticEnergy = electron_mass_c2*tau ;
+    G4double TAU = KineticEnergy/mass ;
+    G4double c = mass*TAU*(TAU+2.)/(electron_mass_c2*(TAU+1.)) ;
+    G4double w = c-2. ;
+    G4double tau = 0.5*(w+sqrt(w*w+4.*c)) ;
+    eKineticEnergy = electron_mass_c2*tau ;
   }
 
   G4double ChargeSquare = charge*charge;
@@ -498,10 +489,11 @@ G4double G4UrbanMscModel::ComputeTruePathLengthLimit(
 			     G4double currentMinimalStep)
 {
   tPathLength = currentMinimalStep;
-  G4int stepNumber = track.GetCurrentStepNumber();
   const G4DynamicParticle* dp = track.GetDynamicParticle();
+  G4StepPoint* sp = track.GetStep()->GetPreStepPoint();
+  G4StepStatus stepStatus = sp->GetStepStatus();
 
-  if(stepNumber == 1) {
+  if(stepStatus == fUndefined) {
     inside = false;
     insideskin = false;
     tlimit = geombig;
@@ -521,7 +513,6 @@ G4double G4UrbanMscModel::ComputeTruePathLengthLimit(
   
   if(tPathLength > currentRange) tPathLength = currentRange;
 
-  G4StepPoint* sp = track.GetStep()->GetPreStepPoint();
   presafety = sp->GetSafety();
 
   //  G4cout << "G4UrbanMscModel::ComputeTruePathLengthLimit tPathLength= " 
@@ -534,8 +525,6 @@ G4double G4UrbanMscModel::ComputeTruePathLengthLimit(
       inside = true;
       return tPathLength;  
     }
-
-  G4StepStatus stepStatus = sp->GetStepStatus();
 
   // standard  version
   //
@@ -554,9 +543,9 @@ G4double G4UrbanMscModel::ComputeTruePathLengthLimit(
       smallstep += 1.;
       insideskin = false;
 
-      if((stepStatus == fGeomBoundary) || (stepNumber == 1))
+      if((stepStatus == fGeomBoundary) || (stepStatus == fUndefined))
 	{
-	  if(stepNumber == 1) smallstep = 1.e10;
+	  if(stepStatus == fUndefined) smallstep = 1.e10;
 	  else  smallstep = 1.;
 
 	  // facrange scaling in lambda 
@@ -654,7 +643,7 @@ G4double G4UrbanMscModel::ComputeTruePathLengthLimit(
           return tPathLength;  
         }
 
-      if((stepStatus == fGeomBoundary) || (stepNumber == 1))
+      if((stepStatus == fGeomBoundary) || (stepStatus == fUndefined))
 	{ 
 	  // facrange scaling in lambda 
 	  // not so strong step restriction above lambdalimit
@@ -864,12 +853,13 @@ void G4UrbanMscModel::SampleScattering(const G4DynamicParticle* dynParticle,
 				       G4double safety)
 {
   G4double kineticEnergy = dynParticle->GetKineticEnergy();
-  if((kineticEnergy <= 0.0) || (tPathLength <= tlimitminfix)) return;
+  if((kineticEnergy <= 0.0) || (tPathLength <= tlimitminfix) ||
+     (tPathLength/tausmall < lambda0) ) return;
 
   G4double cth  = SampleCosineTheta(tPathLength,kineticEnergy);
   // protection against 'bad' cth values
-  if(cth > 1.)  cth =  1.;
-  if(cth < -1.) cth = -1.;
+  if(abs(cth) > 1.) return;
+
   G4double sth  = sqrt((1.0 - cth)*(1.0 + cth));
   G4double phi  = twopi*G4UniformRand();
   G4double dirx = sth*cos(phi);
@@ -898,11 +888,13 @@ void G4UrbanMscModel::SampleScattering(const G4DynamicParticle* dynParticle,
         // sample direction of lateral displacement
         // compute it from the lateral correlation
         G4double Phi = 0.;
-        if(std::abs(r*sth) < latcorr)
+        if(std::abs(r*sth) < latcorr) {
           Phi  = twopi*G4UniformRand();
-        else
-          Phi = phi-std::acos(latcorr/(r*sth));
-        if(Phi < 0.) Phi += twopi;
+        } else {
+          G4double psi = std::acos(latcorr/(r*sth));
+          if(G4UniformRand() < 0.5) Phi = phi+psi;
+          else                      Phi = phi-psi;
+	}
 
         dirx = std::cos(Phi);
         diry = std::sin(Phi);

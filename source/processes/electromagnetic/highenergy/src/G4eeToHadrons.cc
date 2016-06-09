@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eeToHadrons.cc,v 1.7 2006/06/29 19:32:44 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4eeToHadrons.cc,v 1.8 2008/10/16 14:29:48 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // -------------------------------------------------------------------
 //
@@ -63,7 +63,8 @@ G4eeToHadrons::G4eeToHadrons(const G4String& name)
     csFactor(1.0), 
     isInitialised(false)
 {
-    SetVerboseLevel(1);
+  SetVerboseLevel(1);
+  SetProcessSubType(fAnnihilationToHadrons);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

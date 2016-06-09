@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<gdml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://service-spi.web.cern.ch/service-spi/app/releases/GDML/schema/gdml.xsd">
+
+   <define>
+      <variable name="i" value="0"/>
+      <variable name="j" value="0"/>
+      <variable name="k" value="0"/>
+      <constant name="num" value="4"/>
+      <constant name="scale" value="200"/>
+   </define>
+
+   <materials>
+      <material Z="1.0" name="AIR">
+         <D value="1e-24"/>
+         <atom value="1.00794"/>
+      </material>
+      <material name="ALU" Z="13.0">
+         <D value="2.70"/>
+	 <atom value="26.98"/>
+      </material>
+   </materials>
+
+   <solids>
+      <box name="WorldBox" x="2000" y="2000" z="2000"/>
+      <loop for="i" from="0" to="num" step="1">
+      <loop for="j" from="0" to="num" step="1">
+      <loop for="k" from="0" to="num" step="1">
+         <box name="Boxijk" x="64-i*10" y="64-j*10" z="64-k*10"/>
+      </loop>
+      </loop>
+      </loop>
+   </solids>
+
+   <structure>
+      <loop for="i" from="0" to="num" step="1">
+      <loop for="j" from="0" to="num" step="1">
+      <loop for="k" from="0" to="num" step="1">
+         <volume name="vBoxijk">
+            <materialref ref="ALU"/>
+            <solidref ref="Boxijk"/>
+         </volume>
+      </loop>
+      </loop>
+      </loop>
+    
+      <volume name="TOP">
+         <materialref ref="AIR"/>
+         <solidref ref="WorldBox"/>
+         <loop for="i" from="0" to="num" step="1">
+         <loop for="j" from="0" to="num" step="1">
+         <loop for="k" from="0" to="num" step="1">
+            <physvol>
+	       <volumeref ref="vBoxijk"/>
+               <position name="posijk" x="scale*(i-num/2)" y="scale*(j-num/2)" z="scale*(k-num/2)"/>
+            </physvol>
+         </loop>
+	 </loop>
+         </loop>
+      </volume>
+   </structure>
+
+   <setup version="1.0" name="Default">
+      <world ref="TOP"/>
+   </setup>
+
+</gdml>

@@ -1,4 +1,3 @@
-#$Id: g4thread.py,v 1.2 2006/04/25 08:09:45 kmura Exp $
 """
 # ==================================================================
 #   Python module
@@ -8,16 +7,18 @@
 #                                              Q, 2005
 # ==================================================================
 """
+#$Id: g4thread.py,v 1.3 2008/12/03 07:01:04 kmura Exp $
+
 import thread
 from G4run import *
 
 # ------------------------------------------------------------------
 # BeamOn in a new thread
 # ------------------------------------------------------------------
-def TBeamOn(self, nevent):
+def _TBeamOn(self, nevent):
   "generate events in a thread"
-  args= (nevent,)
+  args = (nevent,)
   thread.start_new_thread(self.BeamOn, args)
 
-G4RunManager.TBeamOn= TBeamOn
+G4RunManager.TBeamOn= _TBeamOn
 

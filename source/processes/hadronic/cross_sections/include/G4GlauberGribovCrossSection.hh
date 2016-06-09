@@ -117,11 +117,28 @@ public:
   G4double GetNucleusRadius(const G4DynamicParticle*, const G4Element*);
   G4double GetNucleusRadius(G4double At);
 
+  inline G4double GetParticleBarCorTot( const G4ParticleDefinition* theParticle, G4double Z );
+  inline G4double GetParticleBarCorIn( const G4ParticleDefinition* theParticle, G4double Z );
+
+  inline void SetEnergyLowerLimit(G4double E ){fLowerLimit=E;};
+
 private:
 
   const G4double fUpperLimit;
-  const G4double fLowerLimit; 
+  G4double fLowerLimit; 
   const G4double fRadiusConst;
+
+  static const G4double fNeutronBarCorrectionTot[93];
+  static const G4double fNeutronBarCorrectionIn[93];
+
+  static const G4double fProtonBarCorrectionTot[93];
+  static const G4double fProtonBarCorrectionIn[93];
+
+  static const G4double fPionPlusBarCorrectionTot[93];
+  static const G4double fPionPlusBarCorrectionIn[93];
+
+  static const G4double fPionMinusBarCorrectionTot[93];
+  static const G4double fPionMinusBarCorrectionIn[93];
 
   G4double fTotalXsc, fElasticXsc, fInelasticXsc, fProductionXsc, fDiffractionXsc;
   G4double fHadronNucleonXsc;
@@ -159,6 +176,10 @@ private:
 
 };
 
+////////////////////////////////////////////////////////////////
+//
+// Inlines
+
 inline
 G4double G4GlauberGribovCrossSection::GetElasticGlauberGribov(
 	 const G4DynamicParticle* dp, G4double Z, G4double A)
@@ -167,12 +188,58 @@ G4double G4GlauberGribovCrossSection::GetElasticGlauberGribov(
   return fElasticXsc;
 }
 
+/////////////////////////////////////////////////////////////////
+
 inline
 G4double G4GlauberGribovCrossSection::GetInelasticGlauberGribov(
          const G4DynamicParticle* dp, G4double Z, G4double A)
 {
   GetIsoZACrossSection(dp, Z, A);
   return fInelasticXsc;
+}
+
+/////////////////////////////////////////////////////////////////////
+//
+// return correction at Tkin = 90*GeV GG -> Barashenkov tot xsc, when it 
+// is available, else return 1.0
+
+
+inline G4double G4GlauberGribovCrossSection::GetParticleBarCorTot( 
+                          const G4ParticleDefinition* theParticle, G4double Z )
+{
+  G4int iZ = G4int(Z);
+
+  if( iZ >= 2 && iZ <= 92)
+  {
+    if(      theParticle == theProton ) return fProtonBarCorrectionTot[iZ]; 
+    else if( theParticle == theNeutron) return fNeutronBarCorrectionTot[iZ]; 
+    else if( theParticle == thePiPlus ) return fPionPlusBarCorrectionTot[iZ];
+    else if( theParticle == thePiMinus) return fPionMinusBarCorrectionTot[iZ];
+    else return 1.0;
+  }
+  else return 1.0;
+}
+
+/////////////////////////////////////////////////////////////////////
+//
+// return correction at Tkin = 90*GeV GG -> Barashenkov in xsc, when it 
+// is available, else return 1.0
+
+
+inline G4double G4GlauberGribovCrossSection::GetParticleBarCorIn( 
+                          const G4ParticleDefinition* theParticle, G4double Z )
+{
+  G4int iZ = G4int(Z);
+
+  if( iZ >= 2 && iZ <= 92)
+  {
+    if(      theParticle == theProton ) return fProtonBarCorrectionIn[iZ]; 
+    else if( theParticle == theNeutron) return fNeutronBarCorrectionIn[iZ]; 
+    else if( theParticle == thePiPlus ) return fPionPlusBarCorrectionIn[iZ];
+    else if( theParticle == thePiMinus) return fPionMinusBarCorrectionIn[iZ];
+    else return 1.0;
+  }
+  else return 1.0;
 }
 
 #endif

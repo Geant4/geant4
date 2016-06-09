@@ -1,0 +1,116 @@
+$Id: History,v 1.6 2008/12/04 08:20:06 gcosmo Exp $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                      Category History file
+                      ---------------------
+This file should be used by G4 developers and category coordinators
+to briefly summarize all major modifications introduced in the code
+and keep track of all category-tags.
+It DOES NOT substitute the  CVS log-message one should put at every
+committal in the CVS repository !
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+December 4th, 2008 Gabriele Cosmo - G01-V09-01-04
+- Updated GDML file samples to point to new GDML schema location.
+
+November 21st, 2008 Tatiana Nikitina - G01-V09-01-03
+- Updated loop.gdml and solids.gdml descriptions fix schema validation
+  warnings.
+- Added example in main() how to retrieve auxiliary information.
+- Updated README.
+
+November 20th, 2008  Gabriele Cosmo - G01-V09-01-02
+- Removed obsolete gdml files paramvol.gdml and replicavol.gdml.
+
+November 13th, 2008  Gabriele Cosmo - G01-V09-01-01
+- Added pTube.gdml, example of parameterisation in Phi for a G4Tubs.
+- Corrected name for 'Air' material in solids.gdml.
+- Some code cleanup.
+
+August 27th, 2008  Gabriele Cosmo - G01-V09-01-00
+- Imported from original extended example "gdml".
+
+August 22nd, 2008  Tatiana Nikitina - exgdml-V09-01-03
+- Updated gdml files to be fully compliant with Schema.
+- Added tess.gdml including simple tessellated geoemtry.
+- Added solids.gdml including simple examples for all kind of solids.
+
+July 1st, 2008  Zoltan Torzsok - exgdml-V09-01-02
+- Removed no longer needed toy gdml files: matrix.gdml, modular.gdml,
+  diamond.gdml. Updated files: axes.gdml, entity.gdml, scale.gdml.
+
+April 1st, 2008  Zoltan Torzsok - exgdml-V09-01-01
+- Fixed function calls in main() to follow convention of using first
+  capital letter.
+
+February 15th, 2008  Z. Torzsok
+- Added gdml files featuring replicas and division volumes.
+
+February 12th, 2008  Z.Torzsok
+- Example files are cleaned up.
+- Added gdml file featuring matrices.
+
+January 21st, 2008  Z.Torzsok
+- The GDML example is nicely polished now:
+
+     load_gdml <input_gdml_file> <output_gdml file>
+
+  The input file is mandatory, the output file is optional.
+  Displays usage instructions and complains in case of unnecessary arguments.
+
+January 16th, 2008  Z.Torszok - exgdml-V09-01-00
+- Added entity.gdml and materials.xml to demonstrate the ability of the parser
+  of resolving entities.
+- Fixed axes.gdml and diamond.gdml according to tessellated-solid specifications.
+
+December 11th, 2007  G.Cosmo - exgdml-V09-00-02
+- Protected usage of G4UItcsh in main().
+
+December 5th, 2007  Z.Torzsok - exgdml-V09-00-01
+- Corrected call to parser in main.
+- Use OGLX instead of OGLXm.
+- Fixed gun position.
+
+November 19th, 2007  Z.Torzsok - exgdml-V09-00-00
+- Updated to co-work with built-in GDML plugin module GDML-3.
+- Showing loading of modular GDML files.
+
+December 1st, 2006  W.Pokorski - exgdml-V08-01-00
+- Set schema location to LCG release area in test.gdml.
+- Updated README and GNUmakefile.
+
+June 19th, 2006  W.Pokorski - exgdml-V08-00-00
+- Added G4Evaluator for new version of GDML.
+- Updated GNUmakefile.
+
+May 3rd, 2005  J.Allison
+- Replaced vis manager with G4VisExecutive.
+
+Dec 7th, 2004  R.Chytracek, W.Pokorski - exgdml-V06-02-00
+- Archived old example and setup. New example based on GDML-2.0.0
+  demonstrating the abilities of import/export of GDML descriptions.
+
+Nov 13th, 2003  John Allison - exgdml-V05-02-01
+- Removed OPACS from Vis Manager.
+
+Oct 27th, 2003  R.Chytracek
+- Brought up-to-date the makefiles with the latest Geant4 tags.
+- Updated to adopt XercesC 2.x family.
+- XERCESCROOT default now points to gcc-3.2 installation only.
+
+July 4th, 2003  G.Cosmo - exgdml-V05-02-00
+- Fixed trivial compilation errors originated by last g4std migration.
+- Fixed pedantic compilation warnings on Linux-g++.
+
+June 3rd, 2002  R.Chytracek - exgdml-V04-00-00
+- First implementation of GDML example for detector description persistency.
+
+June 3rd, 2002  G.Cosmo
+- Created.

@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronQElasticPhysics.cc,v 1.6 2006/11/29 14:33:30 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4HadronQElasticPhysics.cc,v 1.7 2008/05/19 10:21:34 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 //---------------------------------------------------------------------------
 //
@@ -44,7 +44,6 @@
 #include "G4HadronElastic.hh"
 #include "G4QElastic.hh"
 
-#include "G4HadronProcessStore.hh"
 #include "G4VQCrossSection.hh"
 
 #include "G4ParticleDefinition.hh"
@@ -84,8 +83,6 @@ void G4HadronQElasticPhysics::ConstructProcess()
 {
   if(wasActivated) return;
   wasActivated = true;
-
-  G4HadronProcessStore* store = G4HadronProcessStore::Instance();
 
   G4double elimit = DBL_MAX;
 
@@ -131,7 +128,6 @@ void G4HadronQElasticPhysics::ConstructProcess()
       G4UHadronElasticProcess* hel = new G4UHadronElasticProcess("hElastic");
       hel->SetQElasticCrossSection(man);
       hel->RegisterMe(model);
-      store->Register(hel,particle,model,mname);
       pmanager->AddDiscreteProcess(hel);
 
     } else if(pname == "neutron" || pname == "proton") {   

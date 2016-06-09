@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PolarizedComptonScattering.cc,v 1.16 2006/06/29 19:53:30 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4PolarizedComptonScattering.cc,v 1.18 2008/10/15 17:53:44 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 //
 //---------- G4PolarizedComptonScattering physics process ----------------------
@@ -49,9 +49,8 @@
 
 using namespace std;
 
-G4PolarizedComptonScattering::G4PolarizedComptonScattering(
-                                                  const G4String& processName)
-: G4ComptonScattering52 (processName)
+G4PolarizedComptonScattering::G4PolarizedComptonScattering(const G4String& pname)
+  : G4ComptonScattering52 (pname)
 { }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -28,6 +28,7 @@
 //          Implemented by T. Koi (SLAC/SCCS)
 //          If NeutronHP data do not available for an element, then Low Energy 
 //          Parameterization models handle the interactions of the element.
+// 080319 Compilation warnings - gcc-4.3.0 fix by T. Koi
 //
 
 // neutron_hp -- source file
@@ -55,7 +56,7 @@ G4NeutronHPorLElastic::G4NeutronHPorLElastic()
    {
       theElastic[i].Init((*(G4Element::GetElementTable()))[i], dirName);
       //while(!theElastic[i].Register(theFS));
-      try { while(!theElastic[i].Register(theFS)); }
+      try { while(!theElastic[i].Register(theFS)) ; }
       catch ( G4HadronicException )
       {
           unavailable_elements.insert ( (*(G4Element::GetElementTable()))[i]->GetName() ); 

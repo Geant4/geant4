@@ -25,7 +25,7 @@
 //
 //
 // $Id: GammaRayTelAnticoincidenceSD.hh,v 1.5 2006/06/29 15:55:00 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// GEANT4 tag $Name: geant4-09-02 $
 // ------------------------------------------------------------
 //      GEANT 4 class header file
 //      CERN Geneva Switzerland

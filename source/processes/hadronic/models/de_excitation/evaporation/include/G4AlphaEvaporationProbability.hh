@@ -23,22 +23,17 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4AlphaEvaporationProbability.hh,v 1.3 2006/06/29 20:09:45 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+//J.M. Quesada (August2008). Based on:
 //
 // Hadronic Process: Nuclear De-excitations
-// by V. Lara (Nov 1999) 
+// by V. Lara (Oct 1998)
 //
-
-
-
 #ifndef G4AlphaEvaporationProbability_h
 #define G4AlphaEvaporationProbability_h 1
 
 
 #include "G4EvaporationProbability.hh"
-
+#include "G4AlphaCoulombBarrier.hh"
 
 class G4AlphaEvaporationProbability : public G4EvaporationProbability
 {
@@ -54,24 +49,38 @@ private:
   const G4AlphaEvaporationProbability & operator=(const G4AlphaEvaporationProbability &right);
   G4bool operator==(const G4AlphaEvaporationProbability &right) const;
   G4bool operator!=(const G4AlphaEvaporationProbability &right) const;
-  
+
 
 private:
 
-  virtual G4double CalcAlphaParam(const G4Fragment & fragment) const 
-  { return 1.0 + CCoeficient(static_cast<G4double>(fragment.GetZ()-GetZ()));}
-	
-  virtual G4double CalcBetaParam(const G4Fragment & ) const 
-  { return 0.0; }
+  virtual G4double CrossSection(const  G4Fragment & fragment, const  G4double K);
 
-	
-  G4double CCoeficient(const G4double ) const;
+  G4double GetOpt0(const G4double K);
+  G4double GetOpt12(const G4double K);
+  G4double GetOpt34(const G4double K);
 
-  // Excitation energy levels 
-  std::vector<G4double> ExcitEnergies;
-  // Spin of excitation energy levels 
-  std::vector<G4int> ExcitSpins;
+  
+ virtual G4double CalcAlphaParam(const G4Fragment & fragment) ;
+ 
+ virtual G4double CalcBetaParam(const G4Fragment & fragment)  ;
+ 
+  G4double CCoeficient(const G4double aZ) ;
+  
+//data members
+    
+      G4AlphaCoulombBarrier theCoulombBarrier;
+
+      G4double ResidualA;
+      G4double ResidualZ; 
+      G4double theA;
+      G4double theZ;
+      G4double ResidualAthrd;
+      G4double FragmentA;
+      G4double FragmentAthrd;
+
+
 };
 
 
 #endif
+

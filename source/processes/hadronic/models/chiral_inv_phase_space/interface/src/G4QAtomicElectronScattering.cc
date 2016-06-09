@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QAtomicElectronScattering.cc,v 1.2 2006/12/13 15:45:19 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4QAtomicElectronScattering.cc,v 1.4 2008/10/02 21:10:07 dennis Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 //      ---------------- G4QAtomicElectronScattering class -----------------
 //                 by Mikhail Kossov, December 2003.
@@ -40,7 +40,7 @@
 #include "G4QAtomicElectronScattering.hh"
 
 G4QAtomicElectronScattering::G4QAtomicElectronScattering(const G4String& processName):
- G4VDiscreteProcess(processName)
+ G4VDiscreteProcess(processName, fElectromagnetic)
 {
 #ifdef debug
   G4cout<<"G4QAtomicElectronScattering::Constructor is called"<<G4endl;

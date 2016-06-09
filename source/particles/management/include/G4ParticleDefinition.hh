@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleDefinition.hh,v 1.31 2007/03/11 07:17:35 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4ParticleDefinition.hh,v 1.32 2008/03/22 06:03:40 kurasige Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 // 
 // ------------------------------------------------------------
@@ -79,7 +79,7 @@ class G4ParticleDefinition
   //  at construction. Most of members seen as arguments of the constructor 
   //  (except last 3 arguments concerning with decay ) are  "constant" 
   //  and can not be changed later. (No "SET" methods are available)
-  //  Each type of particle must be constructed as a unique static object
+  //  Each type of particle must be constructed as a unique object
   //  of special class derived from G4ParticleDefinition.
   //  see G4ParticleTypes for detail 
  

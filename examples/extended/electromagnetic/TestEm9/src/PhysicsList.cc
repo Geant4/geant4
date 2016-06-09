@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysicsList.cc,v 1.19 2007/11/13 14:44:26 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: PhysicsList.cc,v 1.24 2008/10/16 11:48:58 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 //---------------------------------------------------------------------------
 //
@@ -45,10 +45,10 @@
 #include "PhysicsListMessenger.hh"
 
 #include "PhysListEmStandard.hh"
-#include "PhysListEmStandardIG.hh"
 #include "G4EmStandardPhysics.hh"
 #include "G4EmStandardPhysics_option1.hh"
 #include "G4EmStandardPhysics_option2.hh"
+#include "G4EmStandardPhysics_option3.hh"
 #include "PhysListEmLivermore.hh"
 #include "PhysListEmPenelope.hh"
 #include "G4DecayPhysics.hh"
@@ -84,6 +84,8 @@ PhysicsList::PhysicsList() : G4VModularPhysicsList()
   cutForGamma     = defaultCutValue;
   cutForElectron  = defaultCutValue;
   cutForPositron  = defaultCutValue;
+  cutForVertexDetector = defaultCutValue;
+  cutForMuonDetector   = defaultCutValue;
 
   vertexDetectorCuts = 0;
   muonDetectorCuts   = 0;
@@ -95,7 +97,6 @@ PhysicsList::PhysicsList() : G4VModularPhysicsList()
 
   SetVerboseLevel(1);
 
-  mscStepLimit   = true;
   helIsRegisted  = false;
   bicIsRegisted  = false;
   gnucIsRegisted = false;
@@ -105,8 +106,8 @@ PhysicsList::PhysicsList() : G4VModularPhysicsList()
   generalPhysicsList = new G4DecayPhysics();
 
   // EM physics
-  emName = G4String("standard");
-  emPhysicsList = new PhysListEmStandard(emName);
+  emName = G4String("emstandard");
+  emPhysicsList = new G4EmStandardPhysics();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -172,19 +173,19 @@ void PhysicsList::AddPhysicsList(const G4String& name)
     if (verboseLevel > 0) 
       G4cout << "PhysicsList::Set " << name << " EM physics" << G4endl;
 
-  } else if (name == "standard") {
+  } else if (name == "emstandard_opt3") {
+    emName = name;
+    delete emPhysicsList;
+    emPhysicsList = new G4EmStandardPhysics_option3();
+    if (verboseLevel > 0) 
+      G4cout << "PhysicsList::Set " << name << " EM physics" << G4endl;
+
+  } else if (name == "emstandard_local") {
     emName = name;
     delete emPhysicsList;
     emPhysicsList = new PhysListEmStandard();
     if (verboseLevel > 0) 
       G4cout << "PhysicsList::Set " << name << " EM physics" << G4endl;
-
-  } else if (name == "standardIG") {
-    emName = name;
-    delete emPhysicsList;
-    emPhysicsList = new PhysListEmStandardIG();
-    if (verboseLevel > 0) 
-      G4cout << "PhysicsList::Set StandardIG EM physics" << G4endl;
 
   } else if (name == "livermore") {
     emName = name;
@@ -254,23 +255,25 @@ void PhysicsList::AddStepMax()
 
 void PhysicsList::SetCuts()
 {
-
   SetCutValue(cutForGamma, "gamma", "DefaultRegionForTheWorld");
   SetCutValue(cutForElectron, "e-", "DefaultRegionForTheWorld");
   SetCutValue(cutForPositron, "e+", "DefaultRegionForTheWorld");
-  G4cout << "PhysicsList: world cuts are set cutG= " << cutForGamma/mm 
-	 << " mm    cutE= " << cutForElectron/mm << " mm " << G4endl;
+  //  G4cout << "PhysicsList: world cuts are set cutG= " << cutForGamma/mm 
+  //	 << " mm    cutE= " << cutForElectron/mm << " mm " << G4endl;
 
-  if( !vertexDetectorCuts ) SetVertexCut(cutForElectron);
+  //G4cout << " cutV= " << cutForVertexDetector 
+  //     << " cutM= " << cutForMuonDetector<<G4endl;
+
   G4Region* region = (G4RegionStore::GetInstance())->GetRegion("VertexDetector");
-  region->SetProductionCuts(vertexDetectorCuts);
-  G4cout << "Vertex cuts are set" << G4endl;
-
-  if( !muonDetectorCuts ) SetMuonCut(cutForElectron);
+  vertexDetectorCuts = region->GetProductionCuts();
+  SetVertexCut(cutForVertexDetector);
+  //  G4cout << "Vertex cuts are set" << G4endl;
+ 
   region = (G4RegionStore::GetInstance())->GetRegion("MuonDetector");
-  region->SetProductionCuts(muonDetectorCuts);
-  G4cout << "Muon cuts are set" << G4endl;
-
+  muonDetectorCuts = region->GetProductionCuts();
+  SetMuonCut(cutForMuonDetector);
+  //G4cout << "Muon cuts are set " <<muonRegion << " " << muonDetectorCuts << G4endl;
+  
   if (verboseLevel>0) DumpCutValuesTable();
 }
 
@@ -302,30 +305,26 @@ void PhysicsList::SetCutForPositron(G4double cut)
 
 void PhysicsList::SetVertexCut(G4double cut)
 {
-  if( !vertexDetectorCuts ) vertexDetectorCuts = new G4ProductionCuts();
-
-  vertexDetectorCuts->SetProductionCut(cut, idxG4GammaCut);
-  vertexDetectorCuts->SetProductionCut(cut, idxG4ElectronCut);
-  vertexDetectorCuts->SetProductionCut(cut, idxG4PositronCut);
-
+  cutForVertexDetector = cut;
+  
+  if( vertexDetectorCuts ) {
+    vertexDetectorCuts->SetProductionCut(cut, idxG4GammaCut);
+    vertexDetectorCuts->SetProductionCut(cut, idxG4ElectronCut);
+    vertexDetectorCuts->SetProductionCut(cut, idxG4PositronCut);
+  } 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void PhysicsList::SetMuonCut(G4double cut)
 {
-  if( !muonDetectorCuts ) muonDetectorCuts = new G4ProductionCuts();
+  cutForMuonDetector   = cut;
 
-  muonDetectorCuts->SetProductionCut(cut, idxG4GammaCut);
-  muonDetectorCuts->SetProductionCut(cut, idxG4ElectronCut);
-  muonDetectorCuts->SetProductionCut(cut, idxG4PositronCut);
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void PhysicsList::SetMscStepLimit(G4bool val)
-{
-  mscStepLimit = val;
+  if( muonDetectorCuts ) {
+    muonDetectorCuts->SetProductionCut(cut, idxG4GammaCut);
+    muonDetectorCuts->SetProductionCut(cut, idxG4ElectronCut);
+    muonDetectorCuts->SetProductionCut(cut, idxG4PositronCut);
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

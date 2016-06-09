@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: SteppingAction.cc,v 1.11 2007/06/12 14:01:13 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: SteppingAction.cc,v 1.14 2008/08/22 18:30:27 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-02 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -50,26 +50,31 @@ SteppingAction::~SteppingAction()
 
 void SteppingAction::UserSteppingAction(const G4Step* aStep)
 {
- G4double edep = aStep->GetTotalEnergyDeposit();
- if (edep <= 0.) return;
+  G4double edep = aStep->GetTotalEnergyDeposit();
+  if (edep <= 0.) return;
 
- if(aStep->GetTrack()->GetTrackID() == 1) runAction->AddPrimaryStep();  
+  // G4cout << "edep= " << edep << "NIEL= " << aStep->GetNonIonizingEnergyDeposit()<<G4endl;
+
+  runAction->FillEdep(edep,aStep->GetNonIonizingEnergyDeposit());
+
+  if(aStep->GetTrack()->GetTrackID() == 1) runAction->AddPrimaryStep();  
  
- //Bragg curve
- //	
- G4StepPoint* prePoint  = aStep->GetPreStepPoint();
- G4StepPoint* postPoint = aStep->GetPostStepPoint();
+  //Bragg curve
+  //	
+  G4StepPoint* prePoint  = aStep->GetPreStepPoint();
+  G4StepPoint* postPoint = aStep->GetPostStepPoint();
    
- G4double x1 = prePoint->GetPosition().x(), x2 = postPoint->GetPosition().x();  
- G4double x = runAction->GetOffsetX() + x1 + G4UniformRand()*(x2-x1);
- runAction->FillHisto(0, x/mm , edep);
+  G4double x1 = prePoint->GetPosition().x(), x2 = postPoint->GetPosition().x();  
+  G4double x = runAction->GetOffsetX() + x1 + G4UniformRand()*(x2-x1);
+  runAction->FillHisto(0, x/mm , edep);
+  runAction->FillHisto(1, x/mm , edep);
 
- //fill tallies
- //
- G4TouchableHandle touchable = prePoint->GetTouchableHandle();
- G4LogicalVolume* lVolume = touchable->GetVolume()->GetLogicalVolume();
- if (lVolume == detector->GetLogicalTally())
-     runAction->FillTallyEdep(touchable->GetCopyNumber(), edep);
+  //fill tallies
+  //
+  G4TouchableHandle touchable = prePoint->GetTouchableHandle();
+  G4LogicalVolume* lVolume = touchable->GetVolume()->GetLogicalVolume();
+  if (lVolume == detector->GetLogicalTally())
+    runAction->FillTallyEdep(touchable->GetCopyNumber(), edep);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

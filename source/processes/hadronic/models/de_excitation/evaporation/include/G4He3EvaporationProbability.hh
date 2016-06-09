@@ -23,22 +23,17 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4He3EvaporationProbability.hh,v 1.3 2006/06/29 20:10:01 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+//J.M. Quesada (August2008). Based on:
 //
 // Hadronic Process: Nuclear De-excitations
-// by V. Lara (Nov 1999) 
+// by V. Lara (Oct 1998)
 //
-
-
-
 #ifndef G4He3EvaporationProbability_h
 #define G4He3EvaporationProbability_h 1
 
 
 #include "G4EvaporationProbability.hh"
-
+#include "G4He3CoulombBarrier.hh"
 
 class G4He3EvaporationProbability : public G4EvaporationProbability
 {
@@ -54,24 +49,41 @@ private:
   const G4He3EvaporationProbability & operator=(const G4He3EvaporationProbability &right);
   G4bool operator==(const G4He3EvaporationProbability &right) const;
   G4bool operator!=(const G4He3EvaporationProbability &right) const;
-  
+
 
 private:
 
-  virtual G4double CalcAlphaParam(const G4Fragment & fragment) const 
-  { return 1.0 + CCoeficient(static_cast<G4double>(fragment.GetZ()-GetZ()));}
-	
-  virtual G4double CalcBetaParam(const G4Fragment & ) const 
-  { return 0.0; }
+  virtual G4double CrossSection(const  G4Fragment & fragment, const  G4double K);
 
-	
-  G4double CCoeficient(const G4double aZ) const;
+  G4double GetOpt0(const G4double K);
+  G4double GetOpt12(const G4double K);
+  G4double GetOpt34(const G4double K);
 
-  // Excitation energy levels 
-  std::vector<G4double> ExcitEnergies;
-  // Spin of excitation energy levels 
-  std::vector<G4int> ExcitSpins;
+  
+ virtual G4double CalcAlphaParam(const G4Fragment & fragment) ;
+ 
+ virtual G4double CalcBetaParam(const G4Fragment & fragment) ;
+ 
+  G4double CCoeficient(const G4double aZ) ;
+  
+//data members
+   
+      G4He3CoulombBarrier theCoulombBarrier;
+
+      G4double ResidualA;
+      G4double ResidualZ; 
+      G4double theA;
+      G4double theZ;
+      G4double ResidualAthrd;
+      G4double FragmentA;
+      G4double FragmentAthrd;
+
+
 };
 
 
 #endif
+
+
+
+
