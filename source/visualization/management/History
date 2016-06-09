@@ -1,4 +1,4 @@
-$Id: History,v 1.100 2007/05/25 10:50:42 allison Exp $
+$Id: History,v 1.103 2007/11/16 20:34:17 perl Exp $
 
 -------------------------------------------------------------------
 
@@ -26,8 +26,20 @@ committal in the CVS repository !
 History file for visualization management sub-category
 ------------------------------------------------------
 
-25th May 2007  John Allison  (visman-V08-03-01)
-- Improved error trapping in viewer initialisation.
+16th November 2007  Joseph Perl  (visman-V09-00-02)
+- G4VisCommandsCompound.cc: Replace references to Wired3.
+- G4VisCommandsSceneAdd.cc: Replace references to Wired3.
+
+10th November 2007  John Allison  (visman-V09-00-01)
+- G4VisManager.cc: Minor improvement in messaging.
+- G4VisCommandsScene.cc: Improvements in /vis/scene/endOfEventAction messaging.
+
+10th July 2007  John Allison  (visman-V09-00-00)
+- Remove redundant method declarations in G4VisManager.hh.
+- Reinstate refesh after "/vis/viewer/set/autoRefresh true".
+
+-25th May 2007  John Allison  (visman-V08-03-01)
+ Improved error trapping in viewer initialisation.
 - Bug fix in /vis/scene/notifyHandlers for case of no current viewer.
 
 16th May 2007  John Allison  (visman-V08-03-00)

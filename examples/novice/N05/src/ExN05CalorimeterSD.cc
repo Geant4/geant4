@@ -25,7 +25,7 @@
 //
 //
 // $Id: ExN05CalorimeterSD.cc,v 1.8 2006/11/20 18:39:37 asaim Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 
 #include "ExN05CalorimeterSD.hh"

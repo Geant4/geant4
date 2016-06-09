@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // $Id: G4AttributeFilterT.hh,v 1.6 2006/12/13 15:50:02 gunter Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 // Generic attribute filter.
 //

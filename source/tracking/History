@@ -1,5 +1,5 @@
-$Id: History,v 1.118 2007/05/09 18:08:24 asaim Exp $
-$Name: geant4-09-00 $ 
+$Id: History,v 1.121 2007/10/09 03:51:06 tsasaki Exp $
+$Name: geant4-09-01 $ 
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,6 +17,13 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+08 Oct 2007 T.Sasaki (tracking-V09-00-01)
+- G4SteppingManager.hh: use kCarTolerance in CalculateSafety() instead of zero
+
+04 Oct 2007 T.Sasaki (tracking-V09-00-00)
+- G4SteppingManager: fix to use kCarTolerance in Stepping() for the
+  computation of 'endPointSafety'.
 
 9th May 2007 M.Asai (tracking-V08-03-00)
 - Allowing regional user stepping action.

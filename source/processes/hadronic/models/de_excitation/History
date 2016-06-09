@@ -13,6 +13,70 @@ code and to keep track of all tags.
      ---------------------------------------------------------------
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
+ 15 November 2007 Alex Howard (hadr-deex-V09-00-06)
+---------------------------------------------------
+- Added Jose Manuel Quesada's modification to util/src/G4CoulombBarrier.cc in
+  order to the original Dostrovski's formulation as opposed the modified that
+  was giving to low values.
+
+
+
+ 15 November 2007 F Lei (hadr-deex-V09-00-05)
+---------------------------------------------------
+- photon_evaporation
+  bug fix #952. Changes to G4VGammaDeexciation.cc:line 279; 
+			G4NuclearLevelManageer.cc:line 189;
+			G4ContinuumGammaDeexcitation.cc:line133.  
+
+
+ 01 November 2007 Dennis Wright (hadr-deex-V09-00-04)
+-----------------------------------------------------
+- suppressed gamma level file warnings in G4NuclearLevelManager.cc
+  To turn them on again, set pre-compiler flag 
+  CPPFLAGS += -DGAMMAFILEWARNING
+ 
+
+ 01 October 2007 Alex Howard (hadr-deex-V09-00-03)
+---------------------------------------------------
+- Protected Rj (Q_beta) factor against divide by zeroes - occurs occasionally.
+  Following files were altered:
+  G4AlphaEvaporationProbability.hh, G4He3EvaporationProbability.hh, 
+  G4DeuteronEvaporationProbability.hh, G4NeutronEvaporationProbability.hh, 
+  G4TritonEvaporationProbability.hh, G4ProtonEvaporationProbability.hh
+
+
+ 19 September 2007 Alex Howard (hadr-deex-V09-00-02)
+---------------------------------------------------
+- Removed atomic mass number from "gamma factor" within 
+  G4DeuteronEvaporationProbability.cc, G4TritonEvaporationProbability.cc, 
+  G4He3EvaporationProbability.cc, G4AlphaEvaporationProbability.cc
+
+
+ 23 August 2007 Alex Howard (hadr-deex-V09-00-01)
+-----------------------------------------------
+- Removed Coulomb Barrier to beta parameter as it's already included in the
+  inverse cross-section formula and is introduced in terms of the energy limit
+  of the integration.
+- Introduced missing Rj factor in the following files (evaporation module):
+  G4EvaporationProbability.cc, G4EvaporationProbability.hh, 
+  G4AlphaEvaporationProbability.hh, G4DeuteronEvaporationProbability.hh, 
+  G4He3EvaporationProbability.hh, G4NeutronEvaporationProbability.hh, 
+  G4ProtonEvaporationProbability.hh, G4TritonEvaporationProbability.hh
+
+
+ 28 July 2007 Alex Howard (hadr-deex-V09-00-00)
+-----------------------------------------------
+- Added Coulomb Barrier to Beta parameter for inverse channel
+cross-section. Needs verification.  Required additions and changes to the
+following files:
+G4EvaporationProbability.hh, G4EvaporationProbability.cc, 
+G4AlphaEvaporationProbability.hh, G4DeuteronEvaporationProbability.hh, 
+G4He3EvaporationProbability.hh, G4NeutronEvaporationProbability.hh, 
+G4ProtonEvaporationProbability.hh, G4TritonEvaporationProbability.hh, 
+G4AlphaEvaporationProbability.cc, G4DeuteronEvaporationProbability.cc, 
+G4He3EvaporationProbability.cc, G4NeutronEvaporationProbability.cc, 
+G4ProtonEvaporationProbability.cc, G4TritonEvaporationProbability.cc
+
 
  5 June 2007 Alex Howard (hadr-deex-V08-03-01)
 -----------------------------------------------

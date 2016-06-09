@@ -1,0 +1,531 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<gdml xmlns:gdml="http://cern.ch/2001/Schemas/GDML" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="GDMLSchema/gdml.xsd" >
+ <define>
+  <rotation name="tube0xc18410invoxel0xc15240r" unit="degree" x="-90" y="-0" z="0" />
+  <position name="cal0xc188b0inAREA_LV0xc14980p" unit="mm" x="100" y="0" z="20" />
+  <position name="cal0xc18820inAREA_LV0xc14980p" unit="mm" x="50" y="0" z="20" />
+  <position name="cal0xc18790inAREA_LV0xc14980p" unit="mm" x="0" y="0" z="20" />
+  <position name="cal0xc18700inAREA_LV0xc14980p" unit="mm" x="-50" y="0" z="20" />
+  <position name="cal0xc18670inAREA_LV0xc14980p" unit="mm" x="-100" y="0" z="20" />
+  <position name="voxel0xc18140inAREA_LV0xc14980p" unit="mm" x="140" y="0" z="-50" />
+  <position name="voxel0xc180b0inAREA_LV0xc14980p" unit="mm" x="120" y="0" z="-50" />
+  <position name="voxel0xc18020inAREA_LV0xc14980p" unit="mm" x="100" y="0" z="-50" />
+  <position name="voxel0xc17f90inAREA_LV0xc14980p" unit="mm" x="80" y="0" z="-50" />
+  <position name="voxel0xc17f00inAREA_LV0xc14980p" unit="mm" x="60" y="0" z="-50" />
+  <position name="voxel0xc17e70inAREA_LV0xc14980p" unit="mm" x="40" y="0" z="-50" />
+  <position name="voxel0xc168c0inAREA_LV0xc14980p" unit="mm" x="20" y="0" z="-50" />
+  <position name="voxel0xc16830inAREA_LV0xc14980p" unit="mm" x="0" y="0" z="-50" />
+  <position name="voxel0xc167a0inAREA_LV0xc14980p" unit="mm" x="-20" y="0" z="-50" />
+  <position name="voxel0xc16710inAREA_LV0xc14980p" unit="mm" x="-40" y="0" z="-50" />
+  <position name="voxel0xc179d0inAREA_LV0xc14980p" unit="mm" x="-60" y="0" z="-50" />
+  <position name="voxel0xc17940inAREA_LV0xc14980p" unit="mm" x="-80" y="0" z="-50" />
+  <position name="voxel0xc178b0inAREA_LV0xc14980p" unit="mm" x="-100" y="0" z="-50" />
+  <position name="voxel0xc17820inAREA_LV0xc14980p" unit="mm" x="-120" y="0" z="-50" />
+  <position name="voxel0xc17790inAREA_LV0xc14980p" unit="mm" x="-140" y="0" z="-50" />
+  <position name="voxel0xc17700inAREA_LV0xc14980p" unit="mm" x="140" y="0" z="-70" />
+  <position name="voxel0xc17670inAREA_LV0xc14980p" unit="mm" x="120" y="0" z="-70" />
+  <position name="voxel0xc175e0inAREA_LV0xc14980p" unit="mm" x="100" y="0" z="-70" />
+  <position name="voxel0xc17550inAREA_LV0xc14980p" unit="mm" x="80" y="0" z="-70" />
+  <position name="voxel0xc174c0inAREA_LV0xc14980p" unit="mm" x="60" y="0" z="-70" />
+  <position name="voxel0xc17430inAREA_LV0xc14980p" unit="mm" x="40" y="0" z="-70" />
+  <position name="voxel0xc173a0inAREA_LV0xc14980p" unit="mm" x="20" y="0" z="-70" />
+  <position name="voxel0xc17310inAREA_LV0xc14980p" unit="mm" x="0" y="0" z="-70" />
+  <position name="voxel0xc17280inAREA_LV0xc14980p" unit="mm" x="-20" y="0" z="-70" />
+  <position name="voxel0xc171f0inAREA_LV0xc14980p" unit="mm" x="-40" y="0" z="-70" />
+  <position name="voxel0xc17160inAREA_LV0xc14980p" unit="mm" x="-60" y="0" z="-70" />
+  <position name="voxel0xc170d0inAREA_LV0xc14980p" unit="mm" x="-80" y="0" z="-70" />
+  <position name="voxel0xc17040inAREA_LV0xc14980p" unit="mm" x="-100" y="0" z="-70" />
+  <position name="voxel0xc16fb0inAREA_LV0xc14980p" unit="mm" x="-120" y="0" z="-70" />
+  <position name="voxel0xc16f20inAREA_LV0xc14980p" unit="mm" x="-140" y="0" z="-70" />
+  <position name="voxel0xc16e90inAREA_LV0xc14980p" unit="mm" x="140" y="0" z="-90" />
+  <position name="voxel0xc16e00inAREA_LV0xc14980p" unit="mm" x="120" y="0" z="-90" />
+  <position name="voxel0xc16d70inAREA_LV0xc14980p" unit="mm" x="100" y="0" z="-90" />
+  <position name="voxel0xc16ce0inAREA_LV0xc14980p" unit="mm" x="80" y="0" z="-90" />
+  <position name="voxel0xc16c50inAREA_LV0xc14980p" unit="mm" x="60" y="0" z="-90" />
+  <position name="voxel0xc16bc0inAREA_LV0xc14980p" unit="mm" x="40" y="0" z="-90" />
+  <position name="voxel0xc16b30inAREA_LV0xc14980p" unit="mm" x="20" y="0" z="-90" />
+  <position name="voxel0xc16aa0inAREA_LV0xc14980p" unit="mm" x="0" y="0" z="-90" />
+  <position name="voxel0xc16a10inAREA_LV0xc14980p" unit="mm" x="-20" y="0" z="-90" />
+  <position name="voxel0xc16980inAREA_LV0xc14980p" unit="mm" x="-40" y="0" z="-90" />
+  <position name="voxel0xc16920inAREA_LV0xc14980p" unit="mm" x="-60" y="0" z="-90" />
+  <position name="voxel0xc15dc0inAREA_LV0xc14980p" unit="mm" x="-80" y="0" z="-90" />
+  <position name="voxel0xc166b0inAREA_LV0xc14980p" unit="mm" x="-100" y="0" z="-90" />
+  <position name="voxel0xc16620inAREA_LV0xc14980p" unit="mm" x="-120" y="0" z="-90" />
+  <position name="voxel0xc16590inAREA_LV0xc14980p" unit="mm" x="-140" y="0" z="-90" />
+  <position name="voxel0xc16500inAREA_LV0xc14980p" unit="mm" x="140" y="0" z="-110" />
+  <position name="voxel0xc16470inAREA_LV0xc14980p" unit="mm" x="120" y="0" z="-110" />
+  <position name="voxel0xc163e0inAREA_LV0xc14980p" unit="mm" x="100" y="0" z="-110" />
+  <position name="voxel0xc16350inAREA_LV0xc14980p" unit="mm" x="80" y="0" z="-110" />
+  <position name="voxel0xc162c0inAREA_LV0xc14980p" unit="mm" x="60" y="0" z="-110" />
+  <position name="voxel0xc16230inAREA_LV0xc14980p" unit="mm" x="40" y="0" z="-110" />
+  <position name="voxel0xc161a0inAREA_LV0xc14980p" unit="mm" x="20" y="0" z="-110" />
+  <position name="voxel0xc16110inAREA_LV0xc14980p" unit="mm" x="0" y="0" z="-110" />
+  <position name="voxel0xc16080inAREA_LV0xc14980p" unit="mm" x="-20" y="0" z="-110" />
+  <position name="voxel0xc15ff0inAREA_LV0xc14980p" unit="mm" x="-40" y="0" z="-110" />
+  <position name="voxel0xc15f60inAREA_LV0xc14980p" unit="mm" x="-60" y="0" z="-110" />
+  <position name="voxel0xc15ed0inAREA_LV0xc14980p" unit="mm" x="-80" y="0" z="-110" />
+  <position name="voxel0xc158b0inAREA_LV0xc14980p" unit="mm" x="-100" y="0" z="-110" />
+  <position name="voxel0xc15d30inAREA_LV0xc14980p" unit="mm" x="-120" y="0" z="-110" />
+  <position name="voxel0xc15ca0inAREA_LV0xc14980p" unit="mm" x="-140" y="0" z="-110" />
+  <position name="voxel0xc15c10inAREA_LV0xc14980p" unit="mm" x="140" y="0" z="-130" />
+  <position name="voxel0xc15b80inAREA_LV0xc14980p" unit="mm" x="120" y="0" z="-130" />
+  <position name="voxel0xc15af0inAREA_LV0xc14980p" unit="mm" x="100" y="0" z="-130" />
+  <position name="voxel0xc15a60inAREA_LV0xc14980p" unit="mm" x="80" y="0" z="-130" />
+  <position name="voxel0xc159d0inAREA_LV0xc14980p" unit="mm" x="60" y="0" z="-130" />
+  <position name="voxel0xc15940inAREA_LV0xc14980p" unit="mm" x="40" y="0" z="-130" />
+  <position name="voxel0xc15820inAREA_LV0xc14980p" unit="mm" x="20" y="0" z="-130" />
+  <position name="voxel0xc15790inAREA_LV0xc14980p" unit="mm" x="0" y="0" z="-130" />
+  <position name="voxel0xc15700inAREA_LV0xc14980p" unit="mm" x="-20" y="0" z="-130" />
+  <position name="voxel0xc15670inAREA_LV0xc14980p" unit="mm" x="-40" y="0" z="-130" />
+  <position name="voxel0xc15610inAREA_LV0xc14980p" unit="mm" x="-60" y="0" z="-130" />
+  <position name="voxel0xc15580inAREA_LV0xc14980p" unit="mm" x="-80" y="0" z="-130" />
+  <position name="voxel0xc154c0inAREA_LV0xc14980p" unit="mm" x="-100" y="0" z="-130" />
+  <position name="voxel0xc15430inAREA_LV0xc14980p" unit="mm" x="-120" y="0" z="-130" />
+  <position name="voxel0xc15380inAREA_LV0xc14980p" unit="mm" x="-140" y="0" z="-130" />
+ </define>
+ <materials>
+  <element Z="7" formula="N" name="Nitrogen0xc03430" >
+   <atom value="14.0067" />
+  </element>
+  <element Z="8" formula="O" name="Oxygen0xc03600" >
+   <atom value="15.9994" />
+  </element>
+  <material formula=" " name="Vacuum0xc041f0" >
+   <D value="1e-25" />
+   <fraction n="0.7" ref="Nitrogen0xc03430" />
+   <fraction n="0.3" ref="Oxygen0xc03600" />
+  </material>
+  <element Z="18" formula="Ar" name="Argon0xc03b70" >
+   <atom value="39.948" />
+  </element>
+  <material formula=" " name="Air0xc04770" >
+   <D value="0.0012929" />
+   <fraction n="0.755078" ref="Nitrogen0xc03430" />
+   <fraction n="0.232116" ref="Oxygen0xc03600" />
+   <fraction n="0.0128064" ref="Argon0xc03b70" />
+  </material>
+  <material Z="18" formula=" " name="ArgonGas0xc051f0" >
+   <D value="0.00166042" />
+   <atom value="39.948" />
+  </material>
+  <element Z="6" formula="C" name="Carbon0xc032a0" >
+   <atom value="12.011" />
+  </element>
+  <element Z="1" formula="H" name="Hydrogen0x950310" >
+   <atom value="1.00794" />
+  </element>
+  <material formula=" " name="Ethane0xc060e0" >
+   <D value="0.00126349" />
+   <fraction n="0.798879" ref="Carbon0xc032a0" />
+   <fraction n="0.201121" ref="Hydrogen0x950310" />
+  </material>
+  <element Z="18" formula=" " name="ArgonGas0xc05a70" >
+   <atom value="39.948" />
+  </element>
+  <material formula=" " name="ArEthane0xc063b0" >
+   <D value="0.00146196" />
+   <fraction n="0.567878" ref="ArgonGas0xc05a70" />
+   <fraction n="0.345213" ref="Carbon0xc032a0" />
+   <fraction n="0.0869089" ref="Hydrogen0x950310" />
+  </material>
+  <material Z="14" formula=" " name="SiliconWafer0xc06e40" >
+   <D value="2.33" />
+   <atom value="28.0855" />
+  </material>
+  <material Z="13" formula=" " name="Al0xc07d10" >
+   <D value="2.7" />
+   <atom value="26.98" />
+  </material>
+  <material Z="26" formula=" " name="Iron0xc08580" >
+   <D value="7.87" />
+   <atom value="55.847" />
+  </material>
+  <material Z="82" formula=" " name="Lead0xc08ce0" >
+   <D value="11.35" />
+   <atom value="207.2" />
+  </material>
+  <material formula=" " name="Scinti0xc097f0" >
+   <D value="1.032" />
+   <fraction n="0.922579" ref="Carbon0xc032a0" />
+   <fraction n="0.077421" ref="Hydrogen0x950310" />
+  </material>
+  <element Z="14" formula="Si" name="Silicon0xc039a0" >
+   <atom value="28.0855" />
+  </element>
+  <material formula=" " name="Quartz0xc09a30" >
+   <D value="2.64" />
+   <fraction n="0.467435" ref="Silicon0xc039a0" />
+   <fraction n="0.532565" ref="Oxygen0xc03600" />
+  </material>
+  <element Z="11" formula="Na" name="Sodium0xc037c0" >
+   <atom value="22.9898" />
+  </element>
+  <element Z="53" formula="I" name="Iodine0xc03d40" >
+   <atom value="126.904" />
+  </element>
+  <material formula=" " name="NaI0xc0a290" >
+   <D value="3.67" />
+   <fraction n="0.153373" ref="Sodium0xc037c0" />
+   <fraction n="0.846627" ref="Iodine0xc03d40" />
+  </material>
+  <element Z="55" formula="Cs" name="Cesium0xc03f60" >
+   <atom value="132.905" />
+  </element>
+  <material formula=" " name="CsI0xc0aab0" >
+   <D value="4.51" />
+   <fraction n="0.511549" ref="Cesium0xc03f60" />
+   <fraction n="0.488451" ref="Iodine0xc03d40" />
+  </material>
+ </materials>
+ <solids>
+  <box aunit="radian" lunit="mm" name="AREA0xc145c0" x="300" y="300" z="300" />
+  <box aunit="radian" lunit="mm" name="voxel0xc151b0" x="20" y="200" z="20" />
+  <tube aunit="degree" deltaphi="360" lunit="mm" name="tube0xc181d0" rmax="9.5" rmin="0" startphi="0" z="200" />
+  <box aunit="radian" lunit="mm" name="cal0xc184a0" x="50" y="50" z="60" />
+ </solids>
+ <structure>
+  <volume name="tube0xc18280" >
+   <materialref ref="Al0xc07d10" />
+   <solidref ref="tube0xc181d0" />
+  </volume>
+  <volume name="voxel0xc15240" >
+   <materialref ref="Vacuum0xc041f0" />
+   <solidref ref="voxel0xc151b0" />
+   <physvol>
+    <volumeref ref="tube0xc18280" />
+    <rotationref ref="tube0xc18410invoxel0xc15240r" />
+   </physvol>
+  </volume>
+  <volume name="cal0xc18530" >
+   <materialref ref="CsI0xc0aab0" />
+   <solidref ref="cal0xc184a0" />
+  </volume>
+  <volume name="AREA_LV0xc14980" >
+   <materialref ref="Vacuum0xc041f0" />
+   <solidref ref="AREA0xc145c0" />
+   <physvol>
+    <volumeref ref="cal0xc18530" />
+    <positionref ref="cal0xc188b0inAREA_LV0xc14980p" />
+   </physvol>
+   <physvol>
+    <volumeref ref="cal0xc18530" />
+    <positionref ref="cal0xc18820inAREA_LV0xc14980p" />
+   </physvol>
+   <physvol>
+    <volumeref ref="cal0xc18530" />
+    <positionref ref="cal0xc18790inAREA_LV0xc14980p" />
+   </physvol>
+   <physvol>
+    <volumeref ref="cal0xc18530" />
+    <positionref ref="cal0xc18700inAREA_LV0xc14980p" />
+   </physvol>
+   <physvol>
+    <volumeref ref="cal0xc18530" />
+    <positionref ref="cal0xc18670inAREA_LV0xc14980p" />
+   </physvol>
+   <physvol>
+    <volumeref ref="voxel0xc15240" />
+    <positionref ref="voxel0xc18140inAREA_LV0xc14980p" />
+   </physvol>
+   <physvol>
+    <volumeref ref="voxel0xc15240" />
+    <positionref ref="voxel0xc180b0inAREA_LV0xc14980p" />
+   </physvol>
+   <physvol>
+    <volumeref ref="voxel0xc15240" />
+    <positionref ref="voxel0xc18020inAREA_LV0xc14980p" />
+   </physvol>
+   <physvol>
+    <volumeref ref="voxel0xc15240" />
+    <positionref ref="voxel0xc17f90inAREA_LV0xc14980p" />
+   </physvol>
+   <physvol>
+    <volumeref ref="voxel0xc15240" />
+    <positionref ref="voxel0xc17f00inAREA_LV0xc14980p" />
+   </physvol>
+   <physvol>
+    <volumeref ref="voxel0xc15240" />
+    <positionref ref="voxel0xc17e70inAREA_LV0xc14980p" />
+   </physvol>
+   <physvol>
+    <volumeref ref="voxel0xc15240" />
+    <positionref ref="voxel0xc168c0inAREA_LV0xc14980p" />
+   </physvol>
+   <physvol>
+    <volumeref ref="voxel0xc15240" />
+    <positionref ref="voxel0xc16830inAREA_LV0xc14980p" />
+   </physvol>
+   <physvol>
+    <volumeref ref="voxel0xc15240" />
+    <positionref ref="voxel0xc167a0inAREA_LV0xc14980p" />
+   </physvol>
+   <physvol>
+    <volumeref ref="voxel0xc15240" />
+    <positionref ref="voxel0xc16710inAREA_LV0xc14980p" />
+   </physvol>
+   <physvol>
+    <volumeref ref="voxel0xc15240" />
+    <positionref ref="voxel0xc179d0inAREA_LV0xc14980p" />
+   </physvol>
+   <physvol>
+    <volumeref ref="voxel0xc15240" />
+    <positionref ref="voxel0xc17940inAREA_LV0xc14980p" />
+   </physvol>
+   <physvol>
+    <volumeref ref="voxel0xc15240" />
+    <positionref ref="voxel0xc178b0inAREA_LV0xc14980p" />
+   </physvol>
+   <physvol>
+    <volumeref ref="voxel0xc15240" />
+    <positionref ref="voxel0xc17820inAREA_LV0xc14980p" />
+   </physvol>
+   <physvol>
+    <volumeref ref="voxel0xc15240" />
+    <positionref ref="voxel0xc17790inAREA_LV0xc14980p" />
+   </physvol>
+   <physvol>
+    <volumeref ref="voxel0xc15240" />
+    <positionref ref="voxel0xc17700inAREA_LV0xc14980p" />
+   </physvol>
+   <physvol>
+    <volumeref ref="voxel0xc15240" />
+    <positionref ref="voxel0xc17670inAREA_LV0xc14980p" />
+   </physvol>
+   <physvol>
+    <volumeref ref="voxel0xc15240" />
+    <positionref ref="voxel0xc175e0inAREA_LV0xc14980p" />
+   </physvol>
+   <physvol>
+    <volumeref ref="voxel0xc15240" />
+    <positionref ref="voxel0xc17550inAREA_LV0xc14980p" />
+   </physvol>
+   <physvol>
+    <volumeref ref="voxel0xc15240" />
+    <positionref ref="voxel0xc174c0inAREA_LV0xc14980p" />
+   </physvol>
+   <physvol>
+    <volumeref ref="voxel0xc15240" />
+    <positionref ref="voxel0xc17430inAREA_LV0xc14980p" />
+   </physvol>
+   <physvol>
+    <volumeref ref="voxel0xc15240" />
+    <positionref ref="voxel0xc173a0inAREA_LV0xc14980p" />
+   </physvol>
+   <physvol>
+    <volumeref ref="voxel0xc15240" />
+    <positionref ref="voxel0xc17310inAREA_LV0xc14980p" />
+   </physvol>
+   <physvol>
+    <volumeref ref="voxel0xc15240" />
+    <positionref ref="voxel0xc17280inAREA_LV0xc14980p" />
+   </physvol>
+   <physvol>
+    <volumeref ref="voxel0xc15240" />
+    <positionref ref="voxel0xc171f0inAREA_LV0xc14980p" />
+   </physvol>
+   <physvol>
+    <volumeref ref="voxel0xc15240" />
+    <positionref ref="voxel0xc17160inAREA_LV0xc14980p" />
+   </physvol>
+   <physvol>
+    <volumeref ref="voxel0xc15240" />
+    <positionref ref="voxel0xc170d0inAREA_LV0xc14980p" />
+   </physvol>
+   <physvol>
+    <volumeref ref="voxel0xc15240" />
+    <positionref ref="voxel0xc17040inAREA_LV0xc14980p" />
+   </physvol>
+   <physvol>
+    <volumeref ref="voxel0xc15240" />
+    <positionref ref="voxel0xc16fb0inAREA_LV0xc14980p" />
+   </physvol>
+   <physvol>
+    <volumeref ref="voxel0xc15240" />
+    <positionref ref="voxel0xc16f20inAREA_LV0xc14980p" />
+   </physvol>
+   <physvol>
+    <volumeref ref="voxel0xc15240" />
+    <positionref ref="voxel0xc16e90inAREA_LV0xc14980p" />
+   </physvol>
+   <physvol>
+    <volumeref ref="voxel0xc15240" />
+    <positionref ref="voxel0xc16e00inAREA_LV0xc14980p" />
+   </physvol>
+   <physvol>
+    <volumeref ref="voxel0xc15240" />
+    <positionref ref="voxel0xc16d70inAREA_LV0xc14980p" />
+   </physvol>
+   <physvol>
+    <volumeref ref="voxel0xc15240" />
+    <positionref ref="voxel0xc16ce0inAREA_LV0xc14980p" />
+   </physvol>
+   <physvol>
+    <volumeref ref="voxel0xc15240" />
+    <positionref ref="voxel0xc16c50inAREA_LV0xc14980p" />
+   </physvol>
+   <physvol>
+    <volumeref ref="voxel0xc15240" />
+    <positionref ref="voxel0xc16bc0inAREA_LV0xc14980p" />
+   </physvol>
+   <physvol>
+    <volumeref ref="voxel0xc15240" />
+    <positionref ref="voxel0xc16b30inAREA_LV0xc14980p" />
+   </physvol>
+   <physvol>
+    <volumeref ref="voxel0xc15240" />
+    <positionref ref="voxel0xc16aa0inAREA_LV0xc14980p" />
+   </physvol>
+   <physvol>
+    <volumeref ref="voxel0xc15240" />
+    <positionref ref="voxel0xc16a10inAREA_LV0xc14980p" />
+   </physvol>
+   <physvol>
+    <volumeref ref="voxel0xc15240" />
+    <positionref ref="voxel0xc16980inAREA_LV0xc14980p" />
+   </physvol>
+   <physvol>
+    <volumeref ref="voxel0xc15240" />
+    <positionref ref="voxel0xc16920inAREA_LV0xc14980p" />
+   </physvol>
+   <physvol>
+    <volumeref ref="voxel0xc15240" />
+    <positionref ref="voxel0xc15dc0inAREA_LV0xc14980p" />
+   </physvol>
+   <physvol>
+    <volumeref ref="voxel0xc15240" />
+    <positionref ref="voxel0xc166b0inAREA_LV0xc14980p" />
+   </physvol>
+   <physvol>
+    <volumeref ref="voxel0xc15240" />
+    <positionref ref="voxel0xc16620inAREA_LV0xc14980p" />
+   </physvol>
+   <physvol>
+    <volumeref ref="voxel0xc15240" />
+    <positionref ref="voxel0xc16590inAREA_LV0xc14980p" />
+   </physvol>
+   <physvol>
+    <volumeref ref="voxel0xc15240" />
+    <positionref ref="voxel0xc16500inAREA_LV0xc14980p" />
+   </physvol>
+   <physvol>
+    <volumeref ref="voxel0xc15240" />
+    <positionref ref="voxel0xc16470inAREA_LV0xc14980p" />
+   </physvol>
+   <physvol>
+    <volumeref ref="voxel0xc15240" />
+    <positionref ref="voxel0xc163e0inAREA_LV0xc14980p" />
+   </physvol>
+   <physvol>
+    <volumeref ref="voxel0xc15240" />
+    <positionref ref="voxel0xc16350inAREA_LV0xc14980p" />
+   </physvol>
+   <physvol>
+    <volumeref ref="voxel0xc15240" />
+    <positionref ref="voxel0xc162c0inAREA_LV0xc14980p" />
+   </physvol>
+   <physvol>
+    <volumeref ref="voxel0xc15240" />
+    <positionref ref="voxel0xc16230inAREA_LV0xc14980p" />
+   </physvol>
+   <physvol>
+    <volumeref ref="voxel0xc15240" />
+    <positionref ref="voxel0xc161a0inAREA_LV0xc14980p" />
+   </physvol>
+   <physvol>
+    <volumeref ref="voxel0xc15240" />
+    <positionref ref="voxel0xc16110inAREA_LV0xc14980p" />
+   </physvol>
+   <physvol>
+    <volumeref ref="voxel0xc15240" />
+    <positionref ref="voxel0xc16080inAREA_LV0xc14980p" />
+   </physvol>
+   <physvol>
+    <volumeref ref="voxel0xc15240" />
+    <positionref ref="voxel0xc15ff0inAREA_LV0xc14980p" />
+   </physvol>
+   <physvol>
+    <volumeref ref="voxel0xc15240" />
+    <positionref ref="voxel0xc15f60inAREA_LV0xc14980p" />
+   </physvol>
+   <physvol>
+    <volumeref ref="voxel0xc15240" />
+    <positionref ref="voxel0xc15ed0inAREA_LV0xc14980p" />
+   </physvol>
+   <physvol>
+    <volumeref ref="voxel0xc15240" />
+    <positionref ref="voxel0xc158b0inAREA_LV0xc14980p" />
+   </physvol>
+   <physvol>
+    <volumeref ref="voxel0xc15240" />
+    <positionref ref="voxel0xc15d30inAREA_LV0xc14980p" />
+   </physvol>
+   <physvol>
+    <volumeref ref="voxel0xc15240" />
+    <positionref ref="voxel0xc15ca0inAREA_LV0xc14980p" />
+   </physvol>
+   <physvol>
+    <volumeref ref="voxel0xc15240" />
+    <positionref ref="voxel0xc15c10inAREA_LV0xc14980p" />
+   </physvol>
+   <physvol>
+    <volumeref ref="voxel0xc15240" />
+    <positionref ref="voxel0xc15b80inAREA_LV0xc14980p" />
+   </physvol>
+   <physvol>
+    <volumeref ref="voxel0xc15240" />
+    <positionref ref="voxel0xc15af0inAREA_LV0xc14980p" />
+   </physvol>
+   <physvol>
+    <volumeref ref="voxel0xc15240" />
+    <positionref ref="voxel0xc15a60inAREA_LV0xc14980p" />
+   </physvol>
+   <physvol>
+    <volumeref ref="voxel0xc15240" />
+    <positionref ref="voxel0xc159d0inAREA_LV0xc14980p" />
+   </physvol>
+   <physvol>
+    <volumeref ref="voxel0xc15240" />
+    <positionref ref="voxel0xc15940inAREA_LV0xc14980p" />
+   </physvol>
+   <physvol>
+    <volumeref ref="voxel0xc15240" />
+    <positionref ref="voxel0xc15820inAREA_LV0xc14980p" />
+   </physvol>
+   <physvol>
+    <volumeref ref="voxel0xc15240" />
+    <positionref ref="voxel0xc15790inAREA_LV0xc14980p" />
+   </physvol>
+   <physvol>
+    <volumeref ref="voxel0xc15240" />
+    <positionref ref="voxel0xc15700inAREA_LV0xc14980p" />
+   </physvol>
+   <physvol>
+    <volumeref ref="voxel0xc15240" />
+    <positionref ref="voxel0xc15670inAREA_LV0xc14980p" />
+   </physvol>
+   <physvol>
+    <volumeref ref="voxel0xc15240" />
+    <positionref ref="voxel0xc15610inAREA_LV0xc14980p" />
+   </physvol>
+   <physvol>
+    <volumeref ref="voxel0xc15240" />
+    <positionref ref="voxel0xc15580inAREA_LV0xc14980p" />
+   </physvol>
+   <physvol>
+    <volumeref ref="voxel0xc15240" />
+    <positionref ref="voxel0xc154c0inAREA_LV0xc14980p" />
+   </physvol>
+   <physvol>
+    <volumeref ref="voxel0xc15240" />
+    <positionref ref="voxel0xc15430inAREA_LV0xc14980p" />
+   </physvol>
+   <physvol>
+    <volumeref ref="voxel0xc15240" />
+    <positionref ref="voxel0xc15380inAREA_LV0xc14980p" />
+   </physvol>
+  </volume>
+ </structure>
+ <setup name="Default" version="1.0" >
+  <world ref="AREA_LV0xc14980" />
+ </setup>
+</gdml>

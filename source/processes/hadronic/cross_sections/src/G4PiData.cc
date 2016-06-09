@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// GEANT4 tag $Name: geant4-09-00 $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 // --------------------------------------------------------------------
 // by J.P Wellisch, Sun Sep 15 2002.

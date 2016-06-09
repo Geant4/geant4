@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4QuasmonString.hh,v 1.4 2006/06/29 20:06:41 gunter Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 //      ---------------- G4QuasmonString ----------------
 //             by Mikhail Kossov, October 2004.

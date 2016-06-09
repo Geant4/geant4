@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // $Id: G4DimensionedType.hh,v 1.3 2006/12/13 15:44:09 gunter Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 // Generic dimensioned type.
 //

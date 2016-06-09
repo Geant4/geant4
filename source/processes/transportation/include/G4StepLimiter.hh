@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4StepLimiter.hh,v 1.3 2006/06/29 21:10:28 gunter Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 // class description
 //

@@ -32,6 +32,8 @@
 /gui/addButton vis Vis2(OGLSX) "/control/execute visTutor/exN03Vis2.mac"
 /gui/addButton vis Vis3(OGLSX) "/control/execute visTutor/exN03Vis3.mac"
 /gui/addButton vis Vis4(OGLIX) "/control/execute visTutor/exN03Vis4.mac"
+/gui/addButton vis Vis15(OGLIQT) "/control/execute visTutor/exN03Vis15.mac"
+/gui/addButton vis Vis14(OGLSQT) "/control/execute visTutor/exN03Vis14.mac"
 /gui/addButton vis Vis5(OIX)   "/control/execute visTutor/exN03Vis5.mac"
 /gui/addButton vis Vis6(VRML2FILE) "/control/execute visTutor/exN03Vis6.mac"
 /gui/addButton vis Vis7(DAWNFILE) "/control/execute visTutor/exN03Vis7.mac"

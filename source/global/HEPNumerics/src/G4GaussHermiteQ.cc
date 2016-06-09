@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4GaussHermiteQ.cc,v 1.7 2006/06/29 19:00:09 gunter Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: G4GaussHermiteQ.cc,v 1.8 2007/11/13 17:35:06 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 #include "G4GaussHermiteQ.hh"
 
@@ -42,7 +42,7 @@ G4GaussHermiteQ::G4GaussHermiteQ ( function pFunction,
    const G4int maxNumber = 12 ;
    
    G4int i=1, j=1, k=1 ;
-   G4double newton=0.;
+   G4double newton0=0.;
    G4double newton1=0.0, temp1=0.0, temp2=0.0, temp3=0.0, temp=0.0 ;
    G4double piInMinusQ = std::pow(pi,-0.25) ; // 1.0/std::sqrt(std::sqrt(pi)) ??
 
@@ -54,24 +54,24 @@ G4GaussHermiteQ::G4GaussHermiteQ ( function pFunction,
    {
       if(i == 1)
       {
-         newton = std::sqrt((G4double)(2*nHermite + 1)) - 
-                  1.85575001*std::pow((G4double)(2*nHermite + 1),-0.16666999) ;
+         newton0 = std::sqrt((G4double)(2*nHermite + 1)) - 
+                   1.85575001*std::pow((G4double)(2*nHermite + 1),-0.16666999) ;
       }
       else if(i == 2)
       {
-         newton -= 1.14001*std::pow((G4double)nHermite,0.425999)/newton ;
+         newton0 -= 1.14001*std::pow((G4double)nHermite,0.425999)/newton0 ;
       }
       else if(i == 3)
       {
-         newton = 1.86002*newton - 0.86002*fAbscissa[0] ;
+         newton0 = 1.86002*newton0 - 0.86002*fAbscissa[0] ;
       }
       else if(i == 4)
       {
-         newton = 1.91001*newton - 0.91001*fAbscissa[1] ;
+         newton0 = 1.91001*newton0 - 0.91001*fAbscissa[1] ;
       }
       else 
       {
-         newton = 2.0*newton - fAbscissa[i - 3] ;
+         newton0 = 2.0*newton0 - fAbscissa[i - 3] ;
       }
       for(k=1;k<=maxNumber;k++)
       {
@@ -81,13 +81,13 @@ G4GaussHermiteQ::G4GaussHermiteQ ( function pFunction,
          {
             temp3 = temp2 ;
             temp2 = temp1 ;
-            temp1 = newton*std::sqrt(2.0/j)*temp2
+            temp1 = newton0*std::sqrt(2.0/j)*temp2
                   - std::sqrt(((G4double)(j - 1))/j)*temp3 ;
          }
          temp = std::sqrt((G4double)2*nHermite)*temp2 ;
-         newton1 = newton ;
-         newton = newton1 - temp1/temp ;
-         if(std::fabs(newton - newton1) <= tolerance) 
+         newton1 = newton0 ;
+         newton0 = newton1 - temp1/temp ;
+         if(std::fabs(newton0 - newton1) <= tolerance) 
          {
             break ;
          }
@@ -98,7 +98,7 @@ G4GaussHermiteQ::G4GaussHermiteQ ( function pFunction,
                      "OutOfRange", FatalException,
                      "Too many iterations in Gauss-Hermite constructor.") ;
       }
-      fAbscissa[i-1] =  newton ;
+      fAbscissa[i-1] =  newton0 ;
       fWeight[i-1] = 2.0/(temp*temp) ;
    }
 }

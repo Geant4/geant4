@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4QString.cc,v 1.3 2006/12/12 11:02:22 mkossov Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: G4QString.cc,v 1.4 2007/07/06 07:38:36 mkossov Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file
@@ -409,15 +409,14 @@ G4QHadronVector* G4QString::FragmentString(G4bool QL)
 // Creates a string, using only the end-partons of the string
 G4QString* G4QString::CPExcited()
 {
-	G4QParton* Left = new G4QParton(GetLeftParton());
-	G4QParton* Right= new G4QParton(GetRightParton());
-	return new G4QString(Left,Right,GetDirection());
+	G4QParton* LeftParton = new G4QParton(GetLeftParton());
+	G4QParton* RightParton= new G4QParton(GetRightParton());
+	return new G4QString(LeftParton,RightParton,GetDirection());
 } // End of CPExcited
 
 // Simple decay of the string
 G4QHadronVector* G4QString::LightFragmentationTest()
 {
-  static const G4double MassCut = 0.35*GeV; 
   // Check string decay threshold
 		
 	 G4QHadronVector* result=0;  // return 0 when string exceeds the mass cut

@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmStandardPhysics_option2.cc,v 1.2 2007/05/18 17:47:17 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: G4EmStandardPhysics_option2.cc,v 1.3 2007/10/02 11:18:02 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 //---------------------------------------------------------------------------
 //
@@ -207,6 +207,11 @@ void G4EmStandardPhysics_option2::ConstructProcess()
   G4EmProcessOptions opt;
   opt.SetVerbose(verbose);
   opt.SetSubCutoff(true);
+  opt.SetMinEnergy(0.1*keV);
+  opt.SetMaxEnergy(10.*TeV);
+  opt.SetDEDXBinning(220);
+  opt.SetLambdaBinning(220);
+  opt.SetLinearLossLimit(1.e-6);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

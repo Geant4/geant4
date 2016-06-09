@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: geant4-09-00-cand-03    (29-June-2007)
+ Geant4 version Name: global-V09-00-02    (14-December-2007)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -38,8 +38,13 @@ Going to assign importance: 131072, to volume: cell_18
  creating importance process, paraflag is: 0
  importance process paraflag is: 0
 === G4ProcessPlacer::AddProcessAsSecondDoIt: for: neutron
-  ProcessName: ImportanceProcess
-The initial Vectors: 
+  Modifying Process Order for ProcessName: ImportanceProcess
+  The initial AlongStep Vectors: 
+GPIL Vector: 
+   Transportation
+DoIt Vector: 
+   Transportation
+The initial PostStep Vectors: 
 GPIL Vector: 
    Decay
    HadronCapture
@@ -54,7 +59,14 @@ DoIt Vector:
    HadronFission
    HadronCapture
    Decay
-The final Vectors: 
+  The final AlongStep Vectors: 
+GPIL Vector: 
+   ImportanceProcess
+   Transportation
+DoIt Vector: 
+   Transportation
+   ImportanceProcess
+The final PostStep Vectors: 
 GPIL Vector: 
    Decay
    HadronCapture
@@ -97,7 +109,7 @@ eIoni:   tables are built for  e-
       Lambda tables from threshold to 100 TeV in 120 bins.
       Delta cross sections and sampling from MollerBhabha model
       Good description from 1 KeV to 100 GeV.
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1
 
 eBrem:   tables are built for  e-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -110,7 +122,7 @@ eIoni:   tables are built for  e+
       Lambda tables from threshold to 100 TeV in 120 bins.
       Delta cross sections and sampling from MollerBhabha model
       Good description from 1 KeV to 100 GeV.
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1
 
 eBrem:   tables are built for  e+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -133,7 +145,7 @@ hIoni:   tables are built for  proton
       Scaling relation is used from proton dE/dx and range.
       Delta cross sections and sampling from BetheBloch model for scaled energy > 2 MeV
       Parametrisation from Bragg for protons below.
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1
 
 msc:  Model variant of multiple scattering for GenericIon
       LateralDisplacementFlag=  0   Skin= 0
@@ -145,7 +157,7 @@ hIoni:   tables are built for  anti_proton
       Scaling relation is used from proton dE/dx and range.
       Delta cross sections and sampling from BetheBloch model for scaled energy > 2 MeV
       Parametrisation from Bragg for protons below.
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1
 
 msc:  Model variant of multiple scattering for mu+
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
@@ -157,7 +169,7 @@ muIoni:   tables are built for  mu+
       Lambda tables from threshold to 100 TeV in 120 bins.
       Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
       radiative corrections for E > 1 GeV
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1
 
 muBrems:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -174,7 +186,7 @@ muIoni:   tables are built for  mu-
       Lambda tables from threshold to 100 TeV in 120 bins.
       Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
       radiative corrections for E > 1 GeV
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1
 
 muBrems:   tables are built for  mu-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -192,7 +204,7 @@ hIoni:   tables are built for  pi+
       Scaling relation is used from proton dE/dx and range.
       Delta cross sections and sampling from BetheBloch model for scaled energy > 0.297504 MeV
       Parametrisation from Bragg for protons below.
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1
 
 msc:  Model variant of multiple scattering for pi-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
@@ -205,7 +217,7 @@ hIoni:   tables are built for  pi-
       Scaling relation is used from proton dE/dx and range.
       Delta cross sections and sampling from BetheBloch model for scaled energy > 0.297504 MeV
       Parametrisation from Bragg for protons below.
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1
 ++ ConcreteSD/Collisions id 0
 ++ ConcreteSD/CollWeight id 1
 ++ ConcreteSD/Population id 2
@@ -221,30 +233,37 @@ hIoni:   tables are built for  pi-
  Number of event processed : 100
 =============================================================
         Volume |   Tr.Entering |    Population |    Collisions |      Coll*WGT |     NumWGTedE |    FluxWGTedE |     Av.Tr.WGT |            SL |           SLW |         SLW_v |          SLWE |        SLWE_v |
-       cell_00 |             7 |           106 |             0 |             0 |     4.8570632 |      6.394919 |             1 |     1113.0539 |     1113.0539 |     39.997852 |     7117.8892 |     194.27209 |
-       cell_01 |           107 |           126 |           160 |           160 |      7.245862 |     8.6524027 |             1 |     12127.588 |     12127.588 |     350.85037 |     104932.77 |     2542.2133 |
-       cell_02 |            72 |           171 |           216 |           108 |     6.1900176 |     8.0820959 |           0.5 |     16630.552 |     8315.2759 |     269.99556 |     67204.857 |     1671.2773 |
-       cell_03 |            84 |           188 |           199 |         49.75 |     7.3393396 |     8.7216156 |          0.25 |      19277.93 |     4819.4826 |     139.36705 |     42033.675 |     1022.8621 |
-       cell_04 |           107 |           249 |           314 |         39.25 |     6.2237328 |     8.0359115 |         0.125 |     25982.232 |      3247.779 |     105.22726 |     26098.865 |     654.90636 |
-       cell_05 |           119 |           274 |           350 |        21.875 |     5.8304001 |     7.7473901 |        0.0625 |      29050.14 |     1815.6337 |     61.166969 |     14066.423 |      356.6279 |
-       cell_06 |           138 |           314 |           483 |      15.09375 |      5.061069 |     7.4461955 |       0.03125 |     33710.715 |     1053.4598 |     39.851437 |     7844.2679 |     201.69087 |
-       cell_07 |           138 |           312 |           458 |       7.15625 |     5.2852313 |     7.2039361 |      0.015625 |      35495.11 |      554.6111 |     19.756546 |     3995.3829 |     104.41791 |
-       cell_08 |           170 |           390 |           654 |      5.109375 |     4.9015271 |      6.698322 |     0.0078125 |     45936.052 |      358.8754 |     13.198783 |      2403.863 |     64.694191 |
-       cell_09 |           186 |           431 |           655 |     2.5585938 |     4.5999796 |     6.2994019 |    0.00390625 |     45880.729 |      179.2216 |      6.788147 |     1128.9889 |     31.225338 |
-       cell_10 |           205 |           461 |           802 |     1.5664062 |     4.0725245 |     5.9959975 |   0.001953125 |     52001.934 |     101.56628 |     4.2218939 |     608.99115 |     17.193766 |
-       cell_11 |           232 |           512 |           857 |    0.83691406 |    0.75577079 |     5.6832231 |  0.0009765625 |     58106.748 |     56.744871 |     12.259625 |     322.49376 |     9.2654668 |
-       cell_12 |           271 |           584 |          1056 |      0.515625 |     3.0370662 |     5.2506271 | 0.00048828125 |     67467.473 |     32.943102 |     1.6912862 |     172.97195 |      5.136548 |
-       cell_13 |           311 |           675 |          1216 |      0.296875 |     3.2604017 |     4.9243062 | 0.00024414062 |     75024.488 |     18.316525 |    0.84787155 |     90.196179 |     2.7644018 |
-       cell_14 |           329 |           758 |          1419 |    0.17321777 |     3.4451656 |      4.769336 | 0.00012207031 |     84584.636 |     10.325273 |     0.4478539 |     49.244695 |     1.5429309 |
-       cell_15 |           364 |           783 |          1540 |   0.093994141 |    0.40940195 |     4.4470643 | 6.1035156e-05 |     91736.425 |      5.599147 |     1.9622683 |     24.899767 |    0.80335646 |
-       cell_16 |           398 |           858 |          1703 |   0.051971436 |    0.25175739 |     4.2259526 | 3.0517578e-05 |     98797.986 |     3.0150753 |     1.6715126 |     12.741565 |    0.42081564 |
-       cell_17 |           413 |           932 |          1881 |   0.028701782 |     2.8791199 |     4.1895463 | 1.5258789e-05 |     107543.85 |     1.6409889 |   0.079050326 |      6.874999 |    0.22759537 |
-       cell_18 |           383 |           889 |          1706 |   0.013015747 |     2.8292119 |     4.1307913 | 7.6293945e-06 |     100556.11 |    0.76718227 |   0.037287182 |     3.1690698 |    0.10549334 |
-       cell_19 |           440 |           440 |             0 |             0 |     2.8202313 |     4.1847543 | 7.6293945e-06 |     63345.904 |    0.48329089 |   0.023651264 |     2.0224537 |   0.066702034 |
+       cell_00 |            15 |           115 |             0 |             0 |     6.1693238 |      7.188295 |             1 |      2532.137 |      2532.137 |      78.12431 |     18201.747 |     481.97417 |
+       cell_01 |           110 |           136 |           144 |           144 |     7.5216138 |     8.7754593 |             1 |     11872.863 |     11872.863 |     334.63119 |     104189.82 |     2516.9666 |
+       cell_02 |            74 |           196 |           217 |         108.5 |     8.1052514 |     8.7570374 |           0.5 |     17778.519 |     8889.2597 |     233.54288 |     77843.579 |     1892.9237 |
+       cell_03 |            91 |           210 |           207 |         51.75 |     7.5922639 |     8.5918388 |          0.25 |     19594.449 |     4898.6122 |     135.58275 |     42088.086 |       1029.38 |
+       cell_04 |           117 |           279 |           378 |         47.25 |     6.2266601 |     7.7116445 |         0.125 |     30673.893 |     3834.2366 |     121.13123 |     29568.269 |       754.243 |
+       cell_05 |           133 |           318 |           437 |       27.3125 |     5.7489132 |     7.5024664 |        0.0625 |      32642.28 |     2040.1425 |     68.533945 |     15306.101 |      393.9957 |
+       cell_06 |           151 |           333 |           480 |            15 |     5.1433918 |     7.0956906 |       0.03125 |     36018.114 |     1125.5661 |     40.777795 |     7986.6686 |     209.73618 |
+       cell_07 |           177 |           412 |           636 |        9.9375 |   0.066616337 |      6.705372 |      0.015625 |     46841.617 |     731.90027 |     1965.7765 |     4907.6636 |     130.95283 |
+       cell_08 |           197 |           449 |           704 |           5.5 |     3.6435456 |     6.1452679 |     0.0078125 |     50071.975 |     391.18731 |      18.16726 |     2403.9508 |      66.19324 |
+       cell_09 |           224 |           510 |           876 |      3.421875 |     3.8825485 |     5.8797423 |    0.00390625 |     55829.968 |     218.08581 |     9.3342389 |     1282.2884 |     36.240635 |
+       cell_10 |           246 |           533 |           881 |     1.7207031 |     3.8256521 |     5.9375623 |   0.001953125 |     57222.209 |     111.76213 |     4.8739454 |     663.59459 |     18.646019 |
+       cell_11 |           255 |           569 |           955 |    0.93261719 |      3.750962 |     5.6920465 |  0.0009765625 |     61230.795 |     59.795698 |     2.6064336 |     340.35989 |     9.7766332 |
+       cell_12 |           301 |           647 |          1113 |    0.54345703 |    0.40008235 |      5.086439 | 0.00048828125 |      70839.28 |     34.589492 |     13.215827 |     175.93734 |     5.2874193 |
+       cell_13 |           353 |           789 |          1557 |    0.38012695 |     3.1708067 |     4.7100104 | 0.00024414062 |     92751.696 |     22.644457 |     1.0519334 |     106.65563 |     3.3354775 |
+       cell_14 |           387 |           823 |          1653 |    0.20178223 |      2.997233 |     4.4191157 | 0.00012207031 |     99295.668 |     12.121053 |     0.5754521 |     53.564337 |      1.724764 |
+       cell_15 |           421 |           920 |          1933 |    0.11798096 |    0.16704108 |     4.1903824 | 6.1035156e-05 |     109936.62 |     6.7099985 |     5.5391092 |      28.11746 |    0.92525875 |
+       cell_16 |           466 |          1001 |          1987 |   0.060638428 |     2.7742618 |     4.1818373 | 3.0517578e-05 |     115154.22 |     3.5142278 |    0.17524981 |     14.695929 |    0.48618886 |
+       cell_17 |           527 |          1160 |          2312 |    0.03527832 |    0.12747609 |     4.0136176 | 1.5258789e-05 |     131119.17 |     2.0007197 |      2.118756 |     8.0301238 |    0.27009073 |
+       cell_18 |           538 |          1264 |          2527 |    0.01927948 |     2.4519093 |     3.9615137 | 7.6293945e-06 |     143738.51 |     1.0966378 |   0.060193964 |     4.3443456 |    0.14759014 |
+       cell_19 |           596 |           596 |             0 |             0 |     2.7600991 |     4.1615587 | 7.6293945e-06 |     85856.912 |    0.65503626 |   0.032889241 |     2.7259719 |   0.090777566 |
 =============================================
 === G4ProcessPlacer::RemoveProcess: for: neutron
   ProcessName: ImportanceProcess, will be removed!
-  The initial Vectors: 
+  The initial AlongStep Vectors: 
+GPIL Vector: 
+   ImportanceProcess
+   Transportation
+DoIt Vector: 
+   Transportation
+   ImportanceProcess
+  The initial PostStep Vectors: 
 GPIL Vector: 
    Decay
    HadronCapture
@@ -261,7 +280,12 @@ DoIt Vector:
    HadronFission
    HadronCapture
    Decay
-  The final Vectors: 
+  The final AlongStep Vectors: 
+GPIL Vector: 
+   Transportation
+DoIt Vector: 
+   Transportation
+  The final PostStep Vectors: 
 GPIL Vector: 
    Decay
    HadronCapture

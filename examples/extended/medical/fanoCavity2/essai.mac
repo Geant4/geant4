@@ -1,0 +1,20 @@
+# $Id: essai.mac,v 1.3 2007/11/12 18:19:30 maire Exp $
+#
+/control/verbose 2
+/run/verbose 2
+#
+/testem/det/wallMater Water
+/testem/det/wallThickness 5 mm
+/testem/det/worldRadius   5 mm
+#
+/run/initialize
+#
+/process/inactivate msc
+/process/eLoss/fluct false
+#
+/gun/energy 10 keV
+/gun/direction 0 1 0
+#
+/testem/event/printModulo 20000
+#
+#/run/beamOn 200000

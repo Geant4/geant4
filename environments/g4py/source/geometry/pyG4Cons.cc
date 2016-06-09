@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: pyG4Cons.cc,v 1.4 2006/06/29 15:31:56 gunter Exp $
-// $Name: geant4-09-00 $
+// $Id: pyG4Cons.cc,v 1.5 2007/07/12 10:01:53 kmura Exp $
+// $Name: geant4-09-01 $
 // ====================================================================
 //   pyG4Cons.cc
 //
@@ -34,6 +34,22 @@
 #include "G4Cons.hh"
 
 using namespace boost::python;
+
+// ====================================================================
+// wrappers
+// ====================================================================
+namespace pyG4Cons {
+
+G4Cons* CreateCons(const G4String& name, G4double pRmin1, G4double pRmax1,
+                   G4double pRmin2, G4double pRmax2, G4double pDz, 
+                   G4double pSPhi, G4double pDPhi)
+{
+  return new G4Cons(name, pRmin1, pRmax1, pRmin2, pRmax2, pDz, pSPhi, pDPhi);
+}
+
+}
+
+using namespace pyG4Cons;
 
 // ====================================================================
 // module definition
@@ -60,9 +76,12 @@ void export_G4Cons()
     .def("SetZHalfLength",       &G4Cons::SetZHalfLength)
     .def("SetStartPhiAngle",     &G4Cons::SetStartPhiAngle)
     .def("SetDeltaPhiAngle",     &G4Cons::SetDeltaPhiAngle)
-    .def("GetCubicVolume",       &G4Cons::GetCubicVolume)
     // operators
     .def(self_ns::str(self))
     ;
+
+    // Create solid
+    def("CreateCons", CreateCons, return_value_policy<manage_new_object>());
+
 }
 

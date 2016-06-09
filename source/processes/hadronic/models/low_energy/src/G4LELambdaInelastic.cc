@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4LELambdaInelastic.cc,v 1.11 2006/06/29 20:45:05 gunter Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// GEANT4 tag $Name: geant4-09-01 $
 //
  // Hadronic Process: Lambda Inelastic Process
  // J.L. Chuma, TRIUMF, 18-Feb-1997

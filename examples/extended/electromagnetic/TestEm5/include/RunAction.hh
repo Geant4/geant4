@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RunAction.hh,v 1.7 2006/06/29 16:55:12 gunter Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: RunAction.hh,v 1.8 2007/11/21 17:41:19 maire Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -93,6 +93,9 @@ class RunAction : public G4UserRunAction
 		  else if (flag == 2) {Reflect[0]++; Reflect[1]++; }};
 
     G4double ComputeMscHighland();
+    
+    void AddEnergyLeak (G4double eleak, G4int index)
+               { EnergyLeak[index] += eleak; EnergyLeak2[index] += eleak*eleak;};
 
   private:
     G4double EnergyDeposit,  EnergyDeposit2;
@@ -106,6 +109,8 @@ class RunAction : public G4UserRunAction
     G4int    nbGamma, nbElect, nbPosit;
     G4int    Transmit[2],   Reflect[2];
     G4int    MscEntryCentral;
+    
+    G4double EnergyLeak[2],  EnergyLeak2[2];
 
     DetectorConstruction*   detector;
     PrimaryGeneratorAction* primary;

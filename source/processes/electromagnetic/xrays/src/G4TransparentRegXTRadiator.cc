@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4TransparentRegXTRadiator.cc,v 1.10 2006/06/29 19:56:21 gunter Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: G4TransparentRegXTRadiator.cc,v 1.11 2007/09/29 17:49:34 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 
 #include <complex>
@@ -47,7 +47,8 @@ G4TransparentRegXTRadiator::G4TransparentRegXTRadiator(G4LogicalVolume *anEnvelo
                                          const G4String& processName) :
   G4VXTRenergyLoss(anEnvelope,foilMat,gasMat,a,b,n,processName)
 {
-  G4cout<<"Regular transparent X-ray TR  radiator EM process is called"<<G4endl;
+  if(verboseLevel > 0)
+    G4cout<<"Regular transparent X-ray TR  radiator EM process is called"<<G4endl;
 
   // Build energy and angular integral spectra of X-ray TR photons from
   // a radiator
@@ -120,7 +121,7 @@ G4double G4TransparentRegXTRadiator::SpectralXTRdEdx(G4double energy)
     {
       sum   += sin(tmp)*sin(tmp)*abs(k-cofMin)/result;
     }
-    if(fVerbose > 2)
+    if(verboseLevel > 2)
     {    
       G4cout<<"k = "<<k<<"; tmp = "<<sin(tmp)*sin(tmp)*abs(k-cofMin)/result
               <<";    sum = "<<sum<<G4endl;  

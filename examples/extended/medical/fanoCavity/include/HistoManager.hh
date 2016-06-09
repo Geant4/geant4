@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HistoManager.hh,v 1.2 2007/03/19 13:08:41 maire Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: HistoManager.hh,v 1.4 2007/11/13 11:31:54 maire Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -44,7 +44,7 @@ namespace AIDA {
 
 class HistoMessenger;
 
-const G4int MaxHisto = 11;
+const G4int MaxHisto = 12;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -64,6 +64,7 @@ class HistoManager
     void FillHisto(G4int id, G4double e, G4double weight = 1.0);
     void RemoveHisto (G4int);
     void Scale (G4int, G4double);
+    void PrintHisto  (G4int);    
 
     G4bool    HistoExist  (G4int id) {return exist[id];}
     G4double  GetHistoUnit(G4int id) {return Unit[id];}
@@ -85,8 +86,13 @@ class HistoManager
     G4double                 Vmax [MaxHisto];
     G4double                 Unit [MaxHisto];
     G4double                 Width[MaxHisto];
+    G4bool                   ascii[MaxHisto];
+        
     G4bool                   factoryOn;
     HistoMessenger*          histoMessenger;
+    
+  private:
+    void saveAscii();               
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

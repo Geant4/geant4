@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NistElementBuilder.cc,v 1.14 2007/06/14 14:24:30 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: G4NistElementBuilder.cc,v 1.16 2007/07/28 15:58:03 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 // -------------------------------------------------------------------
 //
@@ -41,7 +41,9 @@
 // 11.05.2006 Do not subtract mass of atomic electrons from NIST mass (VI) 
 // 17.10.2006 Add natiral abandances flag to element and 
 //            use G4 units for isotope mass vector (VI) 
-// 10.01.2006 Add protection agains Z>101 (VI)
+// 10.05.2007 Add protection agains Z>101 (VI)
+// 26.07.2007 Create one and only one Nist element with given Z and
+//            allow users to create there own elements with the same Z (VI)
 //
 // -------------------------------------------------------------------
 //
@@ -64,6 +66,7 @@ G4NistElementBuilder::G4NistElementBuilder(G4int vb):
   Initialise();
   // Atomic shells are defined only for 101 elements
   limitNumElements = 101;
+  for(G4int i=0; i<maxNumElements; i++) {elmIndex[i] = -1;}
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -95,24 +98,18 @@ G4Element* G4NistElementBuilder::FindOrBuildElement(const G4String& symb,
 G4Element* G4NistElementBuilder::FindOrBuildElement(G4int Z,
                                                     G4bool buildIsotopes)
 {
-  // already existing in G4ElementTable ?
-  //
-  const G4ElementTable* theElementTable = G4Element::GetElementTable();
-  size_t nelm = theElementTable->size();
   G4Element* anElement = 0;
-  if (nelm>0) {
-    for(size_t i=0; i<nelm; i++) {
-      G4int iz = G4int(((*theElementTable)[i])->GetZ());
-      if (iz == Z) {
-        anElement = (*theElementTable)[i];
-	break;
-      }
-    }
-  }
 
-  // if not, build it
-  //
-  if (!anElement) anElement = BuildElement(Z, buildIsotopes);
+  // Nist element does exist
+  if(elmIndex[Z] >= 0) {
+    const G4ElementTable* theElementTable = G4Element::GetElementTable();
+    anElement = (*theElementTable)[elmIndex[Z]];
+
+    // build new element
+  } else {
+    anElement = BuildElement(Z, buildIsotopes);
+    if(anElement) elmIndex[Z] = anElement->GetIndex();
+  }  
   return anElement;
 }
 
@@ -178,6 +175,7 @@ void G4NistElementBuilder::PrintElement(G4int Z)
     imin = 1;
     imax = maxNumElements;
   }
+  if(imax > maxNumElements) imax = maxNumElements;
 
   for(G4int i=imin; i<imax; i++) {
     G4int nc = nIsotopes[i];

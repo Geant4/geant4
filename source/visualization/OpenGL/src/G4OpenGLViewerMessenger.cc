@@ -24,8 +24,10 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLViewerMessenger.cc,v 1.8 2007/05/16 15:59:58 allison Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: G4OpenGLViewerMessenger.cc,v 1.11 2007/11/15 10:14:23 allison Exp $
+// GEANT4 tag $Name: geant4-09-01 $
+
+#ifdef G4VIS_BUILD_OPENGL_DRIVER
 
 #include "G4OpenGLViewerMessenger.hh"
 
@@ -63,7 +65,8 @@ G4OpenGLViewerMessenger::G4OpenGLViewerMessenger()
   fpCommandPrintEPS->SetGuidance("Print Encapsulated PostScript file.");
   fpCommandPrintEPS->SetGuidance
     ("Generates files with names G4OpenGL_n.eps, where n is a sequence"
-     "\nnumber, starting at 0.");
+     "\nnumber, starting at 0."
+     "\nCan be \"vectored\" or \"pixmap\" - see \"/vis/ogl/set/printMode\".");
 
   fpDirectorySet = new G4UIdirectory ("/vis/ogl/set/");
   fpDirectorySet->SetGuidance("G4OpenGLViewer set commands.");
@@ -217,6 +220,8 @@ G4OpenGLViewerMessenger::~G4OpenGLViewerMessenger ()
   delete fpDirectorySet;
   delete fpCommandPrintEPS;
   delete fpDirectory;
+
+  delete fpInstance;
 }
 
 void G4OpenGLViewerMessenger::SetNewValue
@@ -377,3 +382,5 @@ void G4OpenGLViewerMessenger::SetNewValue
     }
 
 }
+
+#endif

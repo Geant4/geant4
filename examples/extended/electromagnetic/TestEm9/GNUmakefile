@@ -1,5 +1,5 @@
 # $Id: GNUmakefile,v 1.8 2006/10/26 15:50:35 maire Exp $
-# GEANT4 tag $Name: geant4-09-00 $
+# GEANT4 tag $Name: geant4-09-01 $
 # --------------------------------------------------------------
 # GNUmakefile for examples module with AIDA interface
 # --------------------------------------------------------------

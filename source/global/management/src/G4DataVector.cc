@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4DataVector.cc,v 1.8 2006/06/29 19:03:59 gunter Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: G4DataVector.cc,v 1.9 2007/11/13 17:35:06 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 // 
 // --------------------------------------------------------------
@@ -45,13 +45,13 @@ G4DataVector::G4DataVector()
 {
 }
 
-G4DataVector::G4DataVector(size_t capacity)
-  : std::vector<G4double>(capacity, 0.0)
+G4DataVector::G4DataVector(size_t cap)
+  : std::vector<G4double>(cap, 0.0)
 {
 }
 
-G4DataVector::G4DataVector(size_t capacity, G4double value)
-  : std::vector<G4double>(capacity, value)
+G4DataVector::G4DataVector(size_t cap, G4double value)
+  : std::vector<G4double>(cap, value)
 {
 }
 

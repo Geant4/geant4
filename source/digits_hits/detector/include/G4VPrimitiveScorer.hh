@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VPrimitiveScorer.hh,v 1.2 2006/06/29 18:05:32 gunter Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: G4VPrimitiveScorer.hh,v 1.3 2007/08/28 07:51:45 asaim Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 
 #ifndef G4VPrimitiveScorer_h
@@ -109,6 +109,11 @@ class G4VPrimitiveScorer
         return ProcessHits(aStep,ROhis);
       }
  
+  protected:
+     G4int fNi, fNj, fNk; // used for 3D scorers
+  public:
+     inline void SetNijk(G4int i,G4int j,G4int k)
+     { fNi = i; fNj = j; fNk = k; }
 };
 
 

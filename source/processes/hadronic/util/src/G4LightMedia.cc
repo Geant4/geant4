@@ -23,11 +23,14 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
- // Hadronic Process: Light Media Charge and/or Strangeness Exchange
- // J.L. Chuma, TRIUMF, 21-Feb-1997
- // Last modified: 13-Mar-1997
+
+// Hadronic Process: Light Media Charge and/or Strangeness Exchange
+// J.L. Chuma, TRIUMF, 21-Feb-1997
+// Last modified: 13-Mar-1997
+
+// 11-OCT-2007 F.W. Jones: fixed coding errors in inequalities for
+//             charge exchange occurrence in PionPlusExchange,
+//             KaonZeroShortExchange, and NeutronExchange.
 
 #include "G4LightMedia.hh"
 #include "Randomize.hh"
@@ -50,7 +53,7 @@
       
       const G4double cech[] = {0.33,0.27,0.29,0.31,0.27,0.18,0.13,0.10,0.09,0.07};
       G4int iplab = G4int(std::min( 9.0, incidentParticle->GetTotalMomentum()/GeV*5.0 ));
-      if( G4UniformRand() > cech[iplab]/std::pow(atomicNumber,0.42) ) {
+      if( G4UniformRand() < cech[iplab]/std::pow(atomicNumber,0.42) ) {
         G4DynamicParticle* resultant = new G4DynamicParticle;
         resultant->SetDefinition( aPiZero );
         // targetParticle->SetDefinition( aProton );
@@ -123,7 +126,7 @@
       
       const G4double cech[] = {0.33,0.27,0.29,0.31,0.27,0.18,0.13,0.10,0.09,0.07};
       G4int iplab = G4int( std::min( 9.0, incidentParticle->GetTotalMomentum()/GeV*5.0 ) );
-      if( G4UniformRand() > cech[iplab]/std::pow(atomicNumber,0.42) ) {
+      if( G4UniformRand() < cech[iplab]/std::pow(atomicNumber,0.42) ) {
         G4DynamicParticle* resultant = new G4DynamicParticle;
         resultant->SetDefinition( aKaonPlus );
         // targetParticle->SetDefinition( aNeutron );
@@ -232,7 +235,7 @@
     if( targetParticle->GetDefinition() == aProton ) {
       const G4double cech[] = {0.50,0.45,0.40,0.35,0.30,0.25,0.06,0.04,0.005,0.};
       G4int iplab = G4int( std::min( 9.0, incidentParticle->GetTotalMomentum()/GeV*2.5 ) );
-      if( G4UniformRand() > cech[iplab]/std::pow(atomicNumber,0.42) ) {
+      if( G4UniformRand() < cech[iplab]/std::pow(atomicNumber,0.42) ) {
         G4DynamicParticle* resultant = new G4DynamicParticle;
         resultant->SetDefinition( aProton );
         // targetParticle->SetDefinition( aNeutron );

@@ -23,28 +23,21 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-// -------------------------------------------------------------------
-//      GEANT 4 class file --- Copyright CERN 1997
-//      CERN Geneva Switzerland
-//
-//
 //      File name:     G4KaonMinusAbsorptionAtRest.hh 
 //
 //      Author:        Christian V"olcker (Christian.Volcker@cern.ch),
 // 
 //      Creation date: 10. November 1997
 //
-//      Modifications: 
 // -------------------------------------------------------------------
 
 #ifndef G4KaonMinusAbsorptionAtRest_h
 #define G4KaonMinusAbsorptionAtRest_h 1
-// Class Description
-// Process for nuclear absorption of K- at rest; 
-// to be used in your physics list in case you need this physics.
-// Class Description - End
+
+// Class Description:
+//
+// Process for nuclear absorption of K- at rest.
+// To be used in your physics list in case you need this physics.
 
 #include "globals.hh"
 #include "Randomize.hh"

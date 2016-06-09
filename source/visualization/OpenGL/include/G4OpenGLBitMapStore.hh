@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLBitMapStore.hh,v 1.1 2007/01/09 10:11:16 allison Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: G4OpenGLBitMapStore.hh,v 1.2 2007/11/15 10:14:23 allison Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 // 
 // John Allison  6th January 2007
@@ -39,6 +39,7 @@
 //   glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 //   glBitmap(size, size, size/2., size/2., 0., 0., circle);
 
+#ifdef G4VIS_BUILD_OPENGL_DRIVER
 
 #ifndef G4OPENGLBITMAPSTORE_HH
 #define G4OPENGLBITMAPSTORE_HH
@@ -71,5 +72,7 @@ namespace G4OpenGLBitMapStore {
   extern std::map<Key, GLubyte*> fStore;
 
 }
+
+#endif
 
 #endif

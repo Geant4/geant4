@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HepRepSceneHandler.cc,v 1.100 2006/11/16 12:17:54 allison Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: G4HepRepSceneHandler.cc,v 1.101 2007/11/16 20:29:04 perl Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 
 /**
@@ -1241,10 +1241,7 @@ void G4HepRepSceneHandler::addAttVals(HepRepAttribute* attribute, const map<G4St
     if (attValues == NULL) return;
 
     // Copy the instance's G4AttValues to HepRepAttValues.
-    for (vector<G4AttValue>::iterator attValIterator = attValues->begin(); attValIterator != attValues->end(); attValIterator++) {
-        // Use GetDesc rather than GetName once WIRED can handle names with spaces in them.
-        //attribute->addAttValue(iAttDef->second.GetDesc(), iAttVal->GetValue());
-        
+    for (vector<G4AttValue>::iterator attValIterator = attValues->begin(); attValIterator != attValues->end(); attValIterator++) {        
         G4String name = attValIterator->GetName();
 
         HepRepPoint* point = dynamic_cast<HepRepPoint*>(attribute);

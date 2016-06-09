@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4CoupledTransportation.icc,v 1.2 2006/11/14 09:12:59 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: G4CoupledTransportation.icc,v 1.4 2007/05/29 13:50:15 japost Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 
 // 
@@ -68,7 +68,6 @@ inline G4int G4CoupledTransportation::GetVerboseLevel( ) const
   return fVerboseLevel;
 }
 
-#if 0 
 inline G4double G4CoupledTransportation::GetThresholdWarningEnergy() const
 {
   return fThreshold_Warning_Energy;
@@ -98,6 +97,7 @@ inline void G4CoupledTransportation::SetThresholdTrials(G4int newMaxTrials )
 {
   fThresholdTrials = newMaxTrials; 
 }
+
      // Get/Set parameters for killing loopers: 
      //   Above 'important' energy a 'looping' particle in field will 
      //   *NOT* be abandoned, except after fThresholdTrials attempts.
@@ -125,5 +125,4 @@ inline void G4CoupledTransportation::ResetKilledStatistics(G4int report)
   fMaxEnergyKilled= -1.0*GeV;
 }
      // Statistics for tracks killed (currently due to looping in field)
-#endif 
 

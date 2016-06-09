@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: README,v 1.9 2006/11/23 12:24:20 sincerti Exp $
+$Id: README,v 1.10 2007/02/27 12:02:09 sincerti Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,7 +16,7 @@ a. Centre d'Etudes Nucleaires de Bordeaux-Gradignan
 (CENBG), IN2P3 / CNRS / Bordeaux 1 University, 33175 Gradignan, France
 * e-mail:incerti@cenbg.in2p3.fr
 
-Last modified by S. Incerti, 23/06/2006
+Last modified by S. Incerti, 27/02/2007
 
 ---->0. INTRODUCTION.                                                    
                                                                        
@@ -74,29 +74,52 @@ measurements performed on the AIFIRA facility. Incident particle used for
 cellular irradiation are 3 MeV alpha particles.
 
 More details on the experimental setup and its simulation with Geant4 can 
-be found in the following papers :
+be found in the following papers, which may be found on the SLAC-SPIRES
+online database (http://www.slac.stanford.edu/spires/) :
 
-- GEANT4 SIMULATION OF THE NEW CENBG MICRO AND NANOPROBES FACILITY
-By S. Incerti, C. Habchi, Ph. Moretto, J. Olivier and H. Seznec
-(CENBG, Gradignan),. May 2006. 5pp. 
+- MONTE CARLO MICRODOSIMETRY FOR TARGETED IRRADIATION OF INDIVIDUAL CELLS USING 
+A MICROBEAM FACILITY 
+By S. Incerti, T. Pouthier, H. Seznec, Ph. Moretto, O. Boissonnade, 
+T. M. H. Ha, F. Andersson, Ph. Barberet, C. Habchi and D. T. Nguyen 
+In preparation (2007)
+
+- MONTE CARLO SIMULATION OF THE CENBG MICROBEAM AND NANOBEAM LINES WITH THE
+GEANT4 TOOLKIT
+By S. Incerti, Q. Zhang, F. Andersson, Ph. Moretto, G.W. Grime, 
+M.J. Merchant, D.T. Nguyen, C. Habchi, T. Pouthier and H. Seznec
+In press in Nucl.Instrum.Meth.B, 2007
+
+- A COMPARISON OF CELLULAR IRRADIATION TECHNIQUES WITH ALPHA PARTICLES USING 
+THE GEANT4 MONTE CARLO SIMULATION TOOLKIT
+By S. Incerti, N. Gault, C. Habchi, J.L.. Lefaix, Ph. Moretto, J.L.. Poncy, 
+T. Pouthier, H. Seznec. Dec 2006. 3pp.
+Published in Rad.Prot.Dos.,1-3,2006 (Micros 2005 special issue).
+
+- GEANT4 SIMULATION OF THE NEW CENBG MICRO AND NANO PROBES FACILITY
+By S. Incerti, C. Habchi, Ph. Moretto, J. Olivier and H. Seznec. May 2006. 5pp.
 Published in Nucl.Instrum.Meth.B249:738-742, 2006
+
+- A COMPARISON OF RAY-TRACING SOFTWARE FOR THE DESIGN OF QUADRUPOLE MICROBEAM 
+SYSTEMS
+By S. Incerti et al., 
+Published in Nucl.Instrum.Meth.B231:76-85, 2005
 
 - DEVELOPMENT OF A FOCUSED CHARGED PARTICLE MICROBEAM FOR THE IRRADIATION OF 
 INDIVIDUAL CELLS.
 By Ph. Barberet, A. Balana, S. Incerti, C. Michelet-Habchi, Ph. Moretto, 
-Th. Pouthier (CENBG, Gradignan),. Dec 2004. 6pp. 
+Th. Pouthier. Dec 2004. 6pp. 
 Published in Rev.Sci.Instrum.76:015101, 2005
 
 - SIMULATION OF CELLULAR IRRADIATION WITH THE CENBG MICROBEAM LINE USING 
 GEANT4.
 By S. Incerti, Ph. Barberet, R. Villeneuve, P. Aguer, E. Gontier, 
-C. Michelet-Habchi, Ph. Moretto, D.T. Nguyen, T. Pouthier, R.W. Smith 
-(CENBG, Gradignan),. Oct 2003. 6pp. 
+C. Michelet-Habchi, Ph. Moretto, D.T. Nguyen, T. Pouthier, R.W. Smith. Oct 2003. 6pp. 
 Published in IEEE Trans.Nucl.Sci.51:1395-1401, 2004
 
-- SIMULATION OF ION PROPAGATION IN THE MICROBEAM LINE OF CENBG USING GEANT4.
-S. Incerti, Ph. Barberet, B. Courtois, C. Michelet-Habchi, Ph. Moretto 
-(CENBG, Gradignan). Sep 2003.
+- SIMULATION OF ION PROPAGATION IN THE MICROBEAM LINE OF CENBG USING 
+GEANT4.
+By S. Incerti, Ph. Barberet, B. Courtois, C. Michelet-Habchi, 
+Ph. Moretto. Sep 2003. 
 Published in Nucl.Instrum.Meth.B210:92-97, 2003
 
 

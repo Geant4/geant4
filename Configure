@@ -18,9 +18,9 @@
 # you may fetch it yourself from your nearest archive site.)
 #
 
-# $Id: Configure,v 1.98 2007/06/22 11:49:47 bmorgan Exp $
+# $Id: Configure,v 1.103 2007/11/28 13:49:23 bmorgan Exp $
 #
-# Generated on Fri Jun 22 12:32:16 BST 2007 [metaconfig 3.0 PL70]
+# Generated on Wed Nov 28 13:43:54 GMT 2007 [metaconfig 3.0 PL70]
 
 cat >/tmp/c1$$ <<EOF
 WARNING!!!!!
@@ -166,6 +166,7 @@ g4workdir=''
 g4bin=''
 g4lib=''
 g4tmp=''
+g4abladata=''
 g4data=''
 g4elasticdata=''
 g4ledata=''
@@ -191,6 +192,7 @@ g4ui_build_terminal_session=''
 g4ui_build_win32_session=''
 g4ui_build_xaw_session=''
 g4ui_build_xm_session=''
+g4ui_none=''
 g4ui_use_gag=''
 g4ui_use_tcsh=''
 g4ui_use_terminal=''
@@ -203,6 +205,9 @@ g4ui_xawlibs=''
 g4vis_xmflags=''
 g4vis_xmhome=''
 g4vis_xmlibs=''
+g4_qthome=''
+g4ui_build_qt_session=''
+g4ui_use_qt=''
 g4vis_build_asciitree_driver=''
 g4vis_build_dawn_driver=''
 g4vis_build_dawnfile_driver=''
@@ -232,6 +237,10 @@ g4vis_use_vrmlfile=''
 g4vis_xmflags=''
 g4vis_xmhome=''
 g4vis_xmlibs=''
+g4vis_build_openglqt_driver=''
+g4vis_use_openglqt=''
+g4gdml_xercesc_root=''
+g4lib_build_gdml=''
 g4wanalysis_build=''
 g4wanalysis_build_jas=''
 g4wanalysis_build_lab=''
@@ -276,6 +285,20 @@ if test -f /etc/unixtovms.exe; then
 	eunicefix=/etc/unixtovms.exe
 fi
 
+#INITIALIZE QT UI OPTIONS
+g4ui_build_qt_session='n'
+g4ui_use_qt='n'
+g4_qthome=''
+#END QT UI OPTIONS
+#INITIALIZE QT UI OPTIONS
+g4ui_build_qt_session='n'
+g4ui_use_qt='n'
+g4_qthome=''
+#END QT UI OPTIONS
+#INITIALIZE QT VIS DRIVER OPTIONS
+g4vis_build_openglqt_driver='n'
+g4ui_use_openglqt='n'
+#END QT VIS DRIVER OPTIONS
 
 : Find the basic shell for Bourne shell scripts
 case "$sh" in
@@ -1117,6 +1140,7 @@ loclist="
 awk
 cat
 expr
+grep
 rm
 sed
 touch
@@ -2739,15 +2763,22 @@ esac
 
 case "$g4ledata" in
 '')
-	g4ledata=$g4data/G4EMLOW4.3
+	g4ledata=$g4data/G4EMLOW5.1
 	;;
 esac
 
 case "$g4neutronhpcrosssections" in
 '')
-	g4neutronhpcrosssections=$g4data/G4NDL3.11
+	g4neutronhpcrosssections=$g4data/G4NDL3.12
 	;;
 esac
+
+case "$g4abladata" in
+'')
+	g4abladata=$g4data/G4ABLA3.0
+	;;
+esac
+
 
 #case "$g4elasticdata" in
 #'')
@@ -2771,6 +2802,8 @@ Please, specify default directory where ALL the Geant4 data is installed:
 
  G4NEUTRONHPDATA:		$g4neutronhpcrosssections
 
+ G4ABLADATA:                    $g4abladata
+
 You will be asked about customizing these next.
 
 EOM`
@@ -2791,8 +2824,9 @@ gans=$ans
 
 		g4levelgammadata=$g4data/PhotonEvaporation2.0
 		g4radioactivedata=$g4data/RadioactiveDecay3.2
-		g4ledata=$g4data/G4EMLOW4.3
-		g4neutronhpcrosssections=$g4data/G4NDL3.11
+		g4ledata=$g4data/G4EMLOW5.1
+		g4neutronhpcrosssections=$g4data/G4NDL3.12
+		g4abladata=$g4data/G4ABLA3.0
 #		g4elasticdata=$g4data/G4ELASTIC1.1
 		fi
 # done
@@ -2812,6 +2846,8 @@ Please, specify default directory where the Geant4 data is installed:
 3) G4LEDATA:			$g4ledata
 
 4) G4NEUTRONHPDATA:		$g4neutronhpcrosssections
+
+5) G4ABLADATA:                  $g4abladata
 
 To modify default settings, select number above (e.g. 2) 
 EOM`
@@ -2843,16 +2879,24 @@ gans=$ans
 	3) 
 		dflt=$g4ledata
 		fn='d~'
-		rp="Where is G4EMLOW4.3 data installed ?"
+		rp="Where is G4EMLOW5.1 data installed ?"
 		. ./getfile
 		g4ledata=$ans
 		;;
 	4) 
 		dflt=$g4neutronhpcrosssections
 		fn='d~'
-		rp="Where is G4NDL3.11 data installed?"
+		rp="Where is G4NDL3.12 data installed?"
 		. ./getfile
 		g4neutronhpcrosssections=$ans
+		;;
+
+	5)
+		dflt=$g4abladata
+		fn='d~'
+		rp="Where is G4ABLA3.0 data installed?"
+		. ./getfile
+		g4abladata=$ans
 		;;
 
 #	5) 
@@ -3367,6 +3411,7 @@ done
 fi
 
 fi # if !Win
+
 echo " "
 case "$g4global" in
 '')
@@ -3575,98 +3620,6 @@ done
 
 echo " "
 
-case "$g4make" in
-'')
-	g4make=gmake
-	;;
-esac
-
-echo ""
-
-	g4_gmake_version=`(gmake -v) 2>/dev/null` 
-				case $g4_gmake_version in
-				GNU*) 
-				g4_gmake=y				
-				;;
-				*) 
-				g4_gmake=n
-				;;
-				esac				
-
-	g4_make_version=`(make -v) 2>/dev/null`
-				case $g4_make_version in
-				GNU*) 
-				g4_make=y				
-				;;
-				*) 
-				g4_make=n
-				;;
-				esac				
-
-if  [ $g4_gmake = y ] ; then
-
-g4make=gmake
-
-g4message=`cat << EOM
-
-  G4MAKE
-
-You have GNU make which could be used to build GEANT4.
-You can select your own 'make' program if you want.
-EOM`
-
-fi
-
-if [ $g4_gmake = n ] && [ $g4_make = y ] ; then
-
-g4make=make
-
-g4message=`cat << EOM
-
-  G4MAKE
-
-You have GNU make which could be used to build GEANT4.
-You can select your own 'make' program if you want.
-EOM`
-
-fi
-
-if [ $g4_gmake = n ] && [ $g4_make = n ] ; then
-
-g4make=none
-
-g4message=`cat << EOM
-
-  G4MAKE
-
-You have NO GNU make which could be used to build GEANT4.
-Please select your own 'make' program compatible with GNU make.
-EOM`
-
-dflt=$g4make
-rp=$g4message
-
-
-. ./myread
-gans=$ans
-
-	case $gans in
-	
-	'') 
-		g4make=$dflt
-		;;
-	*) 
-		g4make=$gans
-		;;
-	esac
-
-fi
-
-
-
-
-echo " "
-
 case "$g4ui_none" in
 '')
 	g4ui_none=n
@@ -3743,6 +3696,9 @@ case "$g4ui_use_tcsh" in
 	g4ui_use_tcsh=y
 	;;
 esac
+
+
+
 
 echo ""
 
@@ -4339,7 +4295,203 @@ gans=y
 ;;
 esac
 
+#
+# BEGIN QT/QTUI PROBE
+#
 
+#
+# We only perform the query/probe for Linux-g++ and Darwin-g++ systems..
+#
+if test "x$g4system" = "xLinux-g++" -o "x$g4system" = "xDarwin-g++" ; then
+
+# Now, IF g4ui_none HAS NOT BEEN SET TO Y, proceed to the query/probe section
+if test "x$g4ui_none" = "xn" ; then
+
+   # Query the user to see if they want to build the Qt UI module
+
+   g4message=`cat << EOM
+
+   G4UI_BUILD_QT_SESSION
+   G4UI_USE_QT
+
+Setting these variables will enable the building of the G4 Qt based 
+user interface module and the use of this module in your applications
+respectively.
+The Qt4 headers, libraries and binaries are required to enable the
+building of this module.
+### WARNING! THIS FEATURE IS EXPERIMENTAL IN THIS RELEASE! ###
+### WARNING! THIS FEATURE WILL ONLY WORK WITH Qt4!         ###
+Do you want to enable build and use of this module?
+EOM`
+
+   #
+   # read in the user response
+   #
+   dflt=$g4ui_build_qt_session
+   rp=$g4message
+   . ./myread
+   gans=$ans
+
+   #
+   # Check response
+   #
+   case $gans in
+	n*|N*)
+		g4ui_build_qt_session=n
+		g4ui_use_qt=n
+		;;
+	y*|Y*)
+		g4ui_build_qt_session=y
+		g4ui_use_qt=y
+		;;
+   esac
+
+
+   #########################################
+
+
+   #####################################################################
+   # Now, if we want to build/use the Qt UI module, we need to probe for
+   # a Qt4 installation
+   #
+   if test "x$g4ui_build_qt_session" = "xy" ; then
+
+      echo " "
+      g4_havegoodqt=no
+
+      g4_qthome=`./loc qglobal.h no /usr/include/Qt /usr/local/include/Qt /opt/local/include/Qt /sw/include/Qt`
+
+      echo "checking for Qt4 installation... $g4_qthome"
+
+      #If we found an installation, proceed to other tests.
+      if test "x$g4_qthome" != "xno" ; then
+
+	 #Set Qt installation to good at this point
+	 g4_havegoodqt=yes
+      
+	#Check that this is Qt4...
+	g4_qtver=`$grep QT_VERSION_STR $g4_qthome | $sed 's/.* \"\([0-9]\)\..*\"/\1/'`
+
+	echo "checking Qt version... $g4_qtver"
+
+	#Now strip qthome back so we can check for moc...
+	g4_qthome=`dirname $g4_qthome`
+	g4_qthome=`dirname $g4_qthome`
+	g4_qthome=`dirname $g4_qthome`
+
+	#If version is o.k, check for moc
+	if test "x$g4_qtver" = "x4" ; then
+	   #Check for moc
+	   g4_qthavemoc=`./loc moc no $g4_qthome/bin`
+
+	   echo "checking for moc... $g4_qthavemoc"
+
+	   if test "x$g4_qthavemoc" = "xno" ; then
+	      g4_havegoodqt=no
+	   fi
+	else
+	   g4_havegoodqt=no
+	fi #END CHECK Qt VERSION
+      fi #END CHECK QTHOME
+      #
+      # END QT AUTOPROBE
+      ####################################################################
+
+
+      ####################################################################
+      # Based on result of Qt autoprobe, we decide if user input is needed to
+      # locate Qt...
+      #
+      if test "x$g4_havegoodqt" = "xno" ; then
+	 promptend="no"
+	 qthomeloc="the standard locations"
+
+	 while test "x$promptend" = "xno" ; do
+	       g4message=`cat << EOM
+
+Autodetection failed to locate Qt4 in $qthomeloc on your system.
+Please enter the path to your Qt4 install (i.e. if Qt4 is installed
+in PATH/include/Qt, or PATH/include, enter PATH), or type '-' to
+CANCEL the build of the Qt UI module.
+Qt path:
+EOM`
+	       dflt="/usr"
+	       fn='d~(-)'
+	       rp=$g4message
+	       . ./getfile
+
+	       #Check for user cancellation
+	       if test "x$ans" = "x-" ; then
+		  g4ui_build_qt_session=n
+		  g4ui_use_qt=n
+		  g4_qthome=""
+		  echo "build/use of Qt UI module cancelled..."
+		  promptend=yes
+
+	       else
+		  #We want to probe for Qt in the user supplied directory
+		  echo " "
+		  qthomeloc=$ans
+		  g4_havegoodqt=no
+		  g4_qthome=`./loc qglobal.h no $ans/include/Qt $ans/include`
+
+		  echo "checking for Qt4 installation... $g4_qthome"
+
+		  #If we found an installation, proceed to other tests.
+		  if test "x$g4_qthome" != "xno" ; then
+		     #Set Qt installation to good at this point
+		     g4_havegoodqt=yes		
+
+		     #Check that this is Qt4...
+		     g4_qtver=`$grep QT_VERSION_STR $g4_qthome | $sed 's/.* \"\([0-9]\)\..*\"/\1/'`
+
+		     echo "checking Qt version... $g4_qtver"
+
+		     #Now strip qthome back so we can check for moc...
+		     g4_qthome=`dirname $g4_qthome`
+
+		     #At this point we could have include/Qt
+		     #or include
+		     if test `basename $g4_qthome` = "Qt" ; then
+			g4_qthome=`dirname $g4_qthome`
+			g4_qthome=`dirname $g4_qthome`
+		     else
+			g4_qthome=`dirname $g4_qthome`
+		     fi
+
+		     #If version is o.k, check for moc
+		     if test "x$g4_qtver" = "x4" ; then
+			#Check for moc
+			g4_qthavemoc=`./loc moc no $g4_qthome/bin`
+
+			echo "checking for moc... $g4_qthavemoc"
+
+			if test "x$g4_qthavemoc" = "xno" ; then
+			   g4_havegoodqt=no
+			fi
+		     else
+		        g4_havegoodqt=no
+		     fi #END CHECK Qt VERSION
+		  fi #END CHECK QTHOME
+
+		  #If we have a good Qt, end prompt
+		  if test "x$g4_havegoodqt" = "xyes" ; then
+		     promptend=yes
+		  fi
+	       fi #END CHECK USER CANCELLATION
+         done #END USER PROMPT FOR QT DETECTION
+
+      fi #END USER DIRECTED QT DETECTION
+      #
+      #END QT USER INPUT PROBE
+      ####################################################################
+
+   fi #END CHECK OF G4UI_BUILD_QT_SESSION=Y
+   ###########################################
+
+fi #END TEST G4UI_NONE=N
+fi #END TEST G4SYSTEM = Linux-g++ OR Darwin-g++
+########################
 echo " "
 case "$g4vis_none" in
 '')
@@ -5615,6 +5767,444 @@ fi # if need
 ###########################################
 fi # if platform (Unix vs Win)
 
+#
+# BEGIN QTVIS/QT PROBE
+#
+
+#
+# We only run on a Linux-g++ or Darwin-g++ system
+#
+if test "x$g4system" = "xLinux-g++" -o "x$g4system" = "xDarwin-g++" ; then
+
+   # Only proceed further if g4vis_none is not set
+   if test "x$g4vis_none" = "xn" ; then
+      #Query the user on whether to activate the module
+      g4message=`cat << EOM
+
+    G4VIS_BUILD_OPENGLQT_DRIVER
+    G4VIS_USE_OPENGLQT
+
+Setting these variables will enable the building of the G4 OpenGL Qt based
+visualisation driver and the use of this driver in your applications
+respectively.
+The Qt4 headers, libraries and binaries are required to enable the
+building of this module.
+### WARNING! THIS FEATURE IS EXPERIMENTAL IN THIS RELEASE! ###
+### WARNING! THIS FEATURE WILL ONLY WORK WITH Qt4!         ###
+Do you want to enable build and use of this module?
+EOM`
+
+      #Read the user response
+      dflt=$g4vis_build_openglqt_driver
+      rp=$g4message
+      . ./myread
+      gans=$ans
+
+      #
+      # Check response
+      #
+      case $gans in
+	   n*|N*)
+		g4vis_build_openglqt_driver=n
+                g4vis_use_openglqt=n
+                ;;
+	   y*|Y*)
+                g4vis_build_openglqt_driver=y
+                g4vis_use_openglqt=y
+                ;;
+      esac
+
+      ###################
+
+
+
+      ####################################################################
+      # Now, if we have selected to build the driver, we need to check for
+      # a Qt4 installation, which may have been done for use by the UI
+      # module...
+      #
+      if test "x$g4vis_build_openglqt_driver" = "xy" ; then
+	 	 
+	 #Now check whether g4_qthome has been set previously - if it hasn't
+	 #proceed to probe for Qt4... (assume it's unfiltered, i.e. not
+	 #set to '' by earlier probe if it was /usr or /usr/local
+	 if test "x$g4_qthome" != "x" ; then
+	    echo " "
+	    echo "configure: Qt4 preconfigured, no recheck neccessary"
+	 else
+	 #################################################################
+	    #We repeat the search used for the UI module
+	    
+	    echo " "
+	    g4_havegoodqt=no
+
+	    g4_qthome=`./loc qglobal.h no /usr/include/Qt /usr/local/include/Qt /opt/local/include/Qt /sw/include/Qt`
+
+	    echo "checking for Qt4 installation... $g4_qthome"
+
+	    #If we found an installation, proceed to other tests.
+	    if test "x$g4_qthome" != "xno" ; then
+
+	       #Set Qt installation to good at this point
+	       g4_havegoodqt=yes
+      
+		#Check that this is Qt4...
+		g4_qtver=`$grep QT_VERSION_STR $g4_qthome | $sed 's/.* \"\([0-9]\)\..*\"/\1/'`
+
+		echo "checking Qt version... $g4_qtver"
+
+		#Now strip qthome back so we can check for moc...
+		g4_qthome=`dirname $g4_qthome`
+		g4_qthome=`dirname $g4_qthome`
+		g4_qthome=`dirname $g4_qthome`
+
+		#If version is o.k, check for moc
+		if test "x$g4_qtver" = "x4" ; then
+		   #Check for moc
+		   g4_qthavemoc=`./loc moc no $g4_qthome/bin`
+
+		   echo "checking for moc... $g4_qthavemoc"
+
+		   if test "x$g4_qthavemoc" = "xno" ; then
+		      g4_havegoodqt=no
+		   fi
+		else
+		   g4_havegoodqt=no
+		fi #END CHECK Qt VERSION
+	    fi #END CHECK QTHOME
+	    #
+	    # END QT AUTOPROBE	    
+
+
+	    # Based on result of Qt autoprobe, we decide if user input is
+	    # needed to locate Qt...
+            #
+	    if test "x$g4_havegoodqt" = "xno" ; then
+	       promptend="no"
+	       qthomeloc="the standard locations"
+
+	       while test "x$promptend" = "xno" ; do
+		     g4message=`cat << EOM
+
+Autodetection failed to locate Qt4 in $qthomeloc on your system.
+Please enter the path to your Qt4 install (i.e. if Qt4 is installed
+in PATH/include/Qt, or PATH/include, enter PATH), or type '-' to
+CANCEL the build of the Qt UI module.
+Qt path:
+EOM`
+		     dflt="/usr"
+		     fn='d~(-)'
+		     rp=$g4message
+		     . ./getfile
+
+		     #Check for user cancellation
+		     if test "x$ans" = "x-" ; then
+			g4ui_build_qt_session=n
+			g4ui_use_qt=n
+			g4_qthome=""
+			echo "build/use of OpenGl Qt driver cancelled..."
+			promptend=yes
+
+		     else
+		        #We want to probe for Qt in the user supplied directory
+			echo " "
+			qthomeloc=$ans
+			g4_havegoodqt=no
+			g4_qthome=`./loc qglobal.h no $ans/include/Qt $ans/include`
+
+			echo "checking for Qt4 installation... $g4_qthome"
+
+			#If we found an installation, proceed to other tests.
+			if test "x$g4_qthome" != "xno" ; then
+			   #Set Qt installation to good at this point
+			   g4_havegoodqt=yes		
+
+			   #Check that this is Qt4...
+			   g4_qtver=`$grep QT_VERSION_STR $g4_qthome | $sed 's/.* \"\([0-9]\)\..*\"/\1/'`
+
+			   echo "checking Qt version... $g4_qtver"
+
+			   #Now strip qthome back so we can check for moc...
+			   g4_qthome=`dirname $g4_qthome`
+
+			   #At this point we could have include/Qt
+			   #or include
+			   if test `basename $g4_qthome` = "Qt" ; then
+			      g4_qthome=`dirname $g4_qthome`
+			      g4_qthome=`dirname $g4_qthome`
+			   else
+			      g4_qthome=`dirname $g4_qthome`
+			   fi
+
+			   #If version is o.k, check for moc
+			   if test "x$g4_qtver" = "x4" ; then
+			      #Check for moc
+			      g4_qthavemoc=`./loc moc no $g4_qthome/bin`
+
+			      echo "checking for moc... $g4_qthavemoc"
+
+			      if test "x$g4_qthavemoc" = "xno" ; then
+				 g4_havegoodqt=no
+			      fi
+			   else
+			      g4_havegoodqt=no
+			   fi #END CHECK Qt VERSION
+			fi #END CHECK QTHOME
+
+			#If we have a good Qt, end prompt
+			if test "x$g4_havegoodqt" = "xyes" ; then
+			   promptend=yes
+			fi
+		     fi #END CHECK USER CANCELLATION
+	       done #END USER PROMPT FOR QT DETECTION
+
+            fi #END USER DIRECTED QT DETECTION
+	    #
+	    #END QT USER INPUT PROBE
+	 #################################################################
+	 fi #END TEST G4_QTHOME IS SET
+
+
+      fi #END TEST G4VIS_BUILD_OPENGLQT_DRIVER = y
+
+      
+      #
+      # Put a filter in here on /usr and /usr/local as QTHOME in line
+      # with other paths - done here as this is the last place QT is
+      # checked for
+      #DEACTIVATED AT PRESENT BECAUSE OF USE OF MOC
+      #
+      #if test "x$g4_qthome" = "x/usr" -o "x$g4_qthome" = "x/usr/local" ; then
+	# g4_qthome=""
+      #fi
+	 
+
+   fi #END TEST G4VIS_NONE IS N
+
+fi #END TEST G4SYSTEM IS Linux-g++ OR Darwin-g++
+
+#
+# END OF QTVIS/QT PROBE
+
+#
+# BEGIN GDML/XERCESC PROBE 
+#
+
+# Set default build option to no
+echo " "
+case "$g4lib_build_gdml" in
+'')
+	g4lib_build_gdml=n
+	;;
+esac
+
+
+# Now query the user to see if they want to build the GDML plugin
+echo ""
+
+g4message=`cat << EOM
+
+  G4LIB_BUILD_GDML
+
+Setting this variable will enable building of the GDML plugin module embedded
+in Geant4 for detector description persistency.
+It requires your system to have the XercesC library and headers installed.
+Do you want to set this variable?
+
+EOM`
+
+#
+# read in the users response
+#
+dflt=$g4lib_build_gdml
+rp=$g4message
+. ./myread
+gans=$ans
+
+#
+# Check response
+#
+case $gans in
+     n*|N*)
+	g4lib_build_gdml=n
+	;;
+     y*|Y*)
+	g4lib_build_gdml=y
+	;;
+esac
+
+
+#
+# If user does want to build GDML plugin, now try to locate Xerces install
+#
+if test "X$g4lib_build_gdml" != "Xn"; then
+
+   if test "X$g4gdml_xercesc_root" = "X"; then
+      #probe for Xerces, using example from UI and Vis
+      xercesc_root=`find $g4gdml_xercesc_root /usr/include /usr/local/include \
+/opt/local/include /sw/include -type d -name xercesc 2>/dev/null | xargs echo`
+
+      #If we got something, strip off the include/xerces part
+      if test "X$xercesc_root" != "X"; then
+	 g4gdml_xercesc_root=`dirname $xercesc_root`
+	 g4gdml_xercesc_root=`dirname $g4gdml_xercesc_root`
+
+	 echo " "
+	 echo "checking for XercesC install... $g4gdml_xercesc_root"
+      else
+         g4gdml_xercesc_root=""
+	 echo " "
+	 echo "checking for XercesC install... no"
+      fi
+   fi #END OF XERCES AUTOPROBE
+
+   #
+   # If the autoprobe failed, prompt the user to enter the path to the Xerces
+   # install
+   #
+   if test "X$g4gdml_xercesc_root" = "X"; then
+
+      promptend="no"
+      xercesloc="the standard locations"
+      
+      while test "$promptend" = "no"; do
+	    g4message=`cat << EOM
+
+Autodetection failed to locate XercesC in $xercesloc on your system. 
+Please enter the path to your XercesC install (i.e. if XercesC is installed
+in PATH/include/xercesc, enter PATH), or type '-' to CANCEL the build of the 
+GDML module.
+XercesC path:
+EOM`
+
+	    dflt=$g4gdml_xercesc_root
+	    fn='d~(-)'
+	    rp=$g4message
+	    . ./getfile
+
+	    #check for user cancellation
+	    if test "X$ans" = "X-"; then
+	       g4lib_build_gdml=n
+	       g4gdml_xercesc_root=""
+	       echo "G4LIB_BUILD_GDML cancelled..."
+	       promptend=yes
+	    else
+	       if test -r "$ans/include/xercesc"; then
+		  g4gdml_xercesc_root=$ans
+		  echo "checking for XercesC install... $g4gdml_xercesc_root"
+		  promptend=yes
+	       else
+	          xercesloc=$ans
+	          echo "checking for Xercesc install... no"
+	       fi
+            fi #END OF USER INPUT CHECKING
+      done #END OF WHILE LOOP OVER USER INPUT
+   fi #END OF USER INPUT SECTION
+
+   #
+   # If a filter on g4gdml_xerces_root is needed to remove common system paths
+   # then it should be put here...
+   #
+	if test "x$g4gdml_xercesc_root" = "x/usr" -o "x$g4gdml_xercesc_root" = "x/usr/local" ; then
+		g4gdml_xercesc_root=""
+	fi
+
+fi #END XERCES PROBE
+
+#END OF GDML/XERCES PROBE
+
+echo " "
+
+case "$g4make" in
+'')
+	g4make=gmake
+	;;
+esac
+
+echo ""
+
+	g4_gmake_version=`(gmake -v) 2>/dev/null` 
+				case $g4_gmake_version in
+				GNU*) 
+				g4_gmake=y				
+				;;
+				*) 
+				g4_gmake=n
+				;;
+				esac				
+
+	g4_make_version=`(make -v) 2>/dev/null`
+				case $g4_make_version in
+				GNU*) 
+				g4_make=y				
+				;;
+				*) 
+				g4_make=n
+				;;
+				esac				
+
+if  [ $g4_gmake = y ] ; then
+
+g4make=gmake
+
+g4message=`cat << EOM
+
+  G4MAKE
+
+You have GNU make which could be used to build GEANT4.
+You can select your own 'make' program if you want.
+EOM`
+
+fi
+
+if [ $g4_gmake = n ] && [ $g4_make = y ] ; then
+
+g4make=make
+
+g4message=`cat << EOM
+
+  G4MAKE
+
+You have GNU make which could be used to build GEANT4.
+You can select your own 'make' program if you want.
+EOM`
+
+fi
+
+if [ $g4_gmake = n ] && [ $g4_make = n ] ; then
+
+g4make=none
+
+g4message=`cat << EOM
+
+  G4MAKE
+
+You have NO GNU make which could be used to build GEANT4.
+Please select your own 'make' program compatible with GNU make.
+EOM`
+
+dflt=$g4make
+rp=$g4message
+
+
+. ./myread
+gans=$ans
+
+	case $gans in
+	
+	'') 
+		g4make=$dflt
+		;;
+	*) 
+		g4make=$gans
+		;;
+	esac
+
+fi
+
+
+
+
 echo " "
 case "$g4wlib_build_g3tog4" in
 '')
@@ -5813,6 +6403,8 @@ g4_gmake='$g4_gmake'
 g4_gmake_version='$g4_gmake_version'
 g4_make='$g4_make'
 g4_make_version='$g4_make_version'
+g4_qthome='$g4_qthome'
+g4abladata='$g4abladata'
 g4base='$g4base'
 g4bin='$g4bin'
 g4clhep_base_dir='$g4clhep_base_dir'
@@ -5825,6 +6417,7 @@ g4data='$g4data'
 g4debug='$g4debug'
 g4elasticdata='$g4elasticdata'
 g4final_install='$g4final_install'
+g4gdml_xercesc_root='$g4gdml_xercesc_root'
 g4global='$g4global'
 g4granular='$g4granular'
 g4include='$g4include'
@@ -5833,6 +6426,7 @@ g4install='$g4install'
 g4ledata='$g4ledata'
 g4levelgammadata='$g4levelgammadata'
 g4lib='$g4lib'
+g4lib_build_gdml='$g4lib_build_gdml'
 g4lib_build_shared='$g4lib_build_shared'
 g4lib_build_static='$g4lib_build_static'
 g4lib_use_dll='$g4lib_use_dll'
@@ -5847,11 +6441,14 @@ g4radioactivedata='$g4radioactivedata'
 g4system='$g4system'
 g4tmp='$g4tmp'
 g4ui_build_gag_session='$g4ui_build_gag_session'
+g4ui_build_qt_session='$g4ui_build_qt_session'
 g4ui_build_terminal_session='$g4ui_build_terminal_session'
 g4ui_build_win32_session='$g4ui_build_win32_session'
 g4ui_build_xaw_session='$g4ui_build_xaw_session'
 g4ui_build_xm_session='$g4ui_build_xm_session'
+g4ui_none='$g4ui_none'
 g4ui_use_gag='$g4ui_use_gag'
+g4ui_use_qt='$g4ui_use_qt'
 g4ui_use_tcsh='$g4ui_use_tcsh'
 g4ui_use_terminal='$g4ui_use_terminal'
 g4ui_use_win32='$g4ui_use_win32'
@@ -5865,6 +6462,7 @@ g4vis_build_dawn_driver='$g4vis_build_dawn_driver'
 g4vis_build_dawnfile_driver='$g4vis_build_dawnfile_driver'
 g4vis_build_oiwin32_driver='$g4vis_build_oiwin32_driver'
 g4vis_build_oix_driver='$g4vis_build_oix_driver'
+g4vis_build_openglqt_driver='$g4vis_build_openglqt_driver'
 g4vis_build_openglwin32_driver='$g4vis_build_openglwin32_driver'
 g4vis_build_openglx_driver='$g4vis_build_openglx_driver'
 g4vis_build_openglxm_driver='$g4vis_build_openglxm_driver'
@@ -5879,6 +6477,7 @@ g4vis_use_dawn='$g4vis_use_dawn'
 g4vis_use_dawnfile='$g4vis_use_dawnfile'
 g4vis_use_oiwin32='$g4vis_use_oiwin32'
 g4vis_use_oix='$g4vis_use_oix'
+g4vis_use_openglqt='$g4vis_use_openglqt'
 g4vis_use_openglwin32='$g4vis_use_openglwin32'
 g4vis_use_openglx='$g4vis_use_openglx'
 g4vis_use_openglxm='$g4vis_use_openglxm'

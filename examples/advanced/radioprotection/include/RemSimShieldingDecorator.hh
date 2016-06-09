@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // $Id: RemSimShieldingDecorator.hh,v 1.7 2006/06/29 16:23:21 gunter Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 // Code developed by: S.Guatelli, guatelli@ge.infn.it
 //

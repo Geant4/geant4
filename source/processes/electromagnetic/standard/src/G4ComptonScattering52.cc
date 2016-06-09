@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // $Id: G4ComptonScattering52.cc,v 1.5 2007/05/16 14:00:56 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 // 
 //------------ G4ComptonScattering52 physics process -----------------------------

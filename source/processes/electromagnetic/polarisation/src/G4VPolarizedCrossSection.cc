@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VPolarizedCrossSection.cc,v 1.2 2006/11/17 14:14:20 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: G4VPolarizedCrossSection.cc,v 1.4 2007/11/01 17:32:34 schaelic Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 // File name:     G4VPolarizedCrossSection
 //
 // Author:        Andreas Schaelicke
@@ -44,7 +44,8 @@
 #include "G4VPolarizedCrossSection.hh"
 #include "Randomize.hh"
 
-G4VPolarizedCrossSection::G4VPolarizedCrossSection()
+G4VPolarizedCrossSection::G4VPolarizedCrossSection() :
+  fXmin(0), fXmax(1.), fYmin(1.), theA(1), theZ(1), fCoul(0.)
 {
 }
 
@@ -67,8 +68,7 @@ G4StokesVector G4VPolarizedCrossSection::GetPol2()
   G4double xsPol1=XSection(G4StokesVector::P1,G4StokesVector::ZERO);
   G4double xsPol2=XSection(G4StokesVector::P2,G4StokesVector::ZERO);
   G4double xsPol3=XSection(G4StokesVector::P3,G4StokesVector::ZERO);
-  pol2=G4ThreeVector(invXsecTotal*xsPol1,invXsecTotal*xsPol2,invXsecTotal*xsPol3);
-  return pol2;
+  return G4ThreeVector(invXsecTotal*xsPol1,invXsecTotal*xsPol2,invXsecTotal*xsPol3);
 }
 
 G4StokesVector G4VPolarizedCrossSection::GetPol3()
@@ -79,10 +79,22 @@ G4StokesVector G4VPolarizedCrossSection::GetPol3()
   G4double xsPol1=XSection(G4StokesVector::ZERO,G4StokesVector::P1); 
   G4double xsPol2=XSection(G4StokesVector::ZERO,G4StokesVector::P2); 
   G4double xsPol3=XSection(G4StokesVector::ZERO,G4StokesVector::P3); 
-  pol3=G4ThreeVector(invXsecTotal*xsPol1,invXsecTotal*xsPol2,invXsecTotal*xsPol3); 
-  return pol3; 
+  return G4ThreeVector(invXsecTotal*xsPol1,invXsecTotal*xsPol2,invXsecTotal*xsPol3); 
+}
+// minimal energy fraction in TotalXSection
+G4double G4VPolarizedCrossSection::GetXmin(G4double /*y*/)
+{
+  return fXmin;
 }
 
+// maximal energy fraction in TotalXSection
+G4double G4VPolarizedCrossSection::GetXmax(G4double /*y*/)
+{
+  return fXmax;
+}
+
+
+/*
 void G4VPolarizedCrossSection::DicePolarization() 
 {
   // can respect correlation effects, but is limited to 
@@ -115,18 +127,10 @@ void G4VPolarizedCrossSection::DicePolarization()
   if ((k&1)==0) pol3=G4StokesVector::P3;
   else          pol3=G4StokesVector::M3;
 
-  /*
-  do {
-    pol3.DiceP1();
-    G4double sigma=XSection(G4StokesVector::ZERO,pol3);
-    greject = sigma/sigma_max;
-    if (greject<0. || greject>1.) {
-      G4cout<<" pol3 rejection error occurred "<<greject<<G4endl;
-    }
-  } while (greject<G4UniformRand());
-  */
 }
+*/
 
+/*
 G4StokesVector G4VPolarizedCrossSection::DicedPol2()
 {
   return pol2;
@@ -136,6 +140,7 @@ G4StokesVector G4VPolarizedCrossSection::DicedPol3()
 {
   return pol3;
 }
+*/
 
 G4double G4VPolarizedCrossSection::TotalXSection(const G4double, const G4double, const G4double,
 						 const G4StokesVector &,const G4StokesVector &)

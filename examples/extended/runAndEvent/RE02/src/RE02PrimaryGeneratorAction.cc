@@ -25,7 +25,7 @@
 //
 //
 // $Id: RE02PrimaryGeneratorAction.cc,v 1.3 2006/11/18 01:37:24 asaim Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 
 #include "RE02PrimaryGeneratorAction.hh"

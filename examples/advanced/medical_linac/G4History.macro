@@ -171,7 +171,6 @@
 /Jaws/Y1/DistanceFromAxis -6.6 cm
 /Jaws/Y2/DistanceFromAxis 6.8 cm
 /Jaws/update
-/vis/scene/notifyHandlers scene-0
 /energy 6.0 MeV
 /sourceType 0.127 MeV
 /run/beamOn 10

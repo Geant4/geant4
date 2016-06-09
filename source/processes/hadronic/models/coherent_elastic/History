@@ -14,6 +14,51 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+10 Dec 2007 -  V.Ivanchenko (hadr-cohe-V09-00-07)
+  G4HadronElastic - set threshold to G4ElasticHadrNucleusHE model
+                    DBL_MAX
+
+15 Nov 2007 -  V.Ivanchenko (hadr-cohe-V09-00-06)
+------------------------------------------------
+  G4UHadronElasticProcess - introduced "ifdef VERBOSE" for verbosity 
+                            checks inside methods called at each step
+
+14 Nov 2007 -  V.Ivanchenko (hadr-cohe-V09-00-04)
+------------------------------------------------
+  G4DiffuseElastic       - add control on verbosity at initialisation
+
+13 Nov 2007 -  V.Ivanchenko (hadr-cohe-V09-00-03)
+------------------------------------------------
+  G4ElasticHadrNucleusHE - (N.Starkov) updated:
+                         - the difference in scattering off protons and 
+                           neutrons is included;
+                         - optized computation of the distribution function
+                           (important for heavy targets);
+                         - fixed model for scattering off hydrogen;
+                         - tunned model parameters for better description
+                           of total and elastic cross sections 
+
+06 Nov 2007 -  V.Ivanchenko (hadr-cohe-V09-00-02)
+------------------------------------------------
+  G4DiffuseElastic       - (V.Grichine) initialisation of the model for 
+                           each new target nucleus on-fly 
+
+05 Nov 2007 -  V.Ivanchenko (hadr-cohe-V09-00-01)
+------------------------------------------------
+
+  G4DiffuseElastic       - (V.Grichine) initialisation of the model in 
+                           constructor with particle definition for the 
+                           vector of available elements; tuning
+                           at high energies. 
+
+17 Oct 2007 -  V.Ivanchenko (hadr-cohe-V09-00-00)
+------------------------------------------------
+  G4LEnp                 - removed erroneous code for identity 
+	                   exchange of particles ( F.W. Jones)
+
+  G4DiffuseElastic       - added Coulomb elastic scattering amplitude
+                           using Wentzel model (V. Grichine)
+
 14 June 2007 - V.Ivanchenko (hadr-cohe-V08-03-07)
 ------------------------------------------------
   G4UHadronElasticProcess - use "true" flag colling CHIPS to compute cross

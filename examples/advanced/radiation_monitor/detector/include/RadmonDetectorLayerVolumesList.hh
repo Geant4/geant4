@@ -29,7 +29,7 @@
 // Main author:   Riccardo Capra <capra@ge.infn.it>
 //
 // Id:            $Id: RadmonDetectorLayerVolumesList.hh,v 1.4 2006/06/29 16:10:33 gunter Exp $
-// Tag:           $Name: geant4-09-00 $
+// Tag:           $Name: geant4-09-01 $
 //
 // Description:   Collection of solids, physical and logical volumes
 //

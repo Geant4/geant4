@@ -1,0 +1,35 @@
+########################################
+#
+/score/create/boxMesh boxMesh_3a
+#
+/score/mesh/boxSize 1. 1. 1. m
+/score/mesh/nBin 10 10 10
+#
+/score/quantity/nOfStep nOfStepGamma
+/score/filter/particle gammaFilter gamma
+#
+/score/close
+#
+########################################
+#
+/score/create/boxMesh boxMesh_3b
+#
+/score/mesh/boxSize 100. 100. 20. cm
+/score/mesh/nBin 50 50 20
+#
+/score/quantity/nOfStep nOfStepGamma
+/score/filter/particle gammaFilter gamma
+#
+/score/close
+#
+########################################
+#
+/score/list
+#
+/run/beamOn 100
+#
+########################################
+#
+/score/drawProjection boxMesh_3a nOfStepGamma
+/score/drawProjection boxMesh_3b nOfStepGamma ! 11
+#

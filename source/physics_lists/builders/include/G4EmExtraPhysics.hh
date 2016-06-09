@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmExtraPhysics.hh,v 1.1 2006/10/31 11:35:01 gunter Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: G4EmExtraPhysics.hh,v 1.2 2007/11/15 18:08:11 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 //---------------------------------------------------------------------------
 //
@@ -66,7 +66,14 @@ public:
 
 private:
 
-  G4bool wasActivated;
+  void BuildSynch();
+  void BuildGammaNuclear();
+  void BuildMuonNuclear();
+
+  G4bool wasBuilt;
+  G4bool gnActivated;
+  G4bool munActivated;
+  G4bool synActivated;
   G4bool synchOn;
   G4bool gammNucOn;
   G4bool muNucOn;

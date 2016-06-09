@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PolarizedBhabhaCrossSection.cc,v 1.4 2006/11/17 14:14:20 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: G4PolarizedBhabhaCrossSection.cc,v 1.5 2007/11/01 17:32:34 schaelic Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 // -------------------------------------------------------------------
 //
 // GEANT4 Class file
@@ -67,6 +67,8 @@ void G4PolarizedBhabhaCrossSection::Initialize(
                     const G4StokesVector & pol1,
 			  G4int flag)
 {
+  SetXmax(1.);
+
   G4double re2 = classic_electr_radius * classic_electr_radius;
   G4double gamma2 = gamma*gamma;
   G4double gamma3 = gamma2*gamma;

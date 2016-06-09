@@ -1,4 +1,4 @@
-$Id: History,v 1.146 2007/05/11 14:00:23 gcosmo Exp $
+$Id: History,v 1.150 2007/11/16 16:20:39 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,16 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Nov 16th, 2007      G.Cosmo - geomvol-V09-00-01
+- Added inline specification to methods in G4AssemblyTriplet class.
+
+Oct 12th, 2007      P.Gumplinger - geomvol-V09-00-00
+- Minor cleanup: moved typedef to begin of include files and rename to
+  theSkinSurfaceTable in G4LogicalBorderSurface and G4LogicalSkinSurface classes.
+- Added explicit initialisation of first volume entry to zero in
+  G4TouchableHistory constructor, to ensure correct behavior for 'out-of-world'
+  touchable handle. (J.Apostolakis)
 
 May 11th, 2007      G.Cosmo - geomvol-V08-03-00
 - Use call to G4GeometryTolerance instead of kCarTolerance in

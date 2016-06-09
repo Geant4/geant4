@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4TwistTubsHypeSide.hh,v 1.5 2006/06/29 18:47:56 gunter Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 // 
 // --------------------------------------------------------------------

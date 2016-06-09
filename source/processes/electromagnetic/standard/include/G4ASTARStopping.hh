@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // $Id: G4ASTARStopping.hh,v 1.5 2006/06/29 19:49:58 gunter Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// GEANT4 tag $Name: geant4-09-01 $
 
 #ifndef G4ASTARStopping_h
 #define G4ASTARStopping_h 1

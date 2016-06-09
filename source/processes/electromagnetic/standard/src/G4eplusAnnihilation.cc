@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eplusAnnihilation.cc,v 1.26 2006/09/14 10:27:19 maire Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: G4eplusAnnihilation.cc,v 1.27 2007/10/02 10:17:12 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 // -------------------------------------------------------------------
 //
@@ -66,7 +66,9 @@ using namespace std;
 
 G4eplusAnnihilation::G4eplusAnnihilation(const G4String& name)
   : G4VEmProcess(name), isInitialised(false)
-{}
+{
+  enableAtRestDoIt = true;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

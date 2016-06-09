@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4Para.cc,v 1.39 2006/10/19 15:33:37 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 // class G4Para
 //

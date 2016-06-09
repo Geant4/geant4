@@ -1,4 +1,4 @@
-$Id: History,v 1.15 2007/06/25 06:59:17 ahoward Exp $
+$Id: History,v 1.16 2007/10/31 18:05:44 ahoward Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+October 31st, 2007 Alex Howard (procbiasing-V09-00-00)
+- Fixed G4ProcessPlacer.cc to put biasing process second for AlongStep
+  as well as PostStep - a bug which would feature for charged particles.
+- Added print out for AlongStep process vector to avoid confusion
 
 June 22nd, 2007 Alex Howard (procbiasing-V08-03-08)
 - Added missing member function to G4VSampler base class

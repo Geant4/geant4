@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PolarizedGammaConversionModel.cc,v 1.5 2007/05/23 08:52:20 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: G4PolarizedGammaConversionModel.cc,v 1.6 2007/11/01 17:32:34 schaelic Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 // -------------------------------------------------------------------
 //
@@ -86,7 +86,7 @@ void G4PolarizedGammaConversionModel::Initialise(const G4ParticleDefinition* pd,
 {
   G4BetheHeitlerModel::Initialise(pd,dv);
   if (!crossSectionCalculator)
-    crossSectionCalculator = new G4PolarizedPairProductionCrossSection(this);
+    crossSectionCalculator = new G4PolarizedPairProductionCrossSection();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -114,9 +114,12 @@ void G4PolarizedGammaConversionModel::SampleSecondaries(std::vector<G4DynamicPar
 				     (*vdp)[0]->GetMomentumDirection());
 
     // transform polarization into interaction frame
-     beamPol.InvRotateAz(nInteractionFrame,dp->GetMomentumDirection());
+    beamPol.InvRotateAz(nInteractionFrame,dp->GetMomentumDirection());
 
     // calulcate polarization transfer
+    crossSectionCalculator->SetMaterial(GetCurrentElement()->GetN(), // number of nucleons
+					GetCurrentElement()->GetZ(), 
+					GetCurrentElement()->GetfCoulomb());
     crossSectionCalculator->Initialize(gamEnergy0, lepEnergy1, sintheta,
 				       beamPol, G4StokesVector::ZERO);
 

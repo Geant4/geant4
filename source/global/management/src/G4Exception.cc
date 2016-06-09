@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Exception.cc,v 1.20 2006/06/29 19:04:01 gunter Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: G4Exception.cc,v 1.21 2007/11/13 17:35:06 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 // 
 // ----------------------------------------------------------------------
@@ -41,10 +41,10 @@
 #include "G4String.hh"
 #include "G4StateManager.hh"
 
-void G4Exception(const char* s)
+void G4Exception(const char* emessage)
 {
-   if(s)  { G4cerr << s << G4endl; }
-   if(G4StateManager::GetStateManager()->SetNewState(G4State_Abort,s))
+   if(emessage)  { G4cerr << emessage << G4endl; }
+   if(G4StateManager::GetStateManager()->SetNewState(G4State_Abort,emessage))
    {
      G4cerr << G4endl << "*** G4Exception: Aborting execution ***" << G4endl;
      abort();
@@ -114,12 +114,12 @@ void G4Exception(const char* originOfException,
   }
 }
 
-void G4Exception(std::string s)
+void G4Exception(std::string emessage)
 {
-  G4Exception(s.c_str());
+  G4Exception(emessage.c_str());
 }
 
-void G4Exception(G4String s)
+void G4Exception(G4String emessage)
 {
-  G4Exception(s.c_str());
+  G4Exception(emessage.c_str());
 }

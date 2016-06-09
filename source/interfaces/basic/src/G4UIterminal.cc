@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIterminal.cc,v 1.25 2007/06/19 10:38:29 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: G4UIterminal.cc,v 1.27 2007/10/29 18:49:45 asaim Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 // ====================================================================
 //   G4UIterminal.cc
@@ -41,7 +41,6 @@
 #include <sstream>
 
 #ifndef WIN32
-#include "G4RunManager.hh"
 #include <signal.h>
 #endif
 
@@ -53,28 +52,30 @@ static G4VUIshell* theshell= 0;
 
 #ifndef WIN32
 
+extern "C" {
+
 ////////////////////////////////
 static void SignalHandler(G4int)
 ////////////////////////////////
 {
-  G4RunManager* runManager= G4RunManager::GetRunManager();
   G4StateManager* stateManager= G4StateManager::GetStateManager();
   G4ApplicationState state= stateManager-> GetCurrentState();
 
   if(state==G4State_GeomClosed || state==G4State_EventProc) {
     G4cout << "aborting Run ...";
-    runManager-> AbortRun(true);
+    G4UImanager::GetUIpointer()->ApplyCommand("/run/abort");
     G4cout << G4endl;
   } else {
     G4cout << G4endl
            << "Session terminated." << G4endl;
     theshell-> ResetTerminal();
-    delete runManager;
     exit(0);
   }
 
   // for original Unix / System V
   signal(SIGINT, SignalHandler);
+}
+
 }
 #endif
 

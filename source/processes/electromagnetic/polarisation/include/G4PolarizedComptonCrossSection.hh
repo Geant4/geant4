@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PolarizedComptonCrossSection.hh,v 1.2 2006/11/17 14:14:19 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: G4PolarizedComptonCrossSection.hh,v 1.3 2007/11/01 17:32:34 schaelic Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 // GEANT4 Class file
 //
@@ -37,7 +37,8 @@
 //
 // Modifications:
 // 18-07-06 use newly calculated cross sections (P. Starovoitov)
-// 21-08-05 update interface to geant4.8.1 (A. Schaelicke)
+// 21-08-06 update interface to geant4.8.1 (A. Schaelicke)
+// 15-10-07 introduced a more general framework for cross sections (AS)
 //
 //
 // Class Description:
@@ -51,7 +52,7 @@
 
 #include "G4StokesVector.hh"
 #include "G4VPolarizedCrossSection.hh"
-#include "G4RotationMatrix.hh"
+
 
 
 class G4PolarizedComptonCrossSection : public G4VPolarizedCrossSection
@@ -77,6 +78,9 @@ public:
   // the calculation has to be initialised by calling Initialize()
   // prior to the first call of this function (see above)
   G4double XSection(const G4StokesVector & pol2,const G4StokesVector & pol3); 
+  // total cross section
+  G4double TotalXSection(G4double xmin, G4double xmax, G4double y,
+			 const G4StokesVector & pol0,const G4StokesVector & pol1);
 
 public:
   // return expected mean polarisation

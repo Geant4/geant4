@@ -24,19 +24,20 @@
 // ********************************************************************
 //
 //
-// $Id: G4IonisParamMat.cc,v 1.18 2006/06/29 19:12:45 gunter Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: G4IonisParamMat.cc,v 1.20 2007/09/27 14:05:47 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
 
-// 10-05-05, add a missing coma in FindMeanExcitationEnergy() - Bug#746 (mma)
-// 06-09-04, factor 2 to shell correction term (V.Ivanchenko) 
-// 28-10-02, add setMeanExcitationEnergy (V.Ivanchenko)
-// 08-02-01, fShellCorrectionVector correctly handled (mma)
-// 16-01-01, bug corrected in ComputeDensityEffect() E100eV (L.Urban)
-// 18-07-98, bug corrected in ComputeDensityEffect() for gas
 // 09-07-98, data moved from G4Material, M.Maire
+// 18-07-98, bug corrected in ComputeDensityEffect() for gas
+// 16-01-01, bug corrected in ComputeDensityEffect() E100eV (L.Urban)
+// 08-02-01, fShellCorrectionVector correctly handled (mma)
+// 28-10-02, add setMeanExcitationEnergy (V.Ivanchenko)
+// 06-09-04, factor 2 to shell correction term (V.Ivanchenko) 
+// 10-05-05, add a missing coma in FindMeanExcitationEnergy() - Bug#746 (mma)
+// 27-09-07, add computation of parameters for ions (V.Ivanchenko)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
 
@@ -52,6 +53,7 @@ G4IonisParamMat::G4IonisParamMat(G4Material* material)
   ComputeMeanParameters();
   ComputeDensityEffect();
   ComputeFluctModel();
+  ComputeIonParameters();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
@@ -216,18 +218,92 @@ void G4IonisParamMat::ComputeFluctModel()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
 
+void G4IonisParamMat::ComputeIonParameters()
+{
+  // compute parameters for ion transport
+  // The aproximation from:
+  // J.F.Ziegler, J.P. Biersack, U. Littmark
+  // The Stopping and Range of Ions in Matter,
+  // Vol.1, Pergamon Press, 1985
+  // Fast ions or hadrons
+
+  static G4double vFermi[92] = {
+    1.0309,  0.15976, 0.59782, 1.0781,  1.0486,  1.0,     1.058,   0.93942, 0.74562, 0.3424,
+    0.45259, 0.71074, 0.90519, 0.97411, 0.97184, 0.89852, 0.70827, 0.39816, 0.36552, 0.62712,
+    0.81707, 0.9943,  1.1423,  1.2381,  1.1222,  0.92705, 1.0047,  1.2,     1.0661,  0.97411,
+    0.84912, 0.95,    1.0903,  1.0429,  0.49715, 0.37755, 0.35211, 0.57801, 0.77773, 1.0207,
+    1.029,   1.2542,  1.122,   1.1241,  1.0882,  1.2709,  1.2542,  0.90094, 0.74093, 0.86054,
+    0.93155, 1.0047,  0.55379, 0.43289, 0.32636, 0.5131,  0.695,   0.72591, 0.71202, 0.67413,
+    0.71418, 0.71453, 0.5911,  0.70263, 0.68049, 0.68203, 0.68121, 0.68532, 0.68715, 0.61884,
+    0.71801, 0.83048, 1.1222,  1.2381,  1.045,   1.0733,  1.0953,  1.2381,  1.2879,  0.78654,
+    0.66401, 0.84912, 0.88433, 0.80746, 0.43357, 0.41923, 0.43638, 0.51464, 0.73087, 0.81065,
+    1.9578,  1.0257} ;
+
+  static G4double lFactor[92] = {
+    1.0,  1.0,  1.1,  1.06, 1.01, 1.03, 1.04, 0.99, 0.95, 0.9,
+    0.82, 0.81, 0.83, 0.88, 1.0,  0.95, 0.97, 0.99, 0.98, 0.97,
+    0.98, 0.97, 0.96, 0.93, 0.91, 0.9,  0.88, 0.9,  0.9,  0.9,
+    0.9,  0.85, 0.9,  0.9,  0.91, 0.92, 0.9,  0.9,  0.9,  0.9,
+    0.9,  0.88, 0.9,  0.88, 0.88, 0.9,  0.9,  0.88, 0.9,  0.9,
+    0.9,  0.9,  0.96, 1.2,  0.9,  0.88, 0.88, 0.85, 0.9,  0.9,
+    0.92, 0.95, 0.99, 1.03, 1.05, 1.07, 1.08, 1.1,  1.08, 1.08,
+    1.08, 1.08, 1.09, 1.09, 1.1,  1.11, 1.12, 1.13, 1.14, 1.15,
+    1.17, 1.2,  1.18, 1.17, 1.17, 1.16, 1.16, 1.16, 1.16, 1.16,
+    1.16, 1.16} ;
+
+  // get elements in the actual material,
+  const G4ElementVector* theElementVector = fMaterial->GetElementVector() ;
+  const G4double* theAtomicNumDensityVector =
+                         fMaterial->GetAtomicNumDensityVector() ;
+  const G4int NumberOfElements = fMaterial->GetNumberOfElements() ;
+
+  //  loop for the elements in the material
+  //  to find out average values Z, vF, lF
+  G4double z = 0.0, vF = 0.0, lF = 0.0, norm = 0.0 ;
+
+  if( 1 == NumberOfElements ) {
+    z = fMaterial->GetZ() ;
+    G4int iz = G4int(z) - 1 ;
+    if(iz < 0) iz = 0 ;
+    else if(iz > 91) iz = 91 ;
+    vF   = vFermi[iz] ;
+    lF   = lFactor[iz] ;
+
+  } else {
+    for (G4int iel=0; iel<NumberOfElements; iel++)
+      {
+        const G4Element* element = (*theElementVector)[iel] ;
+        G4double z2 = element->GetZ() ;
+        const G4double weight = theAtomicNumDensityVector[iel] ;
+        norm += weight ;
+        z    += z2 * weight ;
+        G4int iz = G4int(z2) - 1 ;
+        if(iz < 0) iz = 0 ;
+        else if(iz > 91) iz =91 ;
+        vF   += vFermi[iz] * weight ;
+        lF   += lFactor[iz] * weight ;
+      }
+    z  /= norm ;
+    vF /= norm ;
+    lF /= norm ;
+  }  
+  fZeff        = z;
+  fLfactor     = lF;
+  fFermiEnergy = 25.*keV*vF*vF;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
+
 void G4IonisParamMat::SetMeanExcitationEnergy(G4double value)
 {
   if(value == fMeanExcitationEnergy || value <= 0.0) return;
 
-  if (fMeanExcitationEnergy > 0.0 &&
-      G4NistManager::Instance()->GetVerbose() > 0) {
+  if (G4NistManager::Instance()->GetVerbose() > 0) 
     G4cout << "G4Material: Mean excitation energy is changed for "
            << fMaterial->GetName()
            << " Iold= " << fMeanExcitationEnergy/eV
            << "eV; Inew= " << value/eV << " eV;"
            << G4endl;
-  }
 
   fMeanExcitationEnergy = value;
   fLogMeanExcEnergy = std::log(value);

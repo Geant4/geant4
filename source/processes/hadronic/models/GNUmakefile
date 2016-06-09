@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.17 2007/05/25 19:27:20 dennis Exp $
+# $Id: GNUmakefile,v 1.21 2007/11/17 18:09:54 dennis Exp $
 # --------------------------------------------------------------
 # GNUmakefile for hadronic models library. G.Folger 10-Dec-97
 # --------------------------------------------------------------
@@ -26,6 +26,7 @@ SUBDIRS += de_excitation/ablation
 SUBDIRS += em_dissociation
 SUBDIRS += high_energy
 SUBDIRS += im_r_matrix
+SUBDIRS += incl
 SUBDIRS += isotope_production
 SUBDIRS += leading_particle
 SUBDIRS += low_energy
@@ -39,6 +40,8 @@ SUBDIRS += parton_string/management
 SUBDIRS += parton_string/qgsm
 SUBDIRS += pre_equilibrium/exciton_model
 SUBDIRS += radioactive_decay
+SUBDIRS += rpg
+SUBDIRS += qmd
 SUBDIRS += theo_high_energy
 SUBDIRS += util
 
@@ -50,6 +53,8 @@ SUBLIBS +=  G4had_im_r_matrix
 SUBLIBS +=  G4hadronic_iso
 SUBLIBS +=  G4hadronic_leading_particle
 SUBLIBS +=  G4hadronic_LE
+SUBLIBS +=  G4hadronic_RPG
+SUBLIBS +=  G4hadronic_qmd
 SUBLIBS +=  G4had_mod_man
 SUBLIBS +=  G4had_neu_hp
 SUBLIBS +=  G4had_lll_fis
@@ -59,6 +64,7 @@ SUBLIBS +=  G4had_mod_util
 SUBLIBS +=  G4hadronic_bert_cascade
 SUBLIBS +=  G4hadronic_hetcpp_evaporation
 SUBLIBS +=  G4hadronic_hetcpp_utils
+SUBLIBS +=  G4hadronic_incl_cascade
 SUBLIBS +=  G4hadronic_body_ci
 SUBLIBS +=  G4hadronic_interface_ci
 SUBLIBS +=  G4hadronic_deex_evaporation

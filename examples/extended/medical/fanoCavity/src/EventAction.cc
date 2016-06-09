@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: EventAction.cc,v 1.1 2007/01/19 17:20:27 maire Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: EventAction.cc,v 1.4 2007/10/29 17:09:53 maire Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -69,7 +69,7 @@ void EventAction::BeginOfEventAction(const G4Event* evt)
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void EventAction::EndOfEventAction(const G4Event* evt)
-{  
+{   
   //trajectories
   //
   if (G4VVisManager::GetConcreteInstance())
@@ -82,7 +82,7 @@ void EventAction::EndOfEventAction(const G4Event* evt)
                                        ((*(evt->GetTrajectoryContainer()))[i]);
         if (drawFlag == "all") trj->DrawTrajectory(1000);
         else if ((drawFlag == "charged")&&(trj->GetCharge() != 0.))
-                               trj->DrawTrajectory(1000); 
+                               trj->DrawTrajectory(); 
       }
   }
 }

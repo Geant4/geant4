@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: ExN05PhysicsList.cc,v 1.13 2007/05/11 14:29:16 mverderi Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: ExN05PhysicsList.cc,v 1.14 2007/11/30 18:08:42 mverderi Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 // 
 
@@ -260,19 +260,27 @@ void ExN05PhysicsList::ConstructGeneral()
 
 void ExN05PhysicsList::AddParameterisation()
 {
-  G4FastSimulationManagerProcess* fastSimProcess_parallelGeom = new G4FastSimulationManagerProcess("G4FSMP_parallelGeom", "pionGhostWorld");
+  // -- Fast simulation manager process for "mass geometry":
   G4FastSimulationManagerProcess* fastSimProcess_massGeom     = new G4FastSimulationManagerProcess("G4FSMP_massGeom");
+  // -- Fast simulation manager process for "parallel geometry":
+  G4FastSimulationManagerProcess* fastSimProcess_parallelGeom = new G4FastSimulationManagerProcess("G4FSMP_parallelGeom", "pionGhostWorld");
   theParticleIterator->reset();
   while( (*theParticleIterator)() )
     {
       G4ParticleDefinition* particle = theParticleIterator->value();
       G4ProcessManager* pmanager = particle->GetProcessManager();
-      // -- G4FSMP is a PostStep process, ordering does not matter
-      if (particle->GetParticleName() == "pi+" || 
-	  particle->GetParticleName() == "pi-")    pmanager->AddDiscreteProcess(fastSimProcess_parallelGeom);
+      // -- For the mass geometry, G4FSMP is a PostStep process, ordering does not matter:
       if (particle->GetParticleName() == "e+"  || 
 	  particle->GetParticleName() == "e-"  ||
 	  particle->GetParticleName() == "gamma")  pmanager->AddDiscreteProcess(fastSimProcess_massGeom);
+      // -- For the parallel geometry, G4FSMP is an Along+PostStep process, and ordering matters:
+      if (particle->GetParticleName() == "pi+" || 
+	  particle->GetParticleName() == "pi-") 
+	{
+	  pmanager->AddProcess(fastSimProcess_parallelGeom);
+	  pmanager->SetProcessOrdering(fastSimProcess_parallelGeom, idxAlongStep, 1);
+	  pmanager->SetProcessOrdering(fastSimProcess_parallelGeom, idxPostStep);
+	}
     }
 }
 

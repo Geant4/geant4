@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// GEANT4 tag $Name: geant4-09-00 $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 //
 // GEANT4 physics class: G4QuasiFreeRatios -- header file
@@ -80,6 +80,9 @@ class G4QuasiFreeRatios
   // Mean hN El and Tot XS(IU) for the isotopic (Z,N): on p -> (Z=1,N=0), on n -> (Z=0,N=1)
   std::pair<G4double,G4double> GetElTot(G4double pIU, G4int hPDG, G4int Z, G4int N); //(IU)
 
+  // Calculate ChEx/El ratio coefficient (p is in independent units, (Z,N) is a target)
+  G4double ChExElCoef(G4double p, G4int Z, G4int N, G4int pPDG);
+
  private:
   // These working member functions are in CHIPS units and must not be used externally
   G4double GetQF2IN_Ratio(G4double TotCS_mb, G4int A); // QuasiFree/Inelastic (fast)
@@ -89,7 +92,6 @@ class G4QuasiFreeRatios
 
  // Body
  private:
-  static std::vector<G4double*> vE;     // Vector of ElastPointers to LogTable
   static std::vector<G4double*> vT;     // Vector of pointers to LinTable
   static std::vector<G4double*> vL;     // Vector of pointers to LogTable
   static std::vector<std::pair<G4double,G4double>*> vX; // Vector of ETPointers to LogTable

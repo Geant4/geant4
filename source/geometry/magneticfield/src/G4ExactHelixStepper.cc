@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ExactHelixStepper.cc,v 1.6 2007/05/18 15:49:18 tnikitin Exp $ 
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: G4ExactHelixStepper.cc,v 1.8 2007/12/10 16:29:47 gunter Exp $ 
+// GEANT4 tag $Name: geant4-09-01 $
 //
 //  Helix a-la-Explicity Euler: x_1 = x_0 + helix(h)
 //   with helix(h) being a helix piece of length h
@@ -45,8 +45,8 @@
 
 G4ExactHelixStepper::G4ExactHelixStepper(G4Mag_EqRhs *EqRhs)
   : G4MagHelicalStepper(EqRhs),
-    fBfieldValue(DBL_MAX, DBL_MAX, DBL_MAX), yInitialEHS(DBL_MAX), yFinalEHS(-DBL_MAX),
-    fLastStepSize( DBL_MAX )
+    fBfieldValue(DBL_MAX, DBL_MAX, DBL_MAX), yInitialEHS(DBL_MAX), yFinalEHS(-DBL_MAX)
+    
 {
    const G4int nvar = 6 ;
    G4int i; 
@@ -89,7 +89,7 @@ G4ExactHelixStepper::Stepper( const G4double yInput[],
     yInitialEHS = G4ThreeVector( yInput[0],   yInput[1],   yInput[2]); 
     yFinalEHS   = G4ThreeVector( yOut[0],  yOut[1],  yOut[2]); 
     fBfieldValue=Bfld_value;
-    fLastStepSize=hstep;
+    
 }
 
 void
@@ -115,22 +115,25 @@ G4double G4ExactHelixStepper::DistChord()   const
   //   Else             DistChord=R_helix
   //
   G4double distChord;
-  G4double H_helix;
-  H_helix=fLastStepSize; 
   G4double Ang_curve=GetAngCurve();
-  if(Ang_curve<pi){
-    
-    distChord=0.5*H_helix*std::tan(0.25*Ang_curve);  
 
-  }
-  else{
-    distChord=GetRadHelix();
+      
+	 if(Ang_curve<=pi){
+	   distChord=GetRadHelix()*(1-std::cos(0.5*Ang_curve));
+	 }
+         else 
+         if(Ang_curve<twopi){
+           distChord=GetRadHelix()*(1+std::cos(0.5*(twopi-Ang_curve)));
+         }
+         else{
+          distChord=2.*GetRadHelix();  
+         }
+
    
-  }
-  
+
   return distChord;
   
-}
+}   
 
 G4int
 G4ExactHelixStepper::IntegratorOrder() const 

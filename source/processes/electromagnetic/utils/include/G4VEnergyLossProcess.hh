@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.hh,v 1.68 2007/06/12 11:29:09 vnivanch Exp $
+// $Id: G4VEnergyLossProcess.hh,v 1.76 2007/11/07 18:38:49 vnivanch Exp $
 // GEANT4 tag $Name:
 //
 // -------------------------------------------------------------------
@@ -74,6 +74,10 @@
 // 15-01-07 Add separate ionisation tables and reorganise get/set methods for
 //          dedx tables (V.Ivanchenko)
 // 13-03-07 use SafetyHelper instead of navigator (V.Ivanchenko)
+// 27-07-07 use stl vector for emModels instead of C-array (V.Ivanchenko)
+// 25-09-07 More accurate handling zero xsect in 
+//          PostStepGetPhysicalInteractionLength (V.Ivanchenko)
+// 27-10-07 Virtual functions moved to source (V.Ivanchenko)
 //
 // Class Description:
 //
@@ -138,14 +142,13 @@ protected:
   //------------------------------------------------------------------------
 protected:
 
-  inline virtual G4double MinPrimaryEnergy(const G4ParticleDefinition*,
-                                    const G4Material*, G4double cut);
+  virtual G4double MinPrimaryEnergy(const G4ParticleDefinition*,
+				    const G4Material*, G4double cut);
 
-  inline virtual void CorrectionsAlongStep(
-                             const G4MaterialCutsCouple*,
-                             const G4DynamicParticle*,
-			           G4double& eloss,
-                                   G4double& length);
+  virtual void CorrectionsAlongStep(const G4MaterialCutsCouple*,
+				    const G4DynamicParticle*,
+				    G4double& eloss,
+				    G4double& length);
 
   //------------------------------------------------------------------------
   // Generic methods common to all ContinuousDiscrete processes 
@@ -166,7 +169,7 @@ public:
   // Return false in case of failure at I/O
   G4bool StorePhysicsTable(const G4ParticleDefinition*,
                            const G4String& directory,
-                                 G4bool ascii = false);
+			   G4bool ascii = false);
 
   // Retrieve Physics from a file.
   // (return true if the Physics Table can be build by using file)
@@ -175,21 +178,21 @@ public:
   // should be placed under the directory specifed by the argument.
   G4bool RetrievePhysicsTable(const G4ParticleDefinition*,
                               const G4String& directory,
-                                    G4bool ascii);
+			      G4bool ascii);
 
 protected:
 
-  inline G4double GetMeanFreePath(const G4Track& track,
-				  G4double previousStepSize,
-				  G4ForceCondition* condition);
+  G4double GetMeanFreePath(const G4Track& track,
+			   G4double previousStepSize,
+			   G4ForceCondition* condition);
 
-  inline G4double GetContinuousStepLimit(const G4Track& track,
-					 G4double previousStepSize,
-					 G4double currentMinimumStep,
-					 G4double& currentSafety);
+  G4double GetContinuousStepLimit(const G4Track& track,
+				  G4double previousStepSize,
+				  G4double currentMinimumStep,
+				  G4double& currentSafety);
 
   //------------------------------------------------------------------------
-  // Specific methods for along/post step simulation 
+  // Specific methods for along/post step EM processes 
   //------------------------------------------------------------------------
 
 public:
@@ -205,7 +208,7 @@ public:
 			     G4double length);
 
 
-  inline G4double AlongStepGetPhysicalInteractionLength(
+  virtual G4double AlongStepGetPhysicalInteractionLength(
                              const G4Track&,
                              G4double  previousStepSize,
                              G4double  currentMinimumStep,
@@ -213,7 +216,7 @@ public:
                              G4GPILSelection* selection
                             );
 
-  inline G4double PostStepGetPhysicalInteractionLength(
+  virtual G4double PostStepGetPhysicalInteractionLength(
                              const G4Track& track,
                              G4double   previousStepSize,
                              G4ForceCondition* condition
@@ -419,7 +422,7 @@ protected:
 private:
 
   G4EmModelManager*                     modelManager;
-  G4VEmModel*                           emModel[5];
+  std::vector<G4VEmModel*>              emModels;
   G4VEmFluctuationModel*                fluctModel;
   std::vector<const G4Region*>          scoffRegions;
   G4int                                 nSCoffRegions;
@@ -492,7 +495,6 @@ private:
   G4GPILSelection  aGPILSelection;
 
   G4bool   lossFluctuationFlag;
-  G4bool   lossFluctuationArePossible;
   G4bool   rndmStepFlag;
   G4bool   tablesAreBuilt;
   G4bool   integral;
@@ -728,7 +730,7 @@ inline void G4VEnergyLossProcess::ComputeLambdaForScaledEnergy(G4double e)
   mfpKinEnergy  = theEnergyOfCrossSectionMax[currentMaterialIndex];
   if (e <= mfpKinEnergy) {
     preStepLambda = GetLambdaForScaledEnergy(e);
-    //   mfpKinEnergy = 0.0;
+
   } else {
     G4double e1 = e*lambdaFactor;
     if(e1 > mfpKinEnergy) {
@@ -742,7 +744,6 @@ inline void G4VEnergyLossProcess::ComputeLambdaForScaledEnergy(G4double e)
       preStepLambda = chargeSqRatio*theCrossSectionMax[currentMaterialIndex];
     }
   }
-  //  theNumberOfInteractionLengthLeft = -1.;  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -752,45 +753,6 @@ inline G4double G4VEnergyLossProcess::ContinuousStepLimit(
 {
   G4GPILSelection sel;
   return AlongStepGetPhysicalInteractionLength(track, x, y, z, &sel);
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline G4double G4VEnergyLossProcess::GetContinuousStepLimit(
-		const G4Track&,
-                G4double, G4double, G4double&)
-{
-  return DBL_MAX;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline G4double G4VEnergyLossProcess::AlongStepGetPhysicalInteractionLength(
-                             const G4Track&,
-                             G4double,
-                             G4double  currentMinStep,
-                             G4double&,
-                             G4GPILSelection* selection)
-{
-  G4double x = DBL_MAX;
-  *selection = aGPILSelection;
-  if(isIonisation) {
-    fRange = GetScaledRangeForScaledEnergy(preStepScaledEnergy)*reduceFactor;
-
-    x = fRange;
-    G4double y = x*dRoverRange;
-
-    //    G4double safety = track.GetStep()->GetPreStepPoint()->GetSafety();
-    if(x > finalRange && y < currentMinStep) { // && x > safety) {
-      x = y + finalRange*(1.0 - dRoverRange)*(2.0 - finalRange/fRange);
-    } else if (rndmStepFlag) x = SampleRange();
-    //    G4cout<<GetProcessName()<<": e= "<<preStepKinEnergy
-    //	  <<" range= "<<fRange <<" cMinSt="<<currentMinStep
-    //	  <<" safety= " << safety<< " limit= " << x <<G4endl;
-  }
-  //  G4cout<<GetProcessName()<<": e= "<<preStepKinEnergy
-  //  <<" stepLimit= "<<x<<G4endl;
-  return x;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -807,56 +769,6 @@ inline G4double G4VEnergyLossProcess::SampleRange()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline G4double G4VEnergyLossProcess::PostStepGetPhysicalInteractionLength(
-                             const G4Track& track,
-                             G4double   previousStepSize,
-                             G4ForceCondition* condition)
-{
-  // condition is set to "Not Forced"
-  *condition = NotForced;
-  G4double x = DBL_MAX;
-  if(previousStepSize <= DBL_MIN) theNumberOfInteractionLengthLeft = -1.0;
-  InitialiseStep(track);
-
-  if(preStepScaledEnergy < mfpKinEnergy) {
-    if (integral) ComputeLambdaForScaledEnergy(preStepScaledEnergy);
-    else  preStepLambda = GetLambdaForScaledEnergy(preStepScaledEnergy);
-    if(preStepLambda <= DBL_MIN) mfpKinEnergy = 0.0;
-  }
-
-  if(preStepLambda > DBL_MIN) {
-
-    if (theNumberOfInteractionLengthLeft < 0.0) {
-      // beggining of tracking (or just after DoIt of this process)
-      ResetNumberOfInteractionLengthLeft();
-    } else if(previousStepSize > DBL_MIN) {
-      // subtract NumberOfInteractionLengthLeft
-      SubtractNumberOfInteractionLengthLeft(previousStepSize);
-      if(theNumberOfInteractionLengthLeft<0.)
-	theNumberOfInteractionLengthLeft=perMillion;
-    }
-
-    // get mean free path
-    currentInteractionLength = 1.0/preStepLambda;
-    x = theNumberOfInteractionLengthLeft * currentInteractionLength;
-#ifdef G4VERBOSE
-    if (verboseLevel>2){
-      G4cout << "G4VEnergyLossProcess::PostStepGetPhysicalInteractionLength ";
-      G4cout << "[ " << GetProcessName() << "]" << G4endl; 
-      G4cout << " for " << particle->GetParticleName() 
-             << " in Material  " <<  currentMaterial->GetName()
-	     << " Ekin(MeV)= " << preStepKinEnergy/MeV 
-	     <<G4endl;
-      G4cout << "MeanFreePath = " << currentInteractionLength/cm << "[cm]" 
-	     << "InteractionLength= " << x/cm <<"[cm] " <<G4endl;
-    }
-#endif
-  }
-  return x;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
 inline G4double G4VEnergyLossProcess::MeanFreePath(const G4Track& track)
 {
   DefineMaterial(track.GetMaterialCutsCouple());
@@ -864,18 +776,6 @@ inline G4double G4VEnergyLossProcess::MeanFreePath(const G4Track& track)
   G4double x = DBL_MAX;
   if(DBL_MIN < preStepLambda) x = 1.0/preStepLambda;
   return x;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline G4double G4VEnergyLossProcess::GetMeanFreePath(
-                             const G4Track& track,
-                             G4double,
-                             G4ForceCondition* condition)
-
-{
-  *condition = NotForced;
-  return MeanFreePath(track);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -1041,14 +941,10 @@ inline G4double G4VEnergyLossProcess::GetCurrentRange() const
 
 void G4VEnergyLossProcess::AddEmModel(G4int order, G4VEmModel* p, 
 				      G4VEmFluctuationModel* fluc,
-                                const G4Region* region)
+				      const G4Region* region)
 {
   modelManager->AddEmModel(order, p, fluc, region);
   if(p) p->SetParticleChange(pParticleChange, fluc);
-  if(!fluc) {
-    lossFluctuationFlag = false;
-    lossFluctuationArePossible = false;
-  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -1069,14 +965,18 @@ inline G4int G4VEnergyLossProcess::NumberOfModels()
 
 inline void G4VEnergyLossProcess::SetEmModel(G4VEmModel* p, G4int index)
 {
-  emModel[index] = p;
+  G4int n = emModels.size();
+  if(index >= n) for(G4int i=n; i<index+1; i++) {emModels.push_back(0);}
+  emModels[index] = p;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 inline G4VEmModel* G4VEnergyLossProcess::EmModel(G4int index)
 {
-  return emModel[index];
+  G4VEmModel* p = 0;
+  if(index >= 0 && index <  G4int(emModels.size())) p = emModels[index];
+  return p;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -1096,7 +996,7 @@ inline G4VEmFluctuationModel* G4VEnergyLossProcess::FluctModel()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 inline void G4VEnergyLossProcess::UpdateEmModel(const G4String& nam, 
-					 G4double emin, G4double emax)
+						G4double emin, G4double emax)
 {
   modelManager->UpdateEmModel(nam, emin, emax);
 }
@@ -1140,7 +1040,7 @@ inline void G4VEnergyLossProcess::SetLinearLossLimit(G4double val)
 
 inline void G4VEnergyLossProcess::SetLossFluctuations(G4bool val)
 {
-  if(!val || lossFluctuationArePossible) lossFluctuationFlag = val;
+  lossFluctuationFlag = val;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

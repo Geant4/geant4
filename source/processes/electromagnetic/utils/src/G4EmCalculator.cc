@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmCalculator.cc,v 1.36 2007/03/15 12:34:47 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: G4EmCalculator.cc,v 1.37 2007/08/16 15:55:42 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 // -------------------------------------------------------------------
 //
@@ -797,7 +797,12 @@ const G4Material* G4EmCalculator::FindMaterial(const G4String& name)
 
 const G4Region* G4EmCalculator::FindRegion(const G4String& reg)
 {
-  return G4RegionStore::GetInstance()->GetRegion(reg);
+  const G4Region* r = 0;
+  if(reg != "" || reg != "world")
+    r = G4RegionStore::GetInstance()->GetRegion(reg);
+  else 
+    r = G4RegionStore::GetInstance()->GetRegion("DefaultRegionForTheWorld");
+  return r;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

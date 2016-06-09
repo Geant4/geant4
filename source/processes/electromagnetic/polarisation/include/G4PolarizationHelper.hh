@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PolarizationHelper.hh,v 1.1 2006/09/21 21:35:10 vnivanch Exp $
-// tag $Name: geant4-09-00 $
+// $Id: G4PolarizationHelper.hh,v 1.2 2007/11/01 17:30:25 schaelic Exp $
+// tag $Name: geant4-09-01 $
 //
 // GEANT4 Class header file
 //
@@ -37,19 +37,22 @@
 //
 // Class Description:
 //
-//   Provides polarization some basic transformation routines.
+//   Provides some basic polarization transformation routines.
 
 #ifndef G4PolarizationHelper_h
 #define G4PolarizationHelper_h 1
 
 #include "globals.hh"
 #include "G4ThreeVector.hh"
+#include "Randomize.hh"
+
 
 class G4PolarizationHelper {
 public:
   static G4ThreeVector GetFrame(const G4ThreeVector &, const G4ThreeVector &);
   static G4ThreeVector GetParticleFrameX(const G4ThreeVector &);
   static G4ThreeVector GetParticleFrameY(const G4ThreeVector &);
+  static G4ThreeVector GetRandomFrame(const G4ThreeVector &);
 
   static G4ThreeVector GetSpinInPRF(const G4ThreeVector &uZ,const G4ThreeVector &spin);
 

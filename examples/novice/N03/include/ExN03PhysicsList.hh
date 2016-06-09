@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: ExN03PhysicsList.hh,v 1.12 2006/06/29 17:48:40 gunter Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: ExN03PhysicsList.hh,v 1.13 2007/07/02 13:22:08 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 // 
 
@@ -42,29 +42,26 @@
 
 class ExN03PhysicsList: public G4VUserPhysicsList
 {
-  public:
-    ExN03PhysicsList();
-   ~ExN03PhysicsList();
+public:
+  ExN03PhysicsList();
+  virtual ~ExN03PhysicsList();
 
-  protected:
-    // Construct particle and physics
-    void ConstructParticle();
-    void ConstructProcess();
+  // Construct particle and physics
+  void ConstructParticle();
+  void ConstructProcess();
  
-    void SetCuts();
-
+  void SetCuts();
    
-  protected:
-    // these methods Construct particles 
-    void ConstructBosons();
-    void ConstructLeptons();
-    void ConstructMesons();
-    void ConstructBaryons();
+private:
+  // these methods Construct particles 
+  void ConstructBosons();
+  void ConstructLeptons();
+  void ConstructMesons();
+  void ConstructBaryons();
 
-  protected:
-    // these methods Construct physics processes and register them
-    void ConstructGeneral();
-    void ConstructEM();
+  // these methods Construct physics processes and register them
+  void ConstructDecay();
+  void ConstructEM();
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

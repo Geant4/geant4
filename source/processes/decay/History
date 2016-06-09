@@ -1,4 +1,4 @@
-$Id: History,v 1.23 2007/05/07 10:17:36 kurasige Exp $
+$Id: History,v 1.28 2007/10/30 03:14:18 gum Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,18 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+- Oct. 29,  07 P.Gumplinger (decay-V09-00-02)
+- add G4PionDecayMakeSpin class
+  set the daughter muon spin for 2 body decays of
+  pi, K and K0_long
+
+- Oct. 12,  07 H.Kurashige (decay-V09-00-01)
+- add forward declaration for G4VExtDecayer in G4DecayWithSpin
+
+- Oct. 06,  07 H.Kurashige (decay-V09-00-00)
+- Add a method of DaughterPolarization in G4Decay 
+
 - May 07, 07 H.Kurashige (decay-V08-02-00)
 - Add protection for "TotalEnergy < Mass" 
 

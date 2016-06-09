@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // $Id: G4CreatorFactoryT.hh,v 1.2 2006/12/13 15:44:03 gunter Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 // Generic identifier-creator based factory. Based on 
 // factory presented in "Modern C++ Design, Andrei Alexandrescu"

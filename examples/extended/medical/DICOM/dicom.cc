@@ -51,7 +51,8 @@
 #include "G4VisExecutive.hh"
 #endif
 
-#include "DicomGeometry.hh"
+#include "RegularDicomDetectorConstruction.hh"
+#include "NestedParamDicomDetectorConstruction.hh"
 #include "DicomPrimaryGeneratorAction.hh"
 #include "DicomEventAction.hh"
 #include "DicomHandler.hh"
@@ -61,15 +62,21 @@ int main(int argc,char** argv)
 				
   // Treatment of DICOM images before creating the G4runManager
   DicomHandler* dcmHandler = new DicomHandler;
-  dcmHandler->checkFileFormat();
+  dcmHandler->CheckFileFormat();
 
   // Initialisation of physics, geometry, primary particles ... 
   G4RunManager* runManager = new G4RunManager;
-  DicomGeometry* theGeometry = new DicomGeometry();
+  DicomDetectorConstruction* theGeometry;
+  char* nest = getenv( "DICOM_NESTED_PARAM" );
+  if( nest && G4String(nest) == "1" ) {
+    theGeometry = new NestedParamDicomDetectorConstruction();
+  } else {
+    theGeometry = new RegularDicomDetectorConstruction();
+  }
   runManager->SetUserInitialization(new DicomPhysicsList);
   runManager->SetUserInitialization(theGeometry);
   runManager->SetUserAction(new DicomPrimaryGeneratorAction());
-  runManager->SetUserAction(new DicomEventAction);
+  //  runManager->SetUserAction(new DicomEventAction);
 
   runManager->Initialize();
 
@@ -86,7 +93,7 @@ int main(int argc,char** argv)
   if (argc==1)
     {
       G4UIsession* session = new G4UIterminal(new G4UItcsh);
-      UI->ApplyCommand("/control/execute default.mac");
+      UI->ApplyCommand("/control/execute vis.mac");
       session->SessionStart();
       delete session;
     }

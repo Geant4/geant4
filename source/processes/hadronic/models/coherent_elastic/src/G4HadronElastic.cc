@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronElastic.cc,v 1.54 2007/05/25 17:50:49 dennis Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: G4HadronElastic.cc,v 1.55 2007/12/10 09:56:01 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 //
 // Physics model class G4HadronElastic (derived from G4LElastic)
@@ -86,7 +86,7 @@ G4HadronElastic::G4HadronElastic(G4ElasticHadrNucleusHE* HModel)
   verboseLevel= 0;
   lowEnergyRecoilLimit = 100.*keV;  
   lowEnergyLimitQ  = 0.0*GeV;  
-  lowEnergyLimitHE = 1.0*GeV;  
+  lowEnergyLimitHE = DBL_MAX;  
   lowestEnergyLimit= 0.0*keV;  
   plabLowLimit     = 20.0*MeV;
 
@@ -187,7 +187,8 @@ G4HadFinalState* G4HadronElastic::ApplyYourself(
     // S-wave for very low energy
     if(plab < plabLowLimit) gtype = fSWave;
     // HE-elastic for energetic projectile mesons
-    else if(ekin >= lowEnergyLimitHE && theParticle->GetBaryonNumber() == 0) 
+    //    else if(ekin >= lowEnergyLimitHE && theParticle->GetBaryonNumber() == 0) 
+    else if(ekin >= lowEnergyLimitHE && (theParticle == thePionPlus || theParticle == thePionMinus)) 
       gtype = fHElastic;
   }
 

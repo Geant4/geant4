@@ -1,4 +1,4 @@
-$Id: History,v 1.25 2007/06/07 09:07:37 kmura Exp $
+$Id: History,v 1.32 2007/11/25 19:37:33 kmura Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -13,6 +13,34 @@ Geant4Py is a Geant4-Python bridge.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+26 November 2007 K.Murakami
+ - add G4 GDML module support
+ - update PL for 9.1
+
+12 November 2007 K.Murakami (1.5.0)
+ - add FTFP_BERT in PL for 9.1
+ - add GDML (external lib.) support (experimental)
+ - add exposure of G4Navigator
+
+07 November 2007 K.Murakami
+ - update for 9.1
+  * G4ParticleGun
+  * G4NistManager
+
+07 August 2007 K.Murakami (1.4.1)
+ - add boolean sold classes
+ - add G4PVPlacement constructors for geometry overlap check 
+ - add gtest06/07 for geometry test
+
+12 July 2007 K.Murakami (1.4.0)
+ - add version contorol in pyG4UIterminal.cc
+ - bug fix in pyG4VUserDetectorConstruction
+    - Construct() method should return PV
+ - update G4VSolid
+ - add specific CSG solid classes
+ - add gtest05 as an example constructing CSG solid geometry in Python
+ - a new example of TestEm0 is contributed by Jean
 
 07 June 2007 K.Murakami
  - modified for 9.0

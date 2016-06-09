@@ -1,0 +1,25 @@
+# 07.08.02 M Vladymyrov
+# Macro file for "monopole.cc"
+# (can be run in batch, without graphic)
+#
+#
+/control/verbose 1
+/run/verbose 0
+/testex/run/verbose 1
+/tracking/verbose 0
+#
+/testex/det/setMat G4_Si
+/testex/det/setSizeX  10 cm
+/testex/det/setSizeYZ 20 cm
+/testex/det/setStepSize 0.2 mm
+
+/testex/run/binSize 0.2 mm
+#
+/run/initialize
+#
+/process/eLoss/verbose 0
+/testex/event/printModulo 10
+#
+/gun/particle monopole
+/gun/energy 100 GeV
+/run/beamOn 100

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleTable.cc,v 1.27 2006/06/29 19:26:05 gunter Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: G4ParticleTable.cc,v 1.29 2007/10/06 06:49:29 kurasige Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 // class G4ParticleTable
 //
@@ -308,6 +308,17 @@ G4ParticleDefinition* G4ParticleTable::GetIon(G4int Z, G4int A, G4double E)
 }
 
 ////////////////////
+G4ParticleDefinition* G4ParticleTable::GetIon(G4int Z, G4int A, G4int L, G4double E)
+{
+   CheckReadiness();
+   if (Z<=0) return 0;
+   if (A-L<Z) return 0;
+   if (L<0) return 0; 
+   if (E<0.) return 0;
+   return fIonTable->GetIon(Z, A, L, E);
+}
+
+////////////////////
 G4ParticleDefinition* G4ParticleTable::FindIon(G4int Z, G4int A, G4double E)
 {
    CheckReadiness();
@@ -315,6 +326,17 @@ G4ParticleDefinition* G4ParticleTable::FindIon(G4int Z, G4int A, G4double E)
    if (A<Z) return 0;
    if (E<0.) return 0;
    return fIonTable->FindIon(Z, A, E);
+}
+
+////////////////////
+G4ParticleDefinition* G4ParticleTable::FindIon(G4int Z, G4int A, G4int L, G4double E)
+{
+   CheckReadiness();
+   if (Z<=0) return 0;
+   if (A-L<Z) return 0;
+   if (L<0) return 0;
+   if (E<0.) return 0;
+   return fIonTable->FindIon(Z, A, L, E);
 }
 
 ////////////////////
@@ -380,7 +402,7 @@ G4ParticleDefinition* G4ParticleTable::FindParticle(G4int aPDGEncoding )
 ////////////////////
 void G4ParticleTable::DumpTable(const G4String &particle_name)  
 {
-   CheckReadiness();
+  CheckReadiness();
   if (( particle_name == "ALL" ) || (particle_name == "all")){
     // dump all particles 
     G4PTblDicIterator *piter = fIterator; 
@@ -394,12 +416,9 @@ void G4ParticleTable::DumpTable(const G4String &particle_name)
     ptr = FindParticle(particle_name);
     if ( ptr != 0) {
       ptr->DumpTable();
-    } else {
-#ifdef G4VERBOSE
-      if (verboseLevel>0){
-        G4cout << particle_name << " does not exist in ParticleTable " <<G4endl;
-      }
-#endif
+    } else { 
+      G4cout << " G4ParticleTable::DumpTable : " 
+	     << particle_name << " does not exist in ParticleTable " <<G4endl;
     }
   }
 }

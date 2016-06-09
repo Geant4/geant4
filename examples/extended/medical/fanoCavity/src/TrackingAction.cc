@@ -23,20 +23,22 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: TrackingAction.cc,v 1.3 2007/01/23 13:34:19 maire Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: TrackingAction.cc,v 1.4 2007/10/29 17:09:53 maire Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "TrackingAction.hh"
-#include "SteppingAction.hh"
+#include "RunAction.hh"
+#include "HistoManager.hh"
+
 #include "G4Track.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-TrackingAction::TrackingAction(SteppingAction* step)
-:stepAction(step)
+TrackingAction::TrackingAction(RunAction* RuAct, HistoManager* histo)
+:runAction(RuAct), histoManager(histo)
 { }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -46,17 +48,24 @@ TrackingAction::~TrackingAction()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void TrackingAction::PreUserTrackingAction(const G4Track* track)
-{  
- G4ParticleDefinition* particle = track->GetDefinition();
- G4bool charged = (particle->GetPDGCharge() != 0.);
- stepAction->TrackCharge(charged);
+void TrackingAction::PreUserTrackingAction(const G4Track*)
+{ 
+ //initialize edep cavity per track
+ //
+ EdepCavity = 0.; 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void TrackingAction::PostUserTrackingAction(const G4Track*)
-{ }
+{
+  //sum energy in cavity
+  //
+  if (EdepCavity > 0.) {
+    runAction->AddEdepCavity(EdepCavity);
+    histoManager->FillHisto(11,EdepCavity);
+  }  
+ }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

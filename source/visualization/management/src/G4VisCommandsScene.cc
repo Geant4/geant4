@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsScene.cc,v 1.66 2007/05/25 10:49:55 allison Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: G4VisCommandsScene.cc,v 1.67 2007/11/10 15:03:56 allison Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 
 // /vis/scene commands - John Allison  9th August 1998
 
@@ -33,6 +33,8 @@
 
 #include "G4VisManager.hh"
 #include "G4TransportationManager.hh"
+#include "G4RunManager.hh"
+#include "G4Run.hh"
 #include "G4PhysicalVolumeModel.hh"
 #include "G4ApplicationState.hh"
 #include "G4UImanager.hh"
@@ -201,6 +203,18 @@ void G4VisCommandSceneEndOfEventAction::SetNewValue (G4UIcommand*,
   // Change of transients behaviour, so...
   fpVisManager->ResetTransientsDrawnFlags();
 
+  // Are there any events currently kept...
+  size_t nCurrentlyKept = 0;
+  G4RunManager* runManager = G4RunManager::GetRunManager();
+  if (runManager) {
+    const G4Run* currentRun = runManager->GetCurrentRun();
+    if (currentRun) {
+      const std::vector<const G4Event*>* events =
+	currentRun->GetEventVector();
+      if (events) nCurrentlyKept = events->size();
+    }
+  }
+
   if (verbosity >= G4VisManager::confirmations) {
     G4cout << "End of event action set to ";
     if (pScene->GetRefreshAtEndOfEvent()) G4cout << "\"refresh\".";
@@ -210,22 +224,29 @@ void G4VisCommandSceneEndOfEventAction::SetNewValue (G4UIcommand*,
 	     << maxNumberOfKeptEvents
 	     << " (unlimited if negative)."
 	"\n  This may be changed with, e.g., "
-	"\"/vis/scene/endOfEventAction accumulate 100\"."
-	     << G4endl;
+	"\"/vis/scene/endOfEventAction accumulate 1000\".";
     }
+    G4cout << G4endl;
   }
+
   if (!pScene->GetRefreshAtEndOfEvent() &&
       maxNumberOfKeptEvents != 0 &&
       verbosity >= G4VisManager::warnings) {
-    G4cout << "WARNING: The vis manager will keep ";
-    if (maxNumberOfKeptEvents < 0) G4cout << "an unlimited number of";
-    else G4cout << "up to " << maxNumberOfKeptEvents;
-    G4cout << " events.";
-    if (maxNumberOfKeptEvents > 1 || maxNumberOfKeptEvents < 0)
-      G4cout << "\n  This may use a lot of memory.";
+    G4cout << "WARNING: ";
+    if (nCurrentlyKept) {
+      G4cout <<
+	"\n  There are currently " << nCurrentlyKept
+	     << " events kept for refreshing and/or reviewing.";
+    } else {
+      G4cout << "The vis manager will keep ";
+      if (maxNumberOfKeptEvents < 0) G4cout << "an unlimited number of";
+      else G4cout << "up to " << maxNumberOfKeptEvents;
+      G4cout << " events.";
+      if (maxNumberOfKeptEvents > 1 || maxNumberOfKeptEvents < 0)
+	G4cout << "\n  This may use a lot of memory.";
+    }
     G4cout << G4endl;
   }
-  UpdateVisManagerScene (pScene->GetName());
 }
 
 ////////////// /vis/scene/endOfRunAction ////////////////////////////
@@ -315,7 +336,6 @@ void G4VisCommandSceneEndOfRunAction::SetNewValue (G4UIcommand*,
     else G4cout << "accumulate";
     G4cout << "\"" << G4endl;
   }
-  UpdateVisManagerScene (pScene->GetName());
 }
 
 ////////////// /vis/scene/list ///////////////////////////////////////

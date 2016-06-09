@@ -12,5 +12,5 @@
 /vis/viewer/zoom 1.4
 /vis/viewer/flush
 
-# (if you prefer refreshing each event, comment out next line)
-/vis/scene/endOfEventAction accumulate
+# (if you prefer not refreshing each event, uncomment next line)
+# /vis/scene/endOfEventAction accumulate

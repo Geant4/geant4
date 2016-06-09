@@ -1,4 +1,4 @@
-# $Id: architecture.gmk,v 1.110 2007/06/28 14:16:55 gcosmo Exp $
+# $Id: architecture.gmk,v 1.114 2007/12/11 13:20:29 gcosmo Exp $
 # ------------------------------------------------------------------------
 #       GEANT 4 - Architecture configuration script for GNU Make
 #
@@ -240,7 +240,7 @@ endif
 # compiler.  OGLHOME can also point to a special installation.
 # If the user does not set his/her own values, system-dependent values
 # are set below.  Most system-dependent code assumes OGLHOME is set.
-#
+
 # ------------- OpenInventor -----------------
 # The path to the installation of OpenInventor must be specified
 # if the package is installed in a location different
@@ -254,6 +254,27 @@ ifndef OIVFLAGS
 endif
 ifndef OIVLIBS
   OIVLIBS   := -L$(OIVHOME)/lib -lInventorXt -lInventor
+endif
+
+# ----------------- GDML ---------------------
+# Setup path to XERCESC library if GDML plugin build is specified
+#
+ifneq ($(G4LIB_BUILD_GDML),)
+  G4LIB_USE_GDML = 1
+  ifndef XERCESCROOT
+    XERCESCROOT := /usr/local/xercesc
+  endif
+  ifndef GDMLFLAGS
+    GDMLFLAGS := -DG4LIB_USE_GDML -I$(XERCESCROOT)/include
+  endif
+  ifndef GDMLLIBS
+    ifneq (,$(findstring WIN32-VC,$(G4SYSTEM)))
+      GDMLLIBS := $(LIB_PATH)$(XERCESCROOT)/lib xerces-depdom_2.lib xerces-c_2.lib
+    else
+      GDMLLIBS := -L$(XERCESCROOT)/lib -lxerces-depdom -lxerces-c
+    endif
+  endif
+  CPPFLAGS  += $(GDMLFLAGS)
 endif
 
 # For cfront compilers the repository location is set to

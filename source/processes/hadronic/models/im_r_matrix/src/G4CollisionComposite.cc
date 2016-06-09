@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CollisionComposite.cc,v 1.6 2006/06/29 20:37:18 gunter Exp $ //
+// $Id: G4CollisionComposite.cc,v 1.7 2007/07/05 21:43:24 dennis Exp $ //
 
 #include "globals.hh"
 #include "G4CollisionComposite.hh"
@@ -121,11 +121,11 @@ G4bool G4CollisionComposite::IsInCharge(const G4KineticTrack& trk1,
 
   // The composite is in charge if any of its components is in charge
 
-  const G4CollisionVector* components = GetComponents();
-  if (components)
+  const G4CollisionVector* comps = GetComponents();
+  if (comps)
     {
       G4CollisionVector::const_iterator iter;
-      for (iter = components->begin(); iter != components->end(); ++iter)
+      for (iter = comps->begin(); iter != comps->end(); ++iter)
 	{
 	 if ( ((*iter))->IsInCharge(trk1,trk2) ) isInCharge = true;
 	}

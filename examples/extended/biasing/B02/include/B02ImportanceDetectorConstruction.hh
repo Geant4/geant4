@@ -25,7 +25,7 @@
 //
 //
 // $Id: B02ImportanceDetectorConstruction.hh,v 1.7 2007/06/22 13:38:55 ahoward Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 
 #ifndef B02ImportanceDetectorConstruction_hh 

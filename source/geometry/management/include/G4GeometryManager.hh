@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4GeometryManager.hh,v 1.12 2007/05/11 13:30:12 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 // class G4GeometryManager
 //

@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ePolarizedBremsstrahlungModel.cc,v 1.3 2007/05/23 08:52:20 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: G4ePolarizedBremsstrahlungModel.cc,v 1.4 2007/11/01 17:32:34 schaelic Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 // -------------------------------------------------------------------
 //
@@ -75,7 +75,7 @@ void G4ePolarizedBremsstrahlungModel::Initialise(const G4ParticleDefinition* p,
 {
   G4eBremsstrahlungModel::Initialise(p,d);
   if (!crossSectionCalculator)
-    crossSectionCalculator = new G4PolarizedBremsstrahlungCrossSection(this);
+    crossSectionCalculator = new G4PolarizedBremsstrahlungCrossSection();
 }
 
 
@@ -109,6 +109,9 @@ void G4ePolarizedBremsstrahlungModel::SampleSecondaries(std::vector<G4DynamicPar
      beamPol.InvRotateAz(nInteractionFrame,dp->GetMomentumDirection());
 
     // calulcate polarization transfer
+    crossSectionCalculator->SetMaterial(GetCurrentElement()->GetN(),  // number of nucleons
+					GetCurrentElement()->GetZ(),
+					GetCurrentElement()->GetfCoulomb());
     crossSectionCalculator->Initialize(lepEnergy0, gamEnergy1, sintheta,
 				       beamPol, G4StokesVector::ZERO);
 

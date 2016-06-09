@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4VUserDetectorConstruction.hh,v 1.9 2007/05/03 17:59:18 asaim Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 
 #ifndef G4VUserDetectorConstruction_h

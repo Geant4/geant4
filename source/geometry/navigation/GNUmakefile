@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.3 2007/05/18 15:53:15 ahoward Exp $
+# $Id: GNUmakefile,v 1.5 2007/11/23 13:30:47 gcosmo Exp $
 # --------------------------------------------------------------------
 # GNUmakefile for geometry/volumes library.  Gabriele Cosmo, 16/11/96.
 # --------------------------------------------------------------------
@@ -14,6 +14,7 @@ include $(G4INSTALL)/config/architecture.gmk
 CPPFLAGS += -DG4GEOM_ALLOC_EXPORT
 CPPFLAGS += -I$(G4BASE)/graphics_reps/include \
             -I$(G4BASE)/intercoms/include \
+            -I$(G4BASE)/materials/include \
             -I$(G4BASE)/global/management/include \
             -I$(G4BASE)/global/HEPRandom/include \
             -I$(G4BASE)/global/HEPGeometry/include \
@@ -29,6 +30,9 @@ ifdef G4DEBUG_FIELD
 endif
 ifdef G4DEBUG_PATHFINDER
   CPPFLAGS += -DG4DEBUG_PATHFINDER
+endif
+ifdef PATHFINDER_OPTIMISATION
+  CPPFLAGS += -DPATHFINDER_OPTIMISATION
 endif
 
 include $(G4INSTALL)/config/common.gmk

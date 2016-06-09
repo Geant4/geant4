@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4QNucleus.hh,v 1.31 2006/10/27 16:47:34 mkossov Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: G4QNucleus.hh,v 1.33 2007/10/31 13:23:07 mkossov Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 //      ---------------- G4QNucleus ----------------
 //             by Mikhail Kossov, Sept 1999.
@@ -37,6 +37,7 @@
 
 #include "G4QCandidateVector.hh"
 #include "G4QHadronVector.hh"
+#include "G4QChipolino.hh"
 #include <utility>
 #include <vector>
 #include "globals.hh"
@@ -51,7 +52,7 @@ public:
   G4QNucleus(G4QContent nucQC, G4LorentzVector p);         // Full QuarkCont-Constructor
   G4QNucleus(G4int z, G4int n, G4int s=0);                 // At Rest ZNS-Constructor
   G4QNucleus(G4int z, G4int n, G4int s, G4LorentzVector p);// Full ZNS-Constructor
-  G4QNucleus(const G4QNucleus& right);                     // Copy Constructor by value
+  //G4QNucleus(const G4QNucleus& right);                     // Copy Constructor by value
   G4QNucleus(G4QNucleus* right);                           // Copy Constructor by pointer
   ~G4QNucleus();                                           // Public Destructor
   // Overloaded Operators
@@ -93,10 +94,20 @@ public:
   }
   G4QHadron* GetNextNucleon()
     {return (currentNucleon>=0&&currentNucleon<GetA()) ? theNucleons[currentNucleon++] :0;}
-  std::vector<G4double>* GetBThickness() const {return Tb;} // T(b) function, step .1 fm
+  //std::vector<G4double>* GetBThickness() const {return Tb;} // T(b) function, step .1 fm
+  std::vector<G4double> const* GetBThickness() {return &Tb;} // T(b) function, step .1 fm
 
   // Specific Modifiers
   G4bool     EvaporateBaryon(G4QHadron* h1,G4QHadron* h2); // Evaporate Baryon from Nucleus
+  void       EvaporateNucleus(G4QHadron* hA, G4QHadronVector* oHV);// Evaporate Nucleus
+  //void DecayBaryon(G4QHadron* dB, G4QHadronVector* oHV); // gamma+N or Delt->N+Pi @@later
+  void       DecayDibaryon(G4QHadron* dB, G4QHadronVector* oHV);   // deuteron is kept
+  void       DecayIsonucleus(G4QHadron* dB, G4QHadronVector* oHV); // nP+(Pi+) or nN+(Pi-)
+  void       DecayMultyBaryon(G4QHadron* dB, G4QHadronVector* oHV);// A*p, A*n or A*L
+  void       DecayAntiStrange(G4QHadron* dB, G4QHadronVector* oHV);// nuclei with K+/K0
+  void       DecayAlphaBar(G4QHadron* dB, G4QHadronVector* oHV);   // alpha+p or alpha+n
+  void       DecayAlphaDiN(G4QHadron* dB, G4QHadronVector* oHV);   // alpha+p+p
+  void       DecayAlphaAlpha(G4QHadron* dB, G4QHadronVector* oHV); // alpha+alpha
   G4int      SplitBaryon();                         // Is it possible to split baryon/alpha
   G4int      HadrToNucPDG(G4int hPDG);              // Converts hadronic PDGCode to nuclear
   G4int      NucToHadrPDG(G4int nPDG);              // Converts nuclear PDGCode to hadronic
@@ -180,7 +191,8 @@ private:
   G4int currentNucleon;         // Current nucleon for the NextNucleon (? M.K.)
   G4double rho0;                // Normalazation density
   G4double radius;              // Nuclear radius
-  std::vector<G4double>* Tb;    // T(b) function with step .1 fm (@@ make .1 a parameter)
+  //std::vector<G4double>* Tb;    // T(b) function with step .1 fm (@@ make .1 a parameter)
+  std::vector<G4double> Tb;    // T(b) function with step .1 fm (@@ make .1 a parameter)
 };
 
 std::ostream& operator<<(std::ostream& lhs, G4QNucleus& rhs);

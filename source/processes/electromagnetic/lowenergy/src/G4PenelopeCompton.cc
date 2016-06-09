@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // $Id: G4PenelopeCompton.cc,v 1.26 2006/06/29 19:40:41 gunter Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 // Author: Luciano Pandola
 //

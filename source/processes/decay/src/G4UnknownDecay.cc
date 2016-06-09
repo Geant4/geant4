@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4UnknownDecay.cc,v 1.4 2007/05/07 10:16:08 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: G4UnknownDecay.cc,v 1.5 2007/10/06 07:01:09 kurasige Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 // 
 // --------------------------------------------------------------
@@ -48,7 +48,7 @@ G4UnknownDecay::G4UnknownDecay(const G4String& processName)
 {
 #ifdef G4VERBOSE
   if (GetVerboseLevel()>1) {
-    G4cerr << "G4UnknownDecay  constructor " << "  Name:" << processName << G4endl;
+    G4cout << "G4UnknownDecay  constructor " << "  Name:" << processName << G4endl;
   }
 #endif
   pParticleChange = &fParticleChangeForDecay;
@@ -112,11 +112,11 @@ G4VParticleChange* G4UnknownDecay::DecayIt(const G4Track& aTrack, const G4Step& 
     ParentEnergy = ParentMass;
 #ifdef G4VERBOSE
     if (GetVerboseLevel()>1) {
-      G4cerr << "G4UnknownDecay::DoIt  : Total Energy is less than its mass" << G4endl;
-      G4cerr << " Particle: " << aParticle->GetDefinition()->GetParticleName();
-      G4cerr << " Energy:"    << ParentEnergy/MeV << "[MeV]";
-      G4cerr << " Mass:"    << ParentMass/MeV << "[MeV]";
-      G4cerr << G4endl;
+      G4cout << "G4UnknownDecay::DoIt  : Total Energy is less than its mass" << G4endl;
+      G4cout << " Particle: " << aParticle->GetDefinition()->GetParticleName();
+      G4cout << " Energy:"    << ParentEnergy/MeV << "[MeV]";
+      G4cout << " Mass:"    << ParentMass/MeV << "[MeV]";
+      G4cout << G4endl;
     }
 #endif
   }
@@ -135,13 +135,13 @@ G4VParticleChange* G4UnknownDecay::DecayIt(const G4Track& aTrack, const G4Step& 
   fParticleChangeForDecay.SetNumberOfSecondaries(numberOfSecondaries);
 #ifdef G4VERBOSE
   if (GetVerboseLevel()>1) {
-    G4cerr << "G4UnknownDecay::DoIt  : Decay vertex :";
-    G4cerr << " Time: " << finalGlobalTime/ns << "[ns]";
-    G4cerr << " X:" << (aTrack.GetPosition()).x() /cm << "[cm]";
-    G4cerr << " Y:" << (aTrack.GetPosition()).y() /cm << "[cm]";
-    G4cerr << " Z:" << (aTrack.GetPosition()).z() /cm << "[cm]";
-    G4cerr << G4endl;
-    G4cerr << "G4UnknownDecay::DoIt  : decay products in Lab. Frame" << G4endl;
+    G4cout << "G4UnknownDecay::DoIt  : Decay vertex :";
+    G4cout << " Time: " << finalGlobalTime/ns << "[ns]";
+    G4cout << " X:" << (aTrack.GetPosition()).x() /cm << "[cm]";
+    G4cout << " Y:" << (aTrack.GetPosition()).y() /cm << "[cm]";
+    G4cout << " Z:" << (aTrack.GetPosition()).z() /cm << "[cm]";
+    G4cout << G4endl;
+    G4cout << "G4UnknownDecay::DoIt  : decay products in Lab. Frame" << G4endl;
     products->DumpInfo();
   }
 #endif

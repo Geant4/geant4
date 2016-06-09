@@ -1,5 +1,5 @@
 #! /bin/sh -
-#$Id: configure,v 1.5 2006/11/20 08:01:17 kmura Exp $
+#$Id: configure,v 1.7 2007/11/25 19:37:44 kmura Exp $
 # ======================================================================
 #  A configure script for Geant4Py
 # ======================================================================
@@ -50,10 +50,19 @@ Fine tuning of the library path:
 
   --with-package-dir=DIR    Geant4 Package dir
 
+  --with-gdml-incdir=DIR    GDML header dir
+  --with-gdml-libdir=DIR    GDML library dir
+
+  --with-xercesc-incdir=DIR Xerces-C header dir [/usr/include]
+  --with-xercesc-libdir=DIR Xerces-C library dir [/usr/lib]
+
 Enable/disable options: prefix with either --enable- or --disable-
   openglx      OpenGLX support    [auto]
   openglxm     OpenGLXm support   [disable, \$G4VIS_USE_OPENGLXM]
   raytracerx   RayTracerX support [disable, \$G4VIS_USE_RAYTRACERX]
+  g4gdml       GDML support (G4 module) [disable]
+  gdml         GDML support (external, experimental) [disable]
+               also specifying inc/lib directories
 
 Supported Architectures:
   linux           for Linux gcc 3.x and 4.x
@@ -93,6 +102,14 @@ enable_raytracerx=${G4VIS_USE_RAYTRACERX:+1}
 enable_raytracerx=${enable_raytracerx:-0}
 
 enable_physicslist=0
+
+enable_g4gdml=0
+
+enable_gdml=0
+gdml_incdir=/zzz
+gdml_libdir=/zzz
+
+xercesc_incdir=/usr/include
 
 # checking system
 case $1 in
@@ -149,6 +166,10 @@ do
     --with-boost-incdir=*)     boost_incdir=$optarg              ;;
     --with-boost-libdir=*)     boost_libdir=$optarg              ;;
     --with-boost-python-lib=*) boost_python_lib=$optarg          ;;
+    --with-gdml-incdir=*)      gdml_incdir=$optarg               ;;
+    --with-gdml-libdir=*)      gdml_libdir=$optarg               ;;
+    --with-xercesc-incdir=*)   xercesc_incdir=$optarg            ;;
+    --with-xercesc-libdir=*)   xercesc_libdir=$optarg            ;;
     # ---------------------------------------------------------------
     --enable-openglx )         enable_openglx=1                  ;;
     --disable-openglx )        enable_openglx=0                  ;;
@@ -156,6 +177,10 @@ do
     --disable-openglxm )       enable_openglxm=0                 ;;
     --enable-raytracerx )      enable_raytracerx=1               ;;
     --disable-raytracerx )     enable_raytracerx=0               ;;
+    --enable-g4gdml )          enable_g4gdml=1                   ;;
+    --disable-g4gdml )         enable_g4gdml=0                   ;;
+    --enable-gdml )            enable_gdml=1                     ;;
+    --disable-gdml )           enable_gdml=0                     ;;
     # ---------------------------------------------------------------
     -*)
       echo "Unrecognized option: $1"
@@ -342,6 +367,79 @@ else
   echo "yes"
 fi
 
+# ---
+echo -n "Checking for G4GDML support ..."
+if [ $enable_g4gdml == 0 ]; then
+  echo "no"
+else
+  if [ -f "$g4_incdir"/G4GDMLParser.hh ]; then
+    echo "yes"
+  else
+    echo "no"
+    echo "### G4 GDML component is not found."
+    exit -1
+  fi  
+fi
+
+# ---
+echo -n "Checking for GDML support ..."
+if [ $enable_gdml == 0 ]; then
+  echo "no"
+else
+  echo "yes"
+fi
+
+if [ $enable_gdml == 1 ]; then
+  echo -n "Checking for GDML include dir ..."
+  if [ -d "$gdml_incdir"/G4Binding ]; then
+    echo "yes"
+  else
+    echo "no"
+    echo "### $gdml_incdir/G4Binding does not exist. "
+    echo "Try --with-gdml-incdir option."
+    exit -1
+  fi
+
+  echo -n "Checking for GDML lib dir ..."
+  if [ -f "$gdml_libdir"/libG4Processor.so ]; then
+    echo "yes"
+  else
+    echo "no"
+    echo "### $gdml_libdir/libG4Processor.so does not exist. "
+    echo "Try --with-gdml-libdir option."
+    exit -1
+  fi
+fi
+
+# ---
+if [ $enable_g4gdml == 1 -o $enable_gdml == 1 ]; then
+  echo -n "Checking for Xerces-C include dir ..."
+  if [ -d "$xercesc_incdir/xercesc" ]; then
+    echo "yes"
+  else
+    echo "no"
+    echo "### $xercesc_incdir/xercesc does not exist. "
+    echo "Try --with-xercesc-incdir option."
+    exit -1
+  fi
+
+  echo -n "Checking for Xerces-C lib dir ..."
+  if [ ! $xercesc_libdir ]; then
+    if [ $arch == 64 ]; then
+      xercesc_libdir=/usr/lib64
+    else
+      xercesc_libdir=/usr/lib
+    fi
+  fi
+  if [ -f "$xercesc_libdir"/libxerces-c.so ]; then
+    echo "yes"
+  else
+    echo "no"
+    echo "### $xercesc_libdir/libxerces-c.so does not exist. "
+    echo "Try --with-xercesc-libdir option."
+    exit -1
+  fi
+fi
 
 # ---
 echo -n "Writing config.gmk ... "
@@ -391,7 +489,24 @@ Q_ENABLE_RAYTRACERX   := $enable_raytracerx
 
 Q_ENABLE_PHYSICSLIST  := $enable_physicslist
 
+Q_ENABLE_G4GDML       := $enable_g4gdml
+Q_ENABLE_GDML         := $enable_gdml
 EOF
+
+if [ $enable_gdml == 1 ]; then
+cat >> $make_config <<EOF
+Q_GDML_INCDIR         := $gdml_incdir
+Q_GDML_LIBDIR         := $gdml_libdir
+EOF
+fi
+
+if [ $enable_g4gdml == 1 -o $enable_gdml == 1 ]; then
+cat >> $make_config <<EOF
+Q_XERCESC_INCDIR      := $xercesc_incdir
+Q_XERCESC_LIBDIR      := $xercesc_libdir
+EOF
+fi
+
 echo "done"
 echo -n "Writing config.status ... "
 echo $arguments > config.status
@@ -414,6 +529,14 @@ fi
 
 if [ $enable_physicslist = 1 ]; then
   echo -n " physicslist"
+fi
+
+if [ $enable_g4gdml = 1 ]; then
+  echo -n " g4gdml"
+fi
+
+if [ $enable_gdml = 1 ]; then
+  echo -n " gdml"
 fi
 
 echo "."

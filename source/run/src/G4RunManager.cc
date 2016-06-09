@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunManager.cc,v 1.103 2007/06/20 17:00:23 asaim Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: G4RunManager.cc,v 1.108 2007/11/09 13:57:39 asaim Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 // 
 
@@ -135,6 +135,7 @@ void G4RunManager::BeamOn(G4int n_event,const char* macroFile,G4int n_select)
   if(cond)
   {
     numberOfEventToBeProcessed = n_event;
+    ConstructScoringWorlds();
     RunInitialization();
     if(n_event>0) DoEventLoop(n_event,macroFile,n_select);
     RunTermination();
@@ -194,17 +195,17 @@ void G4RunManager::RunInitialization()
   HepRandom::saveFullState(oss);
   randomNumberStatusForThisRun = oss.str();
   currentRun->SetRandomNumberStatus(randomNumberStatusForThisRun);
-
-  if(storeRandomNumberStatus) {
-    G4String fileN = randomNumberStatusDir + "currentRun.rndm"; 
-    HepRandom::saveEngineStatus(fileN);
-  }
   
   previousEvents->clear();
   for(G4int i_prev=0;i_prev<n_perviousEventsToBeStored;i_prev++)
   { previousEvents->push_back((G4Event*)0); }
 
   if(userRunAction) userRunAction->BeginOfRunAction(currentRun);
+
+  if(storeRandomNumberStatus) {
+    G4String fileN = randomNumberStatusDir + "currentRun.rndm"; 
+    HepRandom::saveEngineStatus(fileN);
+  }
 
   runAborted = false;
 
@@ -233,6 +234,7 @@ void G4RunManager::DoEventLoop(G4int n_event,const char* macroFile,G4int n_selec
     currentEvent = GenerateEvent(i_event);
     eventManager->ProcessOneEvent(currentEvent);
     AnalyzeEvent(currentEvent);
+    UpdateScoring();
     if(i_event<n_select) G4UImanager::GetUIpointer()->ApplyCommand(msg);
     StackPreviousEvent(currentEvent);
     currentEvent = 0;
@@ -475,6 +477,73 @@ void G4RunManager::DumpRegion(G4Region* region) const
 {
   kernel->UpdateRegion();
   kernel->DumpRegion(region);
+}
+
+#include "G4ScoringManager.hh"
+#include "G4TransportationManager.hh"
+#include "G4VScoringMesh.hh"
+#include "G4ParticleTable.hh"
+#include "G4ParticleDefinition.hh"
+#include "G4ProcessManager.hh"
+#include "G4ParallelWorldScoringProcess.hh"
+#include "G4HCofThisEvent.hh"
+#include "G4VHitsCollection.hh"
+
+void G4RunManager::ConstructScoringWorlds()
+{
+  G4ScoringManager* ScM = G4ScoringManager::GetScoringManagerIfExist();
+  if(!ScM) return;
+  G4int nPar = ScM->GetNumberOfMesh();
+  if(nPar<1) return;
+
+  G4ParticleTable::G4PTblDicIterator* theParticleIterator
+   = G4ParticleTable::GetParticleTable()->GetIterator();
+  for(G4int iw=0;iw<nPar;iw++)
+  {
+    G4VScoringMesh* mesh = ScM->GetMesh(iw);
+    G4VPhysicalVolume* pWorld
+       = G4TransportationManager::GetTransportationManager()
+         ->IsWorldExisting(ScM->GetWorldName(iw));
+    if(!pWorld)
+    {
+      pWorld = G4TransportationManager::GetTransportationManager()
+         ->GetParallelWorld(ScM->GetWorldName(iw));
+      pWorld->SetName(ScM->GetWorldName(iw));
+
+      G4ParallelWorldScoringProcess* theParallelWorldScoringProcess
+        = new G4ParallelWorldScoringProcess(ScM->GetWorldName(iw));
+      theParallelWorldScoringProcess->SetParallelWorld(ScM->GetWorldName(iw));
+
+      theParticleIterator->reset();
+      while( (*theParticleIterator)() ){
+        G4ParticleDefinition* particle = theParticleIterator->value();
+        G4ProcessManager* pmanager = particle->GetProcessManager();
+        pmanager->AddProcess(theParallelWorldScoringProcess);
+        pmanager->SetProcessOrderingToLast(theParallelWorldScoringProcess, idxAtRest);
+        pmanager->SetProcessOrderingToSecond(theParallelWorldScoringProcess, idxAlongStep);
+        pmanager->SetProcessOrderingToLast(theParallelWorldScoringProcess, idxPostStep);
+      }
+    }
+    mesh->Construct(pWorld);
+  }
+  GeometryHasBeenModified();
+}
+
+void G4RunManager::UpdateScoring()
+{
+  G4ScoringManager* ScM = G4ScoringManager::GetScoringManagerIfExist();
+  if(!ScM) return;
+  G4int nPar = ScM->GetNumberOfMesh();
+  if(nPar<1) return;
+
+  G4HCofThisEvent* HCE = currentEvent->GetHCofThisEvent();
+  if(!HCE) return;
+  G4int nColl = HCE->GetCapacity();
+  for(G4int i=0;i<nColl;i++)
+  {
+    G4VHitsCollection* HC = HCE->GetHC(i);
+    if(HC) ScM->Accumulate(HC);
+  }
 }
 
 

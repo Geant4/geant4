@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RunAction.cc,v 1.6 2006/06/29 16:40:45 gunter Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: RunAction.cc,v 1.7 2007/08/19 20:52:53 maire Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -85,14 +85,25 @@ void RunAction::BeginOfRunAction(const G4Run* aRun)
   //initialize track status
   //
   status[0] = status[1] = status[2] = 0;
-    
+  
+  //get csdaRange from EmCalculator
+  //
+  G4EmCalculator emCalculator;
+  G4Material* material = detector->GetAbsorMaterial();
+  G4ParticleDefinition* particle = kinematic->GetParticleGun()
+                                          ->GetParticleDefinition();
+  G4double energy = kinematic->GetParticleGun()->GetParticleEnergy();
+  csdaRange = DBL_MAX;
+  if (particle->GetPDGCharge() != 0.)
+    csdaRange = emCalculator.GetCSDARange(energy,particle,material);
+        
   //histograms
   //
   histoManager->book();
     
   //set StepMax from histos
   //
-  G4double stepMax = histoManager->GetStepMax();
+  G4double stepMax = histoManager->ComputeStepMax(csdaRange);
   physics->GetStepMaxProcess()->SetMaxStep(stepMax);           
 }
 
@@ -154,10 +165,10 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
     
   //compare with csda range
   //
-  G4EmCalculator emCalculator;
-  G4double csdaRange = 0.;
-  if (particle->GetPDGCharge() != 0.)
-    csdaRange = emCalculator.GetCSDARange(energy,particle,material);
+  //G4EmCalculator emCalculator;
+  //G4double csdaRange = 0.;
+  //if (particle->GetPDGCharge() != 0.)
+  //  csdaRange = emCalculator.GetCSDARange(energy,particle,material);
   G4cout 
     << "\n Range from EmCalculator       = " << G4BestUnit(csdaRange,"Length")
     << " (from full dE/dx)" << G4endl;
@@ -204,13 +215,19 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
     << "   transmit = "  << transmit  << " %"
     << "   reflected = " << reflected << " %" << G4endl;
      
-  // normalize histogram of longitudinal energy profile
+  // normalize histograms of longitudinal energy profile
   //
   G4int ih = 1;
   G4double binWidth = histoManager->GetBinWidth(ih);
   G4double fac = (1./(NbofEvents*binWidth))*(mm/MeV);
   histoManager->Scale(ih,fac);
   
+  ih = 8;
+  binWidth = histoManager->GetBinWidth(ih);
+  G4double range = histoManager->GetcsdaRange();
+  fac = (1./(NbofEvents*binWidth*range*density))*(g/(MeV*cm2));
+  histoManager->Scale(ih,fac);
+    
    // reset default formats
   G4cout.setf(mode,std::ios::floatfield);
   G4cout.precision(prec);

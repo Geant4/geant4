@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // $Id: G4Version_7.0.hh,v 1.4 2006/06/29 15:36:05 gunter Exp $
-// $Name: geant4-09-00 $
+// $Name: geant4-09-01 $
 // ====================================================================
 //   G4Version_7.0.hh
 //
@@ -38,14 +38,14 @@
 #endif
 
 #ifndef G4VERSION_TAG
-#define G4VERSION_TAG "$Name: geant4-09-00 $"
+#define G4VERSION_TAG "$Name: geant4-09-01 $"
 #endif
 
 // as variables
 
 #include "G4String.hh"
 
-static const G4String G4Version = "$Name: geant4-09-00 $";
+static const G4String G4Version = "$Name: geant4-09-01 $";
 static const G4String G4Date    = "(17-December-2004)";
 
 #endif

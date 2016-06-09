@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Element.cc,v 1.24 2006/10/17 15:15:46 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: G4Element.cc,v 1.26 2007/10/18 11:14:33 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -50,6 +50,8 @@
 // 30-03-05: warning in GetElement(elementName)
 // 15-11-05: GetElement(elementName, G4bool warning=true) 
 // 17-10-06: Add fNaturalAbandances (V.Ivanchenko)
+// 27-07-07, improve destructor (V.Ivanchenko) 
+// 18-10-07, move definition of material index to ComputeDerivedQuantities (V.Ivanchenko) 
  
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -66,44 +68,29 @@ G4Element::G4Element(const G4String& name, const G4String& symbol,
                      G4double zeff, G4double aeff)
   : fName(name), fSymbol(symbol)		     
 {
-    if (zeff<1.) G4Exception (" ERROR from G4Element::G4Element !"
-       " It is not allowed to create an Element with Z < 1" );
+  if (zeff<1.) G4Exception (" ERROR from G4Element::G4Element !"
+			    " It is not allowed to create an Element with Z < 1" );
 
-    if (aeff/(g/mole)<zeff) G4Exception (" ERROR from G4Element::G4Element !"
-       " Attempt to create an Element with N < Z !!!" );
+  if (aeff/(g/mole)<zeff) G4Exception (" ERROR from G4Element::G4Element !"
+				       " Attempt to create an Element with N < Z !!!" );
 
-    if ((zeff-G4int(zeff)) > perMillion)
-      G4cerr << name << " : WARNING from G4Element::G4Element !"  
-         " Trying to define an element as a mixture directly via effective Z."
-         << G4endl;
+  if ((zeff-G4int(zeff)) > perMillion)
+    G4cerr << name << " : WARNING from G4Element::G4Element !"  
+      " Trying to define an element as a mixture directly via effective Z."
+	   << G4endl;
 
-    InitializePointers();
+  InitializePointers();
 
-    fZeff   = zeff;
-    fNeff   = aeff/(g/mole);
-    fAeff   = aeff;
-
-    fNumberOfIsotopes = 0;
-    fNaturalAbandances = false;
+  fZeff   = zeff;
+  fNeff   = aeff/(g/mole);
+  fAeff   = aeff;
    
-    fNbOfAtomicShells = G4AtomicShells::GetNumberOfShells((G4int)fZeff);
-    fAtomicShells     = new G4double[fNbOfAtomicShells];
-    for (G4int i=0;i<fNbOfAtomicShells;i++)
-       fAtomicShells[i] = G4AtomicShells::GetBindingEnergy((G4int)fZeff,i);
+  fNbOfAtomicShells = G4AtomicShells::GetNumberOfShells((G4int)fZeff);
+  fAtomicShells     = new G4double[fNbOfAtomicShells];
+  for (G4int i=0;i<fNbOfAtomicShells;i++)
+    fAtomicShells[i] = G4AtomicShells::GetBindingEnergy((G4int)fZeff,i);
            
-    ComputeDerivedQuantities();
-
-    // Store in ElementTable
-    theElementTable.push_back(this);
-    fIndexInTable = theElementTable.size() - 1;
-    
-    // check if elements with same Z already exist
-    fIndexZ = 0; 
-    for (size_t J=0 ; J<fIndexInTable ; J++)
-       if (theElementTable[J]->GetZ() == fZeff) fIndexZ++;
-       
-    //nb of materials which use this element
-    fCountUse = 0;
+  ComputeDerivedQuantities();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -115,17 +102,12 @@ G4Element::G4Element(const G4String& name,
                      const G4String& symbol, G4int nIsotopes)
   : fName(name),fSymbol(symbol)
 {
-    InitializePointers();
+  InitializePointers();
 
-    size_t n = size_t(nIsotopes);
+  size_t n = size_t(nIsotopes);
 
-    fNumberOfIsotopes = 0;
-    fNaturalAbandances = false;
-
-    theIsotopeVector         = new G4IsotopeVector(n,0);
-    fRelativeAbundanceVector = new G4double[nIsotopes];
-    
-    fCountUse = 0;           //nb of materials which use this element    
+  theIsotopeVector         = new G4IsotopeVector(n,0);
+  fRelativeAbundanceVector = new G4double[nIsotopes];
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -134,66 +116,60 @@ G4Element::G4Element(const G4String& name,
 
 void G4Element::AddIsotope(G4Isotope* isotope, G4double abundance)
 {
-    if (theIsotopeVector == 0)
-       G4Exception ("ERROR from G4Element::AddIsotope!"
-       " Trying to add an Isotope before contructing the element.");
+  if (theIsotopeVector == 0)
+    G4Exception ("ERROR from G4Element::AddIsotope!"
+		 " Trying to add an Isotope before contructing the element.");
 
-    // filling ...
-    if ( fNumberOfIsotopes < theIsotopeVector->size() ) {
-       // check same Z
-       if (fNumberOfIsotopes==0) fZeff = G4double(isotope->GetZ());
-       else if (G4double(isotope->GetZ()) != fZeff) 
-          G4Exception ("ERROR from G4Element::AddIsotope!"
-	   " Try to add isotopes with different Z");
-       //Z ok   
-       fRelativeAbundanceVector[fNumberOfIsotopes] = abundance;
-       (*theIsotopeVector)[fNumberOfIsotopes] = isotope;
-       ++fNumberOfIsotopes;
-       isotope->increaseCountUse();
-      } 
-    else G4Exception ("ERROR from G4Element::AddIsotope!"  
-       " Attempt to add more than the declared number of isotopes.");
+  // filling ...
+  if ( fNumberOfIsotopes < theIsotopeVector->size() ) {
+    // check same Z
+    if (fNumberOfIsotopes==0) fZeff = G4double(isotope->GetZ());
+    else if (G4double(isotope->GetZ()) != fZeff) 
+      G4Exception ("ERROR from G4Element::AddIsotope!"
+		   " Try to add isotopes with different Z");
+    //Z ok   
+    fRelativeAbundanceVector[fNumberOfIsotopes] = abundance;
+    (*theIsotopeVector)[fNumberOfIsotopes] = isotope;
+    ++fNumberOfIsotopes;
+    isotope->increaseCountUse();
+  } 
+  else G4Exception ("ERROR from G4Element::AddIsotope!"  
+		    " Attempt to add more than the declared number of isotopes.");
 
-    // filled.
-    if ( fNumberOfIsotopes == theIsotopeVector->size() ) {
-      // Compute Neff, Aeff
-      G4double wtSum=0.0;
+  // filled.
+  if ( fNumberOfIsotopes == theIsotopeVector->size() ) {
+    // Compute Neff, Aeff
+    G4double wtSum=0.0;
 
-      fNeff = fAeff = 0.0;
-      for (size_t i=0;i<fNumberOfIsotopes;i++) {
-	fNeff +=  fRelativeAbundanceVector[i]*(*theIsotopeVector)[i]->GetN();
-	fAeff +=  fRelativeAbundanceVector[i]*(*theIsotopeVector)[i]->GetA();
-        wtSum +=  fRelativeAbundanceVector[i];
-      }
-      fNeff /=  wtSum;
-      fAeff /=  wtSum;
+    fNeff = fAeff = 0.0;
+    for (size_t i=0;i<fNumberOfIsotopes;i++) {
+      fNeff +=  fRelativeAbundanceVector[i]*(*theIsotopeVector)[i]->GetN();
+      fAeff +=  fRelativeAbundanceVector[i]*(*theIsotopeVector)[i]->GetA();
+      wtSum +=  fRelativeAbundanceVector[i];
+    }
+    fNeff /=  wtSum;
+    fAeff /=  wtSum;
       
-      fNbOfAtomicShells = G4AtomicShells::GetNumberOfShells((G4int)fZeff);
-      fAtomicShells     = new G4double[fNbOfAtomicShells];
-      for (G4int j=0;j<fNbOfAtomicShells;j++)
-         fAtomicShells[j] = G4AtomicShells::GetBindingEnergy((G4int)fZeff,j);
+    fNbOfAtomicShells = G4AtomicShells::GetNumberOfShells((G4int)fZeff);
+    fAtomicShells     = new G4double[fNbOfAtomicShells];
+    for (G4int j=0;j<fNbOfAtomicShells;j++)
+      fAtomicShells[j] = G4AtomicShells::GetBindingEnergy((G4int)fZeff,j);
          
-      ComputeDerivedQuantities();
+    ComputeDerivedQuantities();
 
-      // Store in table
-      theElementTable.push_back(this);
-      fIndexInTable = theElementTable.size() - 1;
-      
-      // check if elements with same Z already exist
-      fIndexZ = 0; 
-      for (size_t J=0 ; J<fIndexInTable ; J++)
-         if (theElementTable[J]->GetZ() == fZeff) fIndexZ++;
-   }
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void G4Element::InitializePointers()
 {
-    theIsotopeVector = 0;
-    fRelativeAbundanceVector = 0;
-    fAtomicShells = 0;
-    fIonisation = 0;
+  theIsotopeVector = 0;
+  fRelativeAbundanceVector = 0;
+  fAtomicShells = 0;
+  fIonisation = 0;
+  fNumberOfIsotopes = 0;
+  fNaturalAbandances = false;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -213,16 +189,9 @@ G4Element::G4Element( __void__& )
 
 G4Element::~G4Element()
 {
-  if (fCountUse != 0)
-    G4cout << "--> warning from ~G4Element(): the element " << fName
-           << " is still referenced by " << fCountUse << " G4Materials \n" 
-	   << G4endl;
-	   
-  if (theIsotopeVector)
-    { for (size_t i=0; i<fNumberOfIsotopes; i++)
-                          (*theIsotopeVector)[i]->decreaseCountUse();         
-      delete theIsotopeVector;
-    } 
+  //  G4cout << "### Destruction of element " << fName << " started" <<G4endl;
+
+  if (theIsotopeVector)         delete theIsotopeVector;
   if (fRelativeAbundanceVector) delete [] fRelativeAbundanceVector;
   if (fAtomicShells)            delete [] fAtomicShells;
   if (fIonisation)              delete    fIonisation;
@@ -237,13 +206,25 @@ void G4Element::ComputeDerivedQuantities()
 {
   // some basic functions of the atomic number
 
+  // Store in table
+  theElementTable.push_back(this);
+  fIndexInTable = theElementTable.size() - 1;
+      
+  // check if elements with same Z already exist
+  fIndexZ = 0; 
+  for (size_t J=0 ; J<fIndexInTable ; J++)
+    if (theElementTable[J]->GetZ() == fZeff) fIndexZ++;
+
+  //nb of materials which use this element
+  fCountUse = 0;
+
   // Radiation Length
-     ComputeCoulombFactor();
-     ComputeLradTsaiFactor(); 
+  ComputeCoulombFactor();
+  ComputeLradTsaiFactor(); 
 
   // parameters for energy loss by ionisation 
-     if (fIonisation) delete fIonisation;  
-     fIonisation = new G4IonisParamElm(fZeff);
+  if (fIonisation) delete fIonisation;  
+  fIonisation = new G4IonisParamElm(fZeff);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -312,8 +293,8 @@ G4Element* G4Element::GetElement(G4String elementName, G4bool warning)
   // search the element by its name 
   for (size_t J=0 ; J<theElementTable.size() ; J++)
    {
-    if (theElementTable[J]->GetName() == elementName)
-      return theElementTable[J];
+     if (theElementTable[J]->GetName() == elementName)
+       return theElementTable[J];
    }
    
   // the element does not exist in the table
@@ -329,12 +310,12 @@ G4Element* G4Element::GetElement(G4String elementName, G4bool warning)
 
 G4Element::G4Element(G4Element& right)
 {
-      InitializePointers();
-      *this = right;
+  InitializePointers();
+  *this = right;
 
-      // Store this new element in table and set the index
-      theElementTable.push_back(this);
-      fIndexInTable = theElementTable.size() - 1; 
+  // Store this new element in table and set the index
+  theElementTable.push_back(this);
+  fIndexInTable = theElementTable.size() - 1; 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

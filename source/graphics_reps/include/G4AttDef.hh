@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4AttDef.hh,v 1.7 2006/10/17 16:14:08 allison Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// GEANT4 tag $Name: geant4-09-01 $
 
 #ifndef G4ATTDEF_HH
 #define G4ATTDEF_HH

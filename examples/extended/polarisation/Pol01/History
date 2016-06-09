@@ -1,4 +1,4 @@
-$Id: History,v 1.4 2006/11/17 11:44:46 vnivanch Exp $
+$Id: History,v 1.7 2007/12/04 10:34:17 schaelic Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,6 +15,15 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+04-12-07 A.Schaelicke (expol01-V09-00-01)
+- README and pol01.out, to include polarized photo electric effect
+
+05-11-07: A.Schaelicke (expol01-V09-00-00)
+01-11-07: A.Schaelicke
+  use new polarized photo electric effect, this is important for
+  polarisation transfer from photon to electron in certain regions of
+  the phasespace (see E166 experiment)
 
 17-11-06 V.Ivanchenko (expol01-V08-01-02)
 - RunAction and HistoManager classes: double -> G4double,

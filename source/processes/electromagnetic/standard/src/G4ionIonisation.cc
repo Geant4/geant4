@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ionIonisation.cc,v 1.43 2007/05/22 17:34:36 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: G4ionIonisation.cc,v 1.44 2007/11/09 11:45:45 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 // -------------------------------------------------------------------
 //
@@ -53,6 +53,7 @@
 // 13-05-06 Add data for light ion stopping in water (V.Ivantchenko)
 // 14-01-07 use SetEmModel() and SetFluctModel() from G4VEnergyLossProcess (mma)
 // 16-05-07 Add data for light ion stopping only for GenericIon (V.Ivantchenko)
+// 07-11-07 Fill non-ionizing energy loss (V.Ivantchenko)
 //
 //
 // -------------------------------------------------------------------
@@ -166,6 +167,33 @@ void G4ionIonisation::AddStoppingData(G4int Z, G4int A,
 				      G4PhysicsVector& dVector)
 {
   corr->AddStoppingData(Z, A, mname, dVector);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4ionIonisation::CorrectionsAlongStep(const G4MaterialCutsCouple* couple,
+					   const G4DynamicParticle* dp,
+					   G4double& eloss,
+					   G4double& s)
+{
+  if(eloss < preKinEnergy) {
+    const G4ParticleDefinition* part = dp->GetDefinition();
+    const G4Material* mat = couple->GetMaterial();
+    if(preKinEnergy*massRatio > eth)
+      eloss += s*corr->HighOrderCorrections(part,mat,preKinEnergy);
+    else {
+      if(stopDataActive)
+	eloss *= corr->EffectiveChargeCorrection(part,mat,preKinEnergy);
+
+      if(nuclearStopping) {
+	G4double nloss = s*corr->NuclearDEDX(part,mat,preKinEnergy - eloss*0.5);
+        eloss += nloss;
+	fParticleChange.ProposeNonIonizingEnergyDeposit(nloss);
+      }
+    }
+    fParticleChange.SetProposedCharge(effCharge->EffectiveCharge(part,
+                                      mat,preKinEnergy-eloss));
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

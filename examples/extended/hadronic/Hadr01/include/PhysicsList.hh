@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: PhysicsList.hh,v 1.5 2006/08/28 13:54:13 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: PhysicsList.hh,v 1.6 2007/11/14 18:59:08 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 /////////////////////////////////////////////////////////////////////////
 //
@@ -70,7 +70,13 @@ public:
   
 private:
 
-  void SetStandardList(G4bool flagHP = false, G4bool glauber = false);
+  void SetBuilderList0(G4bool flagHP = false);
+  void SetBuilderList1(G4bool flagHP = false);
+  void SetBuilderList2(G4bool flagHP = false);
+  void SetBuilderList3(G4bool flagHP = false);
+  void SetBuilderList4(G4bool flagHP = false);
+  void SetBuilderList5(G4bool flagHP = false);
+  void SetBuilderList6(G4bool flagHP = false);
 
   G4double cutForGamma;
   G4double cutForElectron;

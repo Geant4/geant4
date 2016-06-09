@@ -1,4 +1,4 @@
-# $Id: acosta.mac,v 1.1 2006/05/30 12:28:57 maire Exp $
+# $Id: acosta.mac,v 1.2 2007/07/31 16:51:29 maire Exp $
 #
 # macro file for TestEm5.cc    
 #
@@ -21,7 +21,7 @@
 #
 /testem/histo/setFileName acosta
 /testem/histo/setFileType hbook
-/testem/histo/setHisto 14 40 0 20 keV	#energy at exit. (reflect,neutral)
+/testem/histo/setHisto 40 40 0 20 keV	#energy at exit. (reflect,neutral)
 #
 /testem/phys/setGCut 1 um
 #

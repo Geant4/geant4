@@ -29,7 +29,7 @@
 // Main author:   Riccardo Capra <capra@ge.infn.it>
 //
 // Id:            $Id: RadmonDetectorEnvironmentLayout.hh,v 1.5 2006/06/29 16:09:23 gunter Exp $
-// Tag:           $Name: geant4-09-00 $
+// Tag:           $Name: geant4-09-01 $
 //
 // Description:   Internal class to describe the environment layout
 //

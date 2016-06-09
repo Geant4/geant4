@@ -14,6 +14,13 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+15-Nov-2007 G.Folger        had-theo-HE-V09-00-01
+-  Correct Projectile Diffractive scattering: when a very unusal nucleus 
+    PDGcode is given by chips, recreate another final state.
+    
+13-Nov-2007 G.Folger        had-theo-HE-V09-00-00
+-  Add Channel for Projectile Diffractive scattering
+
 12-04-2007 Gunter Folger    had-theo-HE-V08-02-01
 -  add model name to identify model for hadronic whiteboard; default for 
    G4TheoFSGenerator is "TheoFSGenerator", but the ctor in physics lists should

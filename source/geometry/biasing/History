@@ -1,4 +1,4 @@
-$Id: History,v 1.43 2007/06/04 13:05:14 ahoward Exp $
+$Id: History,v 1.45 2007/11/09 15:22:38 ahoward Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,15 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+November 9th, 2007 A.Howard geombias-V09-00-01
+     - Revised search algorithm to Weight/UpperBound + 1.
+
+November 9th, 2007 A.Howard geombias-V09-00-00
+     - Modified WeightWindow algorithm according to Thomas Booth's
+       recommendation (MCNP author). In order to not introduce extra variance 
+       in the case of splitting to the survival weight when the weight is 
+       above the upper weight window - modified G4WeightWindowAlgorithm.cc
 
 June 4th, 2007 A.Howard geombias-V08-03-02
      - Put back some missing store and scoring classes:

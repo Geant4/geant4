@@ -24,11 +24,13 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLBitMapStore.cc,v 1.3 2007/04/04 16:50:26 allison Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: G4OpenGLBitMapStore.cc,v 1.4 2007/11/15 10:14:23 allison Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 // 
 // John Allison  6th January 2007
+
+#ifdef G4VIS_BUILD_OPENGL_DRIVER
 
 #include "G4OpenGLBitMapStore.hh"
 
@@ -100,3 +102,5 @@ const GLubyte* GetBitMap(Shape shape, G4double& size, G4bool filled)
 }
 
 } // End namespace G4OpenGLBitMapStore.
+
+#endif

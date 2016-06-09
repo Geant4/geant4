@@ -23,19 +23,21 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PolarizedPairProductionCrossSection.hh,v 1.2 2006/11/17 14:14:19 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: G4PolarizedPairProductionCrossSection.hh,v 1.3 2007/11/01 17:32:34 schaelic Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 // GEANT4 Class file
 //
 //
-// File name:     G4PolarizedBremsstrahlungCrossSection
+// File name:     G4PolarizedPairProductionCrossSection
 //
 // Author:        Karim Laihem
 //
 // Creation date: 15.05.2005
-// 20-08-06  updated interface to geant4.8.1 (A.Schaelicke)
+//
 // Modifications:
+// 20-08-06  updated interface to geant4.8.1 (A.Schaelicke)
+// 15-10-07 introduced a more general framework for cross sections (AS)
 //
 // Class Description:
 //   determine the  polarization of the final state 
@@ -47,14 +49,12 @@
 
 #include "G4StokesVector.hh"
 #include "G4VPolarizedCrossSection.hh"
-#include "G4RotationMatrix.hh"
 
-class G4PolarizedGammaConversionModel;
 
 class G4PolarizedPairProductionCrossSection : public G4VPolarizedCrossSection
 {
  public:
-  G4PolarizedPairProductionCrossSection(G4PolarizedGammaConversionModel * model);
+  G4PolarizedPairProductionCrossSection();
   virtual void Initialize(G4double eps, G4double X, G4double phi,
 			  const G4StokesVector & p0,
 			  const G4StokesVector & p1,
@@ -66,8 +66,6 @@ class G4PolarizedPairProductionCrossSection : public G4VPolarizedCrossSection
   G4StokesVector GetPol2();  // electron/positron
   G4StokesVector GetPol3();  // photon
  private:
-  
-  G4PolarizedGammaConversionModel * theModel;
 
   G4StokesVector  theFinalElectronPolarization;
   G4StokesVector  theFinalPositronPolarization;

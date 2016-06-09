@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronHElasticPhysics.hh,v 1.1 2006/11/23 15:46:04 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: G4HadronHElasticPhysics.hh,v 1.2 2007/11/15 18:08:11 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 //---------------------------------------------------------------------------
 //
@@ -50,9 +50,7 @@
 class G4HadronHElasticPhysics : public G4VPhysicsConstructor
 {
 public: 
-  G4HadronHElasticPhysics(const G4String& name = "HElastic",
-			  G4int ver = 0, G4bool hp = false,
-			  G4bool glauber = false);
+  G4HadronHElasticPhysics(G4int ver = 0, G4bool hp = false);
   virtual ~G4HadronHElasticPhysics();
 
 public: 
@@ -75,7 +73,6 @@ private:
 
   G4int    verbose;
   G4bool   hpFlag;
-  G4bool   glFlag;
   G4bool   wasActivated;
 };
 

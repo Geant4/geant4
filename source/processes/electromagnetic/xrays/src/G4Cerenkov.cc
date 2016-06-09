@@ -24,19 +24,23 @@
 // ********************************************************************
 //
 //
-// $Id: G4Cerenkov.cc,v 1.21 2006/06/29 19:56:03 gunter Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: G4Cerenkov.cc,v 1.23 2007/10/15 20:05:23 gum Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 ////////////////////////////////////////////////////////////////////////
 // Cerenkov Radiation Class Implementation
 ////////////////////////////////////////////////////////////////////////
 //
 // File:        G4Cerenkov.cc 
-// Description: Continuous Process -- Generation of Cerenkov Photons
+// Description: Discrete Process -- Generation of Cerenkov Photons
 // Version:     2.1
 // Created:     1996-02-21  
 // Author:      Juliet Armstrong
-// Updated:     2005-08-17 by Peter Gumplinger
+// Updated:     2007-09-30 by Peter Gumplinger
+//              > change inheritance to G4VDiscreteProcess
+//              GetContinuousStepLimit -> GetMeanFreePath (StronglyForced)
+//              AlongStepDoIt -> PostStepDoIt
+//              2005-08-17 by Peter Gumplinger
 //              > change variable name MeanNumPhotons -> MeanNumberOfPhotons
 //              2005-07-28 by Peter Gumplinger
 //              > add G4ProcessType to constructor
@@ -81,8 +85,15 @@ using namespace std;
         /////////////////
 
 G4Cerenkov::G4Cerenkov(const G4String& processName, G4ProcessType type)
-           : G4VContinuousProcess(processName, type)
+           : G4VDiscreteProcess(processName, type)
 {
+        G4cout << "G4Cerenkov::G4Cerenkov constructor" << G4endl;
+        G4cout << "NOTE: this is now a G4VDiscreteProcess!" << G4endl;
+        G4cout << "Required change in UserPhysicsList: " << G4endl;
+        G4cout << "change: pmanager->AddContinuousProcess(theCerenkovProcess);" << G4endl;
+        G4cout << "to:     pmanager->AddProcess(theCerenkovProcess);" << G4endl;
+        G4cout << "        pmanager->SetProcessOrdering(theCerenkovProcess,idxPostStep);" << G4endl;
+
 	fTrackSecondariesFirst = false;
 	fMaxPhotons = 0;
 
@@ -115,11 +126,11 @@ G4Cerenkov::~G4Cerenkov()
         // Methods
         ////////////
 
-// AlongStepDoIt
+// PostStepDoIt
 // -------------
 //
 G4VParticleChange*
-G4Cerenkov::AlongStepDoIt(const G4Track& aTrack, const G4Step& aStep)
+G4Cerenkov::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
 
 // This routine is called for each tracking Step of a charged particle
 // in a radiator. A Poisson-distributed number of photons is generated
@@ -129,6 +140,7 @@ G4Cerenkov::AlongStepDoIt(const G4Track& aTrack, const G4Step& aStep)
 // they are added to the particle change. 
 
 {
+
 	//////////////////////////////////////////////////////
 	// Should we ensure that the material is dispersive?
 	//////////////////////////////////////////////////////
@@ -148,15 +160,22 @@ G4Cerenkov::AlongStepDoIt(const G4Track& aTrack, const G4Step& aStep)
         G4MaterialPropertiesTable* aMaterialPropertiesTable =
                                aMaterial->GetMaterialPropertiesTable();
         if (!aMaterialPropertiesTable)
-           return G4VContinuousProcess::AlongStepDoIt(aTrack, aStep);
+           return G4VDiscreteProcess::PostStepDoIt(aTrack, aStep);
 
 	const G4MaterialPropertyVector* Rindex = 
                 aMaterialPropertiesTable->GetProperty("RINDEX"); 
         if (!Rindex) 
-	   return G4VContinuousProcess::AlongStepDoIt(aTrack, aStep);
+	   return G4VDiscreteProcess::PostStepDoIt(aTrack, aStep);
+
+        // particle charge
+        const G4double charge = aParticle->GetDefinition()->GetPDGCharge();
+
+        // particle beta
+        const G4double beta = (pPreStepPoint ->GetBeta() +
+                               pPostStepPoint->GetBeta())/2.;
 
 	G4double MeanNumberOfPhotons = 
-                 GetAverageNumberOfPhotons(aParticle,aMaterial,Rindex);
+                 GetAverageNumberOfPhotons(charge,beta,aMaterial,Rindex);
 
         if (MeanNumberOfPhotons <= 0.0) {
 
@@ -164,7 +183,7 @@ G4Cerenkov::AlongStepDoIt(const G4Track& aTrack, const G4Step& aStep)
 
                 aParticleChange.SetNumberOfSecondaries(0);
  
-                return G4VContinuousProcess::AlongStepDoIt(aTrack, aStep);
+                return G4VDiscreteProcess::PostStepDoIt(aTrack, aStep);
 
         }
 
@@ -181,7 +200,7 @@ G4Cerenkov::AlongStepDoIt(const G4Track& aTrack, const G4Step& aStep)
 
 		aParticleChange.SetNumberOfSecondaries(0);
 		
-                return G4VContinuousProcess::AlongStepDoIt(aTrack, aStep);
+                return G4VDiscreteProcess::PostStepDoIt(aTrack, aStep);
 	}
 
 	////////////////////////////////////////////////////////////////
@@ -201,8 +220,7 @@ G4Cerenkov::AlongStepDoIt(const G4Track& aTrack, const G4Step& aStep)
 
 	G4double nMax = Rindex->GetMaxProperty();
 
-        G4double BetaInverse = aParticle->GetTotalEnergy() /
-	   	 	       aParticle->GetTotalMomentum();
+        G4double BetaInverse = 1./beta;
 
 	G4double maxCos = BetaInverse / nMax; 
 	G4double maxSin2 = (1.0 - maxCos) * (1.0 + maxCos);
@@ -311,7 +329,7 @@ G4Cerenkov::AlongStepDoIt(const G4Track& aTrack, const G4Step& aStep)
 	     << aParticleChange.GetNumberOfSecondaries() << G4endl;
 	}
 
-	return G4VContinuousProcess::AlongStepDoIt(aTrack, aStep);
+	return G4VDiscreteProcess::PostStepDoIt(aTrack, aStep);
 }
 
 // BuildThePhysicsTable for the Cerenkov process
@@ -418,16 +436,16 @@ void G4Cerenkov::BuildThePhysicsTable()
 	}
 }
 
-// GetContinuousStepLimit
-// ----------------------
+// GetMeanFreePath
+// ---------------
 //
 
-G4double 
-G4Cerenkov::GetContinuousStepLimit(const G4Track& aTrack,
-				   G4double  ,
-				   G4double  ,
-                                   G4double& )
+G4double G4Cerenkov::GetMeanFreePath(const G4Track& aTrack,
+                                           G4double,
+                                           G4ForceCondition* condition)
 {
+        *condition = StronglyForced;
+
 	// If user has defined an average maximum number of photons to
 	// be generated in a Step, then return the Step length for that 
 	// number of photons. 
@@ -445,8 +463,15 @@ G4Cerenkov::GetContinuousStepLimit(const G4Track& aTrack,
                 aMaterialPropertiesTable->GetProperty("RINDEX");
         if (!Rindex) return DBL_MAX;
 
+        // particle charge
+        const G4double charge = aParticle->GetDefinition()->GetPDGCharge();
+
+        // particle beta
+        const G4double beta = aParticle->GetTotalMomentum() /
+                              aParticle->GetTotalEnergy();
+
 	G4double MeanNumberOfPhotons = 
-                 GetAverageNumberOfPhotons(aParticle,aMaterial,Rindex);
+                 GetAverageNumberOfPhotons(charge,beta,aMaterial,Rindex);
 
         if(MeanNumberOfPhotons <= 0.0) return DBL_MAX;
 
@@ -462,16 +487,16 @@ G4Cerenkov::GetContinuousStepLimit(const G4Track& aTrack,
 //             ^^^^^^^^^^
 
 G4double 
-G4Cerenkov::GetAverageNumberOfPhotons(const G4DynamicParticle* aParticle, 
+G4Cerenkov::GetAverageNumberOfPhotons(const G4double charge,
+                              const G4double beta, 
 			      const G4Material* aMaterial,
 			      const G4MaterialPropertyVector* Rindex) const
 {
 	const G4double Rfact = 369.81/(eV * cm);
 
-        if(aParticle->GetTotalMomentum() <= 0.0)return 0.0;
+        if(beta <= 0.0)return 0.0;
 
-	G4double BetaInverse = aParticle->GetTotalEnergy() /
-			       aParticle->GetTotalMomentum();
+        G4double BetaInverse = 1./beta;
 
 	// Vectors used in computation of Cerenkov Angle Integral:
 	// 	- Refraction Indices for the current material
@@ -536,9 +561,6 @@ G4Cerenkov::GetAverageNumberOfPhotons(const G4DynamicParticle* aParticle,
 		}
 	}
 	
-	// particle charge 
-	G4double charge = aParticle->GetDefinition()->GetPDGCharge();
-
 	// Calculate number of photons 
 	G4double NumPhotons = Rfact * charge/eplus * charge/eplus *
                                  (dp - ge * BetaInverse*BetaInverse);

@@ -23,16 +23,15 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: pyG4NistManager.cc,v 1.5 2007/05/28 03:11:20 kmura Exp $
-// $Name: geant4-09-00 $
+// $Id: pyG4NistManager.cc,v 1.6 2007/11/07 08:49:31 kmura Exp $
+// $Name: geant4-09-01 $
 // ====================================================================
 //   pyG4NistManager.cc
 //
 //                                         2005 Q
 // ===================================================================
 #include <boost/python.hpp>
-#include "pyG4Version.hh"
-
+#include "G4Version.hh"
 #if G4VERSION_NUMBER >= 710
 #include "G4NistManager.hh"
 
@@ -64,6 +63,23 @@ BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(f_FindOrBuildMaterial,
 				       FindOrBuildMaterial, 1, 2);
 
 // ConstructNewMaterial
+#if G4VERSION_NUMBER >= 910
+G4Material*(G4NistManager::*f1_ConstructNewMaterial)
+  (const G4String&, const std::vector<G4String>&, 
+   const std::vector<G4int>&, G4double, G4bool,
+   G4State, G4double, G4double)
+  = &G4NistManager::ConstructNewMaterial;
+
+G4Material*(G4NistManager::*f2_ConstructNewMaterial)
+  (const G4String&, const std::vector<G4String>&, 
+   const std::vector<G4double>&, G4double, G4bool,
+   G4State, G4double, G4double)
+  = &G4NistManager::ConstructNewMaterial;
+
+BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(f_ConstructNewMaterial,
+				       ConstructNewMaterial, 4, 8);
+
+#else
 G4Material*(G4NistManager::*f1_ConstructNewMaterial)
   (const G4String&, const std::vector<G4String>&, 
    const std::vector<G4int>&, G4double, G4bool)
@@ -74,8 +90,15 @@ G4Material*(G4NistManager::*f2_ConstructNewMaterial)
    const std::vector<G4double>&, G4double, G4bool)
   = &G4NistManager::ConstructNewMaterial;
 
-BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(f_ConstructNewMaterial, 
+BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(f_ConstructNewMaterial,
 				       ConstructNewMaterial, 4, 5);
+
+#endif
+
+#if G4VERSION_NUMBER >= 910
+BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(f_ConstructNewGasMaterial,
+				       ConstructNewGasMaterial, 4, 5);
+#endif
 
 };
 
@@ -100,8 +123,10 @@ void export_G4NistManager()
     .def("SetVerbose",          &G4NistManager::SetVerbose)
     .def("GetVerbose",          &G4NistManager::GetVerbose)
     // ---
+#if G4VERSION_NUMBER < 910
     .def("RegisterElement",     &G4NistManager::RegisterElement)
     .def("DeRegisterElement",   &G4NistManager::DeRegisterElement)
+#endif
     .def("GetElement",          &G4NistManager::GetElement,
 	 return_internal_reference<>())
     .def("FindOrBuildElement",  f1_FindOrBuildElement,
@@ -117,8 +142,10 @@ void export_G4NistManager()
     .def("PrintElement",        f2_PrintElement)
     .def("PrintG4Element",      &G4NistManager::PrintG4Element)
     // ---
+#if G4VERSION_NUMBER < 910
     .def("RegisterMaterial",    &G4NistManager::RegisterMaterial)
     .def("DeRegisterMaterial",  &G4NistManager::DeRegisterMaterial)
+#endif
     .def("GetMaterial",         &G4NistManager::GetMaterial,
          return_value_policy<reference_existing_object>())
     .def("FindOrBuildMaterial", &G4NistManager::FindOrBuildMaterial,
@@ -130,6 +157,11 @@ void export_G4NistManager()
     .def("ConstructNewMaterial", f2_ConstructNewMaterial,
 	 f_ConstructNewMaterial()
          [return_value_policy<reference_existing_object>()])
+#if G4VERSION_NUMBER >= 910
+    .def("ConstructNewGasMaterial", &G4NistManager::ConstructNewGasMaterial,
+	 f_ConstructNewGasMaterial()
+         [return_value_policy<reference_existing_object>()])
+#endif
     .def("GetNumberOfMaterials", &G4NistManager::GetNumberOfMaterials)
     .def("ListMaterials",        &G4NistManager::ListMaterials)
     .def("PrintG4Material",      &G4NistManager::PrintG4Material)

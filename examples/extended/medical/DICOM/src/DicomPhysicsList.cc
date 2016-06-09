@@ -36,6 +36,8 @@
 // fax (418) 691 5268
 //
 // + Université Laval, Québec (QC) Canada
+//
+// History: 30.11.07  P.Arce default cut changed to 1 mm
 //*******************************************************
 
 #include "DicomPhysicsList.hh"
@@ -51,8 +53,8 @@
 
 DicomPhysicsList::DicomPhysicsList():  G4VUserPhysicsList()
 {
-  defaultCutValue = 10.*mm;
-  cutForGamma     = 10.*mm;
+  defaultCutValue = 1.e-3*mm;
+  cutForGamma     = 1.e-3*mm;
   cutForElectron  = defaultCutValue;
   cutForPositron  = defaultCutValue;
 

@@ -29,7 +29,6 @@
 #include "exrdmPhysicsListMessenger.hh"
 
 #include "exrdmPhysListParticles.hh"
-#include "exrdmPhysListGeneral.hh"
 #include "G4EmStandardPhysics.hh"
 #include "exrdmPhysListEmLowEnergy.hh"
 #include "exrdmPhysListHadron.hh"
@@ -49,11 +48,16 @@
 
 #include "HadronPhysicsQGSP_BERT.hh"
 #include "HadronPhysicsQGSP_BIC.hh"
-#include "HadronPhysicsQGSP_HP.hh"
-#include "HadronPhysicsLHEP_BERT.hh"
-#include "HadronPhysicsLHEP_BERT_HP.hh"
-#include "HadronPhysicsLHEP_BIC.hh"
-#include "HadronPhysicsLHEP_BIC_HP.hh"
+#include "HadronPhysicsQGSP_BERT_HP.hh"
+#include "HadronPhysicsQGSP_BIC_HP.hh"
+
+#include "G4EmExtraPhysics.hh"
+#include "G4HadronElasticPhysics.hh"
+#include "G4QStoppingPhysics.hh"
+#include "G4IonBinaryCascadePhysics.hh"
+#include "G4RadioactiveDecayPhysics.hh"
+#include "G4NeutronTrackingCut.hh"
+#include "G4DecayPhysics.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -71,18 +75,19 @@ exrdmPhysicsList::exrdmPhysicsList() : G4VModularPhysicsList()
   pMessenger = new exrdmPhysicsListMessenger(this);
 
   SetVerboseLevel(2);
+
   //default physics
-   // Particles
-  particleList = new exrdmPhysListParticles("particles");
+  particleList = new G4DecayPhysics();
+
+  //default physics
+  raddecayList = new G4RadioactiveDecayPhysics();
 
   // EM physics
-  emPhysicsList = new G4EmStandardPhysics("em-standard");
+  emPhysicsList = new G4EmStandardPhysics();
   
-  // Had physics (no hadron as default)
-  hadPhysicsList =  0;
-
-  // General exrdmPhysics
-  generalPhysicsList = new exrdmPhysListGeneral("general");
+  // Had physics 
+  hadPhysicsList = new exrdmPhysListHadron("hadron");
+  nhadcomp = 0;
 
 }
 
@@ -91,9 +96,14 @@ exrdmPhysicsList::exrdmPhysicsList() : G4VModularPhysicsList()
 exrdmPhysicsList::~exrdmPhysicsList()
 {
   delete pMessenger;
-  delete generalPhysicsList;
+  delete raddecayList;
   delete emPhysicsList;
   if (hadPhysicsList) delete hadPhysicsList;
+  if (nhadcomp > 0) {
+    for(G4int i=0; i<nhadcomp; i++) {
+      delete hadronPhys[i];
+    }
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -110,9 +120,15 @@ void exrdmPhysicsList::ConstructProcess()
   AddTransportation();
   // em
   emPhysicsList->ConstructProcess();
-  //general
-  generalPhysicsList->ConstructProcess();
+  // decays
+  particleList->ConstructProcess();
+  raddecayList->ConstructProcess();
   // had
+  if (nhadcomp > 0) {
+    for(G4int i=0; i<nhadcomp; i++) {
+      (hadronPhys[i])->ConstructProcess();
+    }
+  }
   if (hadPhysicsList) hadPhysicsList->ConstructProcess();
 }
 
@@ -124,44 +140,21 @@ void exrdmPhysicsList::SelectPhysicsList(const G4String& name)
     G4cout << "exrdmPhysicsList::SelectPhysicsList: <" << name << ">" << G4endl;
   }
   // default  Had physics
-  if (name == "Hadron") {
+  if (name == "Hadron" && nhadcomp == 0) {
     if (hadPhysicsList) delete hadPhysicsList;
     hadPhysicsList = new exrdmPhysListHadron("hadron");
   } else if (name == "QGSP_BERT") {
-    if (emPhysicsList) delete emPhysicsList;
-    emPhysicsList = new G4EmStandardPhysics();
-    if (hadPhysicsList) delete hadPhysicsList;
+    AddExtraBuilders(false);
     hadPhysicsList = new HadronPhysicsQGSP_BERT("std-hadron");
-  } else if (name == "QGSP_BIC") {
-    if (emPhysicsList) delete emPhysicsList;
-    emPhysicsList = new G4EmStandardPhysics();
-    if (hadPhysicsList) delete hadPhysicsList;
+  } else if (name == "QGSP_BIC" && nhadcomp == 0) {
+    AddExtraBuilders(false);
     hadPhysicsList = new HadronPhysicsQGSP_BIC("std-hadron");
-  } else if (name == "QGSP_HP") {
-    if (emPhysicsList) delete emPhysicsList;
-    emPhysicsList = new G4EmStandardPhysics();
-    if (hadPhysicsList) delete hadPhysicsList;
-    hadPhysicsList = new HadronPhysicsQGSP_HP("std-hadron");
-  } else if (name == "LHEP_BERT") {
-    if (emPhysicsList) delete emPhysicsList;
-    emPhysicsList = new G4EmStandardPhysics();
-    if (hadPhysicsList) delete hadPhysicsList;
-    hadPhysicsList = new HadronPhysicsLHEP_BERT("std-hadron");
-  } else if (name == "LHEP_BERT_HP") {
-    if (emPhysicsList) delete emPhysicsList;
-    emPhysicsList = new G4EmStandardPhysics();
-    if (hadPhysicsList) delete hadPhysicsList;
-    hadPhysicsList = new HadronPhysicsLHEP_BERT_HP("std-hadron");
-  } else if (name == "LHEP_BIC") {
-    if (emPhysicsList) delete emPhysicsList;
-    emPhysicsList = new G4EmStandardPhysics();
-    if (hadPhysicsList) delete hadPhysicsList;
-    hadPhysicsList = new HadronPhysicsLHEP_BIC("std-hadron");
-  } else if (name == "LHEP_BIC_HP") {
-    if (emPhysicsList) delete emPhysicsList;
-    emPhysicsList = new G4EmStandardPhysics();
-    if (hadPhysicsList) delete hadPhysicsList;
-    hadPhysicsList = new HadronPhysicsLHEP_BIC_HP("std-hadron");
+  } else if (name == "QGSP_BERT_HP"  && nhadcomp == 0) {
+    AddExtraBuilders(true);
+    hadPhysicsList = new HadronPhysicsQGSP_BERT_HP("std-hadron");
+  } else if (name == "QGSP_BIC_HP"  && nhadcomp == 0) {
+    AddExtraBuilders(true);
+    hadPhysicsList = new HadronPhysicsQGSP_BIC_HP("std-hadron");
   } else if (name == "LowEnergy_EM") {
     if (!hadPhysicsList ||(hadPhysicsList->GetPhysicsName()=="hadron") ) { 
       if (emPhysicsList) delete emPhysicsList;
@@ -176,7 +169,32 @@ void exrdmPhysicsList::SelectPhysicsList(const G4String& name)
     } else {
       G4cout << "exrdmPhysicsList: using EM comes with Std-hadron" <<G4endl;
     }
+  } else {
+      G4cout << "exrdmPhysicsList WARNING wrong or unkonwn <" 
+	     << name << "> Physics " << G4endl;
   }
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void exrdmPhysicsList::AddExtraBuilders(G4bool flagHP)
+{
+  if (emPhysicsList) delete emPhysicsList;
+  emPhysicsList = new G4EmStandardPhysics();
+
+  if (hadPhysicsList) {
+    delete hadPhysicsList;
+    hadPhysicsList = 0;
+  }
+  nhadcomp = 6;
+
+  hadronPhys.push_back( new G4EmExtraPhysics("extra EM"));
+  hadronPhys.push_back( new G4HadronElasticPhysics("elastic",verboseLevel,
+						   flagHP));
+  hadronPhys.push_back( new G4QStoppingPhysics("stopping",verboseLevel));
+  hadronPhys.push_back( new G4IonBinaryCascadePhysics("ionBIC"));
+  hadronPhys.push_back( new G4RadioactiveDecayPhysics("radioactiveDecay"));
+  hadronPhys.push_back( new G4NeutronTrackingCut("Neutron tracking cut"));
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

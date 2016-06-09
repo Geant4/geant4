@@ -661,7 +661,7 @@ G4HadronicProcess::FillTotalResult(G4HadFinalState * aR, const G4Track & aT)
     if(time<0) time = aT.GetGlobalTime();
 
     G4Track* track = new G4Track(aR->GetSecondary(i)->GetParticle(),
-    aT.GetGlobalTime(),
+    time,
     aT.GetPosition());
 
     G4double newWeight = aT.GetWeight()*aR->GetSecondary(i)->GetWeight();

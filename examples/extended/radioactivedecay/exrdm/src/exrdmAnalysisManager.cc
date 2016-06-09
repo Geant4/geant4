@@ -214,8 +214,8 @@ void exrdmAnalysisManager::AddEnergy(G4double edep, G4double weight, G4double ti
            << G4endl;
   }
   histo->fillTuple(2, 0, edep/MeV);
-  histo->fillTuple(2,1,weight);
-  histo->fillTuple(2,2,time/second);
+  histo->fillTuple(2,1,time/second);
+  histo->fillTuple(2,2,weight);
   histo->addRow(2);
   // 
   exrdmEnergyDeposition A(edep,time,weight);
@@ -232,8 +232,8 @@ void exrdmAnalysisManager::AddParticle(G4double pid, G4double energy, G4double w
   }
   histo->fillTuple(0,0, pid);
   histo->fillTuple(0,1,energy/MeV);
-  histo->fillTuple(0,2,weight);
-  histo->fillTuple(0,3,time/second);
+  histo->fillTuple(0,2,time/second);
+  histo->fillTuple(0,3,weight);
   histo->addRow(0);
   // now fill th emission spectrum
   if (energy>0.0) histo->fillHisto(6,energy/MeV,weight);
@@ -247,8 +247,8 @@ void exrdmAnalysisManager::AddIsotope(G4double pid,G4double weight, G4double tim
            << G4endl;
   }
   histo->fillTuple(1,0,pid);
-  histo->fillTuple(1,1,weight);
-  histo->fillTuple(1,2,time/second);
+  histo->fillTuple(1,1,time/second);
+  histo->fillTuple(1,2,weight);
   histo->addRow(1);
 }
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

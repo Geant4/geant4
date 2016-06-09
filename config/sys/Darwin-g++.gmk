@@ -27,7 +27,7 @@ ifeq ($(G4SYSTEM),Darwin-g++)
     FCFLAGS   += -pg
     CCFLAGS   += -pg
   endif
-  FC := g77
+  FC := gfortran
   FCFLAGS += -fno-automatic -fno-backslash -fno-second-underscore
   LDFLAGS += -bind_at_load
   FCLIBS := -lg2c -lnsl
@@ -45,6 +45,19 @@ ifeq ($(G4SYSTEM),Darwin-g++)
   ifndef XMLIBS
     XMLIBS    := -L/sw/lib -lXm -lXpm
 #   XMLIBS    := -L/usr/X11R6/lib -lXm -lXpm   ##### some installations.
+  endif
+  ifndef QTHOME
+    QTHOME  := /sw
+  endif
+  ifndef QTFLAGS
+    QTFLAGS   := -I$(QTHOME)/include/Qt -I$(QTHOME)/include
+    MOC       := $(QTHOME)/bin/moc
+  endif
+  ifndef QTLIBS
+    QT3LIBS    := -L$(QTHOME)/lib -lqt-mt -lqui
+    QT4LIBS    := -F$(QTHOME)/lib -framework QtCore -framework QtGui
+    QT4LIBS    += -framework QtOpenGL -framework QtSql -framework QtXml
+    QTLIBS     := $(shell test -f $(QTHOME)/lib/Qt3Support.framework/Qt3Support && echo $(QT4LIBS) || echo $(QT3LIBS))
   endif
   ifndef XAWFLAGS
     XAWFLAGS   := -I/sw/include

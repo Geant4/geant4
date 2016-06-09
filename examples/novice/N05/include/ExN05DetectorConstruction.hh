@@ -25,7 +25,7 @@
 //
 //
 // $Id: ExN05DetectorConstruction.hh,v 1.6 2006/11/03 17:58:49 mverderi Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 #ifndef ExN05DetectorConstruction_h
 #define ExN05DetectorConstruction_h 1

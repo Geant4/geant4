@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PolarizedMollerCrossSection.cc,v 1.4 2006/11/17 14:14:20 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: G4PolarizedMollerCrossSection.cc,v 1.5 2007/11/01 17:32:34 schaelic Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 // -------------------------------------------------------------------
 //
 // GEANT4 Class file
@@ -51,6 +51,7 @@
 
 G4PolarizedMollerCrossSection::G4PolarizedMollerCrossSection()
 {
+  SetXmax(.5);
 }
 G4PolarizedMollerCrossSection::~G4PolarizedMollerCrossSection() {}
 void G4PolarizedMollerCrossSection::Initialize(

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: Em8DetectorMessenger.hh,v 1.5 2006/06/29 16:59:06 gunter Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: Em8DetectorMessenger.hh,v 1.6 2007/10/02 10:12:47 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 // 
 
@@ -49,33 +49,33 @@ class G4UIcmdWithoutParameter;
 
 class Em8DetectorMessenger: public G4UImessenger
 {
-  public:
-    Em8DetectorMessenger(Em8DetectorConstruction* );
-   ~Em8DetectorMessenger();
+public:
+  Em8DetectorMessenger(Em8DetectorConstruction* );
+  virtual ~Em8DetectorMessenger();
     
-    void SetNewValue(G4UIcommand*, G4String);
+  void SetNewValue(G4UIcommand*, G4String);
     
-  private:
+private:
 
-    Em8DetectorConstruction*   Em8Detector;
+  Em8DetectorConstruction*   Em8Detector;
     
-    G4UIdirectory*             Em8detDir;
+  G4UIdirectory*             Em8detDir;
 
-    G4UIcmdWithAString*        AbsMaterCmd;
-    G4UIcmdWithADoubleAndUnit* AbsThickCmd;
-    G4UIcmdWithADoubleAndUnit* AbsRadCmd;
+  G4UIcmdWithAString*        AbsMaterCmd;
+  G4UIcmdWithADoubleAndUnit* AbsThickCmd;
+  G4UIcmdWithADoubleAndUnit* AbsRadCmd;
 
-    G4UIcmdWithADoubleAndUnit* AbsZposCmd;
+  G4UIcmdWithADoubleAndUnit* AbsZposCmd;
 
-    G4UIcmdWithAString*        WorldMaterCmd;
-    G4UIcmdWithADoubleAndUnit* WorldZCmd;
-    G4UIcmdWithADoubleAndUnit* WorldRCmd;
+  G4UIcmdWithAString*        WorldMaterCmd;
+  G4UIcmdWithADoubleAndUnit* WorldZCmd;
+  G4UIcmdWithADoubleAndUnit* WorldRCmd;
 
-    G4UIcmdWithADoubleAndUnit* ElectronCutCmd;
-    G4UIcmdWithADoubleAndUnit* PositronCutCmd;
-    G4UIcmdWithADoubleAndUnit* GammaCutCmd;
+  G4UIcmdWithADoubleAndUnit* ElectronCutCmd;
+  G4UIcmdWithADoubleAndUnit* PositronCutCmd;
+  G4UIcmdWithADoubleAndUnit* GammaCutCmd;
 
-    G4UIcmdWithoutParameter*   UpdateCmd;
+  G4UIcmdWithoutParameter*   UpdateCmd;
 
 };
 

@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VisManager.cc,v 1.113 2007/05/25 10:50:26 allison Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: G4VisManager.cc,v 1.114 2007/11/10 14:59:46 allison Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 // 
 // GEANT4 Visualization Manager - John Allison 02/Jan/1996.
@@ -1243,12 +1243,12 @@ void G4VisManager::EndOfRun ()
     if (!valid && fVerbosity >= warnings && !warned) {
       G4cout <<
 	"  Only useful if before starting the run:"
-	"\n    a) trajectories are stored (\"/tracking/storeTrajectory N\"), or"
+	"\n    a) trajectories are stored (\"/vis/scene/add/trajectories [smooth|rich]\"), or"
 	"\n    b) the Draw method of any hits is implemented."
 	"\n  To view trajectories and hits:"
 	"\n    open a viewer, draw a volume, \"/vis/scene/add/trajectories\""
 	"\n    \"/vis/scene/add/hits\" and, possibly, \"/vis/viewer/flush\"."
-	"\n  To see all events: \"vis/scene/endOfEventAction accumulate\"."
+	"\n  To see all events: \"/vis/scene/endOfEventAction accumulate\"."
 	"\n  To see events individually: \"/vis/reviewKeptEvents\"."
 	     << G4endl;
       warned = true;

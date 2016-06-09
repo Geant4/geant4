@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmProcessOptions.cc,v 1.21 2007/05/18 18:39:55 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: G4EmProcessOptions.cc,v 1.22 2007/11/07 18:38:49 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 // -------------------------------------------------------------------
 //
@@ -76,6 +76,7 @@ G4EmProcessOptions::~G4EmProcessOptions()
 
 void G4EmProcessOptions::SetLossFluctuations(G4bool val)
 {
+  theManager->SetLossFluctuations(val);
   const std::vector<G4VEnergyLossProcess*>& v =
         theManager->GetEnergyLossProcessVector();
   std::vector<G4VEnergyLossProcess*>::const_iterator itr;
@@ -89,6 +90,7 @@ void G4EmProcessOptions::SetLossFluctuations(G4bool val)
 
 void G4EmProcessOptions::SetSubCutoff(G4bool val, const G4Region* r)
 {
+  theManager->SetSubCutoff(val);
   const std::vector<G4VEnergyLossProcess*>& v =
         theManager->GetEnergyLossProcessVector();
   std::vector<G4VEnergyLossProcess*>::const_iterator itr;
@@ -102,6 +104,7 @@ void G4EmProcessOptions::SetSubCutoff(G4bool val, const G4Region* r)
 
 void G4EmProcessOptions::SetIntegral(G4bool val)
 {
+  theManager->SetIntegral(val);
   const std::vector<G4VEnergyLossProcess*>& v =
         theManager->GetEnergyLossProcessVector();
   std::vector<G4VEnergyLossProcess*>::const_iterator itr;
@@ -115,6 +118,7 @@ void G4EmProcessOptions::SetIntegral(G4bool val)
 
 void G4EmProcessOptions::SetMinSubRange(G4double val)
 {
+  theManager->SetMinSubRange(val);
   const std::vector<G4VEnergyLossProcess*>& v =
         theManager->GetEnergyLossProcessVector();
   std::vector<G4VEnergyLossProcess*>::const_iterator itr;
@@ -128,6 +132,7 @@ void G4EmProcessOptions::SetMinSubRange(G4double val)
 
 void G4EmProcessOptions::SetMinEnergy(G4double val)
 {
+  theManager->SetMinEnergy(val);
   const std::vector<G4VEnergyLossProcess*>& v =
         theManager->GetEnergyLossProcessVector();
   std::vector<G4VEnergyLossProcess*>::const_iterator itr;
@@ -155,6 +160,7 @@ void G4EmProcessOptions::SetMinEnergy(G4double val)
 
 void G4EmProcessOptions::SetMaxEnergy(G4double val)
 {
+  theManager->SetMaxEnergy(val);
   const std::vector<G4VEnergyLossProcess*>& v =
         theManager->GetEnergyLossProcessVector();
   std::vector<G4VEnergyLossProcess*>::const_iterator itr;
@@ -182,6 +188,7 @@ void G4EmProcessOptions::SetMaxEnergy(G4double val)
 
 void G4EmProcessOptions::SetMaxEnergyForCSDARange(G4double val)
 {
+  theManager->SetMaxEnergyForCSDARange(val);
   const std::vector<G4VEnergyLossProcess*>& v =
         theManager->GetEnergyLossProcessVector();
   std::vector<G4VEnergyLossProcess*>::const_iterator itr;
@@ -195,6 +202,7 @@ void G4EmProcessOptions::SetMaxEnergyForCSDARange(G4double val)
 
 void G4EmProcessOptions::SetMaxEnergyForMuons(G4double val)
 {
+  theManager->SetMaxEnergyForMuons(val);
   const std::vector<G4VEnergyLossProcess*>& v =
         theManager->GetEnergyLossProcessVector();
   std::vector<G4VEnergyLossProcess*>::const_iterator itr;
@@ -227,13 +235,13 @@ void G4EmProcessOptions::SetMaxEnergyForMuons(G4double val)
     }
   }
   */
-  theManager->SetMaxEnergyForMuons(val);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void G4EmProcessOptions::SetDEDXBinning(G4int val)
 {
+  theManager->SetDEDXBinning(val);
   const std::vector<G4VEnergyLossProcess*>& v =
         theManager->GetEnergyLossProcessVector();
   std::vector<G4VEnergyLossProcess*>::const_iterator itr;
@@ -247,6 +255,7 @@ void G4EmProcessOptions::SetDEDXBinning(G4int val)
 
 void G4EmProcessOptions::SetDEDXBinningForCSDARange(G4int val)
 {
+  theManager->SetDEDXBinningForCSDARange(val);
   const std::vector<G4VEnergyLossProcess*>& v =
         theManager->GetEnergyLossProcessVector();
   std::vector<G4VEnergyLossProcess*>::const_iterator itr;
@@ -260,6 +269,7 @@ void G4EmProcessOptions::SetDEDXBinningForCSDARange(G4int val)
 
 void G4EmProcessOptions::SetLambdaBinning(G4int val)
 {
+  theManager->SetLambdaBinning(val);
   const std::vector<G4VEmProcess*>& w =
         theManager->GetEmProcessVector();
   std::vector<G4VEmProcess*>::const_iterator itp;
@@ -280,6 +290,7 @@ void G4EmProcessOptions::SetLambdaBinning(G4int val)
 
 void G4EmProcessOptions::SetStepFunction(G4double v1, G4double v2)
 {
+  theManager->SetStepFunction(v1, v2);
   const std::vector<G4VEnergyLossProcess*>& v =
         theManager->GetEnergyLossProcessVector();
   std::vector<G4VEnergyLossProcess*>::const_iterator itr;
@@ -293,6 +304,7 @@ void G4EmProcessOptions::SetStepFunction(G4double v1, G4double v2)
 
 void G4EmProcessOptions::SetRandomStep(G4bool val)
 {
+  theManager->SetRandomStep(val);
   const std::vector<G4VEnergyLossProcess*>& v =
         theManager->GetEnergyLossProcessVector();
   std::vector<G4VEnergyLossProcess*>::const_iterator itr;

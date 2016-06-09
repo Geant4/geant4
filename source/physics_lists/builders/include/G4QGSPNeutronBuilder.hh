@@ -34,7 +34,6 @@
 #include "G4NeutronInelasticProcess.hh"
 #include "G4VNeutronBuilder.hh"
 
-#include "G4NeutronInelasticCrossSection.hh"
 #include "G4TheoFSGenerator.hh"
 #include "G4ExcitationHandler.hh"
 #include "G4PreCompoundModel.hh"
@@ -44,11 +43,15 @@
 #include "G4QGSMFragmentation.hh"
 #include "G4ExcitedStringDecay.hh"
 #include "G4QuasiElasticChannel.hh"
+#include "G4ProjectileDiffractiveChannel.hh"
+
+#include "G4NeutronInelasticCrossSection.hh"
 
 class G4QGSPNeutronBuilder : public G4VNeutronBuilder
 {
   public: 
-    G4QGSPNeutronBuilder(G4bool quasiElastic=false);
+    G4QGSPNeutronBuilder(G4bool quasiElastic=false,
+                         G4bool projectileDiffraction=false);
     virtual ~G4QGSPNeutronBuilder();
 
   public: 
@@ -66,6 +69,7 @@ class G4QGSPNeutronBuilder : public G4VNeutronBuilder
     G4QGSModel< G4QGSParticipants > * theStringModel;
     G4ExcitedStringDecay * theStringDecay;
     G4QuasiElasticChannel * theQuasiElastic;
+    G4ProjectileDiffractiveChannel * theProjectileDiffraction;
 
     G4NeutronInelasticCrossSection theXSec;
     G4double theMin;

@@ -1,4 +1,4 @@
-$Id: History,v 1.82 2007/06/19 10:38:28 gcosmo Exp $
+$Id: History,v 1.90 2007/11/16 15:03:17 kmura Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,43 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+16 November 2007, Koichi Murakami (interfaces-V09-00-03)
+ - G4UIGainServer.cc: cleared a compilation warning.
+ - tagged for the 9.1 release.
+
+15 Nov 2007, Laurent Garnier
+ - G4UIQt,G4Qt : Adding a GEANT4_QT_DEBUG flag to hide all debug messages
+ - G4UIQt,G4Qt : Compilation improvements for Qt3
+ - G4UIQt,G4Qt : Minors corrections on G4UIQt helpWidget
+
+13 Nov 2007, Laurent Garnier
+ - G4UIQt,G4Qt : Moving all moc in one big file interface/G4UIQT_moc.cc,
+   including Qt3 and Qt4 moc support
+
+09 Nov 2007, Laurent Garnier
+ - G4UIQt,G4Qt : Change all include directive to be compatible with Qt3
+
+27 Sept 2007, Laurent Garnier
+ - Adding sur files for G4UIQt driver
+
+06 November Koichi Murakami
+- G4UItcsh.cc: store shell history across sessions.
+
+30 October 2007 Koichi Murakami (interfaces-V09-00-02)
+- Guy committed the new Qt interface (28/Sep).
+- Add "#ifdef G4UI_BUILD_QT_SESSION" protection in src/G4UIQt_moc.cc.
+- Remove Qt interface from the current tag.
+- G4UIGAG.cc: suppress a compilation warning.
+
+30 October 2007 Koichi Murakami (interfaces-V09-00-01)
+- Makoto updated the implementation of the signal handler for Ctrl-C.
+
+28 October 2007, Makoto Asai
+- Remove improper dependency from interfaces/basic to run in GNUmakefile
+
+02 August 2007, Koichi Murakami (interfaces-V09-00-00)
+- Fix compilation warning on SUN-CC in G4UIterminal.cc
 
 19 June 2007, Gabriele Cosmo (interfaces-V08-03-02)
 - Fix compilation error on Windows ('theShell' not declared).

@@ -1,4 +1,4 @@
-$Id: History,v 1.14 2006/10/26 10:18:59 maire Exp $
+$Id: History,v 1.16 2007/11/07 17:22:15 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -6,7 +6,7 @@ $Id: History,v 1.14 2006/10/26 10:18:59 maire Exp $
      =========================================================
 
                     TestEm11 History file
-                    --------------------
+                    ---------------------
 This file should be used by the G4 example coordinator to briefly
 summarize all major modifications introduced in the code and keep
 track of all tags.
@@ -15,6 +15,13 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
      
+07-11-07 mma (testem11-V09-00-01) 
+- HistoManager/HistoMessenger : print selected histos on ascii file
+     
+12-08-07 mma (testem11-V09-00-00) 
+- add histo 8 : energy profile as function of x/range. Same logic as TestEm12
+- add macro sandia.mac
+            
 25-10-06 mma (testem11-V08-01-02) 
 - GNUmakefile : LOADLIBS
 - remove PhysicsLists 52 and 71

@@ -1,0 +1,24 @@
+# $Id: run01.mac,v 1.2 2007/10/31 16:16:20 maire Exp $
+#
+/control/verbose 2
+/run/verbose 2
+#
+/run/initialize
+#
+/testem/histo/setFileName fanocavity2
+/testem/histo/setFileType hbook
+/testem/histo/setHisto  1 200 -10 +10 mm	#interaction point
+/testem/histo/setHisto  2 125  0  1250 keV	#energy spectrum
+/testem/histo/setHisto  3 100  0  100 deg	#theta distribution
+/testem/histo/setHisto  4 200 -10 +10 mm	#vertex of e- in cav
+/testem/histo/setHisto  5 125  0  1250 keV	#energy spectrum at entrance
+/testem/histo/setHisto  6 100  0  100 deg	#theta dist before entrance
+/testem/histo/setHisto  7 100  0  100 deg	#theta dist after entrance
+/testem/histo/setHisto  8 100  0  10 mm		#track segment in cavity
+/testem/histo/setHisto  9 100  0  1 mm		#step size in wall
+/testem/histo/setHisto 10 100  0  3 mm		#step size in cavity
+/testem/histo/setHisto 11 100  0  3000 eV	#edep in cavity
+#
+/testem/event/printModulo 100000
+#
+/run/beamOn 1000000

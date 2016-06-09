@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // $Id: G4PhotoNuclearProcess.hh,v 1.8 2007/01/07 04:56:01 dennis Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 // Class Description
 // Process for photon nuclear inelastic scattering; 

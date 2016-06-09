@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4OpenInventorSceneHandler.hh,v 1.33 2007/03/27 15:24:15 allison Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 // 
 // J Kallenbach  27th Aug 1996

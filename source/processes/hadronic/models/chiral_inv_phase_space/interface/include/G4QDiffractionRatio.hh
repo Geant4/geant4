@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// GEANT4 tag $Name: geant4-09-00 $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 //
 // GEANT4 physics class: G4QDiffractionRatio -- header file
@@ -45,6 +45,7 @@
 //#include "G4NucleiProperties.hh"
 //#include "G4NucleiPropertiesTable.hh"
 #include "G4QPDGCode.hh"
+#include "G4QEnvironment.hh"
 #include "G4Quasmon.hh"
 #include "G4QHadronVector.hh"
 #include "G4VCrossSectionDataSet.hh"
@@ -67,10 +68,18 @@ class G4QDiffractionRatio
   // Diffraction/Prodaction Ratio (Production=Inelastic-QuasiElastic)
   G4double GetRatio(G4double pIU, G4int prPDG, G4int tgZ, G4int tgN);
 
-  // ==> The following ill be a protected function for internal CHIPS usage
-  // Fragment(pPDG,p4M) on a nucleus (tgZ, tgN), result: Vector of secondary hadrons
-  // Whoeve uses this member function is responsible for DEL/DESTROY of the G4QHadronVector
-  G4QHadronVector* Fragment(G4int pPDG, G4LorentzVector p4M, G4int tgZ, G4int tgN);
+  // ==> The following will be a protected function for internal CHIPS usage
+  // ProjFragment(pPDG,p4M) on a nucleus (tgZ, tgN), result: Vector of secondary hadrons
+  // Whoever uses this member function is responsible for DEL/DESTROY of G4QHadronVector
+  G4QHadronVector* ProjFragment(G4int pPDG, G4LorentzVector p4M, G4int tgZ, G4int tgN);
+
+  // ==> The following will be a protected function for internal CHIPS usage
+  // TargFragment(pPDG,p4M) on a nucleus (tgZ, tgN), result: Vector of secondary hadrons
+  // Whoever uses this member function is responsible for DEL/DESTROY of G4QHadronVector
+  G4QHadronVector* TargFragment(G4int pPDG, G4LorentzVector p4M, G4int tgZ, G4int tgN);
+
+  // Single Diffraction Target Excitation Cross-Section (independent Units)
+  G4double GetTargSingDiffXS(G4double pIU, G4int prPDG, G4int tgZ, G4int tgN);
 
  private:
   // These working member functions are in CHIPS units and must not be used externally

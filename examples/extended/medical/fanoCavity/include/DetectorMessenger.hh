@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: DetectorMessenger.hh,v 1.1 2007/01/19 17:20:26 maire Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: DetectorMessenger.hh,v 1.2 2007/10/08 12:05:02 maire Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -60,7 +60,6 @@ class DetectorMessenger: public G4UImessenger
     G4UIdirectory*             detDir;    
     G4UIcmdWithAString*        wallMater;
     G4UIcmdWithADoubleAndUnit* wallThick;
-    G4UIcmdWithADoubleAndUnit* wallRadius;
     G4UIcmdWithAString*        cavMater;
     G4UIcmdWithADoubleAndUnit* cavThick;
     G4UIcmdWithADoubleAndUnit* cavRadius;

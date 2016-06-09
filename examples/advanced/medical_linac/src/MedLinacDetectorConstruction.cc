@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: MedLinacDetectorConstruction.cc,v 1.11 2006/06/29 16:04:19 gunter Exp $
+// $Id: MedLinacDetectorConstruction.cc,v 1.12 2007/07/06 21:39:05 mpiergen Exp $
 //
 // Code developed by: M. Piergentili
 //
@@ -89,10 +89,7 @@ MedLinacDetectorConstruction::MedLinacDetectorConstruction(G4String SDName)
     JawX1_phys(0), JawX2_phys(0),
     Phantom_phys(0)
 {
-  //G4double phantomDim_x = 15.*cm;
-  //G4double phantomDim_y = 15.*cm;
-  //G4double phantomDim_z = 15.*cm;
-
+  phantomDim = 15.*cm;
    //PhantomDimensionX = PhantomDim_x;
    //PhantomDimensionY = PhantomDim_y;
    //PhantomDimensionZ = PhantomDim_z;
@@ -152,7 +149,6 @@ G4VPhysicalVolume* MedLinacDetectorConstruction::Construct()
 
 G4VPhysicalVolume* MedLinacDetectorConstruction::ConstructGeom ()
 {
-
   // Cleanup old geometry
 
   G4GeometryManager::GetInstance()->OpenGeometry();
@@ -447,8 +443,9 @@ void MedLinacDetectorConstruction::PrintParameters()
   //G4cout <<"jaws2 x position "<< fieldX2/cm << " cm "<<G4endl ; 
   //G4cout <<"jaws1 y position "<< fieldY1/cm << " cm "<<G4endl ;
   //G4cout <<"jaws2 y position "<< fieldY2/cm << " cm "<<G4endl ; 
-  //G4cout <<"************************phantom dimension "<< phantomDim/cm << " cm "<<G4endl ;
-  // G4cout <<"************************numberOfVoxelsAlongX "<< numberOfVoxelsAlongX <<G4endl ;
+  G4cout <<"************************phantom dimension "<< phantomDim_x/cm << " cm "<<G4endl ;
+  G4cout <<"************************phantom dimension "<< phantomDim/cm << " cm "<<G4endl;
+  //G4cout <<"************************numberOfVoxelsAlongX "<< numberOfVoxelsAlongX <<G4endl ;
   //G4cout <<"************************numberOfVoxelsAlongY "<< numberOfVoxelsAlongY <<G4endl ;
   //G4cout <<"************************numberOfVoxelsAlongZ "<< numberOfVoxelsAlongZ <<G4endl ;
   //G4cout <<"************************maxStep "<< maxStep/mm << " mm " <<G4endl;
@@ -481,7 +478,7 @@ void MedLinacDetectorConstruction::SetJawY2Pos_y (G4double val)
 void MedLinacDetectorConstruction::SetPhantomDim (G4double val)
 {
   phantomDim = val;
-  //G4cout <<"==============================phantomDim  "<< phantomDim/mm<<"mm"<<G4endl;
+  G4cout <<"==============================phantomDim  "<< phantomDim/mm<<"mm"<<G4endl;
 }
 
 void MedLinacDetectorConstruction::SetNumberOfVoxels (G4int val)

@@ -25,7 +25,7 @@
 //
 //
 // $Id: BrachyDetectorConstruction.hh,v 1.17 2006/06/29 15:47:11 gunter Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// GEANT4 tag $Name: geant4-09-01 $
 //  
 //    ****************************************
 //    *                                      *

@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UHadronElasticProcess.cc,v 1.34 2007/06/14 17:08:27 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: G4UHadronElasticProcess.cc,v 1.35 2007/11/15 15:53:25 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 // Geant4 Hadron Elastic Scattering Process -- header file
 // 
@@ -118,12 +118,14 @@ G4double G4UHadronElasticProcess::GetMeanFreePath(const G4Track& track,
   G4double temp = material->GetTemperature();
   G4int nelm    = material->GetNumberOfElements();
 
+#ifdef G4VERBOSE
   if(verboseLevel>1) 
     G4cout << "G4UHadronElasticProcess get mfp for " 
 	   << theParticle->GetParticleName() 
 	   << "  p(GeV)= " << dp->GetTotalMomentum()/GeV
 	   << " in " << material->GetName()
 	   << G4endl; 
+#endif
  
   for (G4int i=0; i<nelm; i++) {
     const G4Element* elm = (*theElementVector)[i];
@@ -131,14 +133,17 @@ G4double G4UHadronElasticProcess::GetMeanFreePath(const G4Track& track,
     cross += theAtomNumDensityVector[i]*x;
     xsec[i] = cross;
   }
+
+#ifdef G4VERBOSE
   if(verboseLevel>1) 
     G4cout << "G4UHadronElasticProcess cross(1/mm)= " << cross 
            << "  E(MeV)= " << dp->GetKineticEnergy()
 	   << "  " << theParticle->GetParticleName()
            << "  in " << material->GetName()
 	   << G4endl;
-  if(cross > DBL_MIN) x = 1./cross;
+#endif
 
+  if(cross > DBL_MIN) x = 1./cross;
   return x;
 }
 
@@ -165,11 +170,14 @@ G4double G4UHadronElasticProcess::GetMicroscopicCrossSection(
       G4int N = G4int(elm->GetN()+0.5) - iz;
       x = qCManager->GetCrossSection(true,momentum,iz,N,pPDG);
       xsecH[0] = x;
+#ifdef G4VERBOSE
       if(verboseLevel>1) 
 	G4cout << "G4UHadronElasticProcess compute CHIPS CS for Z= " << iz
 	       << " N= "  << N << " pdg= " << pPDG 
 	       << " mom(GeV)= " << momentum/GeV 
 	       << "  " << qCManager << G4endl; 
+#endif
+
     } else {
       G4double* ab = elm->GetRelativeAbundanceVector();
       for(G4int j=0; j<ni; j++) {
@@ -192,10 +200,12 @@ G4double G4UHadronElasticProcess::GetMicroscopicCrossSection(
 
     // GHAD cross section
   } else {
+#ifdef G4VERBOSE
     if(verboseLevel>1) 
       G4cout << "G4UHadronElasticProcess compute GHAD CS for element " 
 	     << elm->GetName() 
 	     << G4endl; 
+#endif
     x = store->GetCrossSection(dp, elm, temp);
   }
   // NaN finder
@@ -211,12 +221,14 @@ G4double G4UHadronElasticProcess::GetMicroscopicCrossSection(
     x = 0.0;
   }
 
+#ifdef G4VERBOSE
   if(verboseLevel>1) 
     G4cout << "G4UHadronElasticProcess cross(mb)= " << x/millibarn 
            << "  E(MeV)= " << dp->GetKineticEnergy()
 	   << "  " << theParticle->GetParticleName()
            << "  in Z= " << iz
 	   << G4endl;
+#endif
 
   return x;
 }

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: PhysListEmPolarized.cc,v 1.1 2006/10/02 16:25:55 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: PhysListEmPolarized.cc,v 1.2 2007/11/01 17:34:53 schaelic Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
@@ -49,6 +49,7 @@
 #include "G4ePolarizedIonisation.hh"
 #include "G4ePolarizedBremsstrahlung.hh"
 #include "G4eplusPolarizedAnnihilation.hh"
+#include "G4PolarizedPhotoElectricEffect.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -75,7 +76,7 @@ void PhysListEmPolarized::ConstructProcess()
 
     if (namePhysics=="polarized") {
       if (particleName == "gamma") {
-	pmanager->AddDiscreteProcess(new G4PhotoElectricEffect);
+	pmanager->AddDiscreteProcess(new G4PolarizedPhotoElectricEffect);
  	pmanager->AddDiscreteProcess(new G4PolarizedCompton);
 	pmanager->AddDiscreteProcess(new G4PolarizedGammaConversion);      
       }

@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HistoMessenger.cc,v 1.1 2007/01/19 17:20:27 maire Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: HistoMessenger.cc,v 1.2 2007/11/13 11:31:54 maire Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -82,6 +82,11 @@ HistoMessenger::HistoMessenger(HistoManager* manager)
   unit->SetDefaultValue("none");
   histoCmd->SetParameter(unit);
   
+  prhistoCmd = new G4UIcmdWithAnInteger("/testem/histo/printHisto",this);
+  prhistoCmd->SetGuidance("print histo #id on ascii file");
+  prhistoCmd->SetParameterName("id",false);
+  prhistoCmd->SetRange("id>0");
+      
   rmhistoCmd = new G4UIcmdWithAnInteger("/testem/histo/removeHisto",this);
   rmhistoCmd->SetGuidance("desactivate histo  #id");
   rmhistoCmd->SetParameterName("id",false);
@@ -93,6 +98,7 @@ HistoMessenger::HistoMessenger(HistoManager* manager)
 HistoMessenger::~HistoMessenger()
 {
   delete rmhistoCmd;
+  delete prhistoCmd;    
   delete histoCmd;
   delete typeCmd;  
   delete factoryCmd;
@@ -119,7 +125,10 @@ void HistoMessenger::SetNewValue(G4UIcommand* command, G4String newValues)
      if (unit != "none") vUnit = G4UIcommand::ValueOf(unit);
      histoManager->SetHisto (ih,nbBins,vmin*vUnit,vmax*vUnit,unit);
    }
-    
+   
+  if (command == prhistoCmd)
+    histoManager->PrintHisto(prhistoCmd->GetNewIntValue(newValues));
+            
   if (command == rmhistoCmd)
     histoManager->RemoveHisto(rmhistoCmd->GetNewIntValue(newValues));         
 }

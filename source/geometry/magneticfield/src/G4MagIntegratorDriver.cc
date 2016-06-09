@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4MagIntegratorDriver.cc,v 1.48 2007/06/04 15:30:22 tnikitin Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: G4MagIntegratorDriver.cc,v 1.49 2007/08/17 12:30:33 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 // 
 //
@@ -153,14 +153,24 @@ G4MagInt_Driver::AccurateAdvance(G4FieldTrack& y_current,
   G4FieldTrack yStartFT(y_current);
 
   //  Ensure that hstep > 0 
-  if( hstep <= 0.0 ) { 
-    if(hstep==0.0){ G4cerr << " G4MagIntegratorDriver::AccurateAdvance(): Hstep is " << hstep << G4endl;
+  if( hstep <= 0.0 )
+  { 
+    if(hstep==0.0)
+    {
+      G4cerr << "WARNING - G4MagIntegratorDriver::AccurateAdvance()" << G4endl
+             << "          Proposed step is zero; hstep = " << hstep
+             << " !" << G4endl;
       return succeeded; 
     }
-    else{ 
-    G4Exception("G4MagInt_Driver::AccurateAdvance()", 
-		"Requested Integration Step is  negative: it must be positive",
-		FatalException, "Requested-Step-is-Negative"); 
+    else
+    { 
+      G4cerr << "ERROR - G4MagIntegratorDriver::AccurateAdvance()" << G4endl
+             << "        Proposed step is negative; hstep = " << hstep
+             << " !" << G4endl;
+      G4Exception("G4MagInt_Driver::AccurateAdvance()", 
+                  "InvalidCall", EventMustBeAborted,
+                  "Requested step cannot be negative! Aborting event.");
+      return false;
     }
   }
 

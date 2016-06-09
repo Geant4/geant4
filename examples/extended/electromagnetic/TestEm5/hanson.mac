@@ -1,4 +1,4 @@
-# $Id: hanson.mac,v 1.3 2006/03/20 11:41:46 maire Exp $
+# $Id: hanson.mac,v 1.4 2007/07/31 16:51:29 maire Exp $
 #
 # macro file for TestEm5.cc    
 #
@@ -26,8 +26,8 @@
 #
 /testem/histo/setFileName hanson
 /testem/histo/setFileType hbook
-/testem/histo/setHisto 5  100 0 10 deg		#space angle
-###/testem/histo/setHisto 5  60 0 30 deg		#space angle    
+/testem/histo/setHisto 12  100 0 10 deg		#space angle
+###/testem/histo/setHisto 12  60 0 30 deg		#space angle    
 #
 /testem/event/printModulo 100000 
 /run/beamOn 1000000

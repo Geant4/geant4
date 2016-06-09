@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4IonisParamMat.hh,v 1.9 2006/06/29 19:11:05 gunter Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: G4IonisParamMat.hh,v 1.10 2007/09/27 14:05:47 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 
 // class description
@@ -36,9 +36,10 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
 
-// 28-10-02: add setMeanExcitationEnergy (V.Ivanchenko)
-// 09-03-01: copy constructor and assignement operator in public (mma)
 // 09-07-98: data moved from G4Material (mma)
+// 09-03-01: copy constructor and assignement operator in public (mma)
+// 28-10-02: add setMeanExcitationEnergy (V.Ivanchenko)
+// 27-09-07: add computation of parameters for ions (V.Ivanchenko)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
 
@@ -88,6 +89,11 @@ public:
     G4double  GetEnergy0fluct()           const {return fEnergy0fluct;};
     G4double  GetRateionexcfluct()        const {return fRateionexcfluct;};
 
+    // parameters for ion corrections computations
+    G4double  GetZeffective()             const {return fZeff;};
+    G4double  GetFermiEnergy()            const {return fFermiEnergy;};
+    G4double  GetLFactor()                const {return fLfactor;};
+
 public:  // without description
 
     G4IonisParamMat(const G4IonisParamMat&);
@@ -110,6 +116,9 @@ private:
 
     // Compute parameters for the energy fluctuation model
     void ComputeFluctModel();
+
+    // Compute parameters for ion parameterizations
+    void ComputeIonParameters();
 
 private:
 
@@ -140,6 +149,11 @@ private:
     G4double fLogEnergy2fluct;
     G4double fEnergy0fluct;
     G4double fRateionexcfluct;
+
+    // parameters for ion corrections computations
+    G4double fZeff;
+    G4double fFermiEnergy;
+    G4double fLfactor;
 };
 
 #endif

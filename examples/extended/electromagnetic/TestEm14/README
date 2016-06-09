@@ -1,4 +1,4 @@
-$Id: README,v 1.5 2006/05/15 14:43:01 maire Exp $
+$Id: README,v 1.6 2007/11/13 12:13:32 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -26,7 +26,7 @@ $Id: README,v 1.5 2006/05/15 14:43:01 maire Exp $
  2- PHYSICS LIST
  
  	The physics list contains the standard electromagnetic processes.
-	In order not to introduce 'articicial' constraints on the step size, the
+	In order not to introduce 'artificial' constraints on the step size, the
 	multiple scattering is not instanciated, and there is no limitation from
 	the maximum energy lost per step.  
  	 
@@ -79,6 +79,11 @@ $Id: README,v 1.5 2006/05/15 14:43:01 maire Exp $
 	the commands:
  	/testem/histo/setFileName  name  (default testem14)
    	/testem/histo/setFileType  name  (default hbook)
+   
+        It is also possible to print selected histograms on an ascii file:
+        /testem/histo/printHisto id
+        All selected histos will be written on a file name.ascii  
+	(default testem14) 
 	
 	Note that, by default, histograms are disabled. To activate them, 
 	uncomment the flag G4ANALYSIS_USE in GNUmakefile. 	

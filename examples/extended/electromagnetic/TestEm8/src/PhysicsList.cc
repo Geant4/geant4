@@ -24,9 +24,8 @@
 // ********************************************************************
 //
 //
-
-// $Id: PhysicsList.cc,v 1.9 2006/12/13 15:42:31 gunter Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: PhysicsList.cc,v 1.14 2007/09/26 10:23:17 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -35,13 +34,11 @@
 #include "PhysicsList.hh"
 #include "PhysicsListMessenger.hh"
 
-#include "PhysListParticles.hh"
-#include "PhysListGeneral.hh"
-#include "PhysListEmStandard.hh"
+#include "G4EmStandardPhysics.hh"
+#include "G4DecayPhysics.hh"
 
 #include "PhysListEmModelPai.hh"
 #include "PhysListEmPaiPhoton.hh"
-
 #include "PhysListEmPAI.hh"
 
 #include "G4Gamma.hh"
@@ -50,6 +47,12 @@
 
 #include "G4UnitsTable.hh"
 #include "G4LossTableManager.hh"
+
+#include "StepMax.hh"
+
+#include "G4ProcessManager.hh"
+#include "G4ParticleTypes.hh"
+#include "G4ParticleTable.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -67,15 +70,12 @@ PhysicsList::PhysicsList() : G4VModularPhysicsList()
 
   SetVerboseLevel(1);
 
-   // Particles
-  particleList = new PhysListParticles("particles");
-
-  // General Physics
-  generalPhysicsList = new PhysListGeneral("general");
+  // Decay Physics is always defined
+  generalPhysicsList = new G4DecayPhysics();
 
   // EM physics
-  emName = G4String("standard");
-  emPhysicsList = new PhysListEmStandard(emName);
+  emName = G4String("emstandard");
+  emPhysicsList = new G4EmStandardPhysics();
 
 }
 
@@ -87,13 +87,14 @@ PhysicsList::~PhysicsList()
   delete generalPhysicsList;
   delete emPhysicsList;
   for(size_t i=0; i<hadronPhys.size(); i++) delete hadronPhys[i];
+  delete stepMaxProcess;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void PhysicsList::ConstructParticle()
 {
-  particleList->ConstructParticle();
+  generalPhysicsList->ConstructParticle();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -101,8 +102,8 @@ void PhysicsList::ConstructParticle()
 void PhysicsList::ConstructProcess()
 {
   AddTransportation();
-  generalPhysicsList->ConstructProcess();
   emPhysicsList->ConstructProcess();
+  generalPhysicsList->ConstructProcess();
   for(size_t i=0; i<hadronPhys.size(); i++) hadronPhys[i]->ConstructProcess();
   AddStepMax();
 }
@@ -117,15 +118,7 @@ void PhysicsList::AddPhysicsList(const G4String& name)
 
   if (name == emName) return;
 
-  if (name == "standard") 
-  {
-    emName = name;
-    delete emPhysicsList;
-    emPhysicsList = new PhysListEmStandard(name);
-    G4cout<<"PhysListEmStandard is called"<<G4endl;
-  } 
-
-  else if (name == "pai") 
+  if (name == "pai") 
   {
     emName = name;
     delete emPhysicsList;
@@ -139,6 +132,13 @@ void PhysicsList::AddPhysicsList(const G4String& name)
     emPhysicsList = new PhysListEmPaiPhoton(name);
     G4cout<<"PhysListEmModelPaiPhoton is called"<<G4endl;
   } 
+  else if (name == "pai_brem") 
+  {
+    emName = name;
+    delete emPhysicsList;
+    emPhysicsList = new PhysListEmPAI(name);
+    G4cout<<"PhysListEmPAI is called (bremsstrahlung dedx added)"<<G4endl;
+  } 
   else 
   {
     G4cout << "PhysicsList::AddPhysicsList: <" << name << ">"
@@ -146,14 +146,6 @@ void PhysicsList::AddPhysicsList(const G4String& name)
            << G4endl;
   }
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-#include "StepMax.hh"
-
-#include "G4ProcessManager.hh"
-#include "G4ParticleTypes.hh"
-#include "G4ParticleTable.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

@@ -1,4 +1,4 @@
-$Id: History,v 1.10 2007/06/11 13:37:56 vnivanch Exp $
+$Id: History,v 1.15 2007/11/05 10:53:13 schaelic Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,50 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+05 November 07: A.Schaelicke (empolar-V09-00-02)
+01 November 07: A.Schaelicke
+- Bug fix in G4PolarizedAnnihilationCrossSection
+    error in calculation of polarisation dependent total cross section
+    (wrong interactionLength for positrons in applications where, 
+     particle and media are polarised)  
+- more general Cross section frame work:
+    G4PolarizedAnnihilationCrossSection
+    G4PolarizedBhabhaCrossSection
+    G4PolarizedBremsstrahlungCrossSection
+    G4PolarizedComptonCrossSection
+    G4PolarizedGammaConversionModel
+    G4PolarizedMollerCrossSection
+    G4PolarizedPairProductionCrossSection
+    G4VPolarizedCrossSection
+    G4ePolarizedBremsstrahlungModel
+   (removed dependencies to models; now cross sections can be used 
+    independent of any model, e.g. in a cross section calculator class)
+- add polarized photo electric effect:
+    G4PolarizationHelper
+       (new method GetRandomFrame, used when interaction frame is not
+        well defined by outgoing particles) 
+    G4PolarizedPEEffectCrossSection
+       (based on McMaster, Rev.Mod.Phys. 33 (1961) 8)
+    G4PolarizedPEEffectModel
+       (derived from G4PEEffectModel, adds polarisation transfer)
+    G4PolarizedPhotoElectricEffect
+       (derived from G4VEmProcess)
+
+02 October 07: V.Ivanchenko (empolar-V09-00-01)
+G4eplusPolarizedAnnihilation - enabled AtRest
+
+10 July 07: V.Ivanchenko (empolar-V09-00-00)
+10 July 07: A.Schaelicke
+- G4VPolarizedCrossSection removed obsolete methodes and variables to
+  clear "shadow" Warning on SUN CC
+- G4PolarizedCompton, G4ePolarizedIonisation,
+  G4eplusPolarizedAnnihilation renamed local variable "particle" to
+  avoid "shadow" Warning on SUN CC
+- G4PolarizedAnnihilationModel
+  copied Initialise() method from G4eeToTwoGammaModel provide a 
+  ParticleChangeForGamma object, this avoids "shadow" Warning on SUNCC
+  and reduces overhead in SampleSecondaries()
 
 11 June 07: V.Ivanchenko (empolar-V08-03-02)
 - (A.Schaelicke) G4PolarizedCompton, G4ePolarizedIonisation, 

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4HelixExplicitEuler.hh,v 1.8 2006/06/29 18:22:29 gunter Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: G4HelixExplicitEuler.hh,v 1.9 2007/08/21 08:52:00 tnikitin Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 //
 // class G4HelixExplicitEuler
@@ -54,12 +54,18 @@ class G4HelixExplicitEuler : public G4MagHelicalStepper
       : G4MagHelicalStepper(EqRhs) {}
  
     ~G4HelixExplicitEuler() {}
-  
-    void DumbStepper( const G4double y[],
-                            G4ThreeVector  Bfld,
-                            G4double       h,
-                            G4double       yout[]);
+   void Stepper( const G4double y[],
+                  const G4double*,
+                        G4double h,
+                        G4double yout[],
+                        G4double yerr[]  ); 
 
+   void DumbStepper( const G4double y[],
+                           G4ThreeVector  Bfld,
+                           G4double       h,
+                           G4double       yout[]);
+   
+  G4double DistChord() const;
   public:  // without description
 
     // DELETED  RightHandSide( ) !!!!  

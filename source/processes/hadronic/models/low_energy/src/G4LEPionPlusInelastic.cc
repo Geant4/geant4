@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4LEPionPlusInelastic.cc,v 1.15 2007/02/24 06:28:52 dennis Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// GEANT4 tag $Name: geant4-09-01 $
 //
  // Hadronic Process: PionPlus Inelastic Process
  // J.L. Chuma, TRIUMF, 19-Nov-1996

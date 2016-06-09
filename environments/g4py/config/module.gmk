@@ -1,4 +1,4 @@
-# $Id: module.gmk,v 1.2 2006/04/25 05:53:05 kmura Exp $
+# $Id: module.gmk,v 1.3 2007/11/25 19:38:03 kmura Exp $
 # ===========================================================
 #   Script for building a Boost-Python module 
 # ===========================================================
@@ -33,6 +33,23 @@ ifneq ($(Q_BOOST_LIBDIR), /usr/lib)
 endif
 
 LOPT  += -l$(Q_BOOST_PYTHON_LIB)
+
+# Xerces-C ...
+ifdef Q_XERCESC_INCDIR
+  ifneq ($(Q_XERCESC_INCDIR), /usr/include)
+    INCFLAGS += -I$(Q_XERCESC_INCDIR)
+  endif
+endif
+
+ifdef Q_XERCESC_LIBDIR
+  ifneq ($(Q_XERCESC_LIBDIR), /usr/lib)
+    ifneq ($(Q_XERCESC_LIBDIR), /usr/lib64)
+      LOPT += -L$(Q_XERCESC_LIBDIR)
+   endif
+  endif
+
+  LOPT  += -lxerces-c
+endif
 
 # finished
 CXXFLAGS += $(INCFLAGS)

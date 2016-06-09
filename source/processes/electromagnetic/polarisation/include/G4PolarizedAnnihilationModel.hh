@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PolarizedAnnihilationModel.hh,v 1.2 2007/05/23 08:52:20 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: G4PolarizedAnnihilationModel.hh,v 1.3 2007/07/10 09:38:17 schaelic Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 // -------------------------------------------------------------------
 //
@@ -39,7 +39,9 @@
 //
 // Modifications:
 // 18-07-06 use newly calculated cross sections (P. Starovoitov)
-// 21-08-05 update interface to geant4.8.1 (A. Schaelicke)
+// 21-08-06 update interface to geant4.8.1 (A. Schaelicke)
+// 10-07-07 copied Initialise() method from G4eeToTwoGammaModel to provide a  
+//          ParticleChangeForGamma object (A. Schaelicke)
 //
 //
 // Class Description:
@@ -69,6 +71,8 @@ public:
 
   virtual ~G4PolarizedAnnihilationModel();
 
+  virtual void Initialise(const G4ParticleDefinition*, 
+			  const G4DataVector&);
   virtual G4double ComputeCrossSectionPerElectron(
                                 const G4ParticleDefinition*,
                                       G4double kinEnergy, 
@@ -107,6 +111,9 @@ private:
   G4StokesVector finalGamma2Polarization;
 
   G4int verboseLevel;
+
+  G4ParticleChangeForGamma* gParticleChange;
+  G4bool gIsInitialised;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

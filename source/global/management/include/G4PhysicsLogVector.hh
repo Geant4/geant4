@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4PhysicsLogVector.hh,v 1.11 2006/06/29 19:02:25 gunter Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 // 
 //--------------------------------------------------------------------

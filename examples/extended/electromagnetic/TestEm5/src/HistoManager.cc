@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HistoManager.cc,v 1.16 2006/06/29 16:55:38 gunter Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: HistoManager.cc,v 1.21 2007/11/28 12:37:56 maire Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -61,6 +61,7 @@ HistoManager::HistoManager()
     exist[k] = false;
     Unit[k]  = 1.0;
     Width[k] = 1.0;
+    ascii[k] = false;        
   }
 
   histoMessenger = new HistoMessenger(this);
@@ -127,6 +128,7 @@ void HistoManager::save()
 {
 #ifdef G4ANALYSIS_USE
   if (factoryOn) {
+    saveAscii();          // Write ascii file, if any     
     tree->commit();       // Writing the histograms to the file
     tree->close();        // and closing the tree (and the file)
     G4cout << "\n----> Histogram Tree is saved in " << fileName[1] << G4endl;
@@ -155,7 +157,7 @@ void HistoManager::FillHisto(G4int ih, G4double e, G4double weight)
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void HistoManager::SetHisto(G4int ih,
-                 G4int nbins, G4double valmin, G4double valmax, const G4String& unit)
+            G4int nbins, G4double valmin, G4double valmax, const G4String& unit)
 {
   if (ih > MaxHisto) {
     G4cout << "---> warning from HistoManager::SetHisto() : histo " << ih
@@ -164,25 +166,42 @@ void HistoManager::SetHisto(G4int ih,
   }
 
   const G4String id[] = { "0", "1", "2", "3", "4", "5", "6", "7", "8", "9",
-                         "10","11","12","13","14","15","16"};
+                         "10","11","12","13","14","15","16","17","18","19",
+			 "20","21","22","23","24","25","26","27","28","29",
+			 "30","31","32","33","34","35","36","37","38","39",
+			 "40","41","42","43","44","45","46","47","48","49" 
+			};
+			
   const G4String title[] =
                 { "dummy",						//0
                   "energy deposit in absorber",				//1
                   "energy of charged secondaries at creation",		//2
                   "energy of gammas at creation (std::log10(ekin/MeV))",//3
-		  "(transmit, charged) : kinetic energy at exit",	//4
-		  "(transmit, charged) : space angle at exit",		//5
-		  "(transmit, charged) : projected angle at exit",	//6
-		  "(transmit, charged) : projected position at exit",	//7
-		  "(transmit, neutral) : kinetic energy at exit",	//8
-		  "(transmit, neutral) : space angle at exit",		//9
-		  "(transmit, neutral) : projected angle at exit",	//10
-		  "(reflect , charged) : kinetic energy at exit",	//11
-		  "(reflect , charged) : space angle at exit",		//12
-		  "(reflect , charged) : projected angle at exit",	//13
-		  "(reflect , neutral) : kinetic energy at exit",	//14
-		  "(reflect , neutral) : space angle at exit",		//15
-		  "(reflect , neutral) : projected angle at exit"	//16
+                  "x_vertex of charged secondaries (all)",		//4
+                  "x_vertex of charged secondaries (not absorbed)",	//5
+		  "dummy","dummy","dummy","dummy",			//6-9
+		  "(transmit, charged) : kinetic energy at exit",	//10
+		  "(transmit, charged) : ener fluence: dE(MeV)/dOmega",	//11
+		  "(transmit, charged) : space angle: dN/dOmega",	//12
+		  "(transmit, charged) : projected angle at exit",	//13
+		  "(transmit, charged) : projected position at exit",	//14
+		  "(transmit, charged) : radius at exit",		//15
+		  "dummy","dummy","dummy","dummy",			//16-19
+		  "(transmit, neutral) : kinetic energy at exit",	//20
+		  "(transmit, neutral) : ener fluence: dE(MeV)/dOmega",	//21
+		  "(transmit, neutral) : space angle: dN/dOmega",	//22
+		  "(transmit, neutral) : projected angle at exit",	//23
+		  "dummy","dummy","dummy","dummy","dummy","dummy",	//24-29
+		  "(reflect , charged) : kinetic energy at exit",	//30
+		  "(reflect , charged) : ener fluence: dE(MeV)/dOmega",	//31
+		  "(reflect , charged) : space angle: dN/dOmega",	//32
+		  "(reflect , charged) : projected angle at exit",	//33
+		  "dummy","dummy","dummy","dummy","dummy","dummy",	//34-39
+		  "(reflect , neutral) : kinetic energy at exit",	//40
+		  "(reflect , neutral) : ener fluence: dE(MeV)/dOmega"	//41
+		  "(reflect , neutral) : space angle: dN/dOmega",	//42
+		  "(reflect , neutral) : projected angle at exit",	//43
+		  "dummy","dummy","dummy","dummy","dummy","dummy"	//44-49
                  };
 
   G4String titl = title[ih];
@@ -224,4 +243,44 @@ void HistoManager::RemoveHisto(G4int ih)
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void HistoManager::PrintHisto(G4int ih)
+{
+ if (ih < MaxHisto) ascii[ih] = true;
+ else
+    G4cout << "---> warning from HistoManager::PrintHisto() : histo " << ih
+           << "does not exist" << G4endl;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+#include <fstream>
+
+void HistoManager::saveAscii()
+{
+#ifdef G4ANALYSIS_USE
+ 
+ G4String name = fileName[0] + ".ascii";
+ std::ofstream File(name, std::ios::out);
+ File.setf( std::ios::scientific, std::ios::floatfield );
+ 
+ //write selected histograms
+ for (G4int ih=0; ih<MaxHisto; ih++) {
+    if (exist[ih] && ascii[ih]) {
+      File << "\n  1D histogram " << ih << ": " << Title[ih] 
+           << "\n \n \t     X \t\t     Y" << G4endl;
+     
+      for (G4int iBin=0; iBin<Nbins[ih]; iBin++) {
+         File << "  " << iBin << "\t" 
+              << histo[ih]->binMean(iBin) << "\t"
+	      << histo[ih]->binHeight(iBin) 
+	      << G4endl;
+      } 
+    }
+ }
+#endif
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 

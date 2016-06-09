@@ -1,0 +1,171 @@
+<lcgdict>
+
+<class name="G4String"/>
+<class name="std::vector<double>"/>
+
+<class name="G4OrderedTable"/>
+<class name="std::vector<G4DataVector*>"/>
+<class name="G4DataVector"/>
+
+<class name="ExP02DetectorConstruction"/>
+<class name="ExP02GeoTree"/>
+
+<class name="G4RunManager"/>
+<class name="G4Isotope"/>
+
+<class name="G4Element">
+    <field name="fAtomicShells" comment="[fNbOfAtomicShells]" />
+    <field name="fRelativeAbundanceVector" comment="[fNumberOfIsotopes]" />
+</class>
+
+<class name="std::vector<G4Isotope*>"/>
+<class name="std::vector<G4Element*>"/>
+
+<class name="G4Material">
+    <field name="fMassFractionVector" comment="[fNumberOfElements]" />
+    <field name="fAtomsVector" comment="[fNumberOfElements]" />
+    <field name="VecNbOfAtomsPerVolume" comment="[fNumberOfElements]" />
+</class>
+
+<class name="G4IonisParamElm">
+<!--    <field name="fShellCorrectionVector" comment="[3]" /> -->
+      <field name="fShellCorrectionVector" transient="true"/>
+</class>
+
+<class name="G4IonisParamMat">
+<!--    <field name="fShellCorrectionVector" comment="[three]" /> -->
+      <field name="fShellCorrectionVector" transient="true"/>
+</class>
+
+<class name="G4SandiaTable"> 
+    <field name="fPhotoAbsorptionCof" transient="true"/>
+</class>
+
+<class name="G4MaterialPropertyVector"/>
+<class name="G4MaterialPropertiesTable"/>
+
+<class name="std::map<G4String, G4MaterialPropertyVector*>" /> 
+<class name="std::map<G4String, double>" />
+
+<class name="G4VSolid"/>
+<class name="G4CSGSolid">
+    <field name="fpPolyhedron" transient="true"/>
+</class>
+<class name="G4VCSGface"/>
+
+<class name="std::vector<G4VCSGface*>"/>
+<class name="G4VCSGfaceted">
+    <field name="faces" comment="[numFace]"/>
+    <field name="fpPolyhedron" transient="true"/>
+</class>
+<class name="G4BooleanSolid">
+    <field name="fpPolyhedron" transient="true"/>
+</class>
+<class name="G4DisplacedSolid">
+    <field name="fpPolyhedron" transient="true"/>
+</class>
+
+<class name="G4AffineTransform"/>
+<class name="G4Box"/>
+<class name="G4Tubs"/>
+<class name="G4Trd"/>
+<class name="G4Trap"/>
+<class name="TrapSidePlane"/>
+<class name="G4Torus"/>
+<class name="G4Sphere"/>
+<class name="G4Para"/>
+<class name="G4Orb"/>
+<class name="G4Cons"/>
+
+<class name="G4Polyhedra">
+    <field name="corners" comment="[numCorner]" />
+</class>
+
+<class name="G4PolyhedraSide">
+    <field name="vecs" comment="[numSide]" />
+    <field name="edges" comment="[numSide]" />
+</class>
+<class name="G4PolyhedraSideRZ"/>
+<class name="G4PolyhedraSide::sG4PolyhedraSideVec"/>
+<class name="G4PolyhedraSide::sG4PolyhedraSideEdge"/>
+
+<class name="G4PolyhedraHistorical">
+    <field name="Z_values" comment="[Num_z_planes]" />    
+    <field name="Rmin" comment="[Num_z_planes]" />    
+    <field name="Rmax" comment="[Num_z_planes]" />    
+</class>
+
+<class name="G4Polycone">
+     <field name="corners" comment="[numCorner]" />
+</class>
+
+<class name="G4PolyconeSide">
+      <field name="corners" comment="[ncorners]" />
+</class>
+
+<class name="G4PolyconeSideRZ"/>
+<class name="std::vector<G4PolyconeSideRZ>"/>
+
+<class name="G4PolyPhiFace">
+     <field name="corners" comment="[numEdges]"/>
+     <field name="edges" comment="[numEdges]"/>
+</class>
+
+<class name="G4PolyPhiFaceEdge"/>
+<class name="G4PolyPhiFaceVertex"/> 
+<class name="std::vector<G4PolyPhiFaceEdge>"/>
+<class name="std::vector<G4PolyPhiFaceVertex>"/>
+
+<class name="G4PolyconeHistorical">
+    <field name="Z_values" comment="[Num_z_planes]" />    
+    <field name="Rmin" comment="[Num_z_planes]" />    
+    <field name="Rmax" comment="[Num_z_planes]" />    
+</class>
+
+<class name="G4IntersectingCone"/>
+<class name="G4EnclosingCylinder"/>
+<!--
+<class name="G4ReduciblePolygon"/>
+<class name="G4ReduciblePolygon::ABVertex"/>
+-->
+<class name="G4UnionSolid"/>
+<class name="G4SubtractionSolid"/>
+<class name="G4IntersectionSolid"/>
+<class name="G4LogicalVolume">
+      <field name="fFieldManager" transient="true"/>
+      <field name="fSensitiveDetector" transient="true"/>
+      <field name="fVoxel" transient="true"/>
+      <field name="fVisAttributes" transient="true"/>
+      <field name="fFastSimulationManager" transient="true"/>
+</class>
+
+<class name="std::vector<G4LogicalVolume*>"/>
+<class name="std::vector<G4Material*>"/>
+<class name="std::pair<G4Material*,G4MaterialCutsCouple*>"/>
+<class name="std::map<G4Material*,G4MaterialCutsCouple*>"/>
+<class name="G4Region">
+      <field name="fFastSimulationManager" transient="true"/>
+      <field name="fRegionalSteppingAction" transient="true"/>
+</class>
+<class name="G4MaterialCutsCouple"/>
+
+<class name="G4ProductionCuts">
+      <field name="gammaDef" transient="true"/>
+      <field name="electDef" transient="true"/>
+      <field name="positDef" transient="true"/>
+</class>
+
+<class name="G4VUserRegionInformation"/>
+<class name="G4UserLimits"/>
+
+<class name="CLHEP::Hep3Vector"/>
+<class name="std::vector<CLHEP::Hep3Vector>"/>
+<class name="CLHEP::HepRotation"/>
+<class name="HepGeom::Transform3D"/>
+
+<class name="G4PVPlacement"/>
+<class name="G4VPhysicalVolume"/>
+<class name="G4VPVParameterisation"/>
+<class name="std::vector<G4VPhysicalVolume*>"/>
+
+</lcgdict>

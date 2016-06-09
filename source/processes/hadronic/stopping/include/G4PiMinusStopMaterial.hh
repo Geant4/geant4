@@ -23,13 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4PiMinusStopMaterial.hh,v 1.10 2006/06/29 21:04:29 gunter Exp $
-//
-// -------------------------------------------------------------------
-//      GEANT 4 class file --- Copyright CERN 1998
-//      CERN Geneva Switzerland
-//
+// $Id: G4PiMinusStopMaterial.hh,v 1.11 2007/07/05 18:19:14 dennis Exp $
 //
 //      File name:     G4PiMinusStopMaterial.hh 
 //

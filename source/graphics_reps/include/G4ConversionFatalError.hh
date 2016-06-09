@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // $Id: G4ConversionFatalError.hh,v 1.2 2006/12/13 15:44:00 gunter Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 // Fatal G4Exception error
 //

@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4OpenGLStoredXmViewer.cc,v 1.22 2007/04/04 16:50:27 allison Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 // 
 // Andrew Walkden  10th February 1997

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // $Id: BrachyAnalysisManager.hh,v 1.13 2007/06/21 14:58:39 gunter Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// GEANT4 tag $Name: geant4-09-01 $
 
 // Code review: MG Pia, 14/05/2207
 // Contact: Geant4-INFN Genova group, MariaGrazia.Pia@ge.infn.it

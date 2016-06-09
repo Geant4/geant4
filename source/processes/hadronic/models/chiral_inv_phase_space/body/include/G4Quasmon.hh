@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Quasmon.hh,v 1.38 2006/06/29 20:06:39 gunter Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: G4Quasmon.hh,v 1.39 2007/08/09 13:07:47 mkossov Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 //      ---------------- G4Quasmon ----------------
 //             by Mikhail Kossov, July 1999.
@@ -100,8 +100,8 @@ private:
   G4double          GetRandomMass(G4int PDGCode, G4double maxM);
   void              ModifyInMatterCandidates();
   void              CalculateHadronizationProbabilities(G4double excE, G4double kQ,
-                                                        G4LorentzVector k4M,
-                                                        G4bool piF, G4bool gaF);
+                                                        G4LorentzVector k4M, G4bool piF,
+                                                        G4bool gaF, G4bool first=false);
   void              FillHadronVector(G4QHadron* qHadron);
   G4int             RandomPoisson(G4double meanValue);
   G4double          GetQPartonMomentum(G4double mMinResidual2, G4double mCandidate2);

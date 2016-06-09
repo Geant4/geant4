@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MultipleScattering.cc,v 1.69 2007/06/11 15:01:26 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: G4MultipleScattering.cc,v 1.70 2007/10/29 08:57:19 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 // -----------------------------------------------------------------------------
 //
@@ -172,20 +172,22 @@ void G4MultipleScattering::InitialiseProcess(const G4ParticleDefinition* p)
     return;
   }
 
-  // initialisation of parameters
-  G4String part_name = p->GetParticleName();
-  mscUrban = new G4UrbanMscModel(RangeFactor(),dtrl,lambdalimit,
-                                 GeomFactor(),Skin(),
-                                 samplez,StepLimitType());
-  mscUrban->SetLateralDisplasmentFlag(LateralDisplasmentFlag());
-
+  // defaults for ions, which cannot be overwritten
   if (p->GetParticleType() == "nucleus") {
-    mscUrban->SetStepLimitType(fMinimal);
+    SetStepLimitType(fMinimal);
     SetLateralDisplasmentFlag(false);
     SetBuildLambdaTable(false);
     SetSkin(0.0);
     SetRangeFactor(0.2);
   }
+
+  // initialisation of parameters - defaults for particles other
+  // than ions can be overwritten by users
+  mscUrban = new G4UrbanMscModel(RangeFactor(),dtrl,lambdalimit,
+                                 GeomFactor(),Skin(),
+                                 samplez,StepLimitType());
+  mscUrban->SetLateralDisplasmentFlag(LateralDisplasmentFlag());
+
   AddEmModel(1,mscUrban);
   isInitialized = true;
   /*

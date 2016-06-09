@@ -33,7 +33,7 @@
 //    ************************************
 //
 // $Id: PurgMagAnalysisManager.cc,v 1.3 2006/06/29 16:06:09 gunter Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 #ifdef  G4ANALYSIS_USE
 #include <stdlib.h>

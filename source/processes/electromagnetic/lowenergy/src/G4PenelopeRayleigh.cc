@@ -25,8 +25,8 @@
 //
 // --------------------------------------------------------------------
 //
-// $Id: G4PenelopeRayleigh.cc,v 1.14 2006/06/29 19:40:53 gunter Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: G4PenelopeRayleigh.cc,v 1.15 2007/09/03 09:43:14 pandola Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 // Author: L. Pandola (luciano.pandola@cern.ch)
 //
@@ -38,6 +38,8 @@
 // 12 Mar 2003 L.Pandola      Code "cleaned" - Cuts per region 
 // 17 Mar 2004 L.Pandola      Removed unnecessary calls to std::pow(a,b)
 // 18 Mar 2004 M.Mendenhall   Introduced SamplingTable (performance improvement)
+// 03 Sep 2007 L.Pandola      Bug fix for the filling of physics table for 
+//                            compounds defined by the mass fraction (bug #965)
 // --------------------------------------------------------------------
 
 #include "G4PenelopeRayleigh.hh"
@@ -145,7 +147,6 @@ void G4PenelopeRayleigh::BuildPhysicsTable(const G4ParticleDefinition& )
 	  iright=i;
 	}
       }
-
       for (bin=0; bin<nOfBins; bin++)
 	{
 	  energies->push_back(energyVector[bin]);
@@ -160,14 +161,11 @@ void G4PenelopeRayleigh::BuildPhysicsTable(const G4ParticleDefinition& )
 	  cs = cs*(ec/energyVector[bin])*(ec/energyVector[bin])*pi*classic_electr_radius*classic_electr_radius;
 	  const G4double* vector_of_atoms = material->GetVecNbOfAtomsPerVolume();
 	  const G4int* stechiometric = material->GetAtomsVector();
-	  G4double density=0.;
+	  G4double density = vector_of_atoms[iright]; //non-bound molecules (default)
 	  if (stechiometric)
 	    {
-	      density = vector_of_atoms[iright]/stechiometric[iright]; //number of molecules per volume
-	    }
-	  else
-	    {
-	      density = vector_of_atoms[iright]; //non-bound molecules
+	      if (stechiometric[iright])
+		density = vector_of_atoms[iright]/stechiometric[iright]; //number of molecules per volume
 	    }
 	  G4double cross = density*cs;
 	  data->push_back(cross);
@@ -195,7 +193,7 @@ void G4PenelopeRayleigh::BuildPhysicsTable(const G4ParticleDefinition& )
 	  }
       }
       G4VEMDataSet* dataSet = new G4EMDataSet(m,energies,data,algo,1.,1.); 
-      materialSet->AddComponent(dataSet); 
+      materialSet->AddComponent(dataSet);
     }
   meanFreePathTable = materialSet;
 }
@@ -203,7 +201,6 @@ void G4PenelopeRayleigh::BuildPhysicsTable(const G4ParticleDefinition& )
 G4VParticleChange* G4PenelopeRayleigh::PostStepDoIt(const G4Track& aTrack,
 						     const G4Step& aStep)
 {
-
   aParticleChange.Initialize(aTrack);
 
   const G4DynamicParticle* incidentPhoton = aTrack.GetDynamicParticle();
@@ -497,7 +494,7 @@ G4double G4PenelopeRayleigh::MolecularFormFactor(G4double y)
 	fb=std::sin(2*Pg*std::atan(Pq))/(Pg*Pq*std::pow((1+Pq*Pq),Pg));
 	fa=std::max(fa,fb);
       }
-    if (stechiometric)
+    if (stechiometric && stechiometric[i]!=0)
       {
 	gradx1=gradx1+stechiometric[i]*(fa*fa); //sum on the molecule
       }

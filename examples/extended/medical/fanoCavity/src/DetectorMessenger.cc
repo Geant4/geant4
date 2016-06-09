@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: DetectorMessenger.cc,v 1.1 2007/01/19 17:20:27 maire Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: DetectorMessenger.cc,v 1.3 2007/11/05 13:44:18 maire Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -52,23 +52,17 @@ DetectorMessenger::DetectorMessenger(DetectorConstruction * Det)
   wallMater->SetGuidance("Set material of the wall.");
   wallMater->SetParameterName("wallMat",false);
   
-  wallThick = new G4UIcmdWithADoubleAndUnit("/testem/det/wallTickness",this);
+  wallThick = new G4UIcmdWithADoubleAndUnit("/testem/det/wallThickness",this);
   wallThick->SetGuidance("Set tickness of the wall");
   wallThick->SetParameterName("wallTick",false);
   wallThick->SetRange("wallTick>0.");
   wallThick->SetUnitCategory("Length");
-  
-  wallRadius = new G4UIcmdWithADoubleAndUnit("/testem/det/wallRadius",this);
-  wallRadius->SetGuidance("Set radius of the wall");
-  wallRadius->SetParameterName("wallRadius",false);
-  wallRadius->SetRange("wallRadius>0.");
-  wallRadius->SetUnitCategory("Length");
     
   cavMater = new G4UIcmdWithAString("/testem/det/cavityMater",this);
   cavMater->SetGuidance("Set material of the cavity.");
   cavMater->SetParameterName("cavMat",false);
   
-  cavThick = new G4UIcmdWithADoubleAndUnit("/testem/det/cavityTickness",this);
+  cavThick = new G4UIcmdWithADoubleAndUnit("/testem/det/cavityThickness",this);
   cavThick->SetGuidance("Set tickness of the cavity");
   cavThick->SetParameterName("cavityTick",false);
   cavThick->SetRange("cavityTick>0.");
@@ -93,7 +87,6 @@ DetectorMessenger::~DetectorMessenger()
 {
   delete wallMater;
   delete wallThick;
-  delete wallRadius;
   
   delete cavMater;
   delete cavThick;
@@ -113,9 +106,6 @@ void DetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
    
   if( command == wallThick )
    { Detector->SetWallThickness(wallThick->GetNewDoubleValue(newValue));}
-   
-  if( command == wallRadius )
-   { Detector->SetWallRadius(wallRadius->GetNewDoubleValue(newValue));}
       
   if( command == cavMater )
    { Detector->SetCavityMaterial(newValue);}

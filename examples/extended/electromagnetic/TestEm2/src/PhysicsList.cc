@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysicsList.cc,v 1.12 2006/10/20 16:03:41 maire Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: PhysicsList.cc,v 1.13 2007/06/22 16:35:07 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -35,6 +35,10 @@
 #include "PhysListEmStandard.hh"
 #include "PhysListEmLivermore.hh"
 #include "PhysListEmPenelope.hh"
+
+#include "G4EmStandardPhysics.hh"
+#include "G4EmStandardPhysics_option1.hh"
+#include "G4EmStandardPhysics_option2.hh"
 
 #include "G4LossTableManager.hh"
 #include "G4UnitsTable.hh"
@@ -203,6 +207,24 @@ void PhysicsList::AddPhysicsList(const G4String& name)
     delete emPhysicsList;
     emPhysicsList = new PhysListEmStandard(name);
     
+  } else if (name == "emstandard") {
+
+    emName = name;
+    delete emPhysicsList;
+    emPhysicsList = new G4EmStandardPhysics();
+
+  } else if (name == "emstandard_opt1") {
+
+    emName = name;
+    delete emPhysicsList;
+    emPhysicsList = new G4EmStandardPhysics_option1();
+
+  } else if (name == "emstandard_opt2") {
+
+    emName = name;
+    delete emPhysicsList;
+    emPhysicsList = new G4EmStandardPhysics_option2();
+
   } else if (name == "livermore") {
 
     emName = name;

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLXViewer.hh,v 1.27 2007/05/08 11:04:11 allison Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: G4OpenGLXViewer.hh,v 1.28 2007/11/10 14:50:01 allison Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 // 
 // Andrew Walkden  7th February 1997
@@ -104,8 +104,6 @@ protected:
   XClassHint                        *class_hints;
   Pixmap                            icon_pixmap;
   XSizeHints                        *size_hints;
-  unsigned int                      WinSize_x,
-                                    WinSize_y;
   Atom                              Xatom;
   XTextProperty                     windowName,
                                     iconName;

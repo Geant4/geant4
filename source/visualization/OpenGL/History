@@ -1,4 +1,4 @@
-$Id: History,v 1.93 2007/05/25 15:41:38 allison Exp $
+$Id: History,v 1.103 2007/11/19 19:45:39 perl Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -20,11 +20,62 @@ committal in the CVS repository !
 History file for visualization/OpenGL
 -------------------------------------
 
+19th November 2007  Joseph Perl (for Laurent Garnier) (opengl-V09-00-04)
+- Added GEANT4_QT_DEBUG flag to more places
+
+15th November 2007  John Allison  (opengl-V09-00-03)
+- Re-introduced Qt files, now properly protected by cpp flags.
+- cpp flags also added to some other files not previously properly protected.
+
+15 Nov 2007, Laurent Garnier
+ - G4UIQt,G4Qt : Adding a GEANT4_QT_DEBUG flag to hide all debug messages
+ - G4UIQt,G4Qt : Compilation improvements for Qt3
+ - G4UIQt,G4Qt : Minors corrections on G4UIQt helpWidget
+
+14 Nov 2007, Laurent Garnier
+ - G4OpenGLStoredQtViewer.cc : Correction of a bug with mouse move event in
+     Qt4
+ - G4OpenGLQtExportDialog_moc.cc, G4OpenGLQtViewer.cc, G4OpenGLQtViewer_moc.cc :
+     Adding protection for Qt version between 4.0 and 4.2
+
+13th November 2007  John Allison  (opengl-V09-00-02)
+- Removed Qt files from tag.  File are still at head - need fixing.
+
+13 Nov 2007, Laurent Garnier
+ - G4UIQt,G4Qt : Moving all moc in one big file interface/G4UIQT_moc.cc,
+   including Qt3 and Qt4 moc support
+
+10th November 2007  John Allison  (opengl-V09-00-01)
+- Moved WinSize_x, y to base class G4OpenGLViewer.
+- Minor improvement in guidance for /vis/ogl/printEPS.
+
+09 Nov 2007, Laurent Garnier
+ - G4UIQt,G4Qt : Change all include directive to be compatible with Qt3
+
+08 Nov 2007, Laurent Garnier
+ - moc_G4OpenGLQtExportDialog.cc move in G4OpenGLQtExportDialog_moc.cc
+ - moc_G4OpenGLQtViewer.cc move to G4OpenGLQtViewer_moc.cc
+
+27 Sept 2007, Laurent Garnier
+ - Adding sur files for G4UIQt driver :
+   - G4OpenGLImmediateQt.cc
+   - G4OpenGLImmediateQtViewer.cc
+   - G4OpenGLQtExportDialog.cc
+   - G4OpenGLQtViewer.cc
+   - G4OpenGLStoredQt.cc
+   - G4OpenGLStoredQtViewer.cc
+   - moc_G4OpenGLQtExportDialog.cc
+   - moc_G4OpenGLQtViewer.cc
+
+28th September 2007  lgarnier
+- first import of G4UI Qt files : Do not try to compil them
+
+21st August 2007  John Allison  (opengl-V09-00-00)
+- Removed redundant G4OpenGLXViewerMessenger.
+
 25th May 2007  John Allison  (opengl-V08-03-03)
 - G4OpenGLSceneHandler and G4OpenGLXViewerMessenger:
   Fixed gcc-4.1.2 compiler warnings.
-
-G4OpenGLXViewer: Trapped glXMakeCurrent in Initialise function.
 
 25th May 2007  John Allison  (opengl-V08-03-02)
 - G4OpenGLXViewer: Trapped glXMakeCurrent in Initialise function.

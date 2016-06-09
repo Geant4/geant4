@@ -25,7 +25,7 @@
 //
 //
 // $Id: F03DetectorMessenger.cc,v 1.5 2006/06/29 17:19:26 gunter Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 // 
 

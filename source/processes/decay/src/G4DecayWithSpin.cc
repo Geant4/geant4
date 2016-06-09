@@ -153,20 +153,19 @@ G4ThreeVector G4DecayWithSpin::Spin_Precession( const G4Step& aStep,
   G4Vector3D newSpin = SpinRotation * Spin;
 
 #ifdef G4VERBOSE
+  if (GetVerboseLevel()>2) {
+    G4double normspin = std::sqrt(Spin*Spin);
+    G4double normnewspin = std::sqrt(newSpin*newSpin);
+    //G4double cosalpha = Spin*newSpin/normspin/normnewspin;
+    //G4double alpha = std::acos(cosalpha);
 
-//  G4double normspin = std::sqrt(Spin*Spin);
-//  G4double normnewspin = std::sqrt(newSpin*newSpin);
-//  G4double cosalpha = Spin*newSpin/normspin/normnewspin;
-//  G4double alpha = std::acos(cosalpha);
-
-//  G4cout<< "AT REST::: PARAMETERS\n"
-//        << "Initial spin  : " << Spin <<"\n"
-//        << "Delta time    : " << deltatime <<"\n"
-//        << "Rotation angle: " << rotationangle/rad <<"\n"
-//        << "New spin      : " << newSpin <<"\n"
-//        << "Checked norms : " << normspin <<" " << normnewspin <<" \n"
-//        << G4endl;
-
+    G4cout << "AT REST::: PARAMETERS " << G4endl;
+    G4cout << "Initial spin  : " << Spin  << G4endl;
+    G4cout << "Delta time    : " << deltatime  << G4endl;
+    G4cout << "Rotation angle: " << rotationangle/rad  << G4endl;
+    G4cout << "New spin      : " << newSpin  << G4endl;
+    G4cout << "Checked norms : " << normspin <<" " << normnewspin << G4endl;
+  }
 #endif
 
   return newSpin;

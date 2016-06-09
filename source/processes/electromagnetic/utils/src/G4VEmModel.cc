@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEmModel.cc,v 1.6 2006/06/29 19:55:17 gunter Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: G4VEmModel.cc,v 1.8 2007/09/25 10:19:07 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 // -------------------------------------------------------------------
 //
@@ -94,7 +94,7 @@ G4double G4VEmModel::ComputeMeanFreePath(const G4ParticleDefinition* p,
 {
   G4double mfp = DBL_MAX;
   G4double cross = CrossSectionPerVolume(material,p,ekin,emin,emax);
-  if (cross >0.) mfp = 1./cross;
+  if (cross > DBL_MIN) mfp = 1./cross;
   return mfp;
 }
 

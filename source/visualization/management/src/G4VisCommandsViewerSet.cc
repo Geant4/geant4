@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsViewerSet.cc,v 1.48 2007/04/03 13:33:16 allison Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: G4VisCommandsViewerSet.cc,v 1.49 2007/07/10 17:51:54 allison Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 
 // /vis/viewer/set commands - John Allison  16th May 2000
 
@@ -469,8 +469,10 @@ void G4VisCommandsViewerSet::SetNewValue
       G4cout << "be automatically refreshed after a change of view parameters."
 	     << G4endl;
     }
-    currentViewer->SetViewParameters(vp);
-    return;  // I.e., avoid a refresh for this command.
+    if (!vp.IsAutoRefresh()) {
+      currentViewer->SetViewParameters(vp);
+      return;  // Avoid a refresh id auto-refresh has been set to off...
+    }  // ...otherwise take normal action.
   }
 
   else if (command == fpCommandAuxEdge) {

@@ -29,7 +29,7 @@
 // Main author:   Riccardo Capra <capra@ge.infn.it>
 //
 // Id:            $Id: RadmonPhysicsMuonStandard.cc,v 1.4 2006/06/29 16:19:01 gunter Exp $
-// Tag:           $Name: geant4-09-00 $
+// Tag:           $Name: geant4-09-01 $
 //
 
 #include "RadmonPhysicsMuonStandard.hh"

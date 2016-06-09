@@ -24,8 +24,13 @@
 // ********************************************************************
 //
 //
-// $Id: HepPolyhedron.cc,v 1.23 2006/11/07 11:48:51 allison Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+//<<<<<<< HepPolyhedron.cc
+// $Id: HepPolyhedron.cc,v 1.26 2007/08/21 14:10:03 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-01 $
+//=======
+// $Id: HepPolyhedron.cc,v 1.26 2007/08/21 14:10:03 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-01 $
+//>>>>>>> 1.24
 //
 // 
 //
@@ -1489,6 +1494,127 @@ HepPolyhedronPara::HepPolyhedronPara(double Dx, double Dy, double Dz,
 
 HepPolyhedronPara::~HepPolyhedronPara() {}
 
+HepPolyhedronParaboloid::HepPolyhedronParaboloid(double r1,
+                                                 double r2,
+                                                 double dz,
+                                                 double sPhi,
+                                                 double dPhi) 
+/***********************************************************************
+ *                                                                     *
+ * Name: HepPolyhedronParaboloid                     Date:    28.06.07 *
+ *       ::HepPolyhedronParaboloid                                     *
+ * Author:                                           Revised:          *
+ *                                                                     *
+ * Function: Constructor for paraboloid                                *
+ *                                                                     *
+ * Input: r1    - inside and outside radiuses at -Dz                   *
+ *        r2    - inside and outside radiuses at +Dz                   *
+ *        dz    - half length in Z                                     *
+ *        sPhi  - starting angle of the segment                        *
+ *        dPhi  - segment range                                        *
+ *                                                                     *
+ ***********************************************************************/
+{
+  static double wholeCircle=twopi;
+
+  //   C H E C K   I N P U T   P A R A M E T E R S
+
+  int k = 0;
+  if (r1 < 0. || r2 <= 0.)        k = 1;
+
+  if (dz <= 0.) k += 2;
+
+  double phi1, phi2, dphi;
+
+  if(dPhi < 0.)
+  {
+    phi2 = sPhi; phi1 = phi2 + dPhi;
+  }
+  else if(dPhi == 0.) 
+  {
+    phi1 = sPhi; phi2 = phi1 + wholeCircle;
+  }
+  else
+  {
+    phi1 = sPhi; phi2 = phi1 + dPhi;
+  }
+  dphi  = phi2 - phi1;
+
+  if (std::abs(dphi-wholeCircle) < perMillion) dphi = wholeCircle;
+  if (dphi > wholeCircle) k += 4; 
+
+  if (k != 0) {
+    std::cerr << "HepPolyhedronParaboloid: error in input parameters";
+    if ((k & 1) != 0) std::cerr << " (radiuses)";
+    if ((k & 2) != 0) std::cerr << " (half-length)";
+    if ((k & 4) != 0) std::cerr << " (angles)";
+    std::cerr << std::endl;
+    std::cerr << " r1=" << r1;
+    std::cerr << " r2=" << r2;
+    std::cerr << " dz=" << dz << " sPhi=" << sPhi << " dPhi=" << dPhi
+              << std::endl;
+    return;
+  }
+  
+  //   P R E P A R E   T W O   P O L Y L I N E S
+
+  int n = GetNumberOfRotationSteps();
+  double a1 = 2 * dz * r2*r2 / (r2*r2 - r1*r1), 
+         a2 = 2 * dz * r1*r1 / (r2*r2 - r1*r1), 
+         b = 2 * r2, A, l1, l2 = 0, l, scale, dl, k1, k2;
+  A = std::sqrt(b*b + 16 * a1*a1);
+  l1 = A / 2 + b*b / 8 / a1 * std::log((4 * a1 + A) / b);
+  if(a2 != 0)
+  {
+    A = std::sqrt(b*b + 16 * a2*a2);
+    l2 = A / 2 + b*b / 8 / a2 * std::log((4 * a2 + A) / b);
+  }
+  l = (l1 - l2) / 2;
+  dl  = l / n;
+  scale = dl;
+  k1 = (r2*r2 - r1*r1) / 2 / dz;
+  k2 = (r2*r2 + r1*r1) / 2;
+
+  double *zz = new double[n + 1], *rr = new double[n + 1];
+
+  zz[0] = dz;
+  rr[0] = r2;
+
+
+  for(int i = 1; i < n - 1; i++)
+  {
+    rr[i] = rr[i-1] - dl;
+    zz[i] = (rr[i]*rr[i] - k2) / k1;
+    while(rr[i] > 0 && (scale = std::sqrt((rr[i] - rr[i-1])*(rr[i] - rr[i-1]) + (zz[i]-zz[i-1])*(zz[i]-zz[i-1]))) < 0.9999 * dl || scale > 1.0001 * dl) // This should maybe be changed to a constant
+    {
+      rr[i] += (scale - dl) / scale * (rr[i-1] - rr[i]);
+      zz[i] = (rr[i]*rr[i] - k2) / k1;
+    }
+    if(rr[i] < 0)
+    {
+      rr[i] = 0;
+      zz[i] = 0;
+    }
+  }
+
+
+  zz[n-1] = -dz;
+  rr[n-1] = r1;
+
+  zz[n] =  dz;
+  rr[n] =  0;
+
+  //   R O T A T E    P O L Y L I N E S
+
+  RotateAroundZ(0, phi1, dphi, n, 1, zz, rr, -1, -1); 
+  SetReferences();
+
+  delete zz;
+  delete rr;
+}
+
+HepPolyhedronParaboloid::~HepPolyhedronParaboloid() {}
+
 HepPolyhedronCons::HepPolyhedronCons(double Rmn1,
                                      double Rmx1,
                                      double Rmn2,
@@ -2041,8 +2167,8 @@ HepPolyhedronEllipticalCone::HepPolyhedronEllipticalCone(double ax,
  {
    Point3D<double> * p= pV;
    for (int i=0; i<nvert; i++, p++) {
-     p->setX( p->x() * ax / h);
-     p->setY( p->y() * ay / h);
+     p->setX( p->x() * ax );
+     p->setY( p->y() * ay );
    }
  }
 }

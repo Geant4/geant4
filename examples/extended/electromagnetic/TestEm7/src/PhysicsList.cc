@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysicsList.cc,v 1.24 2007/05/16 13:14:17 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: PhysicsList.cc,v 1.27 2007/11/19 15:02:04 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -34,6 +34,7 @@
 
 #include "PhysListEmStandard.hh"
 #include "PhysListEmStandardSS.hh"
+#include "PhysListEmStandardIG.hh"
 #include "PhysListEmLivermore.hh"
 #include "PhysListEmPenelope.hh"
 #include "G4EmStandardPhysics.hh"
@@ -41,6 +42,7 @@
 #include "G4EmStandardPhysics_option2.hh"
 
 #include "G4HadronElasticPhysics.hh"
+#include "G4HadronDElasticPhysics.hh"
 #include "G4HadronHElasticPhysics.hh"
 #include "G4HadronQElasticPhysics.hh"
 #include "G4HadronInelasticQBBC.hh"
@@ -228,6 +230,12 @@ void PhysicsList::AddPhysicsList(const G4String& name)
     delete emPhysicsList;
     emPhysicsList = new PhysListEmStandardSS(name);
 
+  } else if (name == "standardNR") {
+
+    emName = name;
+    delete emPhysicsList;
+    emPhysicsList = new PhysListEmStandardIG(name);
+
   } else if (name == "livermore") {
     emName = name;
     delete emPhysicsList;
@@ -239,15 +247,19 @@ void PhysicsList::AddPhysicsList(const G4String& name)
     emPhysicsList = new PhysListEmPenelope();
 
   } else if (name == "elastic" && !helIsRegisted) {
-    hadronPhys.push_back( new G4HadronElasticPhysics(name));
+    hadronPhys.push_back( new G4HadronElasticPhysics());
+    helIsRegisted = true;
+
+  } else if (name == "DElastic" && !helIsRegisted) {
+    hadronPhys.push_back( new G4HadronDElasticPhysics());
     helIsRegisted = true;
 
   } else if (name == "HElastic" && !helIsRegisted) {
-    hadronPhys.push_back( new G4HadronHElasticPhysics(name));
+    hadronPhys.push_back( new G4HadronHElasticPhysics());
     helIsRegisted = true;
 
   } else if (name == "QElastic" && !helIsRegisted) {
-    hadronPhys.push_back( new G4HadronQElasticPhysics(name));
+    hadronPhys.push_back( new G4HadronQElasticPhysics());
     helIsRegisted = true;
 
   } else if (name == "binary" && !bicIsRegisted) {

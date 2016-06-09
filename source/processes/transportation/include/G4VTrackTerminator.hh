@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4VTrackTerminator.hh,v 1.7 2007/05/11 14:13:20 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 // ----------------------------------------------------------------------
 // Class G4VTrackTerminator

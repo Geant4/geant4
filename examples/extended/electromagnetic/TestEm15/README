@@ -1,4 +1,4 @@
-$Id: README,v 1.3 2006/05/15 14:43:23 maire Exp $
+$Id: README,v 1.4 2007/11/13 14:13:31 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -77,6 +77,11 @@ $Id: README,v 1.3 2006/05/15 14:43:23 maire Exp $
  	/testem/histo/setFileName  name  (default testem15)
    	/testem/histo/setFileType  name  (default hbook)
 	
+        It is also possible to print selected histograms on an ascii file:
+        /testem/histo/printHisto id
+        All selected histos will be written on a file name.ascii  
+        (default testem15)
+    	
 	Note that, by default, histograms are disabled. To activate them, 
 	uncomment the flag G4ANALYSIS_USE in GNUmakefile. 	
  	 				

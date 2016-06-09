@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: RemSimPrimaryGeneratorAction.hh,v 1.14 2006/06/29 16:23:07 gunter Exp $// GEANT4 tag $Name: geant4-09-00 $
+// $Id: RemSimPrimaryGeneratorAction.hh,v 1.14 2006/06/29 16:23:07 gunter Exp $// GEANT4 tag $Name: geant4-09-01 $
 //
 // Author: Susanna Guatelli, guatelli@ge.infn.it
 //

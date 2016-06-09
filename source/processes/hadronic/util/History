@@ -14,6 +14,18 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+11 Oct 2007 F.W. Jones (hadr-util-V09-00-00)
+--------------------------------------------
+- G4LightMedia: fixed coding errors in inequalities for
+                charge exchange occurrence in PionPlusExchange,
+                KaonZeroShortExchange, and NeutronExchange.
+
+13 August 2007 Dennis Wright (hadr-util-V08-03-00a)
+---------------------------------------------------
+- special CMS tag: geant4-08-03-ref-00 + hadr-util-V08-03-02.
+  On top of geant4-08-03-ref-00, this contains only array bounds, units 
+  and backward peak fixes in G4ReactionDynamics
+
 27 June 2007 Alex Howard (hadr-util-V08-03-03)
 ------------------------------------------------
 - Removed DumpCoreOnHadronicException protection around Report() in
@@ -30,18 +42,18 @@ code and to keep track of all tags.
   1) sharp peak at 180 degrees for low and medium energies due to a units
      error:
          G4double totalE = kineticE + vMass;
-     was changed to 
+     was changed to
          G4double totalE = kineticE*GeV + vMass;
      Result is that particles from intra-nuclear cascade now have energies
-     ~ 100 MeV instead of almost 0. 
+     ~ 100 MeV instead of almost 0.
 
   2) sharp peak at 180 degrees for low and medium energies and target nuclei
      with Z > 6 due to incorrect sampling of polar angle:
-     replaced 
-         G4double costheta = 
+     replaced
+         G4double costheta =
             1.0 + 2.0*std::log(1.0 - G4UniformRand()) / dtb;
-     with 
-         G4double costheta = 
+     with
+         G4double costheta =
             1.0 + 2.0*std::log(1.0 - G4UniformRand()*factor) / dtb;
             where factor = 1.0 - std::exp(-dtb) and dtb is momentum-dependent
 

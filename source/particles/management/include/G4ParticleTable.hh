@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleTable.hh,v 1.18 2006/06/29 19:24:32 gunter Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: G4ParticleTable.hh,v 1.19 2007/09/14 07:04:09 kurasige Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 // 
 // ------------------------------------------------------------
@@ -120,11 +120,19 @@ class G4ParticleTable
    G4ParticleDefinition* FindIon( G4int    atomicNumber, 
 				  G4int    atomicMass, 
 				  G4double excitationEnergy );
+   G4ParticleDefinition* FindIon( G4int    atomicNumber, 
+				  G4int    atomicMass, 
+				  G4int    numberOfLambda, 
+				  G4double excitationEnergy );
    //  return the pointer to an ion  (returns 0 if the ion does not exist)
    //  the ion has excitation energy nearest to given excitationEnergy  (0: ground state)
 
    G4ParticleDefinition* GetIon(  G4int    atomicNumber, 
 				  G4int    atomicMass, 
+				  G4double   excitationEnergy);
+   G4ParticleDefinition* GetIon(  G4int    atomicNumber, 
+				  G4int    atomicMass, 
+				  G4int    numberOfLambda, 
 				  G4double   excitationEnergy);
    //  return the pointer to an ion ( create ion if the ion does not exist)
    //  It has excitation energy nearest to given excitationEnergy  (0: ground state)
@@ -166,7 +174,7 @@ class G4ParticleTable
 
  public: //With Description
 
-   const G4IonTable* GetIonTable();
+   G4IonTable* GetIonTable();
    // return the pointer to G4IonTable object
 
    const G4ShortLivedTable* GetShortLivedTable();

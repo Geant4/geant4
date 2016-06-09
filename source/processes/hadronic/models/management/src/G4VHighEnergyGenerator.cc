@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4VHighEnergyGenerator.cc,v 1.5 2006/06/29 20:46:03 gunter Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 // G4VHighEnergyGenerator
 #include "G4VHighEnergyGenerator.hh"

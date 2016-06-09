@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RunAction.cc,v 1.7 2007/04/27 10:38:11 maire Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: RunAction.cc,v 1.8 2007/08/19 20:57:29 maire Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -89,17 +89,17 @@ void RunAction::BeginOfRunAction(const G4Run* aRun)
   G4ParticleDefinition* particle = kinematic->GetParticleGun()
                                           ->GetParticleDefinition();
   G4double energy = kinematic->GetParticleGun()->GetParticleEnergy();
-  csdaRange = 0.;
+  csdaRange = DBL_MAX;
   if (particle->GetPDGCharge() != 0.)
     csdaRange = emCalculator.GetCSDARange(energy,particle,material);
-    		    
+     		    
   //histograms
   //
-  histoManager->book(csdaRange);
+  histoManager->book();
   
   //set StepMax from histos
   //
-  G4double stepMax = histoManager->GetStepMax();
+  G4double stepMax = histoManager->ComputeStepMax(csdaRange);
   physics->GetStepMaxProcess()->SetMaxStep(stepMax);
 }
 

@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BohrFluctuations.hh,v 1.2 2006/06/29 19:50:04 gunter Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: G4BohrFluctuations.hh,v 1.3 2007/09/27 13:53:11 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 // -------------------------------------------------------------------
 //
@@ -112,9 +112,9 @@ inline G4double G4BohrFluctuations::Dispersion(
   if(!particle) InitialiseMe(dp->GetDefinition());
 
   G4double electronDensity = material->GetElectronDensity();
-  kineticEnergy  = dp->GetKineticEnergy();
-  G4double gam   = kineticEnergy/particleMass + 1.0;
-  beta2 = 1.0 - 1.0/(gam*gam);
+  kineticEnergy = dp->GetKineticEnergy();
+  G4double etot = kineticEnergy + particleMass;
+  beta2 = kineticEnergy*(kineticEnergy + 2.0*particleMass)/(etot*etot);
   G4double siga  = (1.0/beta2 - 0.5) * twopi_mc2_rcl2 * tmax * length
                  * electronDensity * chargeSquare;
 

@@ -8,6 +8,10 @@ $Id: History, v 1.6 2004/02/27  G.A.P. Cirrone
 
                       Category History file
 
+16.11.2007 Anton Lechner tag hadrontherapy-V09-00-00
+           Updated physics commands in macro files
+           Updated README
+
 07.06.2007 MGP tag hadrontherapy-V08-03-04
            On top of head as on 07.06.2007
            Physics component redesigned and reimplemented by Anton Lechner

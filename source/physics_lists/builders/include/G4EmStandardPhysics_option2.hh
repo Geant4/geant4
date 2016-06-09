@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4EmStandardPhysics_option2.hh,v 1.1 2007/05/16 11:35:36 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 //---------------------------------------------------------------------------
 //

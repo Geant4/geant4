@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEmProcess.cc,v 1.40 2007/05/23 08:43:46 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: G4VEmProcess.cc,v 1.48 2007/10/29 08:38:58 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 // -------------------------------------------------------------------
 //
@@ -50,6 +50,7 @@
 // 11-01-06 add A to parameters of ComputeCrossSectionPerAtom (VI)
 // 12-09-06 add SetModel() (mma)
 // 12-04-07 remove double call to Clear model manager (V.Ivanchenko)
+// 27-10-07 Virtual functions moved to source (V.Ivanchenko)
 //
 // Class Description:
 //
@@ -118,7 +119,10 @@ G4VEmProcess::~G4VEmProcess()
     G4cout << "G4VEmProcess destruct " << GetProcessName() 
 	   << G4endl;
   Clear();
-  if(theLambdaTable) theLambdaTable->clearAndDestroy();
+  if(theLambdaTable) {
+    theLambdaTable->clearAndDestroy();
+    delete theLambdaTable;
+  }
   delete modelManager;
   (G4LossTableManager::Instance())->DeRegister(this);
 }
@@ -139,8 +143,7 @@ void G4VEmProcess::PreparePhysicsTable(const G4ParticleDefinition& part)
   if(particle == &part) {
     Clear();
     InitialiseProcess(particle);
-    theCutsGamma =
-        modelManager->Initialise(particle,secondaryParticle,2.,verboseLevel);
+    theCuts = modelManager->Initialise(particle,secondaryParticle,2.,verboseLevel);
     const G4ProductionCutsTable* theCoupleTable=
           G4ProductionCutsTable::GetProductionCutsTable();
     theCutsGamma    = theCoupleTable->GetEnergyCutsVector(idxG4GammaCut);
@@ -229,11 +232,74 @@ void G4VEmProcess::BuildLambdaTable()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4VEmProcess::AddEmModel(G4int order, G4VEmModel* p, 
-			      const G4Region* region)
+G4double G4VEmProcess::PostStepGetPhysicalInteractionLength(
+                             const G4Track& track,
+                             G4double   previousStepSize,
+                             G4ForceCondition* condition)
 {
-  modelManager->AddEmModel(order, p, 0, region);
-  if(p) p->SetParticleChange(pParticleChange);
+  // condition is set to "Not Forced"
+  *condition = NotForced;
+  G4double x = DBL_MAX;
+  if(previousStepSize <= DBL_MIN) theNumberOfInteractionLengthLeft = -1.0;
+  InitialiseStep(track);
+
+  if(preStepKinEnergy < mfpKinEnergy) {
+    if (integral) ComputeIntegralLambda(preStepKinEnergy);
+    else  preStepLambda = GetCurrentLambda(preStepKinEnergy);
+    if(preStepLambda <= DBL_MIN) mfpKinEnergy = 0.0;
+  }
+
+  // non-zero cross section
+  if(preStepLambda > DBL_MIN) { 
+    if (theNumberOfInteractionLengthLeft < 0.0) {
+      // beggining of tracking (or just after DoIt of this process)
+      ResetNumberOfInteractionLengthLeft();
+    } else if(currentInteractionLength < DBL_MAX) {
+      // subtract NumberOfInteractionLengthLeft
+      SubtractNumberOfInteractionLengthLeft(previousStepSize);
+      if(theNumberOfInteractionLengthLeft < 0.)
+	theNumberOfInteractionLengthLeft = perMillion;
+    }
+
+    // get mean free path and step limit
+    currentInteractionLength = 1.0/preStepLambda;
+    x = theNumberOfInteractionLengthLeft * currentInteractionLength;
+#ifdef G4VERBOSE
+    if (verboseLevel>2){
+      G4cout << "G4VEmProcess::PostStepGetPhysicalInteractionLength ";
+      G4cout << "[ " << GetProcessName() << "]" << G4endl; 
+      G4cout << " for " << particle->GetParticleName() 
+	     << " in Material  " <<  currentMaterial->GetName()
+	     << " Ekin(MeV)= " << preStepKinEnergy/MeV 
+	     <<G4endl;
+      G4cout << "MeanFreePath = " << currentInteractionLength/cm << "[cm]" 
+	     << "InteractionLength= " << x/cm <<"[cm] " <<G4endl;
+    }
+#endif
+
+    // zero cross section case
+  } else {
+    if(theNumberOfInteractionLengthLeft > DBL_MIN && 
+       currentInteractionLength < DBL_MAX) {
+
+      // subtract NumberOfInteractionLengthLeft
+      SubtractNumberOfInteractionLengthLeft(previousStepSize);
+      if(theNumberOfInteractionLengthLeft < 0.)
+	theNumberOfInteractionLengthLeft = perMillion;
+    }
+    currentInteractionLength = DBL_MAX;
+  }
+  return x;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4double G4VEmProcess::GetMeanFreePath(const G4Track& track,
+				       G4double,
+				       G4ForceCondition* condition)
+{
+  *condition = NotForced;
+  return G4VEmProcess::MeanFreePath(track);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -283,7 +349,8 @@ G4VParticleChange* G4VEmProcess::PostStepDoIt(const G4Track& track,
   secParticles.clear();
   currentModel->SampleSecondaries(&secParticles, 
 				  currentCouple, 
-				  track.GetDynamicParticle());
+				  track.GetDynamicParticle(),
+				  (*theCuts)[currentMaterialIndex]);
 
   // save secondaries
   G4int num = secParticles.size();

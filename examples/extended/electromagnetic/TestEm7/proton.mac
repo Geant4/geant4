@@ -1,4 +1,4 @@
-# $Id: proton.mac,v 1.7 2007/06/22 12:44:42 maire Exp $
+# $Id: proton.mac,v 1.10 2007/07/28 16:39:31 vnivanch Exp $
 #
 # Macro file for "TestEm7.cc"
 # (can be run in batch, without graphic)
@@ -8,15 +8,15 @@
 /run/verbose 2
 #
 /testem/det/setMat Water
-/testem/det/setSizeX  30 cm
-/testem/det/setSizeYZ 30 cm
+/testem/det/setSizeX  10 cm
+/testem/det/setSizeYZ 10 cm
 #
 /testem/phys/addPhysics  standard	#em physics
 #
 /run/initialize
 #
 /gun/particle proton
-/gun/energy 2000 MeV
+/gun/energy 100 MeV
 #
 # step limit
 /testem/stepMax 0.5 mm

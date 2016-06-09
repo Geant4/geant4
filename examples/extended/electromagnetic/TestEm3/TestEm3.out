@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: geant4-09-00-cand-03    (29-June-2007)
+ Geant4 version Name: global-V09-00-02    (14-December-2007)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -8,7 +8,7 @@
 
 /run/verbose 2
 #
-/testem/phys/addPhysics  standard
+/testem/phys/addPhysics emstandard
 #
 /run/initialize
 userDetector->Construct() start.
@@ -19,17 +19,17 @@ userDetector->Construct() start.
  	 liquidArgon:    5.7 mm 
 -------------------------------------------------------------
 
- Material: Galactic     density:  0.000 mg/cm3  temperature:   2.73 K  pressure:   0.00 atm  RadLength: 204322175.595 pc 
+ Material: Galactic     density:  0.000 mg/cm3  RadL: 204322175.595 pc   Imean:  21.800 eV   temperature:   2.73 K  pressure:   0.00 atm
    --->  Element: Galactic ( )   Z =  1.0   N =   1.0   A =   1.01 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
- Material:     Lead     density: 11.350 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   5.613 mm 
+ Material:     Lead     density: 11.350 g/cm3   RadL:   5.613 mm   Imean: 820.000 eV 
    --->  Element: Pb (Pb)   Z = 82.0   N = 207.2   A = 207.22 g/mole
    --->  Isotope:    Pb   Z = 82   N = 204   A = 203.97 g/mole   abundance:   1.40 %
    --->  Isotope:    Pb   Z = 82   N = 206   A = 205.97 g/mole   abundance:  24.10 %
    --->  Isotope:    Pb   Z = 82   N = 207   A = 206.98 g/mole   abundance:  22.10 %
    --->  Isotope:    Pb   Z = 82   N = 208   A = 207.98 g/mole   abundance:  52.40 %  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
- Material: liquidArgon     density:  1.390 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:  14.064 cm 
+ Material: liquidArgon     density:  1.390 g/cm3   RadL:  14.064 cm   Imean: 187.200 eV 
    --->  Element: Ar (Ar)   Z = 18.0   N =  40.0   A =  39.95 g/mole
    --->  Isotope:    Ar   Z = 18   N =  36   A =  35.97 g/mole   abundance:   0.34 %
    --->  Isotope:    Ar   Z = 18   N =  38   A =  37.96 g/mole   abundance:   0.06 %
@@ -41,23 +41,26 @@ physicsList->Construct() start.
 physicsList->Construct() start.
 physicsList->setCut() start.
 PhysicsList::SetCuts:CutLength : 1 mm 
+/process/eLoss/verbose 1
+/process/msc/Skin 1
+/run/physicsModified
 #
 /gun/particle e-
 /gun/energy 1 GeV
 #
 /testem/histo/setFileName testem3
 /testem/histo/setFileType hbook
-/testem/histo/setHisto 1 100 700. 1000. MeV	#edep in absor1
+/testem/histo/setHisto 1 100 700. 1000. MeV 
 ----> SetHisto 1: Edep in absorber 1 (MeV);  100 bins from 700 MeV to 1000 MeV
-/testem/histo/setHisto 2 100   0.  300. MeV	#edep in absor2
+/testem/histo/setHisto 2 100 0. 300. MeV 
 ----> SetHisto 2: Edep in absorber 2 (MeV);  100 bins from 0 MeV to 300 MeV
-/testem/histo/setHisto 11 52   0.   52.  none	#long. profile in absor1
+/testem/histo/setHisto 11 52 0. 52. none 
 ----> SetHisto 11: longit. profile of Edep (MeV/event) in absorber 1;  52 bins from 0 none to 52 none
-/testem/histo/setHisto 12 52   0.   52.  none	#long. profile in absor2
+/testem/histo/setHisto 12 52 0. 52. none 
 ----> SetHisto 12: longit. profile of Edep (MeV/event) in absorber 2;  52 bins from 0 none to 52 none
-/testem/histo/setHisto 21 102  0.   102. none	#energy flow
+/testem/histo/setHisto 21 102 0. 102. none 
 ----> SetHisto 21: energy flow (MeV/event);  102 bins from 0 none to 102 none
-/testem/histo/setHisto 22 102  0.   102. none	#lateral energy leakage
+/testem/histo/setHisto 22 102 0. 102. none 
 ----> SetHisto 22: lateral energy leak (MeV/event);  102 bins from 0 none to 102 none
 #
 /testem/event/printModulo 50
@@ -87,7 +90,7 @@ eIoni:   tables are built for  e-
       Lambda tables from threshold to 100 TeV in 120 bins.
       Delta cross sections and sampling from MollerBhabha model
       Good description from 1 KeV to 100 GeV.
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1
 
 eBrem:   tables are built for  e-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -100,7 +103,7 @@ eIoni:   tables are built for  e+
       Lambda tables from threshold to 100 TeV in 120 bins.
       Delta cross sections and sampling from MollerBhabha model
       Good description from 1 KeV to 100 GeV.
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1
 
 eBrem:   tables are built for  e+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -115,7 +118,7 @@ annihil:       Sampling according eplus2gg model
 msc:  Model variant of multiple scattering for proton
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
       LateralDisplacementFlag=  1   Skin= 1
-      Boundary/stepping algorithm is active with RangeFactor= 0.02  Step limit type 2
+      Boundary/stepping algorithm is active with RangeFactor= 0.2  Step limit type 2
 
 hIoni:   tables are built for  proton
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -123,7 +126,7 @@ hIoni:   tables are built for  proton
       Scaling relation is used from proton dE/dx and range.
       Delta cross sections and sampling from BetheBloch model for scaled energy > 2 MeV
       Parametrisation from Bragg for protons below.
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1
 
 msc:  Model variant of multiple scattering for GenericIon
       LateralDisplacementFlag=  0   Skin= 0
@@ -137,7 +140,7 @@ ionIoni:   tables are built for  GenericIon
       Parametrisation from BraggIon for protons below. NuclearStopping 1
 
       Stopping Power data for 8 ion/material pairs are used.
-      Step function: finalRange(mm)= 0.1, dRoverRange= 0.1, integral: 1
+      Step function: finalRange(mm)= 0.1, dRoverRange= 0.1, integral: 1, fluct: 1
 
 hIoni:   tables are built for  anti_proton
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -145,19 +148,19 @@ hIoni:   tables are built for  anti_proton
       Scaling relation is used from proton dE/dx and range.
       Delta cross sections and sampling from BetheBloch model for scaled energy > 2 MeV
       Parametrisation from Bragg for protons below.
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1
 
 msc:  Model variant of multiple scattering for mu+
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
       LateralDisplacementFlag=  1   Skin= 1
-      Boundary/stepping algorithm is active with RangeFactor= 0.02  Step limit type 2
+      Boundary/stepping algorithm is active with RangeFactor= 0.2  Step limit type 2
 
 muIoni:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
       radiative corrections for E > 1 GeV
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1
 
 muBrems:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -174,7 +177,7 @@ muIoni:   tables are built for  mu-
       Lambda tables from threshold to 100 TeV in 120 bins.
       Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
       radiative corrections for E > 1 GeV
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1
 
 muBrems:   tables are built for  mu-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -192,12 +195,12 @@ hIoni:   tables are built for  pi+
       Scaling relation is used from proton dE/dx and range.
       Delta cross sections and sampling from BetheBloch model for scaled energy > 0.297504 MeV
       Parametrisation from Bragg for protons below.
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1
 
 msc:  Model variant of multiple scattering for pi-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
       LateralDisplacementFlag=  1   Skin= 1
-      Boundary/stepping algorithm is active with RangeFactor= 0.02  Step limit type 2
+      Boundary/stepping algorithm is active with RangeFactor= 0.2  Step limit type 2
 
 hIoni:   tables are built for  pi-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -205,7 +208,7 @@ hIoni:   tables are built for  pi-
       Scaling relation is used from proton dE/dx and range.
       Delta cross sections and sampling from BetheBloch model for scaled energy > 0.297504 MeV
       Parametrisation from Bragg for protons below.
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1
 
 Region <DefaultRegionForTheWorld> -- appears in <World> world volume
  Root logical volume(s) : World 
@@ -242,19 +245,19 @@ Start closing geometry.
 G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 
     Total memory consumed for geometry optimisation:   1 kByte
-    Total CPU time elapsed for geometry optimisation: 0 seconds
+    Total CPU time elapsed for geometry optimisation: 0.01 seconds
 
     Voxelisation: top CPU users:
     Percent   Total CPU    System CPU       Memory  Volume
     -------   ----------   ----------     --------  ----------
+     100.00         0.01         0.00            0k Layer
        0.00         0.00         0.00            2k Calorimeter
-       0.00         0.00         0.00            0k Layer
 
     Voxelisation: top memory users:
     Percent     Memory      Heads    Nodes   Pointers    Total CPU    Volume
     -------   --------     ------   ------   --------   ----------    ----------
       91.70          1k         1       50         50         0.00    Calorimeter
-       8.30          0k         1        3          4         0.00    Layer
+       8.30          0k         1        3          4         0.01    Layer
 ### Run 0 start.
 
 --------- Ranecu engine status ---------
@@ -269,28 +272,28 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=185.5s Real=186.77s Sys=0.04s
+  User=182.99s Real=184.27s Sys=0.08s
 
 ------------------------------------------------------------
       material       Total Edep         sqrt(E0(GeV))*rmsE/Emean     total tracklen 
  
-          Lead: 781.05 MeV +- 17.85 MeV     2.285 +- 0.2285 %      53.7 cm  +- 1.33 cm 
-   liquidArgon: 207.34 MeV +- 15.88 MeV     7.657 +- 0.7657 %      1.02 m   +- 8.16 cm 
+          Lead: 788.34 MeV +- 14.84 MeV     1.883 +- 0.1883 %      54.3 cm  +-  1.1 cm 
+   liquidArgon: 202.61 MeV +- 14.65 MeV     7.231 +- 0.7231 %      99.6 cm  +- 7.58 cm 
 
 ------------------------------------------------------------
 
  Energy deposition from Energy flow balance : 
   material 	 Total Edep 
  
-      Lead:	 781.048 MeV
-liquidArgon:	 207.339 MeV
+      Lead:	 788.341 MeV
+liquidArgon:	 202.608 MeV
 
 ------------------------------------------------------------
 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 596130632, 1069559193
+ Current couple of seeds = 1237127441, 1064633457
 ----------------------------------------
 UserDetectorConstruction deleted.
 UserPhysicsList deleted.

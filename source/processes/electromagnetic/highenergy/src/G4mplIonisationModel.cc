@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4mplIonisationModel.cc,v 1.3 2006/12/13 15:44:27 gunter Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: G4mplIonisationModel.cc,v 1.5 2007/11/13 18:36:29 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 // -------------------------------------------------------------------
 //
@@ -38,10 +38,17 @@
 // Creation date: 06.09.2005
 //
 // Modifications:
+// 12.08.2007 Changing low energy approximation and extrapolation. 
+//            Small bug fixing and refactoring (M. Vladymyrov)
+// 13.11.2007 Use low-energy asymptotic from [3] (V.Ivanchenko) 
 //
 //
 // -------------------------------------------------------------------
-//
+// References
+// [1] Steven P. Ahlen: Energy loss of relativistic heavy ionizing particles, 
+//     S.P. Ahlen, Rev. Mod. Phys 52(1980), p121
+// [2] K.A. Milton arXiv:hep-ex/0602040
+// [3] S.P. Ahlen and K. Kinoshita, Phys. Rev. D26 (1982) 2347
 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -56,21 +63,21 @@
 
 using namespace std;
 
-G4mplIonisationModel::G4mplIonisationModel(G4double mCharge, 
-					   const G4String& nam)
+G4mplIonisationModel::G4mplIonisationModel(G4double mCharge, const G4String& nam)
   : G4VEmModel(nam),G4VEmFluctuationModel(nam),
   magCharge(mCharge),
-  twoln10(2.0*log(10.0)),
-  beta2low(0.0001),
-  beta2lim(0.01),
+  twoln10(log(100.0)),
+  betalow(0.01),
+  betalim(0.1),
+  beta2lim(betalim*betalim),
   bg2lim(beta2lim*(1.0 + beta2lim))
 {
-  nmpl         = G4int(abs(magCharge)/68.0);
+  nmpl         = G4int(abs(magCharge) * 2 * fine_structure_const + 0.5);
   if(nmpl > 6)      nmpl = 6;
   else if(nmpl < 1) nmpl = 1;
-  G4double x   = 45.0*GeV*G4double(nmpl)/cm;
-  factlow      = x*x;
-  chargeSquare = magCharge*magCharge;
+  pi_hbarc2_over_mc2 = pi * hbarc * hbarc / electron_mass_c2;
+  chargeSquare = magCharge * magCharge;
+  dedxlim = 45.*nmpl*nmpl*GeV*cm2/g;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -99,60 +106,74 @@ G4double G4mplIonisationModel::ComputeDEDXPerVolume(const G4Material* material,
 						    G4double kineticEnergy,
 						    G4double)
 {
-  G4double tau   = kineticEnergy/mass;
+  G4double tau   = kineticEnergy / mass;
   G4double gam   = tau + 1.0;
-  G4double bg2   = tau * (tau+2.0);
-  G4double beta2 = bg2/(gam*gam);
+  G4double bg2   = tau * (tau + 2.0);
+  G4double beta2 = bg2 / (gam * gam);
+  G4double beta  = sqrt(beta2);
 
-  G4double dedx0 = factlow*abs(beta2);
+  // low-energy asymptotic formula
+  G4double dedx  = dedxlim*beta*material->GetDensity();
 
-  if(beta2 > beta2low) {
+  // above asymptotic
+  if(beta > betalow) {
 
-    G4double b2 = beta2;
-    if(beta2 < beta2lim) {
-      beta2= beta2lim;
-      bg2  = bg2lim;
+    // high energy
+    if(beta >= betalim) {
+      dedx = ComputeDEDXAhlen(material, bg2);
+
+    } else {
+
+      G4double dedx1 = dedxlim*betalow*material->GetDensity();
+      G4double dedx2 = ComputeDEDXAhlen(material, bg2lim);
+
+      // extrapolation between two formula 
+      G4double kapa2 = beta - betalow;
+      G4double kapa1 = betalim - beta;
+      dedx = (kapa1*dedx1 + kapa2*dedx2)/(kapa1 + kapa2);
     }
+  }
+  return dedx;
+}
 
-    G4double eexc  = material->GetIonisation()->GetMeanExcitationEnergy();
-    G4double cden  = material->GetIonisation()->GetCdensity();
-    G4double mden  = material->GetIonisation()->GetMdensity();
-    G4double aden  = material->GetIonisation()->GetAdensity();
-    G4double x0den = material->GetIonisation()->GetX0density();
-    G4double x1den = material->GetIonisation()->GetX1density();
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-    G4double eDensity = material->GetElectronDensity();
+G4double G4mplIonisationModel::ComputeDEDXAhlen(const G4Material* material, G4double bg2)
+{
+  G4double eDensity = material->GetElectronDensity();
+  G4double eexc  = material->GetIonisation()->GetMeanExcitationEnergy();
+  G4double cden  = material->GetIonisation()->GetCdensity();
+  G4double mden  = material->GetIonisation()->GetMdensity();
+  G4double aden  = material->GetIonisation()->GetAdensity();
+  G4double x0den = material->GetIonisation()->GetX0density();
+  G4double x1den = material->GetIonisation()->GetX1density();
 
-    G4double dedx = 2.0*log(2.0*electron_mass_c2*bg2/eexc) - 1.0;
+  // Ahlen's formula for nonconductors, [1]p157, f(5.7)
+  G4double dedx = log(2.0 * electron_mass_c2 * bg2 / eexc) - 0.5;
 
-    G4double  k = 0.406;
-    if(nmpl > 1) k = 0.346;
-    const G4double B[7] = { 0.0, 0.248, 0.672, 1.022,  1.243, 1.464,  1.685}; 
+  // Kazama et al. cross-section correction
+  G4double  k = 0.406;
+  if(nmpl > 1) k = 0.346;
 
-    dedx += k - B[nmpl];
+  // Bloch correction
+  const G4double B[7] = { 0.0, 0.248, 0.672, 1.022, 1.243, 1.464, 1.685}; 
 
-    // density correction
-    G4double x = log(bg2)/twoln10;
-    if ( x >= x0den ) {
-      dedx -= twoln10*x - cden ;
-      if ( x < x1den ) dedx -= aden*pow((x1den-x),mden) ;
-    }
+  dedx += 0.5 * k - B[nmpl];
 
-    // now compute the total ionization loss
-
-    if (dedx < 0.0) dedx = 0.0 ;
-
-    dedx *= twopi_mc2_rcl2*chargeSquare*eDensity;
-
-    // extrapolate between two formula
-    if(beta2 < beta2lim) {
-      x = log(dedx0) + log(dedx/dedx0)*log(b2/beta2low)/log(beta2lim/beta2low);
-      dedx = exp(x);
-    }
-    dedx0 = dedx;
+  // density effect correction
+  G4double deltam;
+  G4double x = log(bg2) / twoln10;
+  if ( x >= x0den ) {
+    deltam = twoln10 * x - cden;
+    if ( x < x1den ) deltam += aden * pow((x1den-x), mden);
+    dedx -= 0.5 * deltam;
   }
 
-  return dedx0;
+  // now compute the total ionization loss
+  dedx *=  pi_hbarc2_over_mc2 * eDensity * nmpl * nmpl;
+
+  if (dedx < 0.0) dedx = 0;
+  return dedx;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -180,9 +201,5 @@ G4double G4mplIonisationModel::SampleFluctuations(
       loss = G4RandGauss::shoot(meanLoss,siga);
     } while (0.0 > loss || loss > twomeanLoss);
   }
-  //G4cout << "G4mplIonisationModel::SampleFluctuations:  loss= " << loss 
-  //<< "  siga= " << siga << G4endl;
   return loss;
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

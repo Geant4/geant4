@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4GeomTestSegment.cc,v 1.10 2007/05/18 07:30:47 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: G4GeomTestSegment.cc,v 1.11 2007/11/16 09:39:14 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 // --------------------------------------------------------------------
 // GEANT 4 class source file
@@ -366,7 +366,6 @@ void G4GeomTestSegment::FindSomePoints( G4GeomTestLogger *logger,
     //
     // Find next intersection
     //
-    G4double dist;
     if (entering) {
       dist = solid->DistanceToOut(p,vSearch);
       //G4cout<<"if entering distToOut="<<dist<<G4endl;

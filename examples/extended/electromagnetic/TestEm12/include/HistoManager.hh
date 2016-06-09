@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HistoManager.hh,v 1.4 2007/04/27 10:38:11 maire Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: HistoManager.hh,v 1.6 2007/11/09 17:35:06 maire Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -58,20 +58,21 @@ class HistoManager
     void SetFileName   (const G4String& name) { fileName[0] = name;};
     void SetFileType   (const G4String& name) { fileType    = name;};
     void SetFileOption (const G4String& name) { fileOption  = name;};
-    void book(G4double);
+    void book();
     void save();
     void SetHisto (G4int,G4int,G4double,G4double,const G4String& unit="none");  
     void FillHisto(G4int id, G4double e, G4double weight = 1.0);
     void RemoveHisto (G4int);
     void Scale (G4int, G4double);
-
+    void PrintHisto (G4int);
+    
     G4bool    HistoExist  (G4int id) {return exist[id];}
     G4double  GetHistoUnit(G4int id) {return Unit[id];}
     G4double  GetBinWidth (G4int id) {return Width[id];}
     
     void     SetcsdaRange(G4double val) {csdaRange = val;};
     G4double GetcsdaRange()             {return csdaRange;};
-    G4double GetStepMax()               {return stepMax;};
+    G4double ComputeStepMax(G4double);
     
   private:
 
@@ -89,11 +90,16 @@ class HistoManager
     G4double                 Vmax [MaxHisto];
     G4double                 Unit [MaxHisto];
     G4double                 Width[MaxHisto];
+    G4bool                   ascii[MaxHisto];    
+    
     G4bool                   factoryOn;
     HistoMessenger*          histoMessenger;
     
+    G4bool                   rangeFlag;    
     G4double                 csdaRange;
-    G4double                 stepMax; 
+    
+  private:
+    void saveAscii();                
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

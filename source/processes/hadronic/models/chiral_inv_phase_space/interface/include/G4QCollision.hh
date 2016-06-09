@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QCollision.hh,v 1.7 2006/10/30 10:33:36 mkossov Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: G4QCollision.hh,v 1.10 2007/11/01 16:09:38 mkossov Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 //      ---------------- G4QCollision header ----------------
 //                 by Mikhail Kossov, December 2003.
@@ -96,7 +96,12 @@
 #include "G4QTauNuclearCrossSection.hh"
 #include "G4QNuMuNuclearCrossSection.hh"
 #include "G4QANuMuNuclearCrossSection.hh"
+#include "G4QNuENuclearCrossSection.hh"
+#include "G4QANuENuclearCrossSection.hh"
+#include "G4QNuNuNuclearCrossSection.hh"
+#include "G4QANuANuNuclearCrossSection.hh"
 //#include "G4QuasmonString.hh"
+#include "G4QuasiFreeRatios.hh"
 #include "G4QPDGToG4Particle.hh"
 #include <vector>
 
@@ -159,6 +164,9 @@ private:
 
   // Copy constructor
   G4QCollision(const G4QCollision&);
+
+  // Random direction in two dimentions pair(first=sin(phi), second=cos(phi))
+  std::pair<G4double,G4double> Random2DDirection();
 
 		// BODY
   // Static Parameters --------------------------------------------------------------------

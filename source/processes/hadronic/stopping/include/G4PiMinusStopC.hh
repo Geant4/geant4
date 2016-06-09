@@ -23,20 +23,12 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-// -------------------------------------------------------------------
-//      GEANT 4 class file --- Copyright CERN 1998
-//      CERN Geneva Switzerland
-//
-//
 //      File name:     G4PiMinusStopC.hh 
 //
 //      Author:        Maria Grazia Pia (pia@genova.infn.it)
 // 
 //      Creation date: 18 May 1998
 //
-//      Modifications: 
 // -------------------------------------------------------------------
 
 #ifndef G4PIMINUSSTOPC_HH
@@ -45,8 +37,6 @@
 #include "G4PiMinusStopMaterial.hh"
 #include "globals.hh"
 #include "G4LorentzVector.hh"
-//#include "G4String.hh"
-//#include "G4NucleiPropertiesTable.hh"
 
 class G4PiMinusStopC : public G4PiMinusStopMaterial
 {  

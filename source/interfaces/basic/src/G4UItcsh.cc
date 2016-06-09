@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4UItcsh.cc,v 1.14 2007/06/14 05:44:58 kmura Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: G4UItcsh.cc,v 1.15 2007/11/06 09:36:23 kmura Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 
 #ifndef WIN32
@@ -36,6 +36,8 @@
 #include "G4UItcsh.hh"
 #include <ctype.h>
 #include <sstream>
+#include <fstream>
+#include <stdlib.h>
 
 // ASCII character code
 static const char AsciiCtrA = '\001';
@@ -58,6 +60,9 @@ static const char AsciiESC   = '\033';
 
 static const int AsciiPrintableMin = 32;
 
+// history file
+static const G4String historyFileName= "/.g4_hist";
+
 /////////////////////////////////////////////////////////
 G4UItcsh::G4UItcsh(const G4String& prompt, G4int maxhist)
   : G4VUIshell(prompt),
@@ -68,12 +73,45 @@ G4UItcsh::G4UItcsh(const G4String& prompt, G4int maxhist)
 {  
   // get current terminal mode
   tcgetattr(0, &tios);
+
+  // read a shell history file
+  G4String homedir= getenv("HOME");
+  G4String fname= homedir + historyFileName;
+
+  std::ifstream histfile;
+  enum { BUFSIZE= 1024 }; char linebuf[BUFSIZE];
+
+  histfile.open(fname, std::ios::in);
+  while (histfile.good()) {
+    if(histfile.eof()) break;
+
+    histfile.getline(linebuf, BUFSIZE);
+    G4String aline= linebuf;
+    aline.strip(G4String::both);
+    if(aline.size() !=  0) StoreHistory(linebuf);
+  }
+  histfile.close();
 }
 
 /////////////////////
 G4UItcsh::~G4UItcsh()
 /////////////////////
 {
+  // store a shell history
+  G4String homedir= getenv("HOME");
+  G4String fname= homedir + historyFileName;
+
+  std::ofstream histfile;
+  histfile.open(fname, std::ios::out);
+
+  G4int n0hist= 1;
+  if( currentHistoryNo > maxHistory ) n0hist= currentHistoryNo-maxHistory+1;
+
+  for (G4int i=n0hist; i<= currentHistoryNo; i++) {
+    histfile << RestoreHistory(i) << G4endl;
+  }
+  
+  histfile.close();
 }
 
 //////////////////////////////////////////
@@ -600,9 +638,9 @@ G4String G4UItcsh::ReadLine()
   return commandLine;
 }
 
-///////////////////////////////////
+//////////////////////////////////////////////////
 G4String G4UItcsh::GetCommandLine(const char* msg)
-///////////////////////////////////
+//////////////////////////////////////////////////
 {
   SetTermToInputMode();
 

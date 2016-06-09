@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysicsList.cc,v 1.1 2007/02/13 17:57:20 maire Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: PhysicsList.cc,v 1.2 2007/11/20 14:15:18 maire Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -178,11 +178,27 @@ void PhysicsList::ConstructProcess()
   emPhysicsList->ConstructProcess();
   AddStepMax();
   
+  // Em options
+  //
   G4EmProcessOptions emOptions;
+  
+  //physics tables
+  //
+  emOptions.SetMinEnergy(100*eV);    
+  emOptions.SetMaxEnergy(100*TeV);  
+  emOptions.SetDEDXBinning(1200);  
+  emOptions.SetLambdaBinning(1200);
+  
+  //energy loss
+  //  
+  emOptions.SetStepFunction(0.2, 10*um);
+  emOptions.SetLinearLossLimit(1.e-6);
+          
+  //build CSDA range
+  //
   emOptions.SetBuildCSDARange(true);
   emOptions.SetMaxEnergyForCSDARange(100*TeV);  
-  emOptions.SetDEDXBinningForCSDARange(480);
-  emOptions.SetDEDXBinning(480);    
+  emOptions.SetDEDXBinningForCSDARange(1200);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

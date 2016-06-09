@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VPreCompoundIon.hh,v 1.3 2006/06/29 20:58:46 gunter Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: G4VPreCompoundIon.hh,v 1.5 2007/08/23 16:29:01 ahoward Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 // by V. Lara
 
@@ -83,6 +83,7 @@ protected:
 
   virtual G4double GetAlpha() = 0;
   virtual G4double GetBeta() = 0;
+  virtual G4double GetRj(const G4int NumberParticles, const G4int NumberCharged) = 0;
   virtual G4double FactorialFactor(const G4double N, const G4double P) = 0;
   virtual G4double CoalescenceFactor(const G4double A) = 0; 
     

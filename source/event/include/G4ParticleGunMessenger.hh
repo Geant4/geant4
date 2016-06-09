@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleGunMessenger.hh,v 1.8 2006/06/29 18:08:44 gunter Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: G4ParticleGunMessenger.hh,v 1.10 2007/10/02 00:45:17 asaim Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 // 
 
@@ -75,6 +75,8 @@ class G4ParticleGunMessenger: public G4UImessenger
     G4UIcmdWithAString *        particleCmd;
     G4UIcmdWith3Vector *        directionCmd;
     G4UIcmdWithADoubleAndUnit * energyCmd;
+    G4UIcmdWithADoubleAndUnit * momAmpCmd;
+    G4UIcmdWith3VectorAndUnit * momCmd;
     G4UIcmdWith3VectorAndUnit * positionCmd;
     G4UIcmdWithADoubleAndUnit * timeCmd;
     G4UIcmdWith3Vector *        polCmd;

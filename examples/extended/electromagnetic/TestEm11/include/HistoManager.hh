@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HistoManager.hh,v 1.3 2006/06/29 16:39:29 gunter Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: HistoManager.hh,v 1.5 2007/11/07 17:22:15 maire Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -44,7 +44,7 @@ namespace AIDA {
 
 class HistoMessenger;
 
-const G4int MaxHisto = 8;
+const G4int MaxHisto = 9;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -64,12 +64,15 @@ class HistoManager
     void FillHisto(G4int id, G4double e, G4double weight = 1.0);
     void RemoveHisto (G4int);
     void Scale (G4int, G4double);
+    void PrintHisto (G4int);
 
     G4bool    HistoExist  (G4int id) {return exist[id];}
     G4double  GetHistoUnit(G4int id) {return Unit[id];}
     G4double  GetBinWidth (G4int id) {return Width[id];}
     
-    G4double  GetStepMax()           {return stepMax;};
+    void     SetcsdaRange(G4double val) {csdaRange = val; rangeFlag = true;};
+    G4double GetcsdaRange()             {return csdaRange;};    
+    G4double ComputeStepMax(G4double);
     
   private:
 
@@ -87,10 +90,16 @@ class HistoManager
     G4double                 Vmax [MaxHisto];
     G4double                 Unit [MaxHisto];
     G4double                 Width[MaxHisto];
+    G4bool                   ascii[MaxHisto];
+        
     G4bool                   factoryOn;
     HistoMessenger*          histoMessenger;
     
-    G4double                 stepMax;
+    G4bool                   rangeFlag;
+    G4double                 csdaRange;
+    
+  private:
+    void saveAscii();            
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

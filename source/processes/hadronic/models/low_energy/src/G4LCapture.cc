@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4LCapture.cc,v 1.14 2007/02/24 05:17:29 dennis Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 //
 // G4 Model: Low-energy Neutron Capture

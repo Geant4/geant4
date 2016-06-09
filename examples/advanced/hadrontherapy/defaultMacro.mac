@@ -29,15 +29,17 @@
 /event/verbose 0
 
 # SETTING FOR THE PHYSICS MODELS
+/physics/addPhysics Decay
 /physics/addPhysics EM-Photon-EPDL
 /physics/addPhysics EM-Electron-EEDL
 /physics/addPhysics EM-Positron-Standard
 /physics/addPhysics EM-HadronIon-LowE
-/physics/addPhysics EM-Muon-Standardmuon-standard
-/physics/addPhysics Decay
-/physics/addPhysics HadronicEl-HadronIon-QElastic
+/physics/addPhysics EM-Muon-Standard
+/physics/addPhysics HadronicEl-HadronIon-LElastic
+/physics/addPhysics HadronicInel-ProtonNeutron-LEP
 /physics/addPhysics HadronicInel-Ion-LEP
-/physics/addPhysics HadronicInel-ProtonNeutron-Prec
+/physics/addPhysics HadronicInel-Pion-LEP
+/physics/addPhysics HadronicAtRest-MuonMinus-Capture
 
 # FIX THE FOLLOWIG PARAMETERS
 # TO SET THE RANGE SHIFTER

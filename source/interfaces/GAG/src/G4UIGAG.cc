@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIGAG.cc,v 1.18 2006/06/29 19:09:23 gunter Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: G4UIGAG.cc,v 1.19 2007/10/30 10:14:34 kmura Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 // G4UIGAG.cc
 // 18.Feb.98 M.Nagamatu and T.Kodama created G4UIGAG from G4UIterminal
@@ -413,7 +413,7 @@ void G4UIGAG::ListDirectory( G4String newCommand )
 void G4UIGAG::TerminalHelp(G4String newCommand)
 {
   G4UIcommandTree * treeTop = UI->GetTree();
-  /*int*/unsigned i = newCommand.index(" ");
+  /*int*/str_size i = newCommand.index(" ");
   if( i != std::string::npos )
   {
     G4String newValue = newCommand(i+1,newCommand.length()-(i+1));

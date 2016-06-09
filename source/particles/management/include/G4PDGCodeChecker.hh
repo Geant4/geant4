@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PDGCodeChecker.hh,v 1.8 2007/05/30 08:30:13 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: G4PDGCodeChecker.hh,v 1.9 2007/09/14 07:04:09 kurasige Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 // 
 // ------------------------------------------------------------
@@ -79,6 +79,7 @@ class G4PDGCodeChecker
   G4int  CheckForDiQuarks();
   G4int  CheckForMesons();
   G4int  CheckForBaryons();
+  G4int  CheckForNuclei();
   
 
  private:

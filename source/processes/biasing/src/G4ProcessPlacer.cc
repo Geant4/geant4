@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProcessPlacer.cc,v 1.3 2007/06/12 17:24:39 ahoward Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: G4ProcessPlacer.cc,v 1.4 2007/10/31 18:05:44 ahoward Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -55,13 +55,21 @@ void G4ProcessPlacer::RemoveProcess(G4VProcess *process)
   G4cout << "  ProcessName: " << process->GetProcessName() 
          << ", will be removed!" << G4endl;
 
-  G4cout << "  The initial Vectors: " << G4endl;
+  G4cout << "  The initial AlongStep Vectors: " << G4endl;
+  PrintAlongStepGPILVec();
+  PrintAlongStepDoItVec();
+
+  G4cout << "  The initial PostStep Vectors: " << G4endl;
   PrintPostStepGPILVec();
   PrintPostStepDoItVec();
 
   GetProcessManager()->RemoveProcess(process);
 
-  G4cout << "  The final Vectors: " << G4endl;
+  G4cout << "  The final AlongStep Vectors: " << G4endl;
+  PrintAlongStepGPILVec();
+  PrintAlongStepDoItVec();
+
+  G4cout << "  The final PostStep Vectors: " << G4endl;
   PrintPostStepGPILVec();
   PrintPostStepDoItVec();
 
@@ -71,8 +79,13 @@ void G4ProcessPlacer::RemoveProcess(G4VProcess *process)
 
 void G4ProcessPlacer::AddProcessAs(G4VProcess *process, SecondOrLast sol)
 {
-  G4cout << "  ProcessName: " << process->GetProcessName() << G4endl;
-  G4cout << "The initial Vectors: " << G4endl;
+  G4cout << "  Modifying Process Order for ProcessName: " << process->GetProcessName() << G4endl;
+
+  G4cout << "  The initial AlongStep Vectors: " << G4endl;
+  PrintAlongStepGPILVec();
+  PrintAlongStepDoItVec();
+
+  G4cout << "The initial PostStep Vectors: " << G4endl;
   PrintPostStepGPILVec();
   PrintPostStepDoItVec();
 
@@ -100,18 +113,26 @@ void G4ProcessPlacer::AddProcessAs(G4VProcess *process, SecondOrLast sol)
     // place the given proces as first for the moment
     GetProcessManager()->AddProcess(process);
     GetProcessManager()->SetProcessOrderingToFirst(process, 
+                                                  idxAlongStep);
+    GetProcessManager()->SetProcessOrderingToFirst(process, 
                                                   idxPostStep);
     // xx test
     //     if(process->GetProcessName() == "ImportanceProcess") 
-    GetProcessManager()->SetProcessOrdering(process, 
-					    idxAlongStep, 1);
+    //bug31/10/07    GetProcessManager()->SetProcessOrdering(process, 
+    //bug31/10/07					    idxAlongStep, 1);
     // place transportation first again
+    GetProcessManager()->SetProcessOrderingToFirst(transportation, 
+                                                  idxAlongStep);
     GetProcessManager()->SetProcessOrderingToFirst(transportation, 
                                                   idxPostStep);
   }
   
   // for verification inly
-  G4cout << "The final Vectors: " << G4endl;
+  G4cout << "  The final AlongStep Vectors: " << G4endl;
+  PrintAlongStepGPILVec();
+  PrintAlongStepDoItVec();
+
+  G4cout << "The final PostStep Vectors: " << G4endl;
   PrintPostStepGPILVec();
   PrintPostStepDoItVec();
   
@@ -160,6 +181,23 @@ G4ProcessManager *G4ProcessPlacer::GetProcessManager()
   }
   return processmanager;
 }
+
+void G4ProcessPlacer::PrintAlongStepGPILVec()
+{
+  G4cout << "GPIL Vector: " << G4endl;
+  G4ProcessVector* processGPILVec = 
+    GetProcessManager()->GetAlongStepProcessVector(typeGPIL);
+  PrintProcVec(processGPILVec);
+} 
+
+void G4ProcessPlacer::PrintAlongStepDoItVec()
+{
+  G4cout << "DoIt Vector: " << G4endl;
+  G4ProcessVector* processDoItVec = 
+    GetProcessManager()->GetAlongStepProcessVector(typeDoIt); 
+  PrintProcVec(processDoItVec);
+}
+
 
 void G4ProcessPlacer::PrintPostStepGPILVec()
 {

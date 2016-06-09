@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NistMaterialBuilder.hh,v 1.9 2006/10/17 15:15:46 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: G4NistMaterialBuilder.hh,v 1.12 2007/10/30 10:05:52 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 
 #ifndef G4NistMaterialBuilder_h
 #define G4NistMaterialBuilder_h 1
@@ -40,7 +40,10 @@
 // Modifications:
 // 31.10.05 Add chemical effect and gas properties (V.Ivanchenko)
 // 27.02.06 V.Ivanchneko add ConstructNewGasMaterial
-// 11.05.06 V.Ivanchneko add warning flag to FindMaterial method
+// 11.05.06 V.Ivanchneko add warning flag to FindOrBuildMaterial method
+// 27.07.06 V.Ivanchneko set defaul warning=true for FindOrBuildMaterial
+// 27.07.07 V.Ivanchneko add matIndex vector to control built materials
+// 28.07.07 V.Ivanchneko add BuildMaterial method using Nist index
 //
 //----------------------------------------------------------------------------
 //
@@ -58,36 +61,44 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class G4NistManager;
 class G4NistElementBuilder;
 
 class G4NistMaterialBuilder
 {
 public:
 
-  G4NistMaterialBuilder(G4NistManager* mm=0, G4NistElementBuilder* eb=0,
-                        G4int verb=0);
+  G4NistMaterialBuilder(G4NistElementBuilder*, G4int verb=0);
 			
   ~G4NistMaterialBuilder();
  
   // Find or build a G4Material by name, from dataBase
   //
-  G4Material* FindOrBuildMaterial (const G4String& name, G4bool isotopes=true,
-				   G4bool warning=false);
+  G4Material* FindOrBuildMaterial (const G4String& name, 
+				   G4bool isotopes=true,
+				   G4bool warning=true);
 					    
   // construct a G4Material from scratch by atome count
   // 
   G4Material* ConstructNewMaterial (const G4String& name,
 				    const std::vector<G4String>& elm,
 				    const std::vector<G4int>& nbAtoms,
-				    G4double dens, G4bool isotopes=true);
+				    G4double dens, 
+				    G4bool isotopes=true,
+				    G4State   state    = kStateSolid,     
+				    G4double  temp     = STP_Temperature,  
+				    G4double  pressure = STP_Pressure); 
 				      
   // construct a G4Material from scratch by fraction mass
   //
   G4Material* ConstructNewMaterial (const G4String& name,
 				    const std::vector<G4String>& elm,
 				    const std::vector<G4double>& weight,
-				    G4double dens, G4bool isotopes=true);
+				    G4double dens, 
+				    G4bool isotopes=true,
+				    G4State   state    = kStateSolid,     
+				    G4double  temp     = STP_Temperature,  
+				    G4double  pressure = STP_Pressure); 
+
 
   // construct a gas G4Material from scratch by atome count
   // 
@@ -129,13 +140,13 @@ private:
 
   // build a G4Material from dataBase
   G4Material* BuildMaterial(const G4String& name, G4bool isotopes);
+  G4Material* BuildMaterial(G4int idx, G4bool isotopes);
 
   void DumpElm(G4int);
   void DumpMix(G4int);
 
 private:
 
-  G4NistManager*         matManager;
   G4NistElementBuilder*  elmBuilder;
 
   G4int                  verbose;
@@ -155,6 +166,8 @@ private:
   std::vector<G4int>     components;
   std::vector<G4int>     indexes;
   std::vector<G4int>     elements;
+
+  std::vector<G4int>     matIndex;
 
   std::vector<G4double>  temperatures;
   std::vector<G4double>  presures;

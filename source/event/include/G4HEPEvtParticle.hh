@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4HEPEvtParticle.hh,v 1.9 2006/06/29 18:08:39 gunter Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 //
 

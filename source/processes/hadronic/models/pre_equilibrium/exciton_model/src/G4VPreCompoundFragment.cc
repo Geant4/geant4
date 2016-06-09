@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VPreCompoundFragment.cc,v 1.3 2006/06/29 20:59:35 gunter Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: G4VPreCompoundFragment.cc,v 1.4 2007/07/23 09:56:40 ahoward Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 // by V. Lara
  
@@ -141,7 +141,8 @@ Initialize(const G4Fragment & aFragment)
 
   if ((theRestNucleusA < theRestNucleusZ) ||
       (theRestNucleusA < theA) ||
-      (theRestNucleusZ < theZ)) 
+      (theRestNucleusZ < theZ) ||
+      (aFragment.GetNumberOfCharged() < theZ)) // AH last argument from JMQ
     {
       // In order to be sure that emission probability will be 0.
       theMaximalKineticEnergy = 0.0;

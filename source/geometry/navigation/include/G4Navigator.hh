@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Navigator.hh,v 1.23 2007/05/11 13:43:59 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: G4Navigator.hh,v 1.26 2007/10/18 14:18:36 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 //
 // class G4Navigator
@@ -65,6 +65,7 @@
 #include "G4VoxelNavigation.hh"
 #include "G4ParameterisedNavigation.hh"
 #include "G4ReplicaNavigation.hh"
+#include "G4RegularNavigation.hh"
 
 #include <iostream>
 
@@ -298,6 +299,9 @@ class G4Navigator
   inline EVolume CharacteriseDaughters(const G4LogicalVolume *pLog) const;
     // Characterise daughter of logical volume.
 
+  inline G4int GetDaughtersRegularStructureId(const G4LogicalVolume *pLog) const;
+    // Get regular structure ID of first daughter
+
   virtual void SetupHierarchy();
     // Renavigate & reset hierarchy described by current history
     // o Reset volumes
@@ -329,6 +333,13 @@ class G4Navigator
 
   G4bool fWasLimitedByGeometry;
     // Set true if last Step was limited by geometry.
+
+  G4ThreeVector fStepEndPoint;
+    //  Endpoint of last ComputeStep 
+    //  - can be used for optimisation (eg when computing safety)
+
+  G4int  fVerbose;
+    // Verbose(ness) level  [if > 0, printout can occur].
 
  private:
 
@@ -422,8 +433,6 @@ class G4Navigator
     // Check-mode flag  [if true, more strict checks are performed].
   G4bool fPushed;
     // Push flag  [if true, means a stuck particle has been pushed].
-  G4int  fVerbose;
-    // Verbose(ness) level  [if > 0, printout can occur].
 
   // Helpers/Utility classes
   //
@@ -431,6 +440,7 @@ class G4Navigator
   G4VoxelNavigation fvoxelNav;
   G4ParameterisedNavigation fparamNav;
   G4ReplicaNavigation freplicaNav;
+  G4RegularNavigation fregularNav;
 };
 
 #include "G4Navigator.icc"

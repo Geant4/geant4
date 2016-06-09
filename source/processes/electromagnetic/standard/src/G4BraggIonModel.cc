@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BraggIonModel.cc,v 1.16 2007/05/22 17:34:36 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: G4BraggIonModel.cc,v 1.17 2007/07/28 13:30:53 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 // -------------------------------------------------------------------
 //
@@ -249,10 +249,11 @@ void G4BraggIonModel::SampleSecondaries(std::vector<G4DynamicParticle*>* vdp,
 
   G4double deltaMomentum =
            sqrt(deltaKinEnergy * (deltaKinEnergy + 2.0*electron_mass_c2));
-  G4double totMomentum = sqrt(energy2 - mass*mass);
+  G4double totMomentum = energy*sqrt(beta2);
   G4double cost = deltaKinEnergy * (energy + electron_mass_c2) /
                                    (deltaMomentum * totMomentum);
-  G4double sint = sqrt(1.0 - cost*cost);
+  if(cost > 1.0) cost = 1.0;
+  G4double sint = sqrt((1.0 - cost)*(1.0 + cost));
 
   G4double phi = twopi * G4UniformRand() ;
 

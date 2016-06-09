@@ -23,12 +23,12 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: pyPhysicsLists.cc,v 1.3 2007/06/07 09:06:43 kmura Exp $
-// $Name: geant4-09-00 $
+// $Id: pyPhysicsLists.cc,v 1.5 2007/11/25 19:40:13 kmura Exp $
+// $Name: geant4-09-01 $
 // ====================================================================
 //   pyPhysicsLists.cc
 //
-//                                         2005 Q
+//                                         2007 Q
 // ====================================================================
 #include <boost/python.hpp>
 #include "pyG4Version.hh"
@@ -80,6 +80,14 @@
 #include "QGSP_BERT_TRV.hh"
 #include "QGSP_EMV_NQE.hh"
 #include "QGSP_NQE.hh"
+#endif
+
+#if G4VERSION_NUMBER >= 910
+#include "FTFP_BERT.hh"
+#include "FTF_BIC.hh"
+#include "QGSC_BERT.hh"
+#include "QGS_BIC.hh"
+#include "QGSP_BIC2.hh"
 #endif
 
 using namespace boost::python;
@@ -237,6 +245,24 @@ void export_PhysicsLists()
 
   class_<QGSP_NQE, QGSP_NQE*, bases<G4VUserPhysicsList> >
     ("QGSP_NQE", "QGSP_NQE physics list")
+    ;
+#endif
+
+#if G4VERSION_NUMBER >= 910
+  class_<FTFP_BERT, FTFP_BERT*, bases<G4VUserPhysicsList> >
+    ("FTFP_BERT", "FTFP_BERT physics list")
+    ;
+  class_<FTF_BIC, FTF_BIC*, bases<G4VUserPhysicsList> >
+    ("FTF_BIC", "FTFP_BIC physics list")
+    ;
+  class_<QGSC_BERT, QGSC_BERT*, bases<G4VUserPhysicsList> >
+    ("QGSC_BERT", "QGSC_BERT physics list")
+    ;
+  class_<QGS_BIC, QGS_BIC*, bases<G4VUserPhysicsList> >
+    ("QGS_BIC", "QGS_BIC physics list")
+    ;
+  class_<QGSP_BIC2, QGSP_BIC2*, bases<G4VUserPhysicsList> >
+    ("QGSP_BIC2", "QGSP_BIC2 physics list")
     ;
 #endif
 

@@ -51,8 +51,10 @@ DicomEventAction::DicomEventAction():drawFlag("all")
 DicomEventAction::~DicomEventAction()
 { }
 
-void DicomEventAction::BeginOfEventAction(const G4Event*)
-{ }
+void DicomEventAction::BeginOfEventAction(const G4Event* evt)
+{
+  G4cout << "EV: " << evt->GetEventID() << G4endl;
+ }
 
 void DicomEventAction::EndOfEventAction(const G4Event* evt)
 {

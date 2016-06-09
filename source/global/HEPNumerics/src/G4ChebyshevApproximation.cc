@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ChebyshevApproximation.cc,v 1.6 2006/06/29 19:00:02 gunter Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: G4ChebyshevApproximation.cc,v 1.7 2007/11/13 17:35:06 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 
 #include "G4ChebyshevApproximation.hh"
@@ -71,20 +71,20 @@ G4ChebyshevApproximation::G4ChebyshevApproximation( function pFunction,
 
 // --------------------------------------------------------------------
 //
-// Constructor for creation of Chebyshev coefficients for m-derivative
-// from pFunction. The value of m ! MUST BE ! < n , because the result
-// array of fChebyshevCof will be of (n-m) size.  The values a and b
+// Constructor for creation of Chebyshev coefficients for mx-derivative
+// from pFunction. The value of mx ! MUST BE ! < nx , because the result
+// array of fChebyshevCof will be of (nx-mx) size.  The values a and b
 // fix the interval of validity of the Chebyshev approximation. 
 
 G4ChebyshevApproximation::
 G4ChebyshevApproximation( function pFunction,
-                          G4int n, G4int m,
+                          G4int nx, G4int mx,
                           G4double a, G4double b ) 
-   : fFunction(pFunction), fNumber(n),
+   : fFunction(pFunction), fNumber(nx),
      fChebyshevCof(new G4double[fNumber]),
      fMean(0.5*(b+a)), fDiff(0.5*(b-a))
 {
-   if(n <= m)
+   if(nx <= mx)
    {
       G4Exception("G4ChebyshevApproximation::G4ChebyshevApproximation()",
                   "InvalidCall", FatalException, "Invalid arguments !") ;
@@ -93,7 +93,7 @@ G4ChebyshevApproximation( function pFunction,
    G4double  rootSum = 0.0, cofj=0.0;   
    G4double* tempFunction = new G4double[fNumber] ;
    G4double weight = 2.0/fNumber ;
-   G4double cof = 0.5*weight*pi ;    // pi/n
+   G4double cof = 0.5*weight*pi ;    // pi/nx
    
    for (i=0;i<fNumber;i++)
    {
@@ -111,9 +111,9 @@ G4ChebyshevApproximation( function pFunction,
       }
       fChebyshevCof[j] = weight*rootSum ; // corresponds to pFunction
    }
-   // Chebyshev coefficients for (m)-derivative of pFunction
+   // Chebyshev coefficients for (mx)-derivative of pFunction
    
-   for(i=1;i<=m;i++)
+   for(i=1;i<=mx;i++)
    {
       DerivativeChebyshevCof(tempFunction) ;
       fNumber-- ;

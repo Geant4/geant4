@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: pyG4Orb.cc,v 1.4 2006/06/29 15:32:13 gunter Exp $
-// $Name: geant4-09-00 $
+// $Id: pyG4Orb.cc,v 1.5 2007/07/13 04:57:50 kmura Exp $
+// $Name: geant4-09-01 $
 // ====================================================================
 //   pyG4Orb.cc
 //
@@ -34,6 +34,20 @@
 #include "G4Orb.hh"
 
 using namespace boost::python;
+
+// ====================================================================
+// wrappers
+// ====================================================================
+namespace pyG4Orb {
+
+G4Orb* CreateOrb(const G4String& name, G4double pRmax)
+{
+  return new G4Orb(name, pRmax);
+}
+
+}
+
+using namespace pyG4Orb;
 
 // ====================================================================
 // module definition
@@ -47,8 +61,11 @@ void export_G4Orb()
     // ---
     .def("GetRadius", &G4Orb::GetRadius)
     .def("SetRadius", &G4Orb::SetRadius)
-    .def("GetCubicVolume", &G4Orb::GetCubicVolume)
     // operators
     .def(self_ns::str(self))
     ;
+
+    // Create solid
+    def("CreateOrb", CreateOrb, return_value_policy<manage_new_object>());
+
 }

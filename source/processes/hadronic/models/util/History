@@ -14,7 +14,23 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+16 Nov 2007 Dennis Wright (hadr-mod-util-V09-00-02)
+---------------------------------------------------
+- remove initialization by random number of angular momentum vector 
+  from G4Fragment ctors.
+- use production version of G4Fancy3DNucleus (see note of 24 Aug 2007) 
+
+24 Aug 2007 Gunter Folger        NOT for production
+---------------------------------------------------
+- change radial limit where choosing nucleons from 1% of density 
+  to 1per-mille for testing purposes- NOT for production
+
+5 Jul 2007 Dennis Wright  (hadr-mod-util-V09-00-01)
+---------------------------------------------------
+- G4KineticTrack.cc : change variable names to avoid Sun warnings about hiding
+
 24 Jan 2007 Gunter Folger  (hadr-mod-util-V08-02-00)
+----------------------------------------------------
 - G4Parton.{cc,hh}: add method setting momentum using both + and - momentum
   component
 - G4Fragment.cc: more info on warning output of negative excitation energy

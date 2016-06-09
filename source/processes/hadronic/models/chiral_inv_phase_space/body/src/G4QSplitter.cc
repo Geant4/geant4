@@ -28,7 +28,7 @@
 //
 //
 // $Id: G4QSplitter.cc,v 1.6 2006/11/27 10:44:55 mkossov Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 //      ---------------- G4QSplitter ----------------
 //             by Mikhail Kossov, August 2005.

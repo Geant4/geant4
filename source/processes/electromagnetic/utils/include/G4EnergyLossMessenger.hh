@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4EnergyLossMessenger.hh,v 1.18 2007/05/18 18:39:54 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 // -------------------------------------------------------------------
 //

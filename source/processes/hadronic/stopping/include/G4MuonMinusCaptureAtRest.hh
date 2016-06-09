@@ -23,29 +23,18 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MuonMinusCaptureAtRest.hh,v 1.17 2006/11/15 12:17:15 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: G4MuonMinusCaptureAtRest.hh,v 1.20 2007/11/15 10:05:13 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 //
-// ------------------------------------------------------------
-//      GEANT 4 class header file --- Copyright CERN 1998
-//      CERN Geneva Switzerland
+//  G4MuonMinusCaptureAtRest physics process
+//  Larry Felawka (TRIUMF) and Art Olin (TRIUMF) April 1998
+//---------------------------------------------------------------------
 //
-//      History: first implementation, based on object model of
-//      2nd December 1995, G.Cosmo
-//      ------------ G4MuonMinusCaptureAtRest physics process ------
-//                   by Larry Felawka (TRIUMF)
-//                     E-mail: felawka@alph04.triumf.ca
-//                   and Art Olin (TRIUMF)
-//                     E-mail: olin@triumf.ca
-//                            April 1998
-//-----------------------------------------------------------------------------
+// Class Description:
 //
-// Class Description
-// Process for nuclear capture of muon- at rest takes into account Fermi model of
-// muon capture in compounds, simplified EM cascade model, muon decay from K-shell,
-// and muon nucleus reaction 
-// Class Description - End
-//
+// Process for nuclear capture of mu- at rest takes into account Fermi 
+// model of muon capture in compounds, simplified EM cascade model, muon 
+// decay from K-shell, and muon nucleus reaction. 
 
 //
 // Modifications: 
@@ -66,9 +55,10 @@
 #include "G4StopElementSelector.hh"
 #include "G4MuMinusCaptureCascade.hh"
 #include "G4ReactionProductVector.hh"
-#include "G4Fancy3DNucleus.hh"
-#include "G4ExcitationHandler.hh"
+#include "G4MuonMinus.hh"
 
+class G4Fancy3DNucleus;
+class G4ExcitationHandler;
 class G4GHEKinematicsVector;
 
 class G4MuonMinusCaptureAtRest : public G4VRestProcess
@@ -107,8 +97,10 @@ private:
   G4StopElementSelector*   pSelector;
   G4MuMinusCaptureCascade* pEMCascade;
   G4GHEKinematicsVector*   Cascade;
-  G4Fancy3DNucleus         theN;
-  G4ExcitationHandler      theHandler;
+  G4Fancy3DNucleus*        theN;
+  G4ExcitationHandler*     theHandler;
+
+  G4bool isInitialised;
 
 };
 

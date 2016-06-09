@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4FTFModel.hh,v 1.5 2007/04/24 10:32:59 gunter Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 // Class Description
 // Final state production code for hadron inelastic scattering above 20 GeV

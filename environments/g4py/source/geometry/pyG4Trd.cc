@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: pyG4Trd.cc,v 1.4 2006/06/29 15:32:42 gunter Exp $
-// $Name: geant4-09-00 $
+// $Id: pyG4Trd.cc,v 1.5 2007/07/12 10:01:53 kmura Exp $
+// $Name: geant4-09-01 $
 // ====================================================================
 //   pyG4Trd.cc
 //
@@ -34,6 +34,21 @@
 #include "G4Trd.hh"
 
 using namespace boost::python;
+
+// ====================================================================
+// wrappers
+// ====================================================================
+namespace pyG4Trd {
+
+G4Trd* CreateTrd(const G4String& name, G4double pdx1, G4double pdx2,
+                 G4double pdy1, G4double pdy2, G4double pdz )
+{
+  return new G4Trd(name, pdx1, pdx2, pdy1, pdy2, pdz);
+}
+
+}
+
+using namespace pyG4Trd;
 
 // ====================================================================
 // module definition
@@ -56,9 +71,12 @@ void export_G4Trd()
     .def("SetYHalfLength1", &G4Trd::SetYHalfLength1)
     .def("SetYHalfLength2", &G4Trd::SetYHalfLength2)
     .def("SetZHalfLength",  &G4Trd::SetZHalfLength)
-    .def("GetCubicVolume",  &G4Trd::GetCubicVolume)
     // operators
     .def(self_ns::str(self))
     ;
+  
+    // Create solid
+    def("CreateTrd", CreateTrd, return_value_policy<manage_new_object>());
+
 }
 

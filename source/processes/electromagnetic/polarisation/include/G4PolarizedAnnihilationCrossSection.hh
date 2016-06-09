@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 // -------------------------------------------------------------------
-// $Id: G4PolarizedAnnihilationCrossSection.hh,v 1.3 2006/11/20 12:21:25 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: G4PolarizedAnnihilationCrossSection.hh,v 1.4 2007/11/01 17:32:34 schaelic Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 // -------------------------------------------------------------------
 //
 // GEANT4 Class file
@@ -38,13 +38,14 @@
 // Creation date: 22.03.2006
 //
 // Modifications:
+//   15.10.07     introduced a more general framework for cross sections
 //
 // Class Description:
 //   * calculates the differential cross section (ME squared, 
-//     without phase space) incomming positron (along positive z direction) 
+//     without phase space) incoming positron (along positive z direction) 
 //     annihilations with an electron at rest 
 //   * phi denotes the angle between the scattering plane and 
-//     X axis of incomint partice reference frame (PRF) 
+//     X axis of incoming partice reference frame (PRF) 
 //
 #ifndef G4PolarizedAnnihilationCrossSection_h
 #define G4PolarizedAnnihilationCrossSection_h 1
@@ -73,6 +74,9 @@ public:
   // return expected mean polarisation
   G4StokesVector GetPol2();
   G4StokesVector GetPol3();
+
+  virtual G4double GetXmin(G4double y); // minimal energy fraction in TotalXSection
+  virtual G4double GetXmax(G4double y); // maximal energy fraction in TotalXSection
 
   G4double getVar(G4int );
   // test routine

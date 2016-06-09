@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProcessManager.cc,v 1.28 2006/06/29 21:08:10 gunter Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: G4ProcessManager.cc,v 1.34 2007/11/28 17:47:57 kurasige Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 // 
 // --------------------------------------------------------------
@@ -39,6 +39,7 @@
 //   fixed bugs in FindInsertPosition
 //                               18 July 1998 H.Kurashige
 //   Use STL vector instead of RW vector    1. Mar 00 H.Kurashige
+//   Add exception to check ordering paramters 2 Oct. 2007  H.Kurashige
 // ------------------------------------------------------------
 
 #include "G4ProcessManagerMessenger.hh"
@@ -270,10 +271,11 @@ G4ProcessAttribute* G4ProcessManager::GetAttribute(G4int index) const
 #ifdef G4VERBOSE
    if (GetVerboseLevel()>0) { 
       G4cout << "G4ProcessManager::GetAttribute():";
-      G4cout << " particle[" << theParticleType->GetParticleName() << "]";
-      G4cout << G4endl;
-      G4cout << "Warning:: attribute vector index is inconsistent with process List index" << G4endl; 
-    }
+      G4cout << " particle[" << theParticleType->GetParticleName() << "]"
+	     << G4endl;
+      G4cout << "Warning:: attribute vector index is inconsistent with process List index" 
+	     << G4endl; 
+   }
 #endif
    // re-ordering attribute vector 
     G4ProcessAttribute *pAttr = 0;
@@ -300,7 +302,7 @@ G4int G4ProcessManager::InsertAt(G4int ip, G4VProcess* process, G4int ivec)
   G4ProcessVector* pVector = theProcVector[ivec];
   // check position
   if ( (ip<0) || (ip > pVector->entries()) ) return -1;
-
+  
   // insert in pVector
   pVector->insertAt(ip, process);
 
@@ -329,12 +331,8 @@ G4int G4ProcessManager::RemoveAt(G4int ip, G4VProcess* , G4int ivec)
   // check position
   if ( (ip<0) || (ip >= pVector->entries()) ) return -1;
 
-  //check pointer and remove
-  //if ((*pVector)[ip]== process) {
+  // remove process
   pVector->removeAt(ip);
-  //} else {
-  //  return -1;
-  //}    
 
   // correct index
   for(G4int iproc=0; iproc<numberOfProcesses; iproc++) {
@@ -437,7 +435,7 @@ G4int G4ProcessManager::AddProcess(
   pAttr->ordProcVector[3] = ordAlongStepDoIt;
   pAttr->ordProcVector[4] = ordPostStepDoIt;
   pAttr->ordProcVector[5] = ordPostStepDoIt;
-
+ 
   // add aProccess in Process vectors
   for (G4int ivec=1; ivec<SizeOfProcVectorArray; ivec+=2) {
     if (pAttr->ordProcVector[ivec] < 0 ) {
@@ -470,6 +468,9 @@ G4int G4ProcessManager::AddProcess(
   theAttrVector->push_back(pAttr);
 
   numberOfProcesses += 1;
+
+ // check consistencies between ordering parameters and process 
+  CheckOrderingParameters(aProcess);
 
   CreateGPILvectors();
 
@@ -577,7 +578,7 @@ void G4ProcessManager::SetProcessOrdering(
 			G4int      ordDoIt
 			)
 {
-  const G4String aErrorMessage(" G4ProcessManager::GetProcessVectorIndex:");
+  const G4String aErrorMessage(" G4ProcessManager::SetProcessOrdering");
 
 #ifdef G4VERBOSE
   if (GetVerboseLevel()>2) {
@@ -593,8 +594,8 @@ void G4ProcessManager::SetProcessOrdering(
 #ifdef G4VERBOSE
     if (verboseLevel>0) {
       G4cout <<  aErrorMessage << G4endl;
-      G4cout << "particle[" + theParticleType->GetParticleName() +"] " ;
-      G4cout << "process[" + aProcess->GetProcessName() + "]"<<  G4endl;
+      G4cout << "particle[" << theParticleType->GetParticleName()  << "] " ;
+      G4cout << "process[" << aProcess->GetProcessName() << "]"<<  G4endl;
       G4cout << " illegal DoIt Index [= " << G4int(idDoIt) << "]";
       G4cout << G4endl;
     }
@@ -632,8 +633,8 @@ void G4ProcessManager::SetProcessOrdering(
 #ifdef G4VERBOSE
       if (verboseLevel>2) {
 	G4cout <<  aErrorMessage << G4endl;
-	G4cout << "particle[" + theParticleType->GetParticleName() +"] " ;
-	G4cout <<"process[" + aProcess->GetProcessName() + "]"<<  G4endl;
+	G4cout << "particle[" << theParticleType->GetParticleName() << "] " ;
+	G4cout <<"process[" << aProcess->GetProcessName() << "]"<<  G4endl;
 	G4cout << aProcess->GetProcessName() << " is inserted at "<< ip;
 	G4cout << " in ProcessVetor[" << ivec<< "]";
 	G4cout << " with Ordering parameter = " <<  ordDoIt ;
@@ -643,6 +644,9 @@ void G4ProcessManager::SetProcessOrdering(
     }
 
   }
+  // check consistencies between ordering parameters and process 
+  CheckOrderingParameters(aProcess);
+
   // create GPIL vectors 
   CreateGPILvectors();
 }
@@ -699,11 +703,105 @@ void G4ProcessManager::SetProcessOrderingToFirst(
 #endif
   }
 
+ // check consistencies between ordering parameters and process 
+  CheckOrderingParameters(aProcess);
+
   // create GPIL vectors 
   CreateGPILvectors();
 
 }
 
+// ///////////////////////////////////////
+void G4ProcessManager::SetProcessOrderingToSecond(
+			G4VProcess *aProcess,
+			G4ProcessVectorDoItIndex idDoIt
+			)
+{
+  const G4String aErrorMessage(" G4ProcessManager::SetProcessOrderingToSecond");
+ 
+#ifdef G4VERBOSE
+  if (GetVerboseLevel()>2) {
+    G4cout << aErrorMessage ;
+    G4cout << "particle[" << theParticleType->GetParticleName()  << "] " ;
+    G4cout <<"process[" << aProcess->GetProcessName() <<  "]"<<  G4endl;
+  }
+#endif
+
+  // get Process Vector Id
+  G4int ivec = GetProcessVectorId(idDoIt, typeDoIt);
+  if (ivec <0 ) {
+#ifdef G4VERBOSE
+    if (verboseLevel>0) {
+      G4cout <<  aErrorMessage << G4endl;
+      G4cout << "particle[" << theParticleType->GetParticleName() << "] " ;
+      G4cout << "process[" << aProcess->GetProcessName() << "]"<<  G4endl;
+      G4cout << " illegal DoIt Index [= " << G4int(idDoIt) << "]";
+      G4cout << G4endl;
+    }
+#endif
+    return;
+  }
+ 
+  // get attribute 
+  G4ProcessAttribute* pAttr = GetAttribute(aProcess); 
+  if (pAttr == 0) {
+    // can not get process attribute
+    return;
+  } else {
+    G4int ip = pAttr->idxProcVector[ivec];
+    // remove a process from the process vector
+    if ( ip >=0 ) {
+      RemoveAt(ip, aProcess, ivec);
+    }
+  }
+
+  // set ordering parameter to 1
+  pAttr->ordProcVector[ivec-1] = 1;
+  pAttr->ordProcVector[ivec]   = 1;
+
+  // find insert position
+  G4ProcessVector* pVector = theProcVector[ivec];
+  G4int ip =  pVector->entries();
+  G4int tmp = INT_MAX;
+
+  // find insert position
+  for (G4int iproc=0; iproc<numberOfProcesses; iproc++) {
+    G4ProcessAttribute* aAttr = (*theAttrVector)[iproc];
+    if ( aAttr->idxProcVector[ivec] >= 0 ) {
+      if (    (aAttr->ordProcVector[ivec] !=0 )  &&
+	      (tmp >= aAttr->ordProcVector[ivec]) ) {
+	tmp =  aAttr->ordProcVector[ivec];
+	if ( ip > aAttr->idxProcVector[ivec] ) {	  
+	  ip = aAttr->idxProcVector[ivec] ;
+	}
+      }
+    }
+  }
+  
+  // insert 
+  InsertAt(ip, aProcess, ivec);
+
+  // set index in Process Attribute
+  pAttr->idxProcVector[ivec] = ip;
+#ifdef G4VERBOSE
+  if (verboseLevel>2) {
+    G4cout <<  aErrorMessage << G4endl;
+    G4cout << "particle[" << theParticleType->GetParticleName()  << "] " ;
+    G4cout <<"process[" << aProcess->GetProcessName() << "]"<<  G4endl;
+    G4cout << aProcess->GetProcessName() << " is inserted at "<< ip;
+    G4cout << " in ProcessVetor[" << ivec<< "]";
+    G4cout << " with Ordering parameter = 1 ";
+    G4cout << G4endl;
+  }
+#endif
+
+ // check consistencies between ordering parameters and process 
+  CheckOrderingParameters(aProcess);
+
+  // create GPIL vectors 
+  CreateGPILvectors();
+}
+         
 // ///////////////////////////////////////
 void G4ProcessManager::SetProcessOrderingToLast(
 			       G4VProcess *aProcess,
@@ -858,10 +956,9 @@ void G4ProcessManager::DumpInfo()
   // Dump Information
 
   // particle type
-  G4String* aMessage = new G4String("G4ProcessManager:");
-  *aMessage += "particle[" + theParticleType->GetParticleName() + "]";
-  G4cout << *aMessage << G4endl;
-  delete aMessage;
+  G4cout << "G4ProcessManager:  particle[" 
+	 << theParticleType->GetParticleName() << "]"
+	 << G4endl;
 
   // loop over all processes
   for (G4int idx=0; idx <theProcessList->entries(); idx++){
@@ -987,7 +1084,7 @@ void G4ProcessManager::EndTracking()
       G4cout << " process (or its index) not found ";
     }
 #endif
-	return false;
+    return false;
   }
   // process attribute    
   G4ProcessAttribute* pAttr = (*theAttrVector)[index];
@@ -995,14 +1092,75 @@ void G4ProcessManager::EndTracking()
   return pAttr-> isActive;
 }
 
+/////////////////////////////////////////////
+void G4ProcessManager::CheckOrderingParameters(G4VProcess* aProcess) const
+{
+  if (aProcess==0) return;
+  G4ProcessAttribute* pAttr = GetAttribute(aProcess);
+  if (pAttr ==0) {
+#ifdef G4VERBOSE
+    if (GetVerboseLevel()>0) {
+      G4cout << "G4ProcessManager::CheckOrderingParameters ";
+      G4cout << " process " << aProcess->GetProcessName() 
+	     << " has no attribute" << G4endl;
+    }
+#endif
+    return;
+  }
 
+  // check consistencies between ordering parameters and 
+  // validity of DoIt of the Process  
+  G4bool isOK =true;
+  if ( (pAttr->ordProcVector[0]>=0) && (!aProcess->isAtRestDoItIsEnabled()) ){
+ #ifdef G4VERBOSE
+    if (GetVerboseLevel()>0) {
+      G4cerr << "G4ProcessManager::CheckOrderingParameters ";
+      G4cerr << "You cannot set ordering parameter ["
+             << pAttr->ordProcVector[0]
+             << "] for AtRest DoIt  to the process "
+             << aProcess->GetProcessName() << G4endl;
+    }
+#endif
+    isOK = false;
+  }
 
+  if ( (pAttr->ordProcVector[2]>=0) && (!aProcess->isAlongStepDoItIsEnabled()) ){
+#ifdef G4VERBOSE
+    if (GetVerboseLevel()>0) {
+      G4cerr << "G4ProcessManager::CheckOrderingParameters ";
+      G4cerr << "You cannot set ordering parameter ["
+             <<  pAttr->ordProcVector[2]
+             << "] for AlongStep DoIt to the process "
+             << aProcess->GetProcessName() << G4endl;
 
+    }
+#endif
+    isOK = false;
+ } 
 
+  if ( (pAttr->ordProcVector[4]>=0) && (!aProcess->isPostStepDoItIsEnabled()) ) {
+#ifdef G4VERBOSE
+    if (GetVerboseLevel()>0) {
+      G4cerr << "G4ProcessManager::CheckOrderingParameters ";
+      G4cerr << "You cannot set ordering parameter [" 
+             << pAttr->ordProcVector[4] 
+             << "] for PostStep DoIt to the process"
+             << aProcess->GetProcessName() << G4endl;
+    }
+#endif
+    isOK = false;
+  } 
 
-
-
-
+  if (!isOK) {
+    G4String msg;
+    msg = "Invalid ordering parameters are set for  ";
+    msg +=  aProcess->GetProcessName();
+    G4Exception( "G4ProcessManager::CheckOrderingParameters ",
+                 "Invalid Ordering",FatalException, msg);
+  }
+  
+  return;
+}
 
 
 

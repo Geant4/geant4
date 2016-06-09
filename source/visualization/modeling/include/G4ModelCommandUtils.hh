@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // $Id: G4ModelCommandUtils.hh,v 1.2 2006/09/13 12:54:31 allison Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 // Jane Tinslay September 2006
 //

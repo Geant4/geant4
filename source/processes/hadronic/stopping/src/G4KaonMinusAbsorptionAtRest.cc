@@ -23,15 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-// -------------------------------------------------------------------
-//      GEANT 4 class file --- Copyright CERN 1997
-//      CERN Geneva Switzerland
-//
-//
-//      File name:     G4KaonMinusAbsorptionAtRest.cc 
-//
 //      Author:        Christian V"olcker (Christian.Volcker@cern.ch),
 // 
 //      Creation date: November 1997
@@ -40,7 +31,7 @@
 //       
 //      Modifications: 
 //      Maria Grazia Pia  September 1998
-//                        Various bug fixes, eliminated several memory leaks
+//                  Various bug fixes, eliminated several memory leaks
 //
 // -------------------------------------------------------------------
 

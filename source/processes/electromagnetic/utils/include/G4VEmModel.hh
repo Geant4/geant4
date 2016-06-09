@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEmModel.hh,v 1.46 2007/05/22 17:31:57 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: G4VEmModel.hh,v 1.48 2007/10/29 08:38:58 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 // -------------------------------------------------------------------
 //
@@ -59,6 +59,7 @@
 // 06-02-06 add method ComputeMeanFreePath() (mma)
 // 07-03-06 Optimize msc methods (V.Ivanchenko)
 // 29-06-06 Add member currentElement and Get/Set methods (V.Ivanchenko)
+// 29-10-07 Added SampleScattering (V.Ivanchenko)
 //
 // Class Description:
 //
@@ -113,7 +114,7 @@ public:
   //------------------------------------------------------------------------
 
   virtual G4double MinEnergyCut(const G4ParticleDefinition*,
-                                const G4MaterialCutsCouple*);
+			const G4MaterialCutsCouple*);
 
   virtual G4double ComputeDEDX(const G4MaterialCutsCouple*,
 			       const G4ParticleDefinition*,
@@ -126,43 +127,48 @@ public:
 				G4double cutEnergy = 0.0,
 				G4double maxEnergy = DBL_MAX);
 
-  virtual G4double ComputeDEDXPerVolume(
-                                const G4Material*,
-			        const G4ParticleDefinition*,
-			              G4double kineticEnergy,
-			              G4double cutEnergy = DBL_MAX);
+  virtual G4double ComputeDEDXPerVolume(const G4Material*,
+					const G4ParticleDefinition*,
+					G4double kineticEnergy,
+					G4double cutEnergy = DBL_MAX);
 
 
-  virtual G4double ComputeCrossSectionPerAtom(
-                                const G4ParticleDefinition*,
-                                      G4double kinEnergy, 
-                                      G4double Z, 
-                                      G4double A = 0., 
-                                      G4double cutEnergy = 0.0,
-                                      G4double maxEnergy = DBL_MAX);
+  virtual G4double ComputeCrossSectionPerAtom(const G4ParticleDefinition*,
+					      G4double kinEnergy, 
+					      G4double Z, 
+					      G4double A = 0., 
+					      G4double cutEnergy = 0.0,
+					      G4double maxEnergy = DBL_MAX);
 				      
-  virtual G4double ComputeMeanFreePath(
-			        const G4ParticleDefinition*,
-                                      G4double kineticEnergy,
-			        const G4Material*,    
-			              G4double cutEnergy = 0.0,
-                                      G4double maxEnergy = DBL_MAX);
+  virtual G4double ComputeMeanFreePath(const G4ParticleDefinition*,
+				       G4double kineticEnergy,
+				       const G4Material*,    
+				       G4double cutEnergy = 0.0,
+				       G4double maxEnergy = DBL_MAX);
 				     
-  virtual G4double CrossSectionPerVolume(
-                                const G4Material*,
-			        const G4ParticleDefinition*,
-                                      G4double kineticEnergy,
-			              G4double cutEnergy = 0.0,
-                                      G4double maxEnergy = DBL_MAX);
-				     
+  virtual G4double CrossSectionPerVolume(const G4Material*,
+					 const G4ParticleDefinition*,
+					 G4double kineticEnergy,
+					 G4double cutEnergy = 0.0,
+					 G4double maxEnergy = DBL_MAX);
 
-				      
-  // Methods for msc simulation
+protected:
 
-  virtual G4double ComputeTruePathLengthLimit(
-                                const G4Track& track, 
-                                G4PhysicsTable* theLambdaTable, 
-				G4double currentMinimalStep);
+  virtual G4double MaxSecondaryEnergy(const G4ParticleDefinition*,
+				      G4double kineticEnergy);  
+				          
+  //------------------------------------------------------------------------
+  // Methods for msc simulation which needs to be overwritten 
+  //------------------------------------------------------------------------
+
+public:
+
+  virtual void SampleScattering(const G4DynamicParticle*,
+				G4double safety);
+
+  virtual G4double ComputeTruePathLengthLimit(const G4Track& track, 
+					      G4PhysicsTable* theLambdaTable, 
+					      G4double currentMinimalStep);
 
   virtual G4double ComputeGeomPathLength(G4double truePathLength);
 
@@ -170,16 +176,9 @@ public:
 
   virtual void DefineForRegion(const G4Region*);
 
-protected:
-
-  virtual G4double MaxSecondaryEnergy(const G4ParticleDefinition*,
-				      G4double kineticEnergy);  
-
   //------------------------------------------------------------------------
   // Generic methods common to all models
   //------------------------------------------------------------------------
-
-public:
 
   void SetParticleChange(G4VParticleChange*, G4VEmFluctuationModel*);
 
@@ -288,8 +287,8 @@ inline G4double G4VEmModel::MinEnergyCut(const G4ParticleDefinition*,
 inline G4double G4VEmModel::ComputeDEDXPerVolume(
                                         const G4Material*,
 					const G4ParticleDefinition*,
-                                              G4double,
-                                              G4double)
+					G4double,
+					G4double)
 {
   return 0.0;
 }
@@ -298,8 +297,8 @@ inline G4double G4VEmModel::ComputeDEDXPerVolume(
 
 inline G4double G4VEmModel::ComputeDEDX(const G4MaterialCutsCouple* c,
                                         const G4ParticleDefinition* p,
-                                              G4double kinEnergy,
-                                              G4double cutEnergy)
+					G4double kinEnergy,
+					G4double cutEnergy)
 {
   return ComputeDEDXPerVolume(c->GetMaterial(),p,kinEnergy,cutEnergy);
 }
@@ -308,19 +307,20 @@ inline G4double G4VEmModel::ComputeDEDX(const G4MaterialCutsCouple* c,
 
 inline G4double G4VEmModel::CrossSection(const G4MaterialCutsCouple* c,
                                          const G4ParticleDefinition* p,
-                                               G4double kinEnergy,
-                                               G4double cutEnergy,
-                                               G4double maxEnergy)
+					 G4double kinEnergy,
+					 G4double cutEnergy,
+					 G4double maxEnergy)
 {
- return CrossSectionPerVolume(c->GetMaterial(),p,kinEnergy,cutEnergy,maxEnergy);
+  return 
+    CrossSectionPerVolume(c->GetMaterial(),p,kinEnergy,cutEnergy,maxEnergy);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 inline G4double G4VEmModel::ComputeCrossSectionPerAtom(
                                          const G4ParticleDefinition*,
-                                               G4double, G4double, G4double,
-		           		       G4double, G4double)
+					 G4double, G4double, G4double,
+					 G4double, G4double)
 {
   return 0.0;
 }
@@ -330,14 +330,14 @@ inline G4double G4VEmModel::ComputeCrossSectionPerAtom(
 inline const G4Element* G4VEmModel::SelectRandomAtom(
 				         const G4Material* material,
 				         const G4ParticleDefinition* pd,
-				               G4double kinEnergy,
-				               G4double tcut,
-				               G4double tmax)
+					 G4double kinEnergy,
+					 G4double tcut,
+					 G4double tmax)
 {
   const G4ElementVector* theElementVector = material->GetElementVector();
-  currentElement = (*theElementVector)[0];
-  G4int nelm = material->GetNumberOfElements() - 1;
-  if (nelm > 0) {
+  G4int nelm = material->GetNumberOfElements();
+  currentElement = (*theElementVector)[nelm-1];
+  if (nelm > 1) {
     G4double x = G4UniformRand()*
                  CrossSectionPerVolume(material,pd,kinEnergy,tcut,tmax);
     for(G4int i=0; i<nelm; i++) {
@@ -376,7 +376,7 @@ inline G4double G4VEmModel::MaxSecondaryKinEnergy(
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 inline G4double G4VEmModel::MaxSecondaryEnergy(const G4ParticleDefinition*,
-    				                     G4double kineticEnergy)
+					       G4double kineticEnergy)
 {
   return kineticEnergy;
 }
@@ -390,6 +390,11 @@ inline const G4String& G4VEmModel::GetName() const
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 // Methods for msc simulation
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+inline void G4VEmModel::SampleScattering(const G4DynamicParticle*, G4double)
+{}
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 inline G4double G4VEmModel::ComputeTruePathLengthLimit(

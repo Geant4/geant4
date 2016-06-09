@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4ParameterisationBox.cc,v 1.10 2006/06/29 18:18:35 gunter Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 // class G4ParameterisationBox Implementation file
 //

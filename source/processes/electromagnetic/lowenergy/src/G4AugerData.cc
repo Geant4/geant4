@@ -479,7 +479,7 @@ void G4AugerData::BuildAugerTransitionTable()
   }
 
 
-  for (G4int element = 6; element < 99; element++)
+  for (G4int element = 6; element < 101; element++)
     { 
       if(nMaterials == 0 || activeZ.contains(element)) {
         augerTransitionTable.insert(trans_Table::value_type(element,LoadData(element)));

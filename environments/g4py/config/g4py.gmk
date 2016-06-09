@@ -1,4 +1,4 @@
-# $Id: g4py.gmk,v 1.3 2006/11/20 08:01:30 kmura Exp $
+# $Id: g4py.gmk,v 1.5 2007/11/25 19:37:55 kmura Exp $
 # ===========================================================
 #   Makefile for building Python module with Boost.Python
 #      
@@ -7,6 +7,7 @@ COMPILE_G4PY := true
 
 G4PY_INCFLAGS := -I$(Q_G4_INCDIR)
 G4PY_LOPT := -L$(Q_G4_LIBDIR) \
+             -lG4persistency \
              -lG4readout \
              -lG4run \
              -lG4event \
@@ -38,4 +39,18 @@ G4PY_INCFLAGS += -I$(G4PY_INSTALL)/source/version
 
 # boost patch
 G4PY_INCFLAGS += -I$(G4PY_INSTALL)/source/boost
+
+# GDML
+ifeq ($(Q_ENABLE_GDML), 1)
+G4PY_INCFLAGS += -I$(Q_GDML_INCDIR)/Common/Writer
+G4PY_INCFLAGS += -I$(Q_GDML_INCDIR)/Common/Saxana
+G4PY_INCFLAGS += -I$(Q_GDML_INCDIR)/Common/Schema
+G4PY_INCFLAGS += -I$(Q_GDML_INCDIR)/G4Binding/G4Writer
+G4PY_INCFLAGS += -I$(Q_GDML_INCDIR)/G4Binding/G4Processor
+G4PY_INCFLAGS += -I$(Q_GDML_INCDIR)/G4Binding/G4Evaluator
+
+G4PY_LOPT += -L$(Q_GDML_LIBDIR) \
+             -lSaxana -lProcesses -lWriter \
+             -lG4Evaluator -lG4Processor -lG4Subscribers -lG4Writer
+endif
 

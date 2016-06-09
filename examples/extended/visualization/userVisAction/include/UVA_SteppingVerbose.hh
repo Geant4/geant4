@@ -25,7 +25,7 @@
 //
 //
 // $Id: UVA_SteppingVerbose.hh,v 1.2 2006/06/29 17:46:26 gunter Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 //   This class manages the verbose outputs in G4SteppingManager. 
 //   It inherits from G4SteppingVerbose.

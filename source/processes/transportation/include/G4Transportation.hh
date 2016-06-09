@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Transportation.hh,v 1.12 2006/06/29 21:10:32 gunter Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: G4Transportation.hh,v 1.16 2007/11/08 17:59:38 japost Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 // 
 // ------------------------------------------------------------
@@ -118,6 +118,9 @@ class G4Transportation : public G4VProcess
      inline void ResetKilledStatistics( G4int report = 1);      
      // Statistics for tracks killed (currently due to looping in field)
 
+     inline void EnableShortStepOptimisation(G4bool optimise=true); 
+     // Whether short steps < safety will avoid to call Navigator (if field=0)
+
   public:  // without description
 
      G4double AtRestGetPhysicalInteractionLength(
@@ -197,6 +200,9 @@ class G4Transportation : public G4VProcess
      G4double fSumEnergyKilled;
      G4double fMaxEnergyKilled;
 
+  // Whether to avoid calling G4Navigator for short step ( < safety)
+  //   If using it, the safety estimate for endpoint will likely be smaller.
+     G4bool   fShortStepOptimisation; 
 
   // Verbosity 
      G4int    fVerboseLevel;

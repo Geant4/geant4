@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: exampleN03.cc,v 1.30 2006/10/26 14:58:24 allison Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: exampleN03.cc,v 1.33 2007/11/16 10:50:41 lgarnier Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -36,19 +36,7 @@
 #include "G4UIterminal.hh"
 #include "G4UItcsh.hh"
 
-#ifdef G4UI_USE_XM
-#include "G4UIXm.hh"
-#endif
-
-#ifdef G4UI_USE_WIN32
-#include "G4UIWin32.hh"
-#endif
-
 #include "Randomize.hh"
-
-#ifdef G4VIS_USE
-#include "G4VisExecutive.hh"
-#endif
 
 #include "ExN03DetectorConstruction.hh"
 #include "ExN03PhysicsList.hh"
@@ -57,6 +45,25 @@
 #include "ExN03EventAction.hh"
 #include "ExN03SteppingAction.hh"
 #include "ExN03SteppingVerbose.hh"
+
+#ifdef G4VIS_USE
+#include "G4VisExecutive.hh"
+#endif
+
+#ifdef G4UI_USE_XM
+#include "G4UIXm.hh"
+#endif
+
+#ifdef G4UI_USE_WIN32
+#include "G4UIWin32.hh"
+#endif
+
+#ifdef G4UI_USE_QT
+#include "G4UIQt.hh"
+#include "G4Qt.hh"
+#include <qapplication.h>
+#endif
+
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -68,8 +75,7 @@ int main(int argc,char** argv)
   
   // User Verbose output class
   //
-  G4VSteppingVerbose* verbosity = new ExN03SteppingVerbose;
-  G4VSteppingVerbose::SetInstance(verbosity);
+  G4VSteppingVerbose::SetInstance(new ExN03SteppingVerbose);
      
   // Construct the default run manager
   //
@@ -82,34 +88,11 @@ int main(int argc,char** argv)
   //
   G4VUserPhysicsList* physics = new ExN03PhysicsList;
   runManager->SetUserInitialization(physics);
-
-  G4UIsession* session=0;
-  
-  if (argc==1)   // Define UI session for interactive mode.
-    {
-      // G4UIterminal is a (dumb) terminal
-      //
-#if defined(G4UI_USE_XM)
-      session = new G4UIXm(argc,argv);
-#elif defined(G4UI_USE_WIN32)
-      session = new G4UIWin32();
-#elif defined(G4UI_USE_TCSH)
-      session = new G4UIterminal(new G4UItcsh);      
-#else
-      session = new G4UIterminal();
-#endif
-    }
-  
-#ifdef G4VIS_USE
-  // Visualization manager
-  //
-  G4VisManager* visManager = new G4VisExecutive;
-  visManager->Initialize();
-#endif
     
   // Set user action classes
   //
-  G4VUserPrimaryGeneratorAction* gen_action = new ExN03PrimaryGeneratorAction(detector);
+  G4VUserPrimaryGeneratorAction* gen_action = 
+                          new ExN03PrimaryGeneratorAction(detector);
   runManager->SetUserAction(gen_action);
   //
   ExN03RunAction* run_action = new ExN03RunAction;  
@@ -119,50 +102,60 @@ int main(int argc,char** argv)
   runManager->SetUserAction(event_action);
   //
   G4UserSteppingAction* stepping_action =
-    new ExN03SteppingAction(detector, event_action);
+                    new ExN03SteppingAction(detector, event_action);
   runManager->SetUserAction(stepping_action);
   
   // Initialize G4 kernel
   //
   runManager->Initialize();
-    
+  
   // Get the pointer to the User Interface manager
   //
-  G4UImanager* UI = G4UImanager::GetUIpointer();  
-
-  if (session)   // Define UI session for interactive mode
+  G4UImanager* UI = G4UImanager::GetUIpointer();      
+  
+  if (argc!=1)   // batch mode
     {
-      // G4UIterminal is a (dumb) terminal
-      //
-      UI->ApplyCommand("/control/execute vis.mac");    
-#if defined(G4UI_USE_XM) || defined(G4UI_USE_WIN32)
-      // Customize the G4UIXm,Win32 menubar with a macro file
-      //
-      UI->ApplyCommand("/control/execute visTutor/gui.mac");
-#endif
-      session->SessionStart();
-      delete session;
-    }
-  else           // Batch mode
-    { 
-#ifdef G4VIS_USE
-      visManager->SetVerboseLevel("quiet");
-#endif
       G4String command = "/control/execute ";
       G4String fileName = argv[1];
-      UI->ApplyCommand(command+fileName);
+      UI->ApplyCommand(command+fileName);    
+    }
+  else           // interactive mode : define visualization UI terminal
+    {
+#ifdef G4VIS_USE
+      G4VisManager* visManager = new G4VisExecutive;
+      visManager->Initialize();
+#endif
+
+      G4UIsession* session = 0;
+#if defined(G4UI_USE_TCSH)
+      session = new G4UIterminal(new G4UItcsh);      
+#elif defined(G4UI_USE_XM)
+      session = new G4UIXm(argc,argv);
+      UI->ApplyCommand("/control/execute visTutor/gui.mac");      
+#elif defined(G4UI_USE_WIN32)
+      session = new G4UIWin32();
+      UI->ApplyCommand("/control/execute visTutor/gui.mac");      
+#elif defined(G4UI_USE_QT)
+      session = new G4UIQt(argc,argv);
+      UI->ApplyCommand("/control/execute visTutor/gui.mac");      
+#else
+      session = new G4UIterminal();
+#endif
+
+      UI->ApplyCommand("/control/execute vis.mac");
+      session->SessionStart();
+      delete session;
+      
+#ifdef G4VIS_USE
+      delete visManager;
+#endif                
     }
 
   // Job termination
   // Free the store: user actions, physics_list and detector_description are
   //                 owned and deleted by the run manager, so they should not
   //                 be deleted in the main() program !
-
-#ifdef G4VIS_USE
-  delete visManager;
-#endif
   delete runManager;
-  delete verbosity;
 
   return 0;
 }

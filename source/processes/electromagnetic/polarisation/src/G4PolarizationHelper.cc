@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PolarizationHelper.cc,v 1.3 2006/11/17 14:14:19 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: G4PolarizationHelper.cc,v 1.4 2007/11/01 17:30:25 schaelic Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 // GEANT4 Class file
 //
@@ -39,8 +39,7 @@
 //
 // Class Description:
 //
-// Provides polarization information for logical volumes, and some basic 
-// transformation routines.
+// Provides some basic polarization transformation routines.
 //
 #include "G4PolarizationHelper.hh"
 #include "G4StokesVector.hh"
@@ -77,6 +76,15 @@ G4ThreeVector G4PolarizationHelper::GetParticleFrameX(const G4ThreeVector &uZ)
   G4double invPerp = uZ.z()/perp;
   return G4ThreeVector(uZ.x()*invPerp,uZ.y()*invPerp,-perp);
 }
+
+G4ThreeVector G4PolarizationHelper::GetRandomFrame(const G4ThreeVector & mom1)
+{
+  G4double phi     =2.*pi*G4UniformRand();
+  G4ThreeVector normal = std::cos(phi)*GetParticleFrameX(mom1) 
+    + std::sin(phi)*G4PolarizationHelper::GetParticleFrameY(mom1);
+  return normal;
+}
+
 
 G4ThreeVector G4PolarizationHelper::GetSpinInPRF(const G4ThreeVector &uZ, const G4ThreeVector & spin)
 {

@@ -29,7 +29,7 @@
 #include "G4ProcessManager.hh"
 
 G4QGSPNeutronBuilder::
-G4QGSPNeutronBuilder(G4bool quasiElastic) 
+G4QGSPNeutronBuilder(G4bool quasiElastic, G4bool projectileDiffraction) 
 {
   theMin = 12*GeV;
   theModel = new G4TheoFSGenerator;
@@ -50,6 +50,12 @@ G4QGSPNeutronBuilder(G4bool quasiElastic)
      theModel->SetQuasiElasticChannel(theQuasiElastic);
   } else 
   {  theQuasiElastic=0;}  
+  if ( projectileDiffraction )
+  {
+     theProjectileDiffraction=new G4ProjectileDiffractiveChannel;
+     theModel->SetProjectileDiffraction(theProjectileDiffraction);
+  } else 
+  {  theProjectileDiffraction=0;}
 }
 
 G4QGSPNeutronBuilder::
@@ -60,6 +66,7 @@ G4QGSPNeutronBuilder::
   delete thePreEquilib;
   delete theCascade;
   if ( theQuasiElastic ) delete theQuasiElastic;
+  if ( theProjectileDiffraction ) delete theProjectileDiffraction;
   delete theModel;
 }
 

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // $Id: PhysListEmStandardSS.hh,v 1.1 2006/10/24 11:37:56 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

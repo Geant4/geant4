@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: ExN02DetectorConstruction.cc,v 1.19 2007/05/11 14:35:01 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: ExN02DetectorConstruction.cc,v 1.20 2007/10/17 08:50:35 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -59,7 +59,8 @@ ExN02DetectorConstruction::ExN02DetectorConstruction()
  solidTarget(0), logicTarget(0), physiTarget(0), 
  solidTracker(0),logicTracker(0),physiTracker(0), 
  solidChamber(0),logicChamber(0),physiChamber(0), 
- TargetMater(0), ChamberMater(0),fpMagField(0),
+ TargetMater(0), ChamberMater(0),chamberParam(0),
+ stepLimit(0), fpMagField(0),
  fWorldLength(0.),  fTargetLength(0.), fTrackerLength(0.),
  NbOfChambers(0) ,  ChamberWidth(0.),  ChamberSpacing(0.)
 {
@@ -72,6 +73,8 @@ ExN02DetectorConstruction::ExN02DetectorConstruction()
 ExN02DetectorConstruction::~ExN02DetectorConstruction()
 {
   delete fpMagField;
+  delete stepLimit;
+  delete chamberParam;
   delete detectorMessenger;             
 }
 
@@ -199,7 +202,7 @@ G4VPhysicalVolume* ExN02DetectorConstruction::Construct()
   G4double firstLength = fTrackerLength/10;
   G4double lastLength  = fTrackerLength;
    
-  G4VPVParameterisation* chamberParam = new ExN02ChamberParameterisation(  
+  chamberParam = new ExN02ChamberParameterisation(  
 			   NbOfChambers,          // NoChambers 
 			   firstPosition,         // Z of center of first 
 			   ChamberSpacing,        // Z spacing of centers
@@ -251,8 +254,9 @@ G4VPhysicalVolume* ExN02DetectorConstruction::Construct()
     
   // Sets a max Step length in the tracker region, with G4StepLimiter
   //
-  G4double maxStep = 0.5*ChamberWidth; 
-  logicTracker->SetUserLimits(new G4UserLimits(maxStep));
+  G4double maxStep = 0.5*ChamberWidth;
+  stepLimit = new G4UserLimits(maxStep);
+  logicTracker->SetUserLimits(stepLimit);
   
   // Set additional contraints on the track, with G4UserSpecialCuts
   //

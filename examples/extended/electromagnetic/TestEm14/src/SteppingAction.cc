@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: SteppingAction.cc,v 1.4 2006/09/06 09:56:06 maire Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: SteppingAction.cc,v 1.5 2007/06/23 22:23:20 maire Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -60,17 +60,19 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
 {
   G4StepPoint* endPoint = aStep->GetPostStepPoint();
   G4String procName = endPoint->GetProcessDefinedStep()->GetProcessName();
-  G4double stepLength = aStep->GetStepLength();
-
-  //count real processes (at least 1 secondary) and sum track length
-  //
-  G4TrackVector* secondary = fpSteppingManager->GetSecondary();
+  G4TrackVector* secondary = fpSteppingManager->GetSecondary();          
   G4bool transmit = (endPoint->GetStepStatus() <= fGeomBoundary);  
-  if ((*secondary).size() > 0) { 
-    runAction->CountProcesses(procName);  
-    runAction->SumTrack(stepLength);
+  if (transmit) runAction->CountProcesses(procName);
+  else {                         
+    //count real processes and sum track length
+    G4double stepLength = aStep->GetStepLength();
+    G4double charge = aStep->GetTrack()->GetDefinition()->GetPDGCharge();
+    if ((charge == 0.) || ((charge != 0.) && (((*secondary).size() > 0))))
+      {
+       runAction->CountProcesses(procName);  
+       runAction->SumTrack(stepLength);
+      }
   }
-  else if (transmit) runAction->CountProcesses(procName);
   
   //plot final state (only if continuous energy loss is small enough)
   //

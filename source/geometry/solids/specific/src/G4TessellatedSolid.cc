@@ -17,15 +17,15 @@
 // *                                                                  *
 // * This  code  implementation is the result of  the  scientific and *
 // * technical work of the GEANT4 collaboration and of QinetiQ Ltd,   *
-// * subject DEFCON 705 IPR conditions.                               *
+// * subject to DEFCON 705 IPR conditions.                            *
 // * By using,  copying,  modifying or  distributing the software (or *
 // * any work based  on the software)  you  agree  to acknowledge its *
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4TessellatedSolid.cc,v 1.9 2007/02/12 12:08:33 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: G4TessellatedSolid.cc,v 1.14 2007/12/11 15:28:50 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 //
@@ -41,6 +41,18 @@
 //
 // CHANGE HISTORY
 // --------------
+//
+// 14 November 2007   P R Truscott, QinetiQ & Stan Seibert, U Texas
+//                    Bug fixes to CalculateExtent
+//
+// 17 September 2007, P R Truscott, QinetiQ Ltd & Richard Holmberg
+//                    Updated extensively prior to this date to deal with
+//                    concaved tessellated surfaces, based on the algorithm
+//                    of Richard Holmberg.  This had been slightly modified
+//                    to determine with inside the geometry by projecting
+//                    random rays from the point provided.  Now random rays
+//                    are predefined rather than making use of random
+//                    number generator at run-time.
 //
 // 22 November 2005, F Lei
 //  - Changed ::DescribeYourselfTo(), line 464
@@ -77,6 +89,8 @@ G4TessellatedSolid::G4TessellatedSolid ()
   yMaxExtent = -kInfinity;
   zMinExtent =  kInfinity;
   zMaxExtent = -kInfinity;
+
+  SetRandomVectorSet();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -99,6 +113,8 @@ G4TessellatedSolid::G4TessellatedSolid (const G4String &name)
   yMaxExtent = -kInfinity;
   zMinExtent =  kInfinity;
   zMaxExtent = -kInfinity;
+
+  SetRandomVectorSet();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -111,8 +127,9 @@ G4TessellatedSolid::G4TessellatedSolid( __void__& a )
     geometryType("G4TessellatedSolid"), cubicVolume(0.), surfaceArea(0.),
     vertexList(), xMinExtent(0.), xMaxExtent(0.),
     yMinExtent(0.), yMaxExtent(0.), zMinExtent(0.), zMaxExtent(0.),
-    solidClosed(false), dirTolerance(0.)
+    solidClosed(false)
 {
+  SetRandomVectorSet();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -295,6 +312,32 @@ void G4TessellatedSolid::SetSolidClosed (const G4bool t)
         zMinExtent = z;    
       }
     }
+//
+//
+// Compute extremeFacets, i.e. find those facets that have surface
+// planes that bound the volume.
+// Note that this is going to reject concaved surfaces as being extreme.  Also
+// note that if the vertex is on the facet, displacement is zero, so IsInside
+// returns true.  So will this work??  Need non-equality
+// "G4bool inside = displacement < 0.0;"
+// or
+// "G4bool inside = displacement <= -0.5*kCarTolerance" 
+// (Notes from PT 13/08/2007).
+//
+    for (FacetCI it=facets.begin(); it!=facets.end(); it++)
+    {
+      G4bool isExtreme = true;
+      for (size_t i=0; i<vertexList.size(); i++)
+      {
+        if (!(*it)->IsInside(vertexList[i]))
+        {
+          isExtreme = false;
+          break;
+        }
+      }
+      if (isExtreme)
+        extremeFacets.insert(*it);
+    }
     solidClosed = true;
   }
   else
@@ -305,10 +348,21 @@ void G4TessellatedSolid::SetSolidClosed (const G4bool t)
 
 ///////////////////////////////////////////////////////////////////////////////
 //
+// GetSolidClosed
+//
+// Used to determine whether the solid is closed to adding further facets.
+//
 G4bool G4TessellatedSolid::GetSolidClosed () const
   {return solidClosed;}
 
 ///////////////////////////////////////////////////////////////////////////////
+//
+// operator+=
+//
+// This operator allows the user to add two tessellated solids together, so
+// that the solid on the left then includes all of the facets in the solid
+// on the right.  Note that copies of the facets are generated, rather than
+// using the original facet set of the solid on the right.
 //
 const G4TessellatedSolid &G4TessellatedSolid::operator+=
   (const G4TessellatedSolid &right)
@@ -320,12 +374,18 @@ const G4TessellatedSolid &G4TessellatedSolid::operator+=
 
 ///////////////////////////////////////////////////////////////////////////////
 //
+// GetFacet
+//
+// Access pointer to facet in solid, indexed by integer i.
+//
 G4VFacet *G4TessellatedSolid::GetFacet (size_t i) const
 {
   return facets[i];
 }
 
 ///////////////////////////////////////////////////////////////////////////////
+//
+// GetNumberOfFacets
 //
 size_t G4TessellatedSolid::GetNumberOfFacets () const
 {
@@ -334,8 +394,20 @@ size_t G4TessellatedSolid::GetNumberOfFacets () const
 
 ///////////////////////////////////////////////////////////////////////////////
 //
+// EInside G4TessellatedSolid::Inside (const G4ThreeVector &p) const
+//
+// This method must return:
+//    * kOutside if the point at offset p is outside the shape
+//      boundaries plus kCarTolerance/2,
+//    * kSurface if the point is <= kCarTolerance/2 from a surface, or
+//    * kInside otherwise.
+//
 EInside G4TessellatedSolid::Inside (const G4ThreeVector &p) const
 {
+//
+// First the simple test - check if we're outside of the X-Y-Z extremes
+// of the tessellated solid.
+//
   if ( p.x() < xMinExtent - kCarTolerance ||
        p.x() > xMaxExtent + kCarTolerance ||
        p.y() < yMinExtent - kCarTolerance ||
@@ -347,51 +419,144 @@ EInside G4TessellatedSolid::Inside (const G4ThreeVector &p) const
   }  
 
   G4double minDist = kInfinity;
-  G4double dist    = 0.0;
-  typedef std::multimap< G4double, FacetCI, std::less<G4double> > DistMapType;
-  DistMapType distmap;
-  size_t purgeIntv = 25;
-  
+//
+//
+// Check if we are close to a surface
+//
   for (FacetCI f=facets.begin(); f!=facets.end(); f++)
   {
-    dist = (*f)->Distance(p,minDist);
-    distmap.insert(DistMapType::value_type(dist,f));
-    minDist = distmap.begin()->first;
-    if (distmap.size() > purgeIntv)
+    G4double dist = (*f)->Distance(p,minDist);
+    if (dist < minDist) minDist = dist;
+    if (dist <= 0.5*kCarTolerance)
     {
-      DistMapType::iterator it =
-        distmap.lower_bound(minDist + 0.5*kCarTolerance);
-      it++;
-      if (it != distmap.end())
+      return kSurface;
+    }
+  }
+//
+//
+// The following is something of an adaptation of the method implemented by
+// Rickard Holmberg augmented with information from Schneider & Eberly,
+// "Geometric Tools for Computer Graphics," pp700-701, 2003.  In essence, we're
+// trying to determine whether we're inside the volume by projecting a few rays
+// and determining if the first surface crossed is has a normal vector between
+// 0 to pi/2 (out-going) or pi/2 to pi (in-going).  We should also avoid rays
+// which are nearly within the plane of the tessellated surface, and therefore
+// produce rays randomly.  For the moment, this is a bit over-engineered
+// (belt-braces-and-ducttape).
+//
+#if G4SPECSDEBUG
+  G4int nTry                = 7;
+#else
+  G4int nTry                = 3;
+#endif
+  G4double distOut          = kInfinity;
+  G4double distIn           = kInfinity;
+  G4double distO            = 0.0;
+  G4double distI            = 0.0;
+  G4double distFromSurfaceO = 0.0;
+  G4double distFromSurfaceI = 0.0;
+  G4ThreeVector normalO(0.0,0.0,0.0);
+  G4ThreeVector normalI(0.0,0.0,0.0);
+  G4bool crossingO          = false;
+  G4bool crossingI          = false;
+  EInside location          = kOutside;
+  EInside locationprime     = kOutside;
+  G4int m                   = 0;
+
+  for (G4int i=0; i<nTry; i++)
+  {
+    G4bool nearParallel = false;
+    do
+    {
+//
+//
+// We loop until we find direction where the vector is not nearly parallel
+// to the surface of any facet since this causes ambiguities.  The usual
+// case is that the angles should be sufficiently different, but there are 20
+// random directions to select from - hopefully sufficient.
+//
+      distOut          = kInfinity;
+      distIn           = kInfinity;
+      G4ThreeVector v  = randir[m];
+      m++;
+      FacetCI f = facets.begin();
+      do
       {
-        DistMapType::iterator itend = distmap.end();
-        itend--;
-        distmap.erase (it,itend);
-      }
-      if (distmap.size() > purgeIntv) purgeIntv = 2*distmap.size();
+//
+//
+// Here we loop through the facets to find out if there is an intersection
+// between the ray and that facet.  The test if performed separately whether
+// the ray is entering the facet or exiting.
+//
+        crossingO =  ((*f)->Intersect(p,v,true,distO,distFromSurfaceO,normalO));
+        crossingI =  ((*f)->Intersect(p,v,false,distI,distFromSurfaceI,normalI));
+        if (crossingO || crossingI)
+        {
+          nearParallel = crossingO && std::abs(normalO.dot(v))<dirTolerance ||
+                         crossingI && std::abs(normalI.dot(v))<dirTolerance;
+          if (!nearParallel)
+          {
+            if (crossingO && distO > 0.0 && distO < distOut) distOut = distO;
+            if (crossingI && distI > 0.0 && distI < distIn)  distIn  = distI;
+          }
+        }
+      } while (!nearParallel && ++f!=facets.end());
+    } while (nearParallel && m!=maxTries);
+
+    if (m == maxTries)
+    {
+//
+//
+// We've run out of random vector directions.  If nTries is set sufficiently
+// low (nTries <= 0.5*maxTries) then this would indicate that there is
+// something wrong with geometry.
+//
+      G4Exception("G4TessellatedSolid::Inside()",
+                "UnknownInsideOutside", FatalException,
+                "Cannot determine whether point is inside or outside volume!");
+    }
+//
+//
+// In the next if-then-elseif string the logic is as follows:
+// (1) You don't hit anything so cannot be inside volume, provided volume
+//     constructed correctly!
+// (2) Distance to inside (ie. nearest facet such that you enter facet) is
+//     shorter than distance to outside (nearest facet such that you exit
+//     facet) - on condition of safety distance - therefore we're outside.
+// (3) Distance to outside is shorter than distance to inside therefore we're
+//     inside.
+//
+    if (distIn == kInfinity && distOut == kInfinity)
+      locationprime = kOutside;
+    else if (distIn <= distOut - kCarTolerance*0.5)
+      locationprime = kOutside;
+    else if (distOut <= distIn - kCarTolerance*0.5)
+      locationprime = kInside;
+
+    if (i == 0) location = locationprime;
+    else if (locationprime != location)
+    {
+//
+//
+// Different ray directions result in different answer.  Seems like the
+// geometry is not constructed correctly.
+//
+      G4Exception("G4TessellatedSolid::Inside()",
+                "UnknownInsideOutside", FatalException,
+                "Cannot determine whether point is inside or outside volume!");
     }
   }
 
-  EInside inside = kInside;
-  
-  if (minDist <= 0.5*kCarTolerance) {inside = kSurface;}
-  else
-  {
-    DistMapType::const_iterator itcut = 
-      distmap.lower_bound(minDist + 0.5* kCarTolerance);
-    itcut++;
-    DistMapType::const_iterator it = distmap.begin();
-    do
-    {
-      if (!((*(it->second))->IsInside(p))) {inside = kOutside;}
-    } while (inside == kInside && ++it != itcut);
-  }
-
-  return inside;
+  return location;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 //
+// G4ThreeVector G4TessellatedSolid::SurfaceNormal (const G4ThreeVector &p) const
+//
+// Return the outwards pointing unit normal of the shape for the
+// surface closest to the point at offset p.
+
 G4ThreeVector G4TessellatedSolid::SurfaceNormal (const G4ThreeVector &p) const
 {
   FacetCI minFacet;
@@ -430,6 +595,14 @@ G4ThreeVector G4TessellatedSolid::SurfaceNormal (const G4ThreeVector &p) const
 
 ///////////////////////////////////////////////////////////////////////////////
 //
+// G4double DistanceToIn(const G4ThreeVector& p, const G4ThreeVector& v)
+//
+// Return the distance along the normalised vector v to the shape,
+// from the point at offset p. If there is no intersection, return
+// kInfinity. The first intersection resulting from ‘leaving’ a
+// surface/volume is discarded. Hence, this is tolerant of points on
+// surface of shape.
+
 G4double G4TessellatedSolid::DistanceToIn (const G4ThreeVector &p,
   const G4ThreeVector &v) const
 {
@@ -438,11 +611,30 @@ G4double G4TessellatedSolid::DistanceToIn (const G4ThreeVector &p,
   G4double distFromSurface = 0.0;
   G4ThreeVector normal(0.0,0.0,0.0);
   
+#if G4SPECSDEBUG
+  if ( Inside(p) == kInside )
+  {
+     G4cout.precision(16) ;
+     G4cout << G4endl ;
+     //     DumpInfo();
+     G4cout << "Position:"  << G4endl << G4endl ;
+     G4cout << "p.x() = "   << p.x()/mm << " mm" << G4endl ;
+     G4cout << "p.y() = "   << p.y()/mm << " mm" << G4endl ;
+     G4cout << "p.z() = "   << p.z()/mm << " mm" << G4endl << G4endl ;
+     G4cout << "DistanceToOut(p) == " << DistanceToOut(p) << G4endl;
+     G4Exception("G4TriangularFacet::DistanceToIn(p,v)", "Notification", JustWarning, 
+                 "Point p is already inside!?" );
+  }
+#endif
+
   for (FacetCI f=facets.begin(); f!=facets.end(); f++)
   {
     if ((*f)->Intersect(p,v,false,dist,distFromSurface,normal))
     {
-      if (dist < minDist) minDist  = dist;
+      if (distFromSurface > 0.5*kCarTolerance && dist >= 0.0 && dist < minDist)
+      {
+        minDist  = dist;
+      }
     }
   }
 
@@ -451,15 +643,36 @@ G4double G4TessellatedSolid::DistanceToIn (const G4ThreeVector &p,
 
 ///////////////////////////////////////////////////////////////////////////////
 //
+// G4double DistanceToIn(const G4ThreeVector& p)
+//
+// Calculate distance to nearest surface of shape from an outside point p. The
+// distance can be an underestimate.
+
 G4double G4TessellatedSolid::DistanceToIn (const G4ThreeVector &p) const
 {
   G4double minDist = kInfinity;
   G4double dist    = 0.0;
   
+#if G4SPECSDEBUG
+  if ( Inside(p) == kInside )
+  {
+     G4cout.precision(16) ;
+     G4cout << G4endl ;
+     //     DumpInfo();
+     G4cout << "Position:"  << G4endl << G4endl ;
+     G4cout << "p.x() = "   << p.x()/mm << " mm" << G4endl ;
+     G4cout << "p.y() = "   << p.y()/mm << " mm" << G4endl ;
+     G4cout << "p.z() = "   << p.z()/mm << " mm" << G4endl << G4endl ;
+     G4cout << "DistanceToOut(p) == " << DistanceToOut(p) << G4endl;
+     G4Exception("G4TriangularFacet::DistanceToIn(p)", "Notification", JustWarning, 
+                 "Point p is already inside!?" );
+  }
+#endif
+
   for (FacetCI f=facets.begin(); f!=facets.end(); f++)
   {
     dist = (*f)->Distance(p,minDist,false);
-    if (dist < minDist) minDist  = dist;
+    if (dist < minDist)  { minDist  = dist; }
   }
   
   return minDist;
@@ -467,65 +680,119 @@ G4double G4TessellatedSolid::DistanceToIn (const G4ThreeVector &p) const
 
 ///////////////////////////////////////////////////////////////////////////////
 //
+// G4double DistanceToOut(const G4ThreeVector& p, const G4ThreeVector& v,
+//                        const G4bool calcNorm=false,
+//                        G4bool *validNorm=0, G4ThreeVector *n=0);
+//
+// Return distance along the normalised vector v to the shape, from a
+// point at an offset p inside or on the surface of the
+// shape. Intersections with surfaces, when the point is not greater
+// than kCarTolerance/2 from a surface, must be ignored.
+//     If calcNorm is true, then it must also set validNorm to either
+//     * true, if the solid lies entirely behind or on the exiting
+//        surface. Then it must set n to the outwards normal vector
+//        (the Magnitude of the vector is not defined).
+//     * false, if the solid does not lie entirely behind or on the
+//       exiting surface.
+// If calcNorm is false, then validNorm and n are unused.
+
 G4double G4TessellatedSolid::DistanceToOut (const G4ThreeVector &p,
                     const G4ThreeVector &v, const G4bool calcNorm,
                           G4bool *validNorm, G4ThreeVector *n) const
 {
-  G4double minDist1        = kInfinity;
-  G4double minDist2        = kInfinity;
+  G4double minDist         = kInfinity;
   G4double dist            = 0.0;
   G4double distFromSurface = 0.0;
   G4ThreeVector normal(0.0,0.0,0.0);
-  G4ThreeVector minNormal1(0.0,0.0,0.0);
-  G4ThreeVector minNormal2(0.0,0.0,0.0);
+  G4ThreeVector minNormal(0.0,0.0,0.0);
   
+#if G4SPECSDEBUG
+  if ( Inside(p) == kOutside )
+  {
+     G4cout.precision(16) ;
+     G4cout << G4endl ;
+     //     DumpInfo();
+     G4cout << "Position:"  << G4endl << G4endl ;
+     G4cout << "p.x() = "   << p.x()/mm << " mm" << G4endl ;
+     G4cout << "p.y() = "   << p.y()/mm << " mm" << G4endl ;
+     G4cout << "p.z() = "   << p.z()/mm << " mm" << G4endl << G4endl ;
+     G4cout << "DistanceToIn(p) == " << DistanceToIn(p) << G4endl;
+     G4Exception("G4TriangularFacet::DistanceToOut(p)", "Notification", JustWarning, 
+                 "Point p is already outside !?" );
+  }
+#endif
+
+  G4bool isExtreme = false;
   for (FacetCI f=facets.begin(); f!=facets.end(); f++)
   {
     if ((*f)->Intersect(p,v,true,dist,distFromSurface,normal))
-    {
-      if (dist < minDist1)
+     {
+      if (distFromSurface > 0.0 && distFromSurface <= 0.5*kCarTolerance &&
+          (*f)->Distance(p,kCarTolerance) <= 0.5*kCarTolerance)
       {
-        if (v.dot(normal) > dirTolerance)
-        {
-          minDist1   = dist;
-          minNormal1 = normal;
-        }
-        else if (dist < minDist2)
-        {
-          minDist2   = dist;
-          minNormal2 = normal;
-        }
+        // We are on a surface. Return zero.
+        *validNorm = extremeFacets.count(*f);
+        *n         = SurfaceNormal(p);
+        return 0.0;
+      }
+      if (dist >= 0.0 && dist < minDist)
+      {
+        minDist   = dist;
+        minNormal = normal;
+        isExtreme = extremeFacets.count(*f);
       }
     }
   }
   
-  if (minDist1 < kInfinity)
+  if (minDist < kInfinity)
   {
     if (calcNorm)
     {
-      *validNorm = true;
-      *n         = minNormal1;
+      *validNorm = isExtreme;
+      *n         = minNormal;
     }
-    return minDist1;
+    return minDist;
   }
   else
   {
+    // No intersection found
     if (calcNorm)
     {
-      *validNorm = true;
-      *n         = minNormal2;
+      *validNorm = false;
+      *n         = SurfaceNormal(p);
     }
-    return minDist2;
+    return 0.0;
   }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 //
+// G4double DistanceToOut(const G4ThreeVector& p)
+//
+// Calculate distance to nearest surface of shape from an inside
+// point. The distance can be an underestimate.
+
 G4double G4TessellatedSolid::DistanceToOut (const G4ThreeVector &p) const
 {
   G4double minDist = kInfinity;
   G4double dist    = 0.0;
   
+#if G4SPECSDEBUG
+  if ( Inside(p) == kOutside )
+  {
+     G4cout.precision(16) ;
+     G4cout << G4endl ;
+     //     DumpInfo();
+     G4cout << "Position:"  << G4endl << G4endl ;
+     G4cout << "p.x() = "   << p.x()/mm << " mm" << G4endl ;
+     G4cout << "p.y() = "   << p.y()/mm << " mm" << G4endl ;
+     G4cout << "p.z() = "   << p.z()/mm << " mm" << G4endl << G4endl ;
+     G4cout << "DistanceToIn(p) == " << DistanceToIn(p) << G4endl;
+     G4Exception("G4TriangularFacet::DistanceToOut(p)", "Notification", JustWarning, 
+                 "Point p is already outside !?" );
+  }
+#endif
+
   for (FacetCI f=facets.begin(); f!=facets.end(); f++)
   {
     dist = (*f)->Distance(p,minDist,true);
@@ -536,6 +803,11 @@ G4double G4TessellatedSolid::DistanceToOut (const G4ThreeVector &p) const
 }
 
 ///////////////////////////////////////////////////////////////////////////////
+//
+// G4GeometryType GetEntityType() const;
+//
+// Provide identification of the class of an object (required for
+// persistency and STEP interface).
 //
 G4GeometryType G4TessellatedSolid::GetEntityType () const
 {
@@ -637,105 +909,86 @@ G4Polyhedron* G4TessellatedSolid::GetPolyhedron () const
 
 ///////////////////////////////////////////////////////////////////////////////
 //
-G4bool G4TessellatedSolid::CalculateExtent(const EAxis pAxis,
-         const G4VoxelLimits& pVoxelLimit, const G4AffineTransform& pTransform,
-               G4double& pMin, G4double& pMax) const
+// CalculateExtent
+//
+// Based on correction provided by Stan Seibert, University of Texas.
+//
+G4bool
+G4TessellatedSolid::CalculateExtent(const EAxis pAxis,
+                                    const G4VoxelLimits& pVoxelLimit,
+                                    const G4AffineTransform& pTransform,
+                                          G4double& pMin, G4double& pMax) const
 {
-  if (!pTransform.IsRotated())
-  {
-    G4double xoffset,xMin,xMax;
-    G4double yoffset,yMin,yMax;
-    G4double zoffset,zMin,zMax;
-                                                                                
-    xoffset = pTransform.NetTranslation().x();
-    xMin    = xoffset + xMinExtent;
-    xMax    = xoffset + xMaxExtent;
-                                                                                
-    if (pVoxelLimit.IsXLimited())
+    G4ThreeVectorList transVertexList(vertexList);
+
+    // Put solid into transformed frame
+    for (size_t i=0; i<vertexList.size(); i++)
+      { pTransform.ApplyPointTransform(transVertexList[i]); }
+
+    // Find min and max extent in each dimension
+    G4ThreeVector minExtent(kInfinity, kInfinity, kInfinity);
+    G4ThreeVector maxExtent(-kInfinity, -kInfinity, -kInfinity);
+    for (size_t i=0; i<transVertexList.size(); i++)
     {
-      if ( xMin > pVoxelLimit.GetMaxXExtent()+kCarTolerance ||
-           xMax < pVoxelLimit.GetMinXExtent()-kCarTolerance    ) return false ;
-      else
+      for (G4int axis=G4ThreeVector::X; axis < G4ThreeVector::SIZE; axis++)
       {
-        if (xMin < pVoxelLimit.GetMinXExtent())
-        {
-          xMin = pVoxelLimit.GetMinXExtent() ;
-        }
-        if (xMax > pVoxelLimit.GetMaxXExtent())
-        {
-          xMax = pVoxelLimit.GetMaxXExtent() ;
-        }
+        G4double coordinate = transVertexList[i][axis];
+        if (coordinate < minExtent[axis])
+          { minExtent[axis] = coordinate; }
+        if (coordinate > maxExtent[axis])
+          { maxExtent[axis] = coordinate; }
       }
     }
- 
-    yoffset = pTransform.NetTranslation().y();
-    yMin    = yoffset + yMinExtent;
-    yMax    = yoffset + yMaxExtent;
-                                                                                
-    if (pVoxelLimit.IsYLimited())
+
+    // Check for containment and clamp to voxel boundaries
+    for (G4int axis=G4ThreeVector::X; axis < G4ThreeVector::SIZE; axis++)
     {
-      if ( yMin > pVoxelLimit.GetMaxYExtent()+kCarTolerance ||
-           yMax < pVoxelLimit.GetMinYExtent()-kCarTolerance    ) return false ;
-      else
+      EAxis geomAxis = kXAxis; // G4 geom classes use different index type
+      switch(axis)
       {
-        if (yMin < pVoxelLimit.GetMinYExtent())
+        case G4ThreeVector::X: geomAxis = kXAxis; break;
+        case G4ThreeVector::Y: geomAxis = kYAxis; break;
+        case G4ThreeVector::Z: geomAxis = kZAxis; break;
+      }
+      G4bool isLimited = pVoxelLimit.IsLimited(geomAxis);
+      G4double voxelMinExtent = pVoxelLimit.GetMinExtent(geomAxis);
+      G4double voxelMaxExtent = pVoxelLimit.GetMaxExtent(geomAxis);
+
+      if (isLimited)
+      {
+        if ( minExtent[axis] > voxelMaxExtent+kCarTolerance ||
+             maxExtent[axis] < voxelMinExtent-kCarTolerance    )
         {
-          yMin = pVoxelLimit.GetMinYExtent() ;
+          return false ;
         }
-        if (yMax > pVoxelLimit.GetMaxYExtent())
+        else
         {
-          yMax = pVoxelLimit.GetMaxYExtent() ;
+          if (minExtent[axis] < voxelMinExtent)
+          {
+            minExtent[axis] = voxelMinExtent ;
+          }
+          if (maxExtent[axis] > voxelMaxExtent)
+          {
+            maxExtent[axis] = voxelMaxExtent;
+          }
         }
       }
     }
 
-    zoffset = pTransform.NetTranslation().z();
-    zMin    = zoffset + zMinExtent;
-    zMax    = zoffset + zMaxExtent;
-                                                                                
-    if (pVoxelLimit.IsZLimited())
+    // Convert pAxis into G4ThreeVector index
+    G4int vecAxis=0;
+    switch(pAxis)
     {
-      if ( zMin > pVoxelLimit.GetMaxZExtent()+kCarTolerance ||
-           zMax < pVoxelLimit.GetMinZExtent()-kCarTolerance    ) return false ;
-      else
-      {
-        if (zMin < pVoxelLimit.GetMinZExtent())
-        {
-          zMin = pVoxelLimit.GetMinZExtent() ;
-        }
-        if (zMax > pVoxelLimit.GetMaxZExtent())
-        {
-          zMax = pVoxelLimit.GetMaxZExtent() ;
-        }
-      }
-    }
+      case kXAxis: vecAxis = G4ThreeVector::X; break;
+      case kYAxis: vecAxis = G4ThreeVector::Y; break;
+      case kZAxis: vecAxis = G4ThreeVector::Z; break;
+      default: break;
+    } 
 
-    switch (pAxis)
-    {
-      case kXAxis:
-        pMin = xMin ;
-        pMax = xMax ;
-        break ;
-      case kYAxis:
-        pMin=yMin;
-        pMax=yMax;
-        break;
-      case kZAxis:
-        pMin=zMin;
-        pMax=zMax;
-        break;
-      default:
-        break;
-    }
-    pMin -= kCarTolerance ;
-    pMax += kCarTolerance ;
-                                                                                
+    pMin = minExtent[vecAxis] - kCarTolerance;
+    pMax = maxExtent[vecAxis] + kCarTolerance;
+
     return true;
-  }
-  else
-  {
-  }
-  return false;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -803,7 +1056,41 @@ G4double G4TessellatedSolid::GetSurfaceArea ()
 G4ThreeVector G4TessellatedSolid::GetPointOnSurface() const
 {
   // Select randomly a facet and return a random point on it
- 
+
   G4int i = CLHEP::RandFlat::shootInt(facets.size());
   return facets[i]->GetPointOnFace();
+}
+///////////////////////////////////////////////////////////////////////////////
+//
+// SetRandomVectorSet
+//
+// This is a set of predefined random vectors (if that isn't a contradition
+// in terms!) used to generate rays from a user-defined point.  The member
+// function Inside uses these to determine whether the point is inside or
+// outside of the tessellated solid.  All vectors should be unit vectors.
+//
+void G4TessellatedSolid::SetRandomVectorSet()
+{
+  randir[0]  = G4ThreeVector(-0.9577428892113370, 0.2732676269591740, 0.0897405271949221);
+  randir[1]  = G4ThreeVector(-0.8331264504940770,-0.5162067214954600,-0.1985722492445700);
+  randir[2]  = G4ThreeVector(-0.1516671651108820, 0.9666292616127460, 0.2064580868390110);
+  randir[3]  = G4ThreeVector( 0.6570250350323190,-0.6944539025883300, 0.2933460081893360);
+  randir[4]  = G4ThreeVector(-0.4820456281280320,-0.6331060000098690,-0.6056474264406270);
+  randir[5]  = G4ThreeVector( 0.7629032554236800, 0.1016854697539910,-0.6384658864065180);
+  randir[6]  = G4ThreeVector( 0.7689540409061150, 0.5034929891988220, 0.3939600142169160);
+  randir[7]  = G4ThreeVector( 0.5765188359255740, 0.5997271636278330,-0.5549354566343150);
+  randir[8]  = G4ThreeVector( 0.6660632777862070,-0.6362809868288380, 0.3892379937580790);
+  randir[9]  = G4ThreeVector( 0.3824415020414780, 0.6541792713761380,-0.6525243125110690);
+  randir[10] = G4ThreeVector(-0.5107726564526760, 0.6020905056811610, 0.6136760679616570);
+  randir[11] = G4ThreeVector( 0.7459135439578050, 0.6618796061649330, 0.0743530220183488);
+  randir[12] = G4ThreeVector( 0.1536405855311580, 0.8117477913978260,-0.5634359711967240);
+  randir[13] = G4ThreeVector( 0.0744395301705579,-0.8707110101772920,-0.4861286795736560);
+  randir[14] = G4ThreeVector(-0.1665874645185400, 0.6018553940549240,-0.7810369397872780);
+  randir[15] = G4ThreeVector( 0.7766902003633100, 0.6014617505959970,-0.1870724331097450);
+  randir[16] = G4ThreeVector(-0.8710128685847430,-0.1434320216603030,-0.4698551243971010);
+  randir[17] = G4ThreeVector( 0.8901082092766820,-0.4388411398893870, 0.1229871120030100);
+  randir[18] = G4ThreeVector(-0.6430417431544370,-0.3295938228697690, 0.6912779675984150);
+  randir[19] = G4ThreeVector( 0.6331124368380410, 0.6306211461665000, 0.4488714875425340);
+
+  maxTries = 20;
 }

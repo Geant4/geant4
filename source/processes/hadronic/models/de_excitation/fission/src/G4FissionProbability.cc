@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4FissionProbability.cc,v 1.8 2007/02/12 09:39:58 ahoward Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Oct 1998)

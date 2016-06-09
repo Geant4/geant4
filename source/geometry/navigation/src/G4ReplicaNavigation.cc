@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ReplicaNavigation.cc,v 1.13 2007/05/18 07:31:03 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: G4ReplicaNavigation.cc,v 1.17 2007/11/16 09:39:14 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 //
 // class G4ReplicaNavigation Implementation
@@ -206,11 +206,13 @@ G4ReplicaNavigation::DistanceToOut(const G4VPhysicalVolume *pVol,
     case kPhi:
       if ( localPoint.y()<=0 )
       {
-        safety = localPoint.x()*std::sin(width*0.5)+localPoint.y()*std::cos(width*0.5);
+        safety = localPoint.x()*std::sin(width*0.5)
+               + localPoint.y()*std::cos(width*0.5);
       }
       else
       {
-        safety = localPoint.x()*std::sin(width*0.5)-localPoint.y()*std::cos(width*0.5);
+        safety = localPoint.x()*std::sin(width*0.5)
+               - localPoint.y()*std::cos(width*0.5);
       }
       break;
     case kRho:
@@ -268,12 +270,12 @@ G4ReplicaNavigation::DistanceToOut(const G4VPhysicalVolume *pVol,
       if ( Comp>0 )
       {
         lindist = width*0.5-coord;
-        Dist = (lindist>kCarTolerance*0.5) ? lindist/Comp : 0;
+        Dist = (lindist>0) ? lindist/Comp : 0;
       }
       else if ( Comp<0 )
       {
         lindist = width*0.5+coord;
-        Dist = (lindist>kCarTolerance*0.5) ? -lindist/Comp : 0;
+        Dist = (lindist>0) ? -lindist/Comp : 0;
       }
       else
       {
@@ -757,6 +759,13 @@ G4ReplicaNavigation::ComputeStep(const G4ThreeVector &globalPoint,
   motherStep = motherSolid->DistanceToOut(repPoint,repDirection,true,
                                           &validExitNormal,&exitNormal);
 
+  // Push in principle no longer necessary. G4Navigator now takes care of ...
+  // Removing this will however generate warnings for pushed particles from
+  // G4Navigator, particularly for the case of 3D replicas (Cartesian or
+  // combined Radial/Phi cases).
+  // Requires further investigation and eventually reimplementation of
+  // LevelLocate() to take into account point and direction ...
+  //
   if  ( ( !ourStep && (sampleSafety<0.5*kCarTolerance) )
      && ( repLogical->GetSolid()->Inside(localPoint)==kSurface ) )
   {
@@ -833,20 +842,20 @@ G4ReplicaNavigation::ComputeStep(const G4ThreeVector &globalPoint,
                         sampleTf.TransformPoint(localPoint);
       const G4VSolid* sampleSolid =
                         samplePhysical->GetLogicalVolume()->GetSolid();
-      const G4double sampleSafety =
+      const G4double sampleSafetyDistance =
                         sampleSolid->DistanceToIn(samplePoint);
-      if ( sampleSafety<ourSafety )
+      if ( sampleSafetyDistance<ourSafety )
       {
-        ourSafety = sampleSafety;
+        ourSafety = sampleSafetyDistance;
       }
-      if ( sampleSafety<=ourStep )
+      if ( sampleSafetyDistance<=ourStep )
       {
         sampleDirection = sampleTf.TransformAxis(localDirection);
-        const G4double sampleStep =
+        const G4double sampleStepDistance =
                         sampleSolid->DistanceToIn(samplePoint,sampleDirection);
-        if ( sampleStep<=ourStep )
+        if ( sampleStepDistance<=ourStep )
         {
-          ourStep  = sampleStep;
+          ourStep  = sampleStepDistance;
           entering = true;
           exiting  = false;
           *pBlockedPhysical = samplePhysical;
@@ -855,10 +864,11 @@ G4ReplicaNavigation::ComputeStep(const G4ThreeVector &globalPoint,
           // Check to see that the resulting point is indeed in/on volume.
           // This check could eventually be made only for successful candidate.
 
-          if ( ( fCheck ) && ( sampleStep < kInfinity ) )
+          if ( ( fCheck ) && ( sampleStepDistance < kInfinity ) )
           {
             G4ThreeVector intersectionPoint;
-            intersectionPoint= samplePoint + sampleStep * sampleDirection;
+            intersectionPoint= samplePoint
+                             + sampleStepDistance * sampleDirection;
             EInside insideIntPt= sampleSolid->Inside(intersectionPoint); 
             if ( insideIntPt != kSurface )
             {
@@ -867,8 +877,8 @@ G4ReplicaNavigation::ComputeStep(const G4ThreeVector &globalPoint,
                      << G4endl
                      << "          Inaccurate DistanceToIn for solid "
                      << sampleSolid->GetName() << G4endl;
-              G4cout << "          Solid gave DistanceToIn = " << sampleStep
-                     << " yet returns " ;
+              G4cout << "          Solid gave DistanceToIn = "
+                     << sampleStepDistance << " yet returns " ;
               if ( insideIntPt == kInside )
                 G4cout << "-kInside-"; 
               else if ( insideIntPt == kOutside )
@@ -979,11 +989,11 @@ G4ReplicaNavigation::ComputeSafety(const G4ThreeVector &globalPoint,
                             sampleTf.TransformPoint(localPoint);
       const G4VSolid *sampleSolid =
                             samplePhysical->GetLogicalVolume()->GetSolid();
-      const G4double sampleSafety =
+      const G4double sampleSafetyDistance =
                             sampleSolid->DistanceToIn(samplePoint);
-      if ( sampleSafety<ourSafety )
+      if ( sampleSafetyDistance<ourSafety )
       {
-        ourSafety = sampleSafety;
+        ourSafety = sampleSafetyDistance;
       }
     }
   }

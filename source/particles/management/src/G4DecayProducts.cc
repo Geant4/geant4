@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4DecayProducts.cc,v 1.15 2007/05/07 10:04:33 gunter Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: G4DecayProducts.cc,v 1.16 2007/10/06 06:49:29 kurasige Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 // 
 // ------------------------------------------------------------
@@ -281,8 +281,14 @@ G4bool G4DecayProducts::IsChecked() const
   // check energy/momentum conservation
   if ( (std::abs(total_energy) >1.0e-6) || (total_momentum.mag() >1.0e-6 ) ){ 
 #ifdef G4VERBOSE
-    G4cout << " Energy/Momentum is not conserved   ";
-    G4cout << total_energy << "  " << total_momentum << G4endl;
+    G4cout << " Energy/Momentum is not conserved   "<< G4endl;
+    G4cout << " difference between parent energy and sum of dughters' energy : " 
+	   << total_energy /MeV << "[MeV]  " << G4endl; 
+    G4cout << " difference between parent momentum and sum of dughters' momentum : " 
+	   << " x:" << total_momentum.getX()/MeV 
+	   << " y:" << total_momentum.getY()/MeV  
+	   << " z:" << total_momentum.getZ()/MeV  
+	   << G4endl;
 #endif
     returnValue = false;
   }

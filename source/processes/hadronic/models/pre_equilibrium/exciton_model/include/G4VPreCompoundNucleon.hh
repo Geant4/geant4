@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VPreCompoundNucleon.hh,v 1.3 2006/06/29 20:58:48 gunter Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: G4VPreCompoundNucleon.hh,v 1.4 2007/07/23 09:56:40 ahoward Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 // by V. Lara
 
@@ -75,6 +75,9 @@ public:
 
     
 protected:
+
+// added Rj method according to literature and JMQ
+  virtual G4double GetRj(const G4int NumberParticles, const G4int NumberCharged) = 0;
   virtual G4double GetAlpha() = 0;
   virtual G4double GetBeta() = 0;
   virtual G4bool IsItPossible(const G4Fragment&) = 0; 

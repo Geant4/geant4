@@ -25,7 +25,7 @@
 //
 //
 // $Id: B01ScoreTable.cc,v 1.2 2007/06/22 13:15:29 ahoward Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file

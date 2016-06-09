@@ -1,4 +1,4 @@
-$Id: History,v 1.13 2006/11/16 04:53:32 tomezb Exp $
+$Id: History,v 1.14 2007/09/30 23:05:58 gum Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -7,6 +7,10 @@ $Id: History,v 1.13 2006/11/16 04:53:32 tomezb Exp $
 
                            History file
                            ------------
+
+30.09.2007 -- P.Gumplinger - air_shower-V09-00-00
+           -- adjust to the G4Cerenkov process now being a G4VDiscreteProcess
+
 16.11.2006 -- B. Tome  - air_shower-V08-01-00
            -- Tested with candidate tag geant4-08-02-cand-00.
            -- Ultra.cc - Removed invocation of Visualisation.mac if argc==1.

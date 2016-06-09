@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4OpenInventorTransform3D.hh,v 1.7 2006/06/29 21:20:26 gunter Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 // 
 // jck  17 Dec 1996

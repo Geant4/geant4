@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VGraphicsScene.hh,v 1.9 2006/07/10 15:19:29 allison Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: G4VGraphicsScene.hh,v 1.10 2007/07/17 17:52:20 allison Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 // John Allison  19th July 1996
 //
 // Class Description:
@@ -67,6 +67,9 @@ class G4NURBS;
 class G4VGraphicsScene {
 
 public: // With description
+
+  G4VGraphicsScene();
+  virtual ~G4VGraphicsScene();
 
   ///////////////////////////////////////////////////////////////////
   // Methods for adding solids to the scene handler.  They

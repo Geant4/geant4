@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: ExN06PhysicsList.cc,v 1.13 2006/06/29 17:54:23 gunter Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: ExN06PhysicsList.cc,v 1.14 2007/09/30 22:51:03 gum Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -272,7 +272,8 @@ void ExN06PhysicsList::ConstructOp()
     G4ProcessManager* pmanager = particle->GetProcessManager();
     G4String particleName = particle->GetParticleName();
     if (theCerenkovProcess->IsApplicable(*particle)) {
-      pmanager->AddContinuousProcess(theCerenkovProcess);
+      pmanager->AddProcess(theCerenkovProcess);
+      pmanager->SetProcessOrdering(theCerenkovProcess,idxPostStep);
     }
     if (theScintillationProcess->IsApplicable(*particle)) {
       pmanager->AddProcess(theScintillationProcess);

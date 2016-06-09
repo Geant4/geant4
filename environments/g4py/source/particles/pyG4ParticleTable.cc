@@ -23,14 +23,15 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: pyG4ParticleTable.cc,v 1.4 2006/06/29 15:34:37 gunter Exp $
-// $Name: geant4-09-00 $
+// $Id: pyG4ParticleTable.cc,v 1.5 2007/11/07 09:12:53 kmura Exp $
+// $Name: geant4-09-01 $
 // ====================================================================
 //   pyG4ParticleTable.cc
 //
 //                                         2005 Q
 // ====================================================================
 #include <boost/python.hpp>
+#include "G4Version.hh"
 #include "G4ParticleTable.hh"
 
 using namespace boost::python;
@@ -71,8 +72,22 @@ G4ParticleDefinition*(G4ParticleTable::*f3_FindAntiParticle)(
 G4ParticleDefinition*(G4ParticleTable::*f1_FindIon)(G4int, G4int, G4double)
   = &G4ParticleTable::FindIon;
 
-G4ParticleDefinition*(G4ParticleTable::*f2_FindIon)(
-G4int, G4int, G4int, G4int)= &G4ParticleTable::FindIon;
+G4ParticleDefinition*(G4ParticleTable::*f2_FindIon)
+  (G4int, G4int, G4int, G4int)= &G4ParticleTable::FindIon;
+
+#if G4VERSION_NUMBER >= 910
+G4ParticleDefinition*(G4ParticleTable::*f3_FindIon)
+  (G4int, G4int, G4int, G4double)= &G4ParticleTable::FindIon;
+#endif
+
+#if G4VERSION_NUMBER >= 910
+// GetIon
+G4ParticleDefinition*(G4ParticleTable::*f1_GetIon)(G4int, G4int, G4double)
+  = &G4ParticleTable::GetIon;
+
+G4ParticleDefinition*(G4ParticleTable::*f2_GetIon)
+  (G4int, G4int, G4int, G4double)= &G4ParticleTable::GetIon;
+#endif
 
 // DumpTable
 BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(f_DumpTable, DumpTable, 0, 1);
@@ -135,8 +150,19 @@ void export_G4ParticleTable()
          return_value_policy<reference_existing_object>())
     .def("FindIon",           f2_FindIon,
          return_value_policy<reference_existing_object>())
+#if G4VERSION_NUMBER >= 910
+    .def("FindIon",           f3_FindIon,
+         return_value_policy<reference_existing_object>())
+#endif
+#if G4VERSION_NUMBER >= 910
+    .def("GetIon",           f1_GetIon,
+         return_value_policy<reference_existing_object>())
+    .def("GetIon",           f2_GetIon,
+         return_value_policy<reference_existing_object>())
+#else
     .def("GetIon",            &G4ParticleTable::GetIon,
          return_value_policy<reference_existing_object>())
+#endif
     .def("DumpTable",         &G4ParticleTable::DumpTable, f_DumpTable())
     //.def("GetIonTable",     &G4ParticleTable::GetIonTable,
     //...)

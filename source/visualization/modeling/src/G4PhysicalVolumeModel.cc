@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicalVolumeModel.cc,v 1.62 2007/05/30 07:58:19 allison Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: G4PhysicalVolumeModel.cc,v 1.63 2007/11/10 14:56:36 allison Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 // 
 // John Allison  31st December 1997.
@@ -656,7 +656,7 @@ G4bool G4PhysicalVolumeModel::Validate (G4bool warn)
       G4cout << "  Volume of the same name and copy number (\""
 	     << fTopPVName << "\", copy " << fTopPVCopyNo
 	     << ") still exists and is being used."
-	"\n  Be warned that this does not necessarily guarantee it's the same"
+	"\n  WARNING: This does not necessarily guarantee it's the same"
 	"\n  volume you originally specified in /vis/scene/add/."
 	     << G4endl;
     }

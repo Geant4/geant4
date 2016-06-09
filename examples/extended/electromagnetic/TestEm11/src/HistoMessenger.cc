@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HistoMessenger.cc,v 1.3 2006/06/29 16:40:22 gunter Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: HistoMessenger.cc,v 1.5 2007/11/07 17:22:16 maire Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -39,6 +39,7 @@
 #include "G4UIparameter.hh"
 #include "G4UIcmdWithAString.hh"
 #include "G4UIcmdWithAnInteger.hh"
+#include "G4UIcmdWithADoubleAndUnit.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -82,17 +83,30 @@ HistoMessenger::HistoMessenger(HistoManager* manager)
   unit->SetDefaultValue("none");
   histoCmd->SetParameter(unit);
   
+  prhistoCmd = new G4UIcmdWithAnInteger("/testem/histo/printHisto",this);
+  prhistoCmd->SetGuidance("print histo #id on ascii file");
+  prhistoCmd->SetParameterName("id",false);
+  prhistoCmd->SetRange("id>0");
+    
   rmhistoCmd = new G4UIcmdWithAnInteger("/testem/histo/removeHisto",this);
   rmhistoCmd->SetGuidance("desactivate histo  #id");
   rmhistoCmd->SetParameterName("id",false);
   rmhistoCmd->SetRange("id>0");
+  
+  csdaCmd = new G4UIcmdWithADoubleAndUnit("/testem/histo/setcsdaRange",this);
+  csdaCmd->SetGuidance("Set csda range for normalisation");
+  csdaCmd->SetParameterName("csda",false);
+  csdaCmd->SetRange("csda>0.");
+  csdaCmd->SetUnitCategory("Length");
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 HistoMessenger::~HistoMessenger()
 {
+  delete csdaCmd; 
   delete rmhistoCmd;
+  delete prhistoCmd;
   delete histoCmd;
   delete typeCmd;  
   delete factoryCmd;
@@ -119,9 +133,15 @@ void HistoMessenger::SetNewValue(G4UIcommand* command, G4String newValues)
      if (unit != "none") vUnit = G4UIcommand::ValueOf(unit);
      histoManager->SetHisto (ih,nbBins,vmin*vUnit,vmax*vUnit,unit);
    }
-    
+   
+  if (command == prhistoCmd)
+    histoManager->PrintHisto(prhistoCmd->GetNewIntValue(newValues));
+        
   if (command == rmhistoCmd)
-    histoManager->RemoveHisto(rmhistoCmd->GetNewIntValue(newValues));         
+    histoManager->RemoveHisto(rmhistoCmd->GetNewIntValue(newValues));
+    
+  if (command == csdaCmd)
+    histoManager->SetcsdaRange(csdaCmd->GetNewDoubleValue(newValues));             
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

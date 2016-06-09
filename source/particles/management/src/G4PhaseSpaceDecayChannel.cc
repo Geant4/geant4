@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhaseSpaceDecayChannel.cc,v 1.12 2006/09/28 14:30:33 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: G4PhaseSpaceDecayChannel.cc,v 1.13 2007/10/06 06:49:29 kurasige Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 // 
 // ------------------------------------------------------------
@@ -442,22 +442,39 @@ G4DecayProducts *G4PhaseSpaceDecayChannel::ManyBodyDecayIt()
       } else {
 	// calculate weight of this events
         weight *=  daughtermomentum[index]/sm[index];
+#ifdef G4VERBOSE
         if (GetVerboseLevel()>1) {
           G4cout << "     daughter " << index << ":" << *daughters_name[index];
           G4cout << " momentum:" << daughtermomentum[index]/GeV << "[GeV/c]" <<G4endl;
         }
+#endif
       }
     }
+
+#ifdef G4VERBOSE
     if (GetVerboseLevel()>1) {
       G4cout << "    weight: " << weight <<G4endl;
     }
+#endif
     
     // exit if number of Try exceeds 100
     if (numberOfTry++ >100) {
+#ifdef G4VERBOSE
       if (GetVerboseLevel()>0) {
         G4cout << "G4PhaseSpaceDecayChannel::ManyBodyDecayIt: ";
 	G4cout << " can not determine Decay Kinematics " << G4endl;
+	G4cout << "parent : " << *parent_name << G4endl;
+	G4cout << "daughters : "; 
+	for(index=0; index<numberOfDaughters; index++) {
+	  G4cout <<  *daughters_name[index] << " , ";
+	}
+	G4cout << G4endl;
       }
+#endif
+      G4Exception("G4PhaseSpaceDecayChannel::ManyBodyDecayIt: ",
+                  " Cannot decay ", JustWarning,
+		  " Decay Kinematics cannot be calculated ");
+      
       delete [] sm;
       delete [] daughtermass;
       delete [] daughtermomentum;
@@ -469,7 +486,8 @@ G4DecayProducts *G4PhaseSpaceDecayChannel::ManyBodyDecayIt()
   if (GetVerboseLevel()>1) {
       G4cout << "Start calulation of daughters momentum vector "<<G4endl;
   }
-#endif  
+#endif 
+ 
   G4double costheta, sintheta, phi;
   G4double beta;
   daughterparticle = new G4DynamicParticle*[numberOfDaughters];
@@ -520,6 +538,7 @@ G4DecayProducts *G4PhaseSpaceDecayChannel::ManyBodyDecayIt()
   for (index = 0; index<numberOfDaughters; index++) {
     products->PushProducts(daughterparticle[index]);
   }
+
 #ifdef G4VERBOSE
   if (GetVerboseLevel()>1) { 
     G4cout << "G4PhaseSpaceDecayChannel::ManyBodyDecayIt ";
@@ -527,6 +546,7 @@ G4DecayProducts *G4PhaseSpaceDecayChannel::ManyBodyDecayIt()
     products->DumpInfo();
   }
 #endif
+
   delete [] daughterparticle;
   delete [] daughtermomentum;
   delete [] daughtermass;

@@ -23,14 +23,15 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: pyG4VSolid.cc,v 1.4 2006/06/29 15:32:54 gunter Exp $
-// $Name: geant4-09-00 $
+// $Id: pyG4VSolid.cc,v 1.5 2007/07/11 15:21:24 kmura Exp $
+// $Name: geant4-09-01 $
 // ====================================================================
 //   pyG4VSolid.cc
 //
 //                                         2005 Q
 // ====================================================================
 #include <boost/python.hpp>
+#include "pyG4Version.hh"
 #include "G4VSolid.hh"
 
 using namespace boost::python;
@@ -43,9 +44,17 @@ void export_G4VSolid()
   class_<G4VSolid, G4VSolid*, boost::noncopyable> 
     ("G4VSolid", "solid class", no_init)
     // ---
-    .def("GetName",    &G4VSolid::GetName)
-    .def("SetName",    &G4VSolid::SetName)
-    .def("DumpInfo",   &G4VSolid::DumpInfo)
+    .def("GetName",        &G4VSolid::GetName)
+    .def("SetName",        &G4VSolid::SetName)
+    .def("DumpInfo",       &G4VSolid::DumpInfo)
+
+    .def("GetCubicVolume",    &G4VSolid::GetCubicVolume)
+#if G4VERSION_NUMBER >=820
+    .def("GetSurfaceArea",    &G4VSolid::GetSurfaceArea)
+#endif
+#if G4VERSION_NUMBER >=800
+    .def("GetPointOnSurface", &G4VSolid::GetPointOnSurface)
+#endif
     // operators
     .def(self == self)
     ;

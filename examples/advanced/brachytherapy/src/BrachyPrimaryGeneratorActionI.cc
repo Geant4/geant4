@@ -38,7 +38,7 @@
 //    ********************************************
 //
 // $Id: BrachyPrimaryGeneratorActionI.cc,v 1.10 2006/06/29 15:48:48 gunter Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 #include "BrachyPrimaryGeneratorActionI.hh"
 

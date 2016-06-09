@@ -1,4 +1,4 @@
-$Id: History,v 1.34 2006/10/18 16:18:02 allison Exp $
+$Id: History,v 1.35 2007/09/30 22:49:55 gum Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+30 Sept 2007 Peter Gumplinger (exampleN06-V09-00-00)
+- adjust to the G4Cerenkov process now being a G4VDiscreteProcess
 
 October 18th 2006 J.Allison  (exampleN06-V08-01-00)
 - Migrate to new trajectory modeling commands.

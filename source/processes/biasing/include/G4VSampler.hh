@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4VSampler.hh,v 1.8 2007/06/25 06:57:22 ahoward Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 // ----------------------------------------------------------------------
 // Class G4VSampler

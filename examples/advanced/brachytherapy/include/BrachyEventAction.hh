@@ -25,7 +25,7 @@
 //
 //
 // $Id: BrachyEventAction.hh,v 1.15 2006/06/29 15:47:28 gunter Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 // Code developed by:
 //  S.Guatelli

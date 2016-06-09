@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QCoherentChargeExchange.cc,v 1.3 2007/05/23 15:14:25 mkossov Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: G4QCoherentChargeExchange.cc,v 1.5 2007/10/02 10:00:37 mkossov Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 //      ---------------- G4QCoherentChargeExchange class -----------------
 //                 by Mikhail Kossov, December 2003.
@@ -408,8 +408,9 @@ G4VParticleChange* G4QCoherentChargeExchange::PostStepDoIt(const G4Track& track,
 #ifdef debug
   G4cout<<"G4QCoherentChargeExchange::PostStepDoIt: track is initialized"<<G4endl;
 #endif
-  G4double localtime = track.GetGlobalTime();
-  G4ThreeVector position = track.GetPosition();
+  G4double      weight    = track.GetWeight();
+  G4double      localtime = track.GetGlobalTime();
+  G4ThreeVector position  = track.GetPosition();
 #ifdef debug
   G4cout<<"G4QCoherentChargeExchange::PostStepDoIt: before Touchable extraction"<<G4endl;
 #endif
@@ -510,6 +511,7 @@ G4VParticleChange* G4QCoherentChargeExchange::PostStepDoIt(const G4Track& track,
   EnMomConservation-=scat4M;
   theSec->Set4Momentum(scat4M);
   G4Track* aNewTrack = new G4Track(theSec, localtime, position );
+  aNewTrack->SetWeight(weight);                                   //    weighted
   aNewTrack->SetTouchableHandle(trTouchable);
   aParticleChange.AddSecondary( aNewTrack );
   // Filling the recoil nucleus
@@ -537,6 +539,7 @@ G4VParticleChange* G4QCoherentChargeExchange::PostStepDoIt(const G4Track& track,
 #endif
   // Make a recoil nucleus
   aNewTrack = new G4Track(theSec, localtime, position );
+  aNewTrack->SetWeight(weight);                                   //    weighted
   aNewTrack->SetTouchableHandle(trTouchable);
   aParticleChange.AddSecondary( aNewTrack );
 #ifdef debug
@@ -551,6 +554,7 @@ G4double G4QCoherentChargeExchange::CalculateXSt(G4bool oxs, G4bool xst, G4doubl
   static G4bool init=false;
   static G4bool first=true;
   static G4VQCrossSection* CSmanager;
+  G4QuasiFreeRatios* qfMan=G4QuasiFreeRatios::GetPointer();
   if(first)                              // Connection with a singletone
   {
     CSmanager=G4QElasticCrossSection::GetPointer();
@@ -560,12 +564,12 @@ G4double G4QCoherentChargeExchange::CalculateXSt(G4bool oxs, G4bool xst, G4doubl
   if(oxs && xst)                         // Only the Cross-Section can be returened
   {
     res=CSmanager->GetCrossSection(true, p, Z, N, pPDG); // XS for isotope
-    res*=ChExElCoef(p, Z, N, pPDG);
+    res*=qfMan->ChExElCoef(p*MeV, Z, N, pPDG);
   }
   else if(!oxs && xst)                   // Calculate Cross-Section & prepare differential
   {
     res=CSmanager->GetCrossSection(false, p, Z, N, pPDG);// XS for isotope + init t-distr.
-    res*=ChExElCoef(p, Z, N, pPDG);      // @@ is that necessary?
+    res*=qfMan->ChExElCoef(p*MeV, Z, N, pPDG);
     // The XS for the nucleus must be calculated the last
     init=true;
   }
@@ -576,24 +580,4 @@ G4double G4QCoherentChargeExchange::CalculateXSt(G4bool oxs, G4bool xst, G4doubl
   }
   else G4cout<<"*Warning*G4QCohChrgExchange::CalculateXSt: NotInitiatedScattering"<<G4endl;
   return res;
-}
-
-G4double G4QCoherentChargeExchange::ChExElCoef(G4double p, G4int Z, G4int N, G4int pPDG) 
-{
-  G4double A=Z+N;
-  if(A<1.5) return 0.;
-  G4double C=0.;
-  if     (pPDG==2212) C=N/A;
-  else if(pPDG==2112) C=Z/A;
-  else G4cout<<"*Warning*G4QCohChrgExchange::ChExElCoef: wrong PDG="<<pPDG<<G4endl;
-  C*=C;                         // Coherent processes squares the amplitude
-  // @@ This is true only for nucleons: other projectiles must be treated differently
-  G4double sp=std::sqrt(p);
-  G4double p2=p*p;            
-  G4double p4=p2*p2;
-		G4double dl1=std::log(p)-5.;
-  G4double T=(6.75+.14*dl1*dl1+13./p)/(1.+.14/p4)+.6/(p4+.00013);
-  G4double U=(6.25+8.33e-5/p4/p)*(p*sp+.34)/p2/p; 
-  G4double R=U/T;
-  return C*R*R;
 }

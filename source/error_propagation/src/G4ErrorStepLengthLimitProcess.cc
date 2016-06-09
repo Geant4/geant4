@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // $Id: G4ErrorStepLengthLimitProcess.cc,v 1.2 2007/05/29 14:41:35 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file 

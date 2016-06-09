@@ -30,6 +30,9 @@
 // 24-Jan-07 Enable to use exact data only and add warnig when substitute file is used T. Koi
 // 30-Jan-07 Modified method of searching substitute isotope data by T. Koi
 // 07-06-12 fix memory leaking by T. Koi
+// 07-06-25 Change data selection logic when G4NEUTRONHP_SKIP_MISSING_ISOTOPES is turn on
+//          Natural Abundance data are allowed. by T. Koi
+// 07-07-06 Allow _nat_ final state even for isotoped cross sections by T. Koi
 //
 #include "G4NeutronHPNames.hh"
 #include "G4SandiaTable.hh"
@@ -99,7 +102,7 @@ if(getenv("NeutronHPNames"))  G4cout << "entered GetName!!!"<<G4endl;
        result.SetA(myA);
        result.SetZ(myZ);
 if(getenv("NeutronHPNames")) G4cout <<"HPWD 1 "<<*theName<<G4endl;
-//3456
+
      // T.K. debug for memory leak
      if ( check != 0 )
      {
@@ -145,11 +148,14 @@ if(getenv("NeutronHPNames"))    G4cout <<"HPWD 3 "<<*theName<<G4endl;
                 G4double natA = myZ/G4SandiaTable::GetZtoA(myZ);
                 result.SetA(natA);
                 result.SetZ(myZ);
+                result.SetNaturalAbundanceFlag();
              }
           }
        }
        else
        {
+// 070706 T. Koi Modified 
+/*
           biff = new G4String(); // delete here as theName
           *biff = base+"/"+rest+itoa(myZ)+"_"+itoa(myA)+"_"+theString[myZ-1];  
           if(theName!=0) delete theName;
@@ -158,6 +164,62 @@ if(getenv("NeutronHPNames"))    G4cout <<"HPWD 4 "<<*theName<<G4endl;
           result.SetName(*theName);
           result.SetA(myA);
           result.SetZ(myZ);
+*/
+
+          G4double tmpA = myA;
+          std::ifstream* file = NULL;
+          G4String fileName;
+
+          if ( rest == "/CrossSection/" )
+          {
+
+             fileName = base+"/"+rest+itoa(myZ)+"_"+itoa(myA)+"_"+theString[myZ-1];
+if(getenv("NeutronHPNames"))    G4cout <<"HPWD 4a "<<*theName<<G4endl;
+
+          }
+          else
+          {
+
+// For FS
+             fileName = base+"/"+rest+itoa(myZ)+"_"+itoa(myA)+"_"+theString[myZ-1];
+             file = new std::ifstream(fileName);
+
+             if ( *file )
+             {
+
+// isotope FS
+if(getenv("NeutronHPNames"))    G4cout <<"HPWD 4b1 "<<*theName<<G4endl;
+             }
+             else
+             {
+
+// _nat_ FS
+                fileName  = base+"/"+rest+itoa(myZ)+"_"+"nat"+"_"+theString[myZ-1];
+
+                delete file;
+                file = new std::ifstream(fileName);
+                if ( *file )
+                {
+
+// FS neither isotope nor _nat_
+if(getenv("NeutronHPNames"))    G4cout <<"HPWD 4b2a "<<*theName<<G4endl;
+                   G4double natA = myZ/G4SandiaTable::GetZtoA(myZ);
+                   tmpA = natA;
+                }
+                else
+                {
+if(getenv("NeutronHPNames"))    G4cout <<"HPWD 4b2c "<<*theName<<G4endl;
+                }
+             }
+
+             delete file;
+
+          }
+
+          result.SetName(fileName);
+          result.SetA(tmpA);
+          result.SetZ(myZ);
+
        }
 
        do 
@@ -248,7 +310,7 @@ if(getenv("NeutronHPNames"))    G4cout <<"HPWD 4 "<<*theName<<G4endl;
           G4String reac = base;
           G4String dir = getenv("G4NEUTRONHPDATA"); 
           reac.erase ( 0 , dir.length() );
-          if ( getenv ( "G4NEUTRONHP_SKIP_MISSING_ISOTOPES" ) )
+          if ( getenv ( "G4NEUTRONHP_SKIP_MISSING_ISOTOPES" ) && !( Z == result.GetZ() && result.IsThisNaturalAbundance() ) )
           {
              G4cout << "NeutronHP: " << reac << " file for Z = " << Z << ", A = " << A << " is not found and CrossSection set to 0." << G4endl;
              G4String new_name = base+"/"+rest+"0_0_Zero";  

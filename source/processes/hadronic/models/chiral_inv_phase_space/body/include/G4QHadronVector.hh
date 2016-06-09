@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4QHadronVector.hh,v 1.22 2006/11/16 11:36:09 mkossov Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 //      ---------------- G4QCandidateVector ----------------
 //             by Mikhail Kossov, Sept 1999.
@@ -36,7 +36,7 @@
 #define G4QHadronVector_h 1
 //
 // $Id: G4QHadronVector.hh,v 1.22 2006/11/16 11:36:09 mkossov Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file

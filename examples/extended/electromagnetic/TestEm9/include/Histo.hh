@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // $Id: Histo.hh,v 1.5 2007/05/24 13:17:41 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// GEANT4 tag $Name: geant4-09-01 $
 
 #ifndef Histo_h
 #define Histo_h 1

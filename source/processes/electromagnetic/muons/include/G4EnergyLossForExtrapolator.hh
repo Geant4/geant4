@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EnergyLossForExtrapolator.hh,v 1.8 2007/05/29 04:43:31 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: G4EnergyLossForExtrapolator.hh,v 1.9 2007/07/28 13:44:25 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 //---------------------------------------------------------------------------
 //
@@ -41,6 +41,7 @@
 // 21-03-06 Add verbosity defined in the constructor and Initialisation
 //          start only when first public method is called (V.Ivanchenko)
 // 03-05-06 Remove unused pointer G4Material* from number of methods (VI)
+// 28-07-07 Add maxEnergyTransfer for computation of energy loss (VI)
 //
 //----------------------------------------------------------------------------
 //
@@ -104,6 +105,8 @@ public:
   inline void SetMinKinEnergy(G4double);
 
   inline void SetMaxKinEnergy(G4double);
+
+  inline void SetMaxEnergyTransfer(G4double);
    
 private:
 
@@ -170,6 +173,8 @@ private:
   G4double    linLossLimit;
   G4double    emin;
   G4double    emax;
+  G4double    maxEnergyTransfer;
+
   G4int       nbins;
   G4int       nmat;
   G4int       verbose;
@@ -242,7 +247,8 @@ inline G4double G4EnergyLossForExtrapolator::ComputeScatteringAngle(G4double x)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
   
-inline G4double G4EnergyLossForExtrapolator::EnergyDispersion(G4double kinEnergy, 
+inline G4double G4EnergyLossForExtrapolator::EnergyDispersion(
+                                                       G4double kinEnergy, 
 						       G4double stepLength, 
 						       const G4Material* mat, 
 						       const G4ParticleDefinition* part)
@@ -286,6 +292,13 @@ inline void G4EnergyLossForExtrapolator::SetMinKinEnergy(G4double val)
 inline void G4EnergyLossForExtrapolator::SetMaxKinEnergy(G4double val)
 {
   emax = val;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline void G4EnergyLossForExtrapolator::SetMaxEnergyTransfer(G4double val)
+{
+  maxEnergyTransfer = val;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4ErrorTrajErr.hh,v 1.3 2007/05/31 20:27:07 arce Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 //
 // Class Description:

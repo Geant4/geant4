@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.14 2006/11/15 12:19:26 gcosmo Exp $
+# $Id: GNUmakefile,v 1.16 2007/07/13 05:56:42 asaim Exp $
 # ----------------------------------------------------------
 # GNUmakefile for run library.  Gabriele Cosmo, 3/4/1997.
 # ----------------------------------------------------------
@@ -31,6 +31,7 @@ CPPFLAGS += \
             -I$(G4BASE)/particles/management/include \
             -I$(G4BASE)/processes/management/include \
             -I$(G4BASE)/processes/cuts/include \
+            -I$(G4BASE)/processes/scoring/include \
             -I$(G4BASE)/processes/electromagnetic/utils/include \
             -I$(G4BASE)/processes/transportation/include \
             -I$(G4BASE)/processes/decay/include \
@@ -43,6 +44,7 @@ CPPFLAGS += \
             -I$(G4BASE)/digits_hits/detector/include \
             -I$(G4BASE)/digits_hits/hits/include \
             -I$(G4BASE)/digits_hits/digits/include \
+            -I$(G4BASE)/digits_hits/utils/include \
             -I$(G4BASE)/event/include \
             -I$(G4BASE)/intercoms/include \
 	    -I$(G4BASE)/geometry/biasing/include \

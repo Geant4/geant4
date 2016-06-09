@@ -23,10 +23,12 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4OpenGL.hh,v 1.5 2007/02/08 14:01:55 allison Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: G4OpenGL.hh,v 1.6 2007/11/15 10:14:23 allison Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 // G.Barrand.
+
+#ifdef G4VIS_BUILD_OPENGL_DRIVER
 
 #ifndef G4OpenGL_h
 #define G4OpenGL_h 
@@ -39,5 +41,7 @@
 #include <GL/glu.h>
 
 #define G4OPENGL_DBL_MAX 1.e308
+
+#endif
 
 #endif

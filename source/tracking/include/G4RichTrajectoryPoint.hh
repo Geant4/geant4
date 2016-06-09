@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4RichTrajectoryPoint.hh,v 1.5 2006/09/27 20:42:52 asaim Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 //---------------------------------------------------------------
 //

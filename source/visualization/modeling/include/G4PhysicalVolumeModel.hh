@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4PhysicalVolumeModel.hh,v 1.34 2007/04/03 13:46:49 allison Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 // 
 // John Allison  31st December 1997.

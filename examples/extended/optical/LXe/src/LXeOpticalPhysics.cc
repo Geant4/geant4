@@ -88,7 +88,8 @@ void LXeOpticalPhysics::ConstructProcess()
     G4ParticleDefinition* particle = theParticleIterator->value();
     pManager = particle->GetProcessManager();
     if(theCerenkovProcess->IsApplicable(*particle)){
-      pManager->AddContinuousProcess(theCerenkovProcess);
+      pManager->AddProcess(theCerenkovProcess);
+      pManager->SetProcessOrdering(theCerenkovProcess,idxPostStep);
     }
     if(theScintProcess->IsApplicable(*particle)){
       pManager->AddProcess(theScintProcess);

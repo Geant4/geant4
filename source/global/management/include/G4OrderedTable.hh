@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OrderedTable.hh,v 1.13 2006/06/29 19:02:13 gunter Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: G4OrderedTable.hh,v 1.14 2007/11/13 17:35:06 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 // 
 // ------------------------------------------------------------
@@ -63,7 +63,7 @@ class G4OrderedTable : public std::vector<G4DataVector*>
   G4OrderedTable();
     // Deafult constructor.
 
-  explicit G4OrderedTable(size_t capacity);
+  explicit G4OrderedTable(size_t cap);
     // Constructor given a 'capacity' defining the initial
     // number of elements (NULL pointers are filled up)
 

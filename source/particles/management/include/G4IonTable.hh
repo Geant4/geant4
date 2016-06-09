@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4IonTable.hh,v 1.24 2007/03/15 06:53:27 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: G4IonTable.hh,v 1.25 2007/09/14 07:04:09 kurasige Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 // 
 // ------------------------------------------------------------
@@ -114,8 +114,13 @@ class G4IonTable
    // Find/Get "excited state" 
    G4ParticleDefinition* FindIon(G4int Z, G4int A, G4double E, G4int J=0);
    G4ParticleDefinition* GetIon(G4int Z, G4int A, G4double E, G4int J=0);
+   G4ParticleDefinition* FindIon(G4int Z, G4int A, G4int L,
+				 G4double E, G4int J=0);
+   G4ParticleDefinition* GetIon(G4int Z, G4int A, G4int L,
+				G4double E, G4int J=0);
    //   Z: Atomic Number
-   //   A: Atomic Mass
+   //   A: Atomic Mass (nn + np +nlambda)
+   //   L: Number of Lmabda
    //   J: Total Angular momentum (in unit of 1/2)
    //   E: Excitaion energy
 
@@ -126,9 +131,10 @@ class G4IonTable
    static G4bool        IsIon(G4ParticleDefinition*);
    // return true if the particle is ion
 
-   G4String             GetIonName(G4int Z, G4int A, G4double E) const;
+   const G4String&  GetIonName(G4int Z, G4int A, G4double E) const;
+   const G4String&  GetIonName(G4int Z, G4int A, G4int L, G4double E) const;
    // get ion name
- 
+  
    static G4int GetNucleusEncoding(G4int Z,        G4int A, 
 				   G4double E=0.0, G4int J=0);
   //  get PDG code for Ions 
@@ -139,19 +145,37 @@ class G4IonTable
   // to the ground state and I >0 to excitations
   //
   //!!! I = 1 is assigned fo all excitation states in Geant4   
+  
+   static G4int GetNucleusEncoding(G4int Z,        G4int A,  G4int L,        
+				   G4double E=0.0, G4int J=0);
+  //  get PDG code for Hyper-Nucleus Ions 
+  // Nuclear codes are given as 10-digit numbers +-10LZZZAAAI.
+  //For a nucleus consisting of np protons and nn neutrons
+  // A = np + nn +nlambda and Z = np.
+  // L = nlambda
+  // I gives the isomer level, with I = 0 corresponding 
+  // to the ground state and I >0 to excitations
+  //
+  //!!! I = 1 is assigned fo all excitation states in Geant4   
 
    static G4bool GetNucleusByEncoding(G4int encoding,
 				     G4int &Z,      G4int &A, 
 				     G4double &E,   G4int &J);
-  //!!! Only ground states are supported now  
+   static G4bool GetNucleusByEncoding(G4int encoding,
+				      G4int &Z,      G4int &A,  G4int &L,    
+				      G4double &E,   G4int &J);
+    //!!! Only ground states are supported now  
  
-   G4double             GetIonMass(G4int Z, G4int A) const;
-   G4double             GetNucleusMass(G4int Z, G4int A) const;
+ 
+   G4double             GetIonMass(G4int Z, G4int A, G4int L=0) const;
+   G4double             GetNucleusMass(G4int Z, G4int A, G4int L=0) const;
    // These two methods returns Nucleus (i.e. full ionized atom) mass 
    // ,where Z is Atomic Number (number of protons) and
-   //  A is Atomic Number (number of nucleons)
+   //  A is Atomic Number (number of nucleons and hyperons)
+   //  L is number of lambda (A= nn + np + nlambda)
 
-  
+ 
+   
    G4int                 Entries() const;
    // Return number of ions in the table
 
@@ -171,6 +195,8 @@ class G4IonTable
 
  protected:
    G4ParticleDefinition* CreateIon(G4int Z, G4int A, G4double E, G4int J);
+   G4ParticleDefinition* CreateIon(G4int Z, G4int A, G4int L, 
+				   G4double E, G4int J);
    // Create Ion 
    
    G4IsotopeProperty* FindIsotope(G4int Z, G4int A, G4double E, G4int J);

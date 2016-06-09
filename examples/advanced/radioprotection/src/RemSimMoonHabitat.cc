@@ -31,7 +31,7 @@
 //    **************************************
 //
 // $Id: RemSimMoonHabitat.cc,v 1.7 2006/06/29 16:23:55 gunter Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 // Author:Susanna Guatelli, guatelli@ge.infn.it 
 //

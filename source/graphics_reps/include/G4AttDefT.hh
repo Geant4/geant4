@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // $Id: G4AttDefT.hh,v 1.2 2006/12/13 15:43:57 gunter Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 // Templated G4AttDef. Generates type key for given template parameter.
 //

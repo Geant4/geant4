@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4VModularPhysicsList.cc,v 1.4 2007/06/15 07:26:55 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 // 
 // ------------------------------------------------------------

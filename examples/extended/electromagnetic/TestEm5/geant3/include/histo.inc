@@ -3,6 +3,6 @@
       
       COMMON/HISTO2/idhist,nbBins,valmin,valmax,valunit
       
-      PARAMETER (MaxHist = 16)
+      PARAMETER (MaxHist = 50)
       LOGICAL histo            
       COMMON/HISTO3/histo(MaxHist),histUnit(MaxHist),binWidth(MaxHist) 

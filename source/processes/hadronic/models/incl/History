@@ -1,0 +1,104 @@
+-------------------------------------------------------------------
+
+     ==========================================================
+     Geant4 - an Object-Oriented Toolkit for Physics Simulation
+     ==========================================================
+$Id: History,v 1.9 2007/12/04 09:52:49 gcosmo Exp $
+---------------------------------------------------------------------
+
+           History file for the Liege cascade INCL Model
+           ---------------------------------------------
+
+This file should be used to summarize modifications introduced in the 
+code and to keep track of all tags.
+
+   ---------------------------------------------------------------
+   * Please list in reverse chronological order (last date on top)
+   ---------------------------------------------------------------
+
+04 December 2007 - Gabriele Cosmo (hadr-incl-V09-00-09)
+---------------------------------
+- Again commented out call to isnan() in G4Incl.cc for allow
+  porting to platforms other than Linux....
+
+15 November 2007 - Pekka Kaitaniemi
+-----------------------------------
+- First fix to secondary particle Pt, Px and Phi distributions.
+  o Momentum x-component was transformed incorrectly from spherical to
+  cartesian coordinates.
+
+08 November 2007 - Pekka Kaitaniemi
+-----------------------------------
+- Started using G4UniformRand as a random number generator. 
+  o It is much more sophisticated generator than the original INCL one
+  was.  
+  o This should eliminate infinite loop in test runs on 64-bit
+  plattforms. The old generator probably was not 64-bit clean.
+
+31 October 2007 - Gabriele Cosmo (hadr-incl-V09-00-05)
+--------------------------------
+- Again commented out calls to isnan() and isinf() in G4Abla.cc for allow
+  porting to platforms other than Linux.
+
+30 October 2007 - Pekka Kaitaniemi
+----------------------------------
+- Abla now runs. Integrated energy spectrums for protons and neutrons
+  seem to be OK. Isotope production is still problematic. There seems
+  to be too much fission.
+
+24 October 2007 - Pekka Kaitaniemi (hadr-incl-V09-00-04)
+----------------------------------
+- Modified INCL to filter out unphysical events containing particles
+  that have more energy than the energy of the projectile. This should
+  fix problem we had with outcoming neutrons (and protons) that have
+  more energy than the projectile particle.
+- Added G4InclAblaDataFile class that reads data used by INCL/ABLA
+  from datafiles located in $G4ABLADATA. If this environment variable
+  is not correctly set INCL/ABLA returns G4Exception.
+- Problematic hardcoded data has been removed.
+
+16 October 2007 - Pekka Kaitaniemi
+------------------------------------------------------
+- Silenced the rather verbose output. Now nothing should be printed on
+  terminal by default.
+- Fixed INCL internal random number generator bug that sometimes
+  (rarely) produced random numbers that were greater than 1.0.
+- Random number seeds are now taken from CLHEP::HepRandom.
+- Cleaned up some commented code.
+- Found new NaN bugs in ABLA.
+
+13 October 2007 - Pekka Kaitaniemi
+------------------------------------------------------
+- Interface cleanup. G4InclCascadeInterface and
+  G4InclLightIonInterface  should be fully operational.
+- INCL was reverted back to using simple random number generator for
+  test result compatibility (to produce exactly same results as the
+  FORTRAN version does).
+- Fixes for ABLA evaporation/fission:
+  o Fission barrier problem fixed. Now fission code is called during
+    the run.
+  o Several NaN bugs fixed.
+  o Random seed initialization bug fixed.
+  o Stand-alone INCL/ABLA program (test/standaloneinclabla) mostly
+    works (produces results that are sometimes in good agreement with
+    FORTRAN version and sometimes in not so good agreement). With
+    heavy targets and lots of energy fission is overestimated.
+  o INCL+ABLA interface not yet fully operational. G4 simulation run
+    crashes. 
+
+11 October 2007 - Gabriele Cosmo (hadr-incl-V09-00-01)
+------------------------------------------------------
+- Fixes for porting:
+  o Commented out usage of isnan() and isinf() in assertions.
+  o Replaced usage of M_PI with CLHEP::pi.
+  o Use std namespace for standard mathematical functions.
+  o Casted to double arguments used in std::pow() function.
+  o Commented out initialisation of data in G4InclAblaHardcodedData.cc
+    for Windows; temporary solution to allow for compilation, pending
+    solution of loading of data from file !
+
+23 May 2007 - Aatos Heikkinen (hadr-incl-V09-00-00)
+---------------------------------------------------
+- First version of the Liege cascade INCL Model.
+
+

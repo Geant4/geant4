@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CoulombScattering.cc,v 1.7 2006/10/19 09:44:27 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: G4CoulombScattering.cc,v 1.11 2007/11/20 18:43:25 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 // -------------------------------------------------------------------
 //
@@ -51,6 +51,7 @@
 #include "G4CoulombScattering.hh"
 #include "G4CoulombScatteringModel.hh"
 #include "G4eCoulombScatteringModel.hh"
+#include "G4Electron.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -60,10 +61,20 @@ G4CoulombScattering::G4CoulombScattering(const G4String& name)
   : G4VEmProcess(name),thetaMin(0.0),thetaMax(pi),q2Max(DBL_MAX),
     isInitialised(false)
 {
-  SetLambdaBinning(80);
-  SetMinKinEnergy(1.0*keV);
-  SetMaxKinEnergy(100.0*GeV);
-  buildTableFlag = true;
+  G4VEmProcess::SetBuildTableFlag(true);
+  SetStartFromNullFlag(false);
+  SetIntegral(true);
+  SetMinKinEnergy(keV);
+  SetMaxKinEnergy(PeV);
+  thEnergy = PeV;
+  thEnergyElec = PeV;
+  if(name == "CoulombScat") {
+    thEnergy = 10.*MeV;
+    thEnergyElec = 10.*GeV;
+  }
+  SetLambdaBinning(120);
+  SetSecondaryParticle(G4Electron::Electron());
+  buildElmTableFlag = true;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -73,31 +84,39 @@ G4CoulombScattering::~G4CoulombScattering()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4CoulombScattering::InitialiseProcess(const G4ParticleDefinition*)
+void G4CoulombScattering::InitialiseProcess(const G4ParticleDefinition* p)
 {
   if(!isInitialised) {
     isInitialised = true;
-    //    SetVerboseLevel(3);
-    //    SetBuildTableFlag(buildTableFlag);
-    SetBuildTableFlag(false);
-    SetStartFromNullFlag(false);
-    SetIntegral(true);
-    SetLambdaFactor(0.8);
-    SetSecondaryParticle(0);
+    aParticle = p;
+    G4double mass = p->GetPDGMass();
+    if (mass > GeV || p->GetParticleType() == "nucleus") {
+      buildElmTableFlag = false;
+      verboseLevel = 0;
+    } else {
+      G4String name = p->GetParticleName();
+      if(name != "e-" && name != "e+" &&
+         name != "mu+" && name != "mu-" && name != "pi+" && 
+	 name != "kaon+" && name != "proton" ) verboseLevel = 0;
+    }
+
     G4double emin = MinKinEnergy();
     G4double emax = MaxKinEnergy();
-    if(GetProcessName() == "eCoulombScat") {
+    G4double eth  = thEnergy;
+    if(mass < MeV) eth  = thEnergyElec; 
+    if(eth > emin) {
       G4eCoulombScatteringModel* model = 
-	new G4eCoulombScatteringModel(thetaMin,thetaMax,buildTableFlag,q2Max);
+	new G4eCoulombScatteringModel(thetaMin,thetaMax,buildElmTableFlag,q2Max);
       model->SetLowEnergyLimit(emin);
-      model->SetHighEnergyLimit(emax);
+      model->SetHighEnergyLimit(std::min(eth,emax));
       AddEmModel(1, model);
-    } else {
+    }
+    if(eth < emax) {
       G4CoulombScatteringModel* model = 
-	new G4CoulombScatteringModel(thetaMin,thetaMax,buildTableFlag,q2Max);
-      model->SetLowEnergyLimit(emin);
+	new G4CoulombScatteringModel(thetaMin,thetaMax,buildElmTableFlag,q2Max);
+      model->SetLowEnergyLimit(eth);
       model->SetHighEnergyLimit(emax);
-      AddEmModel(1, model);
+      AddEmModel(2, model);
     }
   }
 }
@@ -106,10 +125,15 @@ void G4CoulombScattering::InitialiseProcess(const G4ParticleDefinition*)
 
 void G4CoulombScattering::PrintInfo()
 {
-  G4cout << "      Coulomb scattering with ThetaMin(degree)= " << thetaMin/degree
-	 << "; ThetaMax(degree)= " << thetaMax/degree
-         << "; q2Max(GeV^2)= " << q2Max/(GeV*GeV)
-         << G4endl;
+  G4cout << " Scattering of " << aParticle->GetParticleName()
+	 << " with   " << thetaMin/degree
+	 << " < Theta(degree) < " << thetaMax/degree
+	 << "; Eth(MeV)= ";
+  if(aParticle->GetPDGMass() < MeV) G4cout << thEnergyElec;
+  else                              G4cout << thEnergy;
+
+  if(q2Max < DBL_MAX) G4cout << "; q2Max(GeV^2)= " << q2Max/(GeV*GeV);
+  G4cout << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

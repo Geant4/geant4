@@ -1,0 +1,12 @@
+# $Id: fanoCavity2.in,v 1.2 2007/11/05 13:19:16 maire Exp $
+#
+/control/verbose 2
+/run/verbose 2
+#
+/run/initialize
+#
+/gun/energy 1 MeV
+#
+/testem/event/printModulo 10000
+#
+/run/beamOn 40000

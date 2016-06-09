@@ -1,0 +1,104 @@
+<?xml version="1.0"?>
+<xs:schema attributeFormDefault="unqualified" elementFormDefault="unqualified" version="1.0" xmlns:gdml="http://cern.ch/2001/Schemas/GDML" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:include schemaLocation="gdml_define.xsd"/>
+  <xs:include schemaLocation="gdml_extensions.xsd"/>
+  <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+  <xs:complexType abstract="false" name="DimensionsType">
+    <xs:annotation>
+      <xs:documentation>Abstract base for parametrised dimensions</xs:documentation>
+    </xs:annotation>
+  </xs:complexType>
+  <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+  <xs:element name="Dimensions" abstract="true" type="DimensionsType">
+    <xs:annotation>
+      <xs:documentation>Abstract element for substitution group</xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+  <xs:complexType name="BoxDimensionsType">
+    <xs:annotation>
+      <xs:documentation>Dimensions for parametrised boxes. </xs:documentation>
+    </xs:annotation>
+    <xs:complexContent>
+      <xs:extension base="DimensionsType">
+	<xs:attribute default="1.0" name="x" type="ExpressionOrIDREFType"></xs:attribute>
+	<xs:attribute default="1.0" name="y" type="ExpressionOrIDREFType"></xs:attribute>
+	<xs:attribute default="1.0" name="z" type="ExpressionOrIDREFType"></xs:attribute>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+  <xs:element name="box_dimensions" substitutionGroup="Dimensions" type="BoxDimensionsType"/>
+  <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+  <xs:complexType name="TubeDimensionsType">
+    <xs:annotation>
+      <xs:documentation>Dimensions for parametrised boxes. </xs:documentation>
+    </xs:annotation>
+    <xs:complexContent>
+      <xs:extension base="DimensionsType">
+	<xs:attribute default="1.0" name="DeltaPhi" type="ExpressionOrIDREFType"></xs:attribute>
+	<xs:attribute default="1.0" name="InR" type="ExpressionOrIDREFType"></xs:attribute>
+	<xs:attribute default="1.0" name="OutR" type="ExpressionOrIDREFType"></xs:attribute>
+	<xs:attribute default="1.0" name="StartPhi" type="ExpressionOrIDREFType"></xs:attribute>
+	<xs:attribute default="1.0" name="hz" type="ExpressionOrIDREFType"></xs:attribute>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+  <xs:element name="tube_dimensions" substitutionGroup="Dimensions" type="TubeDimensionsType"/>
+  <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+  <xs:complexType abstract="false" name="ParameterisationAlgorithmType">
+    <xs:annotation>
+      <xs:documentation>Abstract base for parameterised placement strategies</xs:documentation>
+    </xs:annotation>
+  </xs:complexType>
+  <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+  <xs:element name="ParameterisationAlgorithm" abstract="true" type="ParameterisationAlgorithmType">
+    <xs:annotation>
+      <xs:documentation>Abstract element for substitution group</xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+  <xs:complexType name="PositionSizeParameterisationAlgorithmType">
+    <xs:annotation>
+      <xs:documentation>Parameterised volumes get created using 
+	the tabularized position and sizes. </xs:documentation>
+    </xs:annotation>
+    <xs:complexContent>
+      <xs:extension base="ParameterisationAlgorithmType">
+	<xs:sequence>
+	  <xs:element maxOccurs="unbounded" name="parameters" type="ParametersType"/>
+	</xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+  <xs:element name="parameterised_position_size" substitutionGroup="ParameterisationAlgorithm" type="PositionSizeParameterisationAlgorithmType"/>
+  <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+  <xs:complexType name="ParameterisedPlacementType">
+    <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+    <xs:annotation>
+      <xs:documentation>Base type for parameterised volumes</xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element name="volumeref" type="ReferenceType"></xs:element> 
+      <xs:element ref="ParameterisationAlgorithm"/> 
+    </xs:sequence>
+    <xs:attribute name="ncopies" type="xs:positiveInteger" use="required"/>
+  </xs:complexType>
+  <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+  <xs:element name="paramvol" type="ParameterisedPlacementType"/>
+  <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+  <xs:complexType name="ParametersType">
+    <xs:annotation>
+      <xs:documentation>
+	Holds parameteres for parameterised volumes.
+      </xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element type="positionType" name="position"/>
+      <xs:element ref="Dimensions"/>
+    </xs:sequence>
+    <xs:attribute type="xs:positiveInteger" use="required" name="number"/>
+  </xs:complexType>
+</xs:schema>

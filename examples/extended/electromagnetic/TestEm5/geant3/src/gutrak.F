@@ -41,20 +41,20 @@
 *
 *     energy spectrum at exit
 *
-      if (transmit.and.charged) id =  4
-      if (transmit.and.neutral) id =  8
-      if (reflect .and.charged) id = 11
-      if (reflect .and.neutral) id = 14
+      if (transmit.and.charged) id = 10
+      if (transmit.and.neutral) id = 20
+      if (reflect .and.charged) id = 30
+      if (reflect .and.neutral) id = 40
       if (id.ne.0.and.histo(id)) then
         call hfill (id,gekin/histUnit(id),0.,1.)
       endif
 *
 *     space angle distribution at exit
 *
-      if (transmit.and.charged) id =  5
-      if (transmit.and.neutral) id =  9
-      if (reflect .and.charged) id = 12
-      if (reflect .and.neutral) id = 15
+      if (transmit.and.charged) id = 12
+      if (transmit.and.neutral) id = 22
+      if (reflect .and.charged) id = 32
+      if (reflect .and.neutral) id = 42
       if (id.ne.0.and.histo(id)) then
         unit   = histUnit(id)
         theta  = acos(abs(vect(4)))
@@ -67,10 +67,10 @@
 *
 *     projected angle distribution at exit
 *
-      if (transmit.and.charged) id =  6
-      if (transmit.and.neutral) id = 10
-      if (reflect .and.charged) id = 13
-      if (reflect .and.neutral) id = 16
+      if (transmit.and.charged) id = 13
+      if (transmit.and.neutral) id = 23
+      if (reflect .and.charged) id = 33
+      if (reflect .and.neutral) id = 43
       if (id.ne.0.and.histo(id)) then
         thety  = atan(vect(5)/abs(vect(4)))
         thetz  = atan(vect(6)/abs(vect(4)))
@@ -80,7 +80,7 @@
 *
 *     projected position at exit
 *
-      if (transmit.and.charged) id = 7
+      if (transmit.and.charged) id = 14
       if (id.ne.0.and.histo(id)) then
         call hfill (id,vect(2)/histUnit(id),0.,1.)
         call hfill (id,vect(3)/histUnit(id),0.,1.)	

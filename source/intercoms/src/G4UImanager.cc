@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4UImanager.cc,v 1.32 2006/10/17 16:32:49 allison Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: G4UImanager.cc,v 1.33 2007/07/16 10:14:36 kmura Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 // 
 // ---------------------------------------------------------------------
@@ -318,7 +318,8 @@ G4String G4UImanager::SolveAlias(const char* aCmd)
         for(G4int iz=0;iz<ia;iz++) G4cerr << " ";
         G4cerr << "^" << G4endl;
         G4cerr << "Unmatched alias parenthis -- command ignored" << G4endl;
-        return fAliasNotFound;
+        G4String nullStr;
+        return nullStr;
       }
       G4String ps = aCommand(ia+1,aCommand.length()-(ia+1));
       G4int ic = ps.index("{");

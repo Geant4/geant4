@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Navigator.icc,v 1.12 2006/10/27 09:13:46 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: G4Navigator.icc,v 1.15 2007/10/18 14:18:36 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 // 
 // class G4Navigator Inline implementation
@@ -157,7 +157,7 @@ EVolume G4Navigator::VolumeType(const G4VPhysicalVolume *pVol) const
 }
 
 // ********************************************************************
-// CharacteriseDahghters
+// CharacteriseDaughters
 // ********************************************************************
 //
 inline
@@ -188,6 +188,26 @@ EVolume G4Navigator::CharacteriseDaughters(const G4LogicalVolume *pLog) const
     type = kNormal;
   }
   return type;
+}
+
+
+// ********************************************************************
+// GetDaughtersRegularStructureId
+// ********************************************************************
+//
+inline
+G4int G4Navigator::
+GetDaughtersRegularStructureId(const G4LogicalVolume *pLog) const
+{
+  G4int regId = 0;
+  G4VPhysicalVolume *pVol;
+
+  if ( pLog->GetNoDaughters()==1 )
+  {
+    pVol = pLog->GetDaughter(0);
+    regId = pVol->GetRegularStructureId();
+  }
+  return regId;
 }
 
 // ********************************************************************
@@ -368,6 +388,7 @@ void G4Navigator::SetVerboseLevel(G4int level)
   fvoxelNav.SetVerboseLevel(level);
   fparamNav.SetVerboseLevel(level);
   freplicaNav.SetVerboseLevel(level);
+  fregularNav.SetVerboseLevel(level);
 }
 
 // ********************************************************************
@@ -424,6 +445,7 @@ void  G4Navigator::CheckMode(G4bool mode)
   fvoxelNav.CheckMode(mode);
   fparamNav.CheckMode(mode);
   freplicaNav.CheckMode(mode);
+  fregularNav.CheckMode(mode);
 }
 
 // ********************************************************************

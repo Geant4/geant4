@@ -33,7 +33,7 @@
 // and all its terms.
 //
 // $Id: G4NeutronHPInelastic.cc,v 1.23 2007/06/22 09:23:48 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 // 070523 bug fix for G4FPE_DEBUG on by A. Howard ( and T. Koi)
 //

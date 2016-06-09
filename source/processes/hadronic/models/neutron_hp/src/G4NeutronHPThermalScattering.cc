@@ -26,7 +26,8 @@
 // Thermal Neutron Scattering
 // Koi, Tatsumi (SLAC/SCCS)
 //
-// Class Description
+// Class Description:
+//
 // Final State Generators for a high precision (based on evaluated data
 // libraries) description of themal neutron scattering below 4 eV;
 // Based on Thermal neutron scattering files
@@ -34,7 +35,9 @@
 // To be used in your physics list in case you need this physics.
 // In this case you want to register an object of this class with
 // the corresponding process.
-// Class Description - End
+
+
+// 070625 Fix memory leaking at destructor by T. Koi 
 
 #include "G4NeutronHPThermalScattering.hh"
 #include "G4Neutron.hh"
@@ -64,14 +67,11 @@ G4NeutronHPThermalScattering::G4NeutronHPThermalScattering()
       }
    }
 
-
-   G4String dirName;
    if ( !getenv("G4NEUTRONHPDATA") ) 
        throw G4HadronicException(__FILE__, __LINE__, "Please setenv G4NEUTRONHPDATA to point to the neutron cross-section files.");
    dirName = getenv("G4NEUTRONHPDATA");
 
-
-// Read data
+//  Read data
 //  Element (id)  -> FS Type -> read file
    for ( size_t i = 0 ; i < indexOfThermalElement.size() ; i++ )
    {
@@ -101,7 +101,67 @@ G4NeutronHPThermalScattering::G4NeutronHPThermalScattering()
 
 G4NeutronHPThermalScattering::~G4NeutronHPThermalScattering()
 {
-   ;
+
+   { // separate name scope of it 
+   std::map < G4int , std::map < G4double , std::vector < E_isoAng* >* >* >::iterator it;
+   for ( it = incoherentFSs.begin() ; it != incoherentFSs.end() ; it++ )
+   {
+      std::map < G4double , std::vector < E_isoAng* >* >::iterator itt;
+      for ( itt = it->second->begin() ; itt != it->second->end() ; itt++ )
+      {
+         std::vector< E_isoAng* >::iterator ittt;
+         for ( ittt = itt->second->begin(); ittt != itt->second->end() ; ittt++ )
+         {
+            delete *ittt;
+         }
+         delete itt->second;
+      }
+      delete it->second;
+   }
+   }
+
+   {
+   std::map < G4int , std::map < G4double , std::vector < std::pair< G4double , G4double >* >* >* >::iterator it;
+   for ( it = coherentFSs.begin() ; it != coherentFSs.end() ; it++ )
+   {
+      std::map < G4double , std::vector < std::pair< G4double , G4double >* >* >::iterator itt;
+      for ( itt = it->second->begin() ; itt != it->second->end() ; itt++ )
+      {
+         std::vector < std::pair< G4double , G4double >* >::iterator ittt;
+         for ( ittt = itt->second->begin(); ittt != itt->second->end() ; ittt++ )
+         {
+            delete *ittt;
+         }
+         delete itt->second;
+      }
+      delete it->second;
+   }
+   }
+
+   {
+   std::map < G4int ,  std::map < G4double , std::vector < E_P_E_isoAng* >* >* >::iterator it;
+   for ( it = inelasticFSs.begin() ; it != inelasticFSs.end() ; it++ )
+   {
+      std::map < G4double , std::vector < E_P_E_isoAng* >* >::iterator itt;
+      for ( itt = it->second->begin() ; itt != it->second->end() ; itt++ )
+      {
+         std::vector < E_P_E_isoAng* >::iterator ittt;
+         for ( ittt = itt->second->begin(); ittt != itt->second->end() ; ittt++ )
+         {
+            std::vector < E_isoAng* >::iterator it4;
+            for ( it4 = (*ittt)->vE_isoAngle.begin() ; it4 != (*ittt)->vE_isoAngle.end() ; it4++ )
+            {
+               delete *it4;
+            }
+            delete *ittt;
+         }
+         delete itt->second;
+      }
+      delete it->second;
+   }
+   }
+
+   delete theXSection;
 }
 
 

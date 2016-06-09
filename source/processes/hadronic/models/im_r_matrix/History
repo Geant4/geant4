@@ -1,0 +1,39 @@
+-------------------------------------------------------------------
+
+       ==========================================================
+       Geant4 - an Object-Oriented Toolkit for Physics Simulation
+       ==========================================================
+
+            History file for hadronic/models/im_r_matrix
+            --------------------------------------------
+
+This file should be used to summarize modifications introduced in the 
+code and to keep track of all tags.
+
+     ---------------------------------------------------------------
+     * Please list in reverse chronological order (last date on top)
+     ---------------------------------------------------------------
+
+15-Nov-2007  Gunter Folger          hadr-im_r_V09-00-03
+----------------------------------------------------------------
+-  In G4ParticleTypeConverter, remove warning on unknown particle;
+    occurs for eta_prime, k_star+, anti_... etc. in BiC propagate interface
+
+03-Oct-2007  Gunter Folger          hadr-im_r_V09-00-02
+----------------------------------------------------------------
+-  Incorporate change by Dennis for G4CollisionComposite.cc: SUN compiler
+     warning  of hiding variable components.
+     hadr-im_r_V09-00-01 had many files from head.
+     
+5 Jul 2007 Dennis Wright  (hadr-im_r_V09-00-01)
+-----------------------------------------------
+- G4CollisionComposite.cc : remove duplicate declaration of local variable 
+     "components" to avoid Sun compiler hiding warning
+
+- use 2006 versions of G4Scatterer.cc and G4CollisionComposite.hh
+  leave all files named G4CollisionN... at HEAD but not tagged
+
+- create History file
+
+
+

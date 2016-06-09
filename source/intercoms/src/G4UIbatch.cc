@@ -23,105 +23,208 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4UIbatch.cc,v 1.16 2007/08/10 09:46:10 kmura Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 //
-// $Id: G4UIbatch.cc,v 1.14 2006/06/29 19:08:35 gunter Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// ====================================================================
+//   G4UIbatch.cc
 //
-
+// ====================================================================
 #include "G4UIbatch.hh"
 #include "G4UImanager.hh"
-#include "G4ios.hh"
+#include <vector>
 
-G4bool G4UIbatch::commandFailed = false;
-
-G4UIbatch::G4UIbatch(const char* fileName,G4UIsession* prevSession) 
- : previousSession(prevSession), macroFileName(fileName),
-   openFailed(false)
+////////////////////////////////////////////////////////////////////////
+static void Tokenize(const G4String& str, std::vector<G4String>& tokens)
+////////////////////////////////////////////////////////////////////////
 {
-  UImanager = G4UImanager::GetUIpointer();
-  UImanager->SetSession(this);
-  macroFile.open((char*)fileName);
-  if(macroFile.fail())
-  {
-    G4cerr << "macro file <" << fileName << "> could not open."
-         << G4endl;
-    openFailed = true;
-    commandFailed = true;
-  }
-  else
-  {
-    commandFailed = false;
+  const char* delimiter= " ";
+
+  str_size pos0= str.find_first_not_of(delimiter);
+  str_size pos = str.find_first_of(delimiter, pos0);
+  
+  while (pos != G4String::npos || pos0 != G4String::npos) {
+    tokens.push_back(str.substr(pos0, pos-pos0));
+
+    pos0 = str.find_first_not_of(delimiter, pos);
+    pos = str.find_first_of(delimiter, pos0);
   }
 }
 
+// ====================================================================
+//
+// class description
+//
+// ====================================================================
+
+////////////////////////////////////////////////////////////////////
+G4UIbatch::G4UIbatch(const char* fileName, G4UIsession* prevSession) 
+  : previousSession(prevSession), isOpened(false)
+////////////////////////////////////////////////////////////////////
+{
+  macroStream.open(fileName, std::ios::in);
+  if(macroStream.fail()) {
+    G4cerr << "***** Can not open a macro file <" 
+           << fileName << ">" 
+           << G4endl;
+  } else {
+    isOpened= true;
+  }
+
+  G4UImanager::GetUIpointer()-> SetSession(this);
+}
+
+
+///////////////////////
 G4UIbatch::~G4UIbatch() 
+///////////////////////
 {
-  if(!openFailed) macroFile.close();
+  if(isOpened) macroStream.close();
 }
 
-G4UIsession * G4UIbatch::SessionStart() 
-{
-  if(!openFailed)
-  {
-    char commandLine[256];
-    G4int lineLength = 255;
 
-    while(1)
-    {
-      macroFile.getline( commandLine, lineLength );
-      if( macroFile.bad() )
-      {
-        G4cout << "Cannot read " << macroFileName << "." << G4endl;
-        commandFailed = true;
-        break;
-      }
-      if( macroFile.eof() ) break;
-      commandLine[lineLength] = '\0';
-      G4String commandString = commandLine;
-      G4String nC= commandString.strip(G4String::both);
-      if( commandLine[0] == '#')
-      { if(G4UImanager::GetUIpointer()->GetVerboseLevel()==2)
-        { G4cout << commandLine << G4endl; }
-      }
-      else if( nC.length() == 0 )
-      { continue; }
-      else if(nC == "exit")
-      { break; }
-      else
-      { 
-        G4int rc = UImanager->ApplyCommand(commandLine);
-        if(rc)
-        {
-          switch(rc) 
-          {
-          case fCommandNotFound:
-            G4cerr << "***** COMMAND NOT FOUND <"
-                   << commandLine << "> *****" << G4endl;
-            break;
-          case fIllegalApplicationState:
-            G4cerr << "***** Illegal application state <"
-                   << commandLine << "> *****" << G4endl;
-            break;
-          default:
-            G4int pn = rc%100;
-            G4cerr << "***** Illegal parameter (" << pn << ") <"
-                   << commandLine << "> *****" << G4endl;
-          }
-          G4cerr << "***** Command ignored *****" << G4endl;
-          commandFailed = true;
+/////////////////////////////////
+G4String G4UIbatch::ReadCommand()
+/////////////////////////////////
+{
+  enum { BUFSIZE= 4096 };
+  static char linebuf[BUFSIZE];
+
+  G4String cmdtotal= "";
+  G4bool qcontinued= false;
+  while(macroStream.good()) {
+    macroStream.getline(linebuf, BUFSIZE);
+
+    G4String cmdline(linebuf);
+
+    // TAB-> ' ' conversion
+    str_size nb=0;
+    while ((nb= cmdline.find('\t',nb)) != G4String::npos) {
+      cmdline.replace(nb, 1, " ");
+    }
+
+    // strip
+    cmdline= cmdline.strip(G4String::both);
+
+    // skip null line if single line
+    if(!qcontinued && cmdline.size()==0) continue;
+
+    // tokenize...
+    std::vector<G4String> tokens;
+    Tokenize(cmdline, tokens);
+    qcontinued= false;
+    for (G4int i=0; i< G4int(tokens.size()); i++) {
+      // '\' or '_' is treated as continued line.
+      if(tokens[i] == '\\' || tokens[i] == '_' ) {
+        qcontinued= true;
+        // check nothing after line continuation character
+        if( i != G4int(tokens.size())-1) {
+          G4Exception("unexpected character after "
+                      "line continuation character");
         }
-        if(commandFailed) break;
+        break; // stop parsing
       }
+      cmdtotal+= tokens[i];
+      cmdtotal+= " ";
+    }
+
+    if(qcontinued) continue; // read` the next line
+
+    if(cmdtotal.size() != 0) break;
+    if(macroStream.eof()) break;
+  }
+
+  // strip again
+  cmdtotal= cmdtotal.strip(G4String::both);
+
+  // '#' is treated as echoing something
+  if(cmdtotal[(size_t)0]=='#') return cmdtotal;
+
+  // normally something after # is treated just as comment and ignored
+  str_size ic= cmdtotal.find_first_of('#');
+  if(ic != G4String::npos) {
+    cmdtotal= cmdtotal(0, ic);
+  }
+
+  // finally,
+  if(macroStream.eof() && cmdtotal.size()==0) {
+    return "exit";
+  }
+
+  return cmdtotal;
+
+}
+
+
+/////////////////////////////////////////////////////
+G4int G4UIbatch::ExecCommand(const G4String& command)
+/////////////////////////////////////////////////////
+{
+  G4UImanager* UI= G4UImanager::GetUIpointer();
+  G4int rc= UI-> ApplyCommand(command);
+
+  switch(rc) {
+  case fCommandSucceeded:
+    break;
+  case fCommandNotFound:
+    G4cerr << "***** COMMAND NOT FOUND <"
+           << command << "> *****" << G4endl;
+    break;
+  case fIllegalApplicationState:
+    G4cerr << "***** Illegal application state <"
+           << command << "> *****" << G4endl;
+    break;
+  default:
+    G4int pn= rc%100;
+    G4cerr << "***** Illegal parameter (" << pn << ") <"
+           << command << "> *****" << G4endl;
+  }
+
+  return rc;
+}
+
+
+///////////////////////////////////////
+G4UIsession * G4UIbatch::SessionStart() 
+///////////////////////////////////////
+{
+  if(!isOpened) return previousSession;
+
+  while(1) {
+    G4String newCommand = ReadCommand();
+
+    if(newCommand == "exit") { 
+      break;
+    }
+
+    // just echo something
+    if( newCommand[(size_t)0] == '#') { 
+      if(G4UImanager::GetUIpointer()-> GetVerboseLevel()==2) {
+        G4cout << newCommand << G4endl; 
+      }
+      continue;
+    }
+
+    // execute command
+    G4int rc= ExecCommand(newCommand);
+    if(rc != fCommandSucceeded) {
+      G4cerr << G4endl << "***** Batch is interupted!! *****" << G4endl;
+      break;
     }
   }
+
   return previousSession;
 }
 
+
+//////////////////////////////////////////////////
 void G4UIbatch::PauseSessionStart(G4String Prompt) 
+//////////////////////////////////////////////////
 {
   G4cout << "Pause session <" << Prompt << "> start." << G4endl;
+
   SessionStart();
+
   G4cout << "Pause session <" << Prompt << "> Terminate." << G4endl;
 }
-
 

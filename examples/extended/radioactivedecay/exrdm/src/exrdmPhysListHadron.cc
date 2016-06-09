@@ -64,6 +64,10 @@
 #include "G4ProtonInelasticCrossSection.hh"
 #include "G4NeutronInelasticCrossSection.hh"
 
+// RadioactiveDecay
+#include "G4RadioactiveDecay.hh"
+#include "G4GenericIon.hh"
+
 exrdmPhysListHadron::exrdmPhysListHadron(const G4String& name)
   :  G4VPhysicsConstructor(name)
 {}
@@ -262,5 +266,11 @@ void exrdmPhysListHadron::ConstructProcess()
   theIonInelasticProcess->RegisterMe(theIonBC);
   theIonInelasticProcess->RegisterMe(theTheoModel);
   pManager->AddDiscreteProcess(theIonInelasticProcess);
+
+  // Add RadioactiveDecay Process
+
+  G4RadioactiveDecay*  theRadioactiveDecay = new G4RadioactiveDecay();
+  G4GenericIon* ion = G4GenericIon::GenericIon();
+  pManager->AddProcess(theRadioactiveDecay, 0, -1, 3);
  
 }

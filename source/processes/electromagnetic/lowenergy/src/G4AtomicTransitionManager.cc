@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4AtomicTransitionManager.cc,v 1.2 ????
-// GEANT4 tag $Name: geant4-09-00 $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 // Authors: Elena Guardincerri (Elena.Guardincerri@ge.infn.it)
 //          Alfonso Mantero (Alfonso.Mantero@ge.infn.it)
@@ -59,9 +59,10 @@ G4AtomicTransitionManager::G4AtomicTransitionManager(G4int minZ, G4int maxZ,
   for (G4int Z = zMin; Z<= zMax; Z++)
     {
       std::vector<G4AtomicShell*> vectorOfShells;  
-    
+      size_t shellIndex = 0; 
+
       size_t numberOfShells=shellManager->NumberOfShells(Z);
-      for (size_t shellIndex = 0; shellIndex<numberOfShells; shellIndex++)
+      for (shellIndex = 0; shellIndex<numberOfShells; shellIndex++) 
 	{ 
 	  G4int shellId = shellManager->ShellId(Z,shellIndex);
 	  G4double bindingEnergy = shellManager->BindingEnergy(Z,shellIndex);

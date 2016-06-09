@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4UIcommandStatus.hh,v 1.5 2006/06/29 19:08:08 gunter Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 
 #ifndef G4UIcommandStatus_h

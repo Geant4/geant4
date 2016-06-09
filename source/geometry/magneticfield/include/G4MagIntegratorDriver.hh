@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4MagIntegratorDriver.hh,v 1.20 2007/05/10 10:10:05 japost Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 //
 // class G4MagInt_Driver

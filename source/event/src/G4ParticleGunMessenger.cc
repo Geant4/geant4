@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleGunMessenger.cc,v 1.14 2006/06/29 18:09:55 gunter Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: G4ParticleGunMessenger.cc,v 1.16 2007/10/02 00:45:17 asaim Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 
 #include "G4ParticleGunMessenger.hh"
@@ -79,8 +79,8 @@ G4ParticleGunMessenger::G4ParticleGunMessenger(G4ParticleGun * fPtclGun)
   directionCmd = new G4UIcmdWith3Vector("/gun/direction",this);
   directionCmd->SetGuidance("Set momentum direction.");
   directionCmd->SetGuidance("Direction needs not to be a unit vector.");
-  directionCmd->SetParameterName("Px","Py","Pz",true,true); 
-  directionCmd->SetRange("Px != 0 || Py != 0 || Pz != 0");
+  directionCmd->SetParameterName("ex","ey","ez",true,true); 
+  directionCmd->SetRange("ex != 0 || ey != 0 || ez != 0");
   
   energyCmd = new G4UIcmdWithADoubleAndUnit("/gun/energy",this);
   energyCmd->SetGuidance("Set kinetic energy.");
@@ -88,6 +88,19 @@ G4ParticleGunMessenger::G4ParticleGunMessenger(G4ParticleGun * fPtclGun)
   energyCmd->SetDefaultUnit("GeV");
   //energyCmd->SetUnitCategory("Energy");
   //energyCmd->SetUnitCandidates("eV keV MeV GeV TeV");
+
+  momCmd = new G4UIcmdWith3VectorAndUnit("/gun/momentum",this);
+  momCmd->SetGuidance("Set momentum. This command is equivalent to two commands /gun/direction and /gun/momentumAmp");
+  momCmd->SetParameterName("px","py","pz",true,true); 
+  momCmd->SetRange("px != 0 || py != 0 || pz != 0");
+  momCmd->SetDefaultUnit("GeV");
+
+  momAmpCmd = new G4UIcmdWithADoubleAndUnit("/gun/momentumAmp",this);
+  momAmpCmd->SetGuidance("Set absolute value of momentum.");
+  momAmpCmd->SetGuidance("Direction should be set by /gun/direction command.");
+  momAmpCmd->SetGuidance("This command should be used alternatively with /gun/energy.");
+  momAmpCmd->SetParameterName("Momentum",true,true);
+  momAmpCmd->SetDefaultUnit("GeV");
 
   positionCmd = new G4UIcmdWith3VectorAndUnit("/gun/position",this);
   positionCmd->SetGuidance("Set starting position of the particle.");
@@ -149,6 +162,8 @@ G4ParticleGunMessenger::~G4ParticleGunMessenger()
   delete particleCmd;
   delete directionCmd;
   delete energyCmd;
+  delete momCmd;
+  delete momAmpCmd;
   delete positionCmd;
   delete timeCmd;
   delete polCmd;
@@ -176,6 +191,10 @@ void G4ParticleGunMessenger::SetNewValue(G4UIcommand * command,G4String newValue
   { fParticleGun->SetParticleMomentumDirection(directionCmd->GetNew3VectorValue(newValues)); }
   else if( command==energyCmd )
   { fParticleGun->SetParticleEnergy(energyCmd->GetNewDoubleValue(newValues)); }
+  else if( command==momCmd )
+  { fParticleGun->SetParticleMomentum(momCmd->GetNew3VectorValue(newValues)); }
+  else if( command==momAmpCmd )
+  { fParticleGun->SetParticleMomentum(momAmpCmd->GetNewDoubleValue(newValues)); }
   else if( command==positionCmd )
   { fParticleGun->SetParticlePosition(positionCmd->GetNew3VectorValue(newValues)); }
   else if( command==timeCmd )
@@ -197,7 +216,26 @@ G4String G4ParticleGunMessenger::GetCurrentValue(G4UIcommand * command)
   else if( command==particleCmd )
   { cv = fParticleGun->GetParticleDefinition()->GetParticleName(); }
   else if( command==energyCmd )
-  { cv = energyCmd->ConvertToString(fParticleGun->GetParticleEnergy(),"GeV"); }
+  {
+    G4double ene = fParticleGun->GetParticleEnergy();
+    if(ene == 0.)
+    { G4cerr << " G4ParticleGun:  was defined in terms of momentum." << G4endl; }
+    else
+    { cv = energyCmd->ConvertToString(ene,"GeV"); }
+  }
+  else if( command==momCmd || command==momAmpCmd )
+  {
+    G4double mom = fParticleGun->GetParticleMomentum();
+    if(mom == 0.)
+    { G4cerr << " G4ParticleGun:  was defined in terms of kinetic energy." << G4endl; }
+    else
+    {
+      if( command==momCmd )
+      { cv = momCmd->ConvertToString(mom*(fParticleGun->GetParticleMomentumDirection()),"GeV"); }
+      else
+      { cv = momAmpCmd->ConvertToString(mom,"GeV"); }
+    }
+  }
   else if( command==positionCmd )
   { cv = positionCmd->ConvertToString(fParticleGun->GetParticlePosition(),"cm"); }
   else if( command==timeCmd )

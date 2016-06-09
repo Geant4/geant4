@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // -------------------------------------------------------------------
-// $Id: MicrobeamEMField.hh,v 1.5 2006/06/29 16:05:03 gunter Exp $
+// $Id: MicrobeamEMField.hh,v 1.6 2007/07/06 06:52:54 sincerti Exp $
 // -------------------------------------------------------------------
 
 #ifndef MicrobeamEMField_h
@@ -32,6 +32,8 @@
 
 #include "globals.hh"
 #include "G4ElectroMagneticField.hh"
+#include "G4FieldManager.hh"
+#include "G4TransportationManager.hh"
 
 class MicrobeamEMField
 #ifndef STANDALONE

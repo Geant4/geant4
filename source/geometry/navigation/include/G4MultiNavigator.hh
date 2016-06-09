@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4MultiNavigator.hh,v 1.3 2006/11/13 17:34:08 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: G4MultiNavigator.hh,v 1.4 2007/05/21 15:36:25 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 //
 // class G4MultiNavigator
@@ -82,7 +82,7 @@ class G4MultiNavigator : public G4Navigator
     // Get values for a single geometry
 
   void PrepareNavigators(); 
-    // Find which geometries are registered for this particles - and keep info
+    // Find which geometries are registered for this particles, and keep info
   void PrepareNewTrack( const G4ThreeVector position, 
                         const G4ThreeVector direction ); 
     // Prepare Navigators and locate 
@@ -97,9 +97,9 @@ class G4MultiNavigator : public G4Navigator
     // Important Note: In order to call this the geometries MUST be closed.
 
   G4VPhysicalVolume* LocateGlobalPointAndSetup(const G4ThreeVector& point,
-                                               const G4ThreeVector* direction=0,
-                                               const G4bool pRelativeSearch=true,
-                                               const G4bool ignoreDirection=true);
+                                         const G4ThreeVector* direction=0,
+                                         const G4bool pRelativeSearch=true,
+                                         const G4bool ignoreDirection=true);
     // Locate in all geometries.
     // Return the volume in the first (mass) geometry
     //  Maintain vector of other volumes,  to be returned separately
@@ -114,8 +114,8 @@ class G4MultiNavigator : public G4Navigator
   G4double ComputeSafety(const G4ThreeVector &globalpoint,
                          const G4double pProposedMaxLength = DBL_MAX);
     // Calculate the isotropic distance to the nearest boundary 
-    // in any geometry from the specified point in the global coordinate system. 
-    // The geometry must be closed.
+    // in any geometry from the specified point in the global coordinate
+    // system. The geometry must be closed.
 
   G4TouchableHistoryHandle CreateTouchableHistoryHandle() const;
     // Returns a reference counted handle to a touchable history.
@@ -161,7 +161,7 @@ class G4MultiNavigator : public G4Navigator
    G4double      fNewSafety[ fMaxNav ];      // Safety for starting point
 
    // Lowest values - determine step length, and safety 
-   G4double      fMinStep;      // As reported by Navigators -- can be kInfinity
+   G4double      fMinStep;      // As reported by Navigators. Can be kInfinity
    G4double      fMinSafety;
    G4double      fTrueMinStep;  // Corrected in case fMinStep >= proposed 
 
@@ -175,8 +175,6 @@ class G4MultiNavigator : public G4Navigator
    G4ThreeVector fPreStepLocation;      //  point where last ComputeStep called
    G4double      fMinSafety_PreStepPt;  //   /\ corresponding value of safety
 
-   // STATE Auxiliary variables 
-   G4int  fVerboseLevel;
    G4TransportationManager* pTransportManager; // Cache for frequent use
 };
 

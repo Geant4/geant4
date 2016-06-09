@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VProcess.hh,v 1.23 2006/06/29 21:07:50 gunter Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: G4VProcess.hh,v 1.24 2007/10/02 08:23:20 kurasige Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 // 
 // ------------------------------------------------------------
@@ -51,6 +51,7 @@
 //   Add Store/RetrievePhysicsTable 8  Nov. 2000   H.Kurashige
 //   Modify Store/RetrievePhysicsTable methods 9 Mar. 2001   H.Kurashige
 //   Added PreparePhysicsTable  20 Aug. 2004 H.Kurashige
+//   Added isXXXXDoItIsEnabled   2 Oct. 2007 H.Kurashige
 
 #ifndef G4VProcess_h 
 #define G4VProcess_h 1
@@ -310,6 +311,14 @@ class G4VProcess
      // !!! This method should be at the end of PostStepDoIt()
      // !!! and AtRestDoIt
 
+ public: // with description
+    // These methods indicate which DoIt is enabled
+    // These methods are used by G4ProcessManager to check
+    // that ordering parameters are set properly
+    G4bool isAtRestDoItIsEnabled() const;
+    G4bool isAlongStepDoItIsEnabled() const;
+    G4bool isPostStepDoItIsEnabled() const;
+  
  protected: 
       G4String theProcessName;
       //  The name of the process
@@ -322,6 +331,10 @@ class G4VProcess
       G4double thePILfactor;
       // factor for PhysicsInteractionLength 
       // which is passed to G4SteppingManager
+ 
+      G4bool enableAtRestDoIt;
+      G4bool enableAlongStepDoIt;
+      G4bool enablePostStepDoIt;
       
  public: // with description
    virtual void  DumpInfo() const;
@@ -441,6 +454,25 @@ inline
 {
   return  aProcessManager; 
 }
+
+inline
+ G4bool G4VProcess::isAtRestDoItIsEnabled() const
+{
+  return enableAtRestDoIt;
+}
+
+inline
+ G4bool G4VProcess::isAlongStepDoItIsEnabled() const
+{
+  return enableAlongStepDoIt;
+}
+
+inline
+ G4bool G4VProcess::isPostStepDoItIsEnabled() const
+{
+  return enablePostStepDoIt;
+}
+
 #endif
 
 

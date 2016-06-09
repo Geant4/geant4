@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: Em8DetectorMessenger.cc,v 1.7 2006/06/29 17:00:11 gunter Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: Em8DetectorMessenger.cc,v 1.8 2007/10/02 10:12:47 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 // 
 
@@ -92,14 +92,12 @@ Em8DetectorMessenger::Em8DetectorMessenger(Em8DetectorConstruction * Em8Det)
   WorldRCmd->SetRange("WSizeR>0.");
   WorldRCmd->AvailableForStates(G4State_Idle);
 
-
   ElectronCutCmd = new G4UIcmdWithADoubleAndUnit("/calor/setElectronCut",this);
   ElectronCutCmd->SetGuidance("Set electron cut in mm for vertex region");
   ElectronCutCmd->SetParameterName("ElectronCut",false,false);
   ElectronCutCmd->SetDefaultUnit("mm");
   ElectronCutCmd->SetRange("ElectronCut>0.");
   ElectronCutCmd->AvailableForStates(G4State_Idle);
-
 
   PositronCutCmd = new G4UIcmdWithADoubleAndUnit("/calor/setPositronCut",this);
   PositronCutCmd->SetGuidance("Set positron cut in mm for vertex region");
@@ -108,14 +106,12 @@ Em8DetectorMessenger::Em8DetectorMessenger(Em8DetectorConstruction * Em8Det)
   PositronCutCmd->SetRange("PositronCut>0.");
   PositronCutCmd->AvailableForStates(G4State_Idle);
 
-
   GammaCutCmd = new G4UIcmdWithADoubleAndUnit("/calor/setGammaCut",this);
   GammaCutCmd->SetGuidance("Set gamma cut in mm for vertex region");
   GammaCutCmd->SetParameterName("GammaCut",false,false);
   GammaCutCmd->SetDefaultUnit("mm");
   GammaCutCmd->SetRange("GammaCut>0.");
   GammaCutCmd->AvailableForStates(G4State_Idle);
-
   
   UpdateCmd = new G4UIcmdWithoutParameter("/calor/update",this);
   UpdateCmd->SetGuidance("Update calorimeter geometry.");
@@ -123,7 +119,6 @@ Em8DetectorMessenger::Em8DetectorMessenger(Em8DetectorConstruction * Em8Det)
   UpdateCmd->SetGuidance("if you changed geometrical value(s).");
   UpdateCmd->AvailableForStates(G4State_Idle);
       
-
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -138,7 +133,9 @@ Em8DetectorMessenger::~Em8DetectorMessenger()
   delete WorldZCmd;
   delete WorldRCmd;
   delete UpdateCmd;
- 
+  delete GammaCutCmd;
+  delete PositronCutCmd;
+  delete ElectronCutCmd; 
   delete Em8detDir;
 }
 

@@ -23,15 +23,15 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PolarizedPairProductionCrossSection.cc,v 1.4 2006/11/17 14:14:20 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: G4PolarizedPairProductionCrossSection.cc,v 1.5 2007/11/01 17:32:34 schaelic Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 // -------------------------------------------------------------------
 //
 // GEANT4 Class file
 //
 //
-// File name:     G4PairProductionCrossSection
+// File name:     G4PolarizedPairProductionCrossSection
 //
 // Author:        Andreas Schaelicke on the base of Karim Laihems code
 //
@@ -39,8 +39,8 @@
 //
 
 #include "G4PolarizedPairProductionCrossSection.hh"
-#include "G4PolarizedGammaConversionModel.hh"
-#include "G4Element.hh"
+// #include "G4PolarizedGammaConversionModel.hh"
+// #include "G4Element.hh"
 
 G4bool G4PolarizedPairProductionCrossSection::scrnInitialized=false;
 G4double G4PolarizedPairProductionCrossSection::SCRN [3][20];  
@@ -73,9 +73,7 @@ void G4PolarizedPairProductionCrossSection::InitializeMe()
   }
 }
 
-G4PolarizedPairProductionCrossSection::G4PolarizedPairProductionCrossSection(
-                                       G4PolarizedGammaConversionModel * model)
-  : theModel(model)
+G4PolarizedPairProductionCrossSection::G4PolarizedPairProductionCrossSection()
 {
   InitializeMe();
 }
@@ -98,22 +96,17 @@ void G4PolarizedPairProductionCrossSection::Initialize(G4double aGammaE,
   G4double GammaE = aGammaE/m0_c2;
   G4double Lept1E = aLept1E/m0_c2-1.,   Lept1E2 = Lept1E * Lept1E ;
     
-  if (theModel==0) {
-    G4cout<<" theSelectedElement is not available!!"<<G4endl;
-    theFinalElectronPolarization=G4StokesVector();
-    theFinalPositronPolarization=G4StokesVector();
-  }
 
-  const G4Element* theSelectedElement = theModel->SelectedAtom();
+  //  const G4Element* theSelectedElement = theModel->SelectedAtom();
 
   // *******  Gamma Transvers Momentum
     
   G4double TMom = std::sqrt(Lept0E2 -1.)* sintheta, u    = TMom       , u2 =u * u ;
   G4double Xsi  = 1./(1.+u2)                      , Xsi2 = Xsi * Xsi  ; 
 
-  G4double theZ  = theSelectedElement->GetZ();
+  //  G4double theZ  = theSelectedElement->GetZ();
     
-  G4double fCoul = theSelectedElement->GetfCoulomb();
+  //  G4double fCoul = theSelectedElement->GetfCoulomb();
   G4double delta = 12. * std::pow(theZ, 1./3.) * Lept0E * Lept1E * Xsi / (121. * GammaE); 
   G4double GG=0.;
 

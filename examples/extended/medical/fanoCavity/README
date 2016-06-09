@@ -1,4 +1,4 @@
-$Id: README,v 1.9 2007/06/12 12:04:15 maire Exp $
+$Id: README,v 1.13 2007/11/13 11:31:54 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -101,11 +101,8 @@ $Id: README,v 1.9 2007/06/12 12:04:15 maire Exp $
     - Compton scattering : as explained above, the final state is modified in
     MyKleinNishinaCompton class.
     
-    The Compton cross section is set to zero in cavity, to force the charged 
-    particle fluence conservation. 
-    
     In order to make the program more efficient, one can increase the Compton
-    cross section in wall via the function SetCSFactor(factor) and its 
+    cross section via the function SetCSFactor(factor) and its 
     associated UI command. Default is factor=1000.
     
     - Bremsstrahlung : Fano conditions imply no energy transfer via
@@ -127,7 +124,9 @@ $Id: README,v 1.9 2007/06/12 12:04:15 maire Exp $
     
     - Multiple scattering : is switched in single Coulomb scattering mode near
     boundaries. This is selected via EM options in PhysicsList, and can be
-    controled with UI commands.  
+    controled with UI commands.
+    
+    - All PhysicsTables are built with 100 bins per decade.  
      	
  5- HISTOGRAMS
  
@@ -143,6 +142,7 @@ $Id: README,v 1.9 2007/06/12 12:04:15 maire Exp $
       8 : track segment of e+- in cavity
       9 : step size of e+- in wall
      10 : step size of e+- in cavity
+     11 : energy deposit in cavity per track     
       
    The histograms are managed by the HistoManager class and its Messenger. 
    The histos can be individually activated with the command :
@@ -154,7 +154,11 @@ $Id: README,v 1.9 2007/06/12 12:04:15 maire Exp $
    
    It is possible to choose the format of the histogram file (hbook, root, XML)
    with the command /testem/histo/setFileType (hbook by default)
-       
+   
+   It is also possible to print selected histograms on an ascii file:
+   /testem/histo/printHisto id
+   All selected histos will be written on a file name.ascii (default fanocavity)
+           
    Note that, by default, histograms are disabled. To activate them, uncomment
    the flag G4ANALYSIS_USE in GNUmakefile.
  	

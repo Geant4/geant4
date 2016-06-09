@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunMessenger.cc,v 1.24 2007/03/08 23:54:04 asaim Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: G4RunMessenger.cc,v 1.31 2007/11/16 22:37:43 asaim Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 
 #include "G4RunMessenger.hh"
@@ -41,6 +41,8 @@
 #include "G4ProductionCutsTable.hh"
 #include "G4ios.hh"
 #include "G4MaterialScanner.hh"
+#include "G4Tokenizer.hh"
+#include "Randomize.hh"
 #include <sstream>
 
 G4RunMessenger::G4RunMessenger(G4RunManager * runMgr)
@@ -149,13 +151,28 @@ G4RunMessenger::G4RunMessenger(G4RunManager * runMgr)
   cutCmd = new G4UIcmdWithoutParameter("/run/cutoffModified",this);
   cutCmd->SetGuidance("/run/cutoffModified becomes obsolete.");
   cutCmd->SetGuidance("It is safe to remove invoking this command.");
+
+  constScoreCmd = new G4UIcmdWithoutParameter("/run/constructScoringWorlds",this);
+  constScoreCmd->SetGuidance("Constrct scoring parallel world(s) if defined.");
+  constScoreCmd->SetGuidance("This command is not mandatory, but automatically called when a run starts.");
+  constScoreCmd->SetGuidance("But the user may use this to visualize the scoring world(s) before a run to start.");
+  constScoreCmd->AvailableForStates(G4State_Idle);
+
+  materialScanner = new G4MaterialScanner();
   
   randomDirectory = new G4UIdirectory("/random/");
   randomDirectory->SetGuidance("Random number status control commands.");
+
+  seedCmd = new G4UIcmdWithAString("/random/setSeeds",this);
+  seedCmd->SetGuidance("Initialize the random number generator with integer seed stream.");
+  seedCmd->SetGuidance("Number of integers should be more than 1.");
+  seedCmd->SetGuidance("Actual number of integers to be used depends on the individual random number engine.");
+  seedCmd->SetParameterName("IntArray",false);
+  seedCmd->AvailableForStates(G4State_PreInit,G4State_Idle,G4State_GeomClosed);
   
   randDirCmd = new G4UIcmdWithAString("/random/setDirectoryName",this);
   randDirCmd->SetGuidance("Define the directory name of the rndm status files.");
-  randDirCmd->SetGuidance("Directory must be creates before storing the files.");
+  randDirCmd->SetGuidance("Directory will be created if it does not exist.");
   randDirCmd->SetParameterName("fileName",true);
   randDirCmd->SetDefaultValue("./");
   randDirCmd->AvailableForStates(G4State_PreInit,G4State_Idle,G4State_GeomClosed);
@@ -226,8 +243,6 @@ G4RunMessenger::G4RunMessenger(G4RunManager * runMgr)
   restoreRandOld->SetParameterName("fileName",true);
   restoreRandOld->SetDefaultValue("currentRun.rndm");
   restoreRandOld->AvailableForStates(G4State_PreInit,G4State_Idle,G4State_GeomClosed);  
-
-  materialScanner = new G4MaterialScanner();
 }
 
 G4RunMessenger::~G4RunMessenger()
@@ -248,9 +263,11 @@ G4RunMessenger::~G4RunMessenger()
   delete cutCmd;
   delete randEvtCmd;
   delete randDirOld; delete storeRandOld; delete restoreRandOld; 
+  delete constScoreCmd;
   delete runDirectory;
   
   delete randDirCmd;
+  delete seedCmd;
   delete savingFlagCmd;
   delete saveThisRunCmd;
   delete saveThisEventCmd;
@@ -303,7 +320,23 @@ void G4RunMessenger::SetNewValue(G4UIcommand * command,G4String newValue)
   { runManager->PhysicsHasBeenModified(); }
   else if( command==cutCmd )
   { runManager->CutOffHasBeenModified(); }
-  
+ 
+  else if( command==seedCmd )
+  {
+    G4Tokenizer next(newValue);
+    G4int idx=0;
+    long seeds[100];
+    G4String vl;
+    while(!(vl=next()).isNull())
+    { seeds[idx] = (long)(StoI(vl)); idx++; }
+    if(idx<2)
+    { G4cerr << "/random/setSeeds should have at least two integers. Command ignored." << G4endl; }
+    else
+    {
+      seeds[idx] = 0;
+      CLHEP::HepRandom::setTheSeeds(seeds);
+    }
+  }
   else if( command==randDirCmd )
   { runManager->SetRandomNumberStoreDir(newValue); }
   else if( command==savingFlagCmd )
@@ -320,18 +353,24 @@ void G4RunMessenger::SetNewValue(G4UIcommand * command,G4String newValue)
   else if( command==randDirOld )
   {G4cout << "warning: deprecated command. Use /random/setDirectoryName"
           << G4endl; 
-   runManager->SetRandomNumberStoreDir(newValue); }
+  // runManager->SetRandomNumberStoreDir(newValue);
+  }
   else if( command==storeRandOld )
   {G4cout << "warning: deprecated command. Use /random/setSavingFlag"
           << G4endl;
-   G4int frequency = storeRandOld->GetNewIntValue(newValue);
-   G4bool flag = false;
-   if(frequency != 0) flag = true;	     
-   runManager->SetRandomNumberStore(flag); }    
+   // G4int frequency = storeRandOld->GetNewIntValue(newValue);
+   // G4bool flag = false;
+   // if(frequency != 0) flag = true;	     
+   // runManager->SetRandomNumberStore(flag);
+  }    
   else if( command==restoreRandOld )
   {G4cout << "warning: deprecated command. Use /random/resetEngineFrom"
            << G4endl;  
-   runManager->RestoreRandomNumberStatus(newValue); }  
+   // runManager->RestoreRandomNumberStatus(newValue);
+  }  
+  else if( command==constScoreCmd )
+  { runManager->ConstructScoringWorlds(); }
+
 }
 
 G4String G4RunMessenger::GetCurrentValue(G4UIcommand * command)

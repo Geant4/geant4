@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4QIsotope.cc,v 1.9 2006/12/07 19:25:49 mkossov Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: G4QIsotope.cc,v 1.10 2007/11/28 14:14:36 mkossov Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 //      ---------------- G4QIsotope class ----------------
 //             by Mikhail Kossov, December 2003.
@@ -656,6 +656,7 @@ G4QIsotope::G4QIsotope()
 #ifdef cdebug
     G4cout<<"G4QIsotope::Constructor: natIsoCrosS is filled"<<G4endl;
 #endif
+    delete is;
   }
 #ifdef cdebug
   G4cout<<"G4QIsotope::Constructor: is finished"<<G4endl;
@@ -667,7 +668,7 @@ G4QIsotope::~G4QIsotope()          // The QIsotopes are destructed only in theEn
 #ifdef debug
   G4cout<<"G4QIsotope::Destructor is called"<<G4endl;
 #endif
-  G4int uP=natElements.size();     // uP, nP, and sP must be the same
+  G4int uP=natElements.size();
   if(uP) for(G4int i=0; i<uP; i++)
   {
     vector<pair<G4int,G4double>*>* curA=natElements[i];

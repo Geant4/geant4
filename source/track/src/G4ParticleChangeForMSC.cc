@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4ParticleChangeForMSC.cc,v 1.13 2006/06/29 21:15:09 gunter Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 // 
 // --------------------------------------------------------------

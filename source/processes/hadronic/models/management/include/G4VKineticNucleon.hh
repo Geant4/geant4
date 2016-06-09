@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4VKineticNucleon.hh,v 1.4 2006/06/29 20:45:47 gunter Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 #ifndef G4VKineticNucleon_h
 #define G4VKineticNucleon_h 1

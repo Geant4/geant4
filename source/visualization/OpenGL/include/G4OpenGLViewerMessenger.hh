@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4OpenGLViewerMessenger.hh,v 1.5 2007/05/08 11:04:11 allison Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// GEANT4 tag $Name: geant4-09-01 $
 
 #ifndef G4OPENGLVIEWERMESSENGER_HH
 #define G4OPENGLVIEWERMESSENGER_HH

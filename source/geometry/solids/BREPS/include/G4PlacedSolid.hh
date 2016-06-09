@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4PlacedSolid.hh,v 1.10 2006/06/29 18:39:59 gunter Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 // ----------------------------------------------------------------------
 // Class G4PlacedSolid

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleDefinition.cc,v 1.29 2007/03/11 07:17:35 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: G4ParticleDefinition.cc,v 1.30 2007/11/14 02:22:08 kurasige Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 // 
 // --------------------------------------------------------------
@@ -193,6 +193,7 @@ G4int G4ParticleDefinition::FillQuarkContents()
 	temp = 0;
 #ifdef G4VERBOSE
 	if (verboseLevel>1) {
+	  G4cout << "G4ParticleDefinition::FillQuarkContents  : ";
 	  G4cout << " illegal charge (" << thePDGCharge/eplus;
 	  G4cout << " PDG code=" << thePDGEncoding <<G4endl;
 	}
@@ -203,6 +204,7 @@ G4int G4ParticleDefinition::FillQuarkContents()
 	temp=0;
 #ifdef G4VERBOSE
 	if (verboseLevel>1) {
+	  G4cout << "G4ParticleDefinition::FillQuarkContents  : ";
 	  G4cout << " illegal SPIN (" << thePDGiSpin << "/2";
 	  G4cout << " PDG code=" << thePDGEncoding <<G4endl;
 	}

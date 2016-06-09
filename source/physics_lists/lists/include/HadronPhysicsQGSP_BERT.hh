@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HadronPhysicsQGSP_BERT.hh,v 1.2 2007/04/26 14:47:10 gunter Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: HadronPhysicsQGSP_BERT.hh,v 1.3 2007/12/10 17:34:44 gunter Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 //---------------------------------------------------------------------------
 //
@@ -36,6 +36,7 @@
 // 23.11.2005 G.Folger: migration to non static particles
 // 08.06.2006 V.Ivanchenko: remove stopping
 // 25.04.2007 G.Folger: Add quasielastic option, use this by default
+// 10.12.2007 G.Folger: Add projectilediffrative option for proton/neutron, off by default
 //
 //----------------------------------------------------------------------------
 //
@@ -73,6 +74,9 @@ class HadronPhysicsQGSP_BERT : public G4VPhysicsConstructor
     virtual void ConstructParticle();
     virtual void ConstructProcess();
 
+    void SetQuasiElastic(G4bool value) {QuasiElastic = value;}; 
+    void SetProjectileDiffraction(G4bool value) {ProjectileDiffraction = value;}; 
+
   private:
     void CreateModels();
     G4NeutronBuilder * theNeutrons;
@@ -93,6 +97,7 @@ class HadronPhysicsQGSP_BERT : public G4VPhysicsConstructor
     G4MiscLHEPBuilder * theMiscLHEP;
     
     G4bool QuasiElastic;
+    G4bool ProjectileDiffraction;
 };
 
 #endif

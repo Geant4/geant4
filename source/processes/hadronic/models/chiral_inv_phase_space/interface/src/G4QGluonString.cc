@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // $Id: G4QGluonString.cc,v 1.1 2006/10/30 10:33:38 mkossov Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 //      ---------------- G4QGluonString class -----------------
 //                 by Mikhail Kossov, December 2003.

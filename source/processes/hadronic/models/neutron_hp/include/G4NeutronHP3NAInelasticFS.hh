@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4NeutronHP3NAInelasticFS.hh,v 1.9 2006/06/29 20:46:35 gunter Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 #ifndef G4NeutronHP3NAInelasticFS_h
 #define G4NeutronHP3NAInelasticFS_h 1

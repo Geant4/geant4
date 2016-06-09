@@ -1,4 +1,4 @@
-$Id: History,v 1.33 2007/06/27 10:06:14 gcosmo Exp $
+$Id: History,v 1.47 2007/12/10 17:38:48 gunter Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,63 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+16-11-2007, G.Folger      phys-list-V09-00-12
+- New PL QGSP_BERT_DIF; as QGSP_BERT with projectile diffraction for proton
+  and neutron enabled.
+   
+26-11-2007, V.Ivanchenko phys-lists-V09-00-11
+- QBBC - fixed bug in adding of cross section for pions
+
+16-11-2007, G.Folger      phys-list-V09-00-10
+- New PL FTF_BIC. Equivalent to QGS_BIC. For pions LEP is not used, as BIC is
+    used up to 5 GeV, thus overlapping with FTF starting at 4 GeV.
+
+15-11-2007, V.Ivanchenko phys-lists-V09-00-09
+- added a possibility to activate G4SynchrotronRadiation and mu-nuclear
+  betwen runs;
+- G4HadronHElasticPhysics - fixed name;
+- QBBC - tuned energy thresholds between string and cascade models
+
+15-11-2007, G.Folger      phys-list-V09-00-08
+- New PL QGSC_BERT; use QGSC down to overlap with BERT. LEP not used 
+   for proton,neutron,pions,Kaons, except neutron capture and neutron
+   induced fission
+
+15-11-2007, V.Ivanchenko phys-lists-V09-00-07
+- fixed QBBC Physics List for pi and K mesons
+
+15-11-2007, V.Ivanchenko phys-lists-V09-00-06
+- G4RadioactiveDecayPhysics optional builder is added
+- QBBC Physics List use correct interface to CHIPS
+
+14-11-2007, V.Ivanchenko phys-lists-V09-00-05
+- G4HadronDElasticPhysics - fixed run time bug - added low-energy model
+- QBBC options are reviewed and left: QBBC, QBBC_DEL,QBBC_HEL, QBBC_HP
+
+13-11-2007, V.Ivanchenko phys-lists-V09-00-04
+- G4HadronDElasticPhysics is added
+- QBBC Physics List upgraded for 9.1
+
+13-11-2007, G.Folger      phys-list-V09-00-03
+- Enable use of projectile diffraction in QGSP-like lists, and create 
+   new list using projectile diffraction QGSP_DIF
+- New PL QGS_BIC; like QGSP_BIC, but use binary also for pion and for 
+    rescattering via the propagate interface; the deexcitation implicitely
+    uses precompound.
+     
+31-10-2007, G.Folger      phys-list-V09-00-02
+- New PL QGSP_BIC2: like QGSP_BIC, but use BIC for low energy pions
+
+19-10-2007, G.Folger      phys-list-V09-00-01
+- New PL FTFP_BERT: FTFP with Bertini cascade. Crossover from Bertini
+     to FTFP at 4-5 GeV. No LEP for inelastic for p,n,pi,K.
+-  G4LEPNeutronBuilder.cc: when limit for MaxInelastic is 0, do NOT add 
+     LEP for inelastic; needed by above FTFP_BERT.
+
+02-10-2007, V.Ivanchenko phys-lists-V09-00-00
+- G4EmStandardPhysics_option2 - increase number of bins in tables in
+                                two times
 
 27-06-2007, G.Cosmo      phys-lists-V08-03-07
 - Updated G4DataQuestionaire to change NeutronHPCrossSections with

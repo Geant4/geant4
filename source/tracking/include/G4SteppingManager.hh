@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4SteppingManager.hh,v 1.29 2006/12/13 15:49:47 gunter Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: G4SteppingManager.hh,v 1.31 2007/10/09 03:51:06 tsasaki Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 // 
 //---------------------------------------------------------------
 //
@@ -273,6 +273,8 @@ public: //without description
 
    G4SteppingControl StepControlFlag;
 
+   G4double kCarTolerance;
+      // Cached geometrical tolerance on surface
    G4double proposedSafety;
       // This keeps the minimum safety value proposed by AlongStepGPILs.
    G4ThreeVector endpointSafOrigin;
@@ -490,7 +492,7 @@ public: //without description
   inline G4double G4SteppingManager::CalculateSafety(){
     return std::max( endpointSafety -
 		(endpointSafOrigin - fPostStepPoint->GetPosition()).mag(),
-	        0.);
+	        kCarTolerance );
   }
 
 

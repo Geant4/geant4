@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4QException.hh,v 1.10 2006/06/29 20:06:13 gunter Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 //      ---------------- G4QException ----------------
 //           by Mikhail Kossov, November 2003.

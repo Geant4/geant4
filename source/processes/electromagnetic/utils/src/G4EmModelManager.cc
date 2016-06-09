@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmModelManager.cc,v 1.39 2007/04/12 11:55:07 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: G4EmModelManager.cc,v 1.40 2007/11/09 11:35:54 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 // -------------------------------------------------------------------
 //
@@ -74,18 +74,6 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #include "G4EmModelManager.hh"
-#include "G4LossTableManager.hh"
-#include "G4Step.hh"
-#include "G4ParticleDefinition.hh"
-#include "G4DataVector.hh"
-#include "G4PhysicsVector.hh"
-#include "G4Gamma.hh"
-#include "G4Positron.hh"
-#include "G4MaterialCutsCouple.hh"
-#include "G4ProductionCutsTable.hh"
-#include "G4Region.hh"
-#include "G4RegionStore.hh"
-
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -110,6 +98,21 @@ G4RegionModels::~G4RegionModels()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
+#include "G4LossTableManager.hh"
+#include "G4Step.hh"
+#include "G4ParticleDefinition.hh"
+#include "G4PhysicsVector.hh"
+#include "G4Gamma.hh"
+#include "G4Positron.hh"
+#include "G4MaterialCutsCouple.hh"
+#include "G4ProductionCutsTable.hh"
+#include "G4Region.hh"
+#include "G4RegionStore.hh"
+#include "G4Gamma.hh"
+#include "G4Positron.hh"
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 G4EmModelManager::G4EmModelManager():
   nEmModels(0),
   nRegions(0),
@@ -127,6 +130,8 @@ G4EmModelManager::G4EmModelManager():
   upperEkin.clear();
   maxCutInRange    = 12.*cm;
   maxSubCutInRange = 0.7*mm;
+  theGamma = G4Gamma::Gamma();
+  thePositron = G4Positron::Positron();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -408,9 +413,9 @@ const G4DataVector* G4EmModelManager::Initialise(const G4ParticleDefinition* p,
     G4double subcut = DBL_MAX;
     if(secondaryParticle) {
       size_t idx = 1;
-      if( secondaryParticle == G4Gamma::Gamma() ) idx = 0;
+      if( secondaryParticle == theGamma ) idx = 0;
       cut = (*theCoupleTable->GetEnergyCutsVector(idx))[i];
-      if( secondaryParticle == G4Positron::Positron() && cut < DBL_MAX )
+      if( secondaryParticle == thePositron && cut < DBL_MAX )
         cut += (*theCoupleTable->GetEnergyCutsVector(2))[i] + 
 	       2.0*electron_mass_c2;
 

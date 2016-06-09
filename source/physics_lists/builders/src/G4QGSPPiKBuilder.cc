@@ -29,7 +29,7 @@
 #include "G4ProcessManager.hh"
 
 G4QGSPPiKBuilder::
-G4QGSPPiKBuilder(G4bool quasiElastic) 
+G4QGSPPiKBuilder(G4bool quasiElastic, G4bool projectileDiffraction) 
 {
   theMin = 12*GeV;
   theModel = new G4TheoFSGenerator;
@@ -49,7 +49,14 @@ G4QGSPPiKBuilder(G4bool quasiElastic)
      theQuasiElastic=new G4QuasiElasticChannel;
      theModel->SetQuasiElasticChannel(theQuasiElastic);
   } else 
-  {  theQuasiElastic=0;}  
+  {  theQuasiElastic=0;}
+  if ( projectileDiffraction )
+  {
+     theProjectileDiffraction=new G4ProjectileDiffractiveChannel;
+     theModel->SetProjectileDiffraction(theProjectileDiffraction);
+  } else 
+  {  theProjectileDiffraction=0;}
+   
   theModel->SetTransport(theCascade);
 }
 
@@ -59,6 +66,7 @@ G4QGSPPiKBuilder::
   delete theCascade;
   delete thePreEquilib;
   if ( theQuasiElastic ) delete theQuasiElastic;
+  if ( theProjectileDiffraction ) delete theProjectileDiffraction;
   delete theStringDecay;
   delete theStringModel;
   delete theModel;

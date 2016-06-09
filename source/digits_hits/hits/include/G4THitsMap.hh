@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4THitsMap.hh,v 1.6 2006/06/29 18:06:36 gunter Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: G4THitsMap.hh,v 1.9 2007/08/30 05:13:03 asaim Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 #ifndef G4THitsMap_h
 #define G4THitsMap_h 1
@@ -192,7 +192,17 @@ template <typename T> void G4THitsMap<T>::DrawAllHits()
 {;}
 
 template <typename T> void G4THitsMap<T>::PrintAllHits() 
-{;}
+{
+ G4cout << "G4THitsMap " << SDname << " / " << collectionName << " --- " << entries() << " entries" << G4endl;
+ std::map<G4int,T*> * theHitsMap = GetMap();
+ typename std::map<G4int, T*>::iterator itr = theHitsMap->begin();
+ G4double sum = 0.;
+ for(; itr != theHitsMap->end(); itr++) {
+  ///////////////////////////////G4cout << "  " << itr->first << " : " << *(itr->second) << G4endl;
+  sum += *(itr->second);
+ }
+ G4cout << "             Total : " << sum << G4endl;
+}
 
 template <typename T> void G4THitsMap<T>::clear() {
 

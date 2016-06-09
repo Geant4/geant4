@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: pyG4Torus.cc,v 1.4 2006/06/29 15:32:30 gunter Exp $
-// $Name: geant4-09-00 $
+// $Id: pyG4Torus.cc,v 1.5 2007/07/13 04:57:50 kmura Exp $
+// $Name: geant4-09-01 $
 // ====================================================================
 //   pyG4Torus.cc
 //
@@ -34,6 +34,21 @@
 #include "G4Torus.hh"
 
 using namespace boost::python;
+
+// ====================================================================
+// wrappers
+// ====================================================================
+namespace pyG4Torus {
+
+G4Torus* CreateTorus(const G4String& name, G4double pRmin, G4double pRmax,
+                     G4double pRtor, G4double pSPhi, G4double pDPhi)
+{
+  return new G4Torus(name, pRmin, pRmax, pRtor, pSPhi, pDPhi);
+}
+
+}
+
+using namespace pyG4Torus;
 
 // ====================================================================
 // module definition
@@ -51,8 +66,10 @@ void export_G4Torus()
     .def("GetRtor", &G4Torus::GetRtor)
     .def("GetSPhi", &G4Torus::GetSPhi)
     .def("GetDPhi", &G4Torus::GetDPhi)
-    .def("GetCubicVolume", &G4Torus::GetCubicVolume)
     // operators
     .def(self_ns::str(self))
     ;
+
+    // Create solid
+    def("CreateTorus", CreateTorus, return_value_policy<manage_new_object>());
 }

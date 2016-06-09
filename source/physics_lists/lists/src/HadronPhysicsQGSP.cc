@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: HadronPhysicsQGSP.cc,v 1.3 2007/04/26 14:47:11 gunter Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: HadronPhysicsQGSP.cc,v 1.4 2007/11/13 10:16:11 gunter Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 //---------------------------------------------------------------------------
 //
@@ -37,6 +37,7 @@
 // 21.11.2005 G.Folger:  migration to non static particles
 // 08.06.2006 V.Ivanchenko: remove stopping
 // 30.03.2007 G.Folger: Add code for quasielastic
+// 12.11.2007 G.Folger: Add code for projectileDiffraction for proton/neutron
 //
 
 #include "HadronPhysicsQGSP.hh"
@@ -53,24 +54,26 @@
 
 HadronPhysicsQGSP::HadronPhysicsQGSP(const G4String& name, G4bool quasiElastic)
                  :  G4VPhysicsConstructor(name) , QuasiElastic(quasiElastic)
-{}
+{
+   ProjectileDiffraction=false;
+}
 
 void HadronPhysicsQGSP::CreateModels()
 {
   theNeutrons=new G4NeutronBuilder;
-  theQGSPNeutron=new G4QGSPNeutronBuilder(QuasiElastic);
+  theQGSPNeutron=new G4QGSPNeutronBuilder(QuasiElastic, ProjectileDiffraction);
   theNeutrons->RegisterMe(theQGSPNeutron);
   theNeutrons->RegisterMe(theLEPNeutron=new G4LEPNeutronBuilder);
   theLEPNeutron->SetMaxInelasticEnergy(25*GeV);  
 
   thePro=new G4ProtonBuilder;
-  theQGSPPro=new G4QGSPProtonBuilder(QuasiElastic);
+  theQGSPPro=new G4QGSPProtonBuilder(QuasiElastic, ProjectileDiffraction);
   thePro->RegisterMe(theQGSPPro);
   thePro->RegisterMe(theLEPPro=new G4LEPProtonBuilder);
   theLEPPro->SetMaxEnergy(25*GeV);
   
   thePiK=new G4PiKBuilder;
-  theQGSPPiK=new G4QGSPPiKBuilder(QuasiElastic);
+  theQGSPPiK=new G4QGSPPiKBuilder(QuasiElastic, false);
   thePiK->RegisterMe(theQGSPPiK);
   thePiK->RegisterMe(theLEPPiK=new G4LEPPiKBuilder);
   theLEPPiK->SetMaxEnergy(25*GeV);

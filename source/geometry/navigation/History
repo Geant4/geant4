@@ -1,4 +1,4 @@
-$Id: History,v 1.84.2.2 2007/06/08 10:09:19 gcosmo Exp $
+$Id: History,v 1.113 2007/11/16 09:39:26 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,24 +17,196 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-June 8th, 2007 - T.Nikitina (geomnav-V08-03-02b)
+November 16th, 2007 - G.Cosmo (geomnav-V09-00-12)
+-----------------------------
+- Cleared compilation warnings for shadowing of variables in classes
+  within the module.
+
+November 14th, 2007 - G.Cosmo (geomnav-V09-00-11)
+-----------------------------
+- Reintroduced artificial push in G4ReplicaNavigation::ComputeStep().
+  Further investigation and eventually reimplementation of LevelLocate()
+  required to take into account point and direction ...
+
+November 14th, 2007 - G.Cosmo (geomnav-V09-00-10)
+-----------------------------
+- Trial to remove artificial push in G4ReplicaNavigation::ComputeStep().
+- Some minor cleanup.
+
+November 9th, 2007 - J.Apostolakis (geomnav-V09-00-09)
+----------------------------------
+- G4SafetyHelper: Improved ComputeSafety() not to call G4Navigator
+  if exactly on safety 'center'.  
+- G4PathFinder: correction to debug code under #ifdef G4DEBUG_NAVIGATION.
+
+November 9th, 2007 - G.Cosmo (geomnav-V09-00-08)
+----------------------------
+- Fix in G4ReplicaNavigation::DistanceToOut() for exact classification of
+  the linear step for Cartesian case.
+- Made IdentifyAndPlaceSolid() method inlined in G4ParameterisedNavigation.
+- Minor cosmetics and cleanup.
+
+November 6th, 2007 - P.Arce (geomnav-V09-00-07)
+---------------------------
+- Optimisation in G4RegularNavigation: use voxelBox->DistanceToOut() instead
+  of ComputeStep() in ComputeStepSkippingEqualMaterials().
+- Some cleanup and proper formatting of error/warning messages.
+
+November 2nd, 2007 - J.Apostolakis (geomnav-V09-00-06)
+----------------------------------
+- Merging fixes in "geomnav-V09-00-03b" and "geomnav-V09-00-03c" on top
+  of tag "geomnav-V09-00-05".
+
+November 2nd, 2007 - J.Apostolakis (geomnav-V09-00-03c)
+----------------------------------
+- G4PathFinder: 
+  o Added setting of 'fNoGeometriesLimiting' in DoNextCurvedStep().
+  o Check to verify that 'fNoGeometriesLimiting' is set by DoNext*Step methods.
+  o Revised data type of 'fNoGeometriesLimiting' to be a int, so that < 0
+    shows 'unset'.
+- G4PropagatorInField: 
+  o Fixes for compilation of code under G4DEBUG_FIELD (problem report #982).
+  o Added extra check of method LocateIntersectionPoint() arguments.
+- Tag based on "geomnav-V09-00-03b".
+
+October 29th, 2007 - J.Apostolakis (geomnav-V09-00-03b)
+----------------------------------
+- G4PathFinder: first fix for problem of another process shortening steps
+  (between calls to ComputeStep by different processes in same step.)
+  I.e.  First call to ComputeStep (geom 1) has proposed Step = 3.0 cm
+        Next  call to ComputeStep (geom 2) has proposed Step = 1.0 cm
+        (e.g. Multiple Scattering)
+- Tag based on "geomnav-V09-00-03a".
+
+October 24th, 2007 - J.Apostolakis (geomnav-V09-00-05)
+----------------------------------
+- Merging fixes introduced in "geomnav-V09-00-03a" on top of
+  "geomnav-V09-00-04".
+
+October 24th, 2007 - J.Apostolakis (geomnav-V09-00-03a)
+----------------------------------
+- G4PathFinder: fix to now set 'fNoGeometriesLimiting' in DoNextLinearStep()
+  when WhichLimited() is not called, i.e. in case of one navigator
+  optimisation.
+- Tag based on "geomnav-V09-00-03".
+
+October 18th, 2007 - G.Cosmo (geomnav-V09-00-04)
+----------------------------
+- Added new specific navigation for regular structures and phantoms.
+  New classes: G4RegularNavigation, G4PhantomParameterisation (by P.Arce).
+  Added cases to G4Navigator. Added dependency on "materials" module.
+
+October 12th, 2007 - J.Apostolakis (geomnav-V09-00-03)
+----------------------------------
+- G4PathFinder: added new methods GetNumberGeometriesLimitingStep()
+  and GetMinimumStep() needed by G4CoupledTransportation to see whether
+  to relocate.
+
+September 25th, 2007 - G.Cosmo (geomnav-V09-00-02)
+------------------------------
+- Some code cleanup in G4PathFinder. Switch off additional optimisation
+  for safety in method DoNextLinearStep().
+- Set 'fRecomputeFactor' in G4SafetyHelper to 0.0, to switch off internal
+  optimisation and allow for reproducibility of steps (A.Howard).
+
+July 12th, 2007 - J.Apostolakis (geomnav-V09-00-01)
+-------------------------------
+- Restores fixes/improvements of geomnav-V08-03-07
+- G4PathFinder: includes fix for result of ObtainSafety(), used in
+  CoupledTransportation.
+
+July 12th, 2007 - J.Apostolakis (geomnav-V09-00-00)
+-------------------------------
+- G4PathFinder: 
+  o Include correction to signature of method PrepareNewTrack(). 
+    (This was done on a branch for this class in order to keep only
+     development of geomnav-V08-03-06) 
+- G4PropagatorInField:
+  o Included revisions and fixes for G4PropagatorInField of June 8th.
+- This tag is based on "geomnav-V08-03-06" and does NOT include the
+  revisions of "geomnav-V08-03-07".
+
+July 5th, 2007 - G.Cosmo
+------------------------
+- G4PathFinder: 
+  o Corrected signature to method PrepareNewTrack().
+    Resolves linking problems detected on SUN-CC platform.
+- Changes included in tag  "geomnav-V08-03-02c", included in relase 9.0.p01.
+
+June 8th, 2007 - T.Nikitina
 ---------------------------
 - G4PropagatorInField:
   o Put in the constructor creation of array of FieldTracks used in
     LocateInterSectionPoint().
   o Change in ReEstimateNewPoint() in order to handle cases with zero step
     caused by diffCurve=0.
+  o In case of proposed step less than tolerance, now return 'kInfinity'
+    as per convention of geometry instead of 'DBL_MAX'.
+    (by J.Apostolakis, May 18th 2007)
+- Changes included in tag "geomnav-V08-03-02b", included in release 9.0.
 
-May 18th, 2007 - J.Apostolakis
+June 5th, 2007 - J.Apostolakis (geomnav-V08-03-07)
 ------------------------------
-- G4PropagatorInField: in case of proposed step less than tolerance,
-  now return 'kInfinity' as per convention of geometry instead of 'DBL_MAX'.
+- G4PathFinder: 
+  o New method to return the safety sphere last calculated for
+    a PreStep point (it could be a previous one - due to optimasation).
+    >> If last step(s) were smaller than safety, then for a linear
+    track (no field or no charge) Navigator's ComputeSafety is not
+    called.  The older PreStep (previous step or some steps back 
+    in case of many small steps) is stored for this - and provided.
+  o ComputeStep() still returns current PreStep point's safety (must).
+  o Revisions are to make this (used by CoupledTransportation) more
+    compatible with the old direct use of G4Navigator by G4Transportation.
 
-May 30th, 2007 - G.Cosmo (geomnav-V08-03-02a)
+May 29th, 2007 - J.Apostolakis (geomnav-V08-03-06)   
+------------------------------
+- G4Navigator
+  o Fixed **ComputeSafety**: wrong coordinates used (last tag only). 
+    For certainty reinstated LocateGlobalPointWithinVolume (for now).
+  o Corrected calculation of fStepEndPoint (in ComputeStep)
+    for case of step not limited by geometry
+- G4PathFinder
+  o PrepareNewTrack: calls to re-initialise SafetyHelper (reset safety)
+  o ReLocate: Corrected check of move (avoid one side effect on stored safety)
+              --> ComputeSafety still results individual navigators' values.
+
+May 24th, 2007 - J.Apostolakis (geomnav-V08-03-05)
+------------------------------
+- G4PathFinder: 1 correction and 2 optimisations:
+  o PrepareNewTrack() clear safety - to avoid potential problems in overlaps.
+  o DoNextLinearStep() only calls ComputeStep() for a navigator whose safety
+    greater than the step.
+  o DoNextCurvedStep(), if there's one geometry, no longer calls
+    ComputeSafety() at start.
+- G4Navigator ComputeSafety: 
+  o Corrected it to address use at non-endpoint
+  o Replaced call to LocateGlobalPointWithinVolume() with calls to
+    sub-navigators.
+
+May 21st, 2007 - G.Cosmo
 ------------------------
+- Made 'fVerbose' protected in G4Navigator, reused in G4MultipleNavigator.
+- Some cleanup in G4MultipleNavigator implementation.
+- Make G4PathFinder singleton definition canonical.
 - Added method CheckPointExiting() in G4AuxiliaryNavServices utility
   class (by P.Arce).
-- Added G4DEBUG_PATHFINDER flag to GNUmakefile.
+
+May 19th, 2007 - J.Apostolakis (geomnav-V08-03-04)
+------------------------------
+- Corrections and additions in G4PathFinder: 
+    1) Added calculation of start-point safety in DoNextCurvedStep
+    2) Corrected GetCurrentSafety() - uses mininum of 1)
+    3) Added method to obtain safety of one navigator (after call to all).
+    4) Deleted obsolete data member 'fMinSafety'.
+    5) If only one geometry, do not call WhichLimited in DoNextLinearStep (optimisation)
+    6) ComputeSafety: save the values of isotropic safety for each navigator
+
+May 18th, 2007 - A.Howard (geomnav-V08-03-03)
+------------------------
+- Fixed return value for G4PathFinder::ComputeStep in case of
+   step smaller than tolerance (now kInfinity): fixes one PathFinder issue (JA).
+- Added compiler flags for verbosity in G4PathFinder.cc
+- Added compiler flags for verbosity in G4MultiNavigator.cc
 
 May 18th, 2007 - G.Cosmo (geomnav-V08-03-02)
 ------------------------

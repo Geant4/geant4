@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+  <gdml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:gdml="http://cern.ch/2001/Schemas/GDML" 
+  xsi:noNamespaceSchemaLocation="/afs/cern.ch/user/z/ztorzsok/scratch0/GDML2/GDMLSchema/gdml.xsd">
+
+    <define>
+      <constant name="XSize" value="100"/>
+      <constant name="YSize" value="200"/>
+      <constant name="ZSize" value="300"/>
+    </define>
+
+    <materials>
+      <material Z="1.0" name="AIR">
+        <D value="1e-25"/>
+        <atom value="1.00794"/>
+      </material>
+      <material name="ALU" Z="13.0">
+        <D value="2.70"/>
+	<atom value="26.98"/>
+      </material>
+    </materials>
+
+    <solids>
+      <box name="WorldBox" y="1000" x="1000" z="1000"/>
+      <xtru name="Extruded">
+        <twoDimVertex x="0" y="0"/>
+        <twoDimVertex x="XSize" y="0"/>
+        <twoDimVertex x="0" y="YSize"/>
+        <section zOrder="0" zPosition="0" xOffset="0" yOffset="0" scalingFactor="1.0"/>
+        <section zOrder="1" zPosition="ZSize" xOffset="0" yOffset="0" scalingFactor="0.5"/>
+      </xtru>
+      <reflectedSolid name="Reflected0" solid="Extruded" sx="+1" sy="+1" sz="+1"/>
+      <reflectedSolid name="Reflected1" solid="Extruded" sx="-1" sy="+1" sz="+1"/>
+      <reflectedSolid name="Reflected2" solid="Extruded" sx="+1" sy="-1" sz="+1"/>
+      <reflectedSolid name="Reflected3" solid="Extruded" sx="+1" sy="+1" sz="-1"/>
+      <reflectedSolid name="Reflected4" solid="Extruded" sx="-1" sy="-1" sz="+1"/>
+      <reflectedSolid name="Reflected5" solid="Extruded" sx="+1" sy="-1" sz="-1"/>
+      <reflectedSolid name="Reflected6" solid="Extruded" sx="-1" sy="+1" sz="-1"/>
+      <reflectedSolid name="Reflected7" solid="Extruded" sx="-1" sy="-1" sz="-1"/>
+    </solids>
+
+    <structure>
+      <volume name="vReflected0">
+        <materialref ref="ALU"/>
+	<solidref ref="Reflected0"/>
+      </volume>
+      <volume name="vReflected1">
+        <materialref ref="ALU"/>
+	<solidref ref="Reflected1"/>
+      </volume>
+      <volume name="vReflected2">
+        <materialref ref="ALU"/>
+	<solidref ref="Reflected2"/>
+      </volume>
+      <volume name="vReflected3">
+        <materialref ref="ALU"/>
+	<solidref ref="Reflected3"/>
+      </volume>
+      <volume name="vReflected4">
+        <materialref ref="ALU"/>
+	<solidref ref="Reflected4"/>
+      </volume>
+      <volume name="vReflected5">
+        <materialref ref="ALU"/>
+	<solidref ref="Reflected5"/>
+      </volume>
+      <volume name="vReflected6">
+        <materialref ref="ALU"/>
+	<solidref ref="Reflected6"/>
+      </volume>
+      <volume name="vReflected7">
+        <materialref ref="ALU"/>
+	<solidref ref="Reflected7"/>
+      </volume>
+      <volume name="TOP">
+        <materialref ref="AIR"/>
+        <solidref ref="WorldBox"/>
+        <physvol>
+          <volumeref ref="vReflected0"/>
+        </physvol>
+        <physvol>
+          <volumeref ref="vReflected1"/>
+        </physvol>
+        <physvol>
+          <volumeref ref="vReflected2"/>
+        </physvol>
+        <physvol>
+          <volumeref ref="vReflected3"/>
+        </physvol>
+        <physvol>
+          <volumeref ref="vReflected4"/>
+        </physvol>
+        <physvol>
+          <volumeref ref="vReflected5"/>
+        </physvol>
+        <physvol>
+          <volumeref ref="vReflected6"/>
+        </physvol>
+        <physvol>
+          <volumeref ref="vReflected7"/>
+        </physvol>
+      </volume>
+    </structure>
+
+    <setup version="1.0" name="Default">
+      <world ref="TOP"/>
+    </setup>
+
+  </gdml>

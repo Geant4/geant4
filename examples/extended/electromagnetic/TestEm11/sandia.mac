@@ -1,0 +1,30 @@
+# $Id: sandia.mac,v 1.1 2007/08/19 20:52:53 maire Exp $
+#
+# limit the step size from histo 8
+#
+# G.J.Lockwood et al. Sandia report SAND79-0414.UC-34a, February 1987
+# O.Kadri et al. NIM B 258 (2007) 381
+#
+/control/verbose 2
+/run/verbose 2
+#
+/testem/det/setMat G4_Al
+###/testem/det/setMat G4_Ta
+/testem/det/setSizeX  1 cm
+/testem/det/setSizeYZ 1 cm
+#
+/testem/phys/addPhysics  standard	# em physics
+#
+/run/initialize
+#
+/gun/particle e-
+/gun/energy 500 keV
+#
+/testem/histo/setFileType hbook
+/testem/histo/setFileName Al.500keV
+/testem/histo/setHisto 8 100 0.  1.0 none	#normalized Edep profile
+###/testem/histo/setHisto 8 100 0.  0.5 none
+#
+/testem/event/printModulo 10000
+#
+/run/beamOn 100000

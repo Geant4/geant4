@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // $Id: MyKleinNishinaCompton.hh,v 1.3 2007/05/23 08:40:21 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

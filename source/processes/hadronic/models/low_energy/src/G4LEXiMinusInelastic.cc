@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4LEXiMinusInelastic.cc,v 1.11 2006/06/29 20:45:23 gunter Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// GEANT4 tag $Name: geant4-09-01 $
 //
  // Hadronic Process: XiMinus Inelastic Process
  // J.L. Chuma, TRIUMF, 20-Feb-1997

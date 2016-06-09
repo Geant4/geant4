@@ -57,6 +57,8 @@
 #define DicomHandler_h 1
 
 #include <cstdio>
+#include <map>
+#include <fstream>
 
 #include "globals.hh"
 
@@ -68,17 +70,17 @@ public:
 
     ~DicomHandler();
 
-  G4int readHeader(FILE *,char *);
-  G4int readData(FILE *,char *); // note: always use readHeader 
+  G4int ReadFile(FILE *,char *);
+  G4int ReadData(FILE *,char *); // note: always use readHeader 
                                     // before readData
 
   // use ImageMagick to display the image
   //G4int displayImage(char[500]);
 
-    void checkFileFormat();
+    void CheckFileFormat();
 
 private:
-    template <class Type> void getValue(char *, Type &);
+    template <class Type> void GetValue(char *, Type &);
 
 private:
 
@@ -86,12 +88,14 @@ private:
     const int LINEBUFFSIZE;
     const int FILENAMESIZE;
 
-    void storeInformation(char *);
-    void getInformation(G4int &, char *);
-    G4double pixel2density(G4int pixel);
+    void GetInformation(G4int &, char *);
+    G4double Pixel2density(G4int pixel);
+    void ReadMaterialIndices( std::ifstream& finData);
+    size_t GetMaterialIndex( G4double density );
+    void StoreData(std::ofstream& foutG4DCM);
 
     short compression;
-    G4int max;
+    G4int nFiles;
     short rows;
     short columns;
     short bitAllocated;
@@ -105,6 +109,9 @@ private:
     
     G4bool littleEndian, implicitEndian;
     short pixelRepresentation;
+
+    G4int** tab;
+  std::map<G4double,G4String> fMaterialIndices;
 };
 #endif
 

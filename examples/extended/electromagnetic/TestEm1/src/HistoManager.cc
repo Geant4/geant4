@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HistoManager.cc,v 1.9 2006/06/29 16:37:03 gunter Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: HistoManager.cc,v 1.10 2007/11/12 15:48:58 maire Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -61,6 +61,7 @@ HistoManager::HistoManager()
     exist[k] = false;
     Unit[k]  = 1.0;
     Width[k] = 1.0;
+    ascii[k] = false;    
   }
 
   histoMessenger = new HistoMessenger(this);
@@ -126,6 +127,7 @@ void HistoManager::save()
 {
 #ifdef G4ANALYSIS_USE
   if (factoryOn) {
+    saveAscii();          // Write ascii file, if any   
     tree->commit();       // Writing the histograms to the file
     tree->close();        // and closing the tree (and the file)
     G4cout << "\n----> Histogram Tree is saved in " << fileName[1] << G4endl;
@@ -206,6 +208,45 @@ void HistoManager::RemoveHisto(G4int ih)
   }
 
   histo[ih] = 0;  exist[ih] = false;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void HistoManager::PrintHisto(G4int ih)
+{
+ if (ih < MaxHisto) ascii[ih] = true;
+ else
+    G4cout << "---> warning from HistoManager::PrintHisto() : histo " << ih
+           << "does not exist" << G4endl;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+#include <fstream>
+
+void HistoManager::saveAscii()
+{
+#ifdef G4ANALYSIS_USE
+ 
+ G4String name = fileName[0] + ".ascii";
+ std::ofstream File(name, std::ios::out);
+ File.setf( std::ios::scientific, std::ios::floatfield );
+ 
+ //write selected histograms
+ for (G4int ih=0; ih<MaxHisto; ih++) {
+    if (exist[ih] && ascii[ih]) {
+      File << "\n  1D histogram " << ih << ": " << Title[ih] 
+           << "\n \n \t     X \t\t     Y" << G4endl;
+     
+      for (G4int iBin=0; iBin<Nbins[ih]; iBin++) {
+         File << "  " << iBin << "\t" 
+              << histo[ih]->binMean(iBin) << "\t"
+	      << histo[ih]->binHeight(iBin) 
+	      << G4endl;
+      } 
+    }
+ }
+#endif
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -1,4 +1,4 @@
-$Id: History,v 1.100 2007/05/29 04:43:31 vnivanch Exp $
+$Id: History,v 1.106 2007/11/12 10:34:23 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,26 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+12 November 07:  V.Ivanchenko (emmuons-V09-00-04)
+11 November 07:  V.Ivanchenko (emmuons-V09-00-03)
+G4MuMscModel - fixed computation of transport cross section
+
+09 November 07:  V.Ivanchenko (emmuons-V09-00-02)
+- G4MuMultipleScattering, G4MuMscModel - new classes for simulation
+                            of multiple scattering (beta-version)
+
+08 November 07:  V.Ivanchenko (emmuons-V09-00-01)
+- G4MuBremsstrahlungModel - updated sampling algorithm to provide 
+                            more precise predictions for the tail
+                            of the gamma energy spectra (NA49 problem)
+- G4MuBremsstrahlungModel and G4MuPairProductionModel - add ignoreCut
+  flag, if this flag is "true" both models provide zero dedx and full
+  cross sections
+
+28 July 07:  V.Ivanchenko (emmuons-V09-00-00)
+- G4EnergyLossForExtrapolator - added maxEnergyTransfer parameter
+                                for computation of energy loss (VI)
 
 29 May 07:  V.Ivanchenko (emmuons-V08-03-04)
 - G4EnergyLossForExtrapolator - added Set methods for first and last

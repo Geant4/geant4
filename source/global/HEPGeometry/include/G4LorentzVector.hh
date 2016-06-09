@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4LorentzVector.hh,v 1.5 2006/06/29 18:59:06 gunter Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 #ifndef G4LorentzVector_hh
 #define G4LorentzVector_hh

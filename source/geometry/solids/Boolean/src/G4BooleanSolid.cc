@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4BooleanSolid.cc,v 1.21 2006/10/19 15:34:49 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 // Implementation for the abstract base class for solids created by boolean 
 // operations between other solids

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: TestEm10.cc,v 1.8 2006/08/16 15:58:32 grichine Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: TestEm10.cc,v 1.9 2007/07/27 17:52:04 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 // 
 // --------------------------------------------------------------
@@ -54,7 +54,7 @@
 #include "Em10EventAction.hh"
 #include "Em10SteppingAction.hh"
 #include "Em10SteppingVerbose.hh"
- #include "Em10TrackingAction.hh"
+#include "Em10TrackingAction.hh"
  
 int main(int argc,char** argv) 
 {
@@ -83,16 +83,10 @@ int main(int argc,char** argv)
   runManager->SetUserInitialization(new Em10PhysicsList(detector));
   
 #ifdef G4VIS_USE
-
-  // visualization manager
-
-  G4VisManager* visManager = new G4VisExecutive;
-  visManager->Initialize();
-
+  G4VisManager* visManager = 0;
 #endif 
  
   // set user action classes
-
   runManager->SetUserAction(new Em10PrimaryGeneratorAction(detector));
 
   Em10RunAction* runAction = new Em10RunAction;
@@ -112,31 +106,28 @@ int main(int argc,char** argv)
   runManager->SetUserAction( new Em10TrackingAction );
 
 
-  
-  //Initialize G4 kernel, physics tables ...
-
-  //  runManager->Initialize();
-    
-  // get the pointer to the User Interface manager 
-
   G4UImanager* UI = G4UImanager::GetUIpointer();  
  
   if (argc==1)   // Define UI terminal for interactive mode  
-  { 
-     G4UIsession * session = new G4UIterminal;
-     UI->ApplyCommand("/control/execute init.mac");    
-     session->SessionStart();
-     delete session;
-  }
+    { 
+#ifdef G4VIS_USE
+      visManager = new G4VisExecutive;
+      visManager->Initialize();
+#endif 
+
+      G4UIsession * session = new G4UIterminal;
+      UI->ApplyCommand("/control/execute init.mac");    
+      session->SessionStart();
+      delete session;
+    }
   else           // Batch mode
-  { 
-     G4String command = "/control/execute ";
-     G4String fileName = argv[1];
-     UI->ApplyCommand(command+fileName);
-  }
+    { 
+      G4String command = "/control/execute ";
+      G4String fileName = argv[1];
+      UI->ApplyCommand(command+fileName);
+    }
     
   // job termination
-
 #ifdef G4VIS_USE
   delete visManager;
 #endif  

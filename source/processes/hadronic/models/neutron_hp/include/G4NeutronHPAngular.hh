@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4NeutronHPAngular.hh,v 1.12 2007/06/22 09:23:47 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 // 070613 fix memory leaking by T. Koi
 //

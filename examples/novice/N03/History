@@ -1,4 +1,4 @@
-$Id: History,v 1.113 2007/06/13 10:36:39 maire Exp $
+$Id: History,v 1.117 2007/11/19 20:18:05 perl Exp $
 --------------------------------------------------
 
      =========================================================
@@ -14,6 +14,18 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+     
+16-11-07 Laurent Garnier (exampleN03-V09-00-01)
+- exampleN03 : Adding Qt render possibility
+- visTutor/gui.mac : Adding menu for Qt render
+- visTutor/exN03Vis14.mac,visTutor/exN03Vis15.mac : Adding file menu for
+  Qt render
+
+02-07-07 V.Ivant (exampleN03-V09-00-00)
+- make destructors virtual, cleanup
+
+25-06-07 mma (exampleN03-V08-03-02)
+- simplifications in exampleN03.cc
      
 13-06-07 mma (exampleN03-V08-03-01)
 - more verbose in rndmSeed.mac

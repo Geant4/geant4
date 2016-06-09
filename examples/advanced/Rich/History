@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: History,v 1.10 2007/05/14 07:50:42 ribon Exp $
+$Id: History,v 1.11 2007/09/30 23:00:40 gum Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -8,6 +8,9 @@ $Id: History,v 1.10 2007/05/14 07:50:42 ribon Exp $
 
                       Category History file
                       ---------------------
+
+30.09.2007 - P.Gumplinger (Rich-V09-00-00)
+             adjust to the G4Cerenkov process now being a G4VDiscreteProcess
 
 14.05.2007 - A.Ribon (Rich-V08-03-00)
              The constant "kCarTolerance" is no longer available,

@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QCoherentChargeExchange.hh,v 1.3 2007/05/23 15:14:25 mkossov Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: G4QCoherentChargeExchange.hh,v 1.4 2007/08/09 13:04:37 mkossov Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 //      ---------------- G4QCoherentChargeExchange header ----------------
 //                 by Mikhail Kossov, December 2003.
@@ -57,6 +57,7 @@
 #include "G4LorentzVector.hh"
 
 // CHIPS Headers
+#include "G4QuasiFreeRatios.hh"
 #include "G4QElasticCrossSection.hh"
 #include "G4QIsotope.hh"
 #include "G4QPDGToG4Particle.hh"
@@ -106,9 +107,6 @@ private:
 
   // Calculate XS/t: oxs=true - only CS; xst=true - calculate XS, xst=false(oxs=f/t) - t/tm
   G4double CalculateXSt(G4bool oxs, G4bool xst, G4double p, G4int Z, G4int N, G4int pPDG);
-
-  // Calculate ChEx/El suppression coefficient
-  G4double ChExElCoef(G4double p, G4int Z, G4int N, G4int pPDG);
 
 		// BODY
   // Static Parameters --------------------------------------------------------------------

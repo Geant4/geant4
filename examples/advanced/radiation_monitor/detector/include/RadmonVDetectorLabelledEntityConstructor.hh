@@ -29,7 +29,7 @@
 // Main author:   Riccardo Capra <capra@ge.infn.it>
 //
 // Id:            $Id: RadmonVDetectorLabelledEntityConstructor.hh,v 1.8 2006/06/29 16:13:16 gunter Exp $
-// Tag:           $Name: geant4-09-00 $
+// Tag:           $Name: geant4-09-01 $
 //
 // Description:   Abstract class of a detector-entity constructor with label
 //                and attributes

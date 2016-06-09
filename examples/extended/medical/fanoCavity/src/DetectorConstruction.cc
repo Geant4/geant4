@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: DetectorConstruction.cc,v 1.1 2007/01/19 17:20:27 maire Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: DetectorConstruction.cc,v 1.3 2007/10/08 12:05:02 maire Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -56,7 +56,6 @@ DetectorConstruction::DetectorConstruction()
   cavityRadius    = 1*cm;      
   
   wallThickness = 5*mm;
-  defaultRadius = true;
   
   DefineMaterials();
   SetWallMaterial("Water");
@@ -110,7 +109,13 @@ void DetectorConstruction::DefineMaterials()
   new G4Material("Air", 1.290*mg/cm3, 2);
   Air->AddElement(N, 70.*perCent);
   Air->AddElement(O, 30.*perCent);
-        
+  
+  new G4Material("Graphite",     6, 12.01*g/mole, 2.265*g/cm3);
+  new G4Material("Graphite_gas", 6, 12.01*g/mole, 2.265*mg/cm3);  
+  
+  new G4Material("Aluminium",     13, 26.98*g/mole, 2.700*g/cm3);
+  new G4Material("Aluminium_gas", 13, 26.98*g/mole, 2.700*mg/cm3);  
+          
  G4cout << *(G4Material::GetMaterialTable()) << G4endl;
 }
 
@@ -126,7 +131,7 @@ G4VPhysicalVolume* DetectorConstruction::ConstructVolumes()
   // Chamber
   //
   totalThickness = cavityThickness + 2*wallThickness;
-  if (defaultRadius) wallRadius = cavityRadius + wallThickness;
+  wallRadius     = cavityRadius + wallThickness;
   
   G4Tubs* 
   sChamber = new G4Tubs("Chamber",					//name
@@ -196,13 +201,6 @@ void DetectorConstruction::SetWallThickness(G4double value)
   
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void DetectorConstruction::SetWallRadius(G4double value)
-{
-  wallRadius = value; 
-}  
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 void DetectorConstruction::SetWallMaterial(G4String materialChoice)
 {
   // search the material by its name   
@@ -222,7 +220,6 @@ void DetectorConstruction::SetCavityThickness(G4double value)
 void DetectorConstruction::SetCavityRadius(G4double value)
 {
   cavityRadius  = value;
-  defaultRadius = false; 
 }  
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

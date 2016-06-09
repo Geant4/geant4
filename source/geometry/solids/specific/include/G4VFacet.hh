@@ -24,8 +24,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VFacet.hh,v 1.5 2007/05/11 13:54:28 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: G4VFacet.hh,v 1.6 2007/08/23 14:45:03 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 //
@@ -83,7 +83,7 @@ class G4VFacet
     inline G4bool IsDefined () const;
     inline void SetVertexIndex (const size_t i, const size_t j);
     inline size_t GetVertexIndex (const size_t i) const;
-    inline G4ThreeVector GetCentroid () const;
+    inline G4ThreeVector GetCircumcentre () const;
     inline G4double GetRadius () const;
     inline G4double GetRadiusSquared() const;
     
@@ -112,7 +112,7 @@ class G4VFacet
     G4ThreeVectorList    E;
     std::vector<size_t>  I;
     G4ThreeVector        surfaceNormal;
-    G4ThreeVector        centroid;
+    G4ThreeVector        circumcentre;
     G4double             radius;
     G4double             radiusSqr;
 

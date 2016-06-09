@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4OpenInventorWinViewer.cc,v 1.25 2006/06/29 21:22:22 gunter Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 /*
  * jck : 05 Feb 1997 : Initial Implementation

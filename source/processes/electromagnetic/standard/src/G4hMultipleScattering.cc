@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4hMultipleScattering.cc,v 1.6 2007/06/11 15:01:26 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: G4hMultipleScattering.cc,v 1.7 2007/12/07 17:35:52 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 // -----------------------------------------------------------------------------
 //
@@ -47,6 +47,7 @@
 
 #include "G4hMultipleScattering.hh"
 #include "G4UrbanMscModel.hh"
+#include "G4UrbanMscModel90.hh"
 #include "G4MscStepLimitType.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -99,7 +100,7 @@ void G4hMultipleScattering::InitialiseProcess(const G4ParticleDefinition* p)
 
   // initialisation of parameters
   G4String part_name = p->GetParticleName();
-  mscUrban = new G4UrbanMscModel(RangeFactor(),dtrl,lambdalimit,
+  mscUrban = new G4UrbanMscModel90(RangeFactor(),dtrl,lambdalimit,
                                  GeomFactor(),Skin(),
                                  samplez,StepLimitType());
   mscUrban->SetLateralDisplasmentFlag(LateralDisplasmentFlag());

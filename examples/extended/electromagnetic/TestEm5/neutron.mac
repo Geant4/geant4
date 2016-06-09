@@ -1,4 +1,4 @@
-# $Id: neutron.mac,v 1.3 2007/06/22 10:48:01 maire Exp $
+# $Id: neutron.mac,v 1.4 2007/07/31 16:51:29 maire Exp $
 #
 # macro file for TestEm5.cc
 #
@@ -24,7 +24,7 @@
 /gun/particle neutron 
 /gun/energy 3 MeV
 #
-/testem/histo/setFileName h2liq.paw
+/testem/histo/setFileName h2liq
 /testem/histo/setHisto 1 200 0.01 4000. keV	#energy deposit
 #
 ##/testem/event/printModulo 10000

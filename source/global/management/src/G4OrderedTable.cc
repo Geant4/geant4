@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OrderedTable.cc,v 1.5 2006/06/29 19:04:07 gunter Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: G4OrderedTable.cc,v 1.6 2007/11/13 17:35:06 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 // 
 // ------------------------------------------------------------
@@ -46,8 +46,8 @@ G4OrderedTable::G4OrderedTable()
 {
 }
 
-G4OrderedTable::G4OrderedTable(size_t capacity)
-  : std::vector<G4DataVector*>(capacity, (G4DataVector*)(0) )
+G4OrderedTable::G4OrderedTable(size_t cap)
+  : std::vector<G4DataVector*>(cap, (G4DataVector*)(0) )
 {
 }
 

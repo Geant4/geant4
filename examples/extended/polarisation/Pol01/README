@@ -1,4 +1,4 @@
-$Id: README,v 1.1 2006/11/17 09:49:41 vnivanch Exp $
+$Id: README,v 1.2 2007/12/04 10:34:17 schaelic Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -68,7 +68,7 @@ $Id: README,v 1.1 2006/11/17 09:49:41 vnivanch Exp $
           asymmetries for longitudinally polarized leptons, and
           circularly polarized photons) 
 
-           photo-electric effect
+           polarized photo-electric effect
            polarized Compton scattering
            polarized pair production
            polarized bremsstrahlung

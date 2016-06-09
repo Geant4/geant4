@@ -25,7 +25,7 @@
 //
 //
 // $Id: RE02PSFlatSurfaceCurrent.hh,v 1.2 2006/12/13 15:42:52 gunter Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 
 #ifndef RE02PSFlatSurfaceCurrent_h

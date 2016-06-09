@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4LowEnergyPolarizedCompton.hh,v 1.9 2006/06/29 19:36:05 gunter Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 // ------------------------------------------------------------
 //      GEANT 4 class header file

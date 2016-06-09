@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Transportation.cc,v 1.60.4.2 2007/02/15 19:02:57 japost Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: G4Transportation.cc,v 1.72 2007/11/08 17:55:57 japost Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 // 
 // ------------------------------------------------------------
 //  GEANT 4  include file implementation
@@ -50,9 +50,6 @@
 //                          correction for spin tracking   
 //            20 Febr 2001, J.Apostolakis:  update for new FieldTrack
 //            22 Sept 2000, V.Grichine:     update of Kinetic Energy
-//             9 June 1999, J.Apostolakis & S.Giani: protect full relocation
-//                          in DEBUG for track  starting on surface that
-//                          goes step < tolerance.
 // Created:  19 March 1997, J. Apostolakis
 // =======================================================================
 
@@ -77,6 +74,7 @@ G4Transportation::G4Transportation( G4int verboseLevel )
     fUnimportant_Energy( 1 * MeV ), 
     fNoLooperTrials(0),
     fSumEnergyKilled( 0.0 ), fMaxEnergyKilled( 0.0 ), 
+    fShortStepOptimisation(false),    // Old default: true (=fast short steps)
     fVerboseLevel( verboseLevel )
 {
   G4TransportationManager* transportMgr ; 
@@ -88,6 +86,8 @@ G4Transportation::G4Transportation( G4int verboseLevel )
   // fGlobalFieldMgr = transportMgr->GetFieldManager() ;
 
   fFieldPropagator = transportMgr->GetPropagatorInField() ;
+
+  // fpSafetyHelper = fpTransportManager->GetSafetyHelper();  // New 
 
   // Cannot determine whether a field exists here,
   //  because it would only work if the field manager has informed 
@@ -201,6 +201,12 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
   {
      fieldMgr= fFieldPropagator->FindAndSetFieldManager( track.GetVolume() ); 
      if (fieldMgr != 0) {
+	// Message the field Manager, to configure it for this track
+	fieldMgr->ConfigureForTrack( &track );
+	// Moved here, in order to allow a transition
+	//   from a zero-field  status (with fieldMgr->(field)0
+	//   to a finite field  status
+
         // If the field manager has no field, there is no field !
         fieldExertsForce = (fieldMgr->GetDetectorField() != 0);
      } 
@@ -214,7 +220,7 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
   if( !fieldExertsForce ) 
   {
      G4double linearStepLength ;
-     if( currentMinimumStep <= currentSafety )
+     if( fShortStepOptimisation && (currentMinimumStep <= currentSafety) )
      {
        // The Step is guaranteed to be taken
        //
@@ -233,24 +239,22 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
        //
        fPreviousSftOrigin = startPosition ;
        fPreviousSafety    = newSafety ; 
+       // fSafetyHelper->SetCurrentSafety( newSafety, startPosition);
 
        // The safety at the initial point has been re-calculated:
        //
        currentSafety = newSafety ;
           
-       if( linearStepLength <= currentMinimumStep)
+       fGeometryLimitedStep= (linearStepLength <= currentMinimumStep); 
+       if( fGeometryLimitedStep )
        {
          // The geometry limits the Step size (an intersection was found.)
-         //
          geometryStepLength   = linearStepLength ;
-         fGeometryLimitedStep = true ;
-       }
+       } 
        else
        {
          // The full Step is taken.
-         //
          geometryStepLength   = currentMinimumStep ;
-         fGeometryLimitedStep = false ;
        }
      }
      endpointDistance = geometryStepLength ;
@@ -279,9 +283,6 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
                                               momentumMagnitude, // in Mev/c 
                                               restMass           ) ;  
 
-     // Message the field Manager, to configure it for this track
-     fieldMgr->ConfigureForTrack( &track );
-
      G4ThreeVector spin        = track.GetPolarization() ;
      G4FieldTrack  aFieldTrack = G4FieldTrack( startPosition, 
                                                track.GetMomentumDirection(),
@@ -300,15 +301,11 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
                                                           currentMinimumStep, 
                                                           currentSafety,
                                                           track.GetVolume() ) ;
-        if( lengthAlongCurve < currentMinimumStep)
-        {
+        fGeometryLimitedStep= lengthAlongCurve < currentMinimumStep; 
+	if( fGeometryLimitedStep ) {
            geometryStepLength   = lengthAlongCurve ;
-           fGeometryLimitedStep = true ;
-        }
-        else
-        {
+        } else {
            geometryStepLength   = currentMinimumStep ;
-           fGeometryLimitedStep = false ;
         }
      }
      else
@@ -321,7 +318,8 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
      //
      fPreviousSftOrigin = startPosition ;
      fPreviousSafety    = currentSafety ;         
-        
+     // fSafetyHelper->SetCurrentSafety( newSafety, startPosition);
+       
      // Get the End-Position and End-Momentum (Dir-ection)
      //
      fTransportEndPosition = aFieldTrack.GetPosition() ;
@@ -428,6 +426,7 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
       currentSafety      = endSafety ;
       fPreviousSftOrigin = fTransportEndPosition ;
       fPreviousSafety    = currentSafety ; 
+      // fSafetyHelper->SetCurrentSafety( currentSafety, fTransportEndPosition);
 
       // Because the Stepping Manager assumes it is from the start point, 
       //  add the StepLength
@@ -435,13 +434,12 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
       currentSafety     += endpointDistance ;
 
 #ifdef G4DEBUG_TRANSPORT 
-      G4cout.precision(16) ;
-      G4cout << "***Transportation::AlongStepGPIL ** " << G4endl  ;
-      G4cout << "  Called Navigator->ComputeSafety at "
-             << fTransportEndPosition
+      G4cout.precision(12) ;
+      G4cout << "***G4Transportation::AlongStepGPIL ** " << G4endl  ;
+      G4cout << "  Called Navigator->ComputeSafety at " << fTransportEndPosition
              << "    and it returned safety= " << endSafety << G4endl ; 
       G4cout << "  Adding endpoint distance " << endpointDistance 
-             << "   we obtain pseudo-safety= " << currentSafety << G4endl ; 
+             << "   to obtain pseudo-safety= " << currentSafety << G4endl ; 
 #endif
   }            
 
@@ -564,7 +562,7 @@ G4VParticleChange* G4Transportation::AlongStepDoIt( const G4Track& track,
 	fNoLooperTrials ++; 
 #ifdef G4VERBOSE
 	if( (fVerboseLevel > 2) ){
-	  G4cout << "   Transportation::AlongStepDoIt(): Particle looping -  "
+	  G4cout << "   G4Transportation::AlongStepDoIt(): Particle looping -  "
 		 << "   Number of trials = " << fNoLooperTrials 
 		 << "   No of calls to  = " << noCalls 
 		 << G4endl;
@@ -716,14 +714,16 @@ G4Transportation::StartTracking(G4Track* aTrack)
   fPreviousSftOrigin = G4ThreeVector(0.,0.,0.) ;
   
   // reset looping counter -- for motion in field
-  if( aTrack->GetCurrentStepNumber()==1 ) {
-     fNoLooperTrials= 0; 
-  }
+  fNoLooperTrials= 0; 
+  // Must clear this state .. else it depends on last track's value
+  //  --> a better solution would set this from state of suspended track TODO ? 
+  // Was if( aTrack->GetCurrentStepNumber()==1 ) { .. }
 
-  // Propagator and ChordFinder: reset internal state
+  // ChordFinder reset internal state
   //
   if( DoesGlobalFieldExist() ) {
-     fFieldPropagator->ClearPropagatorState(); 
+     fFieldPropagator->ClearPropagatorState();   
+       // Resets safety values, in case of overlaps.  
 
      G4ChordFinder* chordF= fFieldPropagator->GetChordFinder();
      if( chordF ) chordF->ResetStepEstimate();

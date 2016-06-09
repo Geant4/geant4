@@ -29,7 +29,7 @@
 // Main author:   Riccardo Capra <capra@ge.infn.it>
 //
 // Id:            $Id: RadmonAnalysisSensitiveDetectorTypeLayout.hh,v 1.3 2006/06/29 16:06:49 gunter Exp $
-// Tag:           $Name: geant4-09-00 $
+// Tag:           $Name: geant4-09-01 $
 //
 // Description:   Internal class to manage sensitive detector types
 //

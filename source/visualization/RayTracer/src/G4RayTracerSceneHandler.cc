@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4RayTracerSceneHandler.cc,v 1.10 2006/11/14 14:46:37 allison Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// GEANT4 tag $Name: geant4-09-01 $
 
 #include "G4RayTracerSceneHandler.hh"
 #include "G4VisManager.hh"

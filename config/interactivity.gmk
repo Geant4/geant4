@@ -62,14 +62,31 @@ ifdef LOAD_X11
   INTYLIBS += $(X11LIBS)
 endif
 
+########################### Qt ###################
+
+ifdef INC_QT
+  CPPFLAGS += $(QTFLAGS)
+endif
+ifdef LOAD_QT
+  INTYLIBS += $(QTLIBS)
+endif
+
 ########################### and finally... #######################
 
 ifdef G4INTY_BUILD_XT
   CPPFLAGS += -DG4INTY_BUILD_XT
 endif
 
+ifdef G4INTY_BUILD_QT
+  CPPFLAGS += -DG4INTY_BUILD_QT
+endif
+
 ifdef G4INTY_USE_XT
   CPPFLAGS += -DG4INTY_USE_XT
+endif
+
+ifdef G4INTY_USE_QT
+  CPPFLAGS += -DG4INTY_USE_QT
 endif
 
 ifdef G4INTY_BUILD_WIN32

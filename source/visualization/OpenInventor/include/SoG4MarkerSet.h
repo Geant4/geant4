@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // $Id: SoG4MarkerSet.h,v 1.2 2006/12/13 15:49:53 gunter Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 // John Allison  26th October 2006
 // Extended SoMarkerSet to include G4Atts.

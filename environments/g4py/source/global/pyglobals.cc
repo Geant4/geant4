@@ -23,17 +23,20 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: pyglobals.cc,v 1.4 2006/06/29 15:33:48 gunter Exp $
-// $Name: geant4-09-00 $
+// $Id: pyglobals.cc,v 1.5 2007/07/12 09:38:01 kmura Exp $
+// $Name: geant4-09-01 $
 // ====================================================================
 //   pyglobals.cc
 //
 //                                         2005 Q
 // ====================================================================
 #include <boost/python.hpp>
+#include "pyG4Version.hh"
 #include "G4strstreambuf.hh"
 #include "G4UImanager.hh"
 #include "G4PyCoutDestination.hh"
+#include "G4ThreeVector.hh"
+#include "G4TwoVector.hh"
 #include "pyG4indexing.hh"
 #include <vector>
 
@@ -62,7 +65,10 @@ void ResetG4PyCoutDestination()
 typedef std::vector<G4int>    G4intVector;
 typedef std::vector<G4double> G4doubleVector;
 typedef std::vector<G4String> G4StringVector;
-
+typedef std::vector<G4ThreeVector> G4ThreeVectorVector;
+#if G4VERSION_NUMBER >= 830
+typedef std::vector<G4TwoVector> G4TwoVectorVector;
+#endif
 };
 
 using namespace pyglobals;
@@ -86,5 +92,16 @@ void export_globals()
   class_<G4StringVector> ("G4StringVector", "string vector")
     .def(vector_indexing_suite<G4StringVector>())
     ;
+
+  class_<G4ThreeVectorVector> ("G4ThreeVectorVector", "3-vector vector")
+    .def(vector_indexing_suite<G4ThreeVectorVector>())
+    ;
+
+#if G4VERSION_NUMBER >= 830
+  class_<G4TwoVectorVector> ("G4StringVector", "2-vector vector")
+    .def(vector_indexing_suite<G4TwoVectorVector>())
+    ;
+#endif
+
 }
 

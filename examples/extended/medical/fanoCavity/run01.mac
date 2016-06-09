@@ -1,4 +1,4 @@
-# $Id: run01.mac,v 1.3 2007/03/19 13:08:41 maire Exp $
+# $Id: run01.mac,v 1.5 2007/10/29 17:09:53 maire Exp $
 #
 /control/verbose 2
 /run/verbose 2
@@ -19,6 +19,7 @@
 /testem/histo/setHisto  8 100  0  10 mm		#track segment in cavity
 /testem/histo/setHisto  9 100  0  1 mm		#step size in wall
 /testem/histo/setHisto 10 100  0  3 mm		#step size in cavity
+/testem/histo/setHisto 11 100  0  3000 eV	#edep in cavity
 #
 /testem/event/printModulo 1000
 #

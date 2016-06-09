@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eCoulombScatteringModel.hh,v 1.6 2007/05/22 17:34:36 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: G4eCoulombScatteringModel.hh,v 1.20 2007/10/24 10:42:05 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 // -------------------------------------------------------------------
 //
@@ -43,6 +43,7 @@
 // 08.08.06 V.Ivanchenko build internal table in ekin scale, introduce faclim
 // 19.08.06 V.Ivanchenko add inline function ScreeningParameter and
 //                       make some members protected
+// 09.10.07 V.Ivanchenko reorganized methods, add cut dependence in scattering off e- 
 //
 // Class Description:
 //
@@ -62,9 +63,11 @@
 
 #include "G4VEmModel.hh"
 #include "G4PhysicsTable.hh"
+#include "G4NistManager.hh"
 #include "globals.hh"
 
 class G4ParticleChangeForGamma;
+class G4ParticleDefinition;
 
 class G4eCoulombScatteringModel : public G4VEmModel
 {
@@ -72,7 +75,7 @@ class G4eCoulombScatteringModel : public G4VEmModel
 public:
 
   G4eCoulombScatteringModel(G4double thetaMin = 0.0, G4double thetaMax = pi,
-			   G4bool build = true, G4double tlim = TeV*TeV,
+			   G4bool build = false, G4double tlim = TeV*TeV,
 			   const G4String& nam = "eCoulombScattering");
  
   virtual ~G4eCoulombScatteringModel();
@@ -81,11 +84,11 @@ public:
 
   virtual G4double ComputeCrossSectionPerAtom(
                                 const G4ParticleDefinition*,
-                                      G4double kinEnergy, 
-                                      G4double Z, 
-                                      G4double A, 
-                                      G4double cut,
-                                      G4double emax);
+				G4double kinEnergy, 
+				G4double Z, 
+				G4double A, 
+				G4double cut,
+				G4double emax);
 
   virtual void SampleSecondaries(std::vector<G4DynamicParticle*>*,
 				 const G4MaterialCutsCouple*,
@@ -95,14 +98,25 @@ public:
 
 protected:
 
-  G4double ScreeningParameter(G4double Z, G4double q2,
-			      G4double mom2, G4double invbeta2);
+  G4double ComputeElectronXSectionPerAtom(
+				 const G4ParticleDefinition*,
+				 G4double kinEnergy, 
+				 G4double Z,
+				 G4double A,
+				 G4double cut);
+
+  virtual G4double CalculateCrossSectionPerAtom(
+                                 const G4ParticleDefinition*, 
+				 G4double kinEnergy, 
+				 G4double Z, G4double A);
+
+  inline void SetupParticle(const G4ParticleDefinition*);
+
+  inline void SetupKinematic(G4double kinEnergy);
+  
+  inline void SetupTarget(G4double Z, G4double A, G4double kinEnergy); 
 
 private:
-
-  G4double CalculateCrossSectionPerAtom(const G4ParticleDefinition*, 
-					G4double kinEnergy, 
-					G4double Z);
 
   // hide assignment operator
   G4eCoulombScatteringModel & operator=(const G4eCoulombScatteringModel &right);
@@ -110,13 +124,39 @@ private:
 
 protected:
 
+  const G4ParticleDefinition* theProton;
+  const G4ParticleDefinition* theElectron;
+  const G4ParticleDefinition* thePositron;
+
   G4ParticleChangeForGamma* fParticleChange;
+  G4NistManager*            fNistManager;
 
   G4double                  coeff;
+  G4double                  constn;
   G4double                  cosThetaMin;
   G4double                  cosThetaMax;
+  G4double                  cosTetMaxNuc;
+  G4double                  cosTetMaxElec;
   G4double                  q2Limit;
+  G4double                  elecXSection;
+  G4double                  nucXSection;
+  G4double                  ecut;
 
+  // projectile
+  const G4ParticleDefinition* particle;
+
+  G4double                  chargeSquare;
+  G4double                  spin;
+  G4double                  mass;
+  G4double                  tkin;
+  G4double                  mom2;
+  G4double                  invbeta2;
+
+  // target
+  G4double                  targetZ;
+  G4double                  targetA;
+  G4double                  screenZ;
+  G4double                  formfactA;
 
 private:
 
@@ -136,35 +176,52 @@ private:
   G4bool                    isInitialised;             
 };
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline G4double G4eCoulombScatteringModel::ComputeCrossSectionPerAtom(
-                const G4ParticleDefinition* p,
-		G4double kinEnergy,
-		G4double Z, G4double,
-		G4double, G4double)
+inline 
+void G4eCoulombScatteringModel::SetupParticle(const G4ParticleDefinition* p)
 {
-  G4double x;
-  G4bool b;
-  if(theCrossSectionTable) {
-    x = std::exp((((*theCrossSectionTable)[index[G4int(Z)]]))
-      ->GetValue(kinEnergy, b));
-  } else x = CalculateCrossSectionPerAtom(p, kinEnergy, Z);
-
-  //  G4cout << "G4eCoulombScatteringModel: e= " << kinEnergy 
-  //         << "  cs= " << x << G4endl;
-  return x;
+  // Initialise mass and charge
+  if(p != particle) {
+    particle = p;
+    mass = particle->GetPDGMass();
+    spin = particle->GetPDGSpin();
+    G4double q = particle->GetPDGCharge()/eplus;
+    chargeSquare = q*q;
+    tkin = 0.0;
+  }
 }
 
-inline G4double G4eCoulombScatteringModel::ScreeningParameter(
-                G4double Z, 
-                G4double q2, 
-		G4double mom2, 
-		G4double invbeta2)
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline void G4eCoulombScatteringModel::SetupKinematic(G4double ekin)
 {
-  G4double a = invbeta2*Z*Z*q2*alpha2;
-  return std::pow(Z,0.6666667)*a0*(1.13 + 3.76*a)/mom2;
+  if(ekin != tkin) {
+    tkin  = ekin;
+    mom2  = tkin*(tkin + 2.0*mass);
+    invbeta2 = 1.0 +  mass*mass/mom2;
+  } 
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+  
+inline void G4eCoulombScatteringModel::SetupTarget(G4double Z, G4double A, 
+						   G4double e)
+{
+  if(e != tkin || Z != targetZ || A != targetA) {
+    targetZ = Z;
+    targetA = A;
+    SetupKinematic(e);
+    cosTetMaxNuc = std::max(cosThetaMax, 1.0 - 0.5*q2Limit/mom2);
+    G4double x = fNistManager->GetZ13(Z);
+    screenZ = a0*x*x*(1.13 + 3.76*invbeta2*Z*Z*chargeSquare*alpha2)/mom2;
+    if(particle == theProton && A < 1.5 && cosTetMaxNuc < 0.0) 
+      cosTetMaxNuc = 0.0;
+    // A.V. Butkevich et al., NIM A 488 (2002) 282
+    x =  fNistManager->GetLOGA(A);
+    formfactA = mom2*constn*std::exp(0.54*x);
+  } 
+} 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

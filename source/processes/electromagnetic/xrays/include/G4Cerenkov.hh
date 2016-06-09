@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Cerenkov.hh,v 1.8 2006/06/29 19:55:31 gunter Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: G4Cerenkov.hh,v 1.9 2007/09/30 22:17:04 gum Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 // 
 ////////////////////////////////////////////////////////////////////////
@@ -33,11 +33,12 @@
 ////////////////////////////////////////////////////////////////////////
 //
 // File:        G4Cerenkov.hh  
-// Description:	Continuous Process -- Generation of Cerenkov Photons
+// Description:	Discrete Process - Generation of Cerenkov Photons
 // Version:     2.0
 // Created:     1996-02-21
 // Author:      Juliet Armstrong
-// Updated:     2005-07-28 add G4ProcessType to constructor
+// Updated:     2007-09-30 change inheritance to G4VDiscreteProcess
+//              2005-07-28 add G4ProcessType to constructor
 //              1999-10-29 add method and class descriptors
 //              1997-04-09 by Peter Gumplinger
 //              > G4MaterialPropertiesTable; new physics/tracking scheme
@@ -58,7 +59,7 @@
 #include "G4ThreeVector.hh"
 #include "G4ParticleMomentum.hh"
 #include "G4Step.hh"
-#include "G4VContinuousProcess.hh"
+#include "G4VDiscreteProcess.hh"
 #include "G4OpticalPhoton.hh"
 #include "G4DynamicParticle.hh"
 #include "G4Material.hh" 
@@ -67,15 +68,15 @@
 #include "G4PhysicsOrderedFreeVector.hh"
 
 // Class Description:
-// Continuous Process -- Generation of Cerenkov Photons.
-// Class inherits publicly from G4VContinuousProcess.
+// Discrete Process -- Generation of Cerenkov Photons.
+// Class inherits publicly from G4VDiscreteProcess.
 // Class Description - End:
 
 /////////////////////
 // Class Definition
 /////////////////////
 
-class G4Cerenkov : public G4VContinuousProcess  
+class G4Cerenkov : public G4VDiscreteProcess  
 {
 
 private:
@@ -108,14 +109,13 @@ public: // With description
         G4bool IsApplicable(const G4ParticleDefinition& aParticleType);
         // Returns true -> 'is applicable', for all charged particles.
 
-	G4double GetContinuousStepLimit(const G4Track& aTrack,
-					G4double  ,
-					G4double  ,
-                                        G4double& );
-        // Returns the continuous step limit defined by the Cerenkov
-        // process.
+        G4double GetMeanFreePath(const G4Track& aTrack,
+                                 G4double ,
+                                 G4ForceCondition* );
+        // Returns the discrete step limit and sets the 'StronglyForced'
+        // condition for the DoIt to be invoked at every step.
 
-	G4VParticleChange* AlongStepDoIt(const G4Track& aTrack, 
+	G4VParticleChange* PostStepDoIt(const G4Track& aTrack, 
 					const G4Step&  aStep);
         // This is the method implementing the Cerenkov process.
 
@@ -146,7 +146,8 @@ private:
 	// Helper Functions
 	/////////////////////
 
-	G4double GetAverageNumberOfPhotons(const G4DynamicParticle *aParticle,
+	G4double GetAverageNumberOfPhotons(const G4double charge,
+                                const G4double beta,
 		    		const G4Material *aMaterial,
 				const G4MaterialPropertyVector* Rindex) const;
 

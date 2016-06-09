@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HistoMessenger.hh,v 1.3 2006/06/29 16:45:06 gunter Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: HistoMessenger.hh,v 1.4 2007/11/13 12:13:32 maire Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -64,7 +64,8 @@ class HistoMessenger: public G4UImessenger
    G4UIcmdWithAString*     optionCmd;   
    G4UIcommand*            histoCmd;
    G4UIcmdWithAnInteger*   rmhistoCmd;
-
+   G4UIcmdWithAnInteger*   prhistoCmd;
+   
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

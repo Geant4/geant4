@@ -1,0 +1,46 @@
+$Id: History,v 1.5 2007/11/30 15:11:22 gcosmo Exp $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                      Category History file
+                      ---------------------
+This file should be used by G4 developers and category coordinators
+to briefly summarize all major modifications introduced in the code
+and keep track of all category-tags.
+It DOES NOT substitute the  CVS log-message one should put at every
+committal in the CVS repository !
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+30 November, 07  Z.Torzsok (gdml-V09-00-04)
+- Fine tuning of the class hierarchy and fixed issue with reflections.
+
+23 November, 07  Z.Torzsok (gdml-V09-00-03)
+- Better handling of embedded loops and first adaptation.
+
+22 November, 07  Z.Torzsok (gdml-V09-00-02)
+- Handling of embedded loops added.
+- Fixed compilation problems on Windows platform.
+
+19 November, 07  G.Cosmo (gdml-V09-00-01)
+- Better handling of modular GDML files and reflections (Z.Torzsok).
+- Added disclaimer to all files. Use G4 types.
+- Fixed compilation problems on SUN platform.
+
+15 November, 07  Z.Torzsok (gdml-V09-00-00)
+- Added support for modular files.
+- Completed set of specific solids. Supported reflections and divisions.
+
+02 November, 07  G.Cosmo (persistency-V09-00-00)
+- Added G4LIB_BUILD_GDML/G4LIB_USE_GDML flags to trigger compilation through
+  the central scripts. Moved setup for XERCESC (includes and libs paths) to
+  central scripts.
+- Coworks with tag "config-V09-00-06".
+
+17 October, 07  Z.Torzsok
+- Introduced new "gdml" plugin sub-module, based on new GDML release 3.

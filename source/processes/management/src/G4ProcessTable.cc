@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProcessTable.cc,v 1.12 2006/06/29 21:08:14 gunter Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: G4ProcessTable.cc,v 1.13 2007/10/06 05:33:58 kurasige Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 // 
 // ------------------------------------------------------------
@@ -72,8 +72,8 @@ G4ProcessTable::~G4ProcessTable()
   if (verboseLevel>1){
     G4cout << "--  G4ProcessTable destructor  --" << G4endl;
   }
-
 #endif
+
   if ( tmpTblVector != 0) {
     tmpTblVector ->clear();
     delete tmpTblVector;
@@ -601,12 +601,26 @@ void G4ProcessTable::DumpInfo(G4VProcess* process,
       manager = anElement->GetProcessManager(idx);
       G4cout << " for " << manager->GetParticleType()->GetParticleName();
       G4cout << G4endl;
-      if (verboseLevel >2) manager->DumpInfo();
+#ifdef G4VERBOSE
+      if (verboseLevel >2){
+	tmpVerbose = manager->GetVerboseLevel();
+	manager->SetVerboseLevel(verboseLevel);
+	manager->DumpInfo();
+	manager->SetVerboseLevel(tmpVerbose);
+      }
+#endif
     }
   } else {
     G4cout << " for " << manager->GetParticleType()->GetParticleName();
     G4cout << G4endl;
-    if (verboseLevel >2) manager->DumpInfo();
+#ifdef G4VERBOSE
+    if (verboseLevel >2){
+      tmpVerbose = manager->GetVerboseLevel();
+      manager->SetVerboseLevel(verboseLevel);
+      manager->DumpInfo();
+      manager->SetVerboseLevel(tmpVerbose);
+    }
+#endif
   }
 }
 

@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eplusPolarizedAnnihilation.cc,v 1.4 2007/06/11 13:37:56 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: G4eplusPolarizedAnnihilation.cc,v 1.6 2007/10/02 11:36:44 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 // -------------------------------------------------------------------
 //
@@ -41,6 +41,7 @@
 // 26-07-06 modified cross section  (P. Starovoitov)
 // 21-08-06 interface updated   (A. Schaelicke)
 // 11-06-07, add PostStepGetPhysicalInteractionLength (A.Schalicke)
+// 02-10-07, enable AtRest (V.Ivanchenko)
 //
 //
 // Class Description:
@@ -74,7 +75,9 @@ G4eplusPolarizedAnnihilation::G4eplusPolarizedAnnihilation(const G4String& name)
   : G4VEmProcess(name), isInitialised(false),
     theAsymmetryTable(NULL),
     theTransverseAsymmetryTable(NULL)
-{}
+{
+  enableAtRestDoIt = true;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -304,7 +307,7 @@ void G4eplusPolarizedAnnihilation::BuildAsymmetryTable(const G4ParticleDefinitio
 
 G4double G4eplusPolarizedAnnihilation::ComputeAsymmetry(G4double energy,
 			    const G4MaterialCutsCouple* couple,
-			    const G4ParticleDefinition& particle,
+			    const G4ParticleDefinition& aParticle,
 			    G4double cut,
 			    G4double &tAsymmetry)
 {
@@ -315,19 +318,19 @@ G4double G4eplusPolarizedAnnihilation::ComputeAsymmetry(G4double energy,
  theTargetPolarization=G4ThreeVector(0.,0.,1.);
  emModel->SetTargetPolarization(theTargetPolarization);
  emModel->SetBeamPolarization(theTargetPolarization);
- G4double sigma2=emModel->CrossSection(couple,&particle,energy,cut,energy);
+ G4double sigma2=emModel->CrossSection(couple,&aParticle,energy,cut,energy);
 
  // calculate transversely polarized cross section
  theTargetPolarization=G4ThreeVector(1.,0.,0.);
  emModel->SetTargetPolarization(theTargetPolarization);
  emModel->SetBeamPolarization(theTargetPolarization);
- G4double sigma3=emModel->CrossSection(couple,&particle,energy,cut,energy);
+ G4double sigma3=emModel->CrossSection(couple,&aParticle,energy,cut,energy);
 
  // calculate unpolarized cross section
  theTargetPolarization=G4ThreeVector();
  emModel->SetTargetPolarization(theTargetPolarization);
  emModel->SetBeamPolarization(theTargetPolarization);
- G4double sigma0=emModel->CrossSection(couple,&particle,energy,cut,energy);
+ G4double sigma0=emModel->CrossSection(couple,&aParticle,energy,cut,energy);
 
  // determine assymmetries
   if (sigma0>0.) {

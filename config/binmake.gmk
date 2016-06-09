@@ -1,4 +1,4 @@
-# $Id: binmake.gmk,v 1.123 2007/06/28 14:16:55 gcosmo Exp $
+# $Id: binmake.gmk,v 1.135 2007/11/22 14:08:10 gcosmo Exp $
 # ----------------------------------------------------------
 # Script defining rules and paths for making binaries.
 #    First implementation: Gabriele Cosmo, 25/06/1998.
@@ -51,7 +51,6 @@ ifndef INCFLAGS
               -I$(G4BASE)/global/HEPNumerics/include \
               -I$(G4BASE)/run/include \
               -I$(G4BASE)/materials/include \
-              -I$(G4BASE)/parameterisations/trd_clusters/include \
               -I$(G4BASE)/parameterisations/gflash/include \
               -I$(G4BASE)/particles/management/include \
               -I$(G4BASE)/particles/bosons/include \
@@ -101,6 +100,7 @@ ifndef INCFLAGS
               -I$(G4BASE)/processes/hadronic/models/general_finalstate/include \
               -I$(G4BASE)/processes/hadronic/models/high_energy/include \
               -I$(G4BASE)/processes/hadronic/models/im_r_matrix/include \
+              -I$(G4BASE)/processes/hadronic/models/incl/include \
               -I$(G4BASE)/processes/hadronic/models/inucl/include \
               -I$(G4BASE)/processes/hadronic/models/isotope_production/include \
               -I$(G4BASE)/processes/hadronic/models/leading_particle/include \
@@ -114,11 +114,13 @@ ifndef INCFLAGS
               -I$(G4BASE)/processes/hadronic/models/parton_string/qgsm/include \
               -I$(G4BASE)/processes/hadronic/models/photolepton_hadron/muon_nuclear/include \
               -I$(G4BASE)/processes/hadronic/models/pre_equilibrium/exciton_model/include \
+              -I$(G4BASE)/processes/hadronic/models/qmd/include \
               -I$(G4BASE)/processes/hadronic/models/quark_molecular_dynamics/body/include \
               -I$(G4BASE)/processes/hadronic/models/quark_molecular_dynamics/util/include \
               -I$(G4BASE)/processes/hadronic/models/radioactive_decay/include \
               -I$(G4BASE)/processes/hadronic/models/relativistic_qmd/include \
               -I$(G4BASE)/processes/hadronic/models/relativistic_qmd/uplusplus/include \
+              -I$(G4BASE)/processes/hadronic/models/rpg/include \
               -I$(G4BASE)/processes/hadronic/models/theo_high_energy/include \
               -I$(G4BASE)/processes/hadronic/models/util/include \
               -I$(G4BASE)/processes/hadronic/processes/include \
@@ -139,8 +141,10 @@ ifndef INCFLAGS
               -I$(G4BASE)/digits_hits/detector/include \
               -I$(G4BASE)/digits_hits/hits/include \
               -I$(G4BASE)/digits_hits/digits/include \
+              -I$(G4BASE)/digits_hits/scorer/include \
               -I$(G4BASE)/digits_hits/utils/include \
-              -I$(G4BASE)/persistency/include \
+              -I$(G4BASE)/persistency/gdml/include \
+              -I$(G4BASE)/persistency/mctruth/include \
               -I$(G4BASE)/readout/include \
               -I$(G4BASE)/event/include \
               -I$(G4BASE)/error_propagation/include \
@@ -251,12 +255,15 @@ else
   endif
 endif
 
-ifdef G4LIB_BUILD_ZLIB
+ifdef G4LIB_USE_ZLIB
   LDLIBS2 += -lG4zlib
 endif
 
 # LDLIBS3 contains the first set of low level libraries...
 #
+ifdef G4LIB_USE_GDML
+  LDLIBS3 += $(GDMLLIBS)
+endif
 LDLIBS3 += $(INTYLIBS)
 LDLIBS3 += $(ANALYSISLIBS)
 
@@ -282,6 +289,7 @@ LDLIBS_PREFINAL += $(LDLIBS4)
 LDLIBS_KERNEL   += $(LDLIBS4)
 
 ifneq (,$(findstring WIN32-VC,$(G4SYSTEM)))
+  # Windows
   WIN32TMP := $(patsubst -L%,$(LIB_PATH)%,$(LDFLAGS))
   LDFLAGS  = $(patsubst /,$(PATH_DEL),$(WIN32TMP))
   WIN32TMP2 := $(patsubst -L%,$(LIB_PATH)%,$(LDLIBS_PREFINAL))
@@ -296,8 +304,11 @@ ifneq (,$(findstring WIN32-VC,$(G4SYSTEM)))
   else
     LDLIBS = $(TARGETLIB) $(patsubst -l%,lib%.a,$(WIN32TMP2))
   endif
+  OUT   := /Fe
 else
+  # Unix
   LDLIBS = $(TARGETLIB) $(LDLIBS_PREFINAL)
+  OUT   := -o 
 endif
 
 ifdef transform-RPath
@@ -339,12 +350,12 @@ endif
 	@if [ ! -d $(G4BINDIR) ] ; then mkdir $(G4BINDIR) ;fi
 ifdef CPPVERBOSE
 	$(CXX) $(CXXFLAGS) $(CPPFLAGS) \
-	  -o $(G4BINDIR)/$(G4TARGET) $(objects) $(LDFLAGS) \
+	  $(OUT)$(G4BINDIR)/$(G4TARGET) $(objects) $(LDFLAGS) \
 	  $(LDLIBS)
 else
 	@echo Linking $(G4TARGET) ...
 	@$(CXX) $(CXXFLAGS) $(CPPFLAGS) \
-	  -o $(G4BINDIR)/$(G4TARGET) $(objects) $(LDFLAGS) \
+	  $(OUT)$(G4BINDIR)/$(G4TARGET) $(objects) $(LDFLAGS) \
 	  $(LDLIBS)
 	@if [ \( -f $(G4BINDIR)/$(G4TARGET) \) ]; then \
 	  echo "... Done!"; fi

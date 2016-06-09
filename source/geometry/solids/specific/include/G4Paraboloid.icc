@@ -1,0 +1,170 @@
+//
+// ********************************************************************
+// * License and Disclaimer                                           *
+// *                                                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
+// *                                                                  *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
+// ********************************************************************
+//
+//
+// $Id: G4Paraboloid.icc,v 1.4 2007/08/21 12:58:36 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-01 $
+//
+//
+// --------------------------------------------------------------------
+// GEANT 4 inline definitions file
+//
+// G4Paraboloid.icc
+//
+// Implementation of inline methods of G4Paraboloid
+// --------------------------------------------------------------------
+
+inline 
+G4double G4Paraboloid::GetZHalfLength() const
+{
+  return dz;
+}
+
+inline 
+G4double G4Paraboloid::GetRadiusPlusZ() const
+{
+  return r2;
+}
+
+inline
+G4double G4Paraboloid::GetRadiusMinusZ() const
+{
+  return r1;
+}
+
+inline
+void G4Paraboloid::SetZHalfLength(G4double pDz)
+{
+  if(pDz <= 0)
+  {
+    G4Exception("G4Paraboloid::SetZHalfLength()", "InvalidSetup", 
+                FatalException, "Invalid dimensions.");
+  }
+  else
+  {
+    dz = pDz;
+    k1 = (sqr(r2) - sqr(r1)) / (2 * dz);
+    k2 = (sqr(r2) + sqr(r1)) / 2;
+
+    // This informs GetSurfaceArea() and GetCubicVolume() that it needs
+    // to recalculate buffered value.
+    //
+    fSurfaceArea = 0.; 
+    fCubicVolume = 0.;
+  }
+}
+
+inline
+void G4Paraboloid::SetRadiusPlusZ(G4double pR2)
+{
+  if(pR2 <= 0 || pR2 <= r1)
+  {
+    G4Exception("G4Paraboloid::SetRadiusPlusZ()", "InvalidSetup", 
+                FatalException, "Invalid dimensions.");
+  }
+  else
+  {
+    r2 = pR2;
+    k1 = (sqr(r2) - sqr(r1)) / (2 * dz);
+    k2 = (sqr(r2) + sqr(r1)) / 2;
+
+    // This informs GetSurfaceArea() and GetCubicVolume() that it needs
+    // to recalculate buffered value.
+    //
+    fSurfaceArea = 0.; 
+    fCubicVolume = 0.;
+  }
+}
+
+inline
+void G4Paraboloid::SetRadiusMinusZ(G4double pR1)
+{
+  if(pR1 < 0 || pR1 >= r2)
+  {
+    G4Exception("G4Paraboloid::SetRadiusMinusZ()", "InvalidSetup", 
+                FatalException, "Invalid dimensions.");
+  }
+  else
+  {
+    r1 = pR1;
+    k1 = (sqr(r2) - sqr(r1)) / (2 * dz);
+    k2 = (sqr(r2) + sqr(r1)) / 2;
+
+    // This informs GetSurfaceArea() and GetCubicVolume() that it needs
+    // to recalculate buffered value.
+    //
+    fSurfaceArea = 0.; 
+    fCubicVolume = 0.;
+  }
+}
+
+inline
+G4double G4Paraboloid::GetCubicVolume()
+{
+  if(fCubicVolume != 0 ) {;}
+  else
+  {
+    fCubicVolume = pi * 2. * k2 * dz;
+  }
+  return fCubicVolume;
+}
+
+
+inline
+G4double G4Paraboloid::CalculateSurfaceArea() const
+{
+  G4double h1, h2, A1, A2;
+
+  h1 = k2/k1 + dz;
+  h2 = k2/k1 - dz;
+
+  // Calculate surface area for the paraboloid full paraboloid
+  // cutoff at z = dz (not the cutoff area though).
+
+  A1 = sqr(r2) + 4 * sqr(h1);
+  A1 *= sqr(A1); // Sets A1 = A1^3
+  A1 = pi * r2 /6 / sqr(h1) * ( std::sqrt(A1) - r2 * r2 * r2);
+
+  // Calculate surface area for the paraboloid full paraboloid
+  // cutoff at z = -dz (not the cutoff area though).
+
+  A2 = sqr(r1) + 4 * sqr(h2);
+  A2 *= sqr(A2);// Sets A2 = A2^3
+
+  if(h2 != 0)
+    { A2 = pi * r1 /6 / sqr(h2) * ( std::sqrt(A2) - r1 * r1 * r1); }
+  else
+    { A2 = 0.; }
+
+  return fSurfaceArea = A1 - A2 + (sqr(r1) + sqr(r2))*pi;
+}
+
+inline
+G4double G4Paraboloid::GetSurfaceArea()
+{
+  if(fSurfaceArea == 0.) CalculateSurfaceArea();
+
+  return fSurfaceArea;
+}

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4LogicalSkinSurface.hh,v 1.14 2006/06/29 18:57:14 gunter Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: G4LogicalSkinSurface.hh,v 1.15 2007/10/12 20:08:28 gum Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 // class G4LogicalSkinSurface
 //
@@ -48,6 +48,9 @@
 #include "G4LogicalSurface.hh"
 
 class G4LogicalVolume;
+class G4LogicalSkinSurface;
+
+typedef std::vector<G4LogicalSkinSurface*> G4LogicalSkinSurfaceTable;
 
 class G4LogicalSkinSurface : public G4LogicalSurface 
 {
@@ -58,14 +61,15 @@ class G4LogicalSkinSurface : public G4LogicalSurface
                                 G4LogicalVolume* vol,
                                 G4SurfaceProperty* surfaceProperty );
     ~G4LogicalSkinSurface();
-       // Constructor and destructor.
+      // Constructor and destructor.
 
     static G4LogicalSkinSurface* GetSurface(const G4LogicalVolume* vol);
     inline const G4LogicalVolume* GetLogicalVolume() const;
     inline void  SetLogicalVolume(G4LogicalVolume* vol);
-       // Accessors.
+      // Accessors.
 
     static void CleanSurfaceTable();
+    static const G4LogicalSkinSurfaceTable* GetSurfaceTable();
     static size_t GetNumberOfSkinSurfaces();
     static void DumpInfo(); // const 
       // To handle with the table of surfaces.
@@ -85,12 +89,10 @@ class G4LogicalSkinSurface : public G4LogicalSurface
     G4LogicalVolume* LogVolume;
       // Logical Volume pointer on side 1.
 
-    static std::vector<G4LogicalSkinSurface*> theSurfaceTable;
-      // The static Table of Surfaces.
+    static G4LogicalSkinSurfaceTable theSkinSurfaceTable;
+      // The static Table of SkinSurfaces.
 
 };
-
-typedef std::vector<G4LogicalSkinSurface*> G4LogicalSkinSurfaceTable;
 
 // ********************************************************************
 // Inline methods

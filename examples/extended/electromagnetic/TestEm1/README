@@ -1,4 +1,4 @@
-$Id: README,v 1.21 2006/05/15 14:38:15 maire Exp $
+$Id: README,v 1.22 2007/11/12 15:48:58 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -100,6 +100,21 @@ $Id: README,v 1.21 2006/05/15 14:38:15 maire Exp $
       1 : track length of primary particle
       2 : number of steps primary particle
       3 : step size of primary particle
+      
+   The histograms are managed by the HistoManager class and its Messenger. 
+   The histos can be individually activated with the command :
+   /testem/histo/setHisto id nbBins  valMin valMax unit 
+   where unit is the desired unit for the histo (MeV or keV, deg or mrad, etc..)
+   
+   One can control the name of the histograms file with the command:
+   /testem/histo/setFileName  name  (default testem1)
+   
+   It is possible to choose the format of the histogram file (hbook, root, XML)
+   with the command /testem/histo/setFileType (hbook by default)
+   
+   It is also possible to print selected histograms on an ascii file:
+   /testem/histo/printHisto id
+   All selected histos will be written on a file name.ascii  (default testem1) 
 
   Note that, by default, histograms are disabled. To activate them, uncomment
   the flag G4ANALYSIS_USE in GNUmakefile.

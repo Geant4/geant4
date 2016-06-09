@@ -29,7 +29,7 @@
 // Main author:   Riccardo Capra <capra@ge.infn.it>
 //
 // Id:            $Id: RadmonPhysicsList.hh,v 1.6 2006/06/29 16:17:29 gunter Exp $
-// Tag:           $Name: geant4-09-00 $
+// Tag:           $Name: geant4-09-01 $
 //
 // Description:   Implementation of the G4VUserPhysicsList
 //

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunMessenger.hh,v 1.15 2007/03/08 23:54:04 asaim Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: G4RunMessenger.hh,v 1.18 2007/11/13 15:48:44 asaim Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 // 
 //	GEANT 4 class header file 
@@ -48,8 +48,7 @@
 //    geometryModified *    Force geometry to be closed again.
 //    physicsModified *     Force cross-section tables to be calculated again.
 //           (and rebuilding physics table will be invoked)
-//    storeRandomNumberStatus *   Set the flag for storing random number status
-//    restoreRandomNumberStatus * Restore the stored random number status
+//    constructScoringWorlds * Constrct scoring world(s) if defined
 // 
 
 #ifndef G4RunMessenger_h
@@ -99,6 +98,7 @@ class G4RunMessenger: public G4UImessenger
     G4UIcmdWithAnInteger *      randEvtCmd;
 
     G4UIdirectory *             randomDirectory;
+    G4UIcmdWithAString *        seedCmd;
     G4UIcmdWithAString *        randDirCmd;
     G4UIcmdWithABool *          savingFlagCmd;
     G4UIcmdWithoutParameter *   saveThisRunCmd;
@@ -108,6 +108,8 @@ class G4RunMessenger: public G4UImessenger
     G4UIcmdWithAString *        randDirOld;
     G4UIcmdWithAnInteger *      storeRandOld;
     G4UIcmdWithAString *        restoreRandOld;  
+
+    G4UIcmdWithoutParameter *   constScoreCmd;
 
     G4MaterialScanner *         materialScanner;
 };

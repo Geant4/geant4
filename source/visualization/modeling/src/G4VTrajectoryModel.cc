@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // $Id: G4VTrajectoryModel.cc,v 1.3 2006/06/29 21:33:26 gunter Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 // Jane Tinslay May 2006
 //

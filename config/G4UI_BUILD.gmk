@@ -1,4 +1,4 @@
-# $Id: G4UI_BUILD.gmk,v 1.4 2003/10/17 10:17:10 gbarrand Exp $
+# $Id: G4UI_BUILD.gmk,v 1.5 2007/10/03 12:15:05 lgarnier Exp $
 # -------------------------------------------------------------
 # Interfaces-specific CPPFLAGS for BUILD phase.
 #   John Allison, 6th July 1998.
@@ -20,6 +20,14 @@ ifdef G4UI_BUILD_XM_SESSION
   G4INTY_BUILD_XT = 1
   INC_XM = 1
   CPPFLAGS += -DG4UI_BUILD_XM_SESSION
+endif
+
+ifdef G4UI_BUILD_QT_SESSION
+  G4UI_BUILD = 1
+  G4UI_BUILD_BASIC_SESSION = 1
+  G4INTY_BUILD_QT = 1
+  INC_QT   = 1
+  CPPFLAGS += -DG4UI_BUILD_QT_SESSION
 endif
 
 ifdef G4UI_BUILD_XAW_SESSION
@@ -45,6 +53,10 @@ ifdef G4LIB_BUILD_SHARED
 
    ifdef G4UI_BUILD_XM_SESSION
      G4UI_USE_XM = 1
+   endif
+
+   ifdef G4UI_BUILD_QT_SESSION
+     G4UI_USE_QT = 1
    endif
 
    ifdef G4UI_BUILD_XAW_SESSION

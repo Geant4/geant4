@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PreCompoundTransitions.cc,v 1.9 2007/05/04 14:50:22 gunter Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: G4PreCompoundTransitions.cc,v 1.13 2007/07/23 12:48:54 ahoward Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 // by V. Lara
 
@@ -133,9 +133,10 @@ CalculateProbability(const G4Fragment & aFragment)
 
 
   // F(p,h) = 0.25*(p^2 + h^2 + p - h) - 0.5*h
-  G4double Fph = (P*P+H*H+P-H)/4.0 - H/2.0;
+  G4double Fph = ((P*P+H*H+P-H)/4.0 - H/2.0);
   G4bool NeverGoBack(false);
-  if (U-Fph < 0.0) NeverGoBack = true;
+  //AH  if (U-Fph < 0.0) NeverGoBack = true;
+  if (GE-Fph < 0.0) NeverGoBack = true;
   // F(p+1,h+1)
   G4double Fph1 = Fph + N/2.0;
   // (n+1)/n ((g*E - F(p,h))/(g*E - F(p+1,h+1)))^(n+1)
@@ -182,11 +183,20 @@ G4Fragment G4PreCompoundTransitions::PerformTransition(const G4Fragment & aFragm
       // Number of excitons is increased on \Delta n = -2
       deltaN = -2;
     }
+
+  // AH/JMQ: Randomly decrease the number of charges if deltaN is -2 and in proportion to the number charges w.r.t. number of particles
+  if(deltaN < 0 && G4UniformRand() <= static_cast<G4double>(result.GetNumberOfCharged())/static_cast<G4double>(result.GetNumberOfParticles()) && (result.GetNumberOfCharged() >= 1))
+    result.SetNumberOfCharged(result.GetNumberOfCharged()+deltaN/2); // deltaN is negative!
+
+  // result.SetNumberOfParticles was here
+  // result.SetNumberOfHoles was here
+  // the following lines have to be before SetNumberOfCharged, otherwise the check on number of charged vs. number of particles fails
   result.SetNumberOfParticles(result.GetNumberOfParticles()+deltaN/2);
   result.SetNumberOfHoles(result.GetNumberOfHoles()+deltaN/2); 
 
   // With weight Z/A, number of charged particles is decreased on +1
-  if ((deltaN > 0 || result.GetNumberOfCharged() > 0) &&
+  //  if ((deltaN > 0 || result.GetNumberOfCharged() > 0) && // AH/JMQ check is now in initialize within G4VPreCompoundFragment
+  if ( ( deltaN > 0 ) &&
       (G4UniformRand() <= static_cast<G4double>(result.GetZ()-result.GetNumberOfCharged())/
 		  std::max(static_cast<G4double>(result.GetA()-Nexcitons),1.)))
     {
@@ -199,6 +209,10 @@ G4Fragment G4PreCompoundTransitions::PerformTransition(const G4Fragment & aFragm
       result.SetNumberOfCharged(result.GetNumberOfParticles());
     }
   
+  // moved from above to make code more readable
+  //  result.SetNumberOfParticles(result.GetNumberOfParticles()+deltaN/2);
+  //  result.SetNumberOfHoles(result.GetNumberOfHoles()+deltaN/2); 
+
   return result;
 }
 

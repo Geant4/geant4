@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LossTableManager.hh,v 1.47 2007/05/18 18:39:54 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: G4LossTableManager.hh,v 1.48 2007/11/07 18:38:49 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 //
 // -------------------------------------------------------------------
@@ -104,37 +104,37 @@ public:
   void Clear();
 
   // get the DEDX or the range for a given particle/energy/material
-  G4double GetDEDX(
+  inline G4double GetDEDX(
     const G4ParticleDefinition *aParticle,
     G4double kineticEnergy,
     const G4MaterialCutsCouple *couple);
 
-  G4double GetSubDEDX(
+  inline G4double GetSubDEDX(
     const G4ParticleDefinition *aParticle,
     G4double kineticEnergy,
     const G4MaterialCutsCouple *couple);
 
-  G4double GetRange(
+  inline G4double GetRange(
     const G4ParticleDefinition *aParticle,
     G4double kineticEnergy,
     const G4MaterialCutsCouple *couple);
 
-  G4double GetCSDARange(
+  inline G4double GetCSDARange(
     const G4ParticleDefinition *aParticle,
     G4double kineticEnergy,
     const G4MaterialCutsCouple *couple);
 
-  G4double GetRangeFromRestricteDEDX(
+  inline G4double GetRangeFromRestricteDEDX(
     const G4ParticleDefinition *aParticle,
     G4double kineticEnergy,
     const G4MaterialCutsCouple *couple);
 
-  G4double GetEnergy(
+  inline G4double GetEnergy(
     const G4ParticleDefinition *aParticle,
     G4double range,
     const G4MaterialCutsCouple *couple);
 
-  G4double GetDEDXDispersion(
+  inline G4double GetDEDXDispersion(
     const G4MaterialCutsCouple *couple,
     const G4DynamicParticle* dp,
           G4double& length);
@@ -208,15 +208,15 @@ public:
 
   G4double BremsstrahlungTh() const;
 
-  G4VEnergyLossProcess* GetEnergyLossProcess(const G4ParticleDefinition*);
-
   const std::vector<G4VEnergyLossProcess*>& GetEnergyLossProcessVector();
 
   const std::vector<G4VEmProcess*>& GetEmProcessVector();
 
   const std::vector<G4VMultipleScattering*>& GetMultipleScatteringVector();
 
-  G4EmCorrections* EmCorrections() {return emCorrections;};
+  inline G4VEnergyLossProcess* GetEnergyLossProcess(const G4ParticleDefinition*);
+
+  inline G4EmCorrections* EmCorrections();
 
 private:
 
@@ -413,6 +413,13 @@ inline G4VEnergyLossProcess* G4LossTableManager::GetEnergyLossProcess(
     }
   }
   return currentLoss;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+inline G4EmCorrections* G4LossTableManager::EmCorrections() 
+{
+  return emCorrections;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

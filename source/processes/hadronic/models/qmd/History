@@ -1,0 +1,62 @@
+
+       ==========================================================
+       Geant4 - an Object-Oriented Toolkit for Physics Simulation
+       ==========================================================
+
+        History file for hadronic/models/qmd directory
+        --------------------------------------------------------
+
+This file should be used to summarize modifications introduced in the 
+code and to keep track of all tags.
+
+     ---------------------------------------------------------------
+     * Please list in reverse chronological order (last date on top)
+     ---------------------------------------------------------------
+26-Nov-2007 Tatsumi Koi (hadr-qmd-V09-00-05)
+- Fix of typo which introduced at (hadr-qmd-V09-00-04)
+	src/G4QMDNucleus.cc  
+
+20-Nov-2007 Tatsumi Koi (hadr-qmd-V09-00-04)
+- Fixed failed initialization of some parameter
+	src/G4QMDParameters.cc  
+- Reduce standard outputted information
+	src/G4QMDNucleus.cc  ( included fix in hadr-qmd-V09-00-03)
+- Reduce multiple calculation of identical and symmetric parameters 
+  (enhance computing speed)
+	src/G4QMDMeanField.cc  
+- Change reaction system CM to NN 
+  (usually enhanced stability of ground state nucleus)
+	include/G4QMDReaction.hh
+	src/G4QMDReaction.cc  
+
+22-Nov-2007 Gabriele Cosmo (hadr-qmd-V09-00-03)
+- Fixed compilation problem on WIN32-VC for usage of std::pow() function
+  in file G4QMDNucleus.cc.
+
+20-Nov-2007 Gabriele Cosmo (hadr-qmd-V09-00-02)
+- Fixed compilation problem on SUN-CC for handling of 'multimap'
+  structures in G4QMDMeanField.cc.
+
+15-Nov-2007 Tatsumi Koi    (hadr-qmd-V09-00-01)
+- First implmentation of QMD reaction model
+	based on JQMD (Niita et al., JAERI-Data/Code 99-042)
+	Use Collision library of Geant4
+
+	History (this file)
+        GNUMakefile 
+	include/G4QMDGroundStateNucleus.hh  
+	include/G4QMDNucleus.hh     
+	include/G4QMDParticipant.hh  
+	include/G4QMDSystem.hh
+	include/G4QMDCollision.hh  
+	include/G4QMDMeanField.hh           
+	include/G4QMDParameters.hh  
+	include/G4QMDReaction.hh
+	src/G4QMDCollision.cc  
+	src/G4QMDGroundStateNucleus.cc  
+	src/G4QMDMeanField.cc  
+	src/G4QMDNucleus.cc  
+	src/G4QMDParameters.cc  
+	src/G4QMDParticipant.cc  
+	src/G4QMDReaction.cc  
+	src/G4QMDSystem.cc

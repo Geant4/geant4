@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4CollisionInitialState.hh,v 1.4.4.2 2006/06/29 20:31:14 gunter Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 // $Id: G4CollisionInitialState.hh,v 1.0 1998/06/30
 // -----------------------------------------------------------------------------

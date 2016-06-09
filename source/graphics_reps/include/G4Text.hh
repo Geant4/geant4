@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4Text.hh,v 1.10 2006/06/29 19:06:06 gunter Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 // 
 // John Allison  17/11/96.

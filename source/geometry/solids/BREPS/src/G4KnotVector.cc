@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4KnotVector.cc,v 1.9 2007/05/11 13:49:32 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: G4KnotVector.cc,v 1.10 2007/07/16 08:06:55 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -48,7 +48,8 @@ G4KnotVector::G4KnotVector(G4int sz)
   k_size=sz; 
   knots = new G4double[k_size]; 
   for(G4int a=0;a<k_size;a++)
-    knots[a]=0;
+    { knots[a]=0; }
+  kCarTolerance = G4GeometryTolerance::GetInstance()->GetSurfaceTolerance();
 }
 
 
@@ -63,7 +64,8 @@ G4KnotVector::G4KnotVector(const G4KnotVector& orig)
   k_size = orig.k_size;
   knots = new G4double[k_size];
   for(register G4int a=0; a < orig.k_size; a++)
-    knots[a] = orig.knots[a];
+    { knots[a] = orig.knots[a]; }
+  kCarTolerance = orig.kCarTolerance;
 }
 
 G4KnotVector& G4KnotVector::operator=(const G4KnotVector& right)
@@ -74,6 +76,7 @@ G4KnotVector& G4KnotVector::operator=(const G4KnotVector& right)
   knots = new G4double[k_size];
   for(register G4int a=0; a < right.k_size; a++)
     knots[a] = right.knots[a];
+  kCarTolerance = right.kCarTolerance;
 
   return *this;
 }

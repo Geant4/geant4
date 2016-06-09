@@ -1,4 +1,4 @@
-$Id: README,v 1.16 2006/05/30 12:36:46 maire Exp $
+$Id: README,v 1.21 2007/11/28 12:37:56 maire Exp $
 -----------------------------------------------------
 
      =========================================================
@@ -27,8 +27,23 @@ $Id: README,v 1.16 2006/05/30 12:36:46 maire Exp $
  The default geometry is constructed in DetectorConstruction class, but all the
  parameters can be changed via commands defined in the DetectorMessenger class.
  The parameters of the "World" can be changed, too.
- 	
- 2- AN EVENT : THE PRIMARY GENERATOR
+ 
+ 2- PHYSICS LIST
+
+ The following EM physics lists are available in this example:	 
+ - "standard"     standard EM physics (default)
+ - "livermore"    low-energy EM physics using Livermore data
+ - "penelope"     low-energy EM physics implementing Penelope models
+ - "standardSS"   standard EM physics with single Coulomb scattering 
+                  instead of multiple scattering
+    
+ Alternatively, the user may use predefined Geant4 builders:
+ - "emstandard"        G4EmStandardPhysics builder
+ - "emstandard_opt1"   G4EmStandardPhysics_option1 builder
+ - "emstandard_opt2"   G4EmStandardPhysics_option2 builder
+ See geant4/source/physics_lists/History for details 
+         	
+ 3- AN EVENT : THE PRIMARY GENERATOR
  
  The primary kinematic consists of a single particle which hits the absorber 
  perpendicular to the input face. The type of the particle and its energy are 
@@ -38,7 +53,7 @@ $Id: README,v 1.16 2006/05/30 12:36:46 maire Exp $
  In addition one can choose randomly the impact point of the incident particle.
  The interactive command is built in PrimaryGeneratorMessenger class.
  
- 3- VISUALIZATION
+ 4- VISUALIZATION
  
  The Visualization Manager is set in the main().
  The initialisation of the drawing is done via the commands in vis.mac
@@ -51,7 +66,7 @@ $Id: README,v 1.16 2006/05/30 12:36:46 maire Exp $
  Optionaly one can choose to draw all particles, only the charged, or none.
  This command is defined in EventActionMessenger class.
  
- 4- TRACKING
+ 5- TRACKING
  
  During the tracking, one can keep or not the secondaries : see StackingAction
  class and its Messenger.
@@ -59,7 +74,7 @@ $Id: README,v 1.16 2006/05/30 12:36:46 maire Exp $
  this limitation is implemented as a 'full' process : see StepMax class and its
  Messenger. The 'StepMax process' is registered in the Physics List. 
   	
- 5- DETECTOR RESPONSE
+ 6- DETECTOR RESPONSE
   	
  At the end of a run, from the histogram(s), one can study different
  physics quantities such as :
@@ -69,10 +84,10 @@ $Id: README,v 1.16 2006/05/30 12:36:46 maire Exp $
  - transmission and backscattering coefficients,
  -  ...
  
- List of the built-in histograms
- -------------------------------
+ 7- List of the built-in histograms
+ ----------------------------------
         
- The test contains 16 built-in 1D histograms, which are managed by the
+ The test contains more than 20 built-in 1D histograms, which are managed by the
  HistoManager class and its Messenger. The histos can be individually activated
  with the command :
  /testem/histo/setHisto id nbBins  valMin valMax unit 
@@ -82,34 +97,45 @@ $Id: README,v 1.16 2006/05/30 12:36:46 maire Exp $
 	1	"energy deposit in absorber"
 	2	"energy of charged secondaries at creation"
 	3	"energy of gammas at creation (log10(Ekin/MeV))"
-	4	"(transmit, charged) : kinetic energy at exit"
-	5	"(transmit, charged) : space angle at exit"
-	6	"(transmit, charged) : projected angle at exit"
-	7	"(transmit, charged) : projected position at exit"
-	8	"(transmit, neutral) : kinetic energy at exit"
-	9	"(transmit, neutral) : space angle at exit"
-	10	"(transmit, neutral) : projected angle at exit"
-	11	"(reflect , charged) : kinetic energy at exit"
-	12	"(reflect , charged) : space angle at exit"
-	13	"(reflect , charged) : projected angle at exit"
-	14	"(reflect , neutral) : kinetic energy at exit"
-	15	"(reflect , neutral) : space angle at exit"
-	16	"(reflect , neutral) : projected angle at exit"
+	4       "x_vertex of charged secondaries (all)"
+	5       "x_vertex of charged secondaries (not absorbed)"
+	10	"(transmit, charged) : kinetic energy at exit"
+        11	"(transmit, charged) : ener fluence: dE(MeV)/dOmega"	
+	12	"(transmit, charged) : space angle dN/dOmega"
+	13	"(transmit, charged) : projected angle at exit"
+	14	"(transmit, charged) : projected position at exit"
+	15	"(transmit, charged) : radius at exit"	
+	20	"(transmit, neutral) : kinetic energy at exit"
+	21	"(transmit, neutral) : ener fluence: dE(MeV)/dOmega"	
+	22	"(transmit, neutral) : space angle dN/dOmega"
+	23	"(transmit, neutral) : projected angle at exit"
+	30	"(reflect , charged) : kinetic energy at exit"
+	31	"(reflect , charged) : ener fluence: dE(MeV)/dOmega"	
+	32	"(reflect , charged) : space angle dN/dOmega"
+	33	"(reflect , charged) : projected angle at exit"
+	40	"(reflect , neutral) : kinetic energy at exit"
+	41	"(reflect , neutral) : ener fluence: dE(MeV)/dOmega"	
+	42	"(reflect , neutral) : space angle dN/dOmega"
+	43	"(reflect , neutral) : projected angle at exit"
 
  The histograms can be viewed using PAW. See below the note on ANAPHE+AIDA.
  
  One can control the name of the histograms file with the command:
  /testem/histo/setFileName  name  (default testem5.hbook) 
+   
+ It is also possible to print selected histograms on an ascii file:
+ /testem/histo/printHisto id
+ All selected histos will be written on a file name.ascii  (default testem5) 
  	
  Note that, by default, histograms are disabled. To activate them, uncomment 
  the flag G4ANALYSIS_USE in GNUmakefile. 	
  				
- 6- GEANT4/GEANT3/DATA COMPARISON
+ 8- GEANT4/GEANT3/DATA COMPARISON
 
  A Geant4/Geant3/exp. data comparison is given here for a few cases.
  These cases can be classified as follow:
  - e-/e+ incident particles versus protons and others. 
- - 3 energy regimes : low: < 1 MeV; medium: 1MeV -> few 10 MeV; high: > 100 MeV
+ - 3 energy regimes: low: < 1MeV; medium: 1MeV -> few 10MeV; high: > 100MeV
  
  We indicate here the corresponding macros.
  
@@ -127,7 +153,7 @@ $Id: README,v 1.16 2006/05/30 12:36:46 maire Exp $
  The relevant part of the GEANT3 code is in the subdirectory geant3 together 
  with the xxxx.dat input files.
 	
- 7- HOW TO START ?
+ 9- HOW TO START ?
  
  - compile and link to generate an executable
  	% cd TestEm5
@@ -143,7 +169,7 @@ $Id: README,v 1.16 2006/05/30 12:36:46 maire Exp $
 	Idle> run/beamOn 5
 	....
 
- 8- USING HISTOGRAMS
+ 10- USING HISTOGRAMS
 	
   Note that, by default, histograms are disabled. To activate them, uncomment
   the flag G4ANALYSIS_USE in GNUmakefile.

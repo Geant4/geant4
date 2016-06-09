@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HepRepFileSceneHandler.cc,v 1.64 2006/11/16 21:06:11 perl Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: G4HepRepFileSceneHandler.cc,v 1.65 2007/11/16 20:29:04 perl Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 //
 // Joseph Perl  27th January 2002
@@ -586,7 +586,6 @@ void G4HepRepFileSceneHandler::AddCompound (const G4VTrajectory& traj) {
 							// Do not write out the Aux or Pos attribute.  Aux does not conform to the HepRep rule
 							// that each object can have only one instance of a given AttValue.
 							// Both of these attributes are redundant to actual position information of the point.
-							// New Wired can just tell the user the point position itself.
 							if (strcmp(iAttVal->GetName(),"Aux-X")!=0 &&
 								strcmp(iAttVal->GetName(),"Aux-Y")!=0 &&
 								strcmp(iAttVal->GetName(),"Aux-Z")!=0 &&
@@ -708,7 +707,6 @@ void G4HepRepFileSceneHandler::AddCompound (const G4VTrajectory& traj) {
 						// Do not write out the Aux or Pos attribute.  Aux does not conform to the HepRep rule
 						// that each object can have only one instance of a given AttValue.
 						// Both of these attributes are redundant to actual position information of the point.
-						// New Wired can just tell the user the point position itself.
 						if (strcmp(iAttVal->GetName(),"Aux-X")!=0 &&
 							strcmp(iAttVal->GetName(),"Aux-Y")!=0 &&
 							strcmp(iAttVal->GetName(),"Aux-Z")!=0 &&
@@ -818,7 +816,6 @@ void G4HepRepFileSceneHandler::AddCompound (const G4VTrajectory& traj) {
 						// Do not write out the Aux or Pos attribute.  Aux does not conform to the HepRep rule
 						// that each object can have only one instance of a given AttValue.
 						// Both of these attributes are redundant to actual position information of the point.
-						// New Wired can just tell the user the point position itself.
 						if (strcmp(iAttVal->GetName(),"Aux-X")!=0 &&
 							strcmp(iAttVal->GetName(),"Aux-Y")!=0 &&
 							strcmp(iAttVal->GetName(),"Aux-Z")!=0 &&
@@ -1391,42 +1388,45 @@ void G4HepRepFileSceneHandler::AddHepRepInstance(const char* primName,
 		// replacing G4's top geometry level name "worldPhysical" with the
 		// name "Detector Geometry".
 	} else {
+		//G4cout << "CurrentDepth" << currentDepth << G4endl;
+		//G4cout << "currentName" << pCurrentPV->GetName() << G4endl;
 		if (strcmp("Detector Geometry",hepRepXMLWriter->prevTypeName[0])!=0) {
+			//G4cout << "Adding Det Geom type" << G4endl;
 			hepRepXMLWriter->addType("Detector Geometry",0);
 			hepRepXMLWriter->addInstance();
 		}
 		
 		// Re-insert any layers of the hierarchy that were removed by G4's culling process.
 		// Don't bother checking if same type name as last instance.
-		if(strcmp(hepRepXMLWriter->prevTypeName[currentDepth],pCurrentPV->GetName())!=0) {
+		if(strcmp(hepRepXMLWriter->prevTypeName[currentDepth+1],pCurrentPV->GetName())!=0) {
 			//G4cout << "Looking for mother of:" << pCurrentLV->GetName() << G4endl;
 			typedef G4PhysicalVolumeModel::G4PhysicalVolumeNodeID PVNodeID;
 			typedef std::vector<PVNodeID> PVPath;
 			const PVPath& drawnPVPath = pPVModel->GetDrawnPVPath();
 			PVPath::const_reverse_iterator ri = ++drawnPVPath.rbegin();
-			G4int drawnMotherDepth = 0;
+			G4int drawnMotherDepth;
 			if (ri != drawnPVPath.rend()) {
 				// This volume has a mother.
 				drawnMotherDepth = ri->GetNonCulledDepth();
+				//G4cout << "drawnMotherDepth" << drawnMotherDepth << G4endl;
 			} else {
 				// This volume has no mother.  Must be a top level volume.
+				drawnMotherDepth = -1;
 				//G4cout << "Mother must be very top" << G4endl;
 			}
 			
 			while (drawnMotherDepth < (currentDepth-1)) {
 				G4String culledParentName = "Culled parent of " + pCurrentPV->GetName();
-				//G4cout << "Inserting culled layer " << culledParentName << " at depth:" << drawnMotherDepth+1 << G4endl;
-				hepRepXMLWriter->addType(culledParentName, drawnMotherDepth+1);
+				//G4cout << "Inserting culled layer " << culledParentName << " at depth:" << drawnMotherDepth+2 << G4endl;
+				hepRepXMLWriter->addType(culledParentName, drawnMotherDepth+2);
 				hepRepXMLWriter->addInstance();
 				drawnMotherDepth ++;
 			}
 		}
 		
-		if (currentDepth!=0) {
-			// Add the HepRepType for the current volume.
-			hepRepXMLWriter->addType(pCurrentPV->GetName(),currentDepth);
-			hepRepXMLWriter->addInstance();
-		}
+		// Add the HepRepType for the current volume.
+		hepRepXMLWriter->addType(pCurrentPV->GetName(),currentDepth+1);
+		hepRepXMLWriter->addInstance();
 		
 		if (fpVisAttribs && (fpVisAttribs->IsVisible()==0) && cullInvisibleObjects)
 			return;

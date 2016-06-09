@@ -1,0 +1,25 @@
+$Id: History,v 1.4 2007/11/12 18:19:30 maire Exp $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                    fanoCavity2 History file
+                    -----------------------
+This file should be used by the G4 example coordinator to briefly
+summarize all major modifications introduced in the code and keep
+track of all tags.
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+     
+12-11-07 mma (fano2-V09-00-01) 
+- HistoManager/HistoMessenger : print selected histos on ascii file
+     
+12-10-07 mma (fano2-V09-00-00)
+- compute error on ratio
+    
+12-10-07 michel maire
+- created from fanoCavity example

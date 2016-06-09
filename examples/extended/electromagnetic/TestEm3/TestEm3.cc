@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: TestEm3.cc,v 1.22 2007/04/06 17:41:54 maire Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: TestEm3.cc,v 1.23 2007/06/22 09:22:05 maire Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
@@ -73,10 +73,6 @@ int main(int argc,char** argv) {
   // primary generator
   PrimaryGeneratorAction* primary = new PrimaryGeneratorAction(detector,histo);
   runManager->SetUserAction(primary);
-
-#ifdef G4VIS_USE
-  G4VisManager* visManager = 0;
-#endif
         
   // set user action classes
   RunAction*      runAct = new RunAction(detector,primary,histo);
@@ -92,36 +88,36 @@ int main(int argc,char** argv) {
   // get the pointer to the User Interface manager 
   G4UImanager* UI = G4UImanager::GetUIpointer();  
 
-  if (argc==1)   // Define UI session for interactive mode.
+  if (argc!=1)   // batch mode  
     {
+     G4String command = "/control/execute ";
+     G4String fileName = argv[1];
+     UI->ApplyCommand(command+fileName);
+    }
+    
+  else           //define visualization and UI terminal for interactive mode
+    { 
 #ifdef G4VIS_USE
-      // visualization manager
-      visManager = new G4VisExecutive;
-      visManager->Initialize();
-#endif
-      // G4UIterminal is a (dumb) terminal.
-      G4UIsession * session = 0;
+   G4VisManager* visManager = new G4VisExecutive;
+   visManager->Initialize();
+#endif    
+     
+     G4UIsession * session = 0;
 #ifdef G4UI_USE_TCSH
       session = new G4UIterminal(new G4UItcsh);      
 #else
       session = new G4UIterminal();
-#endif                 
-      session->SessionStart();
-      delete session;
-    }
-  else           // Batch mode
-    { 
-      G4String command = "/control/execute ";
-      G4String fileName = argv[1];
-      UI->ApplyCommand(command+fileName);
+#endif     
+     session->SessionStart();
+     delete session;
+     
+#ifdef G4VIS_USE
+     delete visManager;
+#endif     
     }
 
   // job termination
-     
-#ifdef G4VIS_USE
-  if(visManager) delete visManager;
-#endif
-
+  //   
   delete histo;
   delete runManager;
 

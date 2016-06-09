@@ -1,4 +1,4 @@
-$Id: History,v 1.290 2007/06/20 12:43:54 vnivanch Exp $
+$Id: History,v 1.307 2007/11/09 11:35:53 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,76 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+09 November 07: V.Ivant (emutils-V09-00-13)
+- G4VMultipleScattering - set at initialisation that scattering may be 
+                          off lectrons (needed for single scattering)
+- G4EmModelmanager - add pointers to G4Gamma and G4Positron at 
+                     initialisation
+
+07 November 07: V.Ivant (emutils-V09-00-12)
+- G4VEnergyLossProcess - simplify logic to switch on/off fluctuations
+- G4EmProcessOptions - add forgoten initialisation of G4LossTableManager
+                       parameters together with parameters of concrete 
+                       processes (fixed initialisation when options
+                       defined before proceeses are instantiated)
+
+29 October 07: V.Ivant (emutils-V09-00-11)
+- G4VEmProcess, G4VEnergyLossProcess, G4VMultipleScattering
+  cleanup - move virtual method to the source code
+- G4VMultipleScattering - use SamleScattering method PostStep
+- G4VEmModel - added SampleScattering method for msc models
+- G4VEnergyLossProcess - set default flags of fluctuation to "false"
+                         they changed to "true" when first model
+                         of fluctuations is added
+
+08 October 07: V.Ivant (emutils-V09-00-10)
+- G4VEmProcess - use cut in PostStepDoIt (before was zero)
+
+04 October 07: V.Ivant (emutils-V09-00-09)
+- G4VEnergyLossProcess - fixed problem at destruction
+
+02 October 07: V.Ivant (emutils-V09-00-08)
+- G4VEnergyLossProcess, G4VEmProcess, G4VMultipleScattering - fixed
+  memory leak - proper delete of G4PhysicsTables 
+
+27 September 07: V.Ivant (emutils-V09-00-07)
+- G4ionEffectiveCharge - use Fermi energy from G4Material and not
+  recalculate at each step; reorganized formulas - less calls to
+  exp, log, pow 
+
+26 September 07: V.Ivant (emutils-V09-00-06)
+- G4VEnergyLossProcess and G4VEmProcess - move virtual function
+   PostStepGetPhysicalInteractionLength from inline to body of classes
+
+25 September 07: V.Ivant (emutils-V09-00-05)
+- G4VEnergyLossProcess and G4VEmProcess - fixed handling zero cross 
+  section in PostStepGetPhysicalInteractionLength method to avoid problem
+  happans in FanoCavity example when cross section inside cavity is zero
+- G4VEmModel - compare cross section with DBL_MIN instead of zero
+
+16 August 07: V.Ivant (emutils-V09-00-04)
+- G4EmCalculator - fixed default region name
+- G4VEnergyLossProcess - use prestep time for subcutoff secondaries
+                         and do not use GetVelocity method
+
+02 August 07: V.Ivant (emutils-V09-00-03)
+- G4VEnergyLossProcess - simplify energy loss computation for the case 
+                         of big step (few % faster)
+
+28 July 07: V.Ivant (emutils-V09-00-02)
+- G4VEnergyLossProcess - use stl vector of G4VEmModel instead of array
+- G4VEmProcess - added cut to ComputeCrossSectionPerAtom method;
+                 added vector of cuts per material for secondaries,
+                 which are needed for single scattering process
+
+16 July 07: V.Ivant (emutils-V09-00-01)
+- G4VEmProcess - integral option coupled with buildLambdaTable option:
+  integral cannot be true if buildLambdaTable is false
+
+11 July 07: V.Ivant (emutils-V09-00-00)
+- G4VEmModel - fixed SelectRandomAtom method (last element of compound
+  was never selected - instead first was taken)
 
 20 June 07: V.Ivant (emutils-V08-03-06)
 - G4VEnergyLossProcess add initialisation of preStepKinEnergy before 

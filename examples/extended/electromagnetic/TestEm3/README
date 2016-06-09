@@ -1,4 +1,4 @@
-$Id: README,v 1.28 2006/11/22 19:16:09 vnivanch Exp $
+$Id: README,v 1.29 2007/11/12 17:04:55 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -155,7 +155,10 @@ $Id: README,v 1.28 2006/11/22 19:16:09 vnivanch Exp $
   absorbers : from 1 to NbOfAbsor (inclued)
   planes    : from 1 to NbOfLayers*NbOfAbsor + 1 (inclued)      
  	
- 
+ It is also possible to print selected histograms on an ascii file:
+ /testem/histo/printHisto id
+ All selected histos will be written on a file name.ascii  (default testem3)
+     
  Note that, by default, histograms are disabled. To activate them, uncomment
  the flag G4ANALYSIS_USE in GNUmakefile.
 

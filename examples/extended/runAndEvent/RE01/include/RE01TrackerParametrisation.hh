@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // $Id: RE01TrackerParametrisation.hh,v 1.2 2006/06/29 17:43:24 gunter Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 
 

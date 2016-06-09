@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MuBremsstrahlungModel.hh,v 1.16 2007/05/22 17:35:58 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: G4MuBremsstrahlungModel.hh,v 1.17 2007/10/11 09:25:31 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 // -------------------------------------------------------------------
 //
@@ -45,6 +45,7 @@
 // 10-02-04 Add lowestKinEnergy (V.Ivanchenko)
 // 08-04-05 Major optimisation of internal interfaces (V.Ivantchenko)
 // 13-02-06 add ComputeCrossSectionPerAtom (mma)
+// 11-10-07 Add ignoreCut flag (V.Ivanchenko) 
 //
 
 //
@@ -125,10 +126,14 @@ public:
                                           G4double A,
                                           G4double gammaEnergy);
 
+  inline void SetIgnoreCutFlag(G4bool);
+
+  inline G4bool IgnoreCutFlag() const;
+
 private:
 
  G4DataVector* ComputePartialSumSigma(const G4Material* material,
-                                             G4double tkin, G4double cut);
+				      G4double tkin, G4double cut);
 
  const G4Element* SelectRandomAtom(const G4MaterialCutsCouple* couple) const;
 
@@ -155,6 +160,8 @@ private:
   G4double ya[1001], proba[5][8][1001];
   G4double cutFixed;
 
+  G4bool  ignoreCut;
+
   std::vector<G4DataVector*> partialSumSigma;
   G4bool  samplingTablesAreFilled;
 
@@ -164,9 +171,23 @@ private:
 
 inline G4double G4MuBremsstrahlungModel::MaxSecondaryEnergy(
                                  const G4ParticleDefinition*,
-    				       G4double kineticEnergy)
+				 G4double kineticEnergy)
 {
   return kineticEnergy;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+inline void G4MuBremsstrahlungModel::SetIgnoreCutFlag(G4bool val)
+{
+  ignoreCut = val;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+inline G4bool G4MuBremsstrahlungModel::IgnoreCutFlag() const
+{
+  return ignoreCut;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

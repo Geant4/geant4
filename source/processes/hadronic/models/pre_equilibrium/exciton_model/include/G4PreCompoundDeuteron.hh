@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PreCompoundDeuteron.hh,v 1.3 2006/06/29 20:58:08 gunter Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: G4PreCompoundDeuteron.hh,v 1.7 2007/10/01 10:41:59 ahoward Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 // by V. Lara
 
@@ -78,6 +78,20 @@ public:
   }   
   
 private:
+
+// added Rj method according to literature and JMQ - formula from Jose Quesada
+  virtual G4double GetRj(const G4int NumberParticles, const G4int NumberCharged)
+  {
+    G4double rj = 1.0;
+    G4double denominator = NumberParticles*(NumberParticles-1);
+    if(denominator != 0) rj = 2.0*static_cast<G4double>(NumberCharged*(NumberParticles-NumberCharged))/static_cast<G4double>(denominator); //JMQ re-corrected 23/8/07
+    //    return static_cast<G4double>(NumberCharged*(NumberCharged-1))/static_cast<G4double>(NumberParticles*(NumberParticles-1));
+
+    return rj;
+  }
+
+
+
   virtual G4double GetAlpha()
   {
     G4double C = 0.0;

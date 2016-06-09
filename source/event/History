@@ -1,4 +1,4 @@
-$Id: History,v 1.113 2007/06/12 08:49:18 gcosmo Exp $
+$Id: History,v 1.118 2007/12/04 17:28:31 flei Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,19 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+December 4, 2007, F. Lei (event-V09-00-03)
+- Fixed the problem in bug report #988
+
+November 7, 2007, M.Asai (event-V09-00-02)
+- Added private copy constructor and =, ==, += operators to G4ParticleGun. Addressing to Bug Report 984.
+
+October 1, 2007, P.Gumplinger and M.Asai (event-V09-00-01)
+- Add UI commands /gun/momentum and /gun/momentumAmp
+  for example: /gun/momentumAmp 1.0 GeV (not GeV/c)!
+
+September 28, 2007, P.Gumplinger (event-V09-00-00)
+- Add class member particle_momentum and
+  method SetParticleMomentum(G4double)
 
 June 11, 2007, G.Santin (event-V08-03-02)
 - Fix to normalisation of source intensities with multiple sources:

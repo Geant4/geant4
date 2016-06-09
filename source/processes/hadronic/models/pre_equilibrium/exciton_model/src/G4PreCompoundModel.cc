@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PreCompoundModel.cc,v 1.8 2006/06/29 20:59:25 gunter Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: G4PreCompoundModel.cc,v 1.11 2007/10/11 14:19:36 ahoward Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 // by V. Lara
 
@@ -85,9 +85,16 @@ G4HadFinalState * G4PreCompoundModel::ApplyYourself(const G4HadProjectile & theP
   anInitialState.SetNumberOfParticles(1+thePrimary.GetDefinition()->GetBaryonNumber());
   
   // Number of Charged Excited Particles
-  anInitialState.SetNumberOfCharged(static_cast<G4int>(thePrimary.GetDefinition()->GetPDGCharge()+.01) + 
-				    static_cast<G4int>(0.5+G4UniformRand()));
-  
+  // JMQ/AH modify number of charged particles with probability of the Z/A ratio of the nucleus:
+  //  if(G4UniformRand() <= aZ/anA) BUG! - integer arithmetic
+  if(G4UniformRand() <= (static_cast<G4double>(aZ))/(static_cast<G4double>(anA))) 
+      anInitialState.SetNumberOfCharged(static_cast<G4int>(thePrimary.GetDefinition()->GetPDGCharge()+.01) + 1);
+  else
+      anInitialState.SetNumberOfCharged(static_cast<G4int>(thePrimary.GetDefinition()->GetPDGCharge()+.01));
+    
+//AH     anInitialState.SetNumberOfCharged(static_cast<G4int>(thePrimary.GetDefinition()->GetPDGCharge()+.01) + 
+//AH 				    static_cast<G4int>(0.5+G4UniformRand()));
+
   // Number of Holes 
   anInitialState.SetNumberOfHoles(1);
   

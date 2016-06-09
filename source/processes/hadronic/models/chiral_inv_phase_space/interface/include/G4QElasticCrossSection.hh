@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// GEANT4 tag $Name: geant4-09-00 $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 //
 // GEANT4 physics class: G4QElasticCrossSection -- header file
@@ -51,6 +51,7 @@
 #include "G4QElastic.hh"
 #include "G4QCoherentChargeExchange.hh"
 #include "G4QuasiFreeRatios.hh"
+#include "G4QIonIonCrossSection.hh"
 
 class G4QElasticCrossSection : public G4VQCrossSection
 {
@@ -64,7 +65,7 @@ public:
 
   static G4VQCrossSection* GetPointer(); // Gives a pointer to this singletone
 
-  // At present momentum (pMom) must be in GeV (@@ Units)
+  // Cross-section is mb. At present momentum (pMom) is in MeV=IU (@@ make Indep. Units)
   virtual G4double GetCrossSection(G4bool fCS, G4double pMom, G4int tgZ, G4int tgN,
                                                                              G4int pPDG=0);
 
@@ -74,6 +75,8 @@ protected:
   friend class G4QElastic;
   friend class G4QCoherentChargeExchange;
   friend class G4QuasiFreeRatios;
+  friend class G4QIonIonCrossSection;
+  G4double GetSlope(G4int tZ, G4int tN, G4int pPDG);     // Slope of the 1st diff. maximum
   G4double GetExchangeT(G4int tZ, G4int tN, G4int pPDG); // Randomizes -t=Q2 (in IU=MeV^2)
   G4double GetHMaxT();                   // Currrent Max(-t=Q2)/2. (in IU=MeV^2)
 

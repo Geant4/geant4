@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4PhotoElectricEffect.hh,v 1.24 2007/05/23 08:47:34 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 //
 //------------------ G4PhotoElectricEffect physics process ------------------

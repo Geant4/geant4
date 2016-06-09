@@ -23,20 +23,22 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: pyG4ParticleGun.cc,v 1.4 2006/06/29 15:31:36 gunter Exp $
-// $Name: geant4-09-00 $
+// $Id: pyG4ParticleGun.cc,v 1.7 2007/11/08 06:42:03 kmura Exp $
+// $Name: geant4-09-01 $
 // ====================================================================
 //   pyG4ParticleGun.cc
 //
 //                                         2005 Q
 // ====================================================================
 #include <boost/python.hpp>
+#include "G4Version.hh"
 #include "G4ParticleGun.hh"
 #include "G4ParticleTable.hh"
 #include "G4Event.hh"
 
 using namespace boost::python;
 
+#if G4VERSION_NUMBER < 910
 // ====================================================================
 // miscs
 // ====================================================================
@@ -77,10 +79,22 @@ G4int G4ParticleGun::operator!=(const G4ParticleGun &right) const
   return 0;
 }
 
+#endif
+
+
 // ====================================================================
 // thin wrappers
 // ====================================================================
 namespace pyG4ParticleGun {
+
+#if G4VERSION_NUMBER >= 910
+// SetParticleMomentum
+void (G4ParticleGun::*f1_SetParticleMomentum)(G4double)
+  = &G4ParticleGun::SetParticleMomentum;
+void (G4ParticleGun::*f2_SetParticleMomentum)(G4ParticleMomentum)
+  = &G4ParticleGun::SetParticleMomentum;
+#endif
+
 
 ////////////////////////////////////////////////////////////////////
 void SetParticleByName(G4ParticleGun* gun, const std::string& pname)
@@ -113,7 +127,11 @@ using namespace pyG4ParticleGun;
 // ====================================================================
 void export_G4ParticleGun()
 {
+#if G4VERSION_NUMBER < 910
   class_<G4ParticleGun>
+#else
+    class_<G4ParticleGun, boost::noncopyable>
+#endif
     ("G4ParticleGun", "particle gun")
     // constructor
     .def(init<G4int>())
@@ -124,7 +142,12 @@ void export_G4ParticleGun()
     .def("SetParticleDefinition", &G4ParticleGun::SetParticleDefinition)
     .def("GetParticleDefinition", &G4ParticleGun::GetParticleDefinition,
     	 return_value_policy<reference_existing_object>())
+#if G4VERSION_NUMBER >= 910
+    .def("SetParticleMomentum",   f1_SetParticleMomentum)
+    .def("SetParticleMomentum",   f2_SetParticleMomentum)
+#else
     .def("SetParticleMomentum",   &G4ParticleGun::SetParticleMomentum)
+#endif
     .def("SetParticleMomentumDirection", 
 	 &G4ParticleGun::SetParticleMomentumDirection)
     .def("GetParticleMomentumDirection", 

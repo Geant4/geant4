@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: DetectorConstruction.hh,v 1.1 2007/01/19 17:20:26 maire Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: DetectorConstruction.hh,v 1.2 2007/10/08 12:05:02 maire Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -51,7 +51,6 @@ class DetectorConstruction : public G4VUserDetectorConstruction
   public:
   
      void SetWallThickness   (G4double);
-     void SetWallRadius      (G4double);           
      void SetWallMaterial    (G4String);
        
      void SetCavityThickness (G4double);
@@ -90,7 +89,6 @@ class DetectorConstruction : public G4VUserDetectorConstruction
      G4VPhysicalVolume*  pCavity;
      
      G4double            totalThickness;
-     G4bool              defaultRadius;     
 
      DetectorMessenger* detectorMessenger;
 

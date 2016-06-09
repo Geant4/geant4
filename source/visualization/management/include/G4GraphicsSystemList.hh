@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4GraphicsSystemList.hh,v 1.9 2006/06/29 21:27:54 gunter Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 // 
 // John Allison  2nd April 1996

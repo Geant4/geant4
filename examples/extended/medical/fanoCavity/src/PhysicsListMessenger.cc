@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysicsListMessenger.cc,v 1.1 2007/01/19 17:20:27 maire Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: PhysicsListMessenger.cc,v 1.2 2007/10/02 14:42:51 maire Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -50,6 +50,12 @@ PhysicsListMessenger::PhysicsListMessenger(PhysicsList* pPhys)
   csFactor->SetParameterName("factor",false);
   csFactor->SetRange("factor>=0");
   
+  singleScat = new G4UIcmdWithABool("/testem/phys/singleScattering",this);
+  singleScat->SetGuidance("apply single Coulomb scattering process");
+  singleScat->SetParameterName("flag",true);
+  singleScat->SetDefaultValue(true);
+  singleScat->AvailableForStates(G4State_PreInit);
+        
   brem = new G4UIcmdWithABool("/testem/phys/registerBrem",this);
   brem->SetGuidance("register Brems in PhysicsList");
   brem->SetParameterName("flag",true);
@@ -62,6 +68,7 @@ PhysicsListMessenger::PhysicsListMessenger(PhysicsList* pPhys)
 PhysicsListMessenger::~PhysicsListMessenger()
 {
   delete csFactor;
+  delete singleScat;
   delete brem;
   delete physDir;    
 }
@@ -73,6 +80,10 @@ void PhysicsListMessenger::SetNewValue(G4UIcommand* command,
 { 
   if (command == csFactor)
    {pPhysicsList->SetComptonCSfactor(csFactor->GetNewDoubleValue(newValue));}
+   
+  if (command == singleScat)
+   {pPhysicsList->SingleCoulombScattering(singleScat->GetNewBoolValue(newValue));}
+            
   if (command == brem)
    {pPhysicsList->RegisterBrem(brem->GetNewBoolValue(newValue));}      
 }

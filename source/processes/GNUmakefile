@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.38 2007/05/31 08:12:53 gcosmo Exp $
+# $Id: GNUmakefile,v 1.43 2007/11/19 13:16:47 gcosmo Exp $
 # ----------------------------------------------------------------------
 # GNUmakefile for processes library, Gabriele Cosmo 27-Jun-1998
 # ----------------------------------------------------------------------
@@ -64,6 +64,7 @@ SUBDIRS += hadronic/models/de_excitation/util
 SUBDIRS += hadronic/models/em_dissociation
 SUBDIRS += hadronic/models/high_energy
 SUBDIRS += hadronic/models/im_r_matrix
+SUBDIRS += hadronic/models/incl
 SUBDIRS += hadronic/models/isotope_production
 SUBDIRS += hadronic/models/leading_particle
 SUBDIRS += hadronic/models/lll_fission
@@ -76,7 +77,9 @@ SUBDIRS += hadronic/models/parton_string/management
 SUBDIRS += hadronic/models/parton_string/qgsm
 SUBDIRS += hadronic/models/photolepton_hadron/muon_nuclear
 SUBDIRS += hadronic/models/pre_equilibrium/exciton_model
+SUBDIRS += hadronic/models/qmd
 SUBDIRS += hadronic/models/radioactive_decay
+SUBDIRS += hadronic/models/rpg
 SUBDIRS += hadronic/models/theo_high_energy
 SUBDIRS += hadronic/models/util
 SUBDIRS += hadronic/processes
@@ -96,6 +99,8 @@ SUBLIBS +=  G4had_im_r_matrix
 SUBLIBS +=  G4hadronic_iso
 SUBLIBS +=  G4hadronic_leading_particle
 SUBLIBS +=  G4hadronic_LE
+SUBLIBS +=  G4hadronic_RPG
+SUBLIBS +=  G4hadronic_qmd
 SUBLIBS +=  G4had_lll_fis
 SUBLIBS +=  G4had_mod_man
 SUBLIBS +=  G4had_neu_hp
@@ -105,6 +110,7 @@ SUBLIBS +=  G4had_mod_util
 SUBLIBS +=  G4hadronic_bert_cascade
 SUBLIBS +=  G4hadronic_hetcpp_evaporation
 SUBLIBS +=  G4hadronic_hetcpp_utils
+SUBLIBS +=  G4hadronic_incl_cascade
 SUBLIBS +=  G4hadronic_body_ci
 SUBLIBS +=  G4hadronic_interface_ci
 SUBLIBS +=  G4hadronic_deex_evaporation

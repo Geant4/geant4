@@ -35,7 +35,7 @@
 // tel (418) 525-4444 #6720
 // fax (418) 691 5268
 //
-// + Universit-Aé Laval, Québec (QC) Canada$)B
+// + Universit.AŽé Laval, QuŽébec (QC) Canada
 //*******************************************************
 //
 //*******************************************************
@@ -45,7 +45,7 @@
 // DicomHandler.cc :
 //	- Handling of DICM images
 // 	- Reading headers and pixels
-//	- Transforming pixel to density and creating *.g4
+//	- Transforming pixel to density and creating *.g4dcm
 //	  files
 // 	- Definitions are in DicomHandler.hh
 //*******************************************************
@@ -61,7 +61,7 @@
 
 DicomHandler::DicomHandler()
     : DATABUFFSIZE(8192), LINEBUFFSIZE(128), FILENAMESIZE(512),
-      compression(0), max(0), rows(0), columns(0),
+      compression(0), nFiles(0), rows(0), columns(0),
       bitAllocated(0), maxPixelValue(0), minPixelValue(0),
       pixelSpacingX(0.), pixelSpacingY(0.),
       sliceThickness(0.), sliceLocation(0.),
@@ -75,8 +75,9 @@ DicomHandler::~DicomHandler() {
     ;
 }
 
-G4int DicomHandler::readHeader(FILE *dicom, char * filename2)
+G4int DicomHandler::ReadFile(FILE *dicom, char * filename2)
 {
+  G4cout << " ReadFile " << filename2 << G4endl;
     G4int returnvalue = 0;
     char * buffer = new char[LINEBUFFSIZE];
 
@@ -108,10 +109,10 @@ G4int DicomHandler::readHeader(FILE *dicom, char * filename2)
 	readElementId = 0;
 	// group ID
 	std::fread(buffer, 2, 1, dicom);
-	getValue(buffer, readGroupId);
+	GetValue(buffer, readGroupId);
 	// element ID
 	std::fread(buffer, 2, 1, dicom);
-	getValue(buffer, readElementId);
+	GetValue(buffer, readElementId);
 
 	// Creating a tag to be identified afterward
 	G4int tagDictionary = readGroupId*0x10000 + readElementId;
@@ -119,7 +120,7 @@ G4int DicomHandler::readHeader(FILE *dicom, char * filename2)
 
 	// VR or element length
 	std::fread(buffer,2,1,dicom);
-	getValue(buffer, elementLength2);
+	GetValue(buffer, elementLength2);
 
 	// If value representation (VR) is OB, OW, SQ, UN, 
 	//the next length is 32 bits
@@ -133,7 +134,7 @@ G4int DicomHandler::readHeader(FILE *dicom, char * filename2)
 
 	    // element length
 	    std::fread(buffer, 4, 1, dicom);
-	    getValue(buffer, elementLength4);
+	    GetValue(buffer, elementLength4);
 
 	    // beginning of the pixels
 	    if(tagDictionary == 0x7FE00010) break;
@@ -147,7 +148,7 @@ G4int DicomHandler::readHeader(FILE *dicom, char * filename2)
 	    if(!implicitEndian || readGroupId == 2) {
 		// element length (2 bytes)
 		std::fread(buffer, 2, 1, dicom);
-		getValue(buffer, elementLength2);
+		GetValue(buffer, elementLength2);
 		elementLength4 = elementLength2;
 
 	    } else { 
@@ -157,7 +158,7 @@ G4int DicomHandler::readHeader(FILE *dicom, char * filename2)
 		    exit(-10);
 		}
 		std::fread(buffer, 4, 1, dicom);
-		getValue(buffer, elementLength4);
+		GetValue(buffer, elementLength4);
 	    }
 
 	    // beginning of the pixels
@@ -169,12 +170,35 @@ G4int DicomHandler::readHeader(FILE *dicom, char * filename2)
 	// NULL termination
 	data[elementLength4] = '\0';
 
-	// analyzing inforamtion 
-	getInformation(tagDictionary, data);
+	// analyzing information 
+	GetInformation(tagDictionary, data);
     }
 
     // Creating files to store information
-    storeInformation(filename2);
+    std::ofstream foutG4DCM;
+    G4String fnameG4DCM = G4String(filename2) + ".g4dcm";
+    foutG4DCM.open(fnameG4DCM);
+    G4cout << " opened fnameG4DCM file " << fnameG4DCM << G4endl;
+
+    foutG4DCM << fMaterialIndices.size() << G4endl;
+    //--- Write materials
+    size_t ii = 0;
+    std::map<G4double,G4String>::const_iterator ite;
+    for( ite = fMaterialIndices.begin(); ite != fMaterialIndices.end(); ite++, ii++ ){
+      foutG4DCM << ii << " " << (*ite).second << G4endl;
+    }
+    //--- Write number of voxels (assume only one voxel in Z)
+    foutG4DCM << rows/compression << " " << columns/compression << " 1 " << G4endl;
+    //--- Write minimum and maximum extensions
+    foutG4DCM << -pixelSpacingX*rows/2 << " " << pixelSpacingX*rows/2 << G4endl;
+    foutG4DCM << -pixelSpacingY*columns/2 << " " << pixelSpacingY*columns/2 << G4endl;
+    foutG4DCM << sliceLocation-sliceThickness/2. << " " << sliceLocation+sliceThickness/2. << G4endl;
+    
+    ReadData( dicom, filename2 );
+    
+    StoreData( foutG4DCM );
+
+    foutG4DCM.close();
 
     //
     delete [] buffer;
@@ -184,35 +208,35 @@ G4int DicomHandler::readHeader(FILE *dicom, char * filename2)
 }
 
 //
-void DicomHandler::getInformation(G4int & tagDictionary, char * data) {
+void DicomHandler::GetInformation(G4int & tagDictionary, char * data) {
     if(tagDictionary == 0x00280010 ) { // Number of Rows
-	getValue(data, rows);
+	GetValue(data, rows);
 	std::printf("[0x00280010] Rows -> %i\n",rows);
 
     } else if(tagDictionary == 0x00280011 ) { // Number of columns
-	getValue(data, columns);
+	GetValue(data, columns);
 	std::printf("[0x00280011] Columns -> %i\n",columns);
 
     } else if(tagDictionary == 0x00280102 ) { // High bits  ( not used )
 	short highBits;
-	getValue(data, highBits);
+	GetValue(data, highBits);
 	std::printf("[0x00280102] High bits -> %i\n",highBits);
 
     } else if(tagDictionary == 0x00280100 ) { // Bits allocated
-	getValue(data, bitAllocated);
+	GetValue(data, bitAllocated);
 	std::printf("[0x00280100] Bits allocated -> %i\n", bitAllocated);
 
     } else if(tagDictionary == 0x00280101 ) { //  Bits stored ( not used )
 	short bitStored;
-	getValue(data, bitStored);
+	GetValue(data, bitStored);
 	std::printf("[0x00280101] Bits stored -> %i\n",bitStored);
 
     } else if(tagDictionary == 0x00280106 ) { //  Min. pixel value
-	getValue(data, minPixelValue);
+	GetValue(data, minPixelValue);
 	std::printf("[0x00280106] Min. pixel value -> %i\n", minPixelValue);
 
     } else if(tagDictionary == 0x00280107 ) { //  Max. pixel value
-	getValue(data, maxPixelValue);
+	GetValue(data, maxPixelValue);
 	std::printf("[0x00280107] Max. pixel value -> %i\n", maxPixelValue);
 
     } else if(tagDictionary == 0x00281053) { //  Rescale slope
@@ -324,68 +348,131 @@ void DicomHandler::getInformation(G4int & tagDictionary, char * data) {
 
 }
 
-//
-void DicomHandler::storeInformation(char * _filename) {
+void DicomHandler::StoreData(std::ofstream& foutG4DCM) 
+{
+  G4int mean;
+  G4double density;
+  G4bool overflow = false;
+  G4int cpt=1;
 
-    char * compressionbuf = new char[LINEBUFFSIZE];
-    char * maxbuf = new char[LINEBUFFSIZE];
-    char * filename = new char[FILENAMESIZE];
-    compression = 0;
-    max = 0;
-    FILE* configuration;
-
-    configuration = std::fopen("Data.dat","r");
-    if( configuration != 0 ) {
-	std::fscanf(configuration,"%s",compressionbuf);
-	compression = atoi(compressionbuf);
-	std::fscanf(configuration,"%s",maxbuf);
-	max = atoi(maxbuf);
-	std::fclose(configuration);
-    } else {
-	std::printf("### WARNING, file Data.dat not here !!!\n");
-	exit(1);
+  //----- Print indices of material 
+  if(compression == 1) { // no compression: each pixel has a density value)
+    for( G4int ww = 0; ww < rows; ww++) {
+      for( G4int xx = 0; xx < columns; xx++) {
+	mean = tab[ww][xx];
+	density = Pixel2density(mean);
+	foutG4DCM << GetMaterialIndex( density ) << " ";
+      }
+      foutG4DCM << G4endl;
+    }
+    
+  } else {
+    // density value is the average of a square region of
+    // compression*compression pixels
+    for(G4int ww = 0; ww < rows ;ww += compression ) {
+      for(G4int xx = 0; xx < columns ;xx +=compression ) {
+	overflow = false;
+	mean = 0;
+	for(int sumx = 0; sumx < compression; sumx++) {
+	  for(int sumy = 0; sumy < compression; sumy++) {
+	    if(ww+sumy >= rows || xx+sumx >= columns) overflow = true;
+	    mean += tab[ww+sumy][xx+sumx];
+	  }
+	  if(overflow) break;
+	}
+	mean /= compression*compression;
+	cpt = 1;
+	
+	if(!overflow) {
+	  G4double density = Pixel2density(mean);
+	  foutG4DCM << GetMaterialIndex( density ) << " ";
+	}
+      }
+      foutG4DCM << G4endl;
     }
 
+  }
 
-    FILE* dat;
-    std::sprintf(filename,"%s.dat", _filename);
-    dat = std::fopen(filename,"w+");
-    // Note: the .dat files contain basic information on the images.
+  //----- Print densities
+  if(compression == 1) { // no compression: each pixel has a density value)
+    for( G4int ww = 0; ww < rows; ww++) {
+      for( G4int xx = 0; xx < columns; xx++) {
+	mean = tab[ww][xx];
+	density = Pixel2density(mean);
+	foutG4DCM << density << " ";
+	if( xx%8 == 3 ) foutG4DCM << G4endl; // just for nicer reading
+      }
+    }
+    
+  } else {
+    // density value is the average of a square region of
+    // compression*compression pixels
+    for(G4int ww = 0; ww < rows ;ww += compression ) {
+      for(G4int xx = 0; xx < columns ;xx +=compression ) {
+	overflow = false;
+	mean = 0;
+	for(int sumx = 0; sumx < compression; sumx++) {
+	  for(int sumy = 0; sumy < compression; sumy++) {
+	    if(ww+sumy >= rows || xx+sumx >= columns) overflow = true;
+	    mean += tab[ww+sumy][xx+sumx];
+	  }
+	  if(overflow) break;
+	}
+	mean /= compression*compression;
+	cpt = 1;
+	
+	if(!overflow) {
+	  G4double density = Pixel2density(mean);
+	  foutG4DCM << density  << " ";
+	  if( xx/compression%8 == 3 ) foutG4DCM << G4endl; // just for nicer reading
+	}
+      }
+    }
 
-    std::fprintf(dat,"Rows,columns(#):      %8i   %8i\n",rows,columns);
-    std::fprintf(dat,"PixelSpacing_X,Y(mm): %8f   %8f\n",
-                 pixelSpacingX,pixelSpacingY);
-    std::fprintf(dat,"SliceThickness(mm):   %8f\n",sliceThickness);
-    std::fprintf(dat,"SliceLocation(mm):    %8f\n",sliceLocation);
-    std::fclose(dat);
+  }
 
-    delete [] compressionbuf;
-    delete [] maxbuf;
-    delete [] filename;
+}
+
+void DicomHandler::ReadMaterialIndices( std::ifstream& finData)
+{
+  size_t nMate;
+  G4String mateName;
+  G4double densityMax;
+  finData >> nMate;
+  G4cout << " ReadMaterialIndices " << nMate << G4endl;
+  for( size_t ii = 0; ii < nMate; ii++ ){
+    finData >> mateName >> densityMax;
+    fMaterialIndices[densityMax] = mateName;
+    G4cout << ii << " ReadMaterialIndices " << mateName << " " << densityMax << G4endl;
+  }
+
+}
+
+size_t DicomHandler::GetMaterialIndex( G4double density )
+{
+  size_t mateID;
+  std::map<G4double,G4String>::reverse_iterator ite;
+  G4int ii = fMaterialIndices.size();
+  for( ite = fMaterialIndices.rbegin(); ite != fMaterialIndices.rend(); ite++, ii-- ) {
+    if( density >= (*ite).first ) {
+      break;
+    }
+  }
+  //-  G4cout << " GetMaterialIndex " << density << " = " << ii << G4endl;
+  return  ii;
 
 }
 
 //
-G4int DicomHandler::readData(FILE *dicom,char * filename2)
+G4int DicomHandler::ReadData(FILE *dicom,char * filename2)
 {
     G4int returnvalue = 0;
-    char * compressionbuf = new char[LINEBUFFSIZE];
-    char * maxbuf = new char[LINEBUFFSIZE];
-    short compression = 0;
-    G4int max = 0;
-
-    FILE* configuration = std::fopen("Data.dat","r");
-    std::fscanf(configuration,"%s",compressionbuf);
-    compression = atoi(compressionbuf);
-    std::fscanf(configuration,"%s",maxbuf);
-    max = atoi(maxbuf);
-    std::fclose(configuration);
 
     //  READING THE PIXELS :
     G4int w = 0;
     G4int len = 0;
     
-    G4int** tab = new G4int*[rows];
+    tab = new G4int*[rows];
     for ( G4int i = 0; i < rows; i ++ ) {
       tab[i] = new G4int[columns];
     }
@@ -416,7 +503,7 @@ G4int DicomHandler::readData(FILE *dicom,char * filename2)
 	    for( G4int i = 0; i < columns; i++) {
 		w++;
 		std::fread(sbuff, 2, 1, dicom);
-		getValue(sbuff, pixel);
+		GetValue(sbuff, pixel);
 		tab[j][i] = pixel*rescaleSlope + rescaleIntercept;
 	    }
 	}
@@ -455,7 +542,7 @@ G4int DicomHandler::readData(FILE *dicom,char * filename2)
 	for( G4int ww = 0; ww < rows; ww++) {
 	    for( G4int xx = 0; xx < columns; xx++) {
 		mean = tab[ww][xx];
-		density = pixel2density(mean);
+		density = Pixel2density(mean);
 		std::fwrite(&density, sizeof(G4double), 1, processed);
             }
         }
@@ -478,7 +565,7 @@ G4int DicomHandler::readData(FILE *dicom,char * filename2)
 		cpt = 1;
 
 		if(!overflow) {
-		    G4double density = pixel2density(mean);
+		    G4double density = Pixel2density(mean);
 		    std::fwrite(&density, sizeof(G4double), 1, processed);
 		}
 	    }
@@ -487,14 +574,13 @@ G4int DicomHandler::readData(FILE *dicom,char * filename2)
     }
     std::fclose(processed);
 
-    delete [] compressionbuf;
-    delete [] maxbuf;
     delete [] nameProcessed;
 
-    for ( G4int i = 0; i < rows; i ++ ) {
+    /*    for ( G4int i = 0; i < rows; i ++ ) {
       delete [] tab[i];
     }
     delete [] tab;
+    */
 
     return returnvalue;
 }
@@ -511,7 +597,7 @@ G4int DicomHandler::readData(FILE *dicom,char * filename2)
   }
 */
 
-G4double DicomHandler::pixel2density(G4int pixel)
+G4double DicomHandler::Pixel2density(G4int pixel)
 {
     G4double density = -1.;
     G4int nbrequali = 0;
@@ -560,11 +646,10 @@ G4double DicomHandler::pixel2density(G4int pixel)
 }
 
 
-void DicomHandler::checkFileFormat()
+void DicomHandler::CheckFileFormat()
 {
     std::ifstream checkData("Data.dat");
     char * oneLine = new char[128];
-    G4int nbImages;
 
     if(!(checkData.is_open())) { //Check existance of Data.dat
 
@@ -575,30 +660,33 @@ void DicomHandler::checkFileFormat()
 	exit(0);
     }
 
-    checkData >> nbImages;
-    checkData >> nbImages;
+    checkData >> compression;
+    checkData >> nFiles;
     G4String oneName;
     checkData.getline(oneLine,100);
     std::ifstream testExistence;
     G4bool existAlready = true;
-    for(G4int rep = 0; rep < nbImages; rep++) { 
-	checkData.getline(oneLine,100);
-	oneName = oneLine;
-	oneName += ".g4"; // create dicomFile.g4
-	testExistence.open(oneName.data());
-	if(!(testExistence.is_open())) {
-	    existAlready = false;
-	    testExistence.clear();
-	    testExistence.close();
-	    break;
-	}
+    for(G4int rep = 0; rep < nFiles; rep++) { 
+      checkData.getline(oneLine,100);
+      oneName = oneLine;
+      oneName += ".g4dcm"; // create dicomFile.g4dcm
+      G4cout << nFiles << " test file " << oneName << G4endl;
+      testExistence.open(oneName.data());
+      if(!(testExistence.is_open())) {
+	existAlready = false;
 	testExistence.clear();
 	testExistence.close();
+      }
+      testExistence.clear();
+      testExistence.close();
     }
+
+    ReadMaterialIndices( checkData );
+
     checkData.close();
     delete [] oneLine;
 
-    if( existAlready == false ) { // The files *.g4 have to be created
+    if( existAlready == false ) { // The files *.g4dcm have to be created
 
 	G4cout << "\nAll the necessary images were not found in processed form, starting "
 	       << "with .dcm images\n";
@@ -615,9 +703,10 @@ void DicomHandler::checkFileFormat()
 	std::fscanf(lecturePref,"%s",compressionc);
 	compression = atoi(compressionc);
 	std::fscanf(lecturePref,"%s",maxc);
-	max = atoi(maxc);
+	nFiles = atoi(maxc);
+	G4cout << " nFiles " << nFiles << G4endl;
 
-	for( G4int i = 1; i <= max; i++ ) { // Begin loop on filenames
+	for( G4int i = 1; i <= nFiles; i++ ) { // Begin loop on filenames
 
 	    std::fscanf(lecturePref,"%s",inputFile);
 	    std::sprintf(name,"%s.dcm",inputFile);
@@ -629,11 +718,9 @@ void DicomHandler::checkFileFormat()
 	    //      1.  reading the header
 	    //	2. reading the pixel data and store the density in Moyenne.dat
 	    if( dicom != 0 ) {
-		readHeader(dicom,inputFile);
-		readData(dicom,inputFile);
+		ReadFile(dicom,inputFile);
 	    } else {
 		G4cout << "\nError opening file : " << name << G4endl;
-		exit(0);
 	    }
 	    std::fclose(dicom);
 	}
@@ -650,7 +737,7 @@ void DicomHandler::checkFileFormat()
 
 
 template <class Type>
-void DicomHandler::getValue(char * _val, Type & _rval) {
+void DicomHandler::GetValue(char * _val, Type & _rval) {
 
 #if BYTE_ORDER == BIG_ENDIAN
     if(littleEndian) {      // little endian

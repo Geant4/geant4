@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Polyhedron.cc,v 1.20 2006/06/29 19:07:04 gunter Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: G4Polyhedron.cc,v 1.21 2007/07/18 14:07:24 tnikitin Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 
 #include "G4Polyhedron.hh"
 
@@ -130,6 +130,11 @@ G4PolyhedronTubs::G4PolyhedronTubs (G4double Rmin, G4double Rmax, G4double Dz,
   G4Polyhedron (HepPolyhedronTubs (Rmin, Rmax, Dz, Phi1, Dphi)) {}
 
 G4PolyhedronTubs::~G4PolyhedronTubs () {}
+
+G4PolyhedronParaboloid::G4PolyhedronParaboloid (G4double r1, G4double r2, G4double dz, G4double sPhi, G4double dPhi):
+  G4Polyhedron (HepPolyhedronParaboloid(r1, r2, dz, sPhi, dPhi)) {}
+
+G4PolyhedronParaboloid::~G4PolyhedronParaboloid () {}
 
 G4PolyhedronEllipsoid::G4PolyhedronEllipsoid (G4double ax, G4double by,
                                               G4double cz, 

@@ -24,14 +24,14 @@
 // ********************************************************************
 //
 // -------------------------------------------------------------------
-// $Id: G4PolarizedAnnihilationCrossSection.cc,v 1.5 2006/11/20 12:21:25 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: G4PolarizedAnnihilationCrossSection.cc,v 1.6 2007/11/01 17:32:34 schaelic Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 // -------------------------------------------------------------------
 //
 // GEANT4 Class file
 //
 //
-// File name:     PolarizedAnnihilationCrossSection
+// File name:     G4PolarizedAnnihilationCrossSection
 //
 // Author:        Andreas Schaelicke
 //
@@ -40,6 +40,8 @@
 // Modifications:
 //   24-03-06 included cross section as given in W.McMaster, Nuovo Cimento 7, 1960, 395
 //   27-07-06 new calculation by P.Starovoitov
+//   15.10.07 introduced a more general framework for cross sections (AS)
+//   16.10.07 some minor corrections in formula longPart
 //
 // Class Description:
 //   * calculates the differential cross section in e+e- -> gamma gamma
@@ -249,12 +251,15 @@ G4double G4PolarizedAnnihilationCrossSection::TotalXSection(
   G4double unpME = (gam*(gam + 4.) + 1.)*logMEM;
   unpME += -(gam + 3.)*sqrtgam1;
   unpME /= 4.*(gam2 - 1.);
-  G4double longPart = - 2.*(gam*(gam + 4.) + 1.)*logMEM; 
-  longPart += (gam*(gam + 4.) + 7.)*sqrtgam1;
+//   G4double longPart = - 2.*(gam*(gam + 4.) + 1.)*logMEM; 
+//   longPart += (gam*(gam + 4.) + 7.)*sqrtgam1;
+//   longPart /= 4.*sqr(gam - 1.)*(gam + 1.);
+  G4double longPart = (3+gam*(gam*(gam + 1.) + 7.))*logMEM; 
+  longPart += - (5.+ gam*(3*gam + 4.))*sqrtgam1;
   longPart /= 4.*sqr(gam - 1.)*(gam + 1.);
-  G4double tranPart = -(gam*(gam + 2.) + 3.)*logMEM;
-  tranPart += 2.*(2.*gam + 1.)*sqrtgam1;
-  tranPart /= 8.*sqr(gam - 1.);
+  G4double tranPart = -(5*gam + 1.)*logMEM;
+  tranPart += (gam + 5.)*sqrtgam1;
+  tranPart /= 4.*sqr(gam - 1.)*(gam + 1.);
 				   
   xs += unpME;
   xs += polzz*longPart;
@@ -296,6 +301,18 @@ void G4PolarizedAnnihilationCrossSection::DefineCoefficients(const G4StokesVecto
   polxy=pol0.x()*pol1.y();
   polyx=pol0.y()*pol1.x();
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4double G4PolarizedAnnihilationCrossSection::GetXmin(G4double y)
+{
+  return 0.5*(1.-std::sqrt((y-1.)/(y+1.)));
+}
+G4double G4PolarizedAnnihilationCrossSection::GetXmax(G4double y)
+{
+  return 0.5*(1.+std::sqrt((y-1.)/(y+1.)));
+}
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 G4double G4PolarizedAnnihilationCrossSection::DiceEpsilon()
 {

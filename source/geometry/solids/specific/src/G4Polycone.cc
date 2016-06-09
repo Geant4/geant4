@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Polycone.cc,v 1.37 2007/04/26 13:34:04 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: G4Polycone.cc,v 1.39 2007/10/02 09:50:46 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 // 
 // --------------------------------------------------------------------
@@ -313,7 +313,7 @@ void G4Polycone::Create( G4double phiStart,
 //                            for usage restricted to object persistency.
 //
 G4Polycone::G4Polycone( __void__& a )
-  : G4VCSGfaceted(a), genericPcon(false),
+  : G4VCSGfaceted(a), genericPcon(false), corners(0),
     original_parameters(0), enclosingCylinder(0)
 {
 }
@@ -638,7 +638,6 @@ G4ThreeVector G4Polycone::GetPointOnCone(G4double fRmin1, G4double fRmax1,
                              fRmax2-((zRand-fDz)/(2.*fDz))*(fRmax1-fRmax2)); 
     point =  G4ThreeVector (rRand1*std::cos(startPhi),
                             rRand1*std::sin(startPhi), zRand);
-    G4cout<<"Point3="<<point<<G4endl;
   }
   else
   { 

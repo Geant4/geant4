@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: Em8RunAction.cc,v 1.14 2006/06/29 17:00:23 gunter Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: Em8RunAction.cc,v 1.15 2007/11/12 10:54:49 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 // 
 
@@ -275,8 +275,8 @@ void Em8RunAction::EndOfRunAction(const G4Run*)
 
   Transmitted /=TotNbofEvents ;
   Reflected   /=TotNbofEvents ;
- G4cout << " ================== run summary =====================" << G4endl;
- G4int prec = G4cout.precision(6);
+  G4cout << " ================== run summary =====================" << G4endl;
+  G4int prec = G4cout.precision(6);
   G4cout << " end of Run TotNbofEvents = " <<  
            TotNbofEvents << G4endl ;
   G4cout << "    mean charged track length   in absorber=" <<

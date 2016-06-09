@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProcessManager.hh,v 1.14 2007/03/30 01:02:28 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: G4ProcessManager.hh,v 1.16 2007/10/02 08:23:20 kurasige Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 // 
 // ------------------------------------------------------------
@@ -64,6 +64,7 @@
 //   Add GetProcessActivation     3 May. 1999 H.Kurashige
 //   Use STL vector instead of RW vector    1. Mar 00 H.Kurashige
 //   Modify G4ProcessVectorOrdering to fix FindInsedrtPosition 15 Feb. 2005
+//   Add  
 // ------------------------------------------------------------
 
 #ifndef G4ProcessManager_h
@@ -201,8 +202,11 @@ class G4ProcessManager
       //   AtRestProcess has only AtRestDoIt
       //   ContinuousProcess has only AlongStepDoIt
       //   DiscreteProcess has only PostStepDoIt
-      //  if ord is not specified, the process is
-      //  added at the end of List of processvectors 
+      //  If the ording parameter is not specified, the process is
+      //  added at the end of List of process vectors 
+      //  If a process with same ordering parameter exists, 
+      //   this new process will be added just after processes 
+      //   with same ordering parameter  
       //  (except for processes assigned to LAST explicitly )
       //  for both DoIt and GetPhysicalInteractionLength
       //  
@@ -211,8 +215,10 @@ class G4ProcessManager
       G4int AddDiscreteProcess(G4VProcess *aProcess, G4int ord = ordDefault);
       G4int AddContinuousProcess(G4VProcess *aProcess, G4int ord = ordDefault);
 
+
+       /////////////////////////////////////////////// 
       // Methods for setting ordering parameters
-       // Altanative methods for setting ordering parameters 
+      // Altanative methods for setting ordering parameters 
       //   Note: AddProcess method should precede these methods
 
       G4int GetProcessOrdering(
@@ -226,8 +232,13 @@ class G4ProcessManager
 			       G4int      ordDoIt = ordDefault
                                );
       // Set ordering parameter for DoIt specified by typeDoIt.
-             
-       void SetProcessOrderingToFirst(
+      // If a process with same ordering parameter exists, 
+      // this new process will be added just after processes 
+      // with same ordering parameter  
+      // Note: Ordering parameter will bet set to non-zero 
+      //       even if you set  ordDoIt = 0
+            
+     void SetProcessOrderingToFirst(
 			       G4VProcess *aProcess,
 			       G4ProcessVectorDoItIndex idDoIt
 			       );
@@ -236,14 +247,24 @@ class G4ProcessManager
       //  Note: If you use this method for two processes,
       //        a process called later will be first.
 
-      void SetProcessOrderingToLast(
+      void SetProcessOrderingToSecond(
+			       G4VProcess *aProcess,
+			       G4ProcessVectorDoItIndex idDoIt
+			       );
+      // Set ordering parameter to 1 for DoIt specified by idDoIt
+      // and the rpocess will be added just after 
+      // the processes with ordering parameter equal to zero
+      //  Note: If you use this method for two processes,
+      //        a process called later will be .
+
+        void SetProcessOrderingToLast(
 			       G4VProcess *aProcess,
 			       G4ProcessVectorDoItIndex idDoIt
 			       );
       // Set ordering parameter to the last of all processes 
       // for DoIt specified by idDoIt.
       //  Note: If you use this method for two processes,
-      //        a process called later will be the last one.
+      //        a process called later will precede.
 
       G4VProcess*  RemoveProcess(G4VProcess *aProcess);
       G4VProcess*  RemoveProcess(G4int      index);
@@ -296,7 +317,11 @@ class G4ProcessManager
 
       G4int GetProcessVectorId(G4ProcessVectorDoItIndex idx,
 			       G4ProcessVectorTypeIndex typ  = typeGPIL) const;
- 
+
+  void CheckOrderingParameters(G4VProcess*) const;
+       // check consistencies between ordering parameters and 
+       // validity of DoIt of the Process 
+
   private:     
       G4ProcessAttribute* GetAttribute(G4int      index) const;
       G4ProcessAttribute* GetAttribute(G4VProcess *aProcess) const;

@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4HadronFissionDataSet.cc,v 1.8 2006/06/29 19:57:41 gunter Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 //
 // G4 Physics class: HadronFissionDataSet for cross sections

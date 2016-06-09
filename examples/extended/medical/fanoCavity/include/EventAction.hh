@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: EventAction.hh,v 1.1 2007/01/19 17:20:26 maire Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: EventAction.hh,v 1.3 2007/10/29 17:09:53 maire Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -50,7 +50,7 @@ class EventAction : public G4UserEventAction
   public:
     void BeginOfEventAction(const G4Event*);
     void   EndOfEventAction(const G4Event*);
-    
+        
     void SetDrawFlag(G4String val) {drawFlag = val;};
     void SetPrintModulo(G4int val) {printModulo = val;};
             

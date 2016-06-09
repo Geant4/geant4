@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4LinInterpolation.cc,v 1.3 2006/06/29 19:40:03 gunter Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
 //

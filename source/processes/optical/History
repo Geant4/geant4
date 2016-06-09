@@ -16,10 +16,22 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+29th Oct 2007 Peter Gumplinger (op-V09-00-01)
+              In G4OpWLS.cc allow for the MeanNumberOfPhotons to be
+              different from one, in case the constant property: 
+              WLSMEANNUMBERPHOTONS is provided and, if it is, sample 
+              NumPhotons with G4Poisson.
+
+15th Oct 2007 Peter Gumplinger (op-V09-00-00)
+              Add capability of calculating the reflectivity off a metal
+              surface by way of a complex index of refraction.
+              Thanks to Sehwook Lee and John Hauptman
+              (Dept. of Physics - Iowa State Univ.)
+
 11th May 2007 Gabriele Cosmo (op-V08-03-00)
-- Use call to G4GeometryTolerance instead of kCarTolerance in
-  G4OpBoundaryProcess.
-- Requires tag "global-V08-03-00" and related tag set.
+              Use call to G4GeometryTolerance instead of kCarTolerance in
+              G4OpBoundaryProcess.
+              Requires tag "global-V08-03-00" and related tag set.
 
 11th May 2006 Peter Gumplinger (op-V08-00-01)
               thanks to Andreia Trindade and Pedro Rodrigues, the WLS time

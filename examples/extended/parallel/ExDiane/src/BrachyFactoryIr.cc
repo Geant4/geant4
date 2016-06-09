@@ -33,7 +33,7 @@
 //    *******************************
 //
 // $Id: BrachyFactoryIr.cc,v 1.3 2006/06/29 17:33:16 gunter Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 #include "globals.hh"
 #include "BrachyFactoryIr.hh"

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Decay.cc,v 1.24 2007/05/07 12:05:45 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: G4Decay.cc,v 1.27 2007/10/06 07:01:09 kurasige Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 // 
 // --------------------------------------------------------------
@@ -65,7 +65,7 @@ G4Decay::G4Decay(const G4String& processName)
 {
 #ifdef G4VERBOSE
   if (GetVerboseLevel()>1) {
-    G4cerr << "G4Decay  constructor " << "  Name:" << processName << G4endl;
+    G4cout << "G4Decay  constructor " << "  Name:" << processName << G4endl;
   }
 #endif
   pParticleChange = &fParticleChangeForDecay;
@@ -150,9 +150,9 @@ G4double G4Decay::GetMeanFreePath(const G4Track& aTrack,G4double, G4ForceConditi
        // too slow particle
 #ifdef G4VERBOSE
        if (GetVerboseLevel()>1) {
-	 G4cerr << "G4Decay::GetMeanFreePath()   !!particle stops!!";
-         G4cerr << aParticleDef->GetParticleName() << G4endl;
-	 G4cerr << "KineticEnergy:" << aParticle->GetKineticEnergy()/GeV <<"[GeV]";
+	 G4cout << "G4Decay::GetMeanFreePath()   !!particle stops!!";
+         G4cout << aParticleDef->GetParticleName() << G4endl;
+	 G4cout << "KineticEnergy:" << aParticle->GetKineticEnergy()/GeV <<"[GeV]";
        }
 #endif
        pathlength = DBL_MIN;
@@ -200,12 +200,14 @@ G4VParticleChange* G4Decay::DecayIt(const G4Track& aTrack, const G4Step& )
 
   // Error due to NO Decay Table 
   if ( (decaytable == 0) && !isExtDecayer &&!isPreAssigned ){
-#ifdef G4VERBOSE
     if (GetVerboseLevel()>0) {
-      G4cerr <<  "G4Decay::DoIt  : decay table not defined  for ";
-      G4cerr << aParticle->GetDefinition()->GetParticleName()<< G4endl;
+      G4cout <<  "G4Decay::DoIt  : decay table not defined  for ";
+      G4cout << aParticle->GetDefinition()->GetParticleName()<< G4endl;
     }
-#endif
+    G4Exception( "G4Decay::DecayIt ",
+                 "No Decay Table",JustWarning, 
+                 "Decay table is not defined");
+
     fParticleChangeForDecay.SetNumberOfSecondaries(0);
     // Kill the parent particle
     fParticleChangeForDecay.ProposeTrackStatus( fStopAndKill ) ;
@@ -233,7 +235,7 @@ G4VParticleChange* G4Decay::DecayIt(const G4Track& aTrack, const G4Step& )
 #ifdef G4VERBOSE
       G4int temp = decaychannel->GetVerboseLevel();
       if (GetVerboseLevel()>1) {
-	G4cerr << "G4Decay::DoIt  : selected decay channel  addr:" << decaychannel <<G4endl;
+	G4cout << "G4Decay::DoIt  : selected decay channel  addr:" << decaychannel <<G4endl;
 	decaychannel->SetVerboseLevel(GetVerboseLevel());
       }
 #endif
@@ -244,8 +246,9 @@ G4VParticleChange* G4Decay::DecayIt(const G4Track& aTrack, const G4Step& )
       }
 #endif
 #ifdef G4VERBOSE
-      // for debug
-      //if (! products->IsChecked() ) products->DumpInfo();
+      if (GetVerboseLevel()>2) {
+	if (! products->IsChecked() ) products->DumpInfo();
+      }
 #endif
     }
   }
@@ -255,15 +258,13 @@ G4VParticleChange* G4Decay::DecayIt(const G4Track& aTrack, const G4Step& )
   G4double   ParentMass    = aParticle->GetMass();
   if (ParentEnergy < ParentMass) {
     ParentEnergy = ParentMass;
-#ifdef G4VERBOSE
     if (GetVerboseLevel()>0) {
-      G4cerr << "G4Decay::DoIt  : Total Energy is less than its mass" << G4endl;
-      G4cerr << " Particle: " << aParticle->GetDefinition()->GetParticleName();
-      G4cerr << " Energy:"    << ParentEnergy/MeV << "[MeV]";
-      G4cerr << " Mass:"    << ParentMass/MeV << "[MeV]";
-      G4cerr << G4endl;
+      G4cout << "G4Decay::DoIt  : Total Energy is less than its mass" << G4endl;
+      G4cout << " Particle: " << aParticle->GetDefinition()->GetParticleName();
+      G4cout << " Energy:"    << ParentEnergy/MeV << "[MeV]";
+      G4cout << " Mass:"    << ParentMass/MeV << "[MeV]";
+      G4cout << G4endl;
     }
-#endif
   }
 
   G4ThreeVector ParentDirection(aParticle->GetMomentumDirection());
@@ -281,18 +282,22 @@ G4VParticleChange* G4Decay::DecayIt(const G4Track& aTrack, const G4Step& )
     if (!isExtDecayer) products->Boost( ParentEnergy, ParentDirection);
   }
 
+   // set polarization for daughter particles
+   DaughterPolarization(aTrack, products);
+
+
   //add products in fParticleChangeForDecay
   G4int numberOfSecondaries = products->entries();
   fParticleChangeForDecay.SetNumberOfSecondaries(numberOfSecondaries);
 #ifdef G4VERBOSE
   if (GetVerboseLevel()>1) {
-    G4cerr << "G4Decay::DoIt  : Decay vertex :";
-    G4cerr << " Time: " << finalGlobalTime/ns << "[ns]";
-    G4cerr << " X:" << (aTrack.GetPosition()).x() /cm << "[cm]";
-    G4cerr << " Y:" << (aTrack.GetPosition()).y() /cm << "[cm]";
-    G4cerr << " Z:" << (aTrack.GetPosition()).z() /cm << "[cm]";
-    G4cerr << G4endl;
-    G4cerr << "G4Decay::DoIt  : decay products in Lab. Frame" << G4endl;
+    G4cout << "G4Decay::DoIt  : Decay vertex :";
+    G4cout << " Time: " << finalGlobalTime/ns << "[ns]";
+    G4cout << " X:" << (aTrack.GetPosition()).x() /cm << "[cm]";
+    G4cout << " Y:" << (aTrack.GetPosition()).y() /cm << "[cm]";
+    G4cout << " Z:" << (aTrack.GetPosition()).z() /cm << "[cm]";
+    G4cout << G4endl;
+    G4cout << "G4Decay::DoIt  : decay products in Lab. Frame" << G4endl;
     products->DumpInfo();
   }
 #endif
@@ -324,6 +329,11 @@ G4VParticleChange* G4Decay::DecayIt(const G4Track& aTrack, const G4Step& )
 
   return &fParticleChangeForDecay ;
 } 
+
+void G4Decay::DaughterPolarization(const G4Track& , G4DecayProducts* )
+{
+}
+
 
 
 void G4Decay::StartTracking(G4Track*)

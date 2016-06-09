@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4BoundingBox3D.cc,v 1.11 2007/05/11 13:49:32 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: G4BoundingBox3D.cc,v 1.12 2007/07/16 08:06:55 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -44,7 +44,11 @@ const G4BoundingBox3D G4BoundingBox3D::
 
 /////////////////////////////////////////////////////////////////////////////
 
-G4BoundingBox3D::G4BoundingBox3D() { distance =0; }
+G4BoundingBox3D::G4BoundingBox3D()
+{
+  distance =0;
+  kCarTolerance = G4GeometryTolerance::GetInstance()->GetSurfaceTolerance();
+}
 
 G4BoundingBox3D::G4BoundingBox3D(const G4Point3D& p1, const G4Point3D& p2) 
 {
@@ -56,12 +60,15 @@ G4BoundingBox3D::G4BoundingBox3D(const G4Point3D& p)
   Init(p);
 }
 
-G4BoundingBox3D::~G4BoundingBox3D() {}
+G4BoundingBox3D::~G4BoundingBox3D()
+{
+}
 
 G4BoundingBox3D::G4BoundingBox3D(const G4BoundingBox3D& right)
   : box_min(right.box_min), box_max(right.box_max),
     distance(right.distance), test_result(right.test_result),
-    MiddlePoint(right.MiddlePoint), GeantBox(right.GeantBox)
+    MiddlePoint(right.MiddlePoint), GeantBox(right.GeantBox),
+    kCarTolerance(right.kCarTolerance)
 {
 }
 
@@ -74,6 +81,7 @@ G4BoundingBox3D& G4BoundingBox3D::operator=(const G4BoundingBox3D& right)
   test_result = right.test_result;
   MiddlePoint = right.MiddlePoint;
   GeantBox = right.GeantBox;
+  kCarTolerance = right.kCarTolerance;
   
   return *this;
 }
@@ -105,6 +113,7 @@ void G4BoundingBox3D::Init(const G4Point3D& p)
   box_min= box_max= MiddlePoint= p;
   GeantBox= G4Point3D(0, 0, 0);
   distance= 0;
+  kCarTolerance = G4GeometryTolerance::GetInstance()->GetSurfaceTolerance();
 }
 
 

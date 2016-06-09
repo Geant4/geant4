@@ -4,26 +4,36 @@
 *
 #include "histo.inc"
 *
-      CHARACTER*50 title(16)
+      CHARACTER*50 title(50)
 *
       data title /
      1    'energy deposit in absorber',					 
-     2    'energy of charged secondaries at creation',			 
-     3    'energy of gammas at creation (log10(ekin/MeV))',		 
-     4	  '(transmit, charged) : kinetic energy at exit',		 
-     5	  '(transmit, charged) : space angle at exit',			 
-     6	  '(transmit, charged) : projected angle at exit',		 
-     7	  '(transmit, charged) : projected position at exit',		 
-     8	  '(transmit, neutral) : kinetic energy at exit',		 
-     9	  '(transmit, neutral) : space angle at exit',
-     +	  '(transmit, neutral) : projected angle at exit',		 
-     1	  '(reflect , charged) : kinetic energy at exit',		 
-     2	  '(reflect , charged) : space angle at exit',			 
-     3	  '(reflect , charged) : projected angle at exit',		 
-     4	  '(reflect , neutral) : kinetic energy at exit',		 
-     5	  '(reflect , neutral) : space angle at exit',			 
-     6	  '(reflect , neutral) : projected angle at exit'   /		 
-*
+     2    'energy of charged secondaries at creation',
+     3    'energy of gammas at creation (log10(ekin/MeV))',
+     C    'dummy','dummy','dummy','dummy','dummy','dummy',
+     +	  '(transmit, charged) : kinetic energy at exit',
+     1	  '(transmit, charged) : energy fluence dE(MeV)/dOmega',
+     2	  '(transmit, charged) : space angle dN/dOmega',	 
+     3	  '(transmit, charged) : projected angle at exit',		 
+     4	  '(transmit, charged) : projected position at exit',
+     5	  '(transmit, charged) : radius at exit',
+     C    'dummy','dummy','dummy','dummy',          		 
+     +	  '(transmit, neutral) : kinetic energy at exit',
+     1	  '(transmit, neutral) : energy fluence dE(MeV)/dOmega',	 
+     2	  '(transmit, neutral) : space angle dN/dOmega',
+     3	  '(transmit, neutral) : projected angle at exit',
+     C    'dummy','dummy','dummy','dummy','dummy','dummy', 
+     +	  '(reflect , charged) : kinetic energy at exit',
+     1	  '(reflect , charged) : energy fluence dE(MeV)/dOmega',
+     2	  '(reflect , charged) : space angle dN/dOmega',
+     3	  '(reflect , charged) : projected angle at exit',
+     C    'dummy','dummy','dummy','dummy','dummy','dummy', 
+     +	  '(reflect , neutral) : kinetic energy at exit',
+     1	  '(reflect , neutral) : energy fluence dE(MeV)/dOmega',	 
+     2	  '(reflect , neutral) : space angle dN/dOmega', 
+     3	  '(reflect , neutral) : projected angle at exit',
+     C    'dummy','dummy','dummy','dummy','dummy','dummy','dummy' /
+* 
       if (histo(idhist)) call hdelet(idhist)
 *      
       vmin = valmin

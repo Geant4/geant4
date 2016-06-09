@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4HadronElastic.hh,v 1.26 2007/05/15 16:06:47 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 //
 // G4 Model: Low energy elastic scattering with 4-momentum balance 

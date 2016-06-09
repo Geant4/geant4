@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4LEAntiSigmaPlusInelastic.hh,v 1.11 2007/02/24 06:39:17 dennis Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// GEANT4 tag $Name: geant4-09-01 $
 //
  // Hadronic Process: Low Energy AntiSigmaPlus Inelastic Process
  // J.L. Chuma, TRIUMF, 19-Feb-1997

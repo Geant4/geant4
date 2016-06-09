@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: ExN03EventAction.hh,v 1.11 2006/10/26 14:30:05 allison Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: ExN03EventAction.hh,v 1.12 2007/07/02 13:22:08 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 // 
 
@@ -45,20 +45,19 @@ class ExN03EventActionMessenger;
 
 class ExN03EventAction : public G4UserEventAction
 {
- public:
-   ExN03EventAction(ExN03RunAction*);
-  ~ExN03EventAction();
+public:
+  ExN03EventAction(ExN03RunAction*);
+  virtual ~ExN03EventAction();
 
- public:
-   void  BeginOfEventAction(const G4Event*);
-   void    EndOfEventAction(const G4Event*);
+  void  BeginOfEventAction(const G4Event*);
+  void    EndOfEventAction(const G4Event*);
     
-   void AddAbs(G4double de, G4double dl) {EnergyAbs += de; TrackLAbs += dl;};
-   void AddGap(G4double de, G4double dl) {EnergyGap += de; TrackLGap += dl;};
+  void AddAbs(G4double de, G4double dl) {EnergyAbs += de; TrackLAbs += dl;};
+  void AddGap(G4double de, G4double dl) {EnergyGap += de; TrackLGap += dl;};
                      
-   void SetPrintModulo(G4int    val)  {printModulo = val;};
+  void SetPrintModulo(G4int    val)  {printModulo = val;};
     
- private:
+private:
    ExN03RunAction*  runAct;
    
    G4double  EnergyAbs, EnergyGap;

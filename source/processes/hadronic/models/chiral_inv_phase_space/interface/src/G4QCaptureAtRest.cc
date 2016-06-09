@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QCaptureAtRest.cc,v 1.12 2007/04/20 15:50:56 mkossov Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: G4QCaptureAtRest.cc,v 1.13 2007/10/02 10:00:37 mkossov Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 //      ---------------- G4QCaptureAtRest class -----------------
 //                 by Mikhail Kossov, December 2003.
@@ -305,6 +305,7 @@ G4VParticleChange* G4QCaptureAtRest::AtRestDoIt(const G4Track& track, const G4St
 #ifdef debug
   G4cout<<"G4QCaptureAtRest::AtRestDoIt: projPDG="<<projPDG<<", targPDG="<<targPDG<<G4endl;
 #endif
+  G4double      weight    = track.GetWeight();
   G4double      localtime = track.GetGlobalTime();
   G4ThreeVector position  = track.GetPosition();
 #ifdef debug
@@ -497,6 +498,7 @@ G4VParticleChange* G4QCaptureAtRest::AtRestDoIt(const G4Track& track, const G4St
         else       theSec = new G4DynamicParticle(G4Gamma::Gamma(),RndmDir(),-ener);
         totLV-=theSec->Get4Momentum();
         G4Track* aNewTrack = new G4Track(theSec, localtime, position );
+        aNewTrack->SetWeight(weight);                                   //    weighted
         aNewTrack->SetTouchableHandle(trTouchable);
         cascT->push_back(aNewTrack);
       }
@@ -697,6 +699,7 @@ G4VParticleChange* G4QCaptureAtRest::AtRestDoIt(const G4Track& track, const G4St
         else       theSec = new G4DynamicParticle(G4Gamma::Gamma(),RndmDir(),-ener);
         projLV-=theSec->Get4Momentum();
         G4Track* aNewTrack = new G4Track(theSec, localtime, position );
+        aNewTrack->SetWeight(weight);                                   //    weighted
         aNewTrack->SetTouchableHandle(trTouchable);
         cascT->push_back(aNewTrack);
       }
@@ -867,6 +870,7 @@ G4VParticleChange* G4QCaptureAtRest::AtRestDoIt(const G4Track& track, const G4St
     G4cout<<"G4QCapAtRest::AtRDoIt:p="<<curD<<curD.mag()<<",e="<<curE<<",m="<<curM<<G4endl;
 #endif
     G4Track* aNewTrack = new G4Track(theSec, localtime, position );
+    aNewTrack->SetWeight(weight);                                   //    weighted
     aNewTrack->SetTouchableHandle(trTouchable);
     aParticleChange.AddSecondary( aNewTrack );
 #ifdef debug

@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NistElementBuilder.hh,v 1.12 2007/05/02 11:22:35 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: G4NistElementBuilder.hh,v 1.13 2007/07/26 18:52:12 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 
 #ifndef G4NistElementBuilder_h
 #define G4NistElementBuilder_h 1
@@ -113,9 +113,11 @@ private:
   G4int      nFirstIsotope [maxNumElements];
   G4int      idxIsotopes   [maxNumElements];
 
-  G4double   massIsotopes   [maxAbundance];
-  G4double   sigMass        [maxAbundance];
-  G4double   relAbundance   [maxAbundance];
+  G4int      elmIndex      [maxNumElements];
+
+  G4double   massIsotopes  [maxAbundance];
+  G4double   sigMass       [maxAbundance];
+  G4double   relAbundance  [maxAbundance];
 
   G4int      limitNumElements;  // protection 
   G4int      index;

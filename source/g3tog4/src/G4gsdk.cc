@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4gsdk.cc,v 1.7 2006/06/29 18:13:55 gunter Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// GEANT4 tag $Name: geant4-09-01 $
 
 #include "G4Decay.hh"
 #include "G3toG4.hh"

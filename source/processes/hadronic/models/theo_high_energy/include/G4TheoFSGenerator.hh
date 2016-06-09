@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4TheoFSGenerator.hh,v 1.5 2007/04/12 07:53:38 gunter Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: G4TheoFSGenerator.hh,v 1.6 2007/11/13 16:01:36 gunter Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 
 // Class Description
@@ -44,11 +44,13 @@
 #define G4TheoFSGenerator_h 1
 
 #include "G4VIntraNuclearTransportModel.hh"
+#include "G4QuasiElasticChannel.hh"
 #include "G4HadronicInteraction.hh"
 #include "G4VHighEnergyGenerator.hh"
 #include "G4DecayStrongResonances.hh"
 #include "G4HadFinalState.hh"
 #include "G4QuasiElasticChannel.hh"
+#include "G4ProjectileDiffractiveChannel.hh"
 
 class G4TheoFSGenerator : public G4HadronicInteraction 
 
@@ -68,7 +70,7 @@ class G4TheoFSGenerator : public G4HadronicInteraction
       void SetTransport(G4VIntraNuclearTransportModel *const  value);
       void SetHighEnergyGenerator(G4VHighEnergyGenerator *const  value);
       void SetQuasiElasticChannel(G4QuasiElasticChannel *const value);
-
+      void SetProjectileDiffraction(G4ProjectileDiffractiveChannel *const value);
   private:
       const G4VIntraNuclearTransportModel * GetTransport() const;
       const G4VHighEnergyGenerator * GetHighEnergyGenerator() const;
@@ -79,7 +81,8 @@ class G4TheoFSGenerator : public G4HadronicInteraction
       G4VHighEnergyGenerator * theHighEnergyGenerator;
       G4DecayStrongResonances theDecay;
       G4HadFinalState * theParticleChange;
-      G4QuasiElasticChannel * theParallelFSGenerator;
+      G4QuasiElasticChannel * theQuasielastic;
+      G4ProjectileDiffractiveChannel * theProjectileDiffraction;
 };
 
 inline const G4VIntraNuclearTransportModel * G4TheoFSGenerator::GetTransport() const
@@ -104,7 +107,11 @@ inline void G4TheoFSGenerator::SetHighEnergyGenerator(G4VHighEnergyGenerator *co
 
 inline void G4TheoFSGenerator::SetQuasiElasticChannel(G4QuasiElasticChannel *const value)
 {
-  theParallelFSGenerator = value;
+  theQuasielastic = value;
+}
+inline void G4TheoFSGenerator::SetProjectileDiffraction(G4ProjectileDiffractiveChannel *const value)
+{
+  theProjectileDiffraction = value;
 }
 
 inline const G4HadFinalState * G4TheoFSGenerator::GetFinalState() const

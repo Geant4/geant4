@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4CoupledTransportation.hh,v 1.4 2006/11/14 09:12:59 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: G4CoupledTransportation.hh,v 1.6 2007/05/29 13:50:14 japost Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 // 
 // ------------------------------------------------------------
@@ -159,8 +159,9 @@ class G4CoupledTransportation : public G4VProcess
      G4PropagatorInField* fFieldPropagator;
        // Still required in order to find/set the fieldmanager
 
-     G4bool fStartedNewTrack;   //  True for first step or restarted tracking 
-                              //    until first step's AlongStepGPIL
+     G4bool fGlobalFieldExists; 
+     // G4bool fStartedNewTrack;   //  True for first step or restarted tracking 
+                                   //    until first step's AlongStepGPIL
 
      G4ThreeVector        fTransportEndPosition;
      G4ThreeVector        fTransportEndMomentumDir;
@@ -176,7 +177,8 @@ class G4CoupledTransportation : public G4VProcess
      G4bool               fParticleIsLooping;
    
      G4ThreeVector        fPreviousSftOrigin; 
-     G4double             fPreviousSafety;
+     G4double             fPreviousMassSafety;
+     G4double             fPreviousFullSafety;
 
      G4TouchableHandle    fCurrentTouchableHandle;
      
@@ -185,13 +187,33 @@ class G4CoupledTransportation : public G4VProcess
        // A data member for this is problematic: it is useful only if it
        // can be initialised and updated -- and a scheme is not yet possible.
 
-     G4bool fGeometryLimitedStep;
-       // Flag to determine whether a boundary was reached.
+     G4bool fMassGeometryLimitedStep;
+       // Flag to determine whether a 'mass' boundary was reached.
+     G4bool fAnyGeometryLimitedStep; 
+       // Did any geometry limit the step ?
 
      G4ParticleChangeForTransport fParticleChange;
        // New ParticleChange
 
      G4double endpointDistance;
+
+
+  // Thresholds for looping particles: 
+  // 
+     G4double fThreshold_Warning_Energy;     //  Warn above this energy
+     G4double fThreshold_Important_Energy;   //  Hesitate above this
+     G4int    fThresholdTrials;              //    for this no of trials
+       // Above 'important' energy a 'looping' particle in field will 
+       //   *NOT* be abandoned, except after fThresholdTrials attempts.
+     G4double fUnimportant_Energy;
+       //  Below this energy, no verbosity for looping particles is issued
+
+  // Counter for steps in which particle reports 'looping',
+  //   if it is above 'Important' Energy 
+     G4int    fNoLooperTrials; 
+  // Statistics for tracks abandoned
+     G4double fSumEnergyKilled;
+     G4double fMaxEnergyKilled;
 
   // Verbosity 
      G4int    fVerboseLevel;

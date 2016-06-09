@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4QElasticCrossSection.cc,v 1.29 2007/06/15 16:43:39 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: G4QElasticCrossSection.cc,v 1.32 2007/11/15 09:36:43 mkossov Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 //
 // G4 Physics class: G4QElasticCrossSection for N+A elastic cross sections
@@ -84,17 +84,17 @@ G4double  G4QElasticCrossSection::lastTH=0.;  // Last threshold momentum
 G4double  G4QElasticCrossSection::lastCS=0.;  // Last value of the Cross Section
 G4int     G4QElasticCrossSection::lastI=0;    // The last position in the DAMDB
 
-std::vector<G4double*> G4QElasticCrossSection::PAR;   // Vector of parameters for functional calculations
-std::vector<G4double*> G4QElasticCrossSection::CST;   // Vector of cross-section table
-std::vector<G4double*> G4QElasticCrossSection::SST;   // Vector of the first squared slope
-std::vector<G4double*> G4QElasticCrossSection::S1T;   // Vector of the first mantissa
-std::vector<G4double*> G4QElasticCrossSection::B1T;   // Vector of the first slope
-std::vector<G4double*> G4QElasticCrossSection::S2T;   // Vector of the secon mantissa
-std::vector<G4double*> G4QElasticCrossSection::B2T;   // Vector of the second slope
-std::vector<G4double*> G4QElasticCrossSection::S3T;   // Vector of the third mantissa
-std::vector<G4double*> G4QElasticCrossSection::B3T;   // Vector of the third slope
-std::vector<G4double*> G4QElasticCrossSection::S4T;   // Vector of the 4-th mantissa (gloria)
-std::vector<G4double*> G4QElasticCrossSection::B4T;   // Vector of the 4-th slope    (gloria)
+std::vector<G4double*> G4QElasticCrossSection::PAR; // Vector of parameters for functCalcul
+std::vector<G4double*> G4QElasticCrossSection::CST; // Vector of cross-section table
+std::vector<G4double*> G4QElasticCrossSection::SST; // Vector of the first squared slope
+std::vector<G4double*> G4QElasticCrossSection::S1T; // Vector of the first mantissa
+std::vector<G4double*> G4QElasticCrossSection::B1T; // Vector of the first slope
+std::vector<G4double*> G4QElasticCrossSection::S2T; // Vector of the secon mantissa
+std::vector<G4double*> G4QElasticCrossSection::B2T; // Vector of the second slope
+std::vector<G4double*> G4QElasticCrossSection::S3T; // Vector of the third mantissa
+std::vector<G4double*> G4QElasticCrossSection::B3T; // Vector of the third slope
+std::vector<G4double*> G4QElasticCrossSection::S4T; // Vector of the 4-th mantissa (gloria)
+std::vector<G4double*> G4QElasticCrossSection::B4T; // Vector of the 4-th slope    (gloria)
 
 G4QElasticCrossSection::G4QElasticCrossSection()
 {
@@ -1066,13 +1066,39 @@ G4double G4QElasticCrossSection::GetExchangeT(G4int tgZ, G4int tgN, G4int PDG)
   else
   {
     G4cout<<"*Error*G4QElasticCrossSection::GetExchangeT: PDG="<<PDG<<", Z="<<tgZ<<", N="
-          <<tgN<<", while it is defined only for PDG=2212, Z=1,N=(0,1) & Z=2,N=2"<<G4endl;
-    throw G4QException("G4QElasticCrossSection::GetExchangeT: n-p,p-H/He are implemented");
+          <<tgN<<", while it is defined only for PDG=2212 & PDG==2112"<<G4endl;
+    throw G4QException("G4QElasticCrossSection::GetExchangeT: nA and pA are implemented");
   }
   if(q2<0.) q2=0.;
-  if(!(q2>-1.||q2<1.)) G4cout<<"*NAN*G4QElasticCrossSect::GetExT: -t="<<q2<<G4endl;
-  if(q2>lastTM)G4cout<<"*Warning*G4QElasticCrossSect::GetExT:-t="<<q2<<">"<<lastTM<<G4endl;
+  if(!(q2>=-1.||q2<=1.)) G4cout<<"*NAN*G4QElasticCrossSect::GetExchangeT: -t="<<q2<<G4endl;
+  if(q2>lastTM)
+  {
+#ifdef tdebug
+    G4cout<<"*Warning*G4QElasticCrossSect::GetExT:-t="<<q2<<">"<<lastTM<<G4endl;
+#endif
+    q2=lastTM;
+  }
   return q2*GeVSQ;
+}
+
+// Returns B in independent units (MeV^-2) (all internal calculations are in GeV) see ExT
+G4double G4QElasticCrossSection::GetSlope(G4int tgZ, G4int tgN, G4int PDG)
+{
+  static const G4double GeVSQ=gigaelectronvolt*gigaelectronvolt;
+#ifdef tdebug
+  G4cout<<"G4QElasticCS::GetSlope:"<<onlyCS<<", Z="<<tgZ<<",N="<<tgN<<",PDG="<<PDG<<G4endl;
+#endif
+  if(onlyCS) G4cout<<"*Warning*G4QElasticCrossSection::GetSlope: onlyCS=true"<<G4endl;
+  if(lastLP<-4.3) return 0.;          // S-wave for p<14 MeV/c (kinE<.1MeV)
+  if(PDG!=2212 && PDG!=2112)
+  {
+    G4cout<<"*Error*G4QElasticCrossSection::GetSlope: PDG="<<PDG<<", Z="<<tgZ<<", N="
+          <<tgN<<", while it is defined only for PDG=2212 & PDG=2112"<<G4endl;
+    throw G4QException("G4QElasticCrossSection::GetSlope: nA and pA are implemented");
+  }
+  if(theB1<0.) theB1=0.;
+  if(!(theB1>=-1.||theB1<=1.))G4cout<<"*NAN*G4QElasticCrossSect::Getslope:"<<theB1<<G4endl;
+  return theB1/GeVSQ;
 }
 
 // Returns half max(Q2=-t) in independent units (MeV^2)
@@ -1281,10 +1307,10 @@ G4double G4QElasticCrossSection::GetQ2max(G4int PDG, G4int tgZ, G4int tgN, G4dou
     if     (PDG==2212) PDG=2112;
     else if(PDG==2112) PDG=2212;
   }
-  G4double pP2=pP*pP;                                  // squared momentum of the projectile
+  G4double pP2=pP*pP;                                 // squared momentum of the projectile
   if(PDG==2212 && tgZ==1 && tgN==0)
   {
-    G4double tMid=std::sqrt(pP2+mProt2)*mProt-mProt2;  // CMS 90deg value of -t=Q2 (GeV^2)
+    G4double tMid=std::sqrt(pP2+mProt2)*mProt-mProt2; // CMS 90deg value of -t=Q2 (GeV^2)
     return tMid+tMid;
   }
   else if(PDG==2112 && tgZ==0 && tgN==1)

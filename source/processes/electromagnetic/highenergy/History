@@ -1,4 +1,4 @@
-$Id: History,v 1.19 2007/05/31 11:13:31 vnivanch Exp $
+$Id: History,v 1.22 2007/11/13 18:36:29 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,14 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+13 November 07:  V.Ivanchenko (emhighenergy-V09-00-01)
+- G4mplIonisationModel - introduced theoretical asymtotic low-energy 
+                         parameterization of dEdx
+
+14 August 07:  V.Ivanchenko (emhighenergy-V09-00-00)
+- G4mplIonisationModel - fixed low-energy parameterization of monopole
+       energy loss; verified mean energy loss (M.Vladymirov)
 
 31 May 07:  V.Ivanchenko (emhighenergy-V08-03-02)
 - G4mplIonisation - fixed destruction of monopole ionisation model

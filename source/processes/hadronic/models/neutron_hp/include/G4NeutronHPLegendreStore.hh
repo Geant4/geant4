@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4NeutronHPLegendreStore.hh,v 1.11 2006/06/29 20:48:25 gunter Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 #ifndef G4NeutronHPLegendreStore_h
 #define G4NeutronHPLegendreStore_h 1

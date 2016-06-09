@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PrimaryVertex.cc,v 1.3 2006/07/20 15:14:43 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: G4PrimaryVertex.cc,v 1.4 2007/10/06 06:49:29 kurasige Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 
 #include "G4PrimaryVertex.hh"
@@ -75,7 +75,10 @@ G4int G4PrimaryVertex::operator!=(const G4PrimaryVertex &right) const
 void G4PrimaryVertex::Print() const
 {
   G4cout << "Vertex  ( "
-       << X0 << ", " << Y0 << ", " << Z0 << ", " << T0 << " )" 
+	 << X0/mm  << "[mm], " 
+	 << Y0/mm << "[mm], " 
+	 << Z0/mm << "[mm], " 
+	 << T0/ns  << "[ns] )" 
        << " Weight " << Weight0 << G4endl;
   if(userInfo!=0) userInfo->Print();
   G4cout << "#### Primary particles" << G4endl;

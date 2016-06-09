@@ -1,0 +1,619 @@
+
+*************************************************************
+ Geant4 version Name: global-V09-00-02    (14-December-2007)
+                      Copyright : Geant4 Collaboration
+                      Reference : NIM A 506 (2003), 250-303
+                            WWW : http://cern.ch/geant4
+*************************************************************
+
+G4ClassicalRK4 (default) is called
+Accuracy Parameters: MinStep=0.01 DeltaChord=3 DeltaOneStep=0.01
+                     DeltaIntersection=0.1 EpsMin=2.5e-07 EpsMax=0.05
+F04PhysicsList::AddPhysicsList: <emstandard_opt1>
+F04PhysicsList::AddPhysicsList: <QGSP_BERT>
+Visualization Manager instantiating...
+Visualization Manager initialising...
+Registering graphics systems...
+
+You have successfully registered the following graphics systems.
+Current available graphics systems are:
+  ASCIITree (ATree)
+  DAWNFILE (DAWNFILE)
+  G4HepRep (HepRepXML)
+  G4HepRepFile (HepRepFile)
+  RayTracer (RayTracer)
+  VRML1FILE (VRML1FILE)
+  VRML2FILE (VRML2FILE)
+
+Registering model factories...
+
+You have successfully registered the following model factories.
+Registered model factories:
+  generic
+  drawByCharge
+  drawByParticleID
+  drawByOriginVolume
+  drawByAttribute
+
+Registered filter factories:
+  chargeFilter
+  particleFilter
+  originVolumeFilter
+  attributeFilter
+
+#/event/verbose 1
+#/tracking/verbose 1
+#
+/field04/SetWorldMat G4_AIR
+/field04/SetWorldR 5.0 m
+/field04/SetWorldZ 50.0 m
+#
+/field04/SetCaptureR 0.6 m
+/field04/SetCaptureZ 4.0 m
+/field04/SetCaptureB1 2.5 tesla
+/field04/SetCaptureB2 5.0 tesla
+#
+/field04/SetTransferR 0.3 m
+/field04/SetTransferZ 15.0 m
+/field04/SetTransferB 5.0 tesla
+/field04/SetTransferP 0.0 m
+#
+/field04/SetTgtMat G4_W
+/field04/SetTgtRad 0.4 cm
+/field04/SetTgtThick 16.0 cm
+/field04/SetTgtPos 0.0 cm
+/field04/SetTgtAng 170
+#
+/field04/SetDgrMat G4_Pb
+/field04/SetDgrRad 30.0 cm
+/field04/SetDgrThick 0.1 cm
+#/field04/SetDgrPos -7.4 m
+#
+#/exp/phys/addPhysics emstandard_opt1
+#/exp/phys/addPhysics QGSP_BERT
+#/exp/phys/removeHadronPhysics gamma_nuc
+/exp/phys/gammaCut 1.0 m
+/exp/phys/stepMax 2.0 mm
+/exp/phys/list
+### PhysicsLists available: FTFC FTFP FTFP_EMV LHEP LHEP_BERT LHEP_EMV
+                            LHEP_PRECO_HP QBBC QBBCG QBEC QBBC_HP QBEC_HP
+                            QGSC QGSC_EFLOW QGSC_EMV QGSP QGSP_BERT QGSP_BER_EMV
+                            QGSP_BERT_HP QGSP_BERT_NQE QGSP_BERT_TRV
+                            QGSP_BIC QGSP_BIC_HP QGSP_EMV QGSP_EMV_NQE
+                            QGSC_EMX QGSP_NQE QGSP_QEL
+#
+#/decay/pienu
+#/decay/pimunu
+#
+/field/setStepperType 4
+/field/setMinStep 10 mm
+/field/update
+G4ClassicalRK4 (default) is called
+Accuracy Parameters: MinStep=10 DeltaChord=3 DeltaOneStep=0.01
+                     DeltaIntersection=0.1 EpsMin=2.5e-07 EpsMax=0.05
+#
+/run/initialize
+G4NistMaterialBuilder::FindOrBuildMaterial G4_Galactic
+G4NistMaterialBuilder: BuildMaterial #286
+New material nComponents= 1
+G4NistElementBuilder: Build Element <H>  Z= 1  A= 1.00795  with natural isotope composition
+G4Material: Mean excitation energy is changed for G4_Galactic Iold= 21.8eV; Inew= 21.8 eV;
+G4NistMaterialBuilder::FindOrBuildMaterial G4_AIR
+G4NistMaterialBuilder::FindOrBuildMaterial G4_BERYLLIUM_OXIDE
+G4NistMaterialBuilder: BuildMaterial #115
+New material nComponents= 2
+G4NistElementBuilder: Build Element <Be>  Z= 4  A= 9.01218  with natural isotope composition
+G4Material: Mean excitation energy is changed for G4_BERYLLIUM_OXIDE Iold= 83.2231eV; Inew= 93.2 eV;
+New material Scintillator is prepeared;  nMaterials= 288 nComponents= 742 nCurrent= 2
+### NIST DataBase for Elements is used
+G4NistMaterialBuilder: BuildMaterial Scintillator
+G4NistMaterialBuilder: BuildMaterial #287
+New material nComponents= 2
+
+The materials defined are: 
+
+
+***** Table : Nb of materials = 6 *****
+
+ Material:   G4_AIR     density:  1.205 mg/cm3  RadL: 303.921 m    Imean:  85.700 eV   temperature: 273.15 K  pressure:   1.00 atm
+   --->  Element: C (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole
+   --->  Isotope:     C   Z =  6   N =  12   A =  12.00 g/mole   abundance:  98.93 %
+   --->  Isotope:     C   Z =  6   N =  13   A =  13.00 g/mole   abundance:   1.07 %  ElmMassFraction:   0.01 %  ElmAbundance   0.02 %
+   --->  Element: N (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole
+   --->  Isotope:     N   Z =  7   N =  14   A =  14.00 g/mole   abundance:  99.63 %
+   --->  Isotope:     N   Z =  7   N =  15   A =  15.00 g/mole   abundance:   0.37 %  ElmMassFraction:  75.53 %  ElmAbundance  78.44 %
+   --->  Element: O (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole
+   --->  Isotope:     O   Z =  8   N =  16   A =  15.99 g/mole   abundance:  99.76 %
+   --->  Isotope:     O   Z =  8   N =  17   A =  17.00 g/mole   abundance:   0.04 %
+   --->  Isotope:     O   Z =  8   N =  18   A =  18.00 g/mole   abundance:   0.20 %  ElmMassFraction:  23.18 %  ElmAbundance  21.07 %
+   --->  Element: Ar (Ar)   Z = 18.0   N =  40.0   A =  39.95 g/mole
+   --->  Isotope:    Ar   Z = 18   N =  36   A =  35.97 g/mole   abundance:   0.34 %
+   --->  Isotope:    Ar   Z = 18   N =  38   A =  37.96 g/mole   abundance:   0.06 %
+   --->  Isotope:    Ar   Z = 18   N =  40   A =  39.96 g/mole   abundance:  99.60 %  ElmMassFraction:   1.28 %  ElmAbundance   0.47 %
+
+ Material:     G4_W     density: 19.300 g/cm3   RadL:   3.504 mm   Imean: 727.000 eV 
+   --->  Element: W (W)   Z = 74.0   N = 183.9   A = 183.84 g/mole
+   --->  Isotope:     W   Z = 74   N = 180   A = 179.95 g/mole   abundance:   0.12 %
+   --->  Isotope:     W   Z = 74   N = 182   A = 181.95 g/mole   abundance:  26.50 %
+   --->  Isotope:     W   Z = 74   N = 183   A = 182.95 g/mole   abundance:  14.31 %
+   --->  Isotope:     W   Z = 74   N = 184   A = 183.95 g/mole   abundance:  30.64 %
+   --->  Isotope:     W   Z = 74   N = 186   A = 185.95 g/mole   abundance:  28.43 %  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
+
+ Material:    G4_Pb     density: 11.350 g/cm3   RadL:   5.613 mm   Imean: 823.000 eV 
+   --->  Element: Pb (Pb)   Z = 82.0   N = 207.2   A = 207.22 g/mole
+   --->  Isotope:    Pb   Z = 82   N = 204   A = 203.97 g/mole   abundance:   1.40 %
+   --->  Isotope:    Pb   Z = 82   N = 206   A = 205.97 g/mole   abundance:  24.10 %
+   --->  Isotope:    Pb   Z = 82   N = 207   A = 206.98 g/mole   abundance:  22.10 %
+   --->  Isotope:    Pb   Z = 82   N = 208   A = 207.98 g/mole   abundance:  52.40 %  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
+
+ Material: G4_Galactic     density:  0.000 mg/cm3  RadL: 204311173.221 pc   Imean:  21.800 eV   temperature:   2.73 K  pressure:   0.00 atm
+   --->  Element: H (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole
+   --->  Isotope:     H   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
+   --->  Isotope:     H   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
+
+ Material: G4_BERYLLIUM_OXIDE     density:  3.010 g/cm3   RadL:  13.722 cm   Imean:  93.200 eV 
+   --->  Element: Be (Be)   Z =  4.0   N =   9.0   A =   9.01 g/mole
+   --->  Isotope:    Be   Z =  4   N =   9   A =   9.01 g/mole   abundance: 100.00 %  ElmMassFraction:  36.03 %  ElmAbundance  50.00 %
+   --->  Element: O (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole
+   --->  Isotope:     O   Z =  8   N =  16   A =  15.99 g/mole   abundance:  99.76 %
+   --->  Isotope:     O   Z =  8   N =  17   A =  17.00 g/mole   abundance:   0.04 %
+   --->  Isotope:     O   Z =  8   N =  18   A =  18.00 g/mole   abundance:   0.20 %  ElmMassFraction:  63.97 %  ElmAbundance  50.00 %
+
+ Material: Scintillator     density:  1.032 g/cm3   RadL:  42.544 cm   Imean:  63.913 eV 
+   --->  Element: C (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole
+   --->  Isotope:     C   Z =  6   N =  12   A =  12.00 g/mole   abundance:  98.93 %
+   --->  Isotope:     C   Z =  6   N =  13   A =  13.00 g/mole   abundance:   1.07 %  ElmMassFraction:  91.47 %  ElmAbundance  47.37 %
+   --->  Element: H (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole
+   --->  Isotope:     H   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
+   --->  Isotope:     H   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %  ElmMassFraction:   8.53 %  ElmAbundance  52.63 %
+
+
+G4NistMaterialBuilder::FindOrBuildMaterial G4_Galactic
+G4NistMaterialBuilder::FindOrBuildMaterial G4_AIR
+G4NistMaterialBuilder::FindOrBuildMaterial G4_Pb
+G4NistMaterialBuilder::FindOrBuildMaterial G4_W
+Angle: 30deg 
+Angle: 10deg 
+Angle: 170deg 
+F04ExtraPhysics:: Add Extra Physics Processes
+Thank you for using G4BinaryCascade. 
+### Adding Neutron tracking cut for neutron
+###  cut value is 10 microseconds
+===========================================================================================
+
+       Hadronic Processes for anti_neutron
+  hElastic           Models:     elastic      Emin(GeV)=     0      Emax(GeV)=  100000
+
+       Hadronic Processes for anti_proton
+  hElastic           Models:     elastic      Emin(GeV)=     0      Emax(GeV)=  100000
+
+       Hadronic Processes for kaon+
+  hElastic           Models:     elastic      Emin(GeV)=     0      Emax(GeV)=  100000
+
+       Hadronic Processes for kaon-
+  hElastic           Models:     elastic      Emin(GeV)=     0      Emax(GeV)=  100000
+
+       Hadronic Processes for lambda
+  hElastic           Models:     elastic      Emin(GeV)=     0      Emax(GeV)=  100000
+
+       Hadronic Processes for neutron
+  hElastic           Models:     elastic      Emin(GeV)=     0      Emax(GeV)=  100000
+
+       Hadronic Processes for pi+
+  hElastic           Models:     elastic      Emin(GeV)=     0      Emax(GeV)=  100000
+
+       Hadronic Processes for pi-
+  hElastic           Models:     elastic      Emin(GeV)=     0      Emax(GeV)=  100000
+
+       Hadronic Processes for proton
+  hElastic           Models:     elastic      Emin(GeV)=     0      Emax(GeV)=  100000
+===========================================================================================
+F04PhysicsList::SetCuts:CutLength : 1 mm 
+#
+#/process/inactivate msc
+#/process/activate msc
+#
+#/field04/SetTgtMat G4_Pb
+#/field04/SetCaptureR 0.6 m
+#/field04/Update
+#
+/gun/particle proton
+/gun/energy 500.0 MeV
+#/gun/momentumAmp 1.09008 GeV
+/gun/random on
+#
+#/control/execute vis.mac
+#
+#/rndm/save 2
+#/rndm/read random/run0evt8268.rndm
+#/random/resetEngineFrom random/run0evt40.rndm
+#
+/run/beamOn 1000
+G4VRangeToEnergyConverter::ConvertCutToKineticEnergy   for gamma
+The cut in range [1000 (mm)]   is too big   for material  idx=1
+The cut in energy is set1.79769e+305GeV 
+G4VRangeToEnergyConverter::ConvertCutToKineticEnergy   for gamma
+The cut in range [1000 (mm)]   is too big   for material  idx=2
+The cut in energy is set1.79769e+305GeV 
+
+phot:  Total cross sections from Sandia parametrisation. 
+      Sampling according PhotoElectric model
+
+compt:  Total cross sections has a good parametrisation from 10 KeV to (100/Z) GeV
+      Sampling according Klein-Nishina model
+      tables are built for  gamma
+      Lambda tables from 100 eV  to 100 GeV in 90 bins.
+
+conv:  Total cross sections has a good parametrisation from 1.5 MeV to 100 GeV for all Z;
+      sampling secondary e+e- according Bethe-Heitler model
+      tables are built for  gamma
+      Lambda tables from 1.022 MeV to 100 GeV in 100 bins.
+
+msc:  Model variant of multiple scattering for e-
+      Lambda tables from 100 eV  to 100 TeV in 120 bins.
+      LateralDisplacementFlag=  1   Skin= 0
+      Boundary/stepping algorithm is active with RangeFactor= 0.2  Step limit type 0
+
+eIoni:   tables are built for  e-
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Delta cross sections and sampling from MollerBhabha model
+      Good description from 1 KeV to 100 GeV.
+      Step function: finalRange(mm)= 1, dRoverRange= 0.8, integral: 1, fluct: 1
+
+eBrem:   tables are built for  e-
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Total cross sections and sampling from StandBrem model (based on the EEDL data library) 
+      Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV. LPM flag 1
+
+eIoni:   tables are built for  e+
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Delta cross sections and sampling from MollerBhabha model
+      Good description from 1 KeV to 100 GeV.
+      Step function: finalRange(mm)= 1, dRoverRange= 0.8, integral: 1, fluct: 1
+
+eBrem:   tables are built for  e+
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Total cross sections and sampling from StandBrem model (based on the EEDL data library) 
+      Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV. LPM flag 1
+
+annihil:       Sampling according eplus2gg model
+      tables are built for  e+
+      Lambda tables from 100 eV  to 100 TeV in 120 bins.
+
+msc:  Model variant of multiple scattering for proton
+      Lambda tables from 100 eV  to 100 TeV in 120 bins.
+      LateralDisplacementFlag=  1   Skin= 0
+      Boundary/stepping algorithm is active with RangeFactor= 0.2  Step limit type 0
+
+hIoni:   tables are built for  proton
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Scaling relation is used from proton dE/dx and range.
+      Delta cross sections and sampling from BetheBloch model for scaled energy > 2 MeV
+      Parametrisation from Bragg for protons below.
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1
+
+msc:  Model variant of multiple scattering for GenericIon
+      LateralDisplacementFlag=  0   Skin= 0
+      Boundary/stepping algorithm is active with RangeFactor= 0.2  Step limit type 1
+
+ionIoni:   tables are built for  GenericIon
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Scaling relation is used from proton dE/dx and range.
+      Delta cross sections and sampling from BetheBloch model for scaled energy > 2 MeV
+      Parametrisation from BraggIon for protons below. NuclearStopping 1
+
+      Stopping Power data for 8 ion/material pairs are used.
+      Step function: finalRange(mm)= 0.1, dRoverRange= 0.1, integral: 1, fluct: 1
+
+hIoni:   tables are built for  anti_proton
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Scaling relation is used from proton dE/dx and range.
+      Delta cross sections and sampling from BetheBloch model for scaled energy > 2 MeV
+      Parametrisation from Bragg for protons below.
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1
+
+msc:  Model variant of multiple scattering for mu+
+      Lambda tables from 100 eV  to 100 TeV in 120 bins.
+      LateralDisplacementFlag=  1   Skin= 0
+      Boundary/stepping algorithm is active with RangeFactor= 0.2  Step limit type 0
+
+muIoni:   tables are built for  mu+
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
+      radiative corrections for E > 1 GeV
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1
+
+muBrems:   tables are built for  mu+
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Parametrised model 
+
+muPairProd:   tables are built for  mu+
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Parametrised model 
+
+muIoni:   tables are built for  mu-
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
+      radiative corrections for E > 1 GeV
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1
+
+muBrems:   tables are built for  mu-
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Parametrised model 
+
+muPairProd:   tables are built for  mu-
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Parametrised model 
+
+G4UHadronElasticProcess for neutron PDGcode= 2112  Elow(MeV)= 19  Elowest(eV)= 0
+
+hIoni:   tables are built for  pi+
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Scaling relation is used from proton dE/dx and range.
+      Delta cross sections and sampling from BetheBloch model for scaled energy > 0.297504 MeV
+      Parametrisation from Bragg for protons below.
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1
+
+msc:  Model variant of multiple scattering for pi-
+      Lambda tables from 100 eV  to 100 TeV in 120 bins.
+      LateralDisplacementFlag=  1   Skin= 0
+      Boundary/stepping algorithm is active with RangeFactor= 0.2  Step limit type 0
+
+hIoni:   tables are built for  pi-
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Scaling relation is used from proton dE/dx and range.
+      Delta cross sections and sampling from BetheBloch model for scaled energy > 0.297504 MeV
+      Parametrisation from Bragg for protons below.
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : G4_AIR
+ Range cuts        :  gamma 1 m      e- 1 mm     e+ 1 mm 
+ Energy thresholds :  gamma 3.07332 keV    e- 990 eV     e+ 990 eV 
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : Yes     recalculation needed : No 
+ Material : G4_Galactic
+ Range cuts        :  gamma 1 m      e- 1 mm     e+ 1 mm 
+ Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 2     used in the geometry : Yes     recalculation needed : No 
+ Material : G4_W
+ Range cuts        :  gamma 1 m      e- 1 mm     e+ 1 mm 
+ Energy thresholds :  gamma 2.88022e+295 J      e- 2.31122 MeV    e+ 2.14666 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 3     used in the geometry : Yes     recalculation needed : No 
+ Material : G4_Pb
+ Range cuts        :  gamma 1 m      e- 1 mm     e+ 1 mm 
+ Energy thresholds :  gamma 2.88022e+295 J      e- 1.37814 MeV    e+ 1.28002 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
+### Run 0 start.
+
+---> Begin of Event: 0
+
+---> Begin of Event: 10
+
+---> Begin of Event: 20
+
+---> Begin of Event: 30
+
+---> Begin of Event: 40
+
+---> Begin of Event: 50
+
+---> Begin of Event: 60
+
+---> Begin of Event: 70
+
+---> Begin of Event: 80
+
+---> Begin of Event: 90
+
+---> Begin of Event: 100
+
+---> Begin of Event: 110
+
+---> Begin of Event: 120
+
+---> Begin of Event: 130
+
+---> Begin of Event: 140
+
+---> Begin of Event: 150
+
+---> Begin of Event: 160
+
+---> Begin of Event: 170
+
+---> Begin of Event: 180
+
+---> Begin of Event: 190
+
+---> Begin of Event: 200
+
+---> Begin of Event: 210
+
+---> Begin of Event: 220
+
+---> Begin of Event: 230
+
+---> Begin of Event: 240
+
+---> Begin of Event: 250
+
+---> Begin of Event: 260
+
+---> Begin of Event: 270
+
+---> Begin of Event: 280
+
+---> Begin of Event: 290
+
+---> Begin of Event: 300
+
+---> Begin of Event: 310
+
+---> Begin of Event: 320
+
+---> Begin of Event: 330
+
+---> Begin of Event: 340
+
+---> Begin of Event: 350
+
+---> Begin of Event: 360
+
+---> Begin of Event: 370
+
+---> Begin of Event: 380
+
+---> Begin of Event: 390
+
+---> Begin of Event: 400
+
+---> Begin of Event: 410
+
+---> Begin of Event: 420
+
+---> Begin of Event: 430
+
+---> Begin of Event: 440
+
+---> Begin of Event: 450
+
+---> Begin of Event: 460
+
+---> Begin of Event: 470
+
+---> Begin of Event: 480
+
+---> Begin of Event: 490
+
+---> Begin of Event: 500
+
+---> Begin of Event: 510
+
+---> Begin of Event: 520
+
+---> Begin of Event: 530
+
+---> Begin of Event: 540
+
+---> Begin of Event: 550
+
+---> Begin of Event: 560
+
+---> Begin of Event: 570
+
+---> Begin of Event: 580
+
+---> Begin of Event: 590
+
+---> Begin of Event: 600
+
+---> Begin of Event: 610
+
+---> Begin of Event: 620
+
+---> Begin of Event: 630
+
+---> Begin of Event: 640
+
+---> Begin of Event: 650
+
+---> Begin of Event: 660
+
+---> Begin of Event: 670
+
+---> Begin of Event: 680
+
+---> Begin of Event: 690
+
+---> Begin of Event: 700
+
+---> Begin of Event: 710
+
+---> Begin of Event: 720
+
+---> Begin of Event: 730
+
+---> Begin of Event: 740
+
+---> Begin of Event: 750
+
+---> Begin of Event: 760
+
+---> Begin of Event: 770
+
+---> Begin of Event: 780
+
+---> Begin of Event: 790
+
+---> Begin of Event: 800
+
+---> Begin of Event: 810
+
+---> Begin of Event: 820
+
+---> Begin of Event: 830
+
+---> Begin of Event: 840
+
+---> Begin of Event: 850
+
+---> Begin of Event: 860
+
+---> Begin of Event: 870
+
+---> Begin of Event: 880
+
+---> Begin of Event: 890
+
+---> Begin of Event: 900
+
+---> Begin of Event: 910
+
+---> Begin of Event: 920
+
+---> Begin of Event: 930
+
+---> Begin of Event: 940
+
+---> Begin of Event: 950
+
+---> Begin of Event: 960
+
+---> Begin of Event: 970
+
+---> Begin of Event: 980
+
+---> Begin of Event: 990
+#
+Graphics systems deleted.
+Visualization Manager deleting...

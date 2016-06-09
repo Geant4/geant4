@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4QEnvironment.hh,v 1.28 2007/02/28 14:26:25 mkossov Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: G4QEnvironment.hh,v 1.32 2007/10/07 13:31:41 mkossov Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 //      ---------------- G4QEnvironment ----------------
 //             by Mikhail Kossov, August 2000.
@@ -40,6 +40,7 @@
 class G4QEnvironment 
 {
 public:
+  G4QEnvironment(const G4QNucleus theEnv);             // Create Env and add Quasmons later
   G4QEnvironment(const G4QHadronVector& projHadrons, const G4int targPDG);
   G4QEnvironment(const G4QEnvironment& right);         // copy QEnvironment by value
   G4QEnvironment(G4QEnvironment* right);               // copy QEnvironment by pointer
@@ -57,6 +58,7 @@ public:
   G4QHadronVector* GetProjectiles();        // User is responsible for Destroy/Clear/Delete
 
   // Modifiers
+  void AddQuasmon(G4Quasmon* Q);            // Add aQuasmon to theEnvironment
   G4QHadronVector* Fragment();              // User must clear and destroy the G4QHadronVec
 
   // Static functions
@@ -77,15 +79,8 @@ private:
   void             InitClustersVector(G4int maxC, G4int maxA);//Init.NucClust's for 1st int
   void             CleanUp();               // Makes theEnvironment=vacuum & kill Quasmons
   void             PrepareInteractionProbabilities(const G4QContent& projQC, G4double AP);
-  void             EvaporateResidual(G4QHadron* evap, G4bool corFlag=false);// Final Evap.
+  void             EvaporateResidual(G4QHadron* h);// Final Evaporation of a nucl. fragment
   void             DecayBaryon(G4QHadron* dB);     // Decay baryon (gamma+N or Delta->N+Pi)
-  void             DecayDibaryon(G4QHadron* dB);   // Decay di-baryon (deuteron is kept)
-  void             DecayIsonucleus(G4QHadron* dB); // Decay nP+(Pi+) or nN+(Pi-) system
-  void             DecayMultyBaryon(G4QHadron* dB);// Decay of Ap, An or AL states
-  void             DecayAntiStrange(G4QHadron* dB);// Decay nuclei containing K+/K0
-  void             DecayAlphaBar(G4QHadron* dB);   // Decay of alpha+p or alpha+n states
-  void             DecayAlphaDiN(G4QHadron* dB);   // Decay of alpha+p+p states
-  void             DecayAlphaAlpha(G4QHadron* dB); // Decay of alpha+alpha state
   G4bool           CheckGroundState(G4Quasmon* quasm,G4bool corFlag=false);//as G4Q for QHV
   G4bool           DecayInEnvQ(G4Quasmon* quasm);  // Use befor evaporation in PANIC case
 

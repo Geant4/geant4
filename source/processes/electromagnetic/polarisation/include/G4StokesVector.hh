@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4StokesVector.hh,v 1.3 2006/11/17 11:59:03 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: G4StokesVector.hh,v 1.4 2007/11/01 17:32:34 schaelic Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 // GEANT4 Class header file
 //
@@ -46,7 +46,7 @@
 // aim:
 //   - store three components of a stokesvector
 //   - distinguish between boson or fermion state (different transformations)
-//   - provide unique definition of reference frame (cf. PolarizationHelper)
+//   - provide unique definition of reference frame (cf. G4PolarizationHelper)
 //
 
 #ifndef G4StokesVector_h

@@ -26,7 +26,7 @@
 //
 //
 // $Id: G4ElectroNuclearReaction.hh,v 1.23 2006/06/29 20:07:46 gunter Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 //
 // GEANT4 physics class: G4ElectroNuclearReaction -- header file

@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RunAction.cc,v 1.23 2006/06/29 16:56:14 gunter Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: RunAction.cc,v 1.25 2007/11/21 17:41:19 maire Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -74,6 +74,8 @@ void RunAction::BeginOfRunAction(const G4Run* aRun)
   Transmit[0] = Transmit[1] = Reflect[0] = Reflect[1] = 0;
   
   MscEntryCentral = 0;
+  
+  EnergyLeak[0] = EnergyLeak[1] = EnergyLeak2[0] = EnergyLeak2[1] = 0.;
 
   histoManager->book();
 
@@ -90,6 +92,9 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   //
   G4int TotNbofEvents = aRun->GetNumberOfEvent();
   if (TotNbofEvents == 0) return;
+  
+  G4double EnergyBalance = EnergyDeposit + EnergyLeak[0] + EnergyLeak[1];
+  EnergyBalance /= TotNbofEvents;
 
   EnergyDeposit /= TotNbofEvents; EnergyDeposit2 /= TotNbofEvents;
   G4double rmsEdep = EnergyDeposit2 - EnergyDeposit*EnergyDeposit;
@@ -133,10 +138,20 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
     MscProjecTheta /= MscEntryCentral; MscProjecTheta2 /= MscEntryCentral;
     rmsMsc = MscProjecTheta2 - MscProjecTheta*MscProjecTheta;
     if (rmsMsc > 0.) rmsMsc = std::sqrt(rmsMsc);
-    tailMsc = 100.- (100.*MscEntryCentral)/(2*Transmit[1]);
-    
+    tailMsc = 100.- (100.*MscEntryCentral)/(2*Transmit[1]);    
   }
   
+  EnergyLeak[0] /= TotNbofEvents; EnergyLeak2[0] /= TotNbofEvents;
+  G4double rmsEl0 = EnergyLeak2[0] - EnergyLeak[0]*EnergyLeak[0];
+  if (rmsEl0>0.) rmsEl0 = std::sqrt(rmsEl0/TotNbofEvents);
+  else           rmsEl0 = 0.;
+  
+  EnergyLeak[1] /= TotNbofEvents; EnergyLeak2[1] /= TotNbofEvents;
+  G4double rmsEl1 = EnergyLeak2[1] - EnergyLeak[1]*EnergyLeak[1];
+  if (rmsEl1>0.) rmsEl1 = std::sqrt(rmsEl1/TotNbofEvents);
+  else           rmsEl1 = 0.;    
+  
+      
   //Stopping Power from input Table.
   //
   G4Material* material = detector->GetAbsorberMaterial();
@@ -173,12 +188,13 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
 	 << G4BestUnit(density,"Volumic Mass") << ")" << G4endl;
   
   G4cout.precision(4);
+  
   G4cout << "\n Total energy deposit in absorber per event = "
          << G4BestUnit(EnergyDeposit,"Energy") << " +- "
          << G4BestUnit(rmsEdep,      "Energy") 
          << G4endl;
 	 
-  G4cout << " -----> Mean dE/dx = " << meandEdx/(MeV/cm) << " MeV/cm"
+  G4cout << "\n -----> Mean dE/dx = " << meandEdx/(MeV/cm) << " MeV/cm"
          << "\t(" << stopPower/(MeV*cm2/g) << " MeV*cm2/g)"
 	 << G4endl;
 	 
@@ -190,7 +206,19 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   G4cout << "   full dEdx       = " << dEdxFull/(MeV/cm) << " MeV/cm"
          << "\t(" << stopFull/(MeV*cm2/g) << " MeV*cm2/g)"
 	 << G4endl;
-	 	 
+	 
+  G4cout << "\n Leakage :  primary = "
+         << G4BestUnit(EnergyLeak[0],"Energy") << " +- "
+         << G4BestUnit(rmsEl0,       "Energy")
+	 << "   secondaries = "
+         << G4BestUnit(EnergyLeak[1],"Energy") << " +- "
+         << G4BestUnit(rmsEl1,       "Energy")	  
+         << G4endl;
+	 
+  G4cout << " Energy balance :  edep + eleak = "
+         << G4BestUnit(EnergyBalance,"Energy")
+         << G4endl;	 
+	 	 	 
   G4cout << "\n Total track length (charged) in absorber per event = "
          << G4BestUnit(TrakLenCharged,"Length") << " +- "
          << G4BestUnit(rmsTLCh,       "Length") << G4endl;
@@ -223,7 +251,7 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
 
   // compute width of the Gaussian central part of the MultipleScattering
   //
-  if (histoManager->HistoExist(6)) {
+  if (histoManager->HistoExist(13)) {
     G4cout << "\n MultipleScattering:" 
            << "\n  rms proj angle of transmit primary particle = "
            << rmsMsc/mrad << " mrad (central part only)" << G4endl;
@@ -234,7 +262,7 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
     G4cout << "  central part defined as +- "
  	   << MscThetaCentral/mrad << " mrad; " 
 	   << "  Tail ratio = " << tailMsc << " %" << G4endl;	   
-  }	 
+  }
 
   G4cout.precision(prec);
 

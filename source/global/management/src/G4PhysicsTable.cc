@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicsTable.cc,v 1.14 2006/06/29 19:04:23 gunter Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: G4PhysicsTable.cc,v 1.15 2007/11/13 17:35:06 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 // 
 // ------------------------------------------------------------
@@ -46,11 +46,11 @@ G4PhysicsTable::G4PhysicsTable()
 {
 }
 
-G4PhysicsTable::G4PhysicsTable(size_t capacity)
+G4PhysicsTable::G4PhysicsTable(size_t cap)
   : G4PhysCollection()
 {
-  reserve(capacity);
-  vecFlag.reserve(capacity);
+  reserve(cap);
+  vecFlag.reserve(cap);
 }
 
 G4PhysicsTable::G4PhysicsTable(const G4PhysicsTable& right)
@@ -81,10 +81,10 @@ G4PhysicsTable::~G4PhysicsTable()
   vecFlag.clear();
 }
  
-void   G4PhysicsTable::resize(size_t size, G4PhysicsVector* vec)
+void   G4PhysicsTable::resize(size_t siz, G4PhysicsVector* vec)
 {
-  G4PhysCollection::resize(size, vec);
-  vecFlag.resize(size, true);
+  G4PhysCollection::resize(siz, vec);
+  vecFlag.resize(siz, true);
 }
 
 G4bool G4PhysicsTable::StorePhysicsTable(const G4String& fileName,

@@ -25,8 +25,8 @@
 //
 
 //
-// $Id: DetectorConstruction.cc,v 1.6 2006/06/29 16:36:55 gunter Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: DetectorConstruction.cc,v 1.8 2007/11/12 15:48:58 maire Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 // 
 
@@ -82,6 +82,7 @@ void DetectorConstruction::DefineMaterials()
   G4double z,a;
   
   G4Element* H  = new G4Element("Hydrogen" ,"H" , z= 1., a=   1.01*g/mole);
+  G4Element* C  = new G4Element("Hydrogen" ,"C" , z= 6., a=  12.00*g/mole);
   G4Element* N  = new G4Element("Nitrogen" ,"N" , z= 7., a=  14.01*g/mole);
   G4Element* O  = new G4Element("Oxygen"   ,"O" , z= 8., a=  16.00*g/mole);
   G4Element* Ge = new G4Element("Germanium","Ge", z=32., a=  72.59*g/mole);
@@ -109,6 +110,13 @@ void DetectorConstruction::DefineMaterials()
   H2O->AddElement(O, natoms=1);
   ///H2O->SetChemicalFormula("H_2O");
   H2O->GetIonisation()->SetMeanExcitationEnergy(75.0*eV);
+
+  density = 0.001*mg/cm3;
+  G4Material* CO2 = new G4Material("CO2", density, ncomponents=2);
+  CO2->AddElement(C, natoms=1);
+  CO2->AddElement(O, natoms=2);
+  
+  new G4Material("D2_gas", z=2., a= 2.0141*g/mole, density= 0.036*mg/cm3);
 
   new G4Material("liquidArgon", z=18., a= 39.95*g/mole, density= 1.390*g/cm3);
 

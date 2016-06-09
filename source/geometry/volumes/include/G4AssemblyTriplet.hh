@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4AssemblyTriplet.hh,v 1.2 2006/06/29 18:56:46 gunter Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: G4AssemblyTriplet.hh,v 1.3 2007/11/16 16:20:25 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 // 
 // Class G4AssemblyTriplet
@@ -86,31 +86,31 @@ class G4AssemblyTriplet
     G4AssemblyTriplet& operator=( const G4AssemblyTriplet& second );
       // Assignment operator
 
-    G4LogicalVolume* GetVolume() const;
+    inline G4LogicalVolume* GetVolume() const;
       // Retrieve the logical volume reference
 
-    void SetVolume( G4LogicalVolume* pVolume );
+    inline void SetVolume( G4LogicalVolume* pVolume );
       // Update the logical volume reference
 
-    G4AssemblyVolume* GetAssembly() const;
+    inline G4AssemblyVolume* GetAssembly() const;
       // Retrieve the assembly volume reference
 
-    void SetAssembly( G4AssemblyVolume* pAssembly );
+    inline void SetAssembly( G4AssemblyVolume* pAssembly );
       // Update the assembly volume reference
 
-    G4ThreeVector GetTranslation() const;
+    inline G4ThreeVector GetTranslation() const;
       // Retrieve the logical volume translation
 
-    void SetTranslation( G4ThreeVector& pVolume );
+    inline void SetTranslation( G4ThreeVector& pVolume );
       // Update the logical volume translation
 
-    G4RotationMatrix* GetRotation() const;
+    inline G4RotationMatrix* GetRotation() const;
       // Retrieve the logical volume rotation
 
-    void SetRotation( G4RotationMatrix* pVolume );
+    inline void SetRotation( G4RotationMatrix* pVolume );
       // Update the logical volume rotation
 
-    G4bool IsReflection() const;
+    inline G4bool IsReflection() const;
       // Return true if the logical or assembly volume has reflection
 
  private:

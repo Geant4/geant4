@@ -1,4 +1,4 @@
-$Id: History,v 1.119.2.2 2007/05/31 08:03:11 gcosmo Exp $
+$Id: History,v 1.142 2007/11/27 18:32:16 japost Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,7 +17,85 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-May 31st, 2007, A.Howard  transport-V08-03-12
+Nov  27th, 2007, J.Apostolakis  transport-V09-00-05a 
+------------------------------
+G4CoupledTransportation
+- Added updating of particle-looping flag (was commented out.)
+
+Nov   8th, 2007, J.Apostolakis  transport-V09-00-05
+------------------------------
+G4Transportation:
+- Create new method (and class member) for flag on Short StepOptimisation.
+  * When it is true, the optimisation is 'on' steps shorter than the
+     safety will not call G4Navigator - so long as the particle goes straight
+     ie it is not charged or there is no field.
+  * Retained the default value as 'off' - as since changed in 
+     transport-V09-00-02 following Alex's suggestion.
+
+Nov   8th, 2007, J.Apostolakis  transport-V09-00-04
+------------------------------
+G4Transportation (AlongStepGPIL)
+- Moved the call to ConfigureForTrack before the check whether 
+    fieldMgr has 0 field ptr, in order to enable it to be called 
+    even if the field manager points to a zero field.
+
+  Needed to enable a user to switch a global field on (off was possible), as a
+  track goes between volume (or regions) of a setup.   
+				[ Response to request of Atlas/ZM. ] 
+
+  Note: this ordering already existed in G4CoupledTransportation.
+
+
+Oct  12th, 2007, J.Apostolakis  transport-V09-00-03
+------------------------------
+G4CoupledTransportation
+- Improves condition for flag that regulates Relocating when only 
+    any geometry (including a parallel geometry) limits the step.  
+    New PathFinder method required.
+  -> Requires and co-works with tag geomnav-V09-00-03
+
+Oct   4th, 2007, J.Apostolakis  transport-V09-00-02
+------------------------------
+G4CoupledTransportation
+- First fix for problem in condition for Relocating when only a parallel 
+    geometry limited the step.  
+- Change of condition for recalculation safety (from Alex Howard) used,
+    as currently it improves stability.
+
+Sept 25th, 2007, J.Apostolakis  transport-V09-00-01
+------------------------------
+G4Transportation
+- Modification to disable 'optimisation' in G4Navigator for small linear
+  step  (ie when a track does less than the safety).
+    * Relevant only if there is no field, or the particle is neutral
+    * Temporary measure (in current form) to improve comparison
+        old / new Transportation  (single/old vs coupled with pathfinder). 
+
+July 12th, 2007, J.Apostolakis  transport-V09-00-00
+------------------------------
+- Retagged to enable testing of new developments 
+     (which were not included in release 9.0)
+
+June  6th, 2007, G.Cosmo        transport-V08-03-14
+-----------------------
+- Includes G4Transportation and G4CoupledTransportation implementations
+  as in tag "transport-V08-03-11":
+  o Corrected bug in ComputeSafety() introduced in "transport-V08-03-10".
+  o Reinitialise SafetyHelper state from G4PathFinder::PrepareNewTrack().
+  o Should fix the problem seen in test33 and reported by system testing.
+- All the rest is kept as in tag "transport-V08-03-12".
+
+June  1st, 2007, A.Howard       transport-V08-03-13
+------------------------
+- Renamed classes associated with old biasing scheme with suffix 8:
+  G4ProcessPlacer8, G4VProcessPlacer8, G4VSamplerConfigurator8,
+  G4WeightCutOffProcess8, G4SamplingPostStepAction8, G4VSampler8,
+  G4WeightCutOffConfigurator8
+- Includes same G4CoupledTransportation as transport-V08-03-12
+
+********** transport-V08-03-12 was used for Geant4 9.0 ***************
+
+May 31st, 2007, A.Howard      transport-V08-03-12
 ------------------------
 - Archived classes for old biasing scheme, now replaced in module
   processes/biasing. Removed classes:
@@ -31,8 +109,69 @@ May 31st, 2007, A.Howard  transport-V08-03-12
   G4ParallelWeightWindowProcess, G4PlaceOfAction, G4ProcessPlacer,
   G4SamplingPostStepAction, G4VProcessPlacer, G4VSampler,
   G4VSamplerConfigurator, G4WeightCutOffConfigurator.
+- Classes are kept on the HEAD for testing purposes.
+- Tag does NOT include changes from tags "transport-V08-03-00" to
+  "transport-V08-03-11" inclusive.
 
-May 8th, 2007, G.Cosmo  transport-V08-02-03a
+May 29th, 2007, A.Howard/J.Apostolakis  transport-V08-03-11
+--------------------------------------
+- G4CoupledTransportation:
+  o Corrected treatment of time integration (made flags do as in original
+    Transport).
+  o Again use momentum change flag in particle-change (optimisation).
+  o Also reset looping counter when no field or charge is present.
+- Corrected names in Transport, Coupled Transport. (J.Apostolakis)
+
+May 29th, 2007, J.Apostolakis  transport-V08-03-10
+-----------------------------
+- Gone back to G4CoupledTransportation.
+  o G4Transportation is now the original (what was called G4Transportation8
+    since "transport-V08-03-03").
+  o G4Transportation8 still exists, to enable code that utilises it to compile
+    (transitional). Expect that G4Transportation8 will be taken away asap.
+
+May 29th, 2007, J.Apostolakis  transport-V08-03-04
+-----------------------------
+- G4Transportation. Refined relocation:
+  o Full (re)location only if any geometry limited the step.
+  o Fast relocation otherwise.
+- Renamed & new data members: f(Mass,Any)GeometryLimitedStep.
+
+May 25th, 2007, J.Apostolakis  transport-V08-03-03
+-----------------------------
+- G4Transportation
+  o Fix for case of zero proposed step: missed to set end position. (A.Howard)
+- G4Transportation8
+  o Fixed StartTracking() to reset number of looping steps and 
+    to clear propagator state (safety issue in case of overlaps).
+
+May 18th, 2007, J.Apostolakis  transport-V08-03-02
+-----------------------------
+- G4Transportation:
+  o Corrected full safety at step start, to protect against negative value.
+  o Obtain the endMassSafety from new saved value in G4PathFinder.
+- G4Transportation8:
+  o Small cleanup, and hints for saving Safety to helper.
+
+May 13th, 2007, A.Howard       transport-V08-03-01 
+------------------------
+- G4VTrackTerminator:
+  o Use call to G4GeometryTolerance instead of kCarTolerance.
+  o Requires tag "global-V08-03-00" and related tag set.
+
+May 9th, 2007, J.Apostolakis  transport-V08-03-00 
+----------------------------
+- G4Transportation (hh,icc,cc)
+  o Renamed G4CoupledTransportation to G4Transportation
+  o Merged changes on branch used to bring in CoupledTransportation,
+    porting changes in G4Transportation since the creation of
+    CoupledTransportation.
+  o Also merged branch used for fixes in G4Transportation.cc (1.60.2, 1.60.4)
+    for convergence to Release 9.0.
+- Renamed G4Transportation to G4Transportation8
+- G4ProcessPlader changed to reflect these revisions. (A.Howard)
+
+May 8th, 2007, G.Cosmo  transport-V08-02-03
 ----------------------
 - Use call to G4GeometryTolerance instead of kCarTolerance in
   G4VTrackTerminator.
@@ -41,14 +180,15 @@ May 8th, 2007, G.Cosmo  transport-V08-02-03a
 May 2nd, 2007, J.Apostolakis  transport-V08-02-02
 ----------------------------
 - G4CoupledTransportation: 
-    Make treatment of mass and full safety coherent (to-dos remain in PathFinder)
-    Added storing of full safety in state; retrieve it after compute step 
-      from PathFinder; calculate them same way at start of step.
-    Put back in the code for treating looping particles
+  o Make treatment of mass and full safety coherent (to-dos remain in
+    G4PathFinder).
+  o Added storing of full safety in state; retrieve it after compute step 
+    from PathFinder; calculate them same way at start of step.
+  o Put back in the code for treating looping particles.
 
 February 15th, 2007, J.Apostolakis  transport-V08-02-01
 ----------------------------------
-- G4Transportation: protection against velocity=0 in AlongStep (invalid)
+- G4Transportation: protection against velocity=0 in AlongStep (invalid).
 
 February 15th, 2007, J.Apostolakis  transport-V08-02-00
 ----------------------------------
@@ -65,11 +205,11 @@ November 22nd, 2006, J.Apostolakis  transport-V08-01-04
 
 November 22nd, 2006, J.Apostolakis  transport-V08-01-03
 ---------------------------------
-- G4CoupledTransportation
-    AlongStepGPIL now returns an estimate for the safety for all geometries
+- G4CoupledTransportation:
+  o AlongStepGPIL() now returns an estimate for the safety for all geometries
     to make up for the fact that some other processes only have PostStep GPILs
     which cannot currently influence safety.
-**** Fix / Workaround for deficiency of others ****
+- NOTE: Fix / Workaround for deficiency of others.
 
 November 13th, 2006, J.Apostolakis  transport-V08-01-01
 ---------------------------------
@@ -79,27 +219,24 @@ November 13th, 2006, J.Apostolakis  transport-V08-01-01
 
 June 2nd, 2006, J.Apostolakis  transport-V08-00-02
 -----------------------------
-- Added new class G4CoupledTransportation, 
-   a revised version of Transportation,
-   for use in 'coupled' parallel navigation in different geometries
-- Includes non-revisions for migration to sstream (Nov 2005)
+- Added new class G4CoupledTransportation, a revised version of Transportation,
+  for use in 'coupled' parallel navigation in different geometries.
+- Includes non-revisions for migration to sstream (Nov 2005).
 
 Feb.  6th, 2006, J.Apostolakis/P.MoraDeFreitas transport-V08-00-01
 ----------------------------------------------
-- Corrected problem with suspended tracks - PR# 802
-
- - Added StartTracking() method which takes over responsibility to
-   clear the state for a new track, and to message other relevant
-   component to clear their state.
-   >> Problem report and proposed revision by P.MoraDeFreitas
+- Corrected problem with suspended tracks - PR# 802.
+- Added StartTracking() method which takes over responsibility to
+  clear the state for a new track, and to message other relevant
+  component to clear their state (problem report and proposed revision
+  by P.MoraDeFreitas).
 
 Jan. 16th, 2006, J.Apostolakis transport-V08-00-00
 ------------------------------
-- G4Transportation
-   the particle's charge is now taken from the dynamic particle, so that
-   it can take into account changes from the interaction of an ion with matter
-   (eg stripping e-)
-    ---> Thanks to Vladimir Ivantchenko
+- G4Transportation:
+  o The particle's charge is now taken from the dynamic particle, so that
+    it can take into account changes from the interaction of an ion with
+    matter (eg stripping e-). (V.Ivantchenko)
 
 Nov. 21st, 2005, M.Asai transport-V07-01-00
 -----------------------
@@ -132,8 +269,8 @@ Sep. 9th, M.Maire
 
 Oct. 8th, M.Asai transport-V06-02-02
 ----------------
-- A protection is added in G4Transportation.cc for an application with parameterized
-  volume but without any EM process.
+- A protection is added in G4Transportation.cc for an application with
+  parameterized volume but without any EM process.
 
 Aug. 27th, M.Asai transport-V06-02-01
 -----------------
@@ -363,7 +500,8 @@ May   31, 2002  M.Dressel transport-V04-00-08
 
 May   31, 2002  M.Dressel transport-V04-00-07
 --------------------------------------------------------
-- bug fix in G4PArallelScoreSampler.cc and remove Warning from ParallelTransport
+- bug fix in G4PArallelScoreSampler.cc and remove Warning from
+  ParallelTransport.
 
 May   31, 2002  M.Dressel transport-V04-00-06
 --------------------------------------------------------

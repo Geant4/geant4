@@ -24,9 +24,11 @@
 // ********************************************************************
 //
 
- // G4 Low energy model: n-p scattering
- // F.W. Jones, L.G. Greeniaus, H.P. Wellisch
+// G4 Low energy model: n-p scattering
+// F.W. Jones, L.G. Greeniaus, H.P. Wellisch
 
+// 11-OCT-2007 F.W. Jones: removed erroneous code for identity
+//             exchange of particles.
 
 #include "G4LEnp.hh"
 #include "Randomize.hh"
@@ -312,30 +314,14 @@ G4LEnp::ApplyYourself(const G4HadProjectile& aTrack, G4Nucleus& targetNucleus)
            << G4endl;
     }
 
-    // charge symmetry....
-    if(G4UniformRand()<.5)
-    {
-      theParticleChange.SetMomentumChange(newP->GetMomentumDirection());
-      theParticleChange.SetEnergyChange(newP->GetKineticEnergy());
-      delete newP;
-      G4DynamicParticle* p1 = new G4DynamicParticle;
-      p1->SetDefinition(targetParticle->GetDefinition());
-      p1->SetMomentum(targetParticle->GetMomentum());
-      theParticleChange.AddSecondary(p1);    
-    }
-    else
-    {
-      theParticleChange.SetStatusChange(stopAndKill);
-      G4DynamicParticle * pA = new G4DynamicParticle;
-      pA->SetDefinition(targetParticle->GetDefinition());
-      pA->SetMomentum(newP->GetMomentum());
-      G4DynamicParticle * pB = new G4DynamicParticle;
-      pB->SetDefinition(newP->GetDefinition());
-      pB->SetMomentum(targetParticle->GetMomentum());
-      delete newP;
-      theParticleChange.AddSecondary(pA);    
-      theParticleChange.AddSecondary(pB);    
-    }
+    theParticleChange.SetMomentumChange(newP->GetMomentumDirection());
+    theParticleChange.SetEnergyChange(newP->GetKineticEnergy());
+    delete newP;
+    G4DynamicParticle* p1 = new G4DynamicParticle;
+    p1->SetDefinition(targetParticle->GetDefinition());
+    p1->SetMomentum(targetParticle->GetMomentum());
+    theParticleChange.AddSecondary(p1);    
+
     return &theParticleChange;
 }
 

@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4VisStateDependent.cc,v 1.6 2006/06/29 21:30:02 gunter Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// GEANT4 tag $Name: geant4-09-01 $
 
 #include "G4VisStateDependent.hh"
 

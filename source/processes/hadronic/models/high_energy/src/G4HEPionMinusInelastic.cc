@@ -24,10 +24,12 @@
 // ********************************************************************
 //
 //
-// $Id: G4HEPionMinusInelastic.cc,v 1.13 2006/06/29 20:30:32 gunter Exp $
-// GEANT4 tag $Name: geant4-09-00 $
-//
-//
+// $Id: G4HEPionMinusInelastic.cc,v 1.14 2007/10/16 19:13:35 fjones Exp $
+// GEANT4 tag $Name: geant4-09-01 $
+
+// 11-OCT-2007 F.W. Jones: fixed incorrect Imax (should be Imin) in
+//             sampling of charge exchange.
+
 
 #include "globals.hh"
 #include "G4ios.hh"
@@ -312,7 +314,7 @@ G4HEPionMinusInelastic::FirstIntInCasPionMinus( G4bool &inElastic,
 //                                            suppress high multiplicity events at low momentum
 //                                            only one additional pion will be produced
        G4double cech[] = {1., 0.95, 0.79, 0.32, 0.19, 0.16, 0.14, 0.12, 0.10, 0.08};
-       G4int iplab = Imax(9, G4int( incidentTotalMomentum*5.));
+       G4int iplab = Imin(9, G4int( incidentTotalMomentum*5.));
        if( G4UniformRand() < cech[iplab] )
          {
            if( targetCode == protonCode )

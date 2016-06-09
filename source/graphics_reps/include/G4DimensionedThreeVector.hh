@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // $Id: G4DimensionedThreeVector.hh,v 1.2 2006/12/13 15:44:07 gunter Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 // Dimensioned G4Threevector.
 //

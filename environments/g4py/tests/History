@@ -1,4 +1,4 @@
-$Id: History,v 1.3 2006/08/08 05:10:09 kmura Exp $
+$Id: History,v 1.5 2007/08/07 03:37:36 kmura Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -13,6 +13,13 @@ A set of tests for python wrapping of C++ elements.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Aug.07, 2007 K.Murakami
+- gtest06 is added.
+- gtest07 is added.
+
+Jul.10, 2007 K.Murakami
+- gtest05 is added.
 
 Aug.07, 2006 K.Murakami
 - gtest04 is added.

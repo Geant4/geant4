@@ -1,4 +1,4 @@
-$Id: History,v 1.56 2007/05/11 14:22:54 gcosmo Exp $
+$Id: History,v 1.62 2007/11/02 20:56:36 gum Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,29 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+02 November 07: P. Gumplinger (xrays-V09-00-03)
+- G4Cerenkov constructor add warning printout about the change
+  to G4VDiscreteProcess
+
+30 September 07: P. Gumplinger (xrays-V09-00-02)
+- G4Cerenkov change inheritance to G4VDiscreteProcess
+  changed the arguments of G4Cerenkov::GetAverageNumberOfPhotons
+
+28 September 07: V.Ivant (xrays-V09-00-01)
+- G4VXTRenergyLoss: general cleanup of old comments;
+                    removed all static members;
+                    use verboseLevel variable to control cout
+- G4XTRTransparentRegRadModel, G4XTRRegularRadModel, 
+  G4StrawTubeXTRadiator : cleanup, use verboseLevel to control cout
+  
+02 July 07: V.Ivant (xrays-V09-00-00)
+- G4VXTRenergyLoss: fixed valgrind complains for wrong memory allocation
+  by removing internal initialisation of Sandia table but using Sandia
+  table from material 
+
+19 June 07: V.Ivant (xrays-V08-03-01)
+- G4VXTRenergyLoss: restore version 1.34 after failing to clean it up
 
 11 May 07: G.Cosmo (xrays-V08-03-00)
 - Use call to G4GeometryTolerance instead of kCarTolerance in G4ForwardXrayTR.

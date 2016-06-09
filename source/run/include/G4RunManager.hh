@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunManager.hh,v 1.48 2007/05/04 16:02:58 asaim Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: G4RunManager.hh,v 1.51 2007/11/13 19:25:13 asaim Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 // 
 
@@ -91,6 +91,7 @@ class G4PrimaryTransformer;
 #include "G4EventManager.hh"
 #include "globals.hh"
 #include <vector>
+#include <stdlib.h>
 
 class G4RunManager
 {
@@ -346,6 +347,9 @@ class G4RunManager
       G4String dirStr = dir;
       if( dirStr(dirStr.length()-1) != '/' ) dirStr += "/";
       randomNumberStatusDir = dirStr;
+      G4String shellCmd = "mkdir -p ";
+      shellCmd += dirStr;
+      system(shellCmd);
     }
     inline G4String GetRandomNumberStoreDir() const
     { return randomNumberStatusDir; }
@@ -433,6 +437,11 @@ class G4RunManager
   public:
     inline void SetDCtable(G4DCtable* DCtbl)
     { DCtable = DCtbl; }
+
+  public:
+    void ConstructScoringWorlds();
+  private:
+    void UpdateScoring();
 };
 
 #endif

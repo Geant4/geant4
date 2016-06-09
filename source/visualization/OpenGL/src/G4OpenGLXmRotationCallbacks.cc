@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4OpenGLXmRotationCallbacks.cc,v 1.14 2006/06/29 21:19:56 gunter Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 // 
 // Andrew Walkden  16th April 1997

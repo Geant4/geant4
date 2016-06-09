@@ -25,7 +25,7 @@
 //
 //
 // $Id: meshdefs.hh,v 1.7 2006/06/29 18:33:17 gunter Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 //
 // Tube/Cone Meshing constants for extent calculations

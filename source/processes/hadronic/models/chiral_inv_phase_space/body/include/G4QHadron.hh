@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4QHadron.hh,v 1.34 2006/11/20 16:29:11 mkossov Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: G4QHadron.hh,v 1.35 2007/08/28 15:42:32 mkossov Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 //      ---------------- G4QHadron ----------------
 //             by Mikhail Kossov, Sept 1999.
@@ -111,8 +111,14 @@ public:
   G4bool CorMDecayIn2(G4double corM, G4LorentzVector& fr4Mom);// This(newMass corM)+fr4Mom
   G4bool CorEDecayIn2(G4double corE, G4LorentzVector& fr4Mom);// This(E+=cE,P)+f(fE-=cE,fP)
   G4bool RelDecayIn2(G4LorentzVector& f4Mom, G4LorentzVector& s4Mom, G4LorentzVector& dir,
-                  G4double maxCost = 1., G4double minCost = -1.);
+                     G4double maxCost = 1., G4double minCost = -1.);
+  G4bool CopDecayIn2(G4LorentzVector& f4Mom, G4LorentzVector& s4Mom, G4LorentzVector& dir,
+                     G4double cop);
   G4bool DecayIn3(G4LorentzVector& f4Mom, G4LorentzVector& s4Mom, G4LorentzVector& t4Mom);
+  G4bool RelDecayIn3(G4LorentzVector& fh4M, G4LorentzVector& sh4M, G4LorentzVector& th4Mom,
+                     G4LorentzVector& dir, G4double maxCost = 1., G4double minCost = -1.);
+  G4bool CopDecayIn3(G4LorentzVector& fh4M, G4LorentzVector& sh4M, G4LorentzVector& th4Mom,
+                     G4LorentzVector& dir, G4double cosp);
   void   Init3D();                         // Initializes 3D nucleus with (Pos,4M)nucleons
 
 private:

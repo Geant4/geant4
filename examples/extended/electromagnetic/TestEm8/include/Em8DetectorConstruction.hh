@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: Em8DetectorConstruction.hh,v 1.8 2006/06/29 16:59:04 gunter Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: Em8DetectorConstruction.hh,v 1.9 2007/10/02 10:12:47 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 // 
 
@@ -50,12 +50,10 @@ class Em8CalorimeterSD;
 
 class Em8DetectorConstruction : public G4VUserDetectorConstruction
 {
-  public:
+public:
   
-    Em8DetectorConstruction();
-   ~Em8DetectorConstruction();
-
-  public:
+  Em8DetectorConstruction();
+  virtual ~Em8DetectorConstruction();
      
   void SetAbsorberMaterial (G4String);     
   void SetAbsorberThickness(G4double);     
@@ -71,22 +69,17 @@ class Em8DetectorConstruction : public G4VUserDetectorConstruction
   void SetElectronCut(G4double cut){fElectronCut = cut;};
   void SetPositronCut(G4double cut){fPositronCut = cut;};
 
+  G4VPhysicalVolume* Construct();
 
-  //  void SetMagField(G4double);
+  void UpdateGeometry();
      
-     G4VPhysicalVolume* Construct();
-
-     void UpdateGeometry();
-     
-  public:
-  
   void PrintCalorParameters(); 
                     
   G4Material* GetWorldMaterial()    {return fWorldMaterial;};
   G4double GetWorldSizeZ()          {return fWorldSizeZ;}; 
   G4double GetWorldSizeR()          {return fWorldSizeR;};
      
-  G4double GetAbsorberZ()        {return fAbsorberZ;}; 
+  G4double GetAbsorberZ()           {return fAbsorberZ;}; 
   G4double GetStartAbsZ()           {return fStartAbsZ;};
   G4double GetEndAbsZ()             {return fEndAbsZ;};
 
@@ -98,9 +91,9 @@ class Em8DetectorConstruction : public G4VUserDetectorConstruction
   const G4VPhysicalVolume* GetAbsorber()   {return fPhysicsAbsorber;};
   G4LogicalVolume* GetLogicalAbsorber()    {return fLogicAbsorber;};
                  
-  private:
-     
-  static const G4double fDelta;
+private:
+  
+  G4double           fDelta;
 
   G4bool             fWorldChanged;
   G4double           fAbsorberThickness;
@@ -108,8 +101,6 @@ class Em8DetectorConstruction : public G4VUserDetectorConstruction
 
   G4Material*        fWindowMat ;
   G4double           fWindowThick ;
-
-
  
   G4double           fAbsorberZ ;
   G4double           fStartAbsZ , fEndAbsZ ;
@@ -130,9 +121,9 @@ class Em8DetectorConstruction : public G4VUserDetectorConstruction
 
   G4double fElectronCut, fGammaCut, fPositronCut;
      
-  Em8DetectorMessenger* fDetectorMessenger;  //pointer to the Messenger
-  Em8CalorimeterSD*     fCalorimeterSD;      //pointer to the sensitive detector
-  G4Region*             fRegGasDet;
+  Em8DetectorMessenger*  fDetectorMessenger;  //pointer to the Messenger
+  Em8CalorimeterSD*      fCalorimeterSD;      //pointer to the sensitive detector
+  G4Region*              fRegGasDet;
       
   private:
     

@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: SteppingAction.cc,v 1.4 2006/09/18 17:26:20 maire Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: SteppingAction.cc,v 1.5 2007/08/19 20:52:53 maire Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -69,6 +69,9 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
  G4double x = point.x() + 0.5*detector->GetAbsorSizeX();  
  histoManager->FillHisto(1, x, edep);
  
+ G4double r0 = histoManager->GetcsdaRange();
+ if (r0 > 0.) histoManager->FillHisto(8, x/r0, edep);
+  
  //step size of primary particle or charged secondaries
  //
  G4double steplen = aStep->GetStepLength();

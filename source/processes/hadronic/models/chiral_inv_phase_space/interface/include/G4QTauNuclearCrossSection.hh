@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4QTauNuclearCrossSection.hh,v 1.5 2006/12/01 10:57:46 mkossov Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 //
 // GEANT4 physics class: G4QTauNuclearCrossSection -- header file

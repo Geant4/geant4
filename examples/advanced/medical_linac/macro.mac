@@ -1,8 +1,8 @@
+
 /PhysicsList/cut 0.2 mm
 /control/verbose 1
 /control/saveHistory
 /run/verbose 2
-
 
 /run/initialize
 /tracking/storeTrajectory 1
@@ -13,6 +13,9 @@
 
 /PhantomSD/dimension 15. cm
 /PhantomSD/Nvoxels 150
+
+#/run/initialize
+#/tracking/storeTrajectory 1
 
 #    Multi Leaf
 

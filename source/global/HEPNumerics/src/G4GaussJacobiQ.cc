@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4GaussJacobiQ.cc,v 1.7 2006/06/29 19:00:11 gunter Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: G4GaussJacobiQ.cc,v 1.8 2007/11/13 17:35:06 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 #include "G4GaussJacobiQ.hh"
 
@@ -49,7 +49,7 @@ G4GaussJacobiQ::G4GaussJacobiQ(       function pFunction,
   G4double alphaBeta=0.0, alphaReduced=0.0, betaReduced=0.0,
            root1=0.0, root2=0.0, root3=0.0 ;
   G4double a=0.0, b=0.0, c=0.0,
-           newton1=0.0, newton2=0.0, newton3=0.0, newton=0.0,
+           newton1=0.0, newton2=0.0, newton3=0.0, newton0=0.0,
            temp=0.0, rootTemp=0.0 ;
 
   fNumber   = nJacobi ;
@@ -117,11 +117,11 @@ G4GaussJacobiQ::G4GaussJacobiQ(       function pFunction,
            c = 2.0*(j-1+alpha)*(j-1+beta)*temp ;
            newton1 = (b*newton2-c*newton3)/a ;
         }
-        newton = (nJacobi*(alpha - beta - temp*root)*newton1 +
-              2.0*(nJacobi + alpha)*(nJacobi + beta)*newton2)/
-             (temp*(1.0 - root*root)) ;
+        newton0 = (nJacobi*(alpha - beta - temp*root)*newton1 +
+               2.0*(nJacobi + alpha)*(nJacobi + beta)*newton2)/
+              (temp*(1.0 - root*root)) ;
         rootTemp = root ;
-        root = rootTemp - newton1/newton ;
+        root = rootTemp - newton1/newton0 ;
         if (std::fabs(root-rootTemp) <= tolerance)
         {
            break ;
@@ -137,7 +137,7 @@ G4GaussJacobiQ::G4GaussJacobiQ(       function pFunction,
                         GammaLogarithm((G4double)(beta+nJacobi)) - 
                         GammaLogarithm((G4double)(nJacobi+1.0)) -
                         GammaLogarithm((G4double)(nJacobi + alphaBeta + 1.0)))
-                        *temp*std::pow(2.0,alphaBeta)/(newton*newton2) ;
+                        *temp*std::pow(2.0,alphaBeta)/(newton0*newton2) ;
   }
 }
 

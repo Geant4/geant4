@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HistoManager.cc,v 1.2 2007/03/19 13:08:41 maire Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: HistoManager.cc,v 1.5 2007/11/13 11:31:54 maire Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -61,6 +61,7 @@ HistoManager::HistoManager()
     exist[k] = false;
     Unit[k]  = 1.0;
     Width[k] = 1.0;
+    ascii[k] = false;      
   }
 
   histoMessenger = new HistoMessenger(this);
@@ -126,6 +127,7 @@ void HistoManager::save()
 {
 #ifdef G4ANALYSIS_USE
   if (factoryOn) {
+    saveAscii();          // Write ascii file, if any     
     tree->commit();       // Writing the histograms to the file
     tree->close();        // and closing the tree (and the file)
     G4cout << "\n----> Histogram Tree is saved in " << fileName[1] << G4endl;
@@ -162,7 +164,7 @@ void HistoManager::SetHisto(G4int ih,
     return;
   }
   
-  const G4String id[] = {"0","1","2","3","4","5","6","7","8","9" ,"10"};
+  const G4String id[] = {"0","1","2","3","4","5","6","7","8","9" ,"10", "11"};
   const G4String title[] =
                 { "dummy",						//0
 		  "emission point of e-",				//1
@@ -174,7 +176,8 @@ void HistoManager::SetHisto(G4int ih,
 		  "theta distribution of e- at first step in cavity",	//7
 		  "track segment of e- in cavity",			//8
 		  "step size of e- in wall",				//9
-		  "step size of e- in cavity"				//10
+		  "step size of e- in cavity",				//10
+		  "energy deposit in cavity per track"			//11
                  };
 
 
@@ -229,4 +232,44 @@ void HistoManager::Scale(G4int ih, G4double fac)
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void HistoManager::PrintHisto(G4int ih)
+{
+ if (ih < MaxHisto) ascii[ih] = true;
+ else
+    G4cout << "---> warning from HistoManager::PrintHisto() : histo " << ih
+           << "does not exist" << G4endl;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+#include <fstream>
+
+void HistoManager::saveAscii()
+{
+#ifdef G4ANALYSIS_USE
+ 
+ G4String name = fileName[0] + ".ascii";
+ std::ofstream File(name, std::ios::out);
+ File.setf( std::ios::scientific, std::ios::floatfield );
+ 
+ //write selected histograms
+ for (G4int ih=0; ih<MaxHisto; ih++) {
+    if (exist[ih] && ascii[ih]) {
+      File << "\n  1D histogram " << ih << ": " << Title[ih] 
+           << "\n \n \t     X \t\t     Y" << G4endl;
+     
+      for (G4int iBin=0; iBin<Nbins[ih]; iBin++) {
+         File << "  " << iBin << "\t" 
+              << histo[ih]->binMean(iBin) << "\t"
+	      << histo[ih]->binHeight(iBin) 
+	      << G4endl;
+      } 
+    }
+ }
+#endif
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 

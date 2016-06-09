@@ -26,7 +26,7 @@
 #include "G4QPartonPair.hh"
 //
 // $Id: G4QPartonPair.cc,v 1.1 2006/10/30 10:40:36 mkossov Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file

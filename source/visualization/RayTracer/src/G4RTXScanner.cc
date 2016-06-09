@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4RTXScanner.cc,v 1.5 2007/05/22 17:10:42 allison Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 //
 

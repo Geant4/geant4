@@ -39,12 +39,14 @@ unsetenv  G4LEDATA
 unsetenv  G4LEVELGAMMADATA
 unsetenv  G4NEUTRONHPDATA
 unsetenv  G4RADIOACTIVEDATA
+unsetenv  G4ABLADATA
 
 unsetenv  G4LIB
 unsetenv  G4LIB_BUILD_G3TOG4
 unsetenv  G4LIB_BUILD_SHARED
 unsetenv  G4LIB_BUILD_STATIC
 unsetenv  G4LIB_BUILD_ZLIB
+unsetenv  G4LIB_BUILD_GDML
 unsetenv  G4LIB_USE_G3TOG4
 unsetenv  G4LIB_USE_GRANULAR
 unsetenv  G4LIB_USE_ZLIB
@@ -58,6 +60,7 @@ unsetenv  G4UI_USE_TCSH
 unsetenv  G4UI_USE_WIN32
 unsetenv  G4UI_USE_XAW
 unsetenv  G4UI_USE_XM
+unsetenv  G4UI_USE_QT
 
 unsetenv  G4VIS_BUILD_DAWN_DRIVER
 unsetenv  G4VIS_BUILD_OIWIN32_DRIVER
@@ -67,6 +70,7 @@ unsetenv  G4VIS_BUILD_OPENGLXM_DRIVER
 unsetenv  G4VIS_BUILD_OPENGLX_DRIVER
 unsetenv  G4VIS_BUILD_RAYTRACERX_DRIVER
 unsetenv  G4VIS_BUILD_VRML_DRIVER
+unsetenv  G4VIS_BUILD_OPENGLQT_DRIVER
 
 unsetenv  G4VIS_USE_DAWN
 unsetenv  G4VIS_USE_OIWIN32
@@ -76,6 +80,7 @@ unsetenv  G4VIS_USE_OPENGLX
 unsetenv  G4VIS_USE_OPENGLXM
 unsetenv  G4VIS_USE_RAYTRACERX
 unsetenv  G4VIS_USE_VRML
+unsetenv  G4VIS_USE_OPENGLQT
 
 ######################################
 #
@@ -143,6 +148,13 @@ if ( X$g4neutronhpcrosssections != X ) then
 setenv G4NEUTRONHPDATA "$g4neutronhpcrosssections"
 echo "On this machine the G4NEUTRONHPDATA=\$G4NEUTRONHPDATA"
 endif
+
+#+
+if ( X$g4abladata != X ) then
+setenv G4ABLADATA "$g4abladata"
+echo "On this machine the G4ABLADATA=\$G4ABLADATA"
+endif
+
 
 #+
 #if ( X$g4elasticdata != X ) then
@@ -233,6 +245,20 @@ setenv G4UI_USE_WIN32 1
 echo "On this machine the G4UI_USE_WIN32=\$G4UI_USE_WIN32"
 endif
 
+#+
+if ( X$g4ui_build_qt_session == Xy ) then
+setenv G4UI_BUILD_QT_SESSION 1
+echo "On this machine the G4UI_BUILD_QT_SESSION=\$G4UI_BUILD_QT_SESSION"
+endif 
+
+#+
+if ( X$g4ui_use_qt == Xy ) then
+setenv G4UI_USE_QT 1
+echo "On this machine the G4UI_USE_QT=\$G4UI_USE_QT"
+endif 
+
+
+
 #
 # g4vis
 #
@@ -285,6 +311,13 @@ echo "On this machine the G4VIS_BUILD_VRML_DRIVER=\$G4VIS_BUILD_VRML_DRIVER"
 endif
 
 #+
+if ( X$g4vis_build_openglqt_driver == Xy ) then
+setenv G4VIS_BUILD_OPENGLQT_DRIVER 1
+echo "On this machine the G4VIS_BUILD_OPENGLQT_DRIVER=\$G4VIS_BUILD_OPENGLQT_DRIVER"
+endif 
+
+
+#+
 if ( X$g4vis_use_dawn == Xy ) then
 setenv G4VIS_USE_DAWN 1
 echo "On this machine the G4VIS_USE_DAWN=\$G4VIS_USE_DAWN"
@@ -333,6 +366,12 @@ echo "On this machine the G4VIS_USE_VRML=\$G4VIS_USE_VRML"
 endif
 
 #+
+if ( X$g4vis_use_openglqt == Xy ) then
+setenv G4VIS_USE_OPENGLQT 1
+echo "On this machine the G4VIS_USE_OPENGLQT=\$G4VIS_USE_OPENGLQT"
+endif
+
+#+
 if ( X$g4vis_oglhome != X )  then
 setenv OGLHOME "$g4vis_oglhome"
 echo "On this machine the OGLHOME=\$OGLHOME"
@@ -343,6 +382,14 @@ if ( X$g4vis_oivhome != X )  then
 setenv OIVHOME "$g4vis_oivhome"
 echo "On this machine the OIVHOME=\$OIVHOME"
 endif 
+
+#+
+if ( X$g4_qthome != X ) then
+setenv QTHOME "$g4_qthome"
+echo "On this machine the QTHOME=\$QTHOME"
+endif
+
+
 
 #+
 if ( X$g4vis_build_openglxm_driver != X )  then
@@ -379,6 +426,25 @@ if ( X$g4ui_build_xaw_session != X )  then
 setenv XAWLIBS "$g4ui_xawlibs"
 echo "On this machine the XAWLIBS=\$XAWLIBS"
 endif 
+
+
+
+#
+# Use GDML module
+#
+#+
+if ( X$g4lib_build_gdml == Xy ) then
+setenv G4LIB_BUILD_GDML 1
+echo "On this machine the G4LIB_BUILD_GDML=\$G4LIB_BUILD_GDML"
+endif 
+
+if ( X$g4lib_build_gdml == Xy ) then
+setenv XERCESCROOT "$g4gdml_xercesc_root"
+echo "On this machine the XERCESCROOT=\$XERCESCROOT"
+endif
+
+
+
 
 #
 # Use G3TOG4 module
@@ -488,9 +554,19 @@ echo ''
 if ( ${?LD_LIBRARY_PATH} )  then
 setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:${G4LIB}/${G4SYSTEM}
 setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:${CLHEP_BASE_DIR}/lib
+
+if ( ${?G4LIB_BUILD_GDML} ) then
+   setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:${XERCESCROOT}/lib
+endif
+
 else
 setenv LD_LIBRARY_PATH ${G4LIB}/${G4SYSTEM}
 setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:${CLHEP_BASE_DIR}/lib
+
+if ( ${?G4LIB_BUILD_GDML} ) then
+   setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:${XERCESCROOT}/lib
+endif
+
 endif
 endif
 
@@ -503,9 +579,19 @@ if ( ${?G4LIB_BUILD_SHARED} ) then
 if ( ${?DYLD_LIBRARY_PATH} )  then
 setenv DYLD_LIBRARY_PATH ${DYLD_LIBRARY_PATH}:${G4LIB}/${G4SYSTEM}
 setenv DYLD_LIBRARY_PATH ${DYLD_LIBRARY_PATH}:${CLHEP_BASE_DIR}/lib
+
+if ( ${?G4LIB_BUILD_GDML} ) then
+   setenv DYLD_LIBRARY_PATH ${DYLD_LIBRARY_PATH}:${XERCESCROOT}/lib
+endif
+
 else
 setenv DYLD_LIBRARY_PATH ${G4LIB}/${G4SYSTEM}
 setenv DYLD_LIBRARY_PATH ${DYLD_LIBRARY_PATH}:${CLHEP_BASE_DIR}/lib
+
+if ( ${?G4LIB_BUILD_GDML} ) then
+   setenv DYLD_LIBRARY_PATH ${DYLD_LIBRARY_PATH}:${XERCESCROOT}/lib
+endif
+
 endif
 endif
 

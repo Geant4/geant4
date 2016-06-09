@@ -14,6 +14,53 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+25-October 2007 A.Howard     hadr-pre-V09-00-04
+-----------------------------------------------
+- Removed compilation warning on unused parameter in G4PreCompoundIon.cc
+
+
+11-October 2007 A.Howard     hadr-pre-V09-00-03
+-----------------------------------------------
+- Corrected for integer arithmetic bug in G4PreCompoundModel.cc 
+  (ratio of charged to neutral excitons)
+
+
+01-October 2007 A.Howard     hadr-pre-V09-00-02
+-----------------------------------------------
+- Protected Rj (Q_beta) factor against divide by zeroes (should never happen?)
+  The following files have been modified:
+  G4PreCompoundAlpha.hh, G4PreCompoundDeuteron.hh, G4PreCompoundHe3.hh, 
+  G4PreCompoundTriton.hh, G4PreCompoundNeutron.hh, G4PreCompoundProton.hh
+  
+
+23-August 2007 A.Howard     hadr-pre-V09-00-01
+----------------------------------------------
+- Development tag incorporating further suggestions/corrections from 
+  Jose-Manuel Quesada particularly with respect to light ion production. 
+  The following files have been modified:
+  G4PreCompoundIon.cc, G4PreCompoundDeuteron.hh, G4PreCompoundHe3.hh,
+  G4PreCompoundTriton.hh, G4PreCompoundAlpha.hh, G4PreCompoundIon.hh,
+  G4VPreCompoundIon.hh (unused?)
+
+
+23-July 2007 A.Howard       hadr-pre-V09-00-00
+----------------------------------------------
+- Development tag incorporating the suggestions/corrections of Jose-Manuel
+  Quesada.  These should reflect the literature and units expected for the
+  exciton model.  The following files have been modified:
+  G4PreCompoundNucleon.hh, G4VPreCompoundNucleon.hh, G4PreCompoundAlpha.hh,
+  G4PreCompoundHe3.hh, G4PreCompoundDeuteron.hh, G4PreCompoundNeutron.hh,
+  G4PreCompoundProton.hh, G4PreCompoundTriton.hh
+  G4VPreCompoundIon.cc, G4PreCompoundIon.cc, G4PreCompoundModel.cc,
+  G4VPreCompoundFragment.cc, G4PreCompoundTransitions.cc,
+  G4PreCompoundNucleon.cc, G4VPreCompoundNucleon.cc
+  The main changes are:
+  - introducing an Rj factor into the probability calculation, 
+  - correcting the units for the Pauli Blocking Factor - missing a g factor,
+  - decreasing the number of charged particles if the number excitons is
+    decreased (previously this number was only increased with increasing
+    excitons).
+
 
 04-May 2007 G.Folger       hadr-pre-V08-02-00
 ----------------------------------------------

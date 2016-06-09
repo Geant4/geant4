@@ -24,15 +24,12 @@
 // ********************************************************************
 //
 //
-// $Id: G4StrawTubeXTRadiator.cc,v 1.4 2006/06/29 19:56:13 gunter Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: G4StrawTubeXTRadiator.cc,v 1.6 2007/09/29 17:49:34 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 //
-
-#include <complex>
 
 #include "G4StrawTubeXTRadiator.hh"
 #include "Randomize.hh"
-
 #include "G4Gamma.hh"
 
 using namespace std;
@@ -48,41 +45,43 @@ G4StrawTubeXTRadiator::G4StrawTubeXTRadiator(G4LogicalVolume *anEnvelope,
                                          const G4String& processName) :
   G4VXTRenergyLoss(anEnvelope,foilMat,gasMat,a,b,1,processName)
 {
-  G4cout<<"Straw tube X-ray TR  radiator EM process is called"<<G4endl;
+  if(verboseLevel > 0)
+    G4cout<<"Straw tube X-ray TR  radiator EM process is called"<<G4endl;
 
   if( unishut )
   {
     fAlphaPlate = 1./3.;
     fAlphaGas   = 12.4;
-    G4cout<<"straw uniform shooting: "<<"fAlphaPlate = "
-          <<fAlphaPlate<<" ; fAlphaGas = "<<fAlphaGas<<G4endl;
+    if(verboseLevel > 0)
+      G4cout<<"straw uniform shooting: "<<"fAlphaPlate = "
+	    <<fAlphaPlate<<" ; fAlphaGas = "<<fAlphaGas<<G4endl;
 
   }
   else
   {
     fAlphaPlate = 0.5;
     fAlphaGas   = 5.;
-    G4cout<<"straw isotropical shooting: "<<"fAlphaPlate = "
-          <<fAlphaPlate<<" ; fAlphaGas = "<<fAlphaGas<<G4endl;
+    if(verboseLevel > 0)
+      G4cout<<"straw isotropical shooting: "<<"fAlphaPlate = "
+	    <<fAlphaPlate<<" ; fAlphaGas = "<<fAlphaGas<<G4endl;
 
 
   }
   // index of medium material
 
   fMatIndex3 = mediumMat->GetIndex();
-  G4cout<<"medium material = "<<mediumMat->GetName()<<G4endl;
+  if(verboseLevel > 0)
+    G4cout<<"medium material = "<<mediumMat->GetName()<<G4endl;
 
- // plasma energy squared for plate material
+  // plasma energy squared for plate material
 
   fSigma3 = fPlasmaCof*mediumMat->GetElectronDensity();
-  G4cout<<"medium plasma energy = "<<sqrt(fSigma3)/eV<<" eV"<<G4endl;
+  if(verboseLevel > 0)
+    G4cout<<"medium plasma energy = "<<sqrt(fSigma3)/eV<<" eV"<<G4endl;
 
-// Compute cofs for preparation of linear photo absorption in external medium
+  // Compute cofs for preparation of linear photo absorption in external medium
 
   ComputeMediumPhotoAbsCof();
-
-
-
 
   // Build energy and angular integral spectra of X-ray TR photons from
   // a radiator
@@ -94,10 +93,7 @@ G4StrawTubeXTRadiator::G4StrawTubeXTRadiator(G4LogicalVolume *anEnvelope,
 
 G4StrawTubeXTRadiator::~G4StrawTubeXTRadiator()
 {
-  ;
 }
-
-
 
 ///////////////////////////////////////////////////////////////////////////
 //
@@ -120,7 +116,6 @@ G4StrawTubeXTRadiator::GetStackFactor( G4double energy,
 
   M2 = GetPlateLinearPhotoAbs(energy);
   M3 = GetGasLinearPhotoAbs(energy);
-
 
   G4complex C2(1.0 + 0.5*fPlateThick*M2/fAlphaPlate, fPlateThick/L2/fAlphaPlate); 
   G4complex C3(1.0 + 0.5*fGasThick*M3/fAlphaGas, fGasThick/L3/fAlphaGas); 
@@ -189,47 +184,9 @@ G4complex G4StrawTubeXTRadiator::GetMediumComplexFZ( G4double omega ,
 
 void G4StrawTubeXTRadiator::ComputeMediumPhotoAbsCof() 
 {
-   G4int i, j, numberOfElements;
-   static const G4MaterialTable* 
-   theMaterialTable = G4Material::GetMaterialTable();
-
-   G4SandiaTable thisMaterialSandiaTable(fMatIndex3);
-   numberOfElements = (*theMaterialTable)[fMatIndex3]->GetNumberOfElements();
-   G4int* thisMaterialZ = new G4int[numberOfElements];
-
-   for(i=0;i<numberOfElements;i++)
-   {
-         thisMaterialZ[i] = (G4int)(*theMaterialTable)[fMatIndex3]->
-                                      GetElement(i)->GetZ() ;
-   }
-   fMediumIntervalNumber = thisMaterialSandiaTable.SandiaIntervals
-                           (thisMaterialZ,numberOfElements) ;
-   
-   fMediumIntervalNumber = thisMaterialSandiaTable.SandiaMixing
-                           ( thisMaterialZ ,
-                           (*theMaterialTable)[fMatIndex3]->GetFractionVector() ,
-                             numberOfElements,fMediumIntervalNumber);
-   
-   fMediumPhotoAbsCof = new G4double*[fMediumIntervalNumber];
-
-   for(i=0;i<fMediumIntervalNumber;i++)
-   {
-     fMediumPhotoAbsCof[i] = new G4double[5];
-   }
-   for(i=0;i<fMediumIntervalNumber;i++)
-   {
-      fMediumPhotoAbsCof[i][0] = thisMaterialSandiaTable.
-                                GetPhotoAbsorpCof(i+1,0); 
-                              
-      for(j=1;j<5;j++)
-      {
-           fMediumPhotoAbsCof[i][j] = thisMaterialSandiaTable.
-                                     GetPhotoAbsorpCof(i+1,j)*
-                 (*theMaterialTable)[fMatIndex3]->GetDensity();
-      }
-   }
-   delete[] thisMaterialZ;
-   return;
+  const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable();
+  const G4Material* mat = (*theMaterialTable)[fMatIndex3];
+  fMediumPhotoAbsCof = mat->GetSandiaTable();
 }
 
 //////////////////////////////////////////////////////////////////////
@@ -239,29 +196,18 @@ void G4StrawTubeXTRadiator::ComputeMediumPhotoAbsCof()
 
 G4double G4StrawTubeXTRadiator::GetMediumLinearPhotoAbs(G4double omega) 
 {
-  G4int i ;
   G4double omega2, omega3, omega4; 
 
   omega2 = omega*omega;
   omega3 = omega2*omega;
   omega4 = omega2*omega2;
 
-  for(i=0;i<fMediumIntervalNumber;i++)
-  {
-    if( omega < fMediumPhotoAbsCof[i][0] ) break;
-  }
-  if( i == 0 )
-  { 
-    G4Exception("Invalid (<I1) energy in G4VXTRenergyLoss::GetMediumLinearPhotoAbs");
-  }
-  else i-- ;
-  
-  return fMediumPhotoAbsCof[i][1]/omega  + fMediumPhotoAbsCof[i][2]/omega2 + 
-         fMediumPhotoAbsCof[i][3]/omega3 + fMediumPhotoAbsCof[i][4]/omega4  ;
+  G4double* SandiaCof = fMediumPhotoAbsCof->GetSandiaCofForMaterial(omega);
+
+  G4double cross = SandiaCof[0]/omega  + SandiaCof[1]/omega2 +
+                   SandiaCof[2]/omega3 + SandiaCof[3]/omega4;
+  return cross;
 }
-
-
-
 
 //
 //

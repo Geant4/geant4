@@ -82,6 +82,7 @@ protected:
   
   virtual G4double GetAlpha() = 0;
   virtual G4double GetBeta() = 0;
+  virtual G4double GetRj(const G4int NumberParticles, const G4int NumberCharged) = 0;
   virtual G4double FactorialFactor(const G4double N, const G4double P) = 0;
   virtual G4double CoalescenceFactor(const G4double A) = 0; 
     

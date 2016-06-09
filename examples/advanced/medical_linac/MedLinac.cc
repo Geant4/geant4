@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: MedLinac.cc,v 1.11 2006/06/29 16:03:27 gunter Exp $
+// $Id: MedLinac.cc,v 1.12 2007/07/01 15:19:18 mpiergen Exp $
 //
 // --------------------------------------------------------------
 //      GEANT 4 -  medical_linac
@@ -65,7 +65,7 @@ int main(int argc ,char ** argv)
 
 //choose the Random engine
   CLHEP::HepRandom::setTheEngine(new CLHEP::RanecuEngine);
-  G4int seed = time(0);
+  G4int seed = 0;
   CLHEP::HepRandom :: setTheSeed(seed);
 
  // Construct the default run manager

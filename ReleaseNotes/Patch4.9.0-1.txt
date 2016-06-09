@@ -1,0 +1,187 @@
+
+                 Geant4 9.0 - patch-01 Release Notes
+                 -----------------------------------
+
+                                                           28 August 2007
+
+List of fixes included in this public patch since the public release 9.0:
+
+  o Configuration:  (*)
+    -------------
+    + liblist.c: fixed problem affecting recent CygWin installations on
+      Windows in parsing the buffer for the generation of libname.map.
+    + binmake.gmk: defined OUT internal variable specifying the proper
+      compilation/linking option to Unix or Windows compilers: '-o '
+      and '/Fe' respectively. Cleared <TAB> characters where not necessary.
+    + SUN-CC.gmk: forced -xO2 as optimisation level.
+
+  o Geometry:
+    --------
+    + magneticfield:
+      o Fix to DistChord() method for Helical Steppers: adopt 'special' case
+        also for Ang<2pi not only for Ang<pi; use cos() in place of tan(), to
+        improve CPU performance.
+      o In G4HelixMixedStepper added possibility to call different steppers
+        for small steps and add some statistics how offen different steppers
+        are called. Improved AdvanceHelix() to be able to make half step and
+        full step in one call.
+      o G4RKG3_Stepper: improved internal algorithm to use pre-computed values;
+        the stepper now gives comparable CPU performance as ClassicalRK4.
+      o Changed FatalException to EventMustBeAborted in AccurateAdvance()
+        if proposed integration step is negative.  (*)
+    + management:
+      o Added dummy constructor and destructor to G4VPVParameterisation.
+    + solids/BREPS:
+      o Added missing initialisations of kCarTolerance in alternative
+        constructors for G4BoundingBox3D, G4Curve, G4CurveRayIntersection,
+        G4KnotVector. Addressing problem report #959.
+    + solids/CSG:
+      o G4Tubs: fixed bug in DistanceToOut(p,v,..) for negative value under
+        sqrt() for the case of point p on the surface and v tangent to the
+        surface. Responsible for rare cases of NaN.
+    + solids/specific:
+      o Fixes in G4Polyhedra::GetPointOnSurface():  (*)
+        Correctly treat 'totalPhi' instead of 'endPhi' for the case of open
+        shapes and 'twopi' for not open shapes.
+        Introduced fix for the case when number of sectors (numSide) is equal
+        to 1. At the origin of problems observed when checking overlaps for
+        polyhedra solids defined as such.
+      o Fixed dummy constructors of G4Polycone and G4PolyPhiFace for
+        initialisation of 'edges' and 'corners'. Added workaround to
+        initialisation of 'corners' vector in G4PolyconeSide class, to allow
+        for object persistency with Root-I/O.
+      o G4EllipticalCone:
+        - DistanceToIn(p): corrected answer for p.z()<-zTopCut and for the
+          point p on the surface.
+        - DistanceToOut(p,v): now returning positive solution or zero when
+          crossing the elliptical surface.
+        - Fix in DistanceToOut(p) which was giving always zero.
+        - Added some formulas on how to pre-calculate 'SemiAxis' and 'zheight'.
+
+  o Global:
+    ------
+    + Changed date for patch-01 to release 9.0.
+
+  o Graphics Representations:
+    ------------------------
+    + Corrected graphical description for G4EllipticalCone in HepPolyhedron
+      and G4Polyhedron.
+    + G4VGraphicsScene: Added default constructor and virtual destructor.
+
+  o Intercoms:
+    ---------
+    + G4UIbatch:
+      o Bug fixed for the treatment of the last line.
+      o Added support for continued line by '\', '_'.
+      o String after '#' is treated as comment.
+      o White spaces at the head of a line are allowed.
+      o Fixed problem on 32bit-Linux.
+    + G4UImanager: fixed bug concerning invalid returned object.
+    + Introduced "/control/getEnv" and "/control/echo" commands.
+
+  o Electromagnetic Processes:
+    -------------------------
+    + Polarisation:
+      o Removed/renamed obsolete methods and local variables in
+        classes G4VPolarizedCrossSection, G4eplusPolarizedAnnihilation,
+        and G4PolarizedAnnihilationModel to clear "shadow" warnings on SUN-CC.
+    + Standard:
+      o G4UniversalFluctuation: added protection such that no sampling of
+        fluctuations is done if mean energy loss at the step is below minimal
+        excitation energy of the media. The fix is important for cases of
+        low-dense gases and very small steps.
+    + Utils:
+      o G4VEmModel: fixed SelectRandomAtom() method for the selection of
+        elements in a compound material.
+    + Xrays:
+      o G4VXTRenergyLoss: fixed Valgrind run-time errors for wrong memory
+        allocation by removing internal initialisation of Sandia table and
+        using Sandia table from materials.
+
+  o Hadronic Processes:
+    ------------------
+    + models/chiral_inv_phase_space:  (*)
+      o G4QuasiFreeRatios: fixed DB filling (ID update), responsible for
+        excessive growth of memory in long runs. Corrected indexing and
+        computation of cos(theta).
+    + models/neutron_hp:
+      o G4NeutronHPThermalScattering: removed duplicate declaration of
+        'dirName', already a class member, to clear compilation warning.
+    + models/util:
+      o G4KineticTrack: changed local variable names to clear compilation
+        warnings on SUN-CC about hiding.
+    + stopping:
+      o Fixed signature of G4MuMinusCaptureCascade::DoCascade() expecting
+        'const' as arguments for A and Z. Resolves linking problems on SUN-CC.
+
+  o Visualization:
+    -------------
+    + Removed redundant method declarations and minor tidies.
+
+  o Environments:
+    ------------
+    + Minor bug fixes to G4Py module; updated geometry wrappers and TestEm0
+      example.
+
+  o Examples:
+    --------
+    + advanced/medical_linac:
+      o Fixed problem report #880 in DetectorConstruction class.
+      o Updated macros; reviewed seed initialisation and modified to use
+        default multiple-scattering class instead of MultipleScattering52.
+    + advanced/microbeam:
+      o Improved dose calculation in the code in order to take into account
+        small energy deposits by any particle around the phantom edge voxels,
+        by suppressing a selection condition on the PostStep. The total result
+        of the dose calculation does not change significantly.
+      o Added protection against scattering at large angles in collimators.
+      o Suppressed field manager in zones with zero field.
+      o Use 'kUndefined' optimization in cell phantom implementation.
+      o Changed number of incident alpha particles in microbeam.mac.
+    + advanced/underground_physics:
+      o Added missing header file G4hIonisation.hh to DMXPhysicsLists
+        translation unit.
+      o Added G4StepLimiter to physics list as correction of migration
+        required since Geant4 release 7.0.
+    + extended/electromagnetic/TestEm7:
+      o Updated README for physics-list names.
+    + extended/electromagnetic/TestEm8:
+      o Fixed PAI physics constructors: energy loss processes should be
+        active post step.
+      o Create VisManager only for interactive session, improved destructor
+        of Em8DetectorConstruction class.
+    + extended/electromagnetic/TestEm10:
+      o Create VisManager only for interactive session, improved destructor
+        of Em10DetectorConstruction class.
+    + extended/electromagnetic/TestEm13:
+    + extended/electromagnetic/TestEm14:
+      o SteppingAction : modify logic to take into account low energy packages.
+    + extended/medical/fanoCavity:
+      o Use 'fUseDistanceToBoundary' in physics-list for 'emOptions'. Cleanup.
+    + extended/medical/GammaTherapy:
+      o Provide possibility to change cuts between runs.
+    + extended/radioactivedecay/exrdm:
+      o Removed obsolete hadronic builders and use only QGSP_BIC,
+        QGSP_BIC_HP, QGSP_BERT, QGSP_BERT_HP instead.
+    + novice/N02:
+      o Fixed implementation of ExN02MagneticField class in way field is set.
+
+
+ (*) Fixes also included in the patched release 8.3.p01.
+
+ ----------------------------------------------------------------------------
+
+                             Technical Notes
+                             --------------- 
+
+  o  This patch should be applied on top of release 9.0
+  o  Technical notes distributed for release 9.0 are also applicable and
+     valid for this patch.
+
+The code and rebuilt binary libraries for release 9.0 are available
+through our "Download" Web page:
+   http://cern.ch/geant4/support/download.shtml
+
+Please refer to the Geant4 User Documentation:
+   http://cern.ch/geant4/support/userdocuments.shtml
+for further information about using Geant4.

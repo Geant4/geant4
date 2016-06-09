@@ -1,4 +1,4 @@
-$Id: History,v 1.87 2007/06/20 09:21:45 vnivanch Exp $
+$Id: History,v 1.103 2007/12/11 13:32:08 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,6 +17,59 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+11-12-07 G.Cosmo (materials-V09-00-08)
+- Made GetZ13() and GetLOGA() in G4NistManager not inlined (since they
+  handle static data), to allow for building of DLLs on WIN32-VC platform.
+
+30-10-07 V.Ivanchenko (materials-V09-00-07)
+- G4NistManager and G4NistMaterialBuilder - set default state kStateSolid
+                (before was kStateUndefined) - this modification keep 
+                existing user code unchanged
+
+28-10-07 V.Ivanchenko (materials-V09-00-06)
+- G4NistManager and G4NistMaterialBuilder - extended interfaces to build 
+                new materials: added G4State, temperature, pressure 
+                (gasses are allowed), because of default values for
+                these extra parameters no interface change to users
+
+18-10-07 V.Ivanchenko (materials-V09-00-05)
+- G4NistManager - added deletion of isotopes (fixed problem of double 
+                  deletion); added precomputed Z^1/3 and log(A)
+- G4Material - move registration in MaterialTable from constructors
+               to InitialisePointers; added Imean to printout
+- G4Element  - do not delete isotopes; move registration in ElementTable 
+               from constructors to ComputeDerivedQuantities
+
+01-10-07 V.Ivanchenko (materials-V09-00-04)
+- G4SandiaTable - fixed memory leak
+
+01-10-07 V.Ivanchenko (materials-V09-00-03)
+- G4SandiaTable - separated computations of tables photo-absobtion 
+                  coeffitients for photo-electric effect and PAI model; 
+                  added fMatSandiaMatrixPAI ordered table; 
+                  general cleanup, reduce number of static variables;
+
+27-09-07 V.Ivanchenko (materials-V09-00-02)
+- G4IonisParamMat - add comutation and get methods for parameters of
+  ion inonisation: Fermi energy, effective Z, effective L-factor;
+  they will not be recomputed at each step 
+
+27-07-07 V.Ivanchenko (materials-V09-00-01)
+- G4NistManager - simplified logic of Print methods
+- G4NistElementBuilder  - added protection to Print method
+- G4NistMaterialBuilder - modified FindOrBuildMaterial method - NIST
+                          material is built even user create a material
+                          with the same name, so NIST materials 
+                          parameters cannot be substituted
+- G4Material, G4Element - fix destructors, now all materials and elements
+  are deleted at the end of a run
+
+26-07-07 V.Ivanchenko (materials-V09-00-00)
+- G4Nistmanager provide destruction of all materials and elements
+- G4NistElementBuilder - for given Z build only one Nist element
+     and allow user create other elements with given Z (HP physics
+     requirement)
+
 19-06-07 V.Ivanchenko (materials-V08-03-02)
 - G4SandiaTable - comment out destruction of G4OrderedTable
 
@@ -25,6 +78,8 @@ committal in the CVS repository !
 
 14-06-07 V.Ivanchenko (materials-V08-03-00)
 - G4SandiaTable - added deletion of elements of the table in destructor
+
+14-08-07 V.Ivanchenko (materials-V08-03-00a)
 - G4NistElementBuilder - protection (Z>=limitNumElements) inside BuildElement
                          (Mokka request)
 

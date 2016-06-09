@@ -29,6 +29,7 @@
 //
 // 070523 add neglecting doppler broadening on the fly. T. Koi
 // 070613 fix memory leaking by T. Koi
+// 071002 enable cross section dump by T. Koi
 //
 #include "G4NeutronHPElasticData.hh"
 #include "G4Neutron.hh"
@@ -82,6 +83,49 @@ void G4NeutronHPElasticData::DumpPhysicsTable(const G4ParticleDefinition& aP)
 {
   if(&aP!=G4Neutron::Neutron()) 
      throw G4HadronicException(__FILE__, __LINE__, "Attempt to use NeutronHP data for particles other than neutrons!!!");  
+
+//
+// Dump element based cross section
+// range 10e-5 eV to 20 MeV
+// 10 point per decade
+// in barn
+//
+
+   G4cout << G4endl;
+   G4cout << G4endl;
+   G4cout << "Elastic Cross Section of Neutron HP"<< G4endl;
+   G4cout << "(Pointwise cross-section at 0 Kelvin.)" << G4endl;
+   G4cout << G4endl;
+   G4cout << "Name of Element" << G4endl;
+   G4cout << "Energy[eV]  XS[barn]" << G4endl;
+   G4cout << G4endl;
+
+   size_t numberOfElements = G4Element::GetNumberOfElements();
+   static const G4ElementTable *theElementTable = G4Element::GetElementTable();
+
+   for ( size_t i = 0 ; i < numberOfElements ; ++i )
+   {
+
+      G4cout << (*theElementTable)[i]->GetName() << G4endl;
+
+      G4int ie = 0;
+
+      for ( ie = 0 ; ie < 130 ; ie++ )
+      {
+         G4double eKinetic = 1.0e-5 * std::pow ( 10.0 , ie/10.0 ) *eV;
+         G4bool outOfRange = false;
+
+         if ( eKinetic < 20*MeV )
+         {
+            G4cout << eKinetic/eV << " " << (*((*theCrossSections)(i))).GetValue(eKinetic, outOfRange)/barn << G4endl;
+         }
+
+      }
+
+      G4cout << G4endl;
+   }
+
+
 //  G4cout << "G4NeutronHPElasticData::DumpPhysicsTable still to be implemented"<<G4endl;
 }
 

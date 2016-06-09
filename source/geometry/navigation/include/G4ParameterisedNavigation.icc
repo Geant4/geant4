@@ -24,13 +24,32 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParameterisedNavigation.icc,v 1.6 2006/06/29 18:36:12 gunter Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: G4ParameterisedNavigation.icc,v 1.7 2007/11/09 16:06:02 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 // 
 // class G4ParameterisedNavigation Inline implementation
 //
 // --------------------------------------------------------------------
+
+// ********************************************************************
+// IdentifyAndPlaceSolid
+// ********************************************************************
+//
+inline
+G4VSolid* G4ParameterisedNavigation::
+IdentifyAndPlaceSolid( G4int num,
+                       G4VPhysicalVolume *apparentPhys, // PhysV or PhysT
+                       G4VPVParameterisation *curParam  )
+{
+  G4VSolid *sampleSolid; 
+
+  sampleSolid = curParam->ComputeSolid(num, apparentPhys);
+  sampleSolid->ComputeDimensions(curParam, num, apparentPhys);
+  curParam->ComputeTransformation(num, apparentPhys);
+
+  return sampleSolid; 
+}
 
 // ********************************************************************
 // ParamVoxelLocate

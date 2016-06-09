@@ -1,0 +1,1062 @@
+/**
+ *  \file 
+ *  \brief Provides code for the general c2_function algebra which supports 
+ *  fast, flexible operations on piecewise-twice-differentiable functions
+ *
+ *  \author Created by R. A. Weller and Marcus H. Mendenhall on 7/9/05.
+ *  \author Copyright 2005 __Vanderbilt University__. All rights reserved.
+ *
+ *	\version c2_function.cc,v 1.43 2007/11/12 20:22:54 marcus Exp
+ */
+
+#include <iostream>
+#include <vector>
+#include <algorithm>
+#include <cstdlib>
+#include <numeric>
+#include <functional>
+#include <iterator>
+#include <cmath>
+#include <limits>
+#include <sstream>
+
+template <typename float_type> const std::string c2_function<float_type>::cvs_file_vers() const 
+{ return "c2_function.cc,v 1.43 2007/11/12 20:22:54 marcus Exp"; }
+
+// find a pre-bracketed root of a c2_function, which is a MUCH easier job than general root finding
+// since the derivatives are known exactly, and smoothness is guaranteed.
+// this searches for f(x)=value, to make life a little easier than always searching for f(x)=0
+template <typename float_type> float_type c2_function<float_type>::find_root(float_type lower_bracket, float_type upper_bracket, 
+	float_type start, float_type value, int *error,
+	float_type *final_yprime, float_type *final_yprime2) const throw(c2_exception) 
+{
+	// find f(x)=value within the brackets, using the guarantees of smoothness associated with a c2_function
+	// can use local f(x)=a*x**2 + b*x + c and solve quadratic to find root, then iterate
+	reset_evaluations();
+	
+	float_type yp, yp2; // we will make unused pointers point here, to save null checks later
+	if (!final_yprime) final_yprime=&yp;
+	if (!final_yprime2) final_yprime2=&yp2;
+	
+	float_type ftol=5*(std::numeric_limits<float_type>::epsilon()*std::abs(value)+std::numeric_limits<float_type>::min());
+	float_type xtol=5*(std::numeric_limits<float_type>::epsilon()*(std::abs(upper_bracket)+std::abs(lower_bracket))+std::numeric_limits<float_type>::min());
+	
+	float_type root=start; // start looking in the middle
+	if(error) *error=0; // start out with error flag set to OK, if it is expected
+	
+	float_type c, b;
+	
+	// this new logic is to keep track of where we were before, and lower the number of 
+	// function evaluations if we are searching inside the same bracket as before.
+	// Since this root finder has, very often, the bracket of the entire domain of the function,
+	// this makes a big difference, especially to c2_inverse_function
+	if(!rootInitialized || upper_bracket != lastRootUpperX || lower_bracket != lastRootLowerX) {
+		lastRootUpperY=value_with_derivatives(upper_bracket, final_yprime, final_yprime2);
+		increment_evaluations();
+		lastRootUpperX=upper_bracket;
+	
+		lastRootLowerY=value_with_derivatives(lower_bracket, final_yprime, final_yprime2);
+		increment_evaluations();
+		lastRootLowerX=lower_bracket;
+		rootInitialized=true;
+	}
+	
+	float_type clower=lastRootLowerY-value;
+	float_type cupper=lastRootUpperY-value;
+	if(clower*cupper >0) { 
+		// argh, no sign change in here!
+		if(error) { *error=1; return 0.0; }
+		else { 
+			std::ostringstream outstr;
+			outstr << "unbracketed root in find_root at xlower= " << lower_bracket << ", xupper= " << upper_bracket;
+			outstr << ", value= " << value << ": bailing"; 
+			throw c2_exception(outstr.str().c_str());
+		}
+	}
+	
+   float_type delta=upper_bracket-lower_bracket; // first error step
+   c=value_with_derivatives(root, final_yprime, final_yprime2)-value; // compute initial values
+   b=*final_yprime; // make a local copy for readability
+   increment_evaluations();
+   
+   while(
+			 std::abs(delta) > xtol && // absolute x step check
+			 std::abs(c) > ftol && // absolute y tolerance
+			 std::abs(c) > xtol*std::abs(b) // comparison to smallest possible Y step from derivative
+		 ) 
+	{
+	   float_type a=(*final_yprime2)/2; // second derivative is 2*a
+	   float_type disc=b*b-4*a*c;
+	   // std::cout << std::endl << "find_root_debug a,b,c,d " << a << " " << b << " " << c << " " << disc << std::endl; 
+	   
+	   if(disc >= 0) {
+		   float_type q=-0.5*((b>=0)?(b+std::sqrt(disc)):(b-std::sqrt(disc)));
+		   if(q*q > std::abs(a*c)) delta=c/q; // since x1=q/a, x2=c/q, x1/x2=q^2/ac, this picks smaller step
+		   else delta=q/a;
+		   root+=delta;
+	   }
+	   
+	   if(disc < 0 || root<lower_bracket || root>upper_bracket ||
+		      std::abs(delta) >= 0.5*(upper_bracket-lower_bracket)) { 
+		      // if we jump out of the bracket, or aren't converging well, bisect
+		   root=0.5*(lower_bracket+upper_bracket);
+		   delta=upper_bracket-lower_bracket;
+	   }
+	   c=value_with_derivatives(root, final_yprime, final_yprime2)-value; // compute initial values
+	   b=*final_yprime; // make a local copy for readability
+	   increment_evaluations();
+
+	   // now, close in bracket on whichever side this still brackets
+	   if(c*clower < 0.0) {
+		   cupper=c;
+		   upper_bracket=root;
+	   } else {
+		   clower=c;
+		   lower_bracket=root;
+	   }
+	   // std::cout << "find_root_debug x, y, dx " << root << " "  << c << " " << delta << std::endl;
+   }
+   return root;
+}
+
+/* def partial_integrals(self, xgrid):
+	Return the integrals of a function between the sampling points xgrid.  The sum is the definite integral.
+	This method uses an exact integration of the polynomial which matches the values and derivatives at the 
+	endpoints of a segment.  Its error scales as h**6, if the input functions really are smooth.  
+	This could very well be used as a stepper for adaptive Romberg integration.
+	For InterpolatingFunctions, it is likely that the Simpson's rule integrator is sufficient.
+	#the weights come from an exact mathematica solution to the 5th order polynomial with the given values & derivatives
+	#yint = (y0+y1)*dx/2 + dx^2*(yp0-yp1)/10 + dx^3 * (ypp0+ypp1)/120 )
+*/
+
+// the recursive part of the integrator is agressively designed to minimize copying of data... lots of pointers
+template <typename float_type> float_type c2_function<float_type>::integrate_step(c2_integrate_recur &rb) const
+{
+	struct c2_integrate_fblock *fbl[3]={rb.f0, rb.f1, rb.f2}; 
+	struct c2_integrate_fblock f1; // will hold new middle values
+	float_type retvals[2]={0.0,0.0};
+	float_type lr[2];
+
+	// std::cout << "entering with " << rb.f0->x << " " << rb.f1->x << " " << rb.f2->x << std::endl;
+	
+	int depth=rb.depth; // save this from the recursion block
+	float_type abs_tol=rb.abs_tol;  // this is the value we will pass down
+	float_type *rblr=rb.lr; // save pointer to our parent's lr[2] array since it will get trampled in recursion
+	
+	if(!depth) {
+		switch(rb.derivs) {
+			case 0:
+				rb.eps_scale=0.1; rb.extrap_coef=16; break;
+			case 1:
+				rb.eps_scale=0.1; rb.extrap_coef=64; break;
+			case 2:
+				rb.eps_scale=0.02; rb.extrap_coef=1024; break;
+			default:
+				throw c2_exception("derivs must be 0, 1 or 2 in partial_integrals");
+		}
+		
+		rb.extrap2=1.0/(rb.extrap_coef-1.0);
+	}
+	
+	for (int i=0; i<(depth==0?1:2); i++) { // handle left and right intervals, but only left one for depth=0
+		struct c2_integrate_fblock *f0=fbl[i], *f2=fbl[i+1];
+		f1.x=0.5*(f0->x + f2->x); // center of interval
+		float_type dx=f2->x - f0->x;
+		float_type dx2 = 0.5*dx;
+		float_type total;
+		
+		f1.y=value_with_derivatives(f1.x, &(f1.yp), &(f1.ypp));
+		increment_evaluations(); 
+		
+		// check for underflow on step size, which prevents us from achieving specified accuracy. 
+		if(std::abs(dx) < std::abs(f1.x)*rb.rel_tol) {
+			std::ostringstream outstr;
+			outstr << "Step size underflow in adaptive_partial_integrals at depth=" << depth << ", x= " << f1.x;
+			throw c2_exception(outstr.str().c_str());
+		}
+		
+		if(!depth) { // top level, total has not been initialized yet
+			switch(rb.derivs) { // create estimate of next lower order for first try
+				case 0:
+					total=0.5*(f0->y+f2->y)*dx; break;
+				case 1:
+					total=(f0->y+4.0*f1.y+f2->y)*dx/6.0; break;
+				case 2:
+					total=( (14*f0->y + 32*f1.y + 14*f2->y) +  dx * (f0->yp - f2->yp) ) * dx /60.; break;
+				default:
+					total=0.0; // just to suppress missing default warnings
+			}
+		} else total=rblr[i]; // otherwise, get it from previous level
+		
+		float_type left, right;
+		
+		switch(rb.derivs) {
+			case 2:
+				// use ninth-order estimates for each side, from full set of all values (!) (Thanks, Mathematica!)
+				left=	( ( (169*f0->ypp + 1024*f1.ypp -  41*f2->ypp)*dx2 + 
+							(2727*f0->yp - 5040*f1.yp +  423*f2->yp) )*dx2 + 
+						  (17007*f0->y + 24576*f1.y -  1263*f2->y) )* (dx2/40320.0);
+				right=	( ( (169*f2->ypp + 1024*f1.ypp -  41*f0->ypp)*dx2 - 
+							(2727*f2->yp - 5040*f1.yp +  423*f0->yp) )*dx2 + 
+						  (17007*f2->y + 24576*f1.y -  1263*f0->y) )* (dx2/40320.0);
+				// std::cout << f0->x << " " << f1.x << " " << f2->x <<  std::endl ;
+				// std::cout << f0->y << " " << f1.y << " " << f2->y << " " << left << " " << right << " " << total << std::endl ;
+				break;
+			case 1:
+				left= 	( (202*f0->y + 256*f1.y + 22*f2->y) + dx*(13*f0->yp - 40*f1.yp - 3*f2->yp) ) * dx /960.;
+				right= 	( (202*f2->y + 256*f1.y + 22*f0->y) - dx*(13*f2->yp - 40*f1.yp - 3*f0->yp) ) * dx /960.;
+				break;
+			case 0:
+				left=	(5*f0->y + 8*f1.y - f2->y)*dx/24.;
+				right=	(5*f2->y + 8*f1.y - f0->y)*dx/24.;
+				break;
+			default:
+				left=right=0.0; // suppress warnings about missing default
+				break;
+		}
+		
+		lr[0]= left; // left interval
+		lr[1]= right; // right interval
+		float_type lrsum=left+right;
+
+		float_type eps=std::abs(total-lrsum)*rb.eps_scale; 
+		if(rb.extrapolate) eps*=rb.eps_scale; 
+		
+		if(!rb.adapt || eps < abs_tol ||  eps < std::abs(total)*rb.rel_tol) {
+			if(depth==0 || !rb.extrapolate) retvals[i]=lrsum;
+			else {
+				retvals[i]=(rb.extrap_coef*lrsum - total)*rb.extrap2; 	
+				// std::cout << "extrapolating " << lrsum << " " << total << " " << retvals[i] << std::endl;
+				
+			}
+		} else {
+			rb.depth=depth+1; // increment depth counter
+			rb.lr=lr;  // point to our left-right values array for recursion
+			rb.abs_tol=abs_tol*0.5; // each half has half the error budget
+			rb.f0=f0; rb.f1=&f1; rb.f2=f2; // insert pointers to data into our recursion block
+			// std::cout << "recurring with " << f0->x << " " << f1.x << " " << f2->x <<  std::endl ;
+			retvals[i]=integrate_step(rb); // and recur
+		}
+	}	
+	return retvals[0]+retvals[1];
+}
+
+template <typename float_type> bool c2_function<float_type>::check_monotonicity(
+	const std::vector<float_type> &data, const char message[]) throw(c2_exception)
+{
+	size_t np=data.size();
+	if(np < 2) return false;  // one point has no direction!
+	
+	bool rev=(data[1] < data[0]); // which way do data point?
+	size_t i;
+	
+	if(!rev) for(i = 2; i < np && (data[i-1] < data[i]) ; i++);
+	else for(i = 2; i < np &&(data[i-1] > data[i]) ; i++);
+	
+	if(i != np) throw c2_exception(message);
+	
+	return rev;
+}
+
+template <typename float_type> void c2_function<float_type>::set_sampling_grid(const std::vector<float_type> &grid) throw(c2_exception)
+{ 
+	bool rev=check_monotonicity(grid, "set_sampling_grid: sampling grid not monotonic");
+	
+	if(!sampling_grid || no_overwrite_grid) sampling_grid=new std::vector<float_type>;
+	(*sampling_grid)=grid; no_overwrite_grid=0;  
+	
+	if(rev) std::reverse(sampling_grid->begin(), sampling_grid->end()); // make it increasing
+}
+
+template <typename float_type> std::vector<float_type> &c2_function<float_type>::get_sampling_grid(float_type xmin, float_type xmax) const 
+{
+	std::vector<float_type> *result=new std::vector<float_type>;
+	
+	if( !(sampling_grid) || !(sampling_grid->size()) || (xmax <= sampling_grid->front()) || (xmin >= sampling_grid->back()) ) { 
+		// nothing is known about the function in this region, return xmin and xmax		
+		result->push_back(xmin);
+		result->push_back(xmax);
+	} else {	
+		std::vector<float_type> &sg=*sampling_grid; // just a shortcut
+		int np=sg.size();
+		int klo=0, khi=np-1, firstindex=0, lastindex=np-1;
+		
+		result->push_back(xmin);
+
+		if(xmin > sg.front() ) {
+			// hunt through table for position bracketing starting point
+			while(khi-klo > 1) {
+				int km=(khi+klo)/2;
+				if(sg[km] > xmin) khi=km;
+				else klo=km;
+			}
+			khi=klo+1;
+			// khi now points to first point definitively beyond our first point, or last point of array
+			firstindex=khi;
+			khi=np-1; // restart upper end of search
+		}
+		
+		if(xmax < sg.back()) {
+			// hunt through table for position bracketing starting point
+			while(khi-klo > 1) {
+				int km=(khi+klo)/2;
+				if(sg[km] > xmax) khi=km;
+				else klo=km;
+			}
+			khi=klo+1;
+			// khi now points to first point definitively beyond our last point, or last point of array
+			lastindex=klo;
+		}
+		
+		int initsize=result->size();
+		result->resize(initsize+(lastindex-firstindex+2));
+		std::copy(sg.begin()+firstindex, sg.begin()+lastindex+1, result->begin()+initsize);
+		result->back()=xmax;
+		
+		//  this is the unrefined sampling grid... now check for very close points on front & back and fix if needed.
+		preen_sampling_grid(result);
+	}
+	return *result;
+}
+
+template <typename float_type> void c2_function<float_type>::preen_sampling_grid(std::vector<float_type> *result) const
+{		
+	//  this is the unrefined sampling grid... now check for very close points on front & back and fix if needed.
+	if(result->size() > 2) { // may be able to prune dangerously close points near the ends if there are at least 3 points
+		bool deleteit=false;
+		float_type x0=(*result)[0], x1=(*result)[1];
+		float_type dx1=x1-x0;
+		
+		float_type ftol=10.0*(std::numeric_limits<float_type>::epsilon()*(std::abs(x0)+std::abs(x1))+std::numeric_limits<float_type>::min());
+		if(dx1 < ftol) deleteit=true;
+		float_type dx2=(*result)[2]-x0;
+		if(dx1/dx2 < 0.1) deleteit=true; // endpoint is very close to internal interesting point
+		
+		if(deleteit) result->erase(result->begin()+1); // delete redundant interesting point
+	}
+	
+	if(result->size() > 2) { // may be able to prune dangerously close points near the ends if there are at least 3 points
+		bool deleteit=false;
+		int pos=result->size()-3;
+		float_type x0=(*result)[pos+1], x1=(*result)[pos+2];
+		float_type dx1=x1-x0;
+		
+		float_type ftol=10.0*(std::numeric_limits<float_type>::epsilon()*(std::abs(x0)+std::abs(x1))+std::numeric_limits<float_type>::min());
+		if(dx1 < ftol) deleteit=true;
+		float_type dx2=x1-(*result)[pos];
+		if(dx1/dx2 < 0.1) deleteit=true; // endpoint is very close to internal interesting point
+		
+		if(deleteit) result->erase(result->end()-2); // delete redundant interesting point
+	}
+}
+
+template <typename float_type> std::vector<float_type> &c2_function<float_type>::
+	refine_sampling_grid(const std::vector<float_type> &grid, size_t refinement) const
+{
+	size_t np=grid.size();
+	size_t count=(np-1)*refinement + 1;
+	float_type dxscale=1.0/refinement;
+	
+	std::vector<float_type> *result=new std::vector<float_type>(count);
+	
+	for(size_t i=0; i<(np-1); i++) {
+		float_type x=grid[i];
+		float_type dx=(grid[i+1]-x)*dxscale;
+		for(size_t j=0; j<refinement; j++, x+=dx) (*result)[i*refinement+j]=x;
+	}
+	(*result)[count-1]=grid.back();
+	return *result;
+}
+
+template <typename float_type> float_type c2_function<float_type>::integral(float_type xmin, float_type xmax, std::vector<float_type> *partials,
+	 float_type abs_tol, float_type rel_tol, int derivs, bool adapt, bool extrapolate) const
+{
+	std::vector<float_type> &grid=get_sampling_grid(xmin, xmax);
+	float_type intg=partial_integrals(grid, partials, abs_tol, rel_tol, adapt, extrapolate);
+	delete &grid;
+	return intg;
+}
+
+template <typename float_type> c2_function<float_type> &c2_function<float_type>::normalized_function(float_type xmin, float_type xmax, float_type norm) 
+{
+	float_type intg=integral(xmin, xmax);
+	return *new c2_scaled_function<float_type>(*this, norm/intg);
+}
+
+template <typename float_type> c2_function<float_type> &c2_function<float_type>::square_normalized_function(float_type xmin, float_type xmax, float_type norm) 
+{
+	c2_quadratic<float_type> q(0., 0., 0., 1.);
+	c2_composed_function<float_type> mesquared(q,*this);
+	
+	std::vector<float_type> grid(get_sampling_grid(xmin, xmax));		
+	float_type intg=mesquared.partial_integrals(grid);
+	
+	return *new c2_scaled_function<float_type>(*this, std::sqrt(norm/intg));
+}
+
+template <typename float_type> c2_function<float_type> &c2_function<float_type>::square_normalized_function(
+		float_type xmin, float_type xmax, const c2_function<float_type> &weight, float_type norm) 
+{
+	c2_quadratic<float_type> q(0., 0., 0., 1.);
+	c2_composed_function<float_type> mesquared(q,*this);
+	c2_product<float_type> weighted(mesquared, weight); 
+
+	std::vector<float_type> grid(get_sampling_grid(xmin, xmax));	
+	float_type intg=weighted.partial_integrals(grid);
+
+	return *new c2_scaled_function<float_type>(*this, std::sqrt(norm/intg));
+}
+
+template <typename float_type> float_type c2_function<float_type>::partial_integrals(
+	std::vector<float_type> xgrid, std::vector<float_type> *partials,
+	float_type abs_tol, float_type rel_tol, int derivs, bool adapt, bool extrapolate) const
+{
+	int np=xgrid.size();
+	
+	struct c2_integrate_fblock f0, f2;
+	struct c2_integrate_recur rb;
+	rb.rel_tol=rel_tol;
+	rb.extrapolate=extrapolate;
+	rb.adapt=adapt;
+	rb.derivs=derivs;
+	
+	reset_evaluations(); // counter returns with total evaluations needed for this integral
+	
+	if(partials) partials->resize(np-1);
+	
+	float_type sum=0.0;
+	
+	f2.x=xgrid[0];
+	f2.y=value_with_derivatives(f2.x, &f2.yp, &f2.ypp);
+	increment_evaluations();
+	
+	for(int i=0; i<np-1; i++) {
+		f0=f2; // copy upper bound to lower before computing new upper bound
+		
+		f2.x=xgrid[i+1];
+		f2.y=value_with_derivatives(f2.x, &f2.yp, &f2.ypp);
+		increment_evaluations();
+		
+		rb.depth=0;
+		rb.abs_tol=abs_tol;
+		rb.f0=&f0; rb.f1=&f2; rb.f2=&f2; // we are really only using the left half for the top level
+		rb.lr=0; // pointer is meaningless; will be filled in in recursion
+		float_type ps=integrate_step(rb);
+		sum+=ps;
+		if(partials) (*partials)[i]=ps;
+	}
+	return sum;
+}
+
+// declare singleton functions for most common c2_function instances
+#define c2_singleton(X) template <typename float_type> const c2_##X<float_type> c2_##X<float_type>::X=c2_##X();
+c2_singleton(sin)
+c2_singleton(cos)
+c2_singleton(tan)
+c2_singleton(log)
+c2_singleton(exp)
+c2_singleton(sqrt)
+c2_singleton(identity)
+
+// reciprocal is actually parametric (a/x), but make singleton 1/x
+template <typename float_type> const c2_recip<float_type> c2_recip<float_type>::recip=c2_recip(1.0);
+
+#undef c2_singleton
+
+// generate a sampling grid at points separated by dx=5, which is intentionally
+// incommensurate with pi and 2*pi so grid errors are somewhat randomized
+template <typename float_type> std::vector<float_type> &c2_sin<float_type>::get_sampling_grid(float_type xmin, float_type xmax)
+{
+	std::vector<float_type> *result=new std::vector<float_type>;
+	
+	for(; xmin < xmax; xmin+=5.0) result->push_back(xmin);
+	result->push_back(xmax);
+	this->preen_sampling_grid(result);
+	return *result;
+}
+
+template <typename float_type> float_type Identity(float_type x) { return x; } // a useful function
+template <typename float_type> float_type f_one(float_type) { return 1.0; } // the first derivative of identity
+template <typename float_type> float_type f_zero(float_type) { return 0.0; } // the second derivative of identity
+
+//  The constructor
+template <typename float_type> void interpolating_function<float_type>::init(
+								const std::vector<float_type> &x, const std::vector<float_type> &f, 
+								bool lowerSlopeNatural, float_type lowerSlope, 
+								bool upperSlopeNatural, float_type upperSlope,
+								float_type (*inputXConversion)(float_type), 
+								float_type (*inputXConversionPrime)(float_type), 
+								float_type (*inputXConversionDPrime)(float_type), 
+								float_type (*inputYConversion)(float_type), 
+								float_type (*inputYConversionPrime)(float_type), 
+								float_type (*inputYConversionDPrime)(float_type), 
+								float_type (*outputYConversion)(float_type)
+					) throw(c2_exception) 
+{
+	X= x;
+	F= f;
+	
+	// Xraw is useful in some of the arithmetic operations between interpolating functions
+	Xraw=x;
+
+	set_domain(std::min(Xraw.front(), Xraw.back()),std::max(Xraw.front(), Xraw.back()));
+	
+	fXin=inputXConversion;
+	fXinPrime=inputXConversionPrime;
+	fXinDPrime=inputXConversionDPrime;
+	fYin=inputYConversion;
+	fYinPrime=inputYConversionPrime;
+	fYinDPrime=inputYConversionDPrime;
+	fYout=outputYConversion;
+	
+	if(x.size() != f.size()) {
+		throw c2_exception("interpolating_function::init() -- x & y inputs are of different size");
+	}
+	
+	size_t np=X.size(); // they are the same now, so lets take a short cut
+	
+	if(np < 2) {
+		throw c2_exception("interpolating_function::init() -- input < 2 elements ");
+	}
+	
+	bool xraw_rev=check_monotonicity(Xraw, 
+			"interpolating_function::init() non-monotonic raw x input"); // which way does raw X point?  sampling grid MUST be increasing
+
+	if(!xraw_rev) { // we can use pointer to raw X values if they are in the right order
+		set_sampling_grid_pointer(Xraw); // our intial grid of x values is certainly a good guess for 'interesting' points
+	} else {
+		set_sampling_grid(Xraw); // make a copy of it, and assure it is in right order
+	}
+	
+	if(fXin) { // check if X scale is nonlinear, and if so, do transform
+		if(!lowerSlopeNatural) lowerSlope /= fXinPrime(X[0]);
+		if(!upperSlopeNatural) upperSlope /= fXinPrime(X[np-1]);
+		for(size_t i=0; i<np; i++) X[i]=fXin(X[i]);
+	} else {
+		fXin=Identity<float_type>;
+		fXinPrime=f_one<float_type>;
+		fXinDPrime=f_zero<float_type>;
+	}
+	
+	if(inputYConversion) {  // check if Y scale is nonlinear, and if so, do transform
+		if(!lowerSlopeNatural) lowerSlope *= fYinPrime(F[0]);
+		if(!upperSlopeNatural) upperSlope *= fYinPrime(F[np-1]);
+		for(size_t i=0; i<np; i++) F[i]=inputYConversion(F[i]);
+	} else {
+		fYin=Identity<float_type>;
+		fYinPrime=f_one<float_type>;
+		fYinDPrime=f_zero<float_type>;
+		fYout=Identity<float_type>;
+	}
+		  
+	xInverted=check_monotonicity(X, 
+		"interpolating_function::init() non-monotonic transformed x input"); 
+	
+	// construct spline tables here.  
+	// this code is a re-translation of the pythonlabtools spline algorithm from pythonlabtools.sourceforge.net
+	
+	std::vector<float_type> u(np),  dy(np-1), dx(np-1), dxi(np-1), dx2i(np-2), siga(np-2), dydx(np-1);
+	
+	std::transform(X.begin()+1, X.end(), X.begin(), dx.begin(), std::minus<float_type>() ); // dx=X[1:] - X [:-1]
+	for(size_t i=0; i<dxi.size(); i++) dxi[i]=1.0/dx[i]; // dxi = 1/dx
+	for(size_t i=0; i<dx2i.size(); i++) dx2i[i]=1.0/(X[i+2]-X[i]); 
+	
+	std::transform(F.begin()+1, F.end(), F.begin(), dy.begin(), std::minus<float_type>() ); // dy = F[i+1]-F[i]
+	std::transform(dx2i.begin(), dx2i.end(), dx.begin(), siga.begin(), std::multiplies<float_type>()); // siga = dx[:-1]*dx2i
+	std::transform(dxi.begin(), dxi.end(), dy.begin(), dydx.begin(), std::multiplies<float_type>()); // dydx=dy/dx
+		
+	// u[i]=(y[i+1]-y[i])/float(x[i+1]-x[i]) - (y[i]-y[i-1])/float(x[i]-x[i-1])
+	std::transform(dydx.begin()+1, dydx.end(), dydx.begin(), u.begin()+1, std::minus<float_type>() ); // incomplete rendering of u = dydx[1:]-dydx[:-1]
+	
+	y2.resize(np,0.0);  
+	
+	if(lowerSlopeNatural) {
+		y2[0]=u[0]=0.0;
+	} else {
+		y2[0]= -0.5;
+		u[0]=(3.0*dxi[0])*(dy[0]*dxi[0] -lowerSlope);
+	}
+	
+	for(size_t i=1; i < np -1; i++) { // the inner loop
+		float_type sig=siga[i-1];
+		float_type p=sig*y2[i-1]+2.0;
+		y2[i]=(sig-1.0)/p;
+		u[i]=(6.0*u[i]*dx2i[i-1] - sig*u[i-1])/p;
+	}
+	
+	float_type qn, un;
+	
+	if(upperSlopeNatural) {
+		qn=un=0.0;
+	} else {
+		qn= 0.5;
+		un=(3.0*dxi[dxi.size()-1])*(upperSlope- dy[dy.size()-1]*dxi[dxi.size()-1] );
+	}
+	
+	y2[np-1]=(un-qn*u[np-2])/(qn*y2[np-2]+1.0);
+	for (size_t k=np-1; k != 0; k--) y2[k-1]=y2[k-1]*y2[k]+u[k-1];
+	
+	lastKLow=-1; // flag  new X search required for next evaluation
+}
+
+//  This function is the reason for this class to exist
+// it computes the interpolated function, and (if requested) its proper first and second derivatives including all coordinate transforms
+template <typename float_type> float_type interpolating_function<float_type>::value_with_derivatives(
+				float_type x, float_type *yprime, float_type *yprime2) const throw(c2_exception)
+{
+	if(x < this->xmin() || x > this->xmax()) {
+		std::ostringstream outstr;
+		outstr << "Interpolating function argument " << x << " out of range " << this->xmin() << " -- " << this ->xmax() << ": bailing";
+		throw c2_exception(outstr.str().c_str());
+    }
+	
+	float_type xraw=x;
+	
+	// template here is impossible! if(fXin && fXin != (Identity<float_type>) ) 
+	x=fXin(x); // save time by explicitly testing for identity function here
+	
+	int klo=0, khi=X.size()-1;
+	
+	if(!xInverted) { // select search depending on whether transformed X is increasing or decreasing
+		if(lastKLow >=0 && (X[lastKLow] <= x) && (X[lastKLow+1] >= x) ) { // already bracketed
+			klo=lastKLow;
+		} else if(lastKLow >=0 && (X[lastKLow+1] <= x) && (X[lastKLow+2] > x)) { // in next bracket to the right
+			klo=lastKLow+1;		
+		} else if(lastKLow > 0 && (X[lastKLow-1] <= x) && (X[lastKLow] > x)) { // in next bracket to the left
+			klo=lastKLow-1;		
+		} else { // not bracketed, not close, start over
+				 // search for new KLow
+			while(khi-klo > 1) {
+				int km=(khi+klo)/2;
+				if(X[km] > x) khi=km;
+				else klo=km;
+			}
+		}
+	} else {
+		if(lastKLow >=0 && (X[lastKLow] >= x) && (X[lastKLow+1] <= x) ) { // already bracketed
+			klo=lastKLow;
+		} else if(lastKLow >=0 && (X[lastKLow+1] >= x) && (X[lastKLow+2] < x)) { // in next bracket to the right
+			klo=lastKLow+1;		
+		} else if(lastKLow > 0 && (X[lastKLow-1] >= x) && (X[lastKLow] < x)) { // in next bracket to the left
+			klo=lastKLow-1;		
+		} else { // not bracketed, not close, start over
+				 // search for new KLow
+			while(khi-klo > 1) {
+				int km=(khi+klo)/2;
+				if(X[km] < x) khi=km;
+				else klo=km;
+			}
+		}
+	}
+	
+	khi=klo+1;
+	lastKLow=klo; 
+	
+	float_type h=X[khi]-X[klo];
+	
+	float_type a=(X[khi]-x)/h; 
+	float_type b=1.0-a;
+	float_type ylo=F[klo], yhi=F[khi], y2lo=y2[klo], y2hi=y2[khi];
+	float_type y=a*ylo+b*yhi+((a*a*a-a)*y2lo+(b*b*b-b)*y2hi)*(h*h)/6.0;
+	
+	// template here is impossible! if(fYin && fYin != Identity) 
+	y=fYout(y); // save time by explicitly testing for identity function here
+	
+	if(yprime || yprime2) {
+		float_type fpi=1.0/fYinPrime(y);
+		float_type gp=fXinPrime(xraw);
+		float_type yp0=(yhi-ylo)/h+((3*b*b-1)*y2hi-(3*a*a-1)*y2lo)*h/6.0; // the derivative in interpolating table coordinates
+		
+		// from Mathematica Dt[InverseFunction[f][y[g[x]]], x]
+		if(yprime) *yprime=gp*yp0*fpi; // the real derivative of the inverse transformed output 
+		if(yprime2) {
+			float_type ypp0=b*y2hi+a*y2lo;
+			float_type fpp=fYinDPrime(y);
+			float_type gpp=fXinDPrime(xraw);
+			// also from Mathematica Dt[InverseFunction[f][y[g[x]]], {x,2}]
+			if(yprime2) *yprime2=(gp*gp*ypp0 + yp0*gpp - gp*gp*yp0*yp0*fpp*fpi*fpi)*fpi; 
+		}
+	}
+	
+	return y;
+}
+
+template <typename float_type> void interpolating_function<float_type>::set_lower_extrapolation(float_type bound) 
+{
+	int kl = 0 ;
+	int kh=kl+1;
+	float_type xx=fXin(bound);
+	float_type h0=X[kh]-X[kl];
+	float_type h1=xx-X[kl];
+	float_type yextrap=F[kl]+((F[kh]-F[kl])/h0 - h0*(y2[kl]+2.0*y2[kh])/6.0)*h1+y2[kl]*h1*h1/2.0;
+	
+	X.insert(X.begin(), xx);
+	F.insert(F.begin(), yextrap);
+	y2.insert(y2.begin(), y2.front()); // duplicate first or last element
+	Xraw.insert(Xraw.begin(), bound);
+	if (bound < this->fXMin) this->fXMin=bound; // check for reversed data
+	else this->fXMax=bound;
+	
+	//printf("%10.4f %10.4f %10.4f %10.4f %10.4f\n", bound, xx, h0, h1, yextrap);
+	//for(int i=0; i<X.size(); i++) printf("%4d %10.4f %10.4f %10.4f %10.4f \n", i, Xraw[i], X[i], F[i], y2[i]);	
+}
+
+template <typename float_type> void interpolating_function<float_type>::set_upper_extrapolation(float_type bound) 
+{
+	int kl = X.size()-2 ;
+	int kh=kl+1;
+	float_type xx=fXin(bound);
+	float_type h0=X[kh]-X[kl];
+	float_type h1=xx-X[kl];
+	float_type yextrap=F[kl]+((F[kh]-F[kl])/h0 - h0*(y2[kl]+2.0*y2[kh])/6.0)*h1+y2[kl]*h1*h1/2.0;
+	
+	X.insert(X.end(), xx);
+	F.insert(F.end(), yextrap);
+	y2.insert(y2.end(), y2.back()); // duplicate first or last element
+	Xraw.insert(Xraw.end(), bound);
+	if (bound < this->fXMin) this->fXMin=bound; // check for reversed data
+	else this->fXMax=bound;
+	//printf("%10.4f %10.4f %10.4f %10.4f %10.4f\n", bound, xx, h0, h1, yextrap);
+	//for(int i=0; i<X.size(); i++) printf("%4d %10.4f %10.4f %10.4f %10.4f \n", i, Xraw[i], X[i], F[i], y2[i]);
+}
+
+// move derivatives into our internal coordinates (use splint to go the other way!)
+template <typename float_type> void interpolating_function<float_type>::localize_derivatives(
+   float_type xraw, float_type y, float_type yp, float_type ypp, float_type *y0, float_type *yprime, float_type *yprime2) const 
+{
+	float_type fp=fYinPrime(y);
+	float_type gp=fXinPrime(xraw);
+	float_type fpp=fYinDPrime(y);
+	float_type gpp=fXinDPrime(xraw);
+	
+	if(y0) *y0=fYin(y);
+	if(yprime) *yprime=yp*fp/gp; // Mathematica Dt[f[y[InverseFunction[g][x]]], x]
+	if(yprime2) *yprime2=( yp*yp*fpp - fp*yp*gpp/gp + fp*ypp )/(gp*gp) ; // Mathematica Dt[f[y[InverseFunction[g][x]]], {x,2}]
+}
+
+// return a new interpolating_function which is the unary function of an existing interpolating_function
+// can also be used to generate a resampling of another c2_function on a different grid
+// by creating a=interpolating_function(x,x)
+// and doing b=a.unary_operator(c) where c is a c2_function (probably another interpolating_function)
+
+template <typename float_type> interpolating_function<float_type>& 
+	interpolating_function<float_type>::unary_operator(const c2_function<float_type> &source) const 
+{
+	size_t np=X.size();
+	std::vector<float_type>yv(np);
+	c2_composed_function<float_type> comp(source, *this);
+	float_type yp0, yp1, ypp;
+	
+	for(size_t i=0; i<np; i++) { 
+		yv[i]=source(fYout(F[i])); // copy pointwise the function of our data values
+	}
+		
+	comp(Xraw.front(), &yp0, &ypp); // get derivative at front
+	comp(Xraw.back(), &yp1, &ypp); // get derivative at back
+	
+	return  *new interpolating_function(Xraw, yv, false, yp0, false, yp1,
+									   fXin, fXinPrime, fXinDPrime,
+									   fYin, fYinPrime, fYinDPrime, fYout);
+}
+
+template <typename float_type> void 
+interpolating_function<float_type>::get_data(std::vector<float_type> &xvals, std::vector<float_type> &yvals) const throw()
+{
+	
+	xvals=Xraw;
+	yvals.resize(F.size());
+	
+	for(size_t i=0; i<F.size(); i++) yvals[i]=fYout(F[i]);
+}
+
+template <typename float_type> interpolating_function<float_type> & 
+	interpolating_function<float_type>::binary_operator(const c2_function<float_type> &rhs,
+		c2_binary_function<float_type> *combining_stub) const
+{	
+	size_t np=X.size();	
+	std::vector<float_type> yv(np);
+	c2_constant<float_type> fval;
+	c2_constant<float_type> yval;
+	float_type yp0, yp1, ypp;
+	
+	for(size_t i=0; i<np; i++) { 
+		fval.reset(fYout(F[i])); // update the constant function pointwise
+		yval.reset(rhs(Xraw[i])); 
+		yv[i]=(*combining_stub).combine(fval, yval, Xraw[i], (float_type *)0, (float_type *)0); // compute rhs & combine without derivatives
+	}
+	
+	(*combining_stub).combine(*this, rhs, Xraw.front(), &yp0, &ypp); // get derivative at front
+	(*combining_stub).combine(*this, rhs, Xraw.back(),  &yp1, &ypp); // get derivative at back
+
+	delete combining_stub;
+	
+	return  *new interpolating_function(Xraw, yv, false, yp0, false, yp1,
+									   fXin, fXinPrime, fXinDPrime,
+									   fYin, fYinPrime, fYinDPrime, fYout);	
+}
+
+template <typename float_type>  float_type c2_f_logprime(float_type x) { return 1.0/x; } // the derivative of log(x)
+template <typename float_type>  float_type c2_f_logprime2(float_type x) { return -1.0/(x*x); } // the second derivative of log(x)
+
+template <typename float_type> log_lin_interpolating_function<float_type>::log_lin_interpolating_function(
+										const std::vector<float_type> &x, const std::vector<float_type> &f, 
+										bool lowerSlopeNatural, float_type lowerSlope, 
+										bool upperSlopeNatural, float_type upperSlope) 
+										: interpolating_function<float_type>()
+{
+	init(x, f, lowerSlopeNatural, lowerSlope, upperSlopeNatural, upperSlope,
+		 (float_type (*)(float_type)) (std::log), c2_f_logprime, c2_f_logprime2, 0, 0, 0, 0);
+}
+
+template <typename float_type> lin_log_interpolating_function<float_type>::lin_log_interpolating_function(
+										const std::vector<float_type> &x, const std::vector<float_type> &f, 
+										bool lowerSlopeNatural, float_type lowerSlope, 
+										bool upperSlopeNatural, float_type upperSlope)
+										: interpolating_function<float_type>()
+{
+	init(x, f, lowerSlopeNatural, lowerSlope, upperSlopeNatural, upperSlope,
+		 0, 0, 0, 
+		 (float_type (*)(float_type)) (std::log), c2_f_logprime, c2_f_logprime2, 
+		 (float_type (*)(float_type)) (std::exp) );
+}
+
+template <typename float_type> log_log_interpolating_function<float_type>::log_log_interpolating_function(
+										const std::vector<float_type> &x, const std::vector<float_type> &f, 
+										bool lowerSlopeNatural, float_type lowerSlope, 
+										bool upperSlopeNatural, float_type upperSlope) 
+										: interpolating_function<float_type>()
+{
+	init(x, f, lowerSlopeNatural, lowerSlope, upperSlopeNatural, upperSlope,
+		 (float_type (*)(float_type)) (std::log), c2_f_logprime, c2_f_logprime2, 
+		 (float_type (*)(float_type)) (std::log), c2_f_logprime, c2_f_logprime2, 
+		 (float_type (*)(float_type)) (std::exp) );
+}
+
+template <typename float_type> float_type c2_f_recip(float_type x) { return 1.0/x; }
+template <typename float_type> float_type c2_f_recipprime(float_type x) { return -1.0/(x*x); } // the derivative of 1/x
+template <typename float_type> float_type c2_f_recipprime2(float_type x) { return 2.0/(x*x*x); } // the second derivative of 1/x
+
+template <typename float_type> arrhenius_interpolating_function<float_type>::arrhenius_interpolating_function(
+										const std::vector<float_type> &x, const std::vector<float_type> &f, 
+										bool lowerSlopeNatural, float_type lowerSlope, 
+										bool upperSlopeNatural, float_type upperSlope) 
+										: interpolating_function<float_type>()
+{
+	init(x, f, lowerSlopeNatural, lowerSlope, upperSlopeNatural, upperSlope,
+		c2_f_recip, c2_f_recipprime, c2_f_recipprime2, 
+		(float_type (*)(float_type)) (std::log), c2_f_logprime, c2_f_logprime2, 
+		(float_type (*)(float_type)) (std::exp) );
+}
+
+template <typename float_type> c2_inverse_function<float_type>::c2_inverse_function(const c2_function<float_type> &source) 
+	: c2_plugin_function<float_type>(source) 
+{
+	float_type l=source.xmin();
+	float_type r=source.xmax();
+	start_hint=(l+r)*0.5; // guess that we start in the middle
+	//  compute our domain assuming the function is monotonic so its values on its domain boundaries are our domain
+	float_type ly=source(l);
+	float_type ry=source(r);
+	if (ly > ry) {
+		float_type t=ly; ly=ry; ry=t; 
+	}
+	set_domain(ly, ry);
+}
+
+template <typename float_type> float_type c2_inverse_function<float_type>::value_with_derivatives(
+					float_type x, float_type *yprime, float_type *yprime2
+			) const throw(c2_exception)
+{
+	float_type l=this->func->xmin();
+	float_type r=this->func->xmax();
+	float_type yp, ypp;
+	float_type y=this->func->find_root(l, r, get_start_hint(x), x, 0, &yp, &ypp);
+	start_hint=y;
+	if(yprime) *yprime=1.0/yp;
+	if(yprime2) *yprime2=-ypp/(yp*yp*yp);
+	return y;
+}
+
+//accumulated_histogram starts with binned data, generates the integral, and generates a piecewise linear interpolating_function
+//If drop_zeros is true, it merges empty bins together before integration
+//Note that the resulting interpolating_function is guaranteed to be increasing (if drop_zeros is false)
+//	or stricly increasing (if drop_zeros is true)
+//If inverse_function is true, it drop zeros, integrates, and returns the inverse function which is useful
+//	for random number generation based on the input distribution.
+//If normalize is true, the big end of the integral is scaled to 1. 
+//If the data are passed in reverse order (large X first), the integral is carried out from the big end,
+//	and then the data are reversed to the result in in increasing X order.  
+template <typename float_type> accumulated_histogram<float_type>::accumulated_histogram(
+							const std::vector<float_type>binedges, const std::vector<float_type> binheights,
+							bool normalize, bool inverse_function, bool drop_zeros) 
+{
+	
+	int np=binheights.size();
+	
+	std::vector<float_type> be, bh;
+	if(drop_zeros || inverse_function) { //inverse functions cannot have any zero bins or they have vertical sections
+		if(binheights[0] || !inverse_function) { // conserve lower x bound if not an inverse function
+			be.push_back(binedges[0]);
+			bh.push_back(binheights[0]);
+		}
+		for(int i=1; i<np-1; i++) {
+			if(binheights[i]) {
+				be.push_back(binedges[i]);
+				bh.push_back(binheights[i]);
+			}
+		}
+		if(binheights[np-1] || !inverse_function) {
+			bh.push_back(binheights[np-1]);			
+			be.push_back(binedges[np-1]);
+			be.push_back(binedges[np]); // push both sides of the last bin if needed
+		}
+		np=bh.size(); // set np to compressed size of bin array
+	} else {
+		be=binedges;
+		bh=binheights;
+	}
+	std::vector<float_type> cum(np+1, 0.0);
+	for(int i=1; i<=np; i++) cum[i]=bh[i]*(be[i]-be[i-1])+cum[i-1]; // accumulate bins, leaving bin 0 as 0
+	if(be[1] < be[0]) { // if bins passed in backwards, reverse them
+		std::reverse(be.begin(), be.end());
+		std::reverse(cum.begin(), cum.end());
+		for(unsigned int i=0; i<cum.size(); i++) cum[i]*=-1; // flip sign on reversed data
+	}
+	if(normalize) {
+		float_type m=1.0/std::max(cum[0], cum[np]);
+		for(int i=0; i<=np; i++) cum[i]*=m;
+	}
+	if(inverse_function) interpolating_function<float_type>(cum, be); // use cum as x axis in inverse function
+	else interpolating_function<float_type>(be, cum); // else use lower bin edge as x axis
+	std::fill(this->y2.begin(), this->y2.end(), 0.0); // clear second derivatives, to we are piecewise linear
+}
+
+template <typename float_type> c2_piecewise_function<float_type>::c2_piecewise_function() 
+: c2_function<float_type>(), lastKLow(-1)
+{
+	this->sampling_grid=new std::vector<float_type>; // this always has a smapling grid
+}
+
+template <typename float_type> c2_piecewise_function<float_type>::~c2_piecewise_function() 
+{
+	size_t np=functions.size();
+	for(size_t i=0; i<np; i++) if(owns[i]) delete functions[i];
+}
+
+template <typename float_type> float_type c2_piecewise_function<float_type>::value_with_derivatives(
+		  float_type x, float_type *yprime, float_type *yprime2
+		  ) const throw(c2_exception)
+{
+	
+	size_t np=functions.size();
+	if(!np) throw c2_exception("attempting to evaluate an empty piecewise function");
+	
+	if(x < this->xmin() || x > this->xmax()) {
+		std::ostringstream outstr;
+		outstr << "piecewise function argument " << x << " out of range " << this->xmin() << " -- " << this->xmax();
+		throw c2_exception(outstr.str().c_str());
+	}
+
+	int klo=0;
+	
+	if(lastKLow >= 0 && functions[lastKLow]->xmin() <= x && functions[lastKLow]->xmax() > x) {
+		klo=lastKLow;
+	} else {
+		int khi=np;
+		while(khi-klo > 1) {
+			int km=(khi+klo)/2;
+			if(functions[km]->xmin() > x) khi=km;
+			else klo=km;
+		}
+	}
+	lastKLow=klo;
+	return functions[klo]->value_with_derivatives(x, yprime, yprime2);
+}
+
+template <typename float_type> void c2_piecewise_function<float_type>::append_function(
+	c2_function<float_type> &func, bool pass_ownership) throw(c2_exception)
+{
+	if(functions.size()) { // check whether there are any gaps to fill, etc.
+		c2_function<float_type> &tail=*(functions.back());
+		float_type x0=tail.xmax();
+		float_type x1=func.xmin();
+		if(x0 < x1) {
+			// must insert a connector if x0 < x1
+			float_type y0=tail(x0);
+			float_type y1=func(x1);
+			c2_function<float_type> *connector=new c2_linear<float_type>(x0, y0, (y1-y0)/(x1-x0));
+			connector->set_domain(x0,x1);
+			functions.push_back(connector);
+			owns.push_back(true);
+			this->sampling_grid->push_back(x1);
+		} else if(x0>x1) throw c2_exception("function domains not increasing in c2_piecewise_function");
+	}
+	functions.push_back(&func);
+	owns.push_back(pass_ownership);
+	// extend our domain to include all known functions
+	this->set_domain(functions.front()->xmin(), functions.back()->xmax());
+	// extend our sampling grid with the new function's grid, with the first point dropped to avoid duplicates
+	std::vector<float_type> &newgrid=func.get_sampling_grid(func.xmin(), func.xmax());
+	this->sampling_grid->insert(this->sampling_grid->end(), newgrid.begin()+1, newgrid.end());
+	delete &newgrid;
+}
+
+template <typename float_type> c2_connector_function<float_type>::c2_connector_function(
+	const c2_function<float_type> &f1, const c2_function<float_type> &f2, float_type x0, float_type x2, 
+	bool auto_center, float_type y1)
+
+: c2_function<float_type>()
+{
+	float_type y0, yp0, ypp0, y2, yp2, ypp2;
+	fdx=(x2-x0)/2.0;
+	fhinv=1.0/fdx;
+	fx1=(x0+x2)/2.0;
+	
+	y0=f1.value_with_derivatives(x0, &yp0, &ypp0); // get left wall values from conventional computation
+	y2=f2.value_with_derivatives(x2, &yp2, &ypp2); // get right wall values from conventional computation
+
+	// scale derivs to put function on [-1,1] since mma  solution is done this way
+	yp0*=fdx;
+	yp2*=fdx;
+	ypp0*=fdx*fdx;
+	ypp2*=fdx*fdx;
+	
+	float_type ff0=(8*(y0 + y2) + 5*(yp0 - yp2) + ypp0 + ypp2)/16.0;
+	if(auto_center) y1=ff0; // forces ff to be 0 if we are auto-centering
+	
+	// y[x_] = y1 + x (a + b x) + (x-1) x (x+1) (c + d x + e x^2 + f x^3)
+	fy1=y1; 
+	fa=-(y0 - y2)/2.;
+	fb=(y0 - 2*y1 + y2)/2.;
+	fc=(7*(y0 - y2 + yp0 + yp2) + ypp0 - ypp2)/16.;
+	fd=(32*y1 - 16*(y2 + y0) + 9*(yp2 - yp0) - ypp0 - ypp2)/16.;
+	fe=(3*(y2 - y0 - yp0 - yp2) - ypp0 + ypp2)/16.;
+	ff=(ff0 - y1);
+	// y'[x] = a + 2 b x + (3x^2 - 1)   (c + d x + e x^2 + f x^3) + (x-1) x (x+1) (d + 2 e x + 3 f x^2 )
+	// y''[x] = 2b + (x-1) x (x+1) (2 e + 6 f x) + 2 (3 x^2 -1) (d + 2 e x + 3 f x^2 ) + 6 x (c + d x + e x^2 + f x^3)
+	this->set_domain(x0,x2); // this is where the function is valid
+}
+
+template <typename float_type> c2_connector_function<float_type>::~c2_connector_function() 
+{
+}
+
+template <typename float_type> float_type c2_connector_function<float_type>::value_with_derivatives(
+	float_type x, float_type *yprime, float_type *yprime2
+	) const throw(c2_exception)
+{
+																									
+	float_type dx=(x-fx1)*fhinv;
+	float_type q1=fc + dx*(fd + dx*(fe + dx*ff));
+	float_type xp1=(dx-1)*(dx+1)*dx;
+	
+	float_type y= fy1 + dx*(fa+fb*dx) + xp1*q1;
+	if(yprime || yprime2) {
+		float_type q2 =fd + dx*(2*fe + dx*3*ff);	
+		float_type q3=2*fe+6*ff*dx;
+		float_type xp2=(3*dx*dx-1);
+		if(yprime) *yprime=(fa + 2*fb*dx + xp2*q1 + xp1*q2)*fhinv;
+		if(yprime2) *yprime2=(2*fb+xp1*q3+2*xp2*q2+6*dx*q1)*fhinv*fhinv;
+	}
+	return y;
+}

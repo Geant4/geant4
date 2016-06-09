@@ -1,4 +1,4 @@
-.$Id: History,v 1.126 2007/05/22 17:05:26 allison Exp $
+.$Id: History,v 1.127 2007/11/16 20:29:04 perl Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,12 @@ committal in the CVS repository !
 
 History file for visualization/HepRep sub-category
 --------------------------------------------------
+
+16 Nov 2007 Joseph Perl (vis-HepRep-V09-00-01)
+- Adjust geometry hierarchy in G4HepRepFileSceneHandler to accomodate
+  parallel worlds.  Where used to just have world at top of hierarchy,
+  now have world or worlds as one level below top level of geometry.
+- Cleaned up G4HepRepSceneHandler (just removing inaccurate old comment).
 
 22 May 2007 John Allison (vis-HepRep-V08-03-00)
 - Fixed memory leak in G4HepRepFile.

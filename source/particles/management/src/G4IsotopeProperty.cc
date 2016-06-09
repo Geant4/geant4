@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4IsotopeProperty.cc,v 1.7 2007/03/16 05:25:08 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 // 
 // ----------------------------------------------------------------------

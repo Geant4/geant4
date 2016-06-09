@@ -1,4 +1,4 @@
-$Id: History,v 1.258 2007/06/07 13:57:26 pia Exp $
+$Id: History,v 1.284 2007/11/26 17:27:09 pia Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,6 +17,125 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+26.11.2007   MGP, tag emlowen-V09-00-28
+             Cleaned up std:: in G4FinalStateIonisationBorn/Rudd
+
+14.11.2007   MGP, tag emlowen-V09-00-27
+             Correction to Problem Report 986 in G4AtomicDeexcitation
+
+??.11.2007   Undocumented tag emlowen-V09-00-26
+
+14.11.2007   MGP, tag emlowen-V09-00-25
+             Workaround in G4DNAProcess to avoid meanFrePath=0 when
+             cross section is DBL_MAX
+
+13.11.2007   MGP, tag emlowen-V09-00-24
+             Fixed calculation of local energy deposit in G4DNAProcess
+             in the case when the primary particle is killed
+             Minor code improvements in G4FinalStateIonisationBorn.cc.
+
+12.11.2007   G.Cosmo, tag emlowen-V09-00-23
+             Fixed trivial compilation error on WIN32-VC system in file
+             G4FinalStateIonisationBorn.cc.
+
+09.11.2007   MGP, tag emlowen-V09-00-22
+             Added cross section and final state policy classes to configure
+             a process to kill particles below threshold
+
+09.11.2007   MGP, tag emlowen-V09-00-21
+             Initialized data members missing initialization
+
+09.11.2007   MGP, tag emlowen-V09-00-20
+             Removed verbose printouts in Geant4-DNA processes
+
+09.11.2007   MGP, tag emlowen-V09-00-19
+             Fixed compilation problems on Windows
+
+09.11.2007   MGP, tag emlowen-V09-00-18
+             Fixed compilation problems on Solaris
+
+08.11.2007   MGP, tag emlowen-V09-00-17
+             Added Rudd ionisation
+
+08.11.2007   MGP, tag emlowen-V09-00-16
+             Added Born ionisation final state
+
+08.11.2007   MGP, tag emlowen-V09-00-15
+             Added Miller-Green excitation
+
+08.11.2007   MGP, tag emlowen-V09-00-14
+             Modified data file name in G4EMLOW5.1
+
+08.11.2007   MGP, tag emlowen-V09-00-13
+             Added charge increase/decrease Geant4-DNA cross sections
+             and final states (code by S. Incerti + code review by MGP)
+
+08.11.2007   MGP, tag emlowen-V09-00-12
+             Removed obsolete G4DNA* files from CVS
+ 
+22.10.2007   MGP, tag emlowen-V09-00-11
+             Added G4CrossSectionIonisationBorn
+             Excludes prototype G4DNA* classes (still available in CVS head)
+             Pertinent G4DNA* classes included are: 
+             G4DNAProcess (.hh .icc),
+             G4DNACrossSectionDataSet (.hh .cc), 
+             G4DNAGenericIonsManager (.hh .cc)
+
+15.10.2007   MGP, tag emlowen-V09-00-10
+             Added electron excitation (Emfietzoglou model),
+             proton Born excitation, electron ionisation (Born) cross              section; modified G4DNACrossSectionDataSet to 
+             remove inheritance from concrete base class introduced
+             by a developer against the baseline design
+             Obsolete G4DNA* classes not compliant with the design
+             as in the TNS paper are still in this tag for convenience;
+             they will be removed from the repository when the 
+             migration to the design as in the paper is completed
+             Goes with G4EMLOW5.0 (where a new dna/directory has been
+             added containing Geant4-DNA data tables for interpolation)
+
+13.10.2007   MGP, tag emlowen-V09-00-09
+             Added Brenner-Zaider elastic scattering final state
+
+12.10.2007   MGP, tag emlowen-V09-00-08
+             Fully working Geant4-DNA electron elastic scattering, 
+             screened Rutherford cross section and final state
+
+12.10.2007   MGP, tag emlowen-V09-00-07
+             Improved G4DNAProcess, G4FinalStateProduct
+
+12.10.2007   MGP, tag emlowen-V09-00-06
+             First core of Geant4-DNA physics compliant with design
+             as in TNS paper: G4DNAProcess, G4FinalStateProduct, 
+             G4eCrossSectionScreenedRutherford, G4DummyFinal State 
+             (MG implementation)
+ 
+12.10.2007   MGP, tag emlowen-V09-00-05
+             Extended G4DNAFinalStateProduct to deal with primary
+             particle modified in final state
+             Modified G4DNAProcess.icc accordingly
+
+12.10.2007   MGP, tag emlowen-V09-00-04
+             Refactoring Geant4-DNA domain to be compliant with TNS paper
+             Added G4DNAProcess and G4DNAFinalStateProduct
+
+11.10.2007   MGP, tag emlowen-V09-00-03
+             Identical to emlowen-V09-00-02, which apparently already 
+             existed on some files (it is unclear where it originared from)
+
+11.10.2007   MGP, tag emlowen-V09-00-02
+             Re-update to atomic relaxation fixes as in  emlowen-V09-00-00
+             emlowen-V09-00-00 was rejected because of a mismatch between 
+             code and G4EMLOW data library
+             This tag goes with G4EMLOW4.4
+
+11.10.2007   MGP, tag emlowen-V09-00-01
+             Fix to bug 965 of G4PenelopeRayleigh by L. Pandola
+
+23.07.2007   MGP, tag emlowen-V09-00-00
+             Deleted tag emlowen-V09-00-01 made by A.M. (no V-09-00-00 existed)
+             Fixes by A.M. to handle Z=100 in the Livermore library
+             and to correct Problem Report 933 (the latter fixes are not
+             documented)
 
 04.06.2007   MGP, tag emlowen-V08-03-03
              Tag on top of emlowen-V08-03-00a

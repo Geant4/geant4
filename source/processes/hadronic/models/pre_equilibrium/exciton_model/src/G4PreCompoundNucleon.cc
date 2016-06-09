@@ -42,14 +42,6 @@ ProbabilityDistributionFunction(const G4double eKin,
   G4double H = aFragment.GetNumberOfHoles();
   G4double N = P + H;
   
-  G4double A0 = (P*P+H*H+P-H)/4.0 - H/2.0;
-  G4double A1 = A0 - P/2.0;
-  
-  G4double E0 = std::max(0.0,U - A0);
-  if (E0 == 0.0) return 0.0;
-  G4double E1 = std::max(0.0,U - eKin - GetBindingEnergy() - A1);
-  if (E1 == 0.0) return 0.0;
-
   // g = (6.0/pi2)*a*A
   //  G4EvaporationLevelDensityParameter theLDP;
   G4double g0 = (6.0/pi2)*aFragment.GetA() * 
@@ -59,9 +51,17 @@ ProbabilityDistributionFunction(const G4double eKin,
     G4PreCompoundParameters::GetAddress()->GetLevelDensity();
     //    theLDP.LevelDensityParameter(static_cast<G4int>(GetRestA()),static_cast<G4int>(GetRestZ()),U);
 
+  G4double A0 = ((P*P+H*H+P-H)/4.0 - H/2.0)/g0;
+  G4double A1 = (A0*g0 - P/2.0)/g1;
+  
+  G4double E0 = std::max(0.0,U - A0);
+  if (E0 == 0.0) return 0.0;
+  G4double E1 = std::max(0.0,U - eKin - GetBindingEnergy() - A1);
+  if (E1 == 0.0) return 0.0;
+
 
   G4double Probability = 2.0/(hbarc*hbarc*hbarc) * GetReducedMass() * 
-      r0 * r0 * std::pow(GetRestA(),2.0/3.0) * GetAlpha() * (eKin + GetBeta()) *
+      GetRj(aFragment.GetNumberOfParticles(), aFragment.GetNumberOfCharged()) * r0 * r0 * std::pow(GetRestA(),2.0/3.0) * GetAlpha() * (eKin + GetBeta()) *
       P*(N-1.0) * std::pow(g1*E1/(g0*E0),N-2.0)/E0 *
       g1/(g0*g0);
 

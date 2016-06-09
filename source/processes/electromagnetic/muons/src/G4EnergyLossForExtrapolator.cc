@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EnergyLossForExtrapolator.cc,v 1.12 2007/05/29 04:43:31 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: G4EnergyLossForExtrapolator.cc,v 1.13 2007/07/28 13:44:25 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 //---------------------------------------------------------------------------
 //
@@ -70,7 +70,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4EnergyLossForExtrapolator::G4EnergyLossForExtrapolator(G4int verb)
-  :verbose(verb),isInitialised(false)
+  :maxEnergyTransfer(DBL_MAX),verbose(verb),isInitialised(false)
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -179,6 +179,7 @@ G4double G4EnergyLossForExtrapolator::ComputeTrueStep(const G4Material* mat,
       G4double r = electron_mass_c2/mass;
       tmax = 2.0*bg2*electron_mass_c2/(1.0 + 2.0*gam*r + r*r);
     }
+    if(tmax > maxEnergyTransfer) tmax = maxEnergyTransfer;
   }
   G4double theta = ComputeScatteringAngle(stepLength);
   return stepLength*std::sqrt(1.0 + 0.625*theta*theta);

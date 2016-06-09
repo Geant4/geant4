@@ -1,4 +1,4 @@
-$Id: History,v 1.413 2007/06/14 15:26:57 allison Exp $
+$Id: History,v 1.418 2007/11/19 19:56:26 perl Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +23,22 @@ committal in the CVS repository !
 
 History file for visualization category
 ---------------------------------------
+
+19th November 2007 Joseph Perl  (vis-V09-00-03)
+- visman-V09-00-02: Replace references to Wired3 in command guidance
+- vis-HepRep-V09-00-01: Adjust geometry hierarchy for parallel worlds.
+- opengl-V09-00-04: Added GEANT4_QT_DEBUG flag to more places
+
+13th November 2007  John Allison  (vis-V09-00-02)
+- Removed OpenGL Qt files from tag.  File are still at head - need fixing.
+
+10th November 2007  John Allison  (vis-V09-00-01)
+- opengl-V09-00-01: Minor improvements in design and messaging.
+- modeling-V09-00-00: Minor improvements in messaging.
+- visman-V09-00-01:Minor improvement in messaging.
+
+10th July 2007  John Allison  (vis-V09-00-00)
+- visman-V09-00-00: Remove redundant method declarations and minor tidies.
 
 14th June 2007  John Allison  (vis-V08-03-07)
 - raytracer-V08-03-01: Fixed memory leak in G4RayTracer.

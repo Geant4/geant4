@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4AtomicDeexcitation.cc,v 1.11 
-// GEANT4 tag $Name: geant4-09-00 $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 // Authors: Elena Guardincerri (Elena.Guardincerri@ge.infn.it)
 //          Alfonso Mantero (Alfonso.Mantero@ge.infn.it)
@@ -56,14 +56,17 @@ G4AtomicDeexcitation::~G4AtomicDeexcitation()
 
 std::vector<G4DynamicParticle*>* G4AtomicDeexcitation::GenerateParticles(G4int Z,G4int givenShellId)
 { 
-  std::vector<G4DynamicParticle*>* vectorOfParticles = new std::vector<G4DynamicParticle*>;
+
+  std::vector<G4DynamicParticle*>* vectorOfParticles;
+  
+  vectorOfParticles = new std::vector<G4DynamicParticle*>;
   G4DynamicParticle* aParticle;
   G4int provShellId = 0;
   G4int counter = 0;
   
   // The aim of this loop is to generate more than one fluorecence photon 
   // from the same ionizing event 
-do
+  do
     {
       if (counter == 0) 
 	// First call to GenerateParticles(...):
@@ -95,9 +98,8 @@ do
 	    }
 	  else if ( provShellId == -1)
 	    {
-	      // controllae che newshellId porti ad una transizione fattibile, in qualche modo.
 	      aParticle = GenerateAuger(Z, newShellId);
-	      }
+	    }
 	  else
 	    {
 	      G4Exception("G4AtomicDeexcitation: starting shell uncorrect: check it");
@@ -107,10 +109,10 @@ do
       if (aParticle != 0) {vectorOfParticles->push_back(aParticle);}
       else {provShellId = -2;}
     }
-
-// Look this in a particular way: only one auger emitted! //
- while (provShellId > -2); 
- 
+  
+  // Look this in a particular way: only one auger emitted! //
+  while (provShellId > -2); 
+  
   return vectorOfParticles;
 }
 
@@ -142,7 +144,7 @@ G4int G4AtomicDeexcitation::SelectTypeOfTransition(G4int Z, G4int shellId)
 	    }
 	  shellNum++;
 	}
-      G4int transProb = 1;
+      G4int transProb = 0; //AM change 29/6/07 was 1
    
       G4double partialProb = G4UniformRand();      
       G4double partSum = 0;
@@ -374,8 +376,8 @@ G4DynamicParticle* G4AtomicDeexcitation::GenerateAuger(G4int Z, G4int shellId)
 
       // AM *********************** F I X E D **************************** AM
       // Another Bug: in EADL Auger Transition are normalized to all the transitions deriving from 
-      // a vacancy in one shell, but no alla of these are present in data tables. So if a transition 
-      // doesn't occur in the maoin onesm a local energy deposition must occur, instead of (like now) 
+      // a vacancy in one shell, but not all of these are present in data tables. So if a transition 
+      // doesn't occur in the main one a local energy deposition must occur, instead of (like now) 
       // generating the last transition present in EADL data.
       // AM *********************** F I X E D **************************** AM
 
@@ -412,13 +414,13 @@ G4DynamicParticle* G4AtomicDeexcitation::GenerateAuger(G4int Z, G4int shellId)
 
           partSum += thisProb;
           
-          if (partSum >= (partialProb/totalVacancyAugerProbability) ) {
+          if (partSum >= (partialProb*totalVacancyAugerProbability) ) { // was /
 	    foundFlag = true;
 	    break;
 	  }
           augerIndex++;
         }
-        if (partSum >= (partialProb/totalVacancyAugerProbability) ) {break;}
+        if (partSum >= (partialProb*totalVacancyAugerProbability) ) {break;} // was /
         transitionRandomShellIndex++;
       }
 

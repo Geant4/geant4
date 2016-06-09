@@ -25,7 +25,7 @@
 //
 //
 // $Id: G3toG4PrimaryGeneratorAction.hh,v 1.3 2006/06/29 17:20:11 gunter Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 
 #ifndef G3toG4PrimaryGeneratorAction_h

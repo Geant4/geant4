@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4ShellData.cc,v 1.8 2006/06/29 19:41:21 gunter Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
 //

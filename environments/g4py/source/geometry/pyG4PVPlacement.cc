@@ -23,18 +23,40 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: pyG4PVPlacement.cc,v 1.4 2006/06/29 15:32:15 gunter Exp $
-// $Name: geant4-09-00 $
+// $Id: pyG4PVPlacement.cc,v 1.5 2007/08/07 03:35:53 kmura Exp $
+// $Name: geant4-09-01 $
 // ====================================================================
 //   pyG4PVPlacement.cc
 //
 //                                         2005 Q
 // ====================================================================
 #include <boost/python.hpp>
+#include "pyG4Version.hh"
 #include "G4PVPlacement.hh"
 #include "G4LogicalVolume.hh"
 
 using namespace boost::python;
+
+// ====================================================================
+// thin wrappers
+// ====================================================================
+namespace pyG4PVPlacement {
+
+#if G4VERSION_NUMBER <=711
+#elif G4VERSION_NUMBER <= 820
+BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(f_CheckOverlaps,
+                                       CheckOverlaps, 0, 1);
+#elif G4VERSION_NUMBER <=821
+BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(f_CheckOverlaps,
+                                       CheckOverlaps, 0, 2);
+#else
+BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(f_CheckOverlaps,
+                                       CheckOverlaps, 0, 3);
+#endif
+
+}
+
+using namespace pyG4PVPlacement;
 
 // ====================================================================
 // module definition
@@ -55,6 +77,22 @@ void export_G4PVPlacement()
 	 G4VPhysicalVolume*, G4bool, G4int>())
     .def(init<const G4Transform3D&, const G4String&,
 	 G4LogicalVolume*, G4VPhysicalVolume*, G4bool, G4int>())
+#if G4VERSION_NUMBER >=800
+    .def(init<G4RotationMatrix*, const G4ThreeVector&,
+	 G4LogicalVolume*, const G4String&,
+	 G4LogicalVolume*, G4bool, G4int, G4bool>())
+    .def(init<const G4Transform3D&, G4LogicalVolume*,
+	 const G4String&, G4LogicalVolume*, G4bool, G4int, G4bool>())
+    .def(init<G4RotationMatrix*, const G4ThreeVector&,
+	 const G4String, G4LogicalVolume*,
+	 G4VPhysicalVolume*, G4bool, G4int, G4bool>())
+    .def(init<const G4Transform3D&, const G4String&,
+	 G4LogicalVolume*, G4VPhysicalVolume*, G4bool, G4int, G4bool>())
+#endif
+    // ---
+#if G4VERSION_NUMBER >=800
+    .def("CheckOverlaps", &G4PVPlacement::CheckOverlaps, f_CheckOverlaps())
+#endif
     ;
 }
 

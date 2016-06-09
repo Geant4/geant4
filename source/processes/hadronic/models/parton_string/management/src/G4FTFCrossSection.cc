@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4FTFCrossSection.cc,v 1.2 2007/04/24 10:37:10 gunter Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 
 #include "G4FTFCrossSection.hh"

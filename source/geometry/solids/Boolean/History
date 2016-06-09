@@ -1,5 +1,5 @@
 
-$Id: History,v 1.61 2007/05/18 07:36:34 gcosmo Exp $
+$Id: History,v 1.62 2007/10/24 08:19:11 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+ Oct 24, 2007  V.Grichine                 geom-bool-V09-00-00
+  - Improved response of Inside() for G4SubtractionSolid and G4UnionSolid
+    according to suggestion in problem report #979.
 
  May 18, 2007  G.Cosmo                    geom-bool-V08-03-00
   - Use kAngTolerance and kRadTolerance from G4GeometryTolerance class.

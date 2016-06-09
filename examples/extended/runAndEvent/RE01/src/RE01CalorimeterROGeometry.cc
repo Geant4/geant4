@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // $Id: RE01CalorimeterROGeometry.cc,v 1.2 2006/06/29 17:43:39 gunter Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 
 #include "RE01CalorimeterROGeometry.hh"

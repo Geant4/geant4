@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4PhysicalVolumeMassScene.hh,v 1.8 2006/11/05 20:38:09 allison Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 // 
 // John Allison  12th September 2004

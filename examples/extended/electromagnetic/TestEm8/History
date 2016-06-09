@@ -1,4 +1,4 @@
-$Id: History,v 1.22 2006/11/15 19:29:08 vnivanch Exp $
+$Id: History,v 1.29 2007/11/12 10:54:49 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,31 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+12-11-07 V.Ivant  (testem8-V09-00-05)
+- Fixed logic in SteppingAction 
+
+02-10-07 V.Ivant  (testem8-V09-00-04)
+- Fixed memory leak in UI interface
+
+26-09-07 V.Ivant  (testem8-V09-00-03)
+- Remove used lines from PAI physics constructors, added "pai_brem"
+  constructor PhysListEmPAI in which AlongStep from bremsstrahlung 
+  is allowed
+
+27-08-07 V.Ivant  (testem8-V09-00-02)
+- Recover head
+
+02-08-07 V.Ivant  (testem8-V09-00-01)
+ Use components of Physics Lists from physics_list subdirectory
+
+27-08-07 V.Ivant  (testem8-V09-00-00a)
+- Fix PAI physics constructors: enegry loss processes should be 
+  active post step
+
+27-07-07 V.Ivant  (testem8-V09-00-00)
+- Create VisManager only for interactive session, improve destructor
+  of Em8DetectorConstruction class
 
 15-11-06 V.Ivant  (testem8-V08-01-01)
 - Put on the head version of Em8DetectorConstruction.cc and

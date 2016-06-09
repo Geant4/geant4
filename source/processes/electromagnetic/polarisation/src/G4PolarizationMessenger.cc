@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // $Id: G4PolarizationMessenger.cc,v 1.1 2006/09/21 21:35:11 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 //
 // GEANT4 Class file

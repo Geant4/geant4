@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VContinuousProcess.cc,v 1.4 2006/06/29 21:08:22 gunter Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: G4VContinuousProcess.cc,v 1.5 2007/10/02 08:23:20 kurasige Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 // 
 // --------------------------------------------------------------
@@ -47,6 +47,8 @@ G4VContinuousProcess::G4VContinuousProcess()
 G4VContinuousProcess::G4VContinuousProcess(const G4String& aName , G4ProcessType aType)
                   : G4VProcess(aName, aType)
 {
+  enableAtRestDoIt = false;
+  enablePostStepDoIt = false;
 }
 
 G4VContinuousProcess::~G4VContinuousProcess()

@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ionIonisation.hh,v 1.46 2007/05/23 08:47:34 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: G4ionIonisation.hh,v 1.50 2007/11/09 11:45:45 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 // -------------------------------------------------------------------
 //
@@ -54,11 +54,14 @@
 // 11-04-05 Move MaxSecondary energy to model (V.Ivanchneko)
 // 11-04-04 Move MaxSecondaryEnergy to models (V.Ivanchenko)
 // 10-05-06 Add a possibility to download user data (V.Ivantchenko)
+// 22-07-06 Remove obsolete method (V.Ivantchenko)
+// 07-11-07 Moved CorrectionsAlongStep to cc (V.Ivantchenko)
 //
 // Class Description:
 //
-// This class manages the ionisation process for ions.
-// it inherites from G4VContinuousDiscreteProcess via G4VEnergyLoss.
+// This class manages the ionisation process for ions. Effective charge,
+// nuclear stopping power, energy loss corrections are taken into account.
+// It inherites from G4VEnergyLossLoss.
 //
 
 // -------------------------------------------------------------------
@@ -84,7 +87,7 @@ public:
 
   virtual ~G4ionIonisation();
 
-  G4bool IsApplicable(const G4ParticleDefinition& p);
+  inline G4bool IsApplicable(const G4ParticleDefinition& p);
 
   // Print out of the class parameters
   virtual void PrintInfo();
@@ -98,33 +101,32 @@ public:
 
 protected:
 
-  void CorrectionsAlongStep(
-                           const G4MaterialCutsCouple*,
-	             	   const G4DynamicParticle*,
-			         G4double& eloss,
-			         G4double& length);
+  virtual void InitialiseEnergyLossProcess(const G4ParticleDefinition*,
+					   const G4ParticleDefinition*);
 
-  void InitialiseEnergyLossProcess(const G4ParticleDefinition*,
-				   const G4ParticleDefinition*);
+  virtual void CorrectionsAlongStep(const G4MaterialCutsCouple*,
+				    const G4DynamicParticle*,
+				    G4double& eloss,
+				    G4double& length);
 
-  void InitialiseMassCharge(const G4Track&);
+  inline void InitialiseMassCharge(const G4Track&);
 
-  G4double MinPrimaryEnergy(const G4ParticleDefinition* p,
-			    const G4Material*, G4double cut);
+  inline G4double MinPrimaryEnergy(const G4ParticleDefinition* p,
+				   const G4Material*, G4double cut);
+
+  inline G4double BetheBlochEnergyThreshold();
+
+  inline G4bool NuclearStoppingFlag();
+
+  // protected pointers 
+  G4ionEffectiveCharge*       effCharge;
+  G4EmCorrections*            corr;
 
 private:
-
-  void DefineMassCharge(const G4ParticleDefinition* pd,
-			const G4Material* mat,
-			G4double mass,
-			G4double kinEnergy);
 
   // hide assignment operator
   G4ionIonisation & operator=(const G4ionIonisation &right);
   G4ionIonisation(const G4ionIonisation&);
-
-  G4ionEffectiveCharge*       effCharge;
-  G4EmCorrections*            corr;
 
   // cash
   const G4Material*           curMaterial;
@@ -178,30 +180,6 @@ inline void G4ionIonisation::InitialiseMassCharge(const G4Track& track)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline void G4ionIonisation::CorrectionsAlongStep(
-                           const G4MaterialCutsCouple* couple,
-	             	   const G4DynamicParticle* dp,
-			         G4double& eloss,
-                                 G4double& s)
-{
-  if(eloss < preKinEnergy) {
-    const G4ParticleDefinition* part = dp->GetDefinition();
-    const G4Material* mat = couple->GetMaterial();
-    if(preKinEnergy*massRatio > eth)
-      eloss += s*corr->HighOrderCorrections(part,mat,preKinEnergy);
-    else {
-      if(stopDataActive)
-	eloss *= corr->EffectiveChargeCorrection(part,mat,preKinEnergy);
-      if(nuclearStopping)
-	eloss += s*corr->NuclearDEDX(part,mat,preKinEnergy - eloss*0.5);
-    }
-    fParticleChange.SetProposedCharge(effCharge->EffectiveCharge(part,
-                                      mat,preKinEnergy-eloss));
-  }
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
 inline void G4ionIonisation::ActivateStoppingData(G4bool val)
 {
   stopDataActive = val;
@@ -212,6 +190,20 @@ inline void G4ionIonisation::ActivateStoppingData(G4bool val)
 inline void G4ionIonisation::ActivateNuclearStopping(G4bool val)
 {
   nuclearStopping = val;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline G4double G4ionIonisation::BetheBlochEnergyThreshold()
+{
+  return eth;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline G4bool G4ionIonisation::NuclearStoppingFlag()
+{
+  return nuclearStopping;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

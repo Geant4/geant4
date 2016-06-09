@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: geant4-09-00-cand-03    (29-June-2007)
+ Geant4 version Name: global-V09-00-02    (14-December-2007)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -9,28 +9,28 @@
 
 ***** Table : Nb of materials = 7 *****
 
- Material: galactic     density:  0.000 mg/cm3  temperature:   2.73 K  pressure:   0.00 atm  RadLength: 204727576.737 pc 
+ Material: galactic     density:  0.000 mg/cm3  RadL: 204727576.737 pc   Imean:  21.800 eV   temperature:   2.73 K  pressure:   0.00 atm
    --->  Element: galactic ( )   Z =  1.0   N =   1.0   A =   1.01 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
- Material:      Air     density:  1.290 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength: 285.161 m  
+ Material:      Air     density:  1.290 mg/cm3  RadL: 285.161 m    Imean:  85.684 eV   temperature: 273.15 K  pressure:   1.00 atm
    --->  Element: Nitrogen (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole  ElmMassFraction:  70.00 %  ElmAbundance  72.71 %
    --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:  30.00 %  ElmAbundance  27.29 %
 
- Material:    CaCO3     density:  2.800 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   8.581 cm 
+ Material:    CaCO3     density:  2.800 g/cm3   RadL:   8.581 cm   Imean: 123.060 eV 
    --->  Element: Calcium (Ca)   Z = 20.0   N =  40.1   A =  40.08 g/mole  ElmMassFraction:  40.04 %  ElmAbundance  20.00 %
    --->  Element: Carbon (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole  ElmMassFraction:  12.00 %  ElmAbundance  20.00 %
    --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:  47.96 %  ElmAbundance  60.00 %
 
- Material:   Carbon     density:  2.265 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:  18.850 cm 
+ Material:   Carbon     density:  2.265 g/cm3   RadL:  18.850 cm   Imean:  78.000 eV 
    --->  Element: Carbon ( )   Z =  6.0   N =  12.0   A =  12.01 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
- Material:     Iron     density:  7.870 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   1.759 cm 
+ Material:     Iron     density:  7.870 g/cm3   RadL:   1.759 cm   Imean: 286.000 eV 
    --->  Element: Iron ( )   Z = 26.0   N =  55.9   A =  55.85 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
- Material:      Tin     density:  7.310 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   1.206 cm 
+ Material:      Tin     density:  7.310 g/cm3   RadL:   1.206 cm   Imean: 490.000 eV 
    --->  Element: Tin ( )   Z = 50.0   N = 118.7   A = 118.70 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
- Material:       HI     density:  2.800 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   3.049 cm 
+ Material:       HI     density:  2.800 g/cm3   RadL:   3.049 cm   Imean: 465.242 eV 
    --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole  ElmMassFraction:   0.79 %  ElmAbundance  50.00 %
    --->  Element: Iodine (I)   Z = 53.0   N = 126.9   A = 126.90 g/mole  ElmMassFraction:  99.21 %  ElmAbundance  50.00 %
 
@@ -142,18 +142,18 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=138.96s Real=254.58s Sys=6.83s
+  User=148.99s Real=261.1s Sys=6.76s
 
  The run consists of 10000 mu+ of 10 TeV through 1 m   of Iron (density: 7.9 g/cm3 )
 
- Number of process calls --->	muIoni : 469141	muPairProd : 63354	muBrems : 711
+ Number of process calls --->	muIoni : 468278	muPairProd : 63553	muBrems : 665
 
- Simulation: total CrossSection = 0.53321 /cm	 MeanFreePath = 1.8754 cm 	 massicCrossSection = 0.067752 cm2/g
+ Simulation: total CrossSection = 0.5325 /cm	 MeanFreePath = 1.8779 cm 	 massicCrossSection = 0.067661 cm2/g
  Theory:     total CrossSection = 0.53938 /cm	 MeanFreePath = 1.854 cm 	 massicCrossSection = 0.068536 cm2/g
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 630902075, 802952017
+ Current couple of seeds = 1877659782, 1214151217
 ----------------------------------------
 Graphics systems deleted.
 Visualization Manager deleting...

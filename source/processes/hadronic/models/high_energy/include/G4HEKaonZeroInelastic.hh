@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4HEKaonZeroInelastic.hh,v 1.13 2007/04/11 18:11:30 dennis Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 //
 // G4 Gheisha High Energy model class -- header file

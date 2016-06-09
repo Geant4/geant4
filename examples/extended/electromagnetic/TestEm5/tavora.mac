@@ -1,4 +1,4 @@
-# $Id: tavora.mac,v 1.1 2006/05/30 12:28:57 maire Exp $
+# $Id: tavora.mac,v 1.2 2007/07/31 16:51:29 maire Exp $
 #
 # macro file for TestEm5.cc    
 #
@@ -21,7 +21,7 @@
 #
 /testem/histo/setFileName tavora
 /testem/histo/setFileType hbook
-/testem/histo/setHisto 11  40 0.0 40 keV	#energy reflected_charged
+/testem/histo/setHisto 30  40 0.0 40 keV	#energy reflected_charged
 #
 /testem/stepMax 50 nm
 #

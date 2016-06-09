@@ -1,4 +1,4 @@
-$Id: History,v 1.10 2005/12/06 14:26:35 gcosmo Exp $
+$Id: History,v 1.12 2007/12/05 22:36:01 arce Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -7,6 +7,13 @@ $Id: History,v 1.10 2005/12/06 14:26:35 gcosmo Exp $
 
                       Category History file
                       ---------------------
+
+06.12.2007 - Pedro Arce
+             Added voxel colouring by material. Added possibility to use nested parameterisation
+
+05.12.2007 - Pedro Arce
+             Deep review on the input files and the way how the geometry is built.
+             Use of G4PhantomParameterisation and G4RegularNavigation.
 
 06.12.2005 - Gabriele Cosmo
              Trivial changes for support of CLHEP-2.0.X series.

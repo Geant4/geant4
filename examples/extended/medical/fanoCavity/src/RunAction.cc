@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RunAction.cc,v 1.2 2007/01/23 13:34:19 maire Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: RunAction.cc,v 1.3 2007/10/29 12:36:26 maire Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -86,7 +86,7 @@ void RunAction::BeginOfRunAction(const G4Run* aRun)
   
   //kinetic energy of charged secondary a creation
   //
-  Esecondary = 0.;
+  Esecondary = Esecondary2 = 0.;
   nbSec = 0;
   
   //charged particles and energy flow in cavity
@@ -96,7 +96,8 @@ void RunAction::BeginOfRunAction(const G4Run* aRun)
        
   //total energy deposit and charged track segment in cavity
   //
-  EdepCavity = trkSegmCavity = 0.; 
+  EdepCavity = EdepCavity2 = trkSegmCavity = 0.;
+  nbEventCavity = 0; 
    
   //stepLenth of charged particles
   //
@@ -237,13 +238,17 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   //mean kinetic energy of secondary electrons
   //
   if (nbSec == 0) return;
-  G4double meanEsecond = Esecondary/nbSec;
+  G4double meanEsecond = Esecondary/nbSec, meanEsecond2 = Esecondary2/nbSec;
+  G4double varianceEsec = meanEsecond2 - meanEsecond*meanEsecond;
+  G4double dToverT = 0.;
+  if (varianceEsec>0.) dToverT = std::sqrt(varianceEsec/nbSec)/meanEsecond;
   G4double csdaRange =
       emCalculator.GetCSDARange(meanEsecond,G4Electron::Electron(),mateWall);
 
   G4cout.precision(4);       
   G4cout 
     << "\n Mean energy of secondary e- = " << G4BestUnit(meanEsecond,"Energy")
+    << " +- " << 100*dToverT << " %"
     << "  (--> range in wall material = "  << G4BestUnit(csdaRange,"Length")
     << ")"   
     << G4endl;
@@ -288,7 +293,16 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   //
   G4double rBeam = wallRadius*(kinematic->GetBeamRadius());
   G4double surfaceBeam = pi*rBeam*rBeam;
-         
+  
+  //error on Edep in cavity
+  //
+  if (nbEventCavity == 0) return;
+  G4double meanEdep  = EdepCavity/nbEventCavity;
+  G4double meanEdep2 = EdepCavity2/nbEventCavity;
+  G4double varianceEdep = meanEdep2 - meanEdep*meanEdep;
+  G4double dEoverE = 0.;
+  if(varianceEdep>0.) dEoverE = std::sqrt(varianceEdep/nbEventCavity)/meanEdep;
+           
   //total dose in cavity
   //		   
   G4double doseCavity = EdepCavity/massCavity;
@@ -300,6 +314,7 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   G4cout.precision(4);       
   G4cout 
     << "\n Total edep in cavity = "      << G4BestUnit(EdepCavity,"Energy")
+    << " +- " << 100*dEoverE << " %"    
     << "\t Total charged trackLength = " << G4BestUnit(trkSegmCavity,"Length")
     << "   (mean value = " << G4BestUnit(meantrack,"Length") << ")"       
     << "\n Total dose in cavity = " << doseCavity/(MeV/mg) << " MeV/mg"
@@ -308,10 +323,13 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
     
   //ratio simulation/theory
   //
-  G4double ratio =  doseOverBeam/massTransfCoef;
+  G4double ratio = doseOverBeam/massTransfCoef;
+  G4double error = ratio*(dEoverE + dToverT);
   
+  G4cout.precision(5);  
   G4cout 
-    << "\n (Dose/EnergyFluence)/Mass_energy_transfer = " << ratio << G4endl; 
+    << "\n (Dose/EnergyFluence)/Mass_energy_transfer = " << ratio 
+    << " +- " << error << G4endl; 
      	 
   //compute mean step size of charged particles
   //
@@ -330,9 +348,9 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   if (rms>0.) rms = std::sqrt(rms); else rms = 0.;
 
   G4cout 
-    << "\n StepSize of ch. tracks in cavity = " 
-    << G4BestUnit(stepCavity,"Length") << " +- " << G4BestUnit( rms,"Length")
-    << "\t (nbSteps/track = " << double(nbStepCavity)/PartFlowCavity[0] << ")";
+   << "\n StepSize of ch. tracks in cavity = " 
+   << G4BestUnit(stepCavity,"Length") << " +- " << G4BestUnit( rms,"Length")
+   << "\t (nbSteps/track = " << double(nbStepCavity)/PartFlowCavity[0] << ")";
         
   G4cout << G4endl;
   

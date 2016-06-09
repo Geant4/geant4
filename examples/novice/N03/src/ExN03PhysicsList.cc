@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: ExN03PhysicsList.cc,v 1.20 2006/06/29 17:49:05 gunter Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: ExN03PhysicsList.cc,v 1.21 2007/07/02 13:22:08 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 // 
 
@@ -41,8 +41,8 @@
 
 ExN03PhysicsList::ExN03PhysicsList():  G4VUserPhysicsList()
 {
- defaultCutValue = 1.0*mm;
- SetVerboseLevel(1);
+  defaultCutValue = 1.0*mm;
+  SetVerboseLevel(1);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -118,7 +118,7 @@ void ExN03PhysicsList::ConstructMesons()
 
 void ExN03PhysicsList::ConstructBaryons()
 {
-//  barions
+  //  barions
   G4Proton::ProtonDefinition();
   G4AntiProton::AntiProtonDefinition();
   G4Neutron::NeutronDefinition();
@@ -132,7 +132,7 @@ void ExN03PhysicsList::ConstructProcess()
 {
   AddTransportation();
   ConstructEM();
-  ConstructGeneral();
+  ConstructDecay();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -204,10 +204,10 @@ void ExN03PhysicsList::ConstructEM()
 
 #include "G4Decay.hh"
 
-void ExN03PhysicsList::ConstructGeneral()
+void ExN03PhysicsList::ConstructDecay()
 {
   // Add Decay Process
-   G4Decay* theDecayProcess = new G4Decay();
+  G4Decay* theDecayProcess = new G4Decay();
   theParticleIterator->reset();
   while( (*theParticleIterator)() ){
     G4ParticleDefinition* particle = theParticleIterator->value();

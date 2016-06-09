@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: SoG4Polyhedron.h,v 1.2 2006/12/13 15:49:56 gunter Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: SoG4Polyhedron.h,v 1.3 2007/09/17 16:08:00 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 // John Allison  26th October 2006
 // Extended Geant4_SoPolyhedron to include G4Atts.
@@ -34,7 +34,7 @@
 #define SoG4Polyhedron_h
 
 // Inheritance :
-#include <Geant4_SoPolyhedron.h>
+#include "Geant4_SoPolyhedron.h"
 #include "G4AttHolder.hh"
 
 class G4Polyhedron;

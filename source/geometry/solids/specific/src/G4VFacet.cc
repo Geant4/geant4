@@ -24,8 +24,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VFacet.cc,v 1.5 2007/05/11 13:54:29 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: G4VFacet.cc,v 1.6 2007/08/23 14:45:03 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 //
@@ -60,7 +60,7 @@ G4VFacet::G4VFacet ()
   P.clear();
   E.clear();
     
-  centroid  = G4ThreeVector(0.0,0.0,0.0);
+  circumcentre = G4ThreeVector(0.0,0.0,0.0);
   radius    = 0.0;
   radiusSqr = 0.0;
   area      = 0.0;
@@ -81,7 +81,7 @@ G4bool G4VFacet::operator== (const G4VFacet &right) const
   G4double tolerance = kCarTolerance*kCarTolerance/4.0;
   if (nVertices != right.GetNumberOfVertices())
     { return false; }
-  else if ((centroid-right.GetCentroid()).mag2() > tolerance)
+  else if ((circumcentre-right.GetCircumcentre()).mag2() > tolerance)
     { return false; }
   else if (std::fabs((right.GetSurfaceNormal()).dot(surfaceNormal)) < 0.9999999999)
     { return false; }

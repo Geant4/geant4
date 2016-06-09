@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // $Id: G4ErrorSurfaceTrajState.cc,v 1.6 2007/06/21 15:04:08 gunter Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file 

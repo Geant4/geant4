@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QElastic.cc,v 1.23 2007/05/23 15:14:25 mkossov Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: G4QElastic.cc,v 1.25 2007/11/15 09:36:43 mkossov Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 //      ---------------- G4QElastic class -----------------
 //                 by Mikhail Kossov, December 2003.
@@ -399,7 +399,8 @@ G4VParticleChange* G4QElastic::PostStepDoIt(const G4Track& track, const G4Step& 
 #ifdef debug
   G4cout<<"G4QElastic::PostStepDoIt: track is initialized"<<G4endl;
 #endif
-  G4double localtime = track.GetGlobalTime();
+  G4double weight        = track.GetWeight();
+  G4double localtime     = track.GetGlobalTime();
   G4ThreeVector position = track.GetPosition();
 #ifdef debug
   G4cout<<"G4QElastic::PostStepDoIt: before Touchable extraction"<<G4endl;
@@ -445,7 +446,7 @@ G4VParticleChange* G4QElastic::PostStepDoIt(const G4Track& track, const G4Step& 
     aParticleChange.ProposeMomentumDirection(dir) ;
     return G4VDiscreteProcess::PostStepDoIt(track,step);
   }
-  G4double mint=CSmanager->GetExchangeT(Z,N,projPDG); // fanctional randomized -t in MeV^2
+  G4double mint=CSmanager->GetExchangeT(Z,N,projPDG); // functional randomized -t in MeV^2
 #ifdef pdebug
   G4cout<<"G4QElast::PSDI:pPDG="<<projPDG<<",tPDG="<<targPDG<<",P="<<Momentum<<",CS="
         <<xSec<<",-t="<<mint<<G4endl;
@@ -488,7 +489,7 @@ G4VParticleChange* G4QElastic::PostStepDoIt(const G4Track& track, const G4Step& 
   G4cout<<"G4QElastic::PoStDoIt: scatE="<<scat4M.e()-pM<<", recoE="<<reco4M.e()-tM<<",d4M="
         <<tot4M-scat4M-reco4M<<G4endl;
 #endif
-  // Update G4VParticleChange for the scattered muon
+  // Update G4VParticleChange for the scattered projectile
   G4double finE=scat4M.e()-pM;             // Final kinetic energy of the scattered proton
   if(finE>0.0) aParticleChange.ProposeEnergy(finE);
   else
@@ -532,6 +533,7 @@ G4VParticleChange* G4QElastic::PostStepDoIt(const G4Track& track, const G4Step& 
 #endif
   // Make a recoil nucleus
   G4Track* aNewTrack = new G4Track(theSec, localtime, position );
+  aNewTrack->SetWeight(weight);                                   //    weighted
   aNewTrack->SetTouchableHandle(trTouchable);
   aParticleChange.AddSecondary( aNewTrack );
 #ifdef debug
@@ -566,8 +568,8 @@ G4double G4QElastic::CalculateXSt(G4bool oxs, G4bool xst, G4double p, G4int Z, G
   else if(init)                          // Return t-value for scattering (=G4QElastic)
   {
     if(oxs) res=CSmanager->GetHMaxT();   // Calculate the max_t value
-				else res=CSmanager->GetExchangeT(Z, N, pPDG); // fanctionally randomized -t in MeV^2
+				else res=CSmanager->GetExchangeT(Z, N, pPDG); // functionally randomized -t in MeV^2
   }
-  else G4cout<<"*Warning*G4QCohChrgExchange::CalculateXSt:*NotInitiatedScattering"<<G4endl;
+  else G4cout<<"*Warning*G4QElastic::CalculateXSt:*NotInitiatedScattering"<<G4endl;
   return res;
 }

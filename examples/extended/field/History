@@ -1,4 +1,4 @@
-$Id: History,v 1.4 2005/05/03 10:05:49 allison Exp $
+$Id: History,v 1.5 2007/10/30 03:36:15 gum Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,7 +15,16 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-3rd May 2005  John Allison  (examples-V07-00-03)
+29th Oct 2007 Peter Gumplinger (fieldex-V09-00-00)
+--------------------------------------------------
+- Add new field example field04 to exhibit the way
+  overlapping fields may be handled in Geant4.
+  Thanks to Tom Roberts and Muons Inc.
+  G4BEAMLINE release 1.12 
+  http://g4beamline.muonsinc.com
+
+3rd May 2005  John Allison  (fieldex-V07-00-03)
+------------------------------------------------
 - Replaced vis manager with G4VisExecutive.
 
 Dec 3rd, 2004 Gabriele Cosmo (fieldex-V06-02-00)

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Isotope.cc,v 1.20 2006/10/17 15:15:46 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: G4Isotope.cc,v 1.21 2007/10/18 11:14:33 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -83,11 +83,12 @@ G4Isotope::G4Isotope(__void__&)
 
 G4Isotope::~G4Isotope()
 {
+  /*
   if (fCountUse != 0)
     G4cout << "--> warning from ~G4Isotope(): the isotope " << fName
            << " is still referenced by " << fCountUse << " G4Elements \n" 
 	   << G4endl;
-	     
+  */     
   //remove this isotope from theIsotopeTable
   theIsotopeTable[fIndexInTable] = 0;
 }  

@@ -13,6 +13,27 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+16-Nov-2007 Gunter Folger                had-binary-V09-00-05
+-   Correction in G4BinaryCascade for memory leak.
+
+16-Nov-2007 Gunter Folger                had-binary-V09-00-04
+-   remove one line of left over debug printing
+
+05-Nov-2007 Gunter Folger                had-binary-V09-00-03
+-   deactivate general debug printout in G4BinaryCascade
+
+05-Nov-2007 Gunter Folger                had-binary-V09-00-02
+-   Fixes for propagate: particles can decay outside nucleus, correct counting 
+      for late particles
+
+31-Oct-2007 Gunter Folger                had-binary-V09-00-01
+-   G4BinaryLightIon... adapt to changes in BIC
+-   Work around problem with very low energy pion (Coulomb barrier, nuclear mass
+      difference)
+
+18-Oct-2007 Gunter Folger                had-binary-V09-00-00
+-   Collect many changes for propagate interface.
+    Fix for pion incident at low energy: cannot go to deexitation directly
 
 18-May-2007 Gunter Folger                had-binary-V08-03-00
 -   G4BinaryLightIonReaction: Protect against divide by 0 when energy momentum

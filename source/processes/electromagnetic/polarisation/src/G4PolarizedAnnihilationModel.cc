@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PolarizedAnnihilationModel.cc,v 1.5 2007/05/23 08:52:20 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: G4PolarizedAnnihilationModel.cc,v 1.6 2007/07/10 09:38:17 schaelic Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 // -------------------------------------------------------------------
 //
@@ -41,6 +41,9 @@
 // 18-07-06 use newly calculated cross sections (P. Starovoitov)
 // 21-08-06 update interface (A. Schaelicke)
 // 17-11-06 add protection agaist e+ zero energy PostStep (V.Ivanchenko)
+// 10-07-07 copied Initialise() method from G4eeToTwoGammaModel to provide a  
+//          local ParticleChangeForGamma object and reduce overhead 
+//          in SampleSecondaries()  (A. Schaelicke)
 //
 //
 // Class Description:
@@ -60,7 +63,8 @@
 
 G4PolarizedAnnihilationModel::G4PolarizedAnnihilationModel(const G4ParticleDefinition* p, 
 							   const G4String& nam)
-  : G4eeToTwoGammaModel(p,nam),crossSectionCalculator(0)
+  : G4eeToTwoGammaModel(p,nam),crossSectionCalculator(0),gParticleChange(0),
+    gIsInitialised(false)
 {
   crossSectionCalculator=new G4PolarizedAnnihilationCrossSection();
 }
@@ -68,6 +72,24 @@ G4PolarizedAnnihilationModel::G4PolarizedAnnihilationModel(const G4ParticleDefin
 G4PolarizedAnnihilationModel::~G4PolarizedAnnihilationModel()
 {
   if (crossSectionCalculator) delete crossSectionCalculator;
+}
+
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4PolarizedAnnihilationModel::Initialise(const G4ParticleDefinition*,
+                                     const G4DataVector&)
+{
+  //  G4eeToTwoGammaModel::Initialise(part,dv);
+  if(gIsInitialised) return;
+
+  if(pParticleChange)
+    gParticleChange =
+      reinterpret_cast<G4ParticleChangeForGamma*>(pParticleChange);
+  else
+    gParticleChange = new G4ParticleChangeForGamma();
+
+  gIsInitialised = true;
 }
 
 G4double G4PolarizedAnnihilationModel::ComputeCrossSectionPerElectron(
@@ -135,13 +157,13 @@ void G4PolarizedAnnihilationModel::SampleSecondaries(std::vector<G4DynamicPartic
 						     G4double /*tmin*/,
 						     G4double /*maxEnergy*/) 
 {
-  G4ParticleChangeForGamma*  fParticleChange 
-    = dynamic_cast<G4ParticleChangeForGamma*>(pParticleChange);
-  const G4Track * aTrack = fParticleChange->GetCurrentTrack();
+//   G4ParticleChangeForGamma*  gParticleChange 
+//     = dynamic_cast<G4ParticleChangeForGamma*>(pParticleChange);
+  const G4Track * aTrack = gParticleChange->GetCurrentTrack();
 
   // kill primary 
-  fParticleChange->SetProposedKineticEnergy(0.);
-  fParticleChange->ProposeTrackStatus(fStopAndKill);
+  gParticleChange->SetProposedKineticEnergy(0.);
+  gParticleChange->ProposeTrackStatus(fStopAndKill);
 
   // V.Ivanchenko add protection against zero kin energy
   G4double PositKinEnergy = dp->GetKineticEnergy();

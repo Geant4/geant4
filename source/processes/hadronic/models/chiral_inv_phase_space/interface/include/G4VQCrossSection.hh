@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VQCrossSection.hh,v 1.8 2006/12/09 14:33:35 mkossov Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: G4VQCrossSection.hh,v 1.9 2007/11/15 09:36:43 mkossov Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 //
 // GEANT4 virtual class: G4VQCrossSection -- header file
@@ -118,6 +118,8 @@ public:
   virtual G4double GetExchangeEnergy(); // Returns energy of the t-chanel particle (gam,pi)
 
   virtual G4double GetExchangeT(G4int tZ, G4int tN, G4int pPDG); // -t=Q2 for hadronic
+
+  virtual G4double GetSlope(G4int tZ, G4int tN, G4int pPDG); // B-slope of the maim maximum
 
   virtual G4double GetHMaxT();          // max(-t=Q2)/2 for hadronic (MeV^2)
 

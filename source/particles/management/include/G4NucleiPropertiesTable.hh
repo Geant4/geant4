@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4NucleiPropertiesTable.hh,v 1.13 2006/06/29 19:23:56 gunter Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 // -------------------------------------------------------------------
 //      GEANT 4 class file --- Copyright CERN 1997

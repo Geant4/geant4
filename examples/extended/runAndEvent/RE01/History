@@ -1,11 +1,11 @@
-$Id: History,v 1.3 2007/02/05 11:47:46 gcosmo Exp $
+$Id: History,v 1.4 2007/11/13 20:33:28 asaim Exp $
 -------------------------------------------------------------------
 
      =========================================================
      Geant4 - an Object-Oriented Toolkit for Simulation in HEP
      =========================================================
 
-                    Example RE02 History file
+                    Example RE01 History file
                     ------------------------
 This file should be used by the G4 example coordinator to briefly
 summarize all major modifications introduced in the code and keep

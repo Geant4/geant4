@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4Region.cc,v 1.23 2007/04/26 21:20:53 asaim Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 // 
 // class G4Region Implementation

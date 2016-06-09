@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HistoManager.cc,v 1.4 2007/04/27 10:38:11 maire Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: HistoManager.cc,v 1.6 2007/11/09 17:35:06 maire Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -61,12 +61,13 @@ HistoManager::HistoManager()
     exist[k] = false;
     Unit[k]  = 1.0;
     Width[k] = 1.0;
+    ascii[k] = false;    
   }
 
   histoMessenger = new HistoMessenger(this);
   
-  csdaRange = 0.;
-  stepMax   = DBL_MAX;
+  rangeFlag = false;  
+  csdaRange = DBL_MAX;    
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -82,7 +83,7 @@ HistoManager::~HistoManager()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void HistoManager::book(G4double range)
+void HistoManager::book()
 {
 #ifdef G4ANALYSIS_USE
   if(!af) return;
@@ -121,8 +122,6 @@ void HistoManager::book(G4double range)
   if (factoryOn) 
      G4cout << "\n----> Histogram Tree is opened in " << fileName[1] << G4endl;
 #endif
-
-if (csdaRange == 0.) csdaRange = range;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -131,6 +130,7 @@ void HistoManager::save()
 {
 #ifdef G4ANALYSIS_USE
   if (factoryOn) {
+    saveAscii();          // Write ascii file, if any   
     tree->commit();       // Writing the histograms to the file
     tree->close();        // and closing the tree (and the file)
     G4cout << "\n----> Histogram Tree is saved in " << fileName[1] << G4endl;
@@ -202,19 +202,6 @@ void HistoManager::SetHisto(G4int ih,
   G4cout << "----> SetHisto " << ih << ": " << titl << ";  "
          << nbins << " bins from "
          << vmin << " " << unit << " to " << vmax << " " << unit << G4endl;
-	 
-  // compute constraint of stepMax from histos 1 and 8
-  //
-  G4double frac = 1.;
-  if (ih == 1) {
-    stepMax = std::min(stepMax,frac*Width[ih]);
-    G4cout << "      stepMax = " << G4BestUnit(stepMax,"Length") << G4endl;
-  }
-     	 
-  if ((ih == 8)&&(csdaRange>0.)) {
-    stepMax = std::min(stepMax,frac*Width[ih]*csdaRange);
-    G4cout << "      stepMax = " << G4BestUnit(stepMax,"Length") << G4endl;
-  }   	 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -242,6 +229,71 @@ void HistoManager::Scale(G4int ih, G4double fac)
 #ifdef G4ANALYSIS_USE
   if(exist[ih]) histo[ih]->scale(fac);
 #endif
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void HistoManager::PrintHisto(G4int ih)
+{
+ if (ih < MaxHisto) ascii[ih] = true;
+ else
+    G4cout << "---> warning from HistoManager::PrintHisto() : histo " << ih
+           << "does not exist" << G4endl;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+#include <fstream>
+
+void HistoManager::saveAscii()
+{
+#ifdef G4ANALYSIS_USE
+ 
+ G4String name = fileName[0] + ".ascii";
+ std::ofstream File(name, std::ios::out);
+ File.setf( std::ios::scientific, std::ios::floatfield );
+ 
+ //write selected histograms
+ for (G4int ih=0; ih<MaxHisto; ih++) {
+    if (exist[ih] && ascii[ih]) {
+      File << "\n  1D histogram " << ih << ": " << Title[ih] 
+           << "\n \n \t     X \t\t     Y" << G4endl;
+     
+      for (G4int iBin=0; iBin<Nbins[ih]; iBin++) {
+         File << "  " << iBin << "\t" 
+              << histo[ih]->binMean(iBin) << "\t"
+	      << histo[ih]->binHeight(iBin) 
+	      << G4endl;
+      } 
+    }
+ }
+#endif
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4double HistoManager::ComputeStepMax(G4double range)
+{
+  // compute constraint on stepMax from histos 1 and 8
+  //
+  G4double stepMax = DBL_MAX;
+  G4double frac = 1.;
+  
+  G4int ih = 1;
+  if (exist[ih]) {
+    stepMax = frac*Width[ih];    
+  }
+  
+  ih = 8;   	 
+  if (exist[ih]) {
+    if (!rangeFlag) csdaRange = range;
+    if (csdaRange > 0.) stepMax = std::min(stepMax,frac*Width[ih]*csdaRange);
+  }
+  
+  G4cout << "\n---> stepMax from HistoManager = " 
+         << G4BestUnit(stepMax,"Length") << G4endl;
+	 
+  return stepMax;     	   
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

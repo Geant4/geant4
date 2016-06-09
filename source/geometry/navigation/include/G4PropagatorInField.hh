@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4PropagatorInField.hh,v 1.13 2007/06/08 09:49:34 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// GEANT4 tag $Name: geant4-09-01 $
 // 
 // class G4PropagatorInField 
 //

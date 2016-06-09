@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4LogicalBorderSurface.cc,v 1.14 2006/06/29 18:57:57 gunter Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: G4LogicalBorderSurface.cc,v 1.15 2007/10/12 20:15:23 gum Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 // --------------------------------------------------------------------
 // G4LogicalBorderSurface Implementation
@@ -110,8 +110,7 @@ G4LogicalBorderSurface::operator!=(const G4LogicalBorderSurface &right) const
 // Methods
 //
 
-const std::vector<G4LogicalBorderSurface*> *
-G4LogicalBorderSurface::GetSurfaceTable()
+const G4LogicalBorderSurfaceTable* G4LogicalBorderSurface::GetSurfaceTable()
 {
   return &theBorderSurfaceTable;
 }
@@ -143,8 +142,11 @@ void G4LogicalBorderSurface::DumpInfo()
 
   for (size_t i=0; i<theBorderSurfaceTable.size(); i++)
   {
-    G4cout << theBorderSurfaceTable[i]->GetName() << " : " << G4endl
-           << "  Surface type   = " << theBorderSurfaceTable[i]->GetName()
+    G4LogicalBorderSurface* pBorderSurface = theBorderSurfaceTable[i];
+    G4cout << pBorderSurface->GetName() << " : " << G4endl
+           << " Border of volumes "
+           << pBorderSurface->GetVolume1()->GetName() << " and " 
+           << pBorderSurface->GetVolume2()->GetName()
            << G4endl;
   }
   G4cout << G4endl;
@@ -152,7 +154,7 @@ void G4LogicalBorderSurface::DumpInfo()
 
 void G4LogicalBorderSurface::CleanSurfaceTable()
 {
-  std::vector<G4LogicalBorderSurface*>::iterator pos;
+  G4LogicalBorderSurfaceTable::iterator pos;
   for(pos=theBorderSurfaceTable.begin();
       pos!=theBorderSurfaceTable.end(); pos++)
   {

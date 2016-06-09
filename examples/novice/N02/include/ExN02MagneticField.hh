@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: ExN02MagneticField.hh,v 1.7 2006/06/29 17:47:37 gunter Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: ExN02MagneticField.hh,v 1.8 2007/08/22 13:11:51 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 //
 //    A class for control of the Magnetic Field of the detector.
@@ -53,8 +53,8 @@ class ExN02MagneticField: public G4UniformMagField
   ~ExN02MagneticField();  
       
    //Set the field (fieldValue,0,0)
-   void SetFieldValue(G4double fieldValue);
-   void SetFieldValue(G4ThreeVector fieldVector);
+   void SetMagFieldValue(G4double fieldValue);
+   void SetMagFieldValue(G4ThreeVector fieldVector);
       
    G4ThreeVector GetConstantFieldValue();
 

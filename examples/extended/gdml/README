@@ -1,4 +1,4 @@
-$Id: README,v 1.9 2006/07/24 15:32:13 witoldp Exp $
+$Id: README,v 1.10 2007/11/20 08:34:16 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,46 +14,29 @@ Geometry Description Markup Language).
 The GDML files can be then used to interchange geometries between different
 applications and users.
 
-The detector construction consists of a call to GDMLProcessor which parses the
-GDML file (test.gdml) and returns the pointer to the world volume. The user
-can also write his/her own GDML file and use it as the primary input format for
-his/her Geant4 application.
+The detector construction consists of a call to GDMLProcessor which parses a
+GDML file and returns the pointer to the world volume. The user can also write
+her/his own GDML file and use it as the primary input format for her/his Geant4
+application.
 
-Once the Geant4 geometry is loaded in the memory, the G4GDMLWriter class is
-instantiated (in the 'main') to demonstrate the exporting of the GDML file.
-The call to DumpGeometryInfo method causes the GDML writer to scan the Geant4
-geometry tree and write it out in the form of a GDML file.
+More than one simple GDML files are provided:
+- axes.gdml, showing loading and orientation of Cartesian axes;
+- diamond.gdml, a simple diamond structure made of tessellated solids;
+- modular.gdml, the combination of the two GDML files above loaded as
+  separate modules in the same setup.
 
 HOW TO BUILD THE EXAMPLE ?
 
-- Install the GDML package with the Geant4 binding as well as Xerces.
-  See: http://cern.ch/gdml.
+- You need to have built the persistency/gdml plugin module by having
+  set G4LIB_BUILD_GDML variable in your environment.
+  It is also required you specify the path where the XercesC XML parser
+  package is installed in your system, through the variable XERCESCROOT.
 
-- Set the environment variable GDML_INC to point to the directory where
-  GDML includes are installed and GDML_LIB to point to the directory
-  where GDML libraries are installed. 
-  Set XERCESCROOT to point to place where Xerces is installed.
-  You can also edit the GNUmakefile provided with the example and
-  customise it for your specific setup.
-
-- Compile and link to generate an executable:
+- Compile and link to generate the executable:
  	      % gmake
-  Note 1: GDML requires that all the Geant4 header files are copied to
-  one directory. You can use the Geant4 Configure script for coping 
-  the Geant4 header files.
-  Note 2: new version of GDML (after GDML_2_5_0) have one additional
-  library called G4Evaluator. If you are compiling with older version
-  of GDML, you should remove that library from the makefile.
 
-- You may need to customise the location of the GDML schema file which is 
-  specified at the top of test.gdml file (the geometry file). By default 
-  the schema will be loaded from the web server of LCG release area, however,
-  you can load your own copy of the schema by specifying the path, like:
-  xsi:noNamespaceSchemaLocation="/home/me/MYGDML/src/GDMLSchema/gdml.xsd"
- 		
 - Execute the application:
- 	      % g4_gdml_read_write
-  Note: if you are using dynamic libraries, you should add $GDML_LIB
-  and $XERCESCROOT/lib paths to the LD_LIBRARY_PATH directory (or
-  equivalent on your system).
-
+ 	      % load_gdml [GDML-file].gdml
+  Note: if you are using dynamic libraries, you should add and
+        $XERCESCROOT/lib paths to the LD_LIBRARY_PATH directory (or
+        equivalent on your system).

@@ -186,7 +186,7 @@ const G4NuclearLevel* G4NuclearLevelManager::LowestLevel() const
 
 G4bool G4NuclearLevelManager::Read(std::ifstream& dataFile)
 {
-  const G4double minProbability = 0.001;
+  const G4double minProbability = 1e-8;
   
   G4bool result = true;
 
@@ -258,9 +258,11 @@ void G4NuclearLevelManager::MakeLevels()
   std::ifstream inFile(_fileName, std::ios::in);
   if (! inFile) 
     {
+#ifdef GAMMAFILEWARNING
       if (_nucleusZ > 10) G4cout << " G4NuclearLevelManager: nuclide (" 
                                  << _nucleusZ << "," << _nucleusA 
                                  << ") does not have a gamma levels file" << G4endl;
+#endif
       return;
     }
   

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Curve.cc,v 1.8 2007/05/11 13:49:32 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: G4Curve.cc,v 1.9 2007/07/16 08:06:55 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -49,7 +49,8 @@ G4Curve::~G4Curve()
 
 G4Curve::G4Curve(const G4Curve& c)
  : start(c.start), end(c.end), pStart(c.pStart), pEnd(c.pEnd),
-   pRange(c.pRange), bounded(c.bounded), sameSense(c.sameSense)
+   pRange(c.pRange), bounded(c.bounded), sameSense(c.sameSense),
+   kCarTolerance(c.kCarTolerance)
 {
 }
 
@@ -63,6 +64,7 @@ G4Curve& G4Curve::operator=(const G4Curve& c)
   pRange    = c.pRange;
   bounded   = c.bounded;
   sameSense = c.sameSense;
+  kCarTolerance = c.kCarTolerance;
 
   return *this;
 }

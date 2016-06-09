@@ -1,0 +1,350 @@
+//
+// ********************************************************************
+// * License and Disclaimer                                           *
+// *                                                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
+// *                                                                  *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
+// ********************************************************************
+//
+//
+// $Id: G4RegularNavigation.cc,v 1.7 2007/12/10 16:30:01 gunter Exp $
+// GEANT4 tag $ Name:$
+//
+// class G4RegularNavigation implementation
+//
+// Author: Pedro Arce, May 2007
+//
+// --------------------------------------------------------------------
+
+#include "G4RegularNavigation.hh"
+#include "G4TouchableHistory.hh"
+#include "G4PhantomParameterisation.hh"
+#include "G4Material.hh"
+#include "G4NormalNavigation.hh"
+#include "G4Navigator.hh"
+#include "G4GeometryTolerance.hh"
+
+//------------------------------------------------------------------
+G4RegularNavigation::G4RegularNavigation()
+  : fVerbose(1), fCheck(true)
+{
+  kCarTolerance = G4GeometryTolerance::GetInstance()->GetSurfaceTolerance();
+}
+
+
+//------------------------------------------------------------------
+G4RegularNavigation::~G4RegularNavigation()
+{
+}
+
+
+//------------------------------------------------------------------
+G4double G4RegularNavigation::
+                    ComputeStep(const G4ThreeVector& localPoint,
+                                const G4ThreeVector& localDirection,
+                                const G4double currentProposedStepLength,
+                                      G4double& newSafety,
+                                      G4NavigationHistory& history,
+                                      G4bool& validExitNormal,
+                                      G4ThreeVector& exitNormal,
+                                      G4bool& exiting,
+                                      G4bool& entering,
+                                      G4VPhysicalVolume *(*pBlockedPhysical),
+                                      G4int& blockedReplicaNo)
+{
+  // This method is never called because to be called the daughter has to be
+  // a regular structure. This would only happen if the track is in the mother
+  // of voxels volume. But the voxels fill completely their mother, so when a
+  // track enters the mother it automatically enters a voxel. Only precision
+  // problems would make this method to be called
+
+  G4ThreeVector globalPoint =
+         history.GetTopTransform().Inverse().TransformPoint(localPoint);
+  G4ThreeVector globalDirection =
+         history.GetTopTransform().Inverse().TransformAxis(localDirection);
+
+  G4ThreeVector localPoint2 = localPoint; // take away constantness
+
+  LevelLocate( history, *pBlockedPhysical, blockedReplicaNo, 
+               globalPoint, &globalDirection, true, localPoint2 );
+
+
+  // Get in which voxel it is
+  //
+  G4VPhysicalVolume *motherPhysical, *daughterPhysical;
+  G4LogicalVolume *motherLogical;
+  motherPhysical = history.GetTopVolume();
+  motherLogical = motherPhysical->GetLogicalVolume();
+  daughterPhysical = motherLogical->GetDaughter(0);
+
+  G4PhantomParameterisation * daughterParam =
+        (G4PhantomParameterisation*)(daughterPhysical->GetParameterisation());
+  G4int copyNo = daughterParam ->GetReplicaNo(localPoint,localDirection);
+
+  G4ThreeVector voxelTranslation = daughterParam->GetTranslation( copyNo );
+  G4ThreeVector daughterPoint = localPoint - voxelTranslation;
+
+
+  // Compute step in voxel
+  //
+  return fnormalNav->ComputeStep(daughterPoint,
+                                 localDirection,
+                                 currentProposedStepLength,
+                                 newSafety,
+                                 history,
+                                 validExitNormal,
+                                 exitNormal,
+                                 exiting,
+                                 entering,
+                                 pBlockedPhysical,
+                                 blockedReplicaNo);
+}
+
+
+//------------------------------------------------------------------
+G4double G4RegularNavigation::ComputeStepSkippingEqualMaterials(
+                                G4ThreeVector localPoint,
+                                const G4ThreeVector& localDirection,
+                                const G4double currentProposedStepLength,
+                                G4double& newSafety,
+                                G4NavigationHistory& history,
+                                G4bool& validExitNormal,
+                                G4ThreeVector& exitNormal,
+                                G4bool& exiting,
+                                G4bool& entering,
+                                G4VPhysicalVolume *(*pBlockedPhysical),
+                                G4int& blockedReplicaNo,
+                                G4VPhysicalVolume* pCurrentPhysical)
+{
+  G4PhantomParameterisation *param =
+    (G4PhantomParameterisation*)(pCurrentPhysical->GetParameterisation());
+
+  if( !param->SkipEqualMaterials() ) {
+    return fnormalNav->ComputeStep(localPoint,
+				   localDirection,
+				   currentProposedStepLength,
+				   newSafety,
+				   history,
+				   validExitNormal,
+				   exitNormal,
+				   exiting,
+				   entering,
+				   pBlockedPhysical,
+				   blockedReplicaNo);
+  }
+
+
+  G4double ourStep = 0.;
+
+  // To get replica No: transform local point to the reference system of the
+  // param container volume
+  //
+  G4int ide = history.GetDepth();
+  G4ThreeVector containerPoint = history.GetTransform(ide).Inverse().TransformPoint(localPoint);
+
+  // Point in global frame
+  //
+  containerPoint = history.GetTransform(ide).Inverse().TransformPoint(localPoint);
+
+  // Point in voxel parent volume frame
+  //
+  containerPoint = history.GetTransform(ide-1).TransformPoint(containerPoint);
+
+  // Store previous voxel translation to move localPoint by the difference
+  // with the new one
+  //
+  G4ThreeVector prevVoxelTranslation = containerPoint - localPoint;
+
+  // Do not use the expression below: There are cases where the
+  // fLastLocatedPointLocal does not give the correct answer
+  // (particle reaching a wall and bounced back, particle travelling through
+  // the wall that is deviated in an step, ...; these are pathological cases
+  // that give wrong answers in G4PhantomParameterisation::GetReplicaNo()
+  //
+  // G4ThreeVector prevVoxelTranslation = param->GetTranslation( copyNo );
+
+  G4int copyNo = param->GetReplicaNo(containerPoint,localDirection);
+
+  G4Material* currentMate = param->ComputeMaterial( copyNo, 0, 0 );
+  G4VSolid* voxelBox = pCurrentPhysical->GetLogicalVolume()->GetSolid();
+
+  G4VSolid* containerSolid = param->GetContainerSolid();
+  G4Material* nextMate;
+  G4bool bLocatedOnEdge = false;
+  G4bool bFirstStep = true;
+  G4double newStep;
+  G4double totalNewStep = 0.;
+
+  // Loop while same material is found 
+  //
+  for( ;; )
+  {
+    newStep = voxelBox->DistanceToOut( localPoint, localDirection );
+    if( (bFirstStep) && (newStep < currentProposedStepLength) )
+    {
+      exiting  = true;
+    }
+    bFirstStep = false;
+ 
+    newStep += kCarTolerance;   // Avoid precision problems
+    ourStep += newStep;
+    totalNewStep += newStep;
+
+    // Physical process is limiting the step, don't continue
+    //
+    if(std::fabs(totalNewStep-currentProposedStepLength) < kCarTolerance)
+    { 
+      return currentProposedStepLength;
+    }
+
+    // Move container point until wall of voxel
+    //
+    containerPoint += newStep*localDirection;
+    if( containerSolid->Inside( containerPoint ) != kInside )
+    {
+      bLocatedOnEdge = true; // NEEDED??
+      break;
+    }
+
+    // Get copyNo and translation of new voxel
+    //
+    copyNo = param->GetReplicaNo(containerPoint,localDirection);
+    G4ThreeVector voxelTranslation = param->GetTranslation( copyNo );
+
+    // Move local point until wall of voxel and then put it in the new voxel
+    // local coordinates
+    //
+    localPoint += newStep*localDirection;
+    localPoint += prevVoxelTranslation - voxelTranslation;
+
+    prevVoxelTranslation = voxelTranslation;
+
+    // Check if material of next voxel is the same as that of the current voxel
+    nextMate = param->ComputeMaterial( copyNo, 0, 0 );
+
+    if( currentMate != nextMate ) { break; }
+  }
+
+  return ourStep;
+}
+
+
+//------------------------------------------------------------------
+G4double
+G4RegularNavigation::ComputeSafety(const G4ThreeVector& localPoint,
+                                   const G4NavigationHistory& history,
+                                   const G4double pMaxLength)
+{
+  // This method is never called because to be called the daughter has to be a
+  // regular structure. This would only happen if the track is in the mother of
+  // voxels volume. But the voxels fill completely their mother, so when a
+  // track enters the mother it automatically enters a voxel. Only precision
+  // problems would make this method to be called
+
+  // Compute step in voxel
+  //
+  return fnormalNav->ComputeSafety(localPoint,
+                                   history,
+                                   pMaxLength );
+}
+
+
+//------------------------------------------------------------------
+G4bool
+G4RegularNavigation::LevelLocate( G4NavigationHistory& history,
+                                  const G4VPhysicalVolume* ,
+                                  const G4int ,
+                                  const G4ThreeVector& globalPoint,
+                                  const G4ThreeVector* globalDirection,
+                                  const G4bool pLocatedOnEdge, 
+                                  G4ThreeVector& localPoint )
+{
+  G4SmartVoxelHeader *motherVoxelHeader;
+  G4VPhysicalVolume *motherPhysical, *pPhysical;
+  G4PhantomParameterisation *pParam;
+  G4LogicalVolume *motherLogical;
+  G4VSolid *pSolid;
+  G4ThreeVector localDir;
+  G4int replicaNo;
+  
+  motherPhysical = history.GetTopVolume();
+  motherLogical = motherPhysical->GetLogicalVolume();
+  motherVoxelHeader = motherLogical->GetVoxelHeader();
+  
+  pPhysical = motherLogical->GetDaughter(0);
+  pParam = (G4PhantomParameterisation*)(pPhysical->GetParameterisation());
+  
+  pSolid = pParam->GetContainerSolid();
+  
+  // Save parent history in touchable history
+  // ... for use as parent t-h in ComputeMaterial method of param
+  //
+  G4TouchableHistory parentTouchable( history ); 
+  
+  // Get local direction
+  //
+  if( globalDirection )
+  {
+    localDir = history.GetTopTransform().TransformAxis(*globalDirection);
+  }
+  else
+  {
+    localDir = G4ThreeVector(0.,0.,0.);
+  }
+
+  // Check that track is not on the surface and check that track is not
+  // exiting the voxel parent volume
+  //
+  if ( !G4AuxiliaryNavServices::CheckPointOnSurface(pSolid, localPoint,
+          globalDirection, history.GetTopTransform(), pLocatedOnEdge) 
+     || G4AuxiliaryNavServices::CheckPointExiting(pSolid, localPoint,
+          globalDirection, history.GetTopTransform() ) )
+  {
+  }
+  else
+  {
+    // Enter this daughter
+    //
+    replicaNo = pParam->GetReplicaNo( localPoint, localDir );
+
+    if( replicaNo < 0 || replicaNo >= G4int(pParam->GetNoVoxel()) )
+    {
+      return false;
+    }
+
+    // Set the correct copy number in physical
+    //
+    pPhysical->SetCopyNo(replicaNo);
+    pParam->ComputeTransformation(replicaNo,pPhysical);
+
+    history.NewLevel(pPhysical, kParameterised, replicaNo );
+    localPoint = history.GetTopTransform().TransformPoint(globalPoint);
+
+    // Set the correct solid and material in Logical Volume
+    //
+    G4LogicalVolume *pLogical = pPhysical->GetLogicalVolume();
+      
+    pLogical->UpdateMaterial(pParam->ComputeMaterial(replicaNo,
+                             pPhysical, &parentTouchable) );
+    return true;
+  }
+
+  return false;
+}

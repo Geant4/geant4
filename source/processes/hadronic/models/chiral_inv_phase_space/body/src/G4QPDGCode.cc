@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4QPDGCode.cc,v 1.53 2006/11/27 10:44:55 mkossov Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: G4QPDGCode.cc,v 1.55 2007/10/07 13:31:42 mkossov Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 //      ---------------- G4QPDGCode ----------------
 //             by Mikhail Kossov, Sept 1999.
@@ -1733,12 +1733,12 @@ G4double G4QPDGCode::CalculateNuclMass(G4int z, G4int n, G4int s)
   }
   else if(Bn==3)
   {
-    if(!S) return mT;    // Bn=3
+    if(!S)                                      // Bn=3
     {
       if     (Z==1 && N== 2) return mT;         // tritium
       else if(Z==2 && N== 1) return mHe3;       // hetrium
     }
-    if(S== 1 && Z==-1 && N== 3) return dnS;     // nnSig-
+    if(S== 1 && Z==-1 && N== 3)                 // nnSig-
     {
       if     (Z==-1 && N== 3) return dnS;       // nnSig-
       else if(Z== 3 && N==-1) return dpS;       // ppSig+
@@ -1974,9 +1974,9 @@ G4double G4QPDGCode::CalculateNuclMass(G4int z, G4int n, G4int s)
   if(S>0)
   {
     G4double bs=0.;
-    if     (S==2) bs=a2;
-    else if(S==3) bs=a3;
-    else if(S>3)  bs=b7*exp(-b8/(A+1.));
+    if     (A==2) bs=a2;
+    else if(A==3) bs=a3;
+    else if(A>3)  bs=b7*exp(-b8/(A+1.));
     m+=S*(mL-bs);
   }  
 #ifdef debug
@@ -2305,47 +2305,33 @@ void G4QPDGCode::ConvertPDGToZNS(G4int nucPDG, G4int& z, G4int& n, G4int& s)
 {//  =======================================================================
   if(nucPDG>80000000&&nucPDG<100000000)            // Condition of conversion
   {
-    G4int r=nucPDG-90000000;
-    if(!r)
-	   {
-      z=0;
-      n=0;
-      s=0;
-      return;
-	   }
-    // Antinucleus extraction
-    if(r<-200000)                                  // Negative -> anLambdas              
+    z=0;
+    n=0;
+    s=0;
+    G4int r=nucPDG;
+    if(r==90000000) return;
+    G4int cn =r%1000;                              // candidate to #of neutrons
+    if(cn)
     {
-      G4int ns=(-r-200000)/1000000+1;
-      r+=ns*1000000;                               // Get out aL from PDG
-      s=-ns;                                       // Remember aLambdas
+      if(cn>500) cn-=1000;                         // AntiNeutrons
+      n=cn;                                        // Increment neutrons
+      r-=cn;                                       // Subtract them from the residual
+      if(r==90000000) return;
     }
-    if(r<-200)                                     // Negative -> aProtons
+    G4int cz =r%1000000;                           // candidate to #of neutrons
+    if(cz)
     {
-      G4int nz=(-r-200)/1000+1;
-      r+=nz*1000;                                  // Get out aP from PDG
-      z=-nz;                                       // Remember aProtons
+      if(cz>500000) cz-=1000000;                   // AntiProtons
+				  z=cz/1000;                                   // Number of protons
+      r-=cz;                                       // Subtract them from the residual
+      if(r==90000000) return;
     }
-    if(r<0)                                        // Negative -> aNeutrons
+    G4int cs =r%10000000;                           // candidate to #of neutrons
+    if(cs)
     {
-      G4int nn=-r;
-      r=0;                                         // Get out aN from PDG
-      n=-nn;                                       // Remember aNeutrons
+      if(cs>5000000) cs-=10000000;                 // AntiLambda
+				  s=cs/1000000;                                // Number of Lambdas
     }
-    G4int sz =r/1000;                              // Residual to analize
-    n+=r%1000;                                     // A#of Neutrons
-    if(n>700)                                      // AntiNutrons
-    {
-      n-=1000;
-      z++;
-    }
-    z+=sz%1000;                                    // A#of Protons
-    if(z>700)                                      // AntiProtons
-    {
-      z-=1000;
-      s++;
-    }
-    s+=sz/1000;                                    // A#of Lambdas
   }
   return;
 }

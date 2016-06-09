@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VProcess.cc,v 1.14 2006/06/29 21:08:26 gunter Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: G4VProcess.cc,v 1.15 2007/10/02 08:23:20 kurasige Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 // 
 // --------------------------------------------------------------
@@ -52,6 +52,9 @@ G4VProcess::G4VProcess(const G4String& aName, G4ProcessType   aType )
                     theProcessName(aName),
 		    theProcessType(aType),
                     thePILfactor(1.0),
+		    enableAtRestDoIt(true),
+		    enableAlongStepDoIt(true),
+		    enablePostStepDoIt(true),
                     verboseLevel(0)
 {
   pParticleChange = &aParticleChange;
@@ -68,7 +71,10 @@ G4VProcess::G4VProcess(const G4VProcess& right)
             theProcessName(right.theProcessName),
             theProcessType(right.theProcessType),
             thePILfactor(1.0),
-            verboseLevel(right.verboseLevel)
+	    enableAtRestDoIt(true),
+	    enableAlongStepDoIt(true),
+	    enablePostStepDoIt(true),
+	    verboseLevel(right.verboseLevel)
 {
 }
 

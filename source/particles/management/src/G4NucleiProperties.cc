@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4NucleiProperties.cc,v 1.12 2006/06/29 19:25:40 gunter Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: G4NucleiProperties.cc,v 1.13 2007/09/14 07:04:09 kurasige Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 // 
 // ------------------------------------------------------------
@@ -75,33 +75,37 @@ G4double  G4NucleiProperties::BindingEnergy(G4double A, G4double Z)
 
 G4double G4NucleiProperties::GetNuclearMass(const G4double A, const G4double Z)
 {
-	if (A < 1 || Z < 0 || Z > A) {
-		G4cout << "G4NucleiProperties::GetNuclearMass: Wrong values for A = " << A 
-				 << " and Z = " << Z << G4endl;
-		return 0.0;
-	} else {
-	 	G4ParticleDefinition * nucleus = 0;
-		if ( (Z<=2) ) {
-			if ( (Z==1)&&(A==1) ) {
-				nucleus = G4ParticleTable::GetParticleTable()->FindParticle("proton"); // proton 
-			} else if ( (Z==0)&&(A==1) ) {
-			  	nucleus = G4ParticleTable::GetParticleTable()->FindParticle("neutron"); // neutron 
-    		} else if ( (Z==1)&&(A==2) ) {
-	  			nucleus = G4ParticleTable::GetParticleTable()->FindParticle("deuteron"); // deuteron 
-    		} else if ( (Z==1)&&(A==3) ) {
-	  			nucleus = G4ParticleTable::GetParticleTable()->FindParticle("triton"); // triton 
-    		} else if ( (Z==2)&&(A==4) ) {
-	  			nucleus = G4ParticleTable::GetParticleTable()->FindParticle("alpha"); // alpha 
-    		} else if ( (Z==2)&&(A==3) ) {
-	  			nucleus = G4ParticleTable::GetParticleTable()->FindParticle("He3"); // He3 
-			}
-  		}
-		if (nucleus!=0) {
-			return nucleus->GetPDGMass();
-  		}else {
-			return GetAtomicMass(A,Z) - Z*electron_mass_c2 + 1.433e-5*MeV*std::pow(Z,2.39);
-		}
-	}
+  if (A < 1 || Z < 0 || Z > A) {
+#ifdef G4VERBOSE
+    if (G4ParticleTable::GetParticleTable()->GetVerboseLevel()>0) {
+      G4cout << "G4NucleiProperties::GetNuclearMass: Wrong values for A = " << A 
+	     << " and Z = " << Z << G4endl;
+    }
+#endif    
+    return 0.0;
+  } else {
+    G4ParticleDefinition * nucleus = 0;
+    if ( (Z<=2) ) {
+      if ( (Z==1)&&(A==1) ) {
+	nucleus = G4ParticleTable::GetParticleTable()->FindParticle("proton"); // proton 
+      } else if ( (Z==0)&&(A==1) ) {
+	nucleus = G4ParticleTable::GetParticleTable()->FindParticle("neutron"); // neutron 
+      } else if ( (Z==1)&&(A==2) ) {
+	nucleus = G4ParticleTable::GetParticleTable()->FindParticle("deuteron"); // deuteron 
+      } else if ( (Z==1)&&(A==3) ) {
+	nucleus = G4ParticleTable::GetParticleTable()->FindParticle("triton"); // triton 
+      } else if ( (Z==2)&&(A==4) ) {
+	nucleus = G4ParticleTable::GetParticleTable()->FindParticle("alpha"); // alpha 
+      } else if ( (Z==2)&&(A==3) ) {
+	nucleus = G4ParticleTable::GetParticleTable()->FindParticle("He3"); // He3 
+      }
+    }
+    if (nucleus!=0) {
+      return nucleus->GetPDGMass();
+    }else {
+      return GetAtomicMass(A,Z) - Z*electron_mass_c2 + 1.433e-5*MeV*std::pow(Z,2.39);
+    }
+  }
 }
 
 
@@ -211,10 +215,14 @@ G4double G4NucleiProperties::GetNuclearMass(const G4double A, const G4double Z)
 G4double G4NucleiProperties::GetMassExcess(const G4int A, const G4int Z)
 {
   if (A < 1 || Z < 0 || Z > A) {
-    G4cout << "G4NucleiProperties::GetMassExccess: Wrong values for A = " << A 
-	   << " and Z = " << Z << G4endl;
+#ifdef G4VERBOSE
+    if (G4ParticleTable::GetParticleTable()->GetVerboseLevel()>0) {
+      G4cout << "G4NucleiProperties::GetMassExccess: Wrong values for A = " 
+	     << A << " and Z = " << Z << G4endl;
+    }
+#endif    
     return 0.0;
-
+    
   } else {
 
     if (G4NucleiPropertiesTable::IsInTable(Z,A)){
@@ -232,8 +240,13 @@ G4double G4NucleiProperties::GetMassExcess(const G4int A, const G4int Z)
 G4double G4NucleiProperties::GetAtomicMass(const G4double A, const G4double Z)
 {
   if (Z < 0 || Z > A) {
-    G4cout << "G4NucleiProperties::GetAtomicMass: Wrong values for A = " << A 
-	   << " and Z = " << Z << G4endl;	return 0.0;
+#ifdef G4VERBOSE
+    if (G4ParticleTable::GetParticleTable()->GetVerboseLevel()>0) {
+      G4cout << "G4NucleiProperties::GetAtomicMass: Wrong values for A = " 
+	     << A << " and Z = " << Z << G4endl;	
+    }
+#endif 
+    return 0.0;
 
   } else if (std::abs(A - G4int(A)) > 1.e-10) {
     return AtomicMass(A,Z);
@@ -254,8 +267,12 @@ G4double G4NucleiProperties::GetAtomicMass(const G4double A, const G4double Z)
 G4double G4NucleiProperties::GetBindingEnergy(const G4int A, const G4int Z)
 {
   if (A < 1 || Z < 0 || Z > A) {
-    G4cout << "G4NucleiProperties::GetMassExccess: Wrong values for A = " << A 
-	   << " and Z = " << Z << G4endl;
+#ifdef G4VERBOSE
+    if (G4ParticleTable::GetParticleTable()->GetVerboseLevel()>0) {
+      G4cout << "G4NucleiProperties::GetMassExccess: Wrong values for A = " 
+	     << A << " and Z = " << Z << G4endl;
+    }
+#endif
     return 0.0;
 
   } else {

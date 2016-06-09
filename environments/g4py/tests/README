@@ -1,4 +1,4 @@
-$Id: README,v 1.3 2006/08/08 05:10:09 kmura Exp $
+$Id: README,v 1.5 2007/08/07 03:37:36 kmura Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -35,4 +35,6 @@ gtest01 ## user application (K.M)
 gtest02 ## test for using site-module packages (K.M)
 gtest03 ## test for EZsim package (K.M)
 gtest04 ## test for getting command tree and command information (K.M)
-
+gtest05 ## test for constructing CSG geometries in Python (K.M)
+gtest06 ## test for constructing/visualizing boolean geoemtries (K.M)
+gtest07 ## test for checking overlapped geometries (K.M)

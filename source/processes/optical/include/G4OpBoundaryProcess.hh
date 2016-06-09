@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpBoundaryProcess.hh,v 1.15 2007/05/11 14:15:18 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: G4OpBoundaryProcess.hh,v 1.16 2007/10/15 21:16:24 gum Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 // 
 ////////////////////////////////////////////////////////////////////////
@@ -44,6 +44,10 @@
 //                           filled since DoIt calls 
 //                           aParticleChange.SetMomentumChange etc.
 //                           upon return (thanks to: Clark McGrew)
+//              2006-11-04 - add capability of calculating the reflectivity
+//                           off a metal surface by way of a complex index
+//                           of refraction - Thanks to Sehwook Lee and John
+//                           Hauptman (Dept. of Physics - Iowa State Univ.)
 //
 // Author:      Peter Gumplinger
 //              adopted from work by Werner Keil - April 2/96
@@ -75,8 +79,8 @@
 
 // Class Description:
 // Discrete Process -- reflection/refraction at optical interfaces.
-// Class inherits publicly from G4VDiscreteProcess.                  
-// Class Description - End:             
+// Class inherits publicly from G4VDiscreteProcess.
+// Class Description - End:
 
 /////////////////////
 // Class Definition
@@ -90,7 +94,7 @@ enum G4OpBoundaryProcessStatus {  Undefined,
                                   Absorption, Detection, NotAtBoundary,
                                   SameMaterial, StepTooSmall, NoRINDEX };
 
-class G4OpBoundaryProcess : public G4VDiscreteProcess 
+class G4OpBoundaryProcess : public G4VDiscreteProcess
 {
 
 private:
@@ -129,7 +133,7 @@ public: // With description
         // Returns infinity; i. e. the process does not limit the step,
         // but sets the 'Forced' condition for the DoIt to be invoked at
         // every step. However, only at a boundary will any action be
-        // taken. 
+        // taken.
 
 	G4VParticleChange* PostStepDoIt(const G4Track& aTrack,
 				       const G4Step&  aStep);
@@ -141,9 +145,19 @@ public: // With description
         G4OpBoundaryProcessStatus GetStatus() const;
         // Returns the current status.
 
+	G4double GetIncidentAngle();
+        // Returns the incident angle of optical photon
+
+	G4double GetReflectivity(G4double E1_perp,
+                                 G4double E1_parl,
+                                 G4double incidentangle,
+	                         G4double RealRindex,
+                                 G4double ImaginaryRindex);
+        // Returns the Reflectivity on a metalic surface
+
 	void           SetModel(G4OpticalSurfaceModel model);
-	// Set the optical surface model to be followed 
-        // (glisur || unified). 
+	// Set the optical surface model to be followed
+        // (glisur || unified).
 
 private:
 
@@ -159,7 +173,7 @@ private:
 
 	G4ThreeVector G4LambertianRand(const G4ThreeVector& normal);
 
-	G4ThreeVector G4PlaneVectorRand(const G4ThreeVector& normal) const; 
+	G4ThreeVector G4PlaneVectorRand(const G4ThreeVector& normal) const;
 
 	G4ThreeVector GetFacetNormal(const G4ThreeVector& Momentum,
 				     const G4ThreeVector&  Normal) const;
@@ -203,6 +217,9 @@ private:
 	G4double theReflectivity;
 	G4double theEfficiency;
 	G4double prob_sl, prob_ss, prob_bs;
+
+        G4int iTE, iTM;
+
         G4double kCarTolerance;
 };
 
@@ -213,7 +230,7 @@ private:
 inline
 void G4OpBoundaryProcess::G4Swap(G4double* a, G4double* b) const
 {
-	// swaps the contents of the objects pointed 
+	// swaps the contents of the objects pointed
 	// to by 'a' and 'b'!
 
   G4double temp;

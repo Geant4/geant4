@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4AnalyticalPolSolver.cc,v 1.6 2006/06/29 19:00:00 gunter Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: G4AnalyticalPolSolver.cc,v 1.7 2007/11/13 17:35:06 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 
 #include  "globals.hh"
@@ -85,7 +85,7 @@ G4int G4AnalyticalPolSolver::QuadRoots( G4double p[5], G4double r[3][5] )
 
 G4int G4AnalyticalPolSolver::CubicRoots( G4double p[5], G4double r[3][5] )
 {
-  G4double s,t,b,c,d;
+  G4double x,t,b,c,d;
   G4int k;
 
   if( p[0] != 1. )
@@ -93,9 +93,9 @@ G4int G4AnalyticalPolSolver::CubicRoots( G4double p[5], G4double r[3][5] )
     for(k = 1; k < 4; k++ ) { p[k] = p[k]/p[0]; }
     p[0] = 1.;
   }
-  s = p[1]/3.0; 
-  t = s*p[1];
-  b = 0.5*( s*( t/1.5 - p[2] ) + p[3] ); 
+  x = p[1]/3.0; 
+  t = x*p[1];
+  b = 0.5*( x*( t/1.5 - p[2] ) + p[3] ); 
   t = ( t - p[2] )/3.0;
   c = t*t*t; 
   d = b*b - c;
@@ -113,19 +113,19 @@ G4int G4AnalyticalPolSolver::CubicRoots( G4double p[5], G4double r[3][5] )
     d       =  std::sqrt(0.75)*(b - c); 
     r[2][2] =  d; 
     b       =  b + c;
-    c       = -0.5*b-s;
+    c       = -0.5*b-x;
     r[1][2] =  c;
 
-    if( ( b > 0. &&  s <= 0. ) || ( b < 0. && s > 0. ) )
+    if( ( b > 0. &&  x <= 0. ) || ( b < 0. && x > 0. ) )
     {
        r[1][1] =  c; 
        r[2][1] = -d; 
-       r[1][3] =  b - s;
+       r[1][3] =  b - x;
        r[2][3] =  0;
     }
     else
     {
-       r[1][1] =  b - s; 
+       r[1][1] =  b - x; 
        r[2][1] =  0.; 
        r[1][3] =  c;
        r[2][3] = -d;
@@ -141,9 +141,9 @@ G4int G4AnalyticalPolSolver::CubicRoots( G4double p[5], G4double r[3][5] )
 
     c =  std::cos(d)*b; 
     t = -std::sqrt(0.75)*std::sin(d)*b - 0.5*c;
-    d = -t - c - s; 
-    c =  c - s; 
-    t =  t - s;
+    d = -t - c - x; 
+    c =  c - x; 
+    t =  t - x;
 
     if( std::fabs(c) > std::fabs(t) ) { r[1][3] = c; }
     else

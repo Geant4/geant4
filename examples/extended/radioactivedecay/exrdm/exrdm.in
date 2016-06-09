@@ -1,6 +1,6 @@
 /control/saveHistory
-#/exrdm/phys/SelectPhysics LHEP_BIC_HP
-/exrdm/phys/SelectPhysics Hadron
+/exrdm/phys/SelectPhysics QGSP_BIC_HP
+#/exrdm/phys/SelectPhysics Hadron
 #/geometry/material/add NaI Na-I 3.67
 /exrdm/det/setDetectorThickness 30 mm
 /exrdm/det/setTargetLength 3 cm

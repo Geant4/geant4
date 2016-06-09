@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: History,v 1.10 2006/11/23 12:24:20 sincerti Exp $
+$Id: History,v 1.16 2007/08/28 09:48:40 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -8,6 +8,27 @@ $Id: History,v 1.10 2006/11/23 12:24:20 sincerti Exp $
 
                        Package History file
                        --------------------
+
+28 August 2007 - tag microbeam-V09-00-03 - G. Cosmo
+- Replaced M_PI constants with CLHEP::pi, and protected usage of G4UItcsh
+  to allow for compilation on WIN32-VC systems.
+
+22 August 2007 - tag microbeam-V09-00-02 - S. Incerti
+- Updated dose computation to take into account volume edges in src/MicrobeamSteppingAction.cc 
+
+21 August 2007 - tag microbeam-V09-00-01 - S. Incerti
+- Changed number of incident alpha particles in microbeam.mac
+
+05 July 2007 - S. Incerti
+- Added protection against scattering at large angles in collimators in src/MicrobeamEMField.cc
+- Suppressed field manager in zero field zones in src/MicrobeamEMField.cc
+- Chose kUndefined optimization in cell phantom implementation in src/MicrobeamDetectorConstruction.cc
+- Updated dose computation for very low energy secondaries in src/MicrobeamSteppingAction.cc
+
+27 Fev 2007 - S. Incerti
+- Modified dE/dX calculation in src/MicrobeamSteppingAction.cc 
+in order to average on Pre/Post step. 
+- Updated README and html files with publications.
 
 23 Nov 2006 - S. Incerti (microbeam-V08-01-01)
 - Replaced G4MultipleScattering process for alphas by 

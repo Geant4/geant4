@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4DataInterpolation.cc,v 1.8 2006/06/29 19:00:05 gunter Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: G4DataInterpolation.cc,v 1.9 2007/11/13 17:35:06 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 #include "G4DataInterpolation.hh"
 
@@ -149,7 +149,7 @@ G4double
 G4DataInterpolation::PolynomInterpolation(G4double pX,
                                           G4double& deltaY ) const
 {
-   G4int i=0, m=1, k=0 ;
+   G4int i=0, j=1, k=0 ;
    G4double mult=0.0, difi=0.0, deltaLow=0.0, deltaUp=0.0, cd=0.0, y=0.0 ;
    G4double* c = new G4double[fNumber] ;
    G4double* d = new G4double[fNumber] ;
@@ -166,12 +166,12 @@ G4DataInterpolation::PolynomInterpolation(G4double pX,
       d[i] = fFunction[i] ;   
    }
    y = fFunction[k--] ;     
-   for(m=1;m<fNumber;m++)
+   for(j=1;j<fNumber;j++)
    {
-      for(i=0;i<fNumber-m;i++)
+      for(i=0;i<fNumber-j;i++)
       {
          deltaLow = fArgument[i] - pX ;
-         deltaUp = fArgument[i+m] - pX ;
+         deltaUp = fArgument[i+j] - pX ;
          cd = c[i+1] - d[i] ;
          mult = deltaLow - deltaUp ;
          if (!(mult != 0.0))
@@ -183,7 +183,7 @@ G4DataInterpolation::PolynomInterpolation(G4double pX,
          d[i] = deltaUp*mult ;
          c[i] = deltaLow*mult ;
       }
-      y += (deltaY = (2*k < (fNumber - m -1) ? c[k+1] : d[k--] )) ;
+      y += (deltaY = (2*k < (fNumber - j -1) ? c[k+1] : d[k--] )) ;
    }
    delete[] c ;
    delete[] d ;
@@ -249,7 +249,7 @@ G4double
 G4DataInterpolation::RationalPolInterpolation(G4double pX,
                                               G4double& deltaY ) const 
 {
-   G4int i=0, m=1, k=0 ;
+   G4int i=0, j=1, k=0 ;
    const G4double tolerance = 1.6e-24 ;
    G4double mult=0.0, difi=0.0, cd=0.0, y=0.0, cof=0.0 ;
    G4double* c = new G4double[fNumber] ;
@@ -275,12 +275,12 @@ G4DataInterpolation::RationalPolInterpolation(G4double pX,
       d[i] = fFunction[i] + tolerance ;   // to prevent rare zero/zero cases
    }
    y = fFunction[k--] ;    
-   for(m=1;m<fNumber;m++)
+   for(j=1;j<fNumber;j++)
    {
-      for(i=0;i<fNumber-m;i++)
+      for(i=0;i<fNumber-j;i++)
       {
          cd  = c[i+1] - d[i] ;
-         difi  = fArgument[i+m] - pX ;
+         difi  = fArgument[i+j] - pX ;
          cof  = (fArgument[i] - pX)*d[i]/difi ;
          mult = cof - c[i+1] ;
          if (!(mult != 0.0))    // function to be interpolated has pole at pX
@@ -292,7 +292,7 @@ G4DataInterpolation::RationalPolInterpolation(G4double pX,
          d[i] = c[i+1]*mult ;
          c[i] = cof*mult ;
       }
-      y += (deltaY = (2*k < (fNumber - m - 1) ? c[k+1] : d[k--] )) ;
+      y += (deltaY = (2*k < (fNumber - j - 1) ? c[k+1] : d[k--] )) ;
    }
    delete[] c ;
    delete[] d ;

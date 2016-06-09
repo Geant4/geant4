@@ -1,0 +1,32 @@
+-------------------------------------------------------------------
+
+     ==========================================================
+     Geant4 - an Object-Oriented Toolkit for Physics Simulation
+     ==========================================================
+
+      History file for the Re-Parameterized Gheisha-style Model
+      ---------------------------------------------------------
+
+This file should be used to summarize modifications introduced in the 
+code and to keep track of all tags.
+
+   ---------------------------------------------------------------
+   * Please list in reverse chronological order (last date on top)
+   ---------------------------------------------------------------
+
+5 December 2007 - Dennis Wright (hadr-rpg-V09-00-02)
+----------------------------------------------------
+Fixed array bound violation in G4RPGFragmentation.cc (pseudoParticle[7]).
+
+15 August 2007 - Dennis Wright (hadr-rpg-V09-00-01)
+---------------------------------------------------
+Fixed unused variable warnings in G4RPGFragmentation.cc, G4RPGInelastic.cc,
+G4RPGTwoBody.cc, G4RPGTwoCluster.cc
+
+26 May 2007 - Dennis Wright (hadr-rpg-V09-00-00)
+------------------------------------------------
+  First version of the Re-Parameterized Gheisha-style model.  This 
+  version is essentially a re-factored copy of the low energy parameterized 
+  model which also contains several bug fixes and physics improvements.
+
+

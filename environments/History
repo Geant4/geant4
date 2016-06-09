@@ -1,4 +1,4 @@
-$Id: History,v 1.29 2007/06/07 09:12:11 kmura Exp $
+$Id: History,v 1.33 2007/11/25 19:47:02 kmura Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,6 +17,29 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+envs-V09-00-04  26 Nov. Koichi Murakami
+ [g4py]
+ - add G4 GDML module support
+ - update PL stuffs for 9.1
+
+envs-V09-00-03  16 Nov. Koichi Murakami
+ - sorry, forget commiting this history file.
+
+envs-V09-00-02  13 Nov. Koichi Murakami
+ [g4py]
+  - modified for 9.1 release
+  - add GDML support / GDML file I/O examples
+
+envs-V09-00-01  07 Aug. Koichi Murakami
+ [g4py]
+  - add geometry stuffs(boolean solids) and testing stuffs
+
+envs-V09-00-00  14 July Koichi Murakami
+ [g4py]
+  - bug fix
+  - update/add geometry stuffs
+  - new example of TestEm0
 
 envs-V08-03-01  7 June Koichi Murakami
  [g4py]
@@ -39,7 +62,7 @@ envs-V08-01-01 21 November 2006 Koichi Murakami
 envs-V08-01-00 20 November 2006 Koichi Murakami
   [g4py]
   - add MacOSX support
-  - more exposed staffs
+  - more exposed stuffs
   - add physics list module
   - add GUI examples using wxPython
       

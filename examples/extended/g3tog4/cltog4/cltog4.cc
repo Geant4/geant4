@@ -25,7 +25,7 @@
 //
 //
 // $Id: cltog4.cc,v 1.6 2006/06/29 17:20:32 gunter Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 // 
 #include "G4ios.hh"

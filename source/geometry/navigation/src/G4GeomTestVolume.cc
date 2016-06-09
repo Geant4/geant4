@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4GeomTestVolume.cc,v 1.5 2006/06/29 18:36:55 gunter Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: G4GeomTestVolume.cc,v 1.6 2007/11/16 09:39:14 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 // --------------------------------------------------------------------
 // GEANT 4 class source file
@@ -274,7 +274,8 @@ void G4GeomTestVolume::TestCylinder( G4int nPhi, G4int nZ, G4int nRho,
   {
     G4double cosPhi = std::cos(phi);
     G4double sinPhi = std::sin(phi);
-    
+    G4ThreeVector vPhi1(sinPhi,-cosPhi,0);
+
     //
     // Loop over rho
     //
@@ -292,16 +293,14 @@ void G4GeomTestVolume::TestCylinder( G4int nPhi, G4int nZ, G4int nRho,
         //
         // Loop over z
         //
-        G4ThreeVector v(sinPhi,-cosPhi,0);
-        
         G4double zScale = 1.0;
         G4int iZ=nZ;
         do
         {
           p.setZ( z0 + zScale*zHalfLength );
-          TestOneLine(p,v);
+          TestOneLine(p,vPhi1);
           p.setZ( z0 - zScale*zHalfLength );
-          TestOneLine(p,v);
+          TestOneLine(p,vPhi1);
         } while( zScale *= fracZ, --iZ );
       }
     } while( rho *= fracRho, --iRho );
@@ -310,7 +309,7 @@ void G4GeomTestVolume::TestCylinder( G4int nPhi, G4int nZ, G4int nRho,
     // Loop over z
     //
     G4ThreeVector p(0,0,0);
-    G4ThreeVector v(cosPhi,sinPhi,0);
+    G4ThreeVector vPhi2(cosPhi,sinPhi,0);
     
     G4double zScale = 1.0;
     G4int iZ=nZ;
@@ -318,11 +317,11 @@ void G4GeomTestVolume::TestCylinder( G4int nPhi, G4int nZ, G4int nRho,
     {
       p.setZ( z0 + zScale*zHalfLength );
       
-      TestOneLine(p,v);
+      TestOneLine(p,vPhi2);
       
       p.setZ( z0 - zScale*zHalfLength );
       
-      TestOneLine(p,v);
+      TestOneLine(p,vPhi2);
     } while( zScale *= fracZ, --iZ );
     
   } while( phi += deltaPhi, --iPhi );
@@ -499,8 +498,7 @@ void G4GeomTestVolume::TestOneLine( const G4ThreeVector &p,
     //
     // Add them to the list
     //
-    G4int n = daughterSegment.GetNumberPoints();
-    G4int i;
+    n = daughterSegment.GetNumberPoints();
     for(i=0;i<n;++i)
     {
       points.push_back( G4GeomTestVolPoint( daughterSegment.GetPoint(i),

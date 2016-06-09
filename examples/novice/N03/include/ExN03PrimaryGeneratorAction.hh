@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: ExN03PrimaryGeneratorAction.hh,v 1.7 2006/06/29 17:48:42 gunter Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: ExN03PrimaryGeneratorAction.hh,v 1.8 2007/07/02 13:22:08 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 // 
 
@@ -47,20 +47,19 @@ class ExN03PrimaryGeneratorMessenger;
 
 class ExN03PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 {
-  public:
-    ExN03PrimaryGeneratorAction(ExN03DetectorConstruction*);    
-   ~ExN03PrimaryGeneratorAction();
+public:
+  ExN03PrimaryGeneratorAction(ExN03DetectorConstruction*);    
+  virtual ~ExN03PrimaryGeneratorAction();
 
-  public:
-    void GeneratePrimaries(G4Event*);
-    void SetRndmFlag(G4String val) { rndmFlag = val;}
+  void GeneratePrimaries(G4Event*);
+  void SetRndmFlag(G4String val) { rndmFlag = val;}
 
-  private:
-    G4ParticleGun*                particleGun;	  //pointer a to G4  class
-    ExN03DetectorConstruction*    ExN03Detector;  //pointer to the geometry
+private:
+  G4ParticleGun*                particleGun;	  //pointer a to G4  class
+  ExN03DetectorConstruction*    ExN03Detector;    //pointer to the geometry
     
-    ExN03PrimaryGeneratorMessenger* gunMessenger; //messenger of this class
-    G4String                      rndmFlag;	  //flag for a rndm impact point
+  ExN03PrimaryGeneratorMessenger* gunMessenger;   //messenger of this class
+  G4String                      rndmFlag;	  //flag for a rndm impact point
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

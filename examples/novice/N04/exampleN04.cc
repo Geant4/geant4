@@ -24,13 +24,12 @@
 // ********************************************************************
 //
 //
-// $Id: exampleN04.cc,v 1.14 2006/12/08 09:34:14 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: exampleN04.cc,v 1.16 2007/07/02 13:28:34 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 //
-// 
-// --------------------------------------------------------------
-//      GEANT 4 - exampleN04
-// --------------------------------------------------------------
+//
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"
@@ -69,13 +68,6 @@ int main(int argc,char** argv)
   //
   G4VUserPhysicsList* physics = new QGSP;
   runManager->SetUserInitialization(physics);
-  
-#ifdef G4VIS_USE
-  // Visualization, if you choose to have it!
-  //
-  G4VisManager* visManager = new G4VisExecutive;
-  visManager->Initialize();
-#endif
 
   runManager->Initialize();
 
@@ -100,37 +92,46 @@ int main(int argc,char** argv)
   runManager->SetUserAction(stepping_action);
   
   //get the pointer to the User Interface manager   
-  G4UImanager* UImanager = G4UImanager::GetUIpointer();  
+  G4UImanager* UI = G4UImanager::GetUIpointer();  
 
-  if(argc==1)  // Define (G)UI terminal for interactive mode
-  {
-    // G4UIterminal is a (dumb) terminal
-    //
-#ifdef G4UI_USE_TCSH
-    G4UIsession* session = new G4UIterminal(new G4UItcsh);      
-#else
-    G4UIsession* session = new G4UIterminal();
+  if (argc!=1)   // batch mode  
+    {
+     G4String command = "/control/execute ";
+     G4String fileName = argv[1];
+     UI->ApplyCommand(command+fileName);
+    }
+    
+  else           // interactive mode : define visualization and UI terminal
+    { 
+#ifdef G4VIS_USE
+      G4VisManager* visManager = new G4VisExecutive;
+      visManager->Initialize();
 #endif    
-    UImanager->ApplyCommand("/control/execute vis.mac");
-    session->SessionStart();
-    delete session;
-  }
-  else   // Batch mode
-  {
-    G4String command = "/control/execute ";
-    G4String fileName = argv[1];
-    UImanager->ApplyCommand(command+fileName);
-  }
+     
+      G4UIsession * session = 0;
+#ifdef G4UI_USE_TCSH
+      session = new G4UIterminal(new G4UItcsh);      
+#else
+      session = new G4UIterminal();
+#endif
 
+      UI->ApplyCommand("/control/execute vis.mac");     
+      session->SessionStart();
+      delete session;
+     
+#ifdef G4VIS_USE
+      delete visManager;
+#endif     
+    }
+    
+  // Job termination
   // Free the store: user actions, physics_list and detector_description are
   //                 owned and deleted by the run manager, so they should not
   //                 be deleted in the main() program !
-
-#ifdef G4VIS_USE
-  delete visManager;
-#endif
   delete runManager;
   delete verbosity;
 
   return 0;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

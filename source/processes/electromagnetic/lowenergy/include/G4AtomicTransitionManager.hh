@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4AtomicTransitionManager.hh,v 1.2 ????
-// GEANT4 tag $Name: geant4-09-00 $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 // Authors: Elena Guardincerri (Elena.Guardincerri@ge.infn.it)
 //          Alfonso Mantero (Alfonso.Mantero@ge.infn.it)
@@ -110,7 +110,7 @@ public:
    
 protected:
 
-  G4AtomicTransitionManager(G4int minZ = 1, G4int maxZ = 99, 
+  G4AtomicTransitionManager(G4int minZ = 1, G4int maxZ = 100, 
 			    G4int limitInfTable = 6, G4int limitSupTable=100 );
   ~G4AtomicTransitionManager();
 

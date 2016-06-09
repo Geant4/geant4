@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4ExplicitEuler.cc,v 1.8 2006/06/29 18:23:53 gunter Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 //
 //  Explicit Euler: x_1 = x_0 + h * dx_0

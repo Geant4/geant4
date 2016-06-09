@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4LEXiMinusInelastic.hh,v 1.11 2007/02/26 18:35:18 dennis Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// GEANT4 tag $Name: geant4-09-01 $
 //
  // Hadronic Process: Low Energy XiMinus Inelastic Process
  // original by J.L. Chuma, TRIUMF, 03-Feb-1997

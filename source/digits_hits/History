@@ -1,4 +1,4 @@
-$Id: History,v 1.25 2007/06/05 16:46:55 ahoward Exp $
+$Id: History,v 1.32 2007/12/11 13:26:13 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,30 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Dec 11, 2007, G.Cosmo (digits_hits-V09-00-05)
+- Added "graphics_reps" to GLOBLIBS list to allow for building DLLs on
+  WIN32-VC platform.
+- Changes for disclaimer and std namespace.
+
+Nov 14, 2007, M.Asai (digits_hits-V09-00-04)
+- Minor corrections and fixes.
+
+Nov 09, 2007, M.Asai (digits_hits-V09-00-03)
+- Introducing Command-base scoring mechanism. This is a preliminary release
+  with Geant4 9.1. This time, shape of scoring cell is limited to box.
+
+Sep 24, 2007, M.Asai (digits_hits-V09-00-02)
+- Introducing 3D scorers to be used in command-base scoring.
+
+Aug 30, 2007, M.Asai (digits_hits-V09-00-01)
+- First implementation of interactive parallel world scoring.
+- Co-working with run-V09-00-01, procman-V09-00-00, config-V09-00-00
+
+July 11, 2007, M.Asai (digits_hits-V09-00-00)
+- Create new sub-directory "scorer" and move all scorer and filter classes
+  to this new directory. "utils" sub-directory will be used for interactive
+  scoring utilities.
 
 June 4, 2007, A.Howard (digits_hits-V08-03-04)
 - Removed G4PSPopulation class to obviate circular dependency

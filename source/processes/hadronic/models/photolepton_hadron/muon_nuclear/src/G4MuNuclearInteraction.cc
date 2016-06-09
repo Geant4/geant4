@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4MuNuclearInteraction.cc,v 1.7 2006/11/04 02:15:05 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 // $Id: 
 // --------------------------------------------------------------

@@ -1,0 +1,208 @@
+
+*************************************************************
+ Geant4 version Name: global-V09-00-02    (14-December-2007)
+                      Copyright : Geant4 Collaboration
+                      Reference : NIM A 506 (2003), 250-303
+                            WWW : http://cern.ch/geant4
+*************************************************************
+
+
+***** Table : Nb of materials = 6 *****
+
+ Material:    Water     density:  1.000 g/cm3   RadL:  36.092 cm   Imean:  75.000 eV 
+   --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole  ElmMassFraction:  11.21 %  ElmAbundance  66.67 %
+   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:  88.79 %  ElmAbundance  33.33 %
+
+ Material: Water_gas     density:  1.000 mg/cm3  RadL: 360.925 m    Imean:  75.000 eV   temperature: 273.15 K  pressure:   1.00 atm
+   --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole  ElmMassFraction:  11.21 %  ElmAbundance  66.67 %
+   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:  88.79 %  ElmAbundance  33.33 %
+
+ Material: Graphite     density:  2.265 g/cm3   RadL:  18.850 cm   Imean:  78.000 eV 
+   --->  Element: Graphite ( )   Z =  6.0   N =  12.0   A =  12.01 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
+
+ Material: Graphite_gas     density:  2.265 mg/cm3  RadL: 188.496 m    Imean:  78.000 eV   temperature: 273.15 K  pressure:   1.00 atm
+   --->  Element: Graphite_gas ( )   Z =  6.0   N =  12.0   A =  12.01 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
+
+ Material: Aluminium     density:  2.700 g/cm3   RadL:   8.893 cm   Imean: 166.400 eV 
+   --->  Element: Aluminium ( )   Z = 13.0   N =  27.0   A =  26.98 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
+
+ Material: Aluminium_gas     density:  2.700 mg/cm3  RadL:  88.925 m    Imean: 166.400 eV   temperature: 273.15 K  pressure:   1.00 atm
+   --->  Element: Aluminium_gas ( )   Z = 13.0   N =  27.0   A =  26.98 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
+
+
+/run/verbose 2
+#
+/run/initialize
+userDetector->Construct() start.
+
+---------------------------------------------------------
+---> The Wall is 5 cm  of Water ( 1 g/cm3  )
+     The Cavity is 2 mm  of Water_gas ( 1 mg/cm3 )
+---------------------------------------------------------
+
+Wall is registered to the default region.
+physicsList->Construct() start.
+physicsList->Construct() start.
+physicsList->setCut() start.
+PhysicsList::SetCuts:CutLength : 10 km 
+#
+/gun/energy 1 MeV
+#
+/testem/event/printModulo 10000
+#
+/run/beamOn 40000
+G4VRangeToEnergyConverter::ConvertCutToKineticEnergy   for gamma
+The cut in range [1e+07 (mm)]   is too big   for material  idx=0
+The cut in energy is set1.79769e+305GeV 
+G4VRangeToEnergyConverter::ConvertCutToKineticEnergy   for e-
+The cut in range [1e+07 (mm)]   is too big   for material  idx=0
+The cut in energy is set1.79769e+305GeV 
+G4VRangeToEnergyConverter::ConvertCutToKineticEnergy   for e+
+The cut in range [1e+07 (mm)]   is too big   for material  idx=0
+The cut in energy is set1.79769e+305GeV 
+G4VRangeToEnergyConverter::ConvertCutToKineticEnergy   for gamma
+The cut in range [1e+07 (mm)]   is too big   for material  idx=1
+The cut in energy is set1.79769e+305GeV 
+
+phot:  Total cross sections from Sandia parametrisation. 
+      Sampling according PhotoElectric model
+
+compt:  Total cross sections has a good parametrisation from 10 KeV to (100/Z) GeV
+      Sampling according Klein-Nishina model
+      tables are built for  gamma
+      Lambda tables from 100 eV  to 10 GeV in 800 bins.
+
+conv:  Total cross sections has a good parametrisation from 1.5 MeV to 100 GeV for all Z;
+      sampling secondary e+e- according Bethe-Heitler model
+      tables are built for  gamma
+      Lambda tables from 1.022 MeV to 10 GeV in 800 bins.
+
+msc:  Model variant of multiple scattering for e-
+      Lambda tables from 100 eV  to 10 GeV in 800 bins.
+      LateralDisplacementFlag=  1   Skin= 2
+      Boundary/stepping algorithm is active with RangeFactor= 0.02  Step limit type 2
+
+eIoni:   tables are built for  e-
+      dE/dx and range tables from 100 eV  to 10 GeV in 800 bins.
+      Lambda tables from threshold to 10 GeV in 800 bins.
+      Delta cross sections and sampling from myMollerBhabha model
+      Good description from 1 KeV to 100 GeV.
+      Step function: finalRange(mm)= 0.01, dRoverRange= 0.2, integral: 1, fluct: 1
+      CSDA range table up to 10 GeV in 800 bins.
+
+eIoni:   tables are built for  e+
+      dE/dx and range tables from 100 eV  to 10 GeV in 800 bins.
+      Lambda tables from threshold to 10 GeV in 800 bins.
+      Delta cross sections and sampling from myMollerBhabha model
+      Good description from 1 KeV to 100 GeV.
+      Step function: finalRange(mm)= 0.01, dRoverRange= 0.2, integral: 1, fluct: 1
+      CSDA range table up to 10 GeV in 800 bins.
+
+msc:  Model variant of multiple scattering for proton
+      Lambda tables from 100 eV  to 10 GeV in 800 bins.
+      LateralDisplacementFlag=  1   Skin= 2
+      Boundary/stepping algorithm is active with RangeFactor= 0.02  Step limit type 2
+
+hIoni:   tables are built for  proton
+      dE/dx and range tables from 100 eV  to 10 GeV in 800 bins.
+      Lambda tables from threshold to 10 GeV in 800 bins.
+      Scaling relation is used from proton dE/dx and range.
+      Delta cross sections and sampling from BetheBloch model for scaled energy > 2 MeV
+      Parametrisation from Bragg for protons below.
+      Step function: finalRange(mm)= 0.01, dRoverRange= 0.2, integral: 1, fluct: 1
+      CSDA range table up to 10 GeV in 800 bins.
+
+Region <DefaultRegionForTheWorld> -- appears in <Wall> world volume
+ Root logical volume(s) : Wall 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : Water Water_gas 
+ Production cuts :  gamma 10 km     e- 10 km     e+ 10 km 
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Water
+ Range cuts        :  gamma 10 km     e- 10 km     e+ 10 km 
+ Energy thresholds :  gamma 2.88022e+295 J      e- 2.88022e+295 J      e+ 2.88022e+295 J  
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : Yes     recalculation needed : No 
+ Material : Water_gas
+ Range cuts        :  gamma 10 km     e- 10 km     e+ 10 km 
+ Energy thresholds :  gamma 2.88022e+295 J      e- 18.4792 GeV    e+ 17.5913 GeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
+Start closing geometry.
+G4GeometryManager::ReportVoxelStats -- Voxel Statistics
+
+    Total memory consumed for geometry optimisation:   0 kByte
+    Total CPU time elapsed for geometry optimisation: 0 seconds
+
+--------- Ranecu engine status ---------
+ Initial seed (index) = 0
+ Current couple of seeds = 9876, 54321
+----------------------------------------
+### Run 0 start.
+
+ ======================== run conditions =====================
+
+ The run will be 40000 e- of 1.000 MeV through 2*5.246 mm  of Water (density: 1.000 g/cm3 ); Mass/cm2 = 1.049 g 
+ csdaRange: 4.371 mm 
+
+ the cavity is 2.000 mm  of Water_gas (density: 1.000 mg/cm3); Mass/cm2 = 0.200 mg --> massRatio = 0.000191
+ World radius: 10.000 m  ; range in cavity: 4.371 m  
+
+ ============================================================
+
+ StoppingPower in wall   = 1.8720 MeV*cm2/g
+               in cavity = 1.8720 MeV*cm2/g
+Start Run processing.
+
+--->evntNb= 10000 Nwall= 10000 Ncav= 1 Ic/Iw= 0.52455 Ne-_cav= 2852 doseCavity/Ebeam= 1.39766  (100*(ratio-1) = 39.76621 %)
+
+--->evntNb= 20000 Nwall= 20000 Ncav= 1 Ic/Iw= 0.26228 Ne-_cav= 5826 doseCavity/Ebeam= 1.29916  (100*(ratio-1) = 29.91598 %)
+
+--->evntNb= 30000 Nwall= 29998 Ncav= 3 Ic/Iw= 0.52459 Ne-_cav= 8614 doseCavity/Ebeam= 1.34504  (100*(ratio-1) = 34.50383 %)
+Run terminated.
+Run Summary
+  Number of events processed : 40000
+  User=2.1e+02s Real=2.1e+02s Sys=0.02s
+
+ Process calls frequency --->  msc= 355861  eIoni= 635564  Transportation= 22917
+
+ Charged particle flow in cavity :
+      Enter --> nbParticles = 11462	 Energy = 7.232 GeV
+      Exit  --> nbParticles = 11455	 Energy = 7.229 GeV
+
+ beamFluence in wall = 39993	 in cavity = 7	 Icav/Iwall = 0.91812	 energyFluence = 38.12063 MeV*cm2/mg
+
+ Total edep in cavity = 10.08626 MeV +- 5.32434 %
+ Total dose in cavity = 50.43128 MeV*cm2/mg +- 5.32434 %
+
+ DoseCavity/EnergyFluence = 1.32294 +- 0.07044
+
+ Total charged trackLength in cavity = 41.2549 m     (mean value = 3.5993 mm )
+
+ StepSize of ch. tracks in wall   = 182.8036 um  +- 184.9149 um 	 (nbSteps/track = 23.9927)
+ StepSize of ch. tracks in cavity = 752.7984 um  +- 3.9930 mm 	 (nbSteps/track = 4.7812)
+
+--------- Ranecu engine status ---------
+ Initial seed (index) = 0
+ Current couple of seeds = 1829867873, 2087567788
+----------------------------------------
+UserDetectorConstruction deleted.
+UserPhysicsList deleted.
+UserRunAction deleted.
+UserPrimaryGenerator deleted.
+G4 kernel has come to Quit state.
+EventManager deleted.
+Default detector region deleted.
+UImanager deleted.
+Units table cleared.
+StateManager deleted.
+RunManagerKernel is deleted.
+RunManager is deleting.

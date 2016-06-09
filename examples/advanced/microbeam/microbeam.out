@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: geant4-09-00-cand-03    (29-June-2007)
+ Geant4 version Name: global-V09-00-02    (14-December-2007)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -40,81 +40,81 @@ Registered filter factories:
 
 ***** Table : Nb of materials = 16 *****
 
- Material:   Vacuum     density:  0.000 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength: 204727576.737 pc 
+ Material:   Vacuum     density:  0.000 mg/cm3  RadL: 204727576.737 pc   Imean:  21.800 eV   temperature: 273.15 K  pressure:   1.00 atm
    --->  Element: Vacuum ( )   Z =  1.0   N =   1.0   A =   1.01 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
- Material:      H2O     density:  1.000 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:  36.092 cm 
+ Material:      H2O     density:  1.000 g/cm3   RadL:  36.092 cm   Imean:  70.893 eV 
    --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole  ElmMassFraction:  11.21 %  ElmAbundance  66.67 %
    --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:  88.79 %  ElmAbundance  33.33 %
 
- Material:      Air     density:  1.290 mg/cm3  temperature: 293.16 K  pressure:   1.00 atm  RadLength: 285.161 m  
+ Material:      Air     density:  1.290 mg/cm3  RadL: 285.161 m    Imean:  85.684 eV   temperature: 293.16 K  pressure:   1.00 atm
    --->  Element: Nitrogen (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole  ElmMassFraction:  70.00 %  ElmAbundance  72.71 %
    --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:  30.00 %  ElmAbundance  27.29 %
 
- Material:    LPAir     density:  0.000 mg/cm3  temperature: 293.16 K  pressure:   1.00 atm  RadLength: 56273252.573 km 
+ Material:    LPAir     density:  0.000 mg/cm3  RadL: 56273252.573 km   Imean:  87.308 eV   temperature: 293.16 K  pressure:   1.00 atm
    --->  Element: Nitrogen (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole  ElmMassFraction:  71.50 %  ElmAbundance  75.57 %
    --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:  25.00 %  ElmAbundance  23.14 %
    --->  Element: Argon (Ar)   Z = 18.0   N =  39.9   A =  39.95 g/mole  ElmMassFraction:   3.50 %  ElmAbundance   1.30 %
 
- Material:       Pl     density: 21.400 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   3.058 mm 
+ Material:       Pl     density: 21.400 g/cm3   RadL:   3.058 mm   Imean: 787.800 eV 
    --->  Element: Pl ( )   Z = 78.0   N = 195.1   A = 195.09 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
- Material:   Butane     density:  0.026 mg/cm3  temperature: 293.16 K  pressure:   0.01 atm  RadLength:  17.729 km 
+ Material:   Butane     density:  0.026 mg/cm3  RadL:  17.729 km   Imean:  53.612 eV   temperature: 293.16 K  pressure:   0.01 atm
    --->  Element: Carbon (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole  ElmMassFraction:  82.63 %  ElmAbundance  28.57 %
    --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole  ElmMassFraction:  17.37 %  ElmAbundance  71.43 %
 
- Material: Polyprop     density: 900.000 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:  49.764 cm 
+ Material: Polyprop     density: 900.000 mg/cm3  RadL:  49.764 cm   Imean:  56.713 eV 
    --->  Element: Carbon (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole  ElmMassFraction:  85.60 %  ElmAbundance  33.33 %
    --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole  ElmMassFraction:  14.40 %  ElmAbundance  66.67 %
 
- Material:    Si3N4     density:  3.440 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   7.644 cm 
+ Material:    Si3N4     density:  3.440 g/cm3   RadL:   7.644 cm   Imean: 128.542 eV 
    --->  Element: Silicon (Si)   Z = 14.0   N =  28.1   A =  28.09 g/mole  ElmMassFraction:  60.06 %  ElmAbundance  42.86 %
    --->  Element: Nitrogen (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole  ElmMassFraction:  39.94 %  ElmAbundance  57.14 %
 
- Material:     SiO2     density:  2.500 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:  10.819 cm 
+ Material:     SiO2     density:  2.500 g/cm3   RadL:  10.819 cm   Imean: 126.007 eV 
    --->  Element: Silicon (Si)   Z = 14.0   N =  28.1   A =  28.09 g/mole  ElmMassFraction:  46.74 %  ElmAbundance  33.33 %
    --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:  53.26 %  ElmAbundance  66.67 %
 
- Material:   Laiton     density:  8.500 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   1.487 cm 
+ Material:   Laiton     density:  8.500 g/cm3   RadL:   1.487 cm   Imean: 325.993 eV 
    --->  Element: Cuivre (Cu)   Z = 29.0   N =  63.5   A =  63.55 g/mole  ElmMassFraction:  49.28 %  ElmAbundance  50.00 %
    --->  Element: Zinc (Zn)   Z = 30.0   N =  65.4   A =  65.41 g/mole  ElmMassFraction:  50.72 %  ElmAbundance  50.00 %
 
- Material: Cytoplasm1     density:  1.000 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:  48.413 cm 
+ Material: Cytoplasm1     density:  1.000 g/cm3   RadL:  48.413 cm   Imean:  31.293 eV 
    --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole  ElmMassFraction:  59.60 %  ElmAbundance  95.53 %
    --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:  24.24 %  ElmAbundance   2.45 %
    --->  Element: Carbon (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole  ElmMassFraction:  11.11 %  ElmAbundance   1.50 %
    --->  Element: Nitrogen (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole  ElmMassFraction:   4.04 %  ElmAbundance   0.47 %
    --->  Element: Phosphorus (P)   Z = 15.0   N =  31.0   A =  30.97 g/mole  ElmMassFraction:   1.01 %  ElmAbundance   0.05 %
 
- Material: Cytoplasm2     density: 10.000 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   3.619 cm 
+ Material: Cytoplasm2     density: 10.000 g/cm3   RadL:   3.619 cm   Imean:  71.338 eV 
    --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole  ElmMassFraction:  10.64 %  ElmAbundance  64.80 %
    --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:  74.50 %  ElmAbundance  28.64 %
    --->  Element: Carbon (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole  ElmMassFraction:   9.04 %  ElmAbundance   4.63 %
    --->  Element: Nitrogen (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole  ElmMassFraction:   3.21 %  ElmAbundance   1.41 %
    --->  Element: Phosphorus (P)   Z = 15.0   N =  31.0   A =  30.97 g/mole  ElmMassFraction:   2.61 %  ElmAbundance   0.52 %
 
- Material: Cytoplasm3     density:  1.000 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:  48.413 cm 
+ Material: Cytoplasm3     density:  1.000 g/cm3   RadL:  48.413 cm   Imean:  31.293 eV 
    --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole  ElmMassFraction:  59.60 %  ElmAbundance  95.53 %
    --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:  24.24 %  ElmAbundance   2.45 %
    --->  Element: Carbon (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole  ElmMassFraction:  11.11 %  ElmAbundance   1.50 %
    --->  Element: Nitrogen (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole  ElmMassFraction:   4.04 %  ElmAbundance   0.47 %
    --->  Element: Phosphorus (P)   Z = 15.0   N =  31.0   A =  30.97 g/mole  ElmMassFraction:   1.01 %  ElmAbundance   0.05 %
 
- Material: Nucleus1     density:  1.000 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:  36.185 cm 
+ Material: Nucleus1     density:  1.000 g/cm3   RadL:  36.185 cm   Imean:  71.338 eV 
    --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole  ElmMassFraction:  10.64 %  ElmAbundance  64.80 %
    --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:  74.50 %  ElmAbundance  28.64 %
    --->  Element: Carbon (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole  ElmMassFraction:   9.04 %  ElmAbundance   4.63 %
    --->  Element: Nitrogen (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole  ElmMassFraction:   3.21 %  ElmAbundance   1.41 %
    --->  Element: Phosphorus (P)   Z = 15.0   N =  31.0   A =  30.97 g/mole  ElmMassFraction:   2.61 %  ElmAbundance   0.52 %
 
- Material: Nucleus2     density:  1.100 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:  32.896 cm 
+ Material: Nucleus2     density:  1.100 g/cm3   RadL:  32.896 cm   Imean:  71.338 eV 
    --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole  ElmMassFraction:  10.64 %  ElmAbundance  64.80 %
    --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:  74.50 %  ElmAbundance  28.64 %
    --->  Element: Carbon (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole  ElmMassFraction:   9.04 %  ElmAbundance   4.63 %
    --->  Element: Nitrogen (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole  ElmMassFraction:   3.21 %  ElmAbundance   1.41 %
    --->  Element: Phosphorus (P)   Z = 15.0   N =  31.0   A =  30.97 g/mole  ElmMassFraction:   2.61 %  ElmAbundance   0.52 %
 
- Material: Nucleus3     density:  1.000 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:  36.185 cm 
+ Material: Nucleus3     density:  1.000 g/cm3   RadL:  36.185 cm   Imean:  71.338 eV 
    --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole  ElmMassFraction:  10.64 %  ElmAbundance  64.80 %
    --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:  74.50 %  ElmAbundance  28.64 %
    --->  Element: Carbon (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole  ElmMassFraction:   9.04 %  ElmAbundance   4.63 %
@@ -159,7 +159,7 @@ eIoni:   tables are built for  e+
       Lambda tables from threshold to 100 TeV in 120 bins.
       Delta cross sections and sampling from MollerBhabha model
       Good description from 1 KeV to 100 GeV.
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1
 
 eBrem:   tables are built for  e+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -305,45 +305,56 @@ Index : 12     used in the geometry : Yes     recalculation needed : No
 ====================================================================
 
 -> Event # 1 generated 
-   ===> The incident alpha particle has reached the targeted cell :
-   -----> total absorbed dose within Nucleus   is (Gy) = 0.307962
-   -----> total absorbed dose within Cytoplasm is (Gy) = 0.0382348
+   ===> Sorry, the incident alpha particle has missed the targeted cell !
 
+G4VisManager: Using G4TrajectoryDrawByCharge as default trajectory model.
+See commands in /vis/modeling/trajectories/ for other options.
+Trajectory drawing configuration will be based on imode value of 50
+WARNING: G4VisManager::IsValidView(): Attempt to draw when no graphics system
+  has been instantiated.  Use "/vis/open" or "/vis/sceneHandler/create".
+  Alternatively, to avoid this message, suppress instantiation of vis
+  manager (G4VisExecutive), possibly by setting G4VIS_NONE, and ensure
+  drawing code is executed only if G4VVisManager::GetConcreteInstance()
+  is non-zero.
 -> Event # 2 generated 
-   ===> The incident alpha particle has reached the targeted cell :
-   -----> total absorbed dose within Nucleus   is (Gy) = 0.3149
-   -----> total absorbed dose within Cytoplasm is (Gy) = 0.13141
+   ===> Sorry, the incident alpha particle has missed the targeted cell !
 
 -> Event # 3 generated 
-   ===> The incident alpha particle has reached the targeted cell :
-   -----> total absorbed dose within Nucleus   is (Gy) = 0.307115
-   -----> total absorbed dose within Cytoplasm is (Gy) = 0.100445
+   ===> Sorry, the incident alpha particle has missed the targeted cell !
 
 -> Event # 4 generated 
-   ===> The incident alpha particle has reached the targeted cell :
-   -----> total absorbed dose within Nucleus   is (Gy) = 0.388045
-   -----> total absorbed dose within Cytoplasm is (Gy) = 0.0381594
+   ===> Sorry, the incident alpha particle has missed the targeted cell !
 
 -> Event # 5 generated 
-   ===> Sorry, the incident alpha particle has missed the targeted cell !
+   ===> The incident alpha particle has reached the targeted cell :
+   -----> total absorbed dose within Nucleus   is (Gy) = 0.32025772
+   -----> total absorbed dose within Cytoplasm is (Gy) = 0.031617269
 
 -> Event # 6 generated 
-   ===> Sorry, the incident alpha particle has missed the targeted cell !
+   ===> The incident alpha particle has reached the targeted cell :
+   -----> total absorbed dose within Nucleus   is (Gy) = 0.32341093
+   -----> total absorbed dose within Cytoplasm is (Gy) = 0.036113653
 
 -> Event # 7 generated 
-   ===> Sorry, the incident alpha particle has missed the targeted cell !
+   ===> The incident alpha particle has reached the targeted cell :
+   -----> total absorbed dose within Nucleus   is (Gy) = 0.26556093
+   -----> total absorbed dose within Cytoplasm is (Gy) = 0.050062224
 
 -> Event # 8 generated 
-   ===> Sorry, the incident alpha particle has missed the targeted cell !
+   ===> The incident alpha particle has reached the targeted cell :
+   -----> total absorbed dose within Nucleus   is (Gy) = 0.32553893
+   -----> total absorbed dose within Cytoplasm is (Gy) = 0.061953552
 
 -> Event # 9 generated 
    ===> Sorry, the incident alpha particle has missed the targeted cell !
 
 -> Event # 10 generated 
-   ===> Sorry, the incident alpha particle has missed the targeted cell !
+   ===> The incident alpha particle has reached the targeted cell :
+   -----> total absorbed dose within Nucleus   is (Gy) = 0.6130144
+   -----> total absorbed dose within Cytoplasm is (Gy) = 0.027280906
 
 ERROR: G4VisCommandsViewerUpdate::SetNewValue: no current viewer.
--> Total number of particles detected by the gas detector : 4
+-> Total number of particles detected by the gas detector : 5
 
 Graphics systems deleted.
 Visualization Manager deleting...

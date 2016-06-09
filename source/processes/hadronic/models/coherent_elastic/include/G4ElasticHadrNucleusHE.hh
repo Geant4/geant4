@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ElasticHadrNucleusHE.hh,v 1.41 2007/05/31 17:03:01 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: G4ElasticHadrNucleusHE.hh,v 1.43 2007/11/13 17:22:51 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 // G4ElasticHadrNucleusHe.hh
 
@@ -96,6 +96,7 @@ public:
   G4int     dnkE[NENERGY];
   G4double  maxQ2[NENERGY];
   G4double  CrossSecMaxQ2[NENERGY];
+
   G4double  TableQ2[ONQ2];
   G4double  TableCrossSec[NQTABLE];
 };
@@ -123,12 +124,16 @@ public:
   void DefineHadronValues(G4int Z);
 
   G4double GetLightFq2(G4int Z, G4int A, G4double Q);
+  G4double GetHeavyFq2(G4int Nucleus, G4double *LineFq2);
+
   G4double GetQ2_2(G4int  N, G4double * Q, 
 		   G4double * F, G4double R);
 
   G4double LineInterpol(G4double p0, G4double p2,
 			G4double c1, G4double c2,
 			G4double p);
+
+  G4double HadrNucDifferCrSec(G4int Nucleus, G4double Q2);
 
   void InterpolateHN(G4int n, const G4double EnP[], 
 		     const G4double C0P[], const G4double C1P[], 
@@ -140,6 +145,19 @@ public:
 
   G4double GetBinomCof( G4int n, G4int m );
 
+  G4double GetFt(G4double Q2);
+
+  G4double GetDistrFun(G4double Q2);
+
+  G4double GetQ2(G4double Ran);
+
+  G4double HadronProtonQ2(const G4ParticleDefinition * aHadron,
+                          G4double inLabMom);
+
+  void     GetKinematics(const G4ParticleDefinition * aHadron,
+		          G4double MomentumH);
+public:
+  //    G4double R1, R2, Pnucl, Aeff, HadrTot1, HadrSlope1, HadrReIm1, Tott1;
 
 private:
 
@@ -153,11 +171,13 @@ private:
   G4int    iHadron;
   G4int    HadronCode[NHADRONS];
   G4int    HadronType[NHADRONS];
+  G4int    HadronType1[NHADRONS];
 
   // protection energy and momemtum
 
   G4double lowestEnergyLimit;  
-  G4double plabLowLimit;  
+  G4double plabLowLimit;
+  G4double dQ2;  
 
   // transition between internal and CLHEP units
 
@@ -180,18 +200,22 @@ private:
   // nucleaus parameters
 
   G4double  R1, R2, Pnucl, Aeff;
+  G4int     NumbN;
 
   // elastic parameters
 
-  G4double  HadrTot, HadrSlope, HadrReIm,  DDSect2, DDSect3;
+  G4double  HadrTot, HadrSlope, HadrReIm, TotP, 
+            DDSect2, DDSect3, ConstU, FmaxT;
 
   // momentum limits for different models of hadron/nucleon scatetring
-  //  G4double BoundaryP[7], BoundaryTL[7], BoundaryTG[7];
+    G4double BoundaryP[7], BoundaryTL[7], BoundaryTG[7];
 
   // parameterisation of scattering
 
   G4double Slope1, Slope2, Coeff1, Coeff2, MaxTR;
   G4double Slope0, Coeff0;
+
+  G4double aAIm, aDIm, Dtot11;
 
   G4double        Energy[NENERGY];
   G4double        LowEdgeEnergy[NENERGY];
@@ -210,6 +234,10 @@ G4double G4ElasticHadrNucleusHE::LineInterpol(G4double p1, G4double p2,
 					      G4double c1, G4double c2,
 					      G4double p)
 {
+//  G4cout<<"  LineInterpol: p1 p2 c1 c2 "<<p1<<"  "<<p2<<"  "
+//        <<c1<<"  "<<c2<<"  c  "<<c1+(p-p1)*(c2-c1)/(p2-p1)<<G4endl;
+
+
   return c1+(p-p1)*(c2-c1)/(p2-p1);
 }
 
@@ -217,19 +245,22 @@ G4double G4ElasticHadrNucleusHE::LineInterpol(G4double p1, G4double p2,
 
 inline
 void G4ElasticHadrNucleusHE::InterpolateHN(G4int n, const G4double EnP[], 
-					   const G4double C0P[], const G4double C1P[], 
-					   const G4double B0P[], const G4double B1P[])
+                   const G4double C0P[], const G4double C1P[], 
+                   const G4double B0P[], const G4double B1P[])
 {
-  G4int i;
+  G4int i; 
 
-  for( i = 1; i < n; i++) if( hLabMomentum <= EnP[i] ) break;
-  
+  for(i=1; i<n; i++) if(hLabMomentum <= EnP[i]) break;
+ 
   if(i == n) i = n - 1;
 
   Coeff0 = LineInterpol(EnP[i], EnP[i-1], C0P[i], C0P[i-1], hLabMomentum);
   Coeff1 = LineInterpol(EnP[i], EnP[i-1], C1P[i], C1P[i-1], hLabMomentum);
   Slope0 = LineInterpol(EnP[i], EnP[i-1], B0P[i], B0P[i-1], hLabMomentum);
   Slope1 = LineInterpol(EnP[i], EnP[i-1], B1P[i], B1P[i-1], hLabMomentum);
+
+//  G4cout<<"  InterpolHN:  n i "<<n<<"  "<<i<<"  Mom "
+//        <<hLabMomentum<<G4endl;
 }
 
 ////////////////////////////////////////////////////////////////

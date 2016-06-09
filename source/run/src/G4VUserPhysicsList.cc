@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VUserPhysicsList.cc,v 1.61 2007/05/30 10:16:28 ahoward Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: G4VUserPhysicsList.cc,v 1.62 2007/09/23 17:33:00 asaim Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 // 
 // ------------------------------------------------------------
@@ -223,6 +223,7 @@ void G4VUserPhysicsList::RemoveProcessManager()
 #include "G4Transportation.hh"
 #include "G4CoupledTransportation.hh"
 #include "G4RunManagerKernel.hh"
+#include "G4ScoringManager.hh"
 
 void G4VUserPhysicsList::AddTransportation()
 {
@@ -230,7 +231,7 @@ void G4VUserPhysicsList::AddTransportation()
   G4VProcess* theTransportationProcess = 0;
   G4int nParaWorld = G4RunManagerKernel::GetRunManagerKernel()->GetNumberOfParallelWorld();
 
-  if(nParaWorld || useCoupledTransportation)
+  if(nParaWorld || useCoupledTransportation || G4ScoringManager::GetScoringManagerIfExist())
     {
       theTransportationProcess = new G4CoupledTransportation(verboseLevelTransport);
       G4cout << "#############################################################################" << G4endl

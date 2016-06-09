@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: ExN03PrimaryGeneratorMessenger.hh,v 1.7 2006/06/29 17:48:44 gunter Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: ExN03PrimaryGeneratorMessenger.hh,v 1.8 2007/07/02 13:22:08 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 // 
 
@@ -46,16 +46,16 @@ class G4UIcmdWithAString;
 
 class ExN03PrimaryGeneratorMessenger: public G4UImessenger
 {
-  public:
-    ExN03PrimaryGeneratorMessenger(ExN03PrimaryGeneratorAction*);
-   ~ExN03PrimaryGeneratorMessenger();
+public:
+  ExN03PrimaryGeneratorMessenger(ExN03PrimaryGeneratorAction*);
+  virtual ~ExN03PrimaryGeneratorMessenger();
     
-    void SetNewValue(G4UIcommand*, G4String);
+  void SetNewValue(G4UIcommand*, G4String);
     
-  private:
-    ExN03PrimaryGeneratorAction* ExN03Action;
-    G4UIdirectory*               gunDir; 
-    G4UIcmdWithAString*          RndmCmd;
+private:
+  ExN03PrimaryGeneratorAction* ExN03Action;
+  G4UIdirectory*               gunDir; 
+  G4UIcmdWithAString*          RndmCmd;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

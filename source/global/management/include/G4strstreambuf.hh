@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4strstreambuf.hh,v 1.15 2006/06/29 19:03:46 gunter Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: G4strstreambuf.hh,v 1.16 2007/11/13 17:35:06 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 // ====================================================================
 //
 //   G4strstreambuf
@@ -63,7 +63,7 @@ class G4strstreambuf : public std::basic_streambuf<char>
 #endif
 
     void SetDestination(G4coutDestination* dest);
-    G4int ReceiveString ();
+    inline G4int ReceiveString ();
   
   private:
 

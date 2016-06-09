@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4IntersectionSolid.cc,v 1.30 2006/11/08 09:37:41 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 // Implementation of methods for the class G4IntersectionSolid
 //

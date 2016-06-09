@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // $Id: G4TrajectoryParticleFilter.cc,v 1.3 2006/08/25 19:44:14 tinslay Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 // Filter trajectories according to particle type. Only registered 
 // particle types will pass the filter.

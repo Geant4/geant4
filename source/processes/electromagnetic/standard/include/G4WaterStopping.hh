@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // $Id: G4WaterStopping.hh,v 1.2 2006/06/29 19:51:56 gunter Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// GEANT4 tag $Name: geant4-09-01 $
 
 #ifndef G4WaterStopping_h
 #define G4WaterStopping_h 1

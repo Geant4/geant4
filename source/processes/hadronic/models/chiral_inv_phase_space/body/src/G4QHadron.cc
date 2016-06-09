@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4QHadron.cc,v 1.48 2007/05/03 07:54:58 mkossov Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: G4QHadron.cc,v 1.51 2007/11/15 09:33:22 mkossov Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 //      ---------------- G4QHadron ----------------
 //             by Mikhail Kossov, Sept 1999.
@@ -50,17 +50,17 @@ G4double G4QHadron::widthOfPtSquare = 0.01*GeV*GeV; // ? M.K.
 G4double G4QHadron::minTransverseMass = 1.*keV;     // ? M.K.
 
 G4QHadron::G4QHadron() : theQPDG(0),theMomentum(0.,0.,0.,0.),valQ(0,0,0,0,0,0),nFragm(0),
-  thePosition(0.,0.,0.),theCollisionCount(0),isSplit(false),Direction(true),bindE(0.),
-  formTime(0.) {}
+  thePosition(0.,0.,0.),theCollisionCount(0),isSplit(false),Direction(true),
+  Color(),AntiColor(),bindE(0.),formTime(0.) {}
 
 G4QHadron::G4QHadron(G4LorentzVector p) : theQPDG(0),theMomentum(p),valQ(0,0,0,0,0,0),
   nFragm(0),thePosition(0.,0.,0.),theCollisionCount(0),isSplit(false),Direction(true),
-  bindE(0.),formTime(0.) {}
+  Color(),AntiColor(),bindE(0.),formTime(0.) {}
 
 // For Chipolino or Quasmon doesn't make any sense
 G4QHadron::G4QHadron(G4int PDGCode, G4LorentzVector p) : theQPDG(PDGCode),theMomentum(p),
   nFragm(0),thePosition(0.,0.,0.),theCollisionCount(0),isSplit(false),Direction(true),
-  bindE(0.),formTime(0.)
+  Color(),AntiColor(),bindE(0.),formTime(0.)
 {
 #ifdef debug
   G4cout<<"G4QHadron must be created with PDG="<<PDGCode<<", 4M="<<p<<G4endl;
@@ -80,7 +80,7 @@ G4QHadron::G4QHadron(G4int PDGCode, G4LorentzVector p) : theQPDG(PDGCode),theMom
 // For Chipolino or Quasmon doesn't make any sense
 G4QHadron::G4QHadron(G4QPDGCode QPDG, G4LorentzVector p) : theQPDG(QPDG),theMomentum(p),
   nFragm(0),thePosition(0.,0.,0.),theCollisionCount(0),isSplit(false),Direction(true),
-  bindE(0.),formTime(0.)
+  Color(),AntiColor(),bindE(0.),formTime(0.)
 {
   if(theQPDG.GetQCode()>-1)
   {
@@ -98,7 +98,7 @@ G4QHadron::G4QHadron(G4QPDGCode QPDG, G4LorentzVector p) : theQPDG(QPDG),theMome
 // Make sense Chipolino or Quasmon
 G4QHadron::G4QHadron(G4QContent QC, G4LorentzVector p): theQPDG(0),theMomentum(p),valQ(QC),
   nFragm(0),thePosition(0.,0.,0.),theCollisionCount(0),isSplit(false),Direction(true),
-		bindE(0.),formTime(0.)
+		Color(),AntiColor(),bindE(0.),formTime(0.)
 {
   G4int curPDG=valQ.GetSPDGCode();
   if(curPDG==10&&valQ.GetBaryonNumber()>0) curPDG=valQ.GetZNSPDGCode();
@@ -108,27 +108,32 @@ G4QHadron::G4QHadron(G4QContent QC, G4LorentzVector p): theQPDG(0),theMomentum(p
 
 G4QHadron::G4QHadron(G4int PDGCode, G4double aMass, G4QContent QC) :
   theQPDG(PDGCode),theMomentum(0.,0.,0., aMass),valQ(QC),nFragm(0),thePosition(0.,0.,0.),
-  theCollisionCount(0),isSplit(false),Direction(true),bindE(0.),formTime(0.)
+  theCollisionCount(0),isSplit(false),Direction(true),Color(),AntiColor(),bindE(0.),
+  formTime(0.)
 {}
 
 G4QHadron::G4QHadron(G4QPDGCode QPDG, G4double aMass, G4QContent QC) :
   theQPDG(QPDG),theMomentum(0.,0.,0., aMass),valQ(QC),nFragm(0),thePosition(0.,0.,0.),
-  theCollisionCount(0),isSplit(false),Direction(true),bindE(0.),formTime(0.)
+  theCollisionCount(0),isSplit(false),Direction(true),Color(),AntiColor(),bindE(0.),
+  formTime(0.)
 {}
 
 G4QHadron::G4QHadron(G4int PDGCode, G4LorentzVector p, G4QContent QC) :
   theQPDG(PDGCode),theMomentum(p),valQ(QC),nFragm(0),thePosition(0.,0.,0.),
-  theCollisionCount(0),isSplit(false),Direction(true),bindE(0.),formTime(0.)
+  theCollisionCount(0),isSplit(false),Direction(true),Color(),AntiColor(),bindE(0.),
+  formTime(0.)
 {}
 
 G4QHadron::G4QHadron(G4QPDGCode QPDG, G4LorentzVector p, G4QContent QC) :
   theQPDG(QPDG),theMomentum(p),valQ(QC),nFragm(0),thePosition(0.,0.,0.),
-  theCollisionCount(0),isSplit(false),Direction(true),bindE(0.),formTime(0.)
+  theCollisionCount(0),isSplit(false),Direction(true),Color(),AntiColor(),bindE(0.),
+  formTime(0.)
 {}
 
 G4QHadron::G4QHadron(G4QParticle* pPart, G4double maxM) :
   theQPDG(pPart->GetQPDG()),theMomentum(0.,0.,0.,0.),nFragm(0),thePosition(0.,0.,0.),
-  theCollisionCount(0),isSplit(false),Direction(true),bindE(0.),formTime(0.)
+  theCollisionCount(0),isSplit(false),Direction(true),Color(),AntiColor(),bindE(0.),
+  formTime(0.)
 {
 #ifdef debug
   G4cout<<"G4QHadron is created & randomized with maxM="<<maxM<<G4endl;
@@ -198,7 +203,14 @@ const G4QHadron& G4QHadron::operator=(const G4QHadron &right)
   return *this;
 }
 
-G4QHadron::~G4QHadron() {}
+G4QHadron::~G4QHadron()
+{
+  std::deque<G4QParton*>::iterator pos;
+  for(pos=Color.begin(); pos<Color.end(); pos++) {delete [] *pos;}
+  Color.clear();
+  for(pos=AntiColor.begin(); pos<AntiColor.end(); pos++) {delete [] *pos;}
+  AntiColor.clear();
+}
 
 // Define quark content of the particle with a particular PDG Code
 void G4QHadron::DefineQC(G4int PDGCode)
@@ -394,6 +406,130 @@ G4bool G4QHadron::RelDecayIn2(G4LorentzVector& f4Mom, G4LorentzVector& s4Mom,
 #endif
   return true;
 } // End of "RelDecayIn2"
+
+// Decay of Hadron In2Particles f&s, f w/r/to dN/dO [cp>0: ~cost^cp, cp<0: ~(1-cost)^(-cp)]
+G4bool G4QHadron::CopDecayIn2(G4LorentzVector& f4Mom, G4LorentzVector& s4Mom,
+                              G4LorentzVector& dir, G4double cosp)
+{//    ===================================================================
+  G4double fM2 = f4Mom.m2();
+  G4double fM  = sqrt(fM2);              // Mass of the 1st Hadron
+  G4double sM2 = s4Mom.m2();
+  G4double sM  = sqrt(sM2);              // Mass of the 2nd Hadron
+  G4double iM2 = theMomentum.m2();
+  G4double iM  = sqrt(iM2);              // Mass of the decaying hadron
+  G4double vP  = theMomentum.rho();      // Momentum of the decaying hadron
+  G4double dE  = theMomentum.e();        // Energy of the decaying hadron
+  G4bool neg=false;                // Negative (backward) distribution of t
+  if(cosp<0)
+  {
+    cosp=-cosp;
+    neg=true;
+		}
+  if(dE<vP)
+  {
+    G4cerr<<"***G4QHad::CopDecIn2: Tachionic 4-mom="<<theMomentum<<", E-p="<<dE-vP<<G4endl;
+    G4double accuracy=.000001*vP;
+    G4double emodif=std::fabs(dE-vP);
+    //if(emodif<accuracy)
+				//{
+      G4cerr<<"G4QHadron::CopDecIn2: *Boost* E-p shift is corrected to "<<emodif<<G4endl;
+      theMomentum.setE(vP+emodif+.01*accuracy);
+				//}
+  }
+  G4ThreeVector ltb = theMomentum.boostVector();// Boost vector for backward Lorentz Trans.
+  G4ThreeVector ltf = -ltb;              // Boost vector for forward Lorentz Trans.
+  G4LorentzVector cdir = dir;            // A copy to make a transformation to CMS
+#ifdef ppdebug
+  if(cdir.e()+.001<cdir.rho()) G4cerr<<"*G4QH::RDIn2:*Boost* cd4M="<<cdir<<",e-p="
+                                     <<cdir.e()-cdir.rho()<<G4endl;
+#endif
+  cdir.boost(ltf);                       // Direction transpormed to CMS of the Momentum
+  G4ThreeVector vdir = cdir.vect();      // 3-Vector of the direction-particle
+#ifdef ppdebug
+  G4cout<<"G4QHad::CopDI2:dir="<<dir<<",ltf="<<ltf<<",cdir="<<cdir<<",vdir="<<vdir<<G4endl;
+#endif
+  G4ThreeVector vx(0.,0.,1.);            // Ort in the direction of the reference particle
+  G4ThreeVector vy(0.,1.,0.);            // First ort orthogonal to the direction
+  G4ThreeVector vz(1.,0.,0.);            // Second ort orthoganal to the direction
+  if(vdir.mag2() > 0.)                   // the refference particle isn't at rest in CMS
+  {
+    vx = vdir.unit();                    // Ort in the direction of the reference particle
+#ifdef ppdebug
+    G4cout<<"G4QH::CopDecIn2:Vx="<<vx<<",M="<<theMomentum<<",d="<<dir<<",c="<<cdir<<G4endl;
+#endif
+    G4ThreeVector vv= vx.orthogonal();   // Not normed orthogonal vector (!)
+    vy = vv.unit();                      // First ort orthogonal to the direction
+    vz = vx.cross(vy);                   // Second ort orthoganal to the direction
+  }
+#ifdef ppdebug
+  G4cout<<"G4QHad::CopDecIn2:iM="<<iM<<"=>fM="<<fM<<"+sM="<<sM<<",ob="<<vx<<vy<<vz<<G4endl;
+#endif
+  if(fabs(iM-fM-sM)<.00000001)
+  {
+    G4double fR=fM/iM;
+    G4double sR=sM/iM;
+    f4Mom=fR*theMomentum;
+    s4Mom=sR*theMomentum;
+    return true;
+  }
+  else if (iM+.001<fM+sM || iM==0.)
+  {//@@ Later on make a quark content check for the decay
+    G4cerr<<"***G4QH::CopDecIn2: fM="<<fM<<"+sM="<<sM<<">iM="<<iM<<",d="<<iM-fM-sM<<G4endl;
+    return false;
+  }
+  G4double d2 = iM2-fM2-sM2;
+  G4double p2 = (d2*d2/4.-fM2*sM2)/iM2;    // Decay momentum(^2) in CMS of Quasmon
+  if(p2<0.)
+  {
+#ifdef ppdebug
+    G4cout<<"*G4QH:CopDI2:p2="<<p2<<"<0,d4/4="<<d2*d2/4.<<"<4*fM2*sM2="<<4*fM2*sM2<<G4endl;
+#endif
+    p2=0.;
+  }
+  G4double p  = sqrt(p2);
+  G4double ct = 0;
+  G4double rn = pow(G4UniformRand(),cosp+1.);
+  if(neg)  ct = rn+rn-1.;                  // More backward than forward
+  else     ct = 1.-rn-rn;                  // More forward than backward
+  //
+  G4double phi= twopi*G4UniformRand();  // @@ Change 360.*deg to M_TWOPI (?)
+  G4double ps=0.;
+  if(fabs(ct)<1.) ps = p * sqrt(1.-ct*ct);
+  else
+  {
+#ifdef ppdebug
+    G4cout<<"**G4QH::CopDecayIn2:ct="<<ct<<",mac="<<maxCost<<",mic="<<minCost<<G4endl;
+    //throw G4QException("***G4QHadron::RDIn2: bad cos(theta)");
+#endif
+    if(ct>1.) ct=1.;
+    if(ct<-1.) ct=-1.;
+  }
+  G4ThreeVector pVect=(ps*sin(phi))*vz+(ps*cos(phi))*vy+p*ct*vx;
+#ifdef ppdebug
+  G4cout<<"G4QH::CopDIn2:ct="<<ct<<",p="<<p<<",ps="<<ps<<",ph="<<phi<<",v="<<pVect<<G4endl;
+#endif
+
+  f4Mom.setVect(pVect);
+  f4Mom.setE(sqrt(fM2+p2));
+  s4Mom.setVect((-1)*pVect);
+  s4Mom.setE(sqrt(sM2+p2));
+  
+#ifdef ppdebug
+  G4cout<<"G4QHadr::CopDecIn2:p2="<<p2<<",v="<<ltb<<",f4M="<<f4Mom<<" + s4M="<<s4Mom<<" = "
+        <<f4Mom+s4Mom<<", M="<<iM<<G4endl;
+#endif
+  if(f4Mom.e()+.001<f4Mom.rho())G4cerr<<"*G4QH::RDIn2:*Boost* f4M="<<f4Mom<<",e-p="
+                                      <<f4Mom.e()-f4Mom.rho()<<G4endl;
+  f4Mom.boost(ltb);                        // Lor.Trans. of 1st hadron back to LS
+  if(s4Mom.e()+.001<s4Mom.rho())G4cerr<<"*G4QH::RDIn2:*Boost* s4M="<<s4Mom<<",e-p="
+                                      <<s4Mom.e()-s4Mom.rho()<<G4endl;
+  s4Mom.boost(ltb);                        // Lor.Trans. of 2nd hadron back to LS
+#ifdef ppdebug
+  G4cout<<"G4QHadron::CopDecayIn2:Output, f4Mom="<<f4Mom<<" + s4Mom="<<s4Mom<<" = "
+        <<f4Mom+s4Mom<<", d4M="<<theMomentum-f4Mom-s4Mom<<G4endl;
+#endif
+  return true;
+} // End of "CopDecayIn2"
 
 // Decay of the Hadron in 2 particles (f + s)
 G4bool G4QHadron::DecayIn2(G4LorentzVector& f4Mom, G4LorentzVector& s4Mom)
@@ -713,7 +849,176 @@ G4bool G4QHadron::DecayIn3
     return false;
   }
   return true;
-}
+} // End of DecayIn3
+
+// Relative Decay of the hadron in 3 particles i=>f+s+t (t is with respect to minC<ct<maxC)
+G4bool G4QHadron::RelDecayIn3(G4LorentzVector& f4Mom, G4LorentzVector& s4Mom,
+                              G4LorentzVector& t4Mom, G4LorentzVector& dir,
+                              G4double maxCost, G4double minCost)
+{//    ====================================================================================
+#ifdef debug
+  G4cout<<"G4QH::RelDIn3:"<<theMomentum<<"=>f="<<f4Mom<<"+s="<<s4Mom<<"+t="<<t4Mom<<G4endl;
+#endif
+  G4double iM  = theMomentum.m();  // Mass of the decaying hadron
+  G4double fM  = f4Mom.m();        // Mass of the 1st hadron
+  G4double sM  = s4Mom.m();        // Mass of the 2nd hadron
+  G4double tM  = t4Mom.m();        // Mass of the 3rd hadron
+  G4double eps = 0.001;            // Accuracy of the split condition
+  if (fabs(iM-fM-sM-tM)<=eps)
+  {
+    G4double fR=fM/iM;
+    G4double sR=sM/iM;
+    G4double tR=tM/iM;
+    f4Mom=fR*theMomentum;
+    s4Mom=sR*theMomentum;
+    t4Mom=tR*theMomentum;
+    return true;
+  }
+  if (iM+eps<fM+sM+tM)
+  {
+    G4cout<<"***G4QHadron::RelDecayIn3:fM="<<fM<<" + sM="<<sM<<" + tM="<<tM<<" > iM="<<iM
+          <<",d="<<iM-fM-sM-tM<<G4endl;
+    return false;
+  }
+  G4double fM2 = fM*fM;
+  G4double sM2 = sM*sM;
+  G4double tM2 = tM*tM;
+  G4double iM2 = iM*iM;
+  G4double m13sBase=(iM-sM)*(iM-sM)-(fM+tM)*(fM+tM);
+  G4double m12sMin =(fM+sM)*(fM+sM);
+  G4double m12sBase=(iM-tM)*(iM-tM)-m12sMin;
+  G4double rR = 0.;
+  G4double rnd= 1.;
+#ifdef debug
+  G4int    tr = 0;                 //@@ Comment if "cout" below is skiped @@
+#endif
+  G4double m12s = 0.;              // Fake definition before the Loop
+  while (rnd > rR)
+  {
+    m12s = m12sMin + m12sBase*G4UniformRand();
+    G4double e1=m12s+fM2-sM2;
+    G4double e2=iM2-m12s-tM2;
+    G4double four12=4*m12s;
+    G4double m13sRange=0.;
+    G4double dif=(e1*e1-four12*fM2)*(e2*e2-four12*tM2);
+    if(dif<0.)
+	   {
+#ifdef debug
+      if(dif<-.01) G4cerr<<"G4QHadron::RelDecayIn3:iM="<<iM<<",tM="<<tM<<",sM="<<sM<<",fM="
+                         <<fM<<",m12(s+f)="<<sqrt(m12s)<<", d="<<iM-fM-sM-tM<<G4endl;
+#endif
+    }
+    else m13sRange=sqrt(dif)/m12s;
+    rR = m13sRange/m13sBase;
+    rnd= G4UniformRand();
+#ifdef debug
+    G4cout<<"G4QHadron::RelDecayIn3: try decay #"<<++tr<<", rR="<<rR<<",rnd="<<rnd<<G4endl;
+#endif
+  }
+  G4double m12 = sqrt(m12s);       // Mass of the H1+H2 system
+  G4LorentzVector dh4Mom(0.,0.,0.,m12);
+  
+  if(!RelDecayIn2(t4Mom,dh4Mom,dir,maxCost,minCost))
+  {
+    G4cerr<<"***G4QHadron::RelDecayIn3: Exception1"<<G4endl;
+	   //throw G4QException("G4QHadron::DecayIn3(): DecayIn2 did not succeed");
+    return false;
+  }
+#ifdef debug
+  G4cout<<"G4QHadron::RelDecayIn3: Now the last decay of m12="<<dh4Mom.m()<<G4endl;
+#endif
+  if(!G4QHadron(dh4Mom).DecayIn2(f4Mom,s4Mom))
+  {
+    G4cerr<<"***G4QHadron::RelDecayIn3: Error in DecayIn2 -> Exception2"<<G4endl;
+	   //throw G4QException("G4QHadron::DecayIn3(): DecayIn2 did not succeed");
+    return false;
+  }
+  return true;
+} // End of RelDecayIn3
+
+// Relative Decay of hadron in 3: i=>f+s+t.  dN/dO [cp>0:~cost^cp, cp<0:~(1-cost)^(-cp)]
+G4bool G4QHadron::CopDecayIn3(G4LorentzVector& f4Mom, G4LorentzVector& s4Mom,
+                              G4LorentzVector& t4Mom, G4LorentzVector& dir, G4double cosp)
+{//    ====================================================================================
+#ifdef debug
+  G4cout<<"G4QH::CopDIn3:"<<theMomentum<<"=>f="<<f4Mom<<"+s="<<s4Mom<<"+t="<<t4Mom<<G4endl;
+#endif
+  G4double iM  = theMomentum.m();  // Mass of the decaying hadron
+  G4double fM  = f4Mom.m();        // Mass of the 1st hadron
+  G4double sM  = s4Mom.m();        // Mass of the 2nd hadron
+  G4double tM  = t4Mom.m();        // Mass of the 3rd hadron
+  G4double eps = 0.001;            // Accuracy of the split condition
+  if (fabs(iM-fM-sM-tM)<=eps)
+  {
+    G4double fR=fM/iM;
+    G4double sR=sM/iM;
+    G4double tR=tM/iM;
+    f4Mom=fR*theMomentum;
+    s4Mom=sR*theMomentum;
+    t4Mom=tR*theMomentum;
+    return true;
+  }
+  if (iM+eps<fM+sM+tM)
+  {
+    G4cout<<"***G4QHadron::CopDecayIn3:fM="<<fM<<" + sM="<<sM<<" + tM="<<tM<<" > iM="<<iM
+          <<",d="<<iM-fM-sM-tM<<G4endl;
+    return false;
+  }
+  G4double fM2 = fM*fM;
+  G4double sM2 = sM*sM;
+  G4double tM2 = tM*tM;
+  G4double iM2 = iM*iM;
+  G4double m13sBase=(iM-sM)*(iM-sM)-(fM+tM)*(fM+tM);
+  G4double m12sMin =(fM+sM)*(fM+sM);
+  G4double m12sBase=(iM-tM)*(iM-tM)-m12sMin;
+  G4double rR = 0.;
+  G4double rnd= 1.;
+#ifdef debug
+  G4int    tr = 0;                 //@@ Comment if "cout" below is skiped @@
+#endif
+  G4double m12s = 0.;              // Fake definition before the Loop
+  while (rnd > rR)
+  {
+    m12s = m12sMin + m12sBase*G4UniformRand();
+    G4double e1=m12s+fM2-sM2;
+    G4double e2=iM2-m12s-tM2;
+    G4double four12=4*m12s;
+    G4double m13sRange=0.;
+    G4double dif=(e1*e1-four12*fM2)*(e2*e2-four12*tM2);
+    if(dif<0.)
+	   {
+#ifdef debug
+      if(dif<-.01) G4cerr<<"G4QHadron::CopDecayIn3:iM="<<iM<<",tM="<<tM<<",sM="<<sM<<",fM="
+                         <<fM<<",m12(s+f)="<<sqrt(m12s)<<", d="<<iM-fM-sM-tM<<G4endl;
+#endif
+    }
+    else m13sRange=sqrt(dif)/m12s;
+    rR = m13sRange/m13sBase;
+    rnd= G4UniformRand();
+#ifdef debug
+    G4cout<<"G4QHadron::CopDecayIn3: try decay #"<<++tr<<", rR="<<rR<<",rnd="<<rnd<<G4endl;
+#endif
+  }
+  G4double m12 = sqrt(m12s);       // Mass of the H1+H2 system
+  G4LorentzVector dh4Mom(0.,0.,0.,m12);
+  
+  if(!CopDecayIn2(t4Mom,dh4Mom,dir,cosp))
+  {
+    G4cerr<<"***G4QHadron::CopDecayIn3: Exception1"<<G4endl;
+	   //throw G4QException("G4QHadron::DecayIn3(): DecayIn2 did not succeed");
+    return false;
+  }
+#ifdef debug
+  G4cout<<"G4QHadron::DecayIn3: Now the last decay of m12="<<dh4Mom.m()<<G4endl;
+#endif
+  if(!G4QHadron(dh4Mom).DecayIn2(f4Mom,s4Mom))
+  {
+    G4cerr<<"***G4QHadron::CopDecayIn3: Error in DecayIn2 -> Exception2"<<G4endl;
+	   //throw G4QException("G4QHadron::DecayIn3(): DecayIn2 did not succeed");
+    return false;
+  }
+  return true;
+} // End of CopDecayIn3
 
 // Randomize particle mass taking into account the width
 G4double G4QHadron::RandomizeMass(G4QParticle* pPart, G4double maxM)

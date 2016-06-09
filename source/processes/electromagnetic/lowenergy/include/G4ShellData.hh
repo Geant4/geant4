@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ShellData.hh,v 1.4 2006/06/29 19:36:53 gunter Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: G4ShellData.hh,v 1.5 2007/02/20 16:53:16 mantero Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
 //
@@ -54,7 +54,7 @@ class G4ShellData
 { 
 public:
 
-  G4ShellData(G4int minZ = 1, G4int maxZ = 99);
+  G4ShellData(G4int minZ = 1, G4int maxZ = 100);
 
   ~G4ShellData();
  

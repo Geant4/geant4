@@ -219,9 +219,9 @@ G4ParticleTypeConverter::GenericType G4ParticleTypeConverter::GetGenericType(con
     if(defMap[i].first == aParticleDef) return defMap[i].second;
   }
   
-  G4cerr << "Unknown Particle : " << aParticleDef->GetParticleName() << G4endl;
+//GF  G4cerr << "Unknown Particle : " << aParticleDef->GetParticleName() << G4endl;
   return UNKNOWN;
-  throw G4HadronicException(__FILE__, __LINE__, "G4ParticleTypeConverter: unknown particle type!");
+//  throw G4HadronicException(__FILE__, __LINE__, "G4ParticleTypeConverter: unknown particle type!");
 }
  
 

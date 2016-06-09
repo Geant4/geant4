@@ -37,6 +37,7 @@
 // Class Description - End
 
 // 15-Nov-06 First implementation is done by T. Koi (SLAC/SCCS)
+// 070625 implement clearCurrentXSData to fix memory leaking by T. Koi
 
 #include "G4NeutronHPThermalScatteringData.hh"
 #include "G4Neutron.hh"
@@ -61,7 +62,58 @@ G4NeutronHPThermalScatteringData::G4NeutronHPThermalScatteringData()
 
 G4NeutronHPThermalScatteringData::~G4NeutronHPThermalScatteringData()
 {
+
+   clearCurrentXSData();
+
    delete names;
+}
+
+
+void G4NeutronHPThermalScatteringData::clearCurrentXSData()
+{
+   std::map< G4int , std::map< G4double , G4NeutronHPVector* >* >::iterator it;
+   std::map< G4double , G4NeutronHPVector* >::iterator itt;
+
+   for ( it = coherent.begin() ; it != coherent.end() ; it++ )
+   {
+      if ( it->second != NULL )
+      {
+         for ( itt = it->second->begin() ; itt != it->second->end() ; itt++ )
+         {
+            delete itt->second;
+         }
+      }
+      delete it->second;
+   }
+
+   for ( it = incoherent.begin() ; it != incoherent.end() ; it++ )
+   {
+      if ( it->second != NULL )
+      { 
+         for ( itt = it->second->begin() ; itt != it->second->end() ; itt++ )
+         {
+            delete itt->second;
+         }
+      }
+      delete it->second;
+   }
+
+   for ( it = inelastic.begin() ; it != inelastic.end() ; it++ )
+   {
+      if ( it->second != NULL )
+      {
+         for ( itt = it->second->begin() ; itt != it->second->end() ; itt++ )
+         {
+            delete itt->second;
+         }
+      }
+      delete it->second; 
+   }
+
+   coherent.clear();
+   incoherent.clear();
+   inelastic.clear();
+
 }
 
 
@@ -106,6 +158,8 @@ void G4NeutronHPThermalScatteringData::BuildPhysicsTable(const G4ParticleDefinit
       throw G4HadronicException(__FILE__, __LINE__, "Attempt to use NeutronHP data for particles other than neutrons!!!");  
 
    indexOfThermalElement.clear(); 
+
+   clearCurrentXSData();
 
    static const G4ElementTable* theElementTable = G4Element::GetElementTable();
    size_t numberOfElements = G4Element::GetNumberOfElements();

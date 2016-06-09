@@ -23,13 +23,13 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PolarizedComptonCrossSection.cc,v 1.3 2006/11/09 18:00:49 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: G4PolarizedComptonCrossSection.cc,v 1.4 2007/11/01 17:32:34 schaelic Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 // GEANT4 Class file
 //
 //
-// File name:     PolarizedComptonCrossSectionPS
+// File name:     G4PolarizedComptonCrossSection
 //
 // Author:        Andreas Schaelicke
 //
@@ -50,9 +50,11 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 G4PolarizedComptonCrossSection::G4PolarizedComptonCrossSection()
   {
+  SetYmin(0.);
+
   //  G4cout<<"G4PolarizedComptonCrossSection() init\n";
 
-  re2 = classic_electr_radius * classic_electr_radius;
+  re2 = classic_electr_radius * classic_electr_radius * sqr(4*pi/hbarc);
   //  G4double unit_conversion = hbarc_squared ;
   //  G4cout<<" (keV)^2* m^2 ="<<unit_conversion<<"\n";
   phi0 = 0.; polXS = 0.; unpXS = 0.;
@@ -71,7 +73,7 @@ G4PolarizedComptonCrossSection::~G4PolarizedComptonCrossSection()
 void G4PolarizedComptonCrossSection::Initialize(G4double eps, G4double X, G4double , // phi
 						const G4StokesVector & pol0,
 						const G4StokesVector & pol1,
-						int flag)
+						G4int flag)
 {
   G4double cosT = 1. - (1./eps - 1.)/X;
   if(cosT > 1.+1.e-8)  cosT = 1.;
@@ -178,6 +180,35 @@ G4double G4PolarizedComptonCrossSection::XSection(const G4StokesVector & pol2,co
 } 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+
+G4double G4PolarizedComptonCrossSection::TotalXSection(G4double /*xmin*/, G4double /*xmax*/, G4double k0,
+						   const G4StokesVector & pol0,
+						   const G4StokesVector & pol1)
+{
+  
+  //  G4double k0 = gammaEnergy / electron_mass_c2 ;
+  G4double k1 = 1 + 2*k0 ;
+
+//   // pi*re^2
+//   G4double re=2.81794e-15; //m
+//   G4double barn=1.e-28; //m^2
+  G4double Z=theZ;
+
+  G4double unit = Z*pi*classic_electr_radius  
+    * classic_electr_radius ; // *1./barn;
+
+  G4double pre = unit/(sqr(k0)*sqr(1.+2.*k0));
+
+  G4double xs_0 = ((k0 - 2.)*k0  -2.)*sqr(k1)*std::log(k1) + 2.*k0*(k0*(k0 + 1.)*(k0 + 8.) + 2.);		
+  G4double xs_pol = (k0 + 1.)*sqr(k1)*std::log(k1) - 2.*k0*(5.*sqr(k0) + 4.*k0 + 1.);
+
+  return pre*(xs_0/k0 + pol0.p3()*pol1.z()*xs_pol);
+}
+
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 
 G4StokesVector G4PolarizedComptonCrossSection::GetPol2()
 {

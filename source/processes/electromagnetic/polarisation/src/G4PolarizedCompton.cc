@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PolarizedCompton.cc,v 1.6 2007/06/11 13:37:56 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: G4PolarizedCompton.cc,v 1.7 2007/07/10 09:35:37 schaelic Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 // 
 //
 // File name:     G4PolarizedCompton
@@ -332,7 +332,7 @@ void G4PolarizedCompton::BuildAsymmetryTable(const G4ParticleDefinition& part)
 
 G4double G4PolarizedCompton::ComputeAsymmetry(G4double energy,
 			 const G4MaterialCutsCouple* couple,
-		       const G4ParticleDefinition& particle,
+		       const G4ParticleDefinition& aParticle,
 			       G4double cut,
 			       G4double & tAsymmetry)
 {
@@ -345,7 +345,7 @@ G4double G4PolarizedCompton::ComputeAsymmetry(G4double energy,
   G4ThreeVector thePolarization=G4ThreeVector(0.,0.,1.);
   emModel->SetTargetPolarization(thePolarization);
   emModel->SetBeamPolarization(thePolarization);
-  G4double sigma2=emModel->CrossSection(couple,&particle,energy,cut,energy);
+  G4double sigma2=emModel->CrossSection(couple,&aParticle,energy,cut,energy);
 
   //
   // calculate unpolarized cross section
@@ -353,7 +353,7 @@ G4double G4PolarizedCompton::ComputeAsymmetry(G4double energy,
   thePolarization=G4ThreeVector();
   emModel->SetTargetPolarization(thePolarization);
   emModel->SetBeamPolarization(thePolarization);
-  G4double sigma0=emModel->CrossSection(couple,&particle,energy,cut,energy);
+  G4double sigma0=emModel->CrossSection(couple,&aParticle,energy,cut,energy);
 
   // determine assymmetries
   if (sigma0>0.) {

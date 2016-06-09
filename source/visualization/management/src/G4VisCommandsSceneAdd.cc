@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsSceneAdd.cc,v 1.72 2006/11/25 15:37:31 allison Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: G4VisCommandsSceneAdd.cc,v 1.73 2007/11/16 20:29:04 perl Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 // /vis/scene commands - John Allison  9th August 1998
 
 #include "G4VisCommandsSceneAdd.hh"
@@ -1490,8 +1490,7 @@ G4VisCommandSceneAddVolume::G4VisCommandSceneAddVolume () {
      "\nadded.  Otherwise a search of all worlds is made, taking the first"
      "\nmatching occurence only.  To see a representation of the geometry"
      "\nhierarchy of the worlds, try \"/vis/drawTree [worlds]\" or one of the"
-     "\ndriver/browser combinations that have the required functionality,"
-     "\ne.g., HepRepFile/XML with the WIRED3/4 browser.");
+     "\ndriver/browser combinations that have the required functionality, e.g., HepRep.");
   fpCommand -> SetGuidance
     ("If clip-volume-type is specified, the subsequent parameters are used to"
      "\nto define a clipping volume.  For example,"

@@ -1,4 +1,4 @@
-# $Id: range.mac,v 1.3 2006/09/18 17:26:20 maire Exp $
+# $Id: range.mac,v 1.4 2007/08/19 20:52:53 maire Exp $
 #
 # Macro file for "TestEm11.cc"
 # 
@@ -26,9 +26,9 @@
 /process/eLoss/fluct false
 #
 /gun/particle e-
-/gun/energy 500 keV
+/gun/energy 600 keV
 #
-/testem/histo/setFileName range.std
+/testem/histo/setFileName range
 /testem/histo/setFileType hbook
 /testem/histo/setHisto 3 200 0 4 mm	# csda range
 #	 

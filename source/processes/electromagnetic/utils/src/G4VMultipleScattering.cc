@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VMultipleScattering.cc,v 1.43 2007/05/18 18:39:55 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: G4VMultipleScattering.cc,v 1.47 2007/11/09 11:35:54 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 // -------------------------------------------------------------------
 //
@@ -53,6 +53,7 @@
 // 15-04-05 remove boundary flag (V.Ivanchenko)
 // 27-10-05 introduce virtual function MscStepLimitation() (V.Ivanchenko)
 // 12-04-07 Add verbosity at destruction (V.Ivanchenko)
+// 27-10-07 Virtual functions moved to source (V.Ivanchenko)
 //
 // Class Description:
 //
@@ -79,6 +80,7 @@
 #include "G4RegionStore.hh"
 #include "G4PhysicsTableHelper.hh"
 #include "G4GenericIon.hh"
+#include "G4Electron.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -115,7 +117,10 @@ G4VMultipleScattering::~G4VMultipleScattering()
     G4cout << "G4VMultipleScattering destruct " << GetProcessName() 
 	   << G4endl;
   delete modelManager;
-  if (theLambdaTable) theLambdaTable->clearAndDestroy();
+  if (theLambdaTable) {
+    theLambdaTable->clearAndDestroy();
+    delete theLambdaTable;
+  }
   (G4LossTableManager::Instance())->DeRegister(this);
 }
 
@@ -197,21 +202,13 @@ void G4VMultipleScattering::PreparePhysicsTable(const G4ParticleDefinition& part
     if(buildLambdaTable)
       theLambdaTable = G4PhysicsTableHelper::PreparePhysicsTable(theLambdaTable);
     const G4DataVector* theCuts = 
-      modelManager->Initialise(firstParticle, 0, 10.0, verboseLevel);
+      modelManager->Initialise(firstParticle, 
+			       G4Electron::Electron(), 
+			       10.0, verboseLevel);
 
     if(2 < verboseLevel) G4cout << theCuts << G4endl;
 
   }
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-void G4VMultipleScattering::AddEmModel(G4int order, G4VEmModel* p,
-                                 const G4Region* region)
-{
-  G4VEmFluctuationModel* fm = 0;
-  modelManager->AddEmModel(order, p, fm, region);
-  if(p)p->SetParticleChange(pParticleChange);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -238,6 +235,76 @@ void G4VMultipleScattering::PrintInfoDefinition()
       if(theLambdaTable) G4cout << (*theLambdaTable) << G4endl;
     }
   }
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4double G4VMultipleScattering::AlongStepGetPhysicalInteractionLength(
+                             const G4Track& track,
+                             G4double previousStepSize,
+                             G4double currentMinimalStep,
+                             G4double& currentSafety,
+                             G4GPILSelection* selection)
+{
+  // get Step limit proposed by the process
+  valueGPILSelectionMSC = NotCandidateForSelection;
+  G4double steplength = GetMscContinuousStepLimit(track,previousStepSize,
+                                              currentMinimalStep,currentSafety);
+  // G4cout << "StepLimit= " << steplength << G4endl;
+  // set return value for G4GPILSelection
+  *selection = valueGPILSelectionMSC;
+  return  steplength;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4double G4VMultipleScattering::PostStepGetPhysicalInteractionLength(
+              const G4Track&, G4double, G4ForceCondition* condition)
+{
+  *condition = Forced;
+  return DBL_MAX;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4double G4VMultipleScattering::GetContinuousStepLimit(
+                                       const G4Track& track,
+                                       G4double previousStepSize,
+                                       G4double currentMinimalStep,
+                                       G4double& currentSafety)
+{
+  return GetMscContinuousStepLimit(track,previousStepSize,currentMinimalStep,
+				   currentSafety);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4double G4VMultipleScattering::GetMeanFreePath(
+              const G4Track&, G4double, G4ForceCondition* condition)
+{
+  *condition = Forced;
+  return DBL_MAX;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4VParticleChange* G4VMultipleScattering::AlongStepDoIt(const G4Track&,
+                                                        const G4Step& step)
+{
+  fParticleChange.ProposeTrueStepLength(
+    currentModel->ComputeTrueStepLength(step.GetStepLength()));
+  return &fParticleChange;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4VParticleChange* G4VMultipleScattering::PostStepDoIt(const G4Track& track,
+						       const G4Step& step)
+{
+  fParticleChange.Initialize(track);
+  currentModel->SampleScattering(track.GetDynamicParticle(),
+				 step.GetPostStepPoint()->GetSafety());
+  return &fParticleChange;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

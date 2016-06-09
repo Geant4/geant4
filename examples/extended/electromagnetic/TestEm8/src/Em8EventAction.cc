@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: Em8EventAction.cc,v 1.9 2006/06/29 17:00:13 gunter Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: Em8EventAction.cc,v 1.10 2007/11/12 10:54:49 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 // 
 
@@ -222,6 +222,7 @@ void Em8EventAction::AddNeutral()
 void Em8EventAction::AddE() 
 {
   NE += 1.;
+  Nch += 1.;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -229,6 +230,7 @@ void Em8EventAction::AddE()
 void Em8EventAction::AddP() 
 {
   NP += 1.;
+  Nch += 1.;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

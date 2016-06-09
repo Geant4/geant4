@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4StepLimiter.cc,v 1.3 2006/11/14 09:11:18 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 // --------------------------------------------------------------
 // History

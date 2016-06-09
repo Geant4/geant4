@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BohrFluctuations.cc,v 1.4 2006/06/29 19:52:42 gunter Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: G4BohrFluctuations.cc,v 1.6 2007/09/27 14:02:41 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 // -------------------------------------------------------------------
 //
@@ -95,19 +95,11 @@ G4double G4BohrFluctuations::SampleFluctuations(const G4Material* material,
   G4double siga = Dispersion(material,dp,tmax,length);
   G4double loss = meanLoss;
 
-  G4double navr = minNumberInteractionsBohr;
-
-  // Gaussian fluctuation
-  G4bool gauss = true;
-  if (meanLoss < minNumberInteractionsBohr*tmax) {
-    navr = meanLoss*meanLoss/siga;
-    if (navr < minNumberInteractionsBohr) gauss = false;
-  }
-  //G4cout << "### meanLoss= " << meanLoss << "  navr= " << navr << " sig= " << sqrt(siga) << G4endl;
-
-  if(gauss) {
+  G4double navr = meanLoss*meanLoss/siga;
+  //G4cout << "### meanLoss= " << meanLoss << "  navr= " << navr << G4endl;
+  if (navr >= minNumberInteractionsBohr) {
+ 
     // Increase fluctuations for big fractional energy loss
-
     if ( meanLoss > minFraction*kineticEnergy ) {
       G4double gam = (kineticEnergy - meanLoss)/particleMass + 1.0;
       G4double b2  = 1.0 - 1.0/(gam*gam);

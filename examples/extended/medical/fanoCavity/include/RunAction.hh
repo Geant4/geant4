@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RunAction.hh,v 1.2 2007/02/06 11:47:39 maire Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: RunAction.hh,v 1.3 2007/10/29 12:36:26 maire Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -59,12 +59,14 @@ class RunAction : public G4UserRunAction
     
     void SurveyConvergence(G4int);
     
-    void sumEsecond(G4double e)    { Esecondary += e; nbSec++;};
+    void sumEsecond(G4double e)    { Esecondary += e; Esecondary2 += e*e;
+                                     nbSec++;};
     
     void FlowInCavity(G4int k, G4double e) { EnerFlowCavity[k] += e;  
                                              PartFlowCavity[k]++;};
 				                
-    void AddEdepCavity(G4double de) { EdepCavity += de;};
+    void AddEdepCavity(G4double de) { EdepCavity += de; EdepCavity2 += de*de;
+                                      nbEventCavity++;};
     void AddTrakCavity(G4double dt) { trkSegmCavity += dt;};
         
     void StepInWall   (G4double s)  { stepWall += s; stepWall2 += s*s; 
@@ -78,13 +80,14 @@ class RunAction : public G4UserRunAction
     ProcessesCount*         ProcCounter;
     HistoManager*           histoManager;
     
-    G4double                Esecondary;
+    G4double                Esecondary, Esecondary2;
     G4long                  nbSec;
     
     G4long                  PartFlowCavity[2];
     G4double                EnerFlowCavity[2];        
-    G4double                EdepCavity;
+    G4double                EdepCavity, EdepCavity2;
     G4double                trkSegmCavity;
+    G4long                  nbEventCavity;    
     
     G4double                oldEmean, oldDose;
         

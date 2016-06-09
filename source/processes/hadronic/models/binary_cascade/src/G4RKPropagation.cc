@@ -287,11 +287,12 @@ void G4RKPropagation::Transport(G4KineticTrackVector & active,
 #endif
  
 // if the particle is already outside nucleus go to next  @@GF should never happen? check!
-    if(t_leave < 0)
-    {  
-       throw G4HadronicException(__FILE__, __LINE__, "G4RKPropagation:: Attempt to track particle past a  nucleus");
-       continue;
-    }  
+//  does happen for particles added as late....
+//     if(t_leave < 0 )
+//     {  
+//        throw G4HadronicException(__FILE__, __LINE__, "G4RKPropagation:: Attempt to track particle past a  nucleus");
+//        continue;
+//     }  
 
 // Apply a straight line propagation for particle types
 // not included in the model
@@ -334,6 +335,10 @@ void G4RKPropagation::Transport(G4KineticTrackVector & active,
 //      for the moment take it past the nucleus, so we'll not worry next time..
 	  FreeTransport(kt, 1.1*t_leave);   // take past nucleus
           kt->SetState(G4KineticTrack::miss_nucleus);
+//	   G4cout << "G4RKPropagation: Warning particle cannot enter Nucleus :" << G4endl;
+//	   G4cout << " enter nucleus, E out/in: " << kt->GetTrackingMomentum().e() << " / " << newE <<G4endl;
+//	   G4cout << " the Field "<< currentField->GetField(kt->GetPosition()) << " "<< kt->GetPosition()<<G4endl;
+// 	   G4cout << " the particle "<<kt->GetDefinition()->GetParticleName()<<G4endl;
 	  continue;
 	}
 //
@@ -380,8 +385,8 @@ void G4RKPropagation::Transport(G4KineticTrackVector & active,
     G4ThreeVector posold=kt->GetPosition();
 
 //    if (currentField->GetField(kt->GetPosition()) > kt->GetProjectilePotential() ||
-    if ( currTimeStep > 0 && 
-         ! FieldTransport(kt, currTimeStep)) {
+    if (currTimeStep > 0 && 
+        ! FieldTransport(kt, currTimeStep)) {
         FreeTransport(kt,currTimeStep);
     }
 

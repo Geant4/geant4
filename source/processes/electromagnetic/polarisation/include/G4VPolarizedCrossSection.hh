@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VPolarizedCrossSection.hh,v 1.2 2006/11/17 14:14:19 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: G4VPolarizedCrossSection.hh,v 1.4 2007/11/01 17:32:34 schaelic Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 // File name:     G4VPolarizedCrossSection
 //
@@ -53,6 +53,7 @@ class G4VPolarizedCrossSection
 public:
   G4VPolarizedCrossSection();
   virtual ~G4VPolarizedCrossSection();
+
 public:
   virtual void Initialize(G4double, G4double, G4double,
 			  const G4StokesVector & p0,const G4StokesVector & p1,
@@ -66,14 +67,31 @@ public:
   virtual G4StokesVector GetPol2();
   virtual G4StokesVector GetPol3();
 
+  // return basic kinematics properties
+  //   minimal gamma value in TotalXSection
+  inline G4double GetYmin() {return fYmin; } 
+  //   minimal energy fraction in TotalXSection
+  virtual G4double GetXmin(G4double y);
+  //   maximal energy fraction in TotalXSection 
+  virtual G4double GetXmax(G4double y);
+
   // return appropriate distribute polarisation states;
-  void DicePolarization();
-  G4StokesVector DicedPol2();
-  G4StokesVector DicedPol3();
+//  void DicePolarization();
+//   G4StokesVector DicedPol2();
+//   G4StokesVector DicedPol3();
+  inline void SetMaterial(G4double A, G4double Z, G4double coul) 
+  { theA=A; theZ=Z; fCoul=coul; }
 protected:
-//   G4double costheta;
-  G4StokesVector pol0, pol1;
-  G4StokesVector pol2, pol3;
+  // define kinematics properties
+  inline void SetXmin(G4double xmin) { fXmin=xmin;}
+  inline void SetXmax(G4double xmax) { fXmax=xmax;}
+  inline void SetYmin(G4double ymin) { fYmin=ymin;}
+
+  // kinematic properties
+  G4double fXmin, fXmax, fYmin;
+  // material properties
+  G4double theA, theZ;
+  G4double fCoul;
 };
 
 

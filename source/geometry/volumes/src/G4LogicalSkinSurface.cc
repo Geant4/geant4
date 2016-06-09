@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4LogicalSkinSurface.cc,v 1.13 2006/06/29 18:57:59 gunter Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: G4LogicalSkinSurface.cc,v 1.14 2007/10/12 20:17:27 gum Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 // --------------------------------------------------------------------
 // G4LogicalSkinSurface Implementation
@@ -40,10 +40,9 @@
 // ----------------------------------------------------------------------
 
 #include "G4LogicalSkinSurface.hh"
-#include "G4ios.hh"
 #include "G4LogicalVolume.hh"
 
-G4LogicalSkinSurfaceTable G4LogicalSkinSurface::theSurfaceTable;
+G4LogicalSkinSurfaceTable G4LogicalSkinSurface::theSkinSurfaceTable;
 
 //
 // Constructors & destructor
@@ -57,7 +56,7 @@ G4LogicalSkinSurface::G4LogicalSkinSurface(const G4String&   name,
 {
   // Store in the table of Surfaces
   //
-  theSurfaceTable.push_back(this);
+  theSkinSurfaceTable.push_back(this);
 }
 
 G4LogicalSkinSurface::G4LogicalSkinSurface(const G4LogicalSkinSurface& right)
@@ -65,7 +64,7 @@ G4LogicalSkinSurface::G4LogicalSkinSurface(const G4LogicalSkinSurface& right)
 {
   SetTransitionRadiationSurface(right.GetTransitionRadiationSurface());
   LogVolume = right.LogVolume;
-  theSurfaceTable = right.theSurfaceTable;
+  theSkinSurfaceTable = right.theSkinSurfaceTable;
 }
 
 G4LogicalSkinSurface::~G4LogicalSkinSurface()
@@ -86,7 +85,7 @@ G4LogicalSkinSurface::operator=(const G4LogicalSkinSurface& right)
     SetName(right.GetName());
     SetTransitionRadiationSurface(right.GetTransitionRadiationSurface());
     LogVolume = right.LogVolume;
-    theSurfaceTable = right.theSurfaceTable;
+    theSkinSurfaceTable = right.theSkinSurfaceTable;
   }
   return *this;
 }
@@ -107,18 +106,23 @@ G4LogicalSkinSurface::operator!=(const G4LogicalSkinSurface& right) const
 // Methods
 //
 
+const G4LogicalSkinSurfaceTable* G4LogicalSkinSurface::GetSurfaceTable()
+{
+  return &theSkinSurfaceTable;
+}
+
 size_t G4LogicalSkinSurface::GetNumberOfSkinSurfaces()
 {
-  return theSurfaceTable.size();
+  return theSkinSurfaceTable.size();
 }
 
 G4LogicalSkinSurface*
 G4LogicalSkinSurface::GetSurface(const G4LogicalVolume* vol)
 {
-  for (size_t i=0; i<theSurfaceTable.size(); i++)
+  for (size_t i=0; i<theSkinSurfaceTable.size(); i++)
   {
-    if(theSurfaceTable[i]->GetLogicalVolume() == vol)
-      return theSurfaceTable[i];
+    if(theSkinSurfaceTable[i]->GetLogicalVolume() == vol)
+      return theSkinSurfaceTable[i];
   }
   return NULL;
 }
@@ -127,13 +131,13 @@ G4LogicalSkinSurface::GetSurface(const G4LogicalVolume* vol)
 //
 void G4LogicalSkinSurface::DumpInfo() 
 {
-    G4cout << "***** Surface Table : Nb of Surfaces = "
+    G4cout << "***** Skin Surface Table : Nb of Surfaces = "
            << GetNumberOfSkinSurfaces() << " *****" << G4endl;
 
-    for (size_t i=0; i<theSurfaceTable.size(); i++)
+    for (size_t i=0; i<theSkinSurfaceTable.size(); i++)
     {
-      G4LogicalSkinSurface* pSkinSurface = theSurfaceTable[i];
-      G4cout << theSurfaceTable[i]->GetName() << " : " << G4endl
+      G4LogicalSkinSurface* pSkinSurface = theSkinSurfaceTable[i];
+      G4cout << pSkinSurface->GetName() << " : " << G4endl
              << " Skin of logical volume "
              << pSkinSurface->GetLogicalVolume()->GetName()
              << G4endl;
@@ -143,10 +147,10 @@ void G4LogicalSkinSurface::DumpInfo()
 
 void G4LogicalSkinSurface::CleanSurfaceTable()
 {  
-  std::vector<G4LogicalSkinSurface*>::iterator pos;
-  for(pos=theSurfaceTable.begin(); pos!=theSurfaceTable.end(); pos++)
+  G4LogicalSkinSurfaceTable::iterator pos;
+  for(pos=theSkinSurfaceTable.begin(); pos!=theSkinSurfaceTable.end(); pos++)
   {
     if (*pos) delete *pos;
   }
-  theSurfaceTable.clear();
+  theSkinSurfaceTable.clear();
 }

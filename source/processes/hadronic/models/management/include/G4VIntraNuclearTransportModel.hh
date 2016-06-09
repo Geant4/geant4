@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4VIntraNuclearTransportModel.hh,v 1.4 2007/01/11 05:29:46 dennis Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 // $Id: G4IntraNuclearTransportMode.hh,v 1.0 1998/06/30
 // -----------------------------------------------------------------------------

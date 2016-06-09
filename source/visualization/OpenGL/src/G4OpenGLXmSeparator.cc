@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4OpenGLXmSeparator.cc,v 1.5 2006/06/29 21:19:58 gunter Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 //Separator class. Inherits from G4OpenGLXmVWidgetComponent
 

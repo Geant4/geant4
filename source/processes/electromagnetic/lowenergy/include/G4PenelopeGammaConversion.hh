@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4PenelopeGammaConversion.hh,v 1.2 2006/06/29 19:36:25 gunter Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 // Author: L. Pandola
 //         

@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4VInteractorManager.cc,v 1.13 2006/06/29 19:10:24 gunter Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 // G.Barrand
 

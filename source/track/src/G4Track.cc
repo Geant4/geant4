@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Track.cc,v 1.29 2006/06/29 21:15:17 gunter Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: G4Track.cc,v 1.30 2007/10/02 00:46:21 kurasige Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 //
 //---------------------------------------------------------------
@@ -182,8 +182,10 @@ G4double G4Track::GetVelocity() const
        if ( this->GetStep() ){
 	  mat= this->GetMaterial();         //   Fix for repeated volumes
        }else{
-          mat=fpTouchable->GetVolume()->GetLogicalVolume()->GetMaterial();
-       }
+          if (fpTouchable!=0){ 
+            mat=fpTouchable->GetVolume()->GetLogicalVolume()->GetMaterial();
+          }
+        }
        // check if previous step is in the same volume
        //  and get new GROUPVELOVITY table if necessary 
        if ((mat != prev_mat)||(groupvel==0)) {

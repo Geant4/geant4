@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PrimaryParticle.cc,v 1.4 2006/10/01 02:29:43 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: G4PrimaryParticle.cc,v 1.5 2007/10/06 06:49:29 kurasige Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 
 #include "G4PrimaryParticle.hh"
@@ -165,19 +165,25 @@ void G4PrimaryParticle::Print() const
   else
   { G4cout << " is not defined in G4." << G4endl; }
   if(charge<DBL_MAX)
-  { G4cout << " Assigned charge : " << charge << G4endl; }
+  { G4cout << " Assigned charge : " << charge/eplus  << G4endl; }
   else
   { G4cout << " Charge will be taken from PDG charge." << G4endl; }
-  G4cout << "     Momentum ( " << Px << ", " << Py << ", " << Pz << " )" << G4endl;
+  G4cout << "     Momentum ( " 
+	 << Px/GeV << "[GeV/c], " 
+	 << Py/GeV << "[GeV/c], " 
+	 << Pz/GeV << "[GeV/c] )" << G4endl;
   if(mass>=0.)
-  { G4cout << "     Mass in MeV : " << mass/MeV << G4endl; }
+    { G4cout << "     Mass : " << mass/GeV << " [GeV]" << G4endl; }
   else
-  { G4cout << "     Nominal mass will be taken from particle definition." << G4endl; }
-  G4cout << "     Polarization ( " << polX << ", " << polY << ", "
-                                 << polZ << " )" << G4endl;
+    { G4cout << "     Nominal mass will be taken from particle definition." << G4endl; }
+  G4cout << "     Polarization ( " 
+	 << polX << ", " 
+	 << polY << ", "
+	 << polZ << " )" 
+	 << G4endl;
   G4cout << "     Weight : " << Weight0 << G4endl;
   if(properTime>0.0)
-  { G4cout << "     PreAssigned proper decay time : " << properTime/ns << " (nsec)" << G4endl; }
+  { G4cout << "     PreAssigned proper decay time : " << properTime/ns << " [ns] " << G4endl; }
   if(userInfo != 0) userInfo->Print();
   if(daughterParticle != 0)
   {

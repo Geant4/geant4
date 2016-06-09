@@ -1,4 +1,4 @@
-$Id: README,v 1.14 2006/11/22 18:56:20 vnivanch Exp $
+$Id: README,v 1.17 2007/12/04 12:06:28 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -34,26 +34,36 @@ $Id: README,v 1.14 2006/11/22 18:56:20 vnivanch Exp $
      defined via UI commands : /testem/det/tally...    
  	
  2- PHYSICS LIST
- 
-    Physics Lists are subdivided on 4 following modules:
-    1. "particles" - particle definitions  
-    2. "general" - decays and transportation  
 
-    The following options for EM physics are available:	 
-    - "standard"        the best standard EM physics (default)
-    - "G4standard"      recommended standard EM physics for LHC
-    - "G4standard_fast" the best CPU performance standard physics for LHC
-    - "Livermore"       low-energy EM physics using Livermore data
-    - "Penelope"        low-energy EM physics implementing Penelope models
+    The following EM physics lists are available in this example:	 
+    - "standard"     standard EM physics (default)
+    - "livermore"    low-energy EM physics using Livermore data
+    - "penelope"     low-energy EM physics implementing Penelope models
+    - "standardSS"   standard EM physics with single Coulomb scattering 
+                     instead of multiple scattering; G4ionIonisation is 
+                     substituted by G4ionGasIonisation for GenericIons
+    - "standardNR"   standard EM physics with single Coulomb scattering 
+                     process G4ScreenedNuclearRecoil instead of the 
+                     multiple scattering; the new process was developed 
+                     by M.H. Mendenhall and R.A. Weller from Vanderbuilt 
+                     University and published in NIM B 277 (2005) 420.
+                     In later Geant4 releases the process will be a part
+                     of Geant4 source, currently it is released together
+                     with its mathematical tool c2_functions in current 
+                     example
+    
+    Alternatively, the user may use predefined Geant4 builders:
+    - "emstandard"        G4EmStandardPhysics builder
+    - "emstandard_opt1"   G4EmStandardPhysics_option1 builder
+    - "emstandard_opt2"   G4EmStandardPhysics_option2 builder
+    See geant4/source/physics_lists/History for details        
 
     Optional components can be added:
     - "elastic"       elastic scattering of hadrons
+    - "HElastic"
+    - "QElastic"    
     - "binary"        QBBC configuration of hadron inelastic models
-    - "binary_ion"    Binary ion inelastic models
-    
-    Notice that there is an example of definition of a static ion : IonC12
-    (see PhysListParticle.cc) and an example of use : ionC12.mac
- 		
+    - "binary_ion"    Binary ion inelastic models 		
  	 
  3- AN EVENT : THE PRIMARY GENERATOR
  

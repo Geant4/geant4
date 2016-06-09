@@ -17,15 +17,15 @@
 // *                                                                  *
 // * This  code  implementation is the result of  the  scientific and *
 // * technical work of the GEANT4 collaboration and of QinetiQ Ltd,   *
-// * subject DEFCON 705 IPR conditions.                               *
+// * subject to DEFCON 705 IPR conditions.                            *
 // * By using,  copying,  modifying or  distributing the software (or *
 // * any work based  on the software)  you  agree  to acknowledge its *
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4TessellatedSolid.hh,v 1.7 2007/02/12 11:51:25 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: G4TessellatedSolid.hh,v 1.10 2007/12/10 16:30:13 gunter Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 //
@@ -121,6 +121,7 @@
 
 #include <iostream>
 #include <vector>
+#include <set>
 #include <map>
 
 class G4TessellatedSolid : public G4VSolid
@@ -147,6 +148,7 @@ class G4TessellatedSolid : public G4VSolid
 //                                  const G4VPhysicalVolume* pRep) const;
     
     virtual EInside Inside (const G4ThreeVector &p) const;
+    void SetRandomVectorSet ();
     virtual G4ThreeVector SurfaceNormal (const G4ThreeVector &p) const;
     virtual G4double DistanceToIn(const G4ThreeVector &p,
                                   const G4ThreeVector &v) const;
@@ -202,11 +204,13 @@ class G4TessellatedSolid : public G4VSolid
       // Create the List of transformed vertices in the format required
       // for G4VSolid:: ClipCrossSection and ClipBetweenSections.
 
-  private: 
+  private:
 
     mutable G4Polyhedron* fpPolyhedron;
 
     std::vector<G4VFacet *>  facets;
+    std::set<G4VFacet *>     extremeFacets; // Does all other facets lie
+                                            // on or behind this surface?
     G4GeometryType           geometryType;
     G4double                 cubicVolume;
     G4double                 surfaceArea;
@@ -219,7 +223,9 @@ class G4TessellatedSolid : public G4VSolid
     G4double                 zMaxExtent;
     G4bool                   solidClosed;
     
-    G4double                 dirTolerance;
+    G4double          dirTolerance;
+    G4ThreeVector     randir[20];
+    G4int             maxTries;
 };
 
 #endif

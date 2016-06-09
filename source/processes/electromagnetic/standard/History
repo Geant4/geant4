@@ -1,4 +1,4 @@
-$Id: History,v 1.316 2007/06/11 15:01:26 vnivanch Exp $
+$Id: History,v 1.360 2007/12/07 17:35:51 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,142 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+07 December 07: V.Ivant (emstand-V09-00-22)
+G4UrbanMscModel90 is created on base of G4UrbanMscModel of release 9.0
+G4hMultipleScattering uses G4UrbanMscModel90
+
+30 November 07: V.Ivant (emstand-V09-00-21)
+G4UrbanMscModel - L.Urban fix sign of mean scattering angle for 
+                  negatively changed particles
+
+29 November 07: V.Ivant (emstand-V09-00-20)
+G4UrbanMscModel - added extra protection in sampling of angle - no
+                  sampling if mean angle below tausmall
+
+28 November 07: V.Ivant (emstand-V09-00-19)
+G4UrbanMscModel - L.Urban added extra protection in sampling of angle 
+	          to avoid NaN 
+G4eCoulombScatteringModel - added a protection against precision lost
+
+22 November 07: V.Ivant (emstand-V09-00-18)
+G4UrbanMscModel - change parameter tausmall to avoid lost of numerical 
+                  precision and NaN values
+
+20 November 07: V.Ivant (emstand-V09-00-17)
+G4eCoulombScatteringModel - fixed crash happens at initialisation when 
+                            several elements with the same Z are defined
+
+11 November 07: V.Ivant (emstand-V09-00-16)
+G4eCoulombScatteringModel - fixed computation of transport cross section
+
+09 November 07: V.Ivant (emstand-V09-00-15)
+- G4ionIonisation, G4ionGasIonisation, G4CoulombScatteringModel:
+  fill NIEL energy deposit
+
+29 October 07: V.Ivant (emstand-V09-00-14)
+- G4UrbanMscModel (V.Ivanchenko) - fixed nan for heavy ions introduced 
+	                           in previous tag
+
+27 October 07: V.Ivant (emstand-V09-00-13)
+- G4eCoulombScatteringModel, G4CoulombScatteringModel use precomputed
+  Z^1/3 and log(A) values to speed up the code; revised nuclear size 
+  correction
+
+- G4UrbanMscModel (L.Urban):
+         - changed initialisation for ions - parameters are protected
+           from modification 
+         - use sampleScattering method instead of SampleSecondaries
+         - use different correction to Highland formula for different
+           particle type (electron, muons, others)
+         - tuning ComputeGeomPathLength in order to get better low 
+           energy behaviour for heavy particles (mu, hadrons)
+         - small modification of theta0 in ComputeTheta0 (based on data)
+         - some old inconsistency/bug has been cured in SampleCosineTheta
+           now the variable prob is always in [0,1]
+
+08 October 07: V.Ivant (emstand-V09-00-12)
+- G4eCoulombScatteringModel, G4CoulombScatteringModel  
+	- add cut dependence for scattering off electrons
+        - reorganized protected methods 
+
+02 October 07: V.Ivant (emstand-V09-00-11)
+G4eplusAnnihilation - enable AtRest
+G4PAIModel - general cleanup, fixed memory leak
+G4PAIySection - a new class which substitutes G4PAIxSection,
+                this class is free of memory leak
+
+27 Septamber 07: V.Ivant (emstand-V09-00-10)
+G4IonFluctuations - added dependence on cut in the formula of width on cut,
+  reduces cut dependence of Bragg peak width for ions; use Fermi energy
+  from G4Material
+G4BohrFluctuations - minor cleanup
+
+26 Septamber 07: V.Ivant (emstand-V09-00-09)
+G4PAIphotonModel, G4PAIModel - fixed MaxSecondaryEnergy method for
+  e- and e+ and use it for definition of max energy transfer;
+  added control on all cout by fVerbose;  
+
+28 August 07: V.Ivant (emstand-V09-00-08)
+- G4eCoulombScatteringModel - fixed compilation warning 
+
+15 August 07: V.Ivant (emstand-V09-00-07)
+- G4eCoulombScatteringModel and G4CoulombScatteringModel - fixed bug in 
+  computation of screening parameters in SampleSecondary method; 
+  reorganised initialisation of kinematics and screening parameters;
+  used Z(Z+1) factor to take into account scattering off e-
+
+13 August 07: V.Ivant (emstand-V09-00-06)
+- G4CoulombScatteringModel - fixed bug in kinematic of final state
+- G4ionIonisation - add protected methods BetheBlochEnergyThreshold()
+                    and NuclearStoppingFlag()
+- G4ionGasIonisation - added complete implementation of the method
+                       CorrectionsAlongStep() and do not call base class
+- G4UrbanMscModel - tail of angular distribution modified; compare (L.Urban) 
+                    safety with zero after lateral displacement (VI)
+
+02 August 07: V.Ivant (emstand-V09-00-05)
+-  G4UrbanMscModel - compare safety not with 0 but with tlimitminfix
+
+31 July 07: V.Ivant (emstand-V09-00-04)
+- G4CoulombScatteringModel - introduce energy threshold between models
+   with and without nuclear recoil
+- G4eCoulombScatteringModel - add array to cash screen parameters
+- G4CoulombScatteringModel - fix bug in SamplingSecondaries
+
+30 July 07: V.Ivant (emstand-V09-00-03)
+30 July 07: L.Urban
+-  G4UrbanMscModel - new, simpler model functions to describe the angular
+   distribution; theta0 of this distribution has been changed too (now 
+   the form of theta0 is the same as in the Highland formula, but the 
+   parameter values are different for e+/e- and the other (heavy) particles;
+   the change for the UseDistanseToBoundary case: tlimitmin = 10 stepmin;
+   some cosmetics in ComputeTruePathLengthLimit.
+
+28 July 07: V.Ivant (emstand-V09-00-02)
+- G4eCoulombScatteringModel - updated screen radius model
+- G4ionIonisation - remove obsolete method DefineMassCharge
+- G4ionGasIonisation - new ion ionisation process with descrete ion charge and
+                       no equilibrium btween ion and media 
+- G4BraggModel, G4BraggIonModel - more safe computation of scattering angle
+
+16 July 07: V.Ivant (emstand-V09-00-01)
+- G4CoulombScattering - update InitialiseProcess and PrintInfo methods 
+  to ensure parameters of models change between runs and more clear cout
+- G4eCoulombScatteringModel, G4CoulombScatteringModel - added nuclear size
+  effect; added separate simulation of scattering on atomic electrons taking
+  into account cuts; fixed cross section for compounds. 
+
+13 July 07: V.Ivant (emstand-V09-00-00)
+- G4UniversalFluctuation - added protection such that no sampling of
+  fluctuations is done if mean energy loss at the step is below minimal
+  excitation energy of the media. The fix is important for cases of
+  low-dense gases and very small steps.
+   
+19 June 07: V.Ivant (emstand-V08-03-10)
+- G4UrbanMscModel for skin > 0 use range instead of TrueStepLimit
+  for computation of distance to boundary, this provides stable
+  step limitation by GeomFactor (L.Urban)
 
 11 May 07: V.Ivant (emstand-V08-03-09)
 - G4MultipleScattering, G4hMultipleScattering - substitute name 

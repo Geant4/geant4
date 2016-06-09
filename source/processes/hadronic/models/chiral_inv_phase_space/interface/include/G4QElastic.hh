@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // $Id: G4QElastic.hh,v 1.3 2007/05/23 15:14:25 mkossov Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 //      ---------------- G4QElastic header ----------------
 //                 by Mikhail Kossov, December 2003.

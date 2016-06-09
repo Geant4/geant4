@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4GaussLegendreQ.cc,v 1.7 2006/06/29 19:00:16 gunter Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: G4GaussLegendreQ.cc,v 1.8 2007/11/13 17:35:06 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 #include "G4GaussLegendreQ.hh"
 
@@ -55,7 +55,7 @@ G4GaussLegendreQ::G4GaussLegendreQ( function pFunction,
       G4Exception("G4GaussLegendreQ::G4GaussLegendreQ()", "InvalidCall",
                   FatalException, "Invalid nLegendre argument !") ;
    }
-   G4double newton=0.0, newton1=0.0,
+   G4double newton0=0.0, newton1=0.0,
             temp1=0.0, temp2=0.0, temp3=0.0, temp=0.0 ;
 
    fAbscissa = new G4double[fNumber] ;
@@ -63,7 +63,7 @@ G4GaussLegendreQ::G4GaussLegendreQ( function pFunction,
       
    for(G4int i=1;i<=fNumber;i++)      // Loop over the desired roots
    {
-      newton = std::cos(pi*(i - 0.25)/(k + 0.5)) ;  // Initial root
+      newton0 = std::cos(pi*(i - 0.25)/(k + 0.5)) ;  // Initial root
       do                                            // approximation
       {               // loop of Newton's method               
          temp1 = 1.0 ;
@@ -72,16 +72,16 @@ G4GaussLegendreQ::G4GaussLegendreQ( function pFunction,
          {
             temp3 = temp2 ;
             temp2 = temp1 ;
-            temp1 = ((2.0*j - 1.0)*newton*temp2 - (j - 1.0)*temp3)/j ;
+            temp1 = ((2.0*j - 1.0)*newton0*temp2 - (j - 1.0)*temp3)/j ;
          }
-         temp = k*(newton*temp1 - temp2)/(newton*newton - 1.0) ;
-         newton1 = newton ;
-         newton  = newton1 - temp1/temp ;       // Newton's method
+         temp = k*(newton0*temp1 - temp2)/(newton0*newton0 - 1.0) ;
+         newton1 = newton0 ;
+         newton0 = newton1 - temp1/temp ;       // Newton's method
       }
-      while(std::fabs(newton - newton1) > tolerance) ;
+      while(std::fabs(newton0 - newton1) > tolerance) ;
 
-      fAbscissa[fNumber-i] =  newton ;
-      fWeight[fNumber-i] = 2.0/((1.0 - newton*newton)*temp*temp) ;
+      fAbscissa[fNumber-i] = newton0 ;
+      fWeight[fNumber-i] = 2.0/((1.0 - newton0*newton0)*temp*temp) ;
    }
 }
 

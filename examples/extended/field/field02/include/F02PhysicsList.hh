@@ -25,7 +25,7 @@
 //
 //
 // $Id: F02PhysicsList.hh,v 1.5 2007/05/23 13:40:14 tnikitin Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 
 #ifndef F02PhysicsList_h

@@ -29,7 +29,7 @@
 // Main author:   Riccardo Capra <capra@ge.infn.it>
 //
 // Id:            $Id: RadmonTDetectorVolumesWithGroundDecorator.hh,v 1.4 2006/06/29 16:12:28 gunter Exp $
-// Tag:           $Name: geant4-09-00 $
+// Tag:           $Name: geant4-09-01 $
 //
 // Description:   Decorates with a ground plane
 //                 - Constructor

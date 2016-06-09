@@ -24,12 +24,12 @@
 // ********************************************************************
 //
 //
-// $Id: G4CoulombBarrier.cc,v 1.6 2006/06/29 20:28:21 gunter Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: G4CoulombBarrier.cc,v 1.7 2007/11/15 17:10:51 ahoward Exp $
+// GEANT4 tag $Name: geant4-09-01 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Dec 1999)
-
+// modified barrier by JMQ (test30) by 14-11-07 
 
 #include "G4CoulombBarrier.hh"
 #include "G4HadronicException.hh"
@@ -59,7 +59,7 @@ G4bool G4CoulombBarrier::operator!=(const G4CoulombBarrier & ) const
 
 
 
-G4double G4CoulombBarrier::GetCoulombBarrier(const G4int ARes, const G4int ZRes, const G4double U) const 
+G4double G4CoulombBarrier::GetCoulombBarrier(const G4int ARes, const G4int ZRes, const G4double) const 
   // Calculation of Coulomb potential energy (barrier) for outgoing fragment
 {
   G4double Barrier = 0.0;
@@ -75,16 +75,34 @@ G4double G4CoulombBarrier::GetCoulombBarrier(const G4int ARes, const G4int ZRes,
   if (GetA() == 1 && GetZ() == 0) {
     Barrier = 0.0;   // Neutron Coulomb Barrier is 0
   } else {
-    G4double CompoundRadius = CalcCompoundRadius(static_cast<G4double>(ZRes));
-    Barrier = elm_coupling/CompoundRadius * static_cast<G4double>(GetZ())*static_cast<G4double>(ZRes)/
-      (std::pow(static_cast<G4double>(GetA()),1./3.) + std::pow(static_cast<G4double>(ARes),1./3.));
+
+// JMQ: old coulomb barrier commented since it does not agree with Dostrovski's prescription
+// and too low  barriers are obtained (for protons at least)
+// calculation of K penetration factor is correct
+//    G4double CompoundRadius = CalcCompoundRadius(static_cast<G4double>(ZRes));
+//    Barrier = elm_coupling/CompoundRadius * static_cast<G4double>(GetZ())*static_cast<G4double>(ZRes)/
+//      (std::pow(static_cast<G4double>(GetA()),1./3.) + std::pow(static_cast<G4double>(ARes),1./3.));
+
+///New coulomb Barrier according to original Dostrovski's paper 
+   G4double rho=1.2*fermi; 
+   if(GetA()==1 && GetZ()==1){  rho=0.0;}  
+
+   G4double RN=1.5*fermi;  
+Barrier=elm_coupling* static_cast<G4double>(GetZ())*static_cast<G4double>(ZRes)/(RN*std::pow(static_cast<G4double>(ARes),1./3.)+rho);
 
     // Barrier penetration coeficient
     G4double K = BarrierPenetrationFactor(ZRes);
-		
+
+
     Barrier *= K;
+//
+
+ 	
+
 		
-    Barrier /= (1.0 + std::sqrt(U/(2.0*static_cast<G4double>(ARes))));
+// JMQ : the following statement has unknown origin and dimensionally is meaningless( energy divided by mass number in argument of sqrt function). Energy dependence of Coulomb barrier penetrability should be included in proper way (if needed..)
+//   Barrier /= (1.0 + std::sqrt(U/(2.0*static_cast<G4double>(ARes))));
+//
   }
   return Barrier;
 }
