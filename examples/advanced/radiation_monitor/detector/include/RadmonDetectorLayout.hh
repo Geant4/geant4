@@ -29,7 +29,7 @@
 // Main author:   Riccardo Capra <capra@ge.infn.it>
 //
 // Id:            $Id: RadmonDetectorLayout.hh,v 1.4.2.2.4.1 2009/08/11 14:20:35 gcosmo Exp $
-// Tag:           $Name: geant4-09-02-patch-03 $
+// Tag:           $Name: geant4-09-02-patch-04 $
 //
 // Description:   Class to keep track of the configured detector layout
 //

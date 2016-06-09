@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // $Id: G4HadronElastic.cc,v 1.61.2.1 2010/01/26 15:03:49 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02-patch-03 $
+// GEANT4 tag $Name: geant4-09-02-patch-04 $
 //
 //
 // Physics model class G4HadronElastic (derived from G4LElastic)

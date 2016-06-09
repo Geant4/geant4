@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4VRangeToEnergyConverter.hh,v 1.4.4.2 2010/01/26 13:56:43 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02-patch-03 $
+// GEANT4 tag $Name: geant4-09-02-patch-04 $
 //
 //
 // ------------------------------------------------------------

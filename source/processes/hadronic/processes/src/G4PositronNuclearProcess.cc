@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4PositronNuclearProcess.cc,v 1.1.2.2 2009/08/11 14:36:30 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02-patch-03 $
+// GEANT4 tag $Name: geant4-09-02-patch-04 $
 //
 
 #include "G4PositronNuclearProcess.hh" 

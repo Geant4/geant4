@@ -12,6 +12,14 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+16-Jun-2010 Andrea Dotti                (hadr-chips-body-V09-01-05)
+-------------------------------------------------------------------
+- Fix in G4QEnvironment for a rare problem of anomalous event with high pT
+  jet observed in ATLAS, identified in a Gamma+A -> X reaction with gamma
+  energy of 2 GeV, for which at least one of the secondaries was created
+  with too much kinetic energy (up to 90 GeV).
+  Addresses problem report #1126 and relates only to 9.2 release series.
+
 31-Mar-2008 Dennis Wright               (hadr-chips-body-V09-01-04)
 -------------------------------------------------------------------
 - add more parentheses around && within || to satisfy gcc-4.3 compiler

@@ -33,7 +33,7 @@
 //    *******************************
 //
 // $Id: BrachyAnalysisManager.cc,v 1.20.2.1 2009/03/03 11:54:09 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02-patch-03 $
+// GEANT4 tag $Name: geant4-09-02-patch-04 $
 //
 #ifdef G4ANALYSIS_USE
 

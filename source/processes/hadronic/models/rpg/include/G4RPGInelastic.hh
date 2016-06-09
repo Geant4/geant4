@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // $Id: G4RPGInelastic.hh,v 1.3.2.1 2009/08/11 12:57:01 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02-patch-03 $
+// GEANT4 tag $Name: geant4-09-02-patch-04 $
 //
 // Author: D. H. Wright
 // Date:   26 May 2007

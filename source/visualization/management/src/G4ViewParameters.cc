@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4ViewParameters.cc,v 1.31.2.1 2009/03/13 09:02:57 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02-patch-03 $
+// GEANT4 tag $Name: geant4-09-02-patch-04 $
 //
 // 
 // John Allison  19th July 1996

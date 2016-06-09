@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // $Id: G4MagIntegratorStepper.hh,v 1.12.6.1 2009/08/11 13:44:36 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02-patch-03 $
+// GEANT4 tag $Name: geant4-09-02-patch-04 $
 //
 //
 // class G4MagIntegratorStepper

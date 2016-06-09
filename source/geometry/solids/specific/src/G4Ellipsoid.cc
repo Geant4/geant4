@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // $Id: G4Ellipsoid.cc,v 1.14.8.2 2010/01/26 11:33:53 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02-patch-03 $
+// GEANT4 tag $Name: geant4-09-02-patch-04 $
 //
 // class G4Ellipsoid
 //

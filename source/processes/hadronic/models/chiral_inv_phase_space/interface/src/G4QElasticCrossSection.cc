@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4QElasticCrossSection.cc,v 1.36.2.1 2010/01/26 15:26:52 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02-patch-03 $
+// GEANT4 tag $Name: geant4-09-02-patch-04 $
 //
 //
 // G4 Physics class: G4QElasticCrossSection for N+A elastic cross sections

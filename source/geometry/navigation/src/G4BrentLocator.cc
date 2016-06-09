@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // $Id: G4BrentLocator.cc,v 1.5.2.2 2009/08/11 13:31:19 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02-patch-03 $
+// GEANT4 tag $Name: geant4-09-02-patch-04 $
 //
 // Class G4BrentLocator implementation
 //

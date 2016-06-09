@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // $Id: G4GDMLReadDefine.cc,v 1.20.2.2 2010/01/26 13:39:58 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02-patch-03 $
+// GEANT4 tag $Name: geant4-09-02-patch-04 $
 //
 // class G4GDMLReadDefine Implementation
 //

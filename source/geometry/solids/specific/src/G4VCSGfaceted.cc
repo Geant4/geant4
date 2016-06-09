@@ -30,7 +30,7 @@
 // and all its terms.
 //
 // $Id: G4VCSGfaceted.cc,v 1.25.2.1 2009/08/11 09:20:32 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02-patch-03 $
+// GEANT4 tag $Name: geant4-09-02-patch-04 $
 //
 // 
 // --------------------------------------------------------------------

@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4VTouchable.cc,v 1.1.2.2 2010/01/26 08:19:41 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02-patch-03 $
+// GEANT4 tag $Name: geant4-09-02-patch-04 $
 //
 // 
 // class G4VTouchable implementation

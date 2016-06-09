@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4EqEMFieldWithSpin.cc,v 1.4.2.2 2010/01/25 11:30:34 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02-patch-03 $
+// GEANT4 tag $Name: geant4-09-02-patch-04 $
 //
 //
 //  This is the standard right-hand side for equation of motion.

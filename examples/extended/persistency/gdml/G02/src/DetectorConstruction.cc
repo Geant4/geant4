@@ -25,7 +25,7 @@
 //
 //
 // $Id: DetectorConstruction.cc,v 1.4.2.1 2009/03/03 13:50:54 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02-patch-03 $
+// GEANT4 tag $Name: geant4-09-02-patch-04 $
 //
 // Class DetectorConstruction implementation
 //

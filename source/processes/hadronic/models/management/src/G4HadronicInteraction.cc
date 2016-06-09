@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // $Id: G4HadronicInteraction.cc,v 1.3.4.1 2009/03/03 11:26:45 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02-patch-03 $
+// GEANT4 tag $Name: geant4-09-02-patch-04 $
 //
 // Hadronic Interaction  base class
 // original by H.P. Wellisch

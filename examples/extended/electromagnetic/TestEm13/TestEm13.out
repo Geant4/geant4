@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-02-patch-03-ref    (29-January-2010)
+ Geant4 version Name: geant4-09-02-patch-04-ref    (16-September-2010)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -291,7 +291,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100000
-  User=0.91s Real=0.92s Sys=0s
+  User=0.94s Real=0.93s Sys=0s
 
  The run consists of 100000 gamma of 100 keV through 1 cm  of Water (density: 1 g/cm3 )
 
@@ -360,7 +360,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100000
-  User=0.91s Real=0.9s Sys=0s
+  User=1.02s Real=1.03s Sys=0s
 
  The run consists of 100000 e- of 100 MeV through 1 cm  of Water (density: 1 g/cm3 )
 

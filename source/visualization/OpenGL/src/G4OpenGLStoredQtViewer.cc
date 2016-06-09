@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4OpenGLStoredQtViewer.cc,v 1.20.2.1 2009/03/13 09:02:57 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02-patch-03 $
+// GEANT4 tag $Name: geant4-09-02-patch-04 $
 //
 //
 // Class G4OpenGLStoredQtViewer : a class derived from G4OpenGLQtViewer and

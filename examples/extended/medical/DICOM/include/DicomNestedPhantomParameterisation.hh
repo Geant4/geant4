@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // $Id: DicomNestedPhantomParameterisation.hh,v 1.2.4.1 2009/03/03 13:43:58 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02-patch-03 $
+// GEANT4 tag $Name: geant4-09-02-patch-04 $
 //
 // --------------------------------------------------------------------
 #ifndef DICOMNESTEDPARAMETERISATION_HH

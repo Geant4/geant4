@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4PSSphereSurfaceFlux.cc,v 1.1.4.2 2010/01/25 10:14:16 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02-patch-03 $
+// GEANT4 tag $Name: geant4-09-02-patch-04 $
 //
 // G4PSSphereSurfaceFlux
 #include "G4PSSphereSurfaceFlux.hh"

@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-02-patch-03-ref    (29-January-2010)
+ Geant4 version Name: geant4-09-02-patch-04-ref    (16-September-2010)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -366,6 +366,6 @@ Stage 1->2 : 1 isolated muon found.
 Run terminated.
 Run Summary
   Number of events processed : 3
-  User=2.57s Real=2.59s Sys=0s
+  User=2.49s Real=2.5s Sys=0s
 G4 kernel has come to Quit state.
 

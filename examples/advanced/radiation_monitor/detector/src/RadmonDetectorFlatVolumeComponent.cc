@@ -29,7 +29,7 @@
 // Main author:   Riccardo Capra <capra@ge.infn.it>
 //
 // Id:            $Id: RadmonDetectorFlatVolumeComponent.cc,v 1.2.2.2.4.1 2009/08/11 14:20:35 gcosmo Exp $
-// Tag:           $Name: geant4-09-02-patch-03 $
+// Tag:           $Name: geant4-09-02-patch-04 $
 //
 
 // Include files

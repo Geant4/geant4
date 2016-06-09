@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4PSSphereSurfaceCurrent.cc,v 1.2.4.2 2010/01/25 10:14:16 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02-patch-03 $
+// GEANT4 tag $Name: geant4-09-02-patch-04 $
 //
 // G4PSSphereSurfaceCurrent
 #include "G4PSSphereSurfaceCurrent.hh"

@@ -1,0 +1,43 @@
+
+                 Geant4 9.2 - patch-04 Release Notes
+                 -----------------------------------
+
+                                                            16 September 2010
+
+List of fixes included in this public patch since the public release 9.2.p03:
+
+  o Hadronic Processes:
+    ------------------
+    + models/cascade:
+      o Fix for long-standing problem of energy non conservation in pion-nuclear
+        reaction on very light nuclei (in particular He) in G4CascadeInterface.
+        The workaround re-samples the interaction in the rare case when an
+        unphysical final state with baryon number violation is generated.
+    + models/CHIPS:
+      o Fix in G4QEnvironment for a rare problem of anomalous event with high
+        pT jet observed in ATLAS, identified in a Gamma+A -> X reaction with
+        gamma energy of 2 GeV, for which at least one of the secondaries was
+        created with too much kinetic energy (up to 90 GeV).
+        Addresses problem report #1126 and relates only to 9.2 release series.
+      o Fix in G4ChiralInvariantPhaseSpace to catch previously un-handled
+        exceptions produced when a 'chipolino' pseudo-particle is produced by
+        the model and thrown by Q4QEnvironment::Fragment; handles the case in
+        which Q4QEnvironment returns a 90000000 fragment, and converts it to
+        a gamma. Addressing problem report #1138.
+
+ ----------------------------------------------------------------------------
+
+                             Technical Notes
+                             --------------- 
+
+  o  This is a cumulative patch and can be applied on top of release 9.2,
+     9.2.p01, 9.2.p02 or 9.2.p03.
+  o  Technical notes distributed for release 9.2 are also applicable and
+     valid for this patch.
+
+The code and rebuilt binary libraries for release 9.2 are available
+through our "Download" Web page.
+
+Please refer to the Geant4 User Documentation:
+   http://cern.ch/geant4/support/userdocuments.shtml
+for further information about using Geant4.

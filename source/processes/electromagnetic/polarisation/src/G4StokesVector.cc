@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // $Id: G4StokesVector.cc,v 1.3.4.2 2010/01/26 16:36:05 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02-patch-03 $
+// GEANT4 tag $Name: geant4-09-02-patch-04 $
 //
 // GEANT4 Class file
 //

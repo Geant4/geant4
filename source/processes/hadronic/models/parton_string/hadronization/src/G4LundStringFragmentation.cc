@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4LundStringFragmentation.cc,v 1.13.2.1 2009/08/11 13:05:47 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02-patch-03 $ 1.8
+// GEANT4 tag $Name: geant4-09-02-patch-04 $ 1.8
 //
 // -----------------------------------------------------------------------------
 //      GEANT 4 class implementation file

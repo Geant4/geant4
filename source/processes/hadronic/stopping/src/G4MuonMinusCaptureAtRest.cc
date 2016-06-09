@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // $Id: G4MuonMinusCaptureAtRest.cc,v 1.53.2.1 2009/03/03 13:36:32 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02-patch-03 $
+// GEANT4 tag $Name: geant4-09-02-patch-04 $
 //
 //   G4MuonMinusCaptureAtRest physics process
 //   Larry Felawka (TRIUMF) and Art Olin (TRIUMF)

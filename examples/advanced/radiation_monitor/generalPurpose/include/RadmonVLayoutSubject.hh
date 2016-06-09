@@ -29,7 +29,7 @@
 // Main author:   Riccardo Capra <capra@ge.infn.it>
 //
 // Id:            $Id: RadmonVLayoutSubject.hh,v 1.2.2.2.4.1 2009/08/11 14:20:35 gcosmo Exp $
-// Tag:           $Name: geant4-09-02-patch-03 $
+// Tag:           $Name: geant4-09-02-patch-04 $
 //
 // Description:   Subject class of the observer-subjectmodel for the detector
 //                layout

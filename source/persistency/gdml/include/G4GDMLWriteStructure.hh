@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4GDMLWriteStructure.hh,v 1.34.2.1 2009/08/11 08:27:49 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02-patch-03 $
+// GEANT4 tag $Name: geant4-09-02-patch-04 $
 //
 //
 // class G4GDMLWriteStructure

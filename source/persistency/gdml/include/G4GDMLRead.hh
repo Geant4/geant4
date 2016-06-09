@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4GDMLRead.hh,v 1.26.2.1 2009/03/03 10:55:46 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02-patch-03 $
+// GEANT4 tag $Name: geant4-09-02-patch-04 $
 //
 // class G4GDMLRead
 //

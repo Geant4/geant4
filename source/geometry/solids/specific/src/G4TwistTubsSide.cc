@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4TwistTubsSide.cc,v 1.5.10.1 2010/01/26 11:33:53 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02-patch-03 $
+// GEANT4 tag $Name: geant4-09-02-patch-04 $
 //
 // 
 // --------------------------------------------------------------------

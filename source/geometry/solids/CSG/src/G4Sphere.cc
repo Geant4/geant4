@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4Sphere.cc,v 1.68.2.1 2009/08/18 15:46:31 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02-patch-03 $
+// GEANT4 tag $Name: geant4-09-02-patch-04 $
 //
 // class G4Sphere
 //

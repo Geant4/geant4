@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // $Id: G4ErrorMagFieldLimitProcess.cc,v 1.2.4.1 2010/01/25 10:22:27 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02-patch-03 $
+// GEANT4 tag $Name: geant4-09-02-patch-04 $
 //
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file 
