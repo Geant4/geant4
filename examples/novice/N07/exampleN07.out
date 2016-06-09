@@ -1,5 +1,5 @@
 **********************************************
- Geant4 version $Name: geant4-05-02 $
+ Geant4 version $Name:  $
                                 (27-June-2003)
              Copyright : Geant4 Collaboration
 **********************************************
@@ -129,7 +129,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=10.55s Real=12.75s Sys=1.82s
+  User=10.33s Real=12.26s Sys=1.74s
 ############################################################
  Run Summary - Number of events : 10
 ############################################################
@@ -323,7 +323,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=10.56s Real=12.95s Sys=2.04s
+  User=10.31s Real=12.29s Sys=1.98s
 ############################################################
  Run Summary - Number of events : 10
 ############################################################
@@ -516,7 +516,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=2.55s Real=2.99s Sys=0.43s
+  User=2.34s Real=2.93s Sys=0.59s
 ############################################################
  Run Summary - Number of events : 10
 ############################################################
@@ -740,7 +740,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=10.84s Real=13.98s Sys=3.12s
+  User=10.56s Real=14.8s Sys=3.39s
 ############################################################
  Run Summary - Number of events : 10
 ############################################################

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4StatMFMicroPartition.cc,v 1.17 2003/06/16 17:06:47 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4StatMFMicroPartition.cc,v 1.18 2003/06/30 07:44:00 gcosmo Exp $
+// GEANT4 tag $Name: ghad-deex-V05-02-00 $
 //
 // by V. Lara
 // --------------------------------------------------------------------
@@ -77,8 +77,7 @@ void G4StatMFMicroPartition::CoulombFreeEnergy(const G4double anA)
 	_theCoulombFreeEnergy.push_back(CoulombConstFactor*(theZ/theA)*(theZ/theA));
     } else if (anA == 2 || anA == 3 || anA == 4) {
 	// Z/A ~ 1/2
-	_theCoulombFreeEnergy.push_back(CoulombConstFactor*0.5*
-					pow(anA,5./3.));
+	_theCoulombFreeEnergy.push_back(CoulombConstFactor*0.5*pow(anA,5./3.));
     } else { // anA > 4
 	_theCoulombFreeEnergy.push_back(CoulombConstFactor*(theZ/theA)*(theZ/theA)*
 					pow(anA,5./3.));	
@@ -93,15 +92,13 @@ G4double G4StatMFMicroPartition::GetCoulombEnergy(void)
 	pow(1.0+G4StatMFParameters::GetKappaCoulomb(),1.0/3.0);	
 			
     G4double CoulombEnergy = elm_coupling*(3./5.)*theZ*theZ*CoulombFactor/
-	(G4StatMFParameters::Getr0()*pow(theA,1./3.));
-									
-									
+	(G4StatMFParameters::Getr0()*pow(static_cast<G4double>(theA),1./3.));
+	
     for (unsigned int i = 0; i < _thePartition.size(); i++) 
 	CoulombEnergy += _theCoulombFreeEnergy[i] - elm_coupling*(3./5.)*
-	    (theZ/theA)*(theZ/theA)*pow(_thePartition[i],5./3.)/
+	    (theZ/theA)*(theZ/theA)*pow(static_cast<G4double>(_thePartition[i]),5./3.)/
 	    G4StatMFParameters::Getr0();
-									
-			
+		
     return CoulombEnergy;
 }
 
@@ -152,7 +149,7 @@ G4double G4StatMFMicroPartition::GetPartitionEnergy(const G4double T)
 					
 		// Surface term
 		(G4StatMFParameters::Beta(T) - T*G4StatMFParameters::DBetaDT(T))*
-		pow(_thePartition[i],2./3.) +
+		pow(static_cast<G4double>(_thePartition[i]),2./3.) +
 					
 		// Coulomb term 
 		_theCoulombFreeEnergy[i];
@@ -161,7 +158,7 @@ G4double G4StatMFMicroPartition::GetPartitionEnergy(const G4double T)
     }
 	
     PartitionEnergy += elm_coupling*(3./5.)*theZ*theZ*CoulombFactor/
-	(G4StatMFParameters::Getr0()*pow(theA,1./3.))
+	(G4StatMFParameters::Getr0()*pow(static_cast<G4double>(theA),1./3.))
 	+ (3./2.)*T*(_thePartition.size()-1);
 							 
     return PartitionEnergy;
@@ -251,8 +248,9 @@ G4double G4StatMFMicroPartition::CalcPartitionProbability(const G4double U,
 					2.0*T*_thePartition[i]/InvLevelDensity(_thePartition[i]);
 	// interaction entropy for Af > 4
 	else if (_thePartition[i] > 4) PartitionEntropy += 
-					   2.0*T*_thePartition[i]/InvLevelDensity(_thePartition[i]) -
-					   G4StatMFParameters::DBetaDT(T)*pow(_thePartition[i],2.0/3.0);
+					   2.0*T*_thePartition[i]/InvLevelDensity(_thePartition[i])
+					   - G4StatMFParameters::DBetaDT(T)
+                                           * pow(static_cast<G4double>(_thePartition[i]),2.0/3.0);
     }
 	
     // Thermal Wave Lenght = sqrt(2 pi hbar^2 / nucleon_mass T)
@@ -260,7 +258,8 @@ G4double G4StatMFMicroPartition::CalcPartitionProbability(const G4double U,
     ThermalWaveLenght3 = ThermalWaveLenght3*ThermalWaveLenght3*ThermalWaveLenght3;
 	
     // Translational Entropy
-    G4double kappa = (1. + elm_coupling*(pow(_thePartition.size(),1./3.)-1.0)/(G4StatMFParameters::Getr0()*pow(theA,1./3.)));
+    G4double kappa = (1. + elm_coupling*(pow(static_cast<G4double>(_thePartition.size()),1./3.)-1.0)
+                                        /(G4StatMFParameters::Getr0()*pow(static_cast<G4double>(theA),1./3.)));
     kappa = kappa*kappa*kappa;
     kappa -= 1.;
     G4double V0 = (4./3.)*pi*theA*G4StatMFParameters::Getr0()*G4StatMFParameters::Getr0()*

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4StatMFMacroTetraNucleon.cc,v 1.12 2003/05/30 13:23:26 hpw Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4StatMFMacroTetraNucleon.cc,v 1.13 2003/06/30 07:43:59 gcosmo Exp $
+// GEANT4 tag $Name: ghad-deex-V05-02-00 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara
@@ -77,7 +77,7 @@ G4double G4StatMFMacroTetraNucleon::CalcMeanMultiplicity(const G4double FreeVol,
     const G4double BindingE = G4NucleiPropertiesTable::GetBindingEnergy(2,theA); //old value was 30.11*MeV
 	
     G4double exponent = (BindingE + theA*(mu+nu*theZARatio+T*T/_InvLevelDensity) - 
-			 Coulomb*theZARatio*theZARatio*pow(theA,5./3.))/T;
+			 Coulomb*theZARatio*theZARatio*pow(static_cast<G4double>(theA),5./3.))/T;
     if (exponent > 700.0) exponent = 700.0;
     
     _MeanMultiplicity = ( degeneracy*FreeVol* static_cast<G4double>(theA)* 

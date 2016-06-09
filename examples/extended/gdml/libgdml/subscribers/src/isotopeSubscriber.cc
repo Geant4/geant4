@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: isotopeSubscriber.cc,v 1.3 2002/06/03 12:09:35 radoone Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: isotopeSubscriber.cc,v 1.4 2003/07/04 14:55:41 gcosmo Exp $
+// GEANT4 tag $Name: exgdml-V05-02-00 $
 //
 // 
 // --------------------------------------------------------------
@@ -74,8 +74,8 @@ public:
 
           GDMLExpressionEvaluator* calc = GDMLProcessor::GetInstance()->GetEvaluator();
           // The big moment, we're gonna create an isotope
-          double z = calc->Eval( obj->get_Z() );
-          double n = calc->Eval( obj->get_N() );
+          int z = static_cast<int>(calc->Eval( obj->get_Z() ));
+          int n = static_cast<int>(calc->Eval( obj->get_N() ));
           std::string sA = obj->get_atom().get_value();
           sA += "*";
           sA += obj->get_atom().get_unit();

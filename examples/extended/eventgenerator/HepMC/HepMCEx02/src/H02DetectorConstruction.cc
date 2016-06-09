@@ -22,7 +22,7 @@
 
 // ====================================================================
 //    H02DetectorConstruction.cc
-//    $Id: H02DetectorConstruction.cc,v 1.1 2002/05/28 14:15:46 murakami Exp $
+//    $Id: H02DetectorConstruction.cc,v 1.2 2003/07/04 09:34:01 gcosmo Exp $
 //
 // ====================================================================
 #include "H02DetectorConstruction.hh"
@@ -130,10 +130,6 @@ G4VPhysicalVolume* H02DetectorConstruction::Construct()
   density= 1.782e-03*g/cm3;
   G4Material* Ar= new G4Material(name="ArgonGas", z=18., a, density);
 
-  a= 28.09*g/mole;
-  density= 2.33*g/cm3;
-  G4Material* Silicon= new G4Material(name="Silicon", z=14., a, density);
-
   density= 1.032*g/cm3;
   G4Material* Scinti= new G4Material(name="Scintillator", density, nel=2);
   Scinti-> AddElement(elC, 9);
@@ -182,16 +178,16 @@ G4VPhysicalVolume* H02DetectorConstruction::Construct()
   barrelCalLV-> SetVisAttributes(calVisAtt);
   endcapCalLV-> SetVisAttributes(calVisAtt);
 
-  G4PVPlacement* barrelCal= 
+  // G4PVPlacement* barrelCal= 
     new G4PVPlacement(0, G4ThreeVector(), "BARREL_CAL_PV",
 		      barrelCalLV, expHall, FALSE, 0);
 
   G4ThreeVector posCal(0.,0.,6.*m);
-  G4PVPlacement* endcapCal1= 
+  // G4PVPlacement* endcapCal1= 
     new G4PVPlacement(0, posCal, "ENDCAP_CAL_PV",
 		      endcapCalLV, expHall, FALSE, 0);
 
-  G4PVPlacement* endcapCal2= 
+  //G4PVPlacement* endcapCal2= 
     new G4PVPlacement(0, -posCal, "ENDCAP_CAL_PV",
 		      endcapCalLV, expHall, FALSE, 1);
 
@@ -219,7 +215,6 @@ G4VPhysicalVolume* H02DetectorConstruction::Construct()
   G4RotationMatrix* rotM= new G4RotationMatrix;
   rotM->rotateZ(90.*deg);
 
-  G4RotationMatrix* rotMDA= new G4RotationMatrix;
   for (G4int k=0; k<8; k++) {
     G4Transform3D transformM(*rotM, posM);
     new G4PVPlacement(transformM, "BARREL_MUON_PV",
@@ -229,11 +224,11 @@ G4VPhysicalVolume* H02DetectorConstruction::Construct()
   }
 
   G4ThreeVector posMuon(0.,0.,8.*m);
-  G4PVPlacement* endcapMuon1= 
+  // G4PVPlacement* endcapMuon1= 
     new G4PVPlacement(0, posMuon, "ENDCAP_MUON_PV",
 		      endcapMuonLV, expHall, FALSE, 0);
 
-  G4PVPlacement* endcapMuon2= 
+  // G4PVPlacement* endcapMuon2= 
     new G4PVPlacement(0, -posMuon, "ENDCAP_MUON_PV",
 		      endcapMuonLV, expHall, FALSE, 1);
 

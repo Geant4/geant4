@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: ExN02TrackerHit.hh,v 1.1 2002/03/05 15:21:58 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: ExN02TrackerHit.hh,v 1.2 2003/07/04 15:36:50 gcosmo Exp $
+// GEANT4 tag $Name: exparallel-V05-02-00 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -45,7 +45,7 @@ class ExN02TrackerHit : public G4VHit
      ~ExN02TrackerHit();
       ExN02TrackerHit(const ExN02TrackerHit&);
       const ExN02TrackerHit& operator=(const ExN02TrackerHit&);
-      int operator==(const ExN02TrackerHit&) const;
+      G4int operator==(const ExN02TrackerHit&) const;
 
       inline void* operator new(size_t);
       inline void  operator delete(void*);

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Transportation.hh,v 1.7 2002/08/29 15:32:00 dressel Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4Transportation.hh,v 1.8 2003/06/25 15:32:12 japost Exp $
+// GEANT4 tag $Name: transport-V05-02-00 $
 //
 // 
 // ------------------------------------------------------------
@@ -57,7 +57,7 @@ class G4Transportation : public G4VProcess
   // Concrete class that does the geometrical transport 
 
   public:
-     G4Transportation();
+     G4Transportation( G4int verbosityLevel= 1);
      ~G4Transportation(); 
 
      //  G4double          GetContinuousStepLimit  (
@@ -94,6 +94,10 @@ class G4Transportation : public G4VProcess
      G4PropagatorInField* GetPropagatorInField();
      void SetPropagatorInField( G4PropagatorInField* pFieldPropagator);
 
+     // Level of warnings regarding eg energy conservation in field integration
+     void   SetVerboseLevel( G4int verboseLevel );
+     G4int  GetVerboseLevel() const;
+
      //  no operation in  AtRestDoIt
      G4double AtRestGetPhysicalInteractionLength(
                              const G4Track& ,
@@ -105,6 +109,8 @@ class G4Transportation : public G4VProcess
 			     const G4Track& ,
 			     const G4Step&
 			    ) {return NULL;};
+  
+
   protected:
      //  Checks whether a field exists for the "global" field manager.
      G4bool               DoesGlobalFieldExist();
@@ -133,16 +139,8 @@ class G4Transportation : public G4VProcess
      
      // Whether a magnetic field exists ...
      // G4bool         fFieldExists;
-     //   The above data member is problematic: it is useful only if
-     // it is initialised.  However the transportation process(es) are not
-     // capable of doing this initialisation itself (themselves) and there
-     // seems no alternative agent capable of doing it right now.
-     // Eg, at construction time it is likely that the field manager has
-     // not yet been informed about the detector's field 
-     // I cannot foresee how the transportation can be informed later. JA 
-     //   The current answer is to ignore this data member and use 
-     // the member function DoesGlobalFieldExist() in its place ...
-     //    John Apostolakis, July 7, 1997
+     //   A data member for this is problematic: it is useful only if it
+     //   can be initialised and updated -- and a scheme is not yet possible.
 
      // Flag to determine whether a boundary was reached.
      G4bool fGeometryLimitedStep;
@@ -155,6 +153,10 @@ class G4Transportation : public G4VProcess
      G4ParticleChangeForTransport fParticleChange;
 
      G4double endpointDistance;
+
+     // Verbosity level for warnings 
+     //    eg about energy non-conservation in magnetic field
+     G4int    fVerboseLevel;
 };
 
 

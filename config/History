@@ -1,5 +1,5 @@
-$Id: History,v 1.218 2003/06/26 07:54:59 gcosmo Exp $
-$Name: geant4-05-02 $
+$Id: History,v 1.219 2003/07/01 14:35:32 gcosmo Exp $
+$Name: config-V05-02-00 $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+1st July 2003  Gabriele Cosmo (config-V05-02-00)
+- WIN32-VC.gmk, WIN32-VC7.gmk:
+  o reinstated options "-D_CONSOLE -D_WIN32 -DOS" to allow correct
+    treatment/opening of data files from applications.
 
 24th June 2003  Gabriele Cosmo (config-V05-01-05)
 - Added UI32LIBS to interactivity.gmk to handle UI libraries on WIN32

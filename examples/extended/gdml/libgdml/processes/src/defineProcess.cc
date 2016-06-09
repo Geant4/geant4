@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: defineProcess.cc,v 1.3 2002/06/03 12:09:32 radoone Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: defineProcess.cc,v 1.4 2003/07/04 14:55:38 gcosmo Exp $
+// GEANT4 tag $Name: exgdml-V05-02-00 $
 //
 // 
 // --------------------------------------------------------------
@@ -58,7 +58,7 @@ public:
   }
 
   // Analogical to SAX startElement callback
-  virtual void StartElement( const std::string& name, const ASCIIAttributeList& attrs ) {
+  virtual void StartElement( const std::string&, const ASCIIAttributeList& ) {
     //std::cout << "PROCESS::START OF TAG  : " << name << std::endl;
 
     SAXObject** obj = Context()->GetTopObject();
@@ -67,7 +67,7 @@ public:
   }
 
   // Analogical to SAX endElement callback
-  virtual void EndElement( const std::string& name ) {
+  virtual void EndElement( const std::string& ) {
     //std::cout << "PROCESS::END OF TAG  : " << name << std::endl;
     try
     {
@@ -89,7 +89,7 @@ public:
   }
 
   // Analogical to SAX characters callback, it's called for ignorableWhitespace too!
-  virtual void Characters( const std::string& name )
+  virtual void Characters( const std::string& )
   {
     // Irrelevant in this process
   }

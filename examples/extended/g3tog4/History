@@ -1,12 +1,12 @@
-$Id: History,v 1.2 2003/07/04 15:36:51 gcosmo Exp $
+$Id: History,v 1.1 2003/07/04 15:59:37 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
      Geant4 - an Object-Oriented Toolkit for Simulation in HEP
      =========================================================
 
-                    Example ParN04 History file
-                    ---------------------------
+                    g3tog4 examples History file
+                    ----------------------------
 This file should be used by the G4 example coordinator to briefly
 summarize all major modifications introduced in the code and keep
 track of all tags.
@@ -15,12 +15,12 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-July 4th, 2003  G.Cosmo
+July 4th, 2003  G.Cosmo (g3tog4Tests-V05-02-00)
 -----------------------
 - Cleared pedantic compilation warnings ...
 
-March 5th, 2002  G.Cosmo - ParN04-V04-00-00
+July 24th, 2000  G.Cosmo (g3tog4Tests-V02-00-00)
 ------------------------
-- Created from original version of Gene Cooperman.
-  Parallel version of example/novice/N04.
+- Moved tests from source/g3tog4/test and adapted to default
+  build mechanism
 

@@ -23,7 +23,7 @@
 // ====================================================================
 //
 //   H02MuonHit.hh
-//   $Id: H02MuonHit.hh,v 1.1 2002/05/28 14:10:52 murakami Exp $
+//   $Id: H02MuonHit.hh,v 1.2 2003/07/04 09:34:00 gcosmo Exp $
 //
 // ====================================================================
 #ifndef H02_MUON_HIT_H
@@ -50,7 +50,7 @@ public:
 
   H02MuonHit(const H02MuonHit& right);
   const H02MuonHit& operator=(const H02MuonHit& right);
-  int operator==(const H02MuonHit& right) const;
+  G4int operator==(const H02MuonHit& right) const;
   
   void* operator new(size_t);
   void operator delete(void* aHit);

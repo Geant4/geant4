@@ -23,7 +23,7 @@
 // ====================================================================
 //
 //   H02EventAction.cc
-//   $Id: H02EventAction.cc,v 1.1 2002/05/28 14:15:46 murakami Exp $
+//   $Id: H02EventAction.cc,v 1.2 2003/07/04 09:34:01 gcosmo Exp $
 //
 // ====================================================================
 #include "H02EventAction.hh"
@@ -55,6 +55,7 @@ H02EventAction::~H02EventAction()
 void H02EventAction::BeginOfEventAction(const G4Event* anEvent)
 //////////////////////////////////////////////////////////////
 {
+  const G4Event* ev = anEvent; ev=0;
 #ifdef DEBUG_HEPMC
   // printout primary information
   G4cout << "Print out primary information" << G4endl;
@@ -68,7 +69,7 @@ void H02EventAction::BeginOfEventAction(const G4Event* anEvent)
 }
 
 ////////////////////////////////////////////////////////////
-void H02EventAction::EndOfEventAction(const G4Event* anEvent)
+void H02EventAction::EndOfEventAction(const G4Event*)
 ////////////////////////////////////////////////////////////
 {
   G4cout << " Print out hit information" << G4endl;

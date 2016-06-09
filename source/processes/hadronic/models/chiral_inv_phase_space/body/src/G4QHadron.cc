@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4QHadron.cc,v 1.25 2002/12/12 19:14:34 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4QHadron.cc,v 1.25.6.1 2003/08/25 17:30:03 mkossov Exp $
+// GEANT4 tag $Name: ghad-chips-body-V05-02-00 $
 //
 //      ---------------- G4QHadron ----------------
 //             by Mikhail Kossov, Sept 1999.
@@ -457,6 +457,16 @@ G4bool G4QHadron::DecayIn3(G4LorentzVector& f4Mom,G4LorentzVector& s4Mom,G4Loren
     G4cerr<<"***G4QHadron::DecayIn3:fM="<<fM<<" + sM="<<sM<<" + tM="<<tM<<" > iM="<<iM<<",d="
           <<iM-fM-sM-tM<<G4endl;
     return false;
+  }
+  else if (iM<.001+fM+sM+tM)
+  {
+    G4double fR=fM/iM;
+    G4double sR=sM/iM;
+    G4double tR=tM/iM;
+    f4Mom=fR*theMomentum;
+    s4Mom=sR*theMomentum;
+    t4Mom=tR*theMomentum;
+    return true;
   }
   G4double fM2 = fM*fM;
   G4double sM2 = sM*sM;

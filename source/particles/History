@@ -1,4 +1,4 @@
-$Id: History,v 1.91 2003/06/19 13:24:08 gcosmo Exp $
+$Id: History,v 1.93 2003/08/12 02:30:20 asaim Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+- Aug 11, 2003  M.Asai (particles-V05-02-00)
+- Add one void pointer to G4DynamicParticle for the sake of maintaining links between
+  pre-assigned decay products and corresponding primary particle. This pointer is used
+  by G4EventManager.
 
 - June 19, 2003  V.Ivantchenko
 - G4DynamicParticle.cc: use condition m^2<0.001MeV^2 to identify massless

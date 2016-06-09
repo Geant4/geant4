@@ -1,4 +1,4 @@
-$Id: History,v 1.17 2003/06/18 08:25:25 gcosmo Exp $
+$Id: History,v 1.18 2003/08/05 00:30:21 asaim Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +23,9 @@ committal in the CVS repository !
 
 History file for visualization category
 ---------------------------------------
+
+4th August 2003  Makoto Asai  (raytracer-V05-02-00)
+- Migrate to the changes with "Cuts per region"
 
 18th June 2003  Gabriele Cosmo  (raytracer-V05-01-01)
 - Removed usage of G4USE_STD_NAMESPACE in G4RTJpegMaker.cc, after

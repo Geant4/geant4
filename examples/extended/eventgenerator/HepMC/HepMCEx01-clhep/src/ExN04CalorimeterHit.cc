@@ -41,6 +41,7 @@ ExN04CalorimeterHit::~ExN04CalorimeterHit()
 {;}
 
 ExN04CalorimeterHit::ExN04CalorimeterHit(const ExN04CalorimeterHit &right)
+  : G4VHit()
 {
   ZCellID = right.ZCellID;
   PhiCellID = right.PhiCellID;

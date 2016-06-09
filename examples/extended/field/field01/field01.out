@@ -1,5 +1,5 @@
 **********************************************
- Geant4 version $Name: geant4-05-02 $
+ Geant4 version $Name:  $
                                 (27-June-2003)
              Copyright : Geant4 Collaboration
 **********************************************
@@ -1145,7 +1145,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.33s Real=0.44s Sys=0.11s
+  User=0.34s Real=0.45s Sys=0.1s
 Graphics systems deleted.
 Visualization Manager deleting...
 G4 kernel has come to Quit state.

@@ -23,7 +23,7 @@
 // ====================================================================
 //
 //   ExN04PrimaryGeneratorAction.hh
-//   $Id: ExN04PrimaryGeneratorAction.hh,v 1.3 2003/06/16 16:48:06 gunter Exp $
+//   $Id: ExN04PrimaryGeneratorAction.hh,v 1.4 2003/07/04 09:23:04 gcosmo Exp $
 //
 // ====================================================================
 #ifndef EXN04_PRIMARY_GENERATOR_ACTION_H
@@ -74,7 +74,7 @@ inline void ExN04PrimaryGeneratorAction::SetGenerator
 
 inline void ExN04PrimaryGeneratorAction::SetGenerator(G4String genname) 
 {
-  map<G4String, G4VPrimaryGenerator*>::iterator pos= gentypeMap.find(genname);
+  std::map<G4String, G4VPrimaryGenerator*>::iterator pos= gentypeMap.find(genname);
   if(pos != gentypeMap.end()) {
     currentGenerator= pos->second;
     currentGeneratorName= genname;

@@ -114,10 +114,12 @@ void G4QGSMSplitableHadron::SplitUp()
   if (GetSoftCollisionCount() == 0)
   {
     DiffractiveSplitUp();
+    //G4cout << "Splitting diffractively"<<G4endl;
   }
   else
   {
     SoftSplitUp();
+    //G4cout << "Splitting softly"<<G4endl;
   }
 }
    
@@ -136,8 +138,13 @@ void G4QGSMSplitableHadron::DiffractiveSplitUp()
   G4double pt2 = HadronMom.perp2();
   G4double transverseMass2 = HadronMom.plus()*HadronMom.minus();
   G4double maxAvailMomentum2 = sqr(sqrt(transverseMass2) - sqrt(pt2));
-  G4ThreeVector pt(0.,0.,0.);
-  if(maxAvailMomentum2/widthOfPtSquare>0.01) pt = GaussianPt(widthOfPtSquare, maxAvailMomentum2);
+  //G4cout << "====> G4QGSMSplitableHadron: "<<pt2<<" "<<transverseMass2<<" "<<maxAvailMomentum2<<G4endl;
+  G4ThreeVector pt(1.*keV,1.*keV,0.);
+  if(maxAvailMomentum2/widthOfPtSquare>0.01) 
+  {
+    pt = GaussianPt(widthOfPtSquare, maxAvailMomentum2);
+  }
+  //G4cout << "====> G4QGSMSplitableHadron 1: "<<pt<<G4endl;
 
   G4LorentzVector LeftMom(pt, 0.);
   G4LorentzVector RightMom;
@@ -149,9 +156,12 @@ void G4QGSMSplitableHadron::DiffractiveSplitUp()
   if (Direction) Local2 = -Local2;
   G4double RightMinus   = 0.5*(Local1 + Local2);
   G4double LeftMinus = HadronMom.minus() - RightMinus;
+  //G4cout << "====> G4QGSMSplitableHadron 2: "<< RightMinus <<" "<< LeftMinus <<G4endl;
 
   G4double LeftPlus  = LeftMom.perp2()/LeftMinus;
   G4double RightPlus = HadronMom.plus() - LeftPlus;
+  //G4cout << "====> G4QGSMSplitableHadron 3: "<< RightPlus <<" "<< LeftPlus <<G4endl;
+
   LeftMom.setPz(0.5*(LeftPlus - LeftMinus));
   LeftMom.setE (0.5*(LeftPlus + LeftMinus));
   RightMom.setPz(0.5*(RightPlus - RightMinus));
@@ -296,7 +306,12 @@ void G4QGSMSplitableHadron::SoftSplitUp()
    } 
    while (1. - SumX <= Xmin); 
    (*(AntiColor.end()-1))->SetX(1. - SumX); // the di-quark takes the rest, then go to momentum
+   /// and here is the bug ;-) @@@@@@@@@@@@@
+   if(getenv("debug_QGSMSplitableHadron") )G4cout << "particle energy at split = "<<Get4Momentum().t()<<G4endl;
    G4double lightCone = ((!Direction) ? Get4Momentum().minus() : Get4Momentum().plus());
+   // lightCone -= 0.5*Get4Momentum().m();
+   // hpw testing @@@@@ lightCone = 2.*Get4Momentum().t();
+   if(getenv("debug_QGSMSplitableHadron") )G4cout << "Light cone = "<<lightCone<<G4endl;
    for(aSeaPair = 0; aSeaPair < nSeaPair+1; aSeaPair++) 
    {
      G4Parton* aParton = Color[aSeaPair];

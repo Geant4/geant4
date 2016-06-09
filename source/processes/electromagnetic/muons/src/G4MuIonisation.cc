@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4MuIonisation.cc,v 1.32 2003/06/16 17:01:48 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4MuIonisation.cc,v 1.33 2003/06/26 12:30:45 vnivanch Exp $
+// GEANT4 tag $Name: muons-V05-02-00 $
 //
 // --------------- G4MuIonisation physics process ------------------------------
 //                 by Laszlo Urban, September 1997
@@ -667,7 +667,7 @@ void G4MuIonisation::PrintInfoDefinition()
          << "\n        PhysicsTables from " << G4BestUnit(LowerBoundLambda,
                                                   "Energy")
          << " to " << G4BestUnit(UpperBoundLambda,"Energy")
-         << " in " << TotBin << " bins. \n";
+         << " in " << NbinLambda << " bins. \n";
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

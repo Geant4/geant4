@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4RayTracer.cc,v 1.11 2002/12/11 16:00:00 johna Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4RayTracer.cc,v 1.12 2003/08/05 00:30:24 asaim Exp $
+// GEANT4 tag $Name: raytracer-V05-02-00 $
 //
 //
 //
@@ -50,6 +50,8 @@
 #include "G4VisAttributes.hh"
 #include "G4UImanager.hh"
 #include "G4TransportationManager.hh"
+#include "G4RegionStore.hh"
+#include "G4ProductionCutsTable.hh"
 
 G4RayTracer::G4RayTracer(G4VFigureFileMaker* figMaker)
 :G4VGraphicsSystem("RayTracer","RayTracer",RAYTRACER_FEATURES,
@@ -176,6 +178,10 @@ void G4RayTracer::RestoreUserActions()
   { theSDMan->Activate("/",true); }
 }
 
+#include "G4ProcessManager.hh"
+#include "G4ProcessVector.hh"
+#include "G4Geantino.hh"
+
 G4bool G4RayTracer::CreateBitMap()
 {
   G4int iEvent = 0;
@@ -183,6 +189,30 @@ G4bool G4RayTracer::CreateBitMap()
   G4double viewSpanX = stepAngle*nColumn;
   G4double viewSpanY = stepAngle*nRow;
   G4bool succeeded;
+
+// Confirm process(es) of Geantino is initialized
+  G4RegionStore::GetInstance()->UpdateMaterialList();
+  G4ProductionCutsTable::GetProductionCutsTable()->UpdateCoupleTable();
+  G4ProcessVector* pVector
+    = G4Geantino::GeantinoDefinition()->GetProcessManager()->GetProcessList();
+  for (G4int j=0; j < pVector->size(); ++j) {
+      (*pVector)[j]->BuildPhysicsTable(*(G4Geantino::GeantinoDefinition()));
+  }
+
+// Close geometry and set the application state
+  G4GeometryManager* geomManager = G4GeometryManager::GetInstance();
+  geomManager->OpenGeometry();
+  geomManager->CloseGeometry(1,0);
+  
+  G4ThreeVector center(0,0,0);
+  G4Navigator* navigator =
+      G4TransportationManager::GetTransportationManager()->GetNavigatorForTracking();
+  navigator->LocateGlobalPointAndSetup(center,0,false);
+
+  G4StateManager* theStateMan = G4StateManager::GetStateManager();
+  theStateMan->SetNewState(G4State_GeomClosed); 
+
+// Event loop
   for(int iRow=0;iRow<nRow;iRow++)
   {
     for(int iColumn=0;iColumn<nColumn;iColumn++)
@@ -240,6 +270,8 @@ G4bool G4RayTracer::CreateBitMap()
       if(!succeeded) return false;
     }
   }
+
+  theStateMan->SetNewState(G4State_Idle); 
   return true;
 }
 

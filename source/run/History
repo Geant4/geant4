@@ -1,4 +1,4 @@
-$Id: History,v 1.95 2003/06/19 13:21:02 gcosmo Exp $
+$Id: History,v 1.95.2.1 2003/08/25 15:44:06 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+August 25, 2003, G.Cosmo (run-V05-02-00b)
+- G4RunManager.cc: changed date for release 5.2-patch01.
 
 June 19, 2003, G.Cosmo (run-V05-01-04)
 - G4VUserPhysicsList.cc: check IsShortLived() before building the

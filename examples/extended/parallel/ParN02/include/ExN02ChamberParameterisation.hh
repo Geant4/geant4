@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: ExN02ChamberParameterisation.hh,v 1.1 2002/03/05 15:21:56 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: ExN02ChamberParameterisation.hh,v 1.2 2003/07/04 15:36:50 gcosmo Exp $
+// GEANT4 tag $Name: exparallel-V05-02-00 $
 //
 //
 //  A parameterisation that describes a series of boxes along Z
@@ -40,6 +40,16 @@
 
 class G4VPhysicalVolume;
 class G4Box;
+
+// Dummy declarations to get rid of warnings ...
+class G4Trd;
+class G4Trap;
+class G4Cons;
+class G4Sphere;
+class G4Torus;
+class G4Para;
+class G4Hype;
+class G4Tubs;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -63,6 +73,16 @@ class ExN02ChamberParameterisation : public G4VPVParameterisation
     void ComputeDimensions (G4Box & trackerLayer, const G4int copyNo,
                             const G4VPhysicalVolume* physVol) const;
 
+  private:  // Dummy declarations to get rid of warnings ...
+
+    void ComputeDimensions (G4Trd&,const G4int,const G4VPhysicalVolume*) const {}
+    void ComputeDimensions (G4Trap&,const G4int,const G4VPhysicalVolume*) const {}
+    void ComputeDimensions (G4Cons&,const G4int,const G4VPhysicalVolume*) const {}
+    void ComputeDimensions (G4Sphere&,const G4int,const G4VPhysicalVolume*) const {}
+    void ComputeDimensions (G4Torus&,const G4int,const G4VPhysicalVolume*) const {}
+    void ComputeDimensions (G4Para&,const G4int,const G4VPhysicalVolume*) const {}
+    void ComputeDimensions (G4Hype&,const G4int,const G4VPhysicalVolume*) const {}
+    void ComputeDimensions (G4Tubs&,const G4int,const G4VPhysicalVolume*) const {}
 
   private:
 

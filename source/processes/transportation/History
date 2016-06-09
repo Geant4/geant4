@@ -1,4 +1,4 @@
-$Id: History,v 1.76 2003/06/21 01:34:50 japost Exp $
+$Id: History,v 1.80 2003/07/31 14:05:09 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,31 +16,57 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Jul, 31st, P.Gumplinger  transport-V05-02-00
+-----------------------
+- G4Transportation.cc:
+  o Use the finalVelocity to update TofF for optical photons.
+
+Jul, 17th, J.Apostolakis
+------------------------
+- G4Transportation.cc:
+  o Attempt to correct photon problem - by using the velocity from
+    current medium for massless particles.
+
+Jun, 25th, J.Apostolakis
+------------------------
+- G4Transportation[.hh.icc]:
+  o Added verbosity level to control the printing of warnings (see below).
+
+Jun, 21st, J.Apostolakis  transport-V05-01-06
+------------------------
+G4Transportation:
+- Added warning when energy changes from propagation in magnetic field 
+  (or other field that conserves energy) due to the inaccuracy of 
+  numerical integration of the equations of motion.
+
 Jun, 21st, J.Apostolakis  transport-V05-01-05
 ------------------------
-**  Requires field-V05-01-04 and geomvol-V05-01-03 **
-- Use new method of PropagatorInField to simplify choice of global/local field,
-    
-- Activate the new capability of a (user derived) field manager to configure 
-   itself with different accuracy parameters depending on track's energy, 
-   particle identity, or other property.
-
-Includes updates of files to use <std> in place of "g4std", as made at the head.
+- G4Transportation:
+  o Use new method of PropagatorInField to simplify choice of
+    global/local field.
+  o Activated the new capability of a (user derived) field manager to
+    configure itself with different accuracy parameters depending on
+    track's energy, particle identity, or other property.
+- Notes:
+  o Requires tags "field-V05-01-04" and "geomvol-V05-01-03"
+  o Includes updates of files to use <std> in place of "g4std",
+    as made at the CVS HEAD.
 
 Jun, 13th, M.Dressel       transport-V05-01-04
 --------------------
-added to put the delete fImportancePostStepDoIt in G4MassImportanceProcess
-and G4ParallelImportanceProcess.
+- Added to put the delete fImportancePostStepDoIt in G4MassImportanceProcess
+  and G4ParallelImportanceProcess.
 
 Jun, 13th, M.Dressel       transport-V05-01-03
 --------------------
-fixed bug created by last bug fix in G4MassImportanceProcess
-and G4ParallelImportanceProcess.
+- Fixed bug created by last bug fix in G4MassImportanceProcess
+  and G4ParallelImportanceProcess.
 
 Jun, 12th, M.Dressel       transport-V05-01-02
 --------------------
-fixed "'this' : used in base member initializer list" in 
-src\G4MassImportanceProcess.cc, src\G4ParallelImportanceProcess.cc
+- Fixed "'this' : used in base member initializer list" in 
+  src\G4MassImportanceProcess.cc, src\G4ParallelImportanceProcess.cc
 
 Jun, 4th, G.Cosmo          transport-V05-01-01
 -----------------

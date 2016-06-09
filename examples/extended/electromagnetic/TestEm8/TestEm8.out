@@ -1,5 +1,5 @@
 **********************************************
- Geant4 version $Name: geant4-05-02 $
+ Geant4 version $Name:  $
                                 (27-June-2003)
              Copyright : Geant4 Collaboration
 **********************************************
@@ -250,7 +250,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=2.06s Real=2.09s Sys=0s
+  User=1.92s Real=2.06s Sys=0s
  ================== run summary =====================
  end of Run TotNbofEvents = 1000
     mean charged track length   in absorber=40.2593 +- 0.20516  mm  

@@ -32,7 +32,8 @@
 
 ExN04PrimaryGeneratorAction::ExN04PrimaryGeneratorAction()
 {
-  HEPEvt = new G4HEPEvtInterface("pythia_event.data");
+  const char* filename = "pythia_event.data";
+  HEPEvt = new G4HEPEvtInterface(filename);
 
   G4int n_particle = 1;
   G4ParticleGun* fParticleGun = new G4ParticleGun(n_particle);

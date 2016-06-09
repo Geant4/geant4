@@ -21,8 +21,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4AntiProtonAnnihilationAtRest.cc,v 1.8 2003/06/16 17:11:57 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
 //
 // --------------------------------------------------------------
 //      GEANT 4 class implementation file --- Copyright CERN 1998
@@ -79,7 +77,12 @@ G4AntiProtonAnnihilationAtRest::G4AntiProtonAnnihilationAtRest(const G4String& p
  
 // destructor
  
-G4AntiProtonAnnihilationAtRest::~G4AntiProtonAnnihilationAtRest(){;}
+G4AntiProtonAnnihilationAtRest::~G4AntiProtonAnnihilationAtRest()
+{
+  delete [] pv;
+  delete [] eve;
+  delete [] gkin;
+}
  
  
 // methods.............................................................................

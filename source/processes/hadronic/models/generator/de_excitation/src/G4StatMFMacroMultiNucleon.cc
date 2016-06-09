@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4StatMFMacroMultiNucleon.cc,v 1.14 2003/06/16 17:06:42 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4StatMFMacroMultiNucleon.cc,v 1.15 2003/06/30 07:43:57 gcosmo Exp $
+// GEANT4 tag $Name: ghad-deex-V05-02-00 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara
@@ -77,7 +77,7 @@ G4double G4StatMFMacroMultiNucleon::CalcMeanMultiplicity(const G4double FreeVol,
 	
     const G4double lambda3 = ThermalWaveLenght*ThermalWaveLenght*ThermalWaveLenght;
 	
-    const G4double A23 = pow(theA,2./3.);
+    const G4double A23 = pow(static_cast<G4double>(theA),2./3.);
 	
     const G4double Coulomb = (3./5.)*(elm_coupling/G4StatMFParameters::Getr0())*
 	(1.0 - 1.0/pow(1.0+G4StatMFParameters::GetKappaCoulomb(),1./3.));
@@ -103,7 +103,7 @@ G4double G4StatMFMacroMultiNucleon::CalcZARatio(const G4double nu)
     const G4double Coulomb = (3./5.)*(elm_coupling/G4StatMFParameters::Getr0())*
 	(1.0 - 1.0/pow(1.0+G4StatMFParameters::GetKappaCoulomb(),1./3.));
 
-    G4double den = 8.0*G4StatMFParameters::GetGamma0()+2.0*Coulomb*pow(theA,2./3.);
+    G4double den = 8.0*G4StatMFParameters::GetGamma0()+2.0*Coulomb*pow(static_cast<G4double>(theA),2./3.);
     G4double num = 4.0*G4StatMFParameters::GetGamma0()+nu;
 	
     return theZARatio = num/den;

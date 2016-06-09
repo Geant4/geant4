@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: ExN03CalorimeterSD.cc,v 1.1.1.1 2002/05/31 00:34:44 radoone Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: ExN03CalorimeterSD.cc,v 1.2 2003/07/04 14:55:34 gcosmo Exp $
+// GEANT4 tag $Name: exgdml-V05-02-00 $
 //
 // 
 
@@ -61,7 +61,7 @@ ExN03CalorimeterSD::~ExN03CalorimeterSD()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void ExN03CalorimeterSD::Initialize(G4HCofThisEvent*HCE)
+void ExN03CalorimeterSD::Initialize(G4HCofThisEvent*)
 {
   CalCollection = new ExN03CalorHitsCollection
                       (SensitiveDetectorName,collectionName[0]); 
@@ -70,7 +70,7 @@ void ExN03CalorimeterSD::Initialize(G4HCofThisEvent*HCE)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4bool ExN03CalorimeterSD::ProcessHits(G4Step* aStep,G4TouchableHistory* ROhist)
+G4bool ExN03CalorimeterSD::ProcessHits(G4Step* aStep,G4TouchableHistory*)
 {
   G4double edep = aStep->GetTotalEnergyDeposit();
   

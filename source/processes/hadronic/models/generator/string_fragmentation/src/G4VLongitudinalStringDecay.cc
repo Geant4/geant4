@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VLongitudinalStringDecay.cc,v 1.26 2003/06/16 17:09:30 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4VLongitudinalStringDecay.cc,v 1.27 2003/08/14 09:33:20 maya Exp $
+// GEANT4 tag $Name: ghad-stringfrag-V05-02-00 $
 //
 // -----------------------------------------------------------------------------
 //      GEANT 4 class implementation file
@@ -49,6 +49,7 @@
 #include "G4DiQuarks.hh"
 #include "G4Quarks.hh"
 #include "G4Gluons.hh"
+#include "G4Gamma.hh"
 
 //********************************************************************************
 // Constructors
@@ -311,6 +312,7 @@ G4KineticTrack * G4VLongitudinalStringDecay::Splitup(
        if ( HadronMomentum != 0 ) {    
 
 	   G4ThreeVector   Pos;
+	   //G4cout << "====> string 1 "<<*HadronMomentum<< " "<<HadronDefinition->GetParticleName()<<" "<<Pos<<G4endl;
 	   Hadron = new G4KineticTrack(HadronDefinition, 0,Pos, *HadronMomentum);
  
 	   newString=new G4FragmentingString(*string,newStringEnd,
@@ -416,7 +418,9 @@ G4bool G4VLongitudinalStringDecay::SplitLast(G4FragmentingString * string,
     Sample4Momentum(&LeftMom, LeftHadron->GetPDGMass(), &RightMom, RightHadron->GetPDGMass(), ResidualMass);
     LeftMom.boost(ClusterVel);
     RightMom.boost(ClusterVel);
+    //G4cout << "====> string 2 "<< LeftMom<<" "<<Pos<<" "<<LeftHadron->GetParticleName()<<G4endl;
     LeftVector->push_back(new G4KineticTrack(LeftHadron, 0, Pos, LeftMom));
+    //G4cout << "====> string 3 "<< RightMom<<" "<<Pos<<" "<<RightHadron->GetParticleName()<<G4endl;
     RightVector->push_back(new G4KineticTrack(RightHadron, 0, Pos, RightMom));
 
     return true;
@@ -431,8 +435,13 @@ G4KineticTrackVector* G4VLongitudinalStringDecay::FragmentString(const G4Excited
 	PastInitPhase=true;
 	
 // 	check if string has enough mass to fragment...
+	  //G4cout << "=========================> FragmentString 1: "<<theString.Get4Momentum()<<G4endl;
 	G4KineticTrackVector * LeftVector=LightFragmentationTest(&theString);
-	if ( LeftVector != 0 ) return LeftVector;
+	if ( LeftVector != 0 ) 
+	{
+	  //G4cout << "=========================> FragmentString 2: "<<theString.Get4Momentum()<<G4endl;
+	  return LeftVector;
+	}
 	
 	LeftVector = new G4KineticTrackVector;
 	G4KineticTrackVector * RightVector=new G4KineticTrackVector;
@@ -598,11 +607,26 @@ G4KineticTrackVector* G4VLongitudinalStringDecay::LightFragmentationTest(const
 {
    // Check string decay threshold
 		
+	//G4cout << "============> LightFragmentationTest: "<< string->Get4Momentum() <<G4endl;
 	G4KineticTrackVector * result=0;  // return 0 when string exceeds the mass cut
 	
 	pDefPair hadrons((G4ParticleDefinition *)0,(G4ParticleDefinition *)0);
 	G4FragmentingString aString(*string);
-	if ( sqr(FragmentationMass(&aString,0,&hadrons)+MassCut) < aString.Mass2()) {
+	//G4cout << "=================> string mass is"<< aString.Mass()<<G4endl;
+	if(aString.Mass2()<1*MeV*MeV)
+	{
+	       G4ThreeVector Mom3 = string->Get4Momentum().vect();
+	       G4LorentzVector Mom(Mom3, Mom3.mag());
+	       //G4cout << "=======<>======= constructing a gamma kinetic track "<<G4endl;
+	       //G4cout << "     "<<string->GetPosition()<<" "<<Mom<<G4endl;
+	       result=new G4KineticTrackVector;
+               result->push_back(new G4KineticTrack(G4Gamma::GammaDefinition(), 0, string->GetPosition(), Mom));
+	       return result;		
+	}
+	if ( sqr(FragmentationMass(&aString,0,&hadrons)+MassCut) < aString.Mass2()) 
+	{
+		//G4cout << "======> LightFragmentationTest "<<sqr(FragmentationMass(&aString,0,&hadrons)+MassCut)
+		//       <<" "<<aString.Mass2()<<G4endl;
 		return 0;
 	}
 	
@@ -615,6 +639,7 @@ G4KineticTrackVector* G4VLongitudinalStringDecay::LightFragmentationTest(const
 	       G4ThreeVector Mom3 = string->Get4Momentum().vect();
 	       G4LorentzVector Mom(Mom3, 
 	       			   sqrt(Mom3.mag2() + sqr(hadrons.first->GetPDGMass())));
+               //G4cout << "====> string 4 "<<Mom3<<" "<<Mom<<" "<<string->GetPosition()<<" "<<hadrons.first->GetParticleName()<<G4endl;
                result->push_back(new G4KineticTrack(hadrons.first, 0, string->GetPosition(), Mom));
 	} else 
 	{
@@ -623,7 +648,9 @@ G4KineticTrackVector* G4VLongitudinalStringDecay::LightFragmentationTest(const
 	       Sample4Momentum(&Mom1, hadrons.first->GetPDGMass(), 
 			       &Mom2,hadrons.second->GetPDGMass(),
 			        string->Get4Momentum().mag());
+               //G4cout << "====> string 4 "<<Mom1<<" "<<string->GetPosition()<<" "<<hadrons.first->GetParticleName()<<G4endl;
 	       result->push_back(new G4KineticTrack(hadrons.first, 0, string->GetPosition(), Mom1));
+               //G4cout << "====> string 4 "<<Mom2<<" "<<string->GetPosition()<<" "<<hadrons.second->GetParticleName()<<G4endl;
 	       result->push_back(new G4KineticTrack(hadrons.second, 0, string->GetPosition(), Mom2));
                G4ThreeVector Velocity = string->Get4Momentum().boostVector();
                result->Boost(Velocity);          

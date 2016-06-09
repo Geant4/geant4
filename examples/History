@@ -1,4 +1,4 @@
-$Id: History,v 1.70 2003/06/26 13:47:18 gcosmo Exp $
+$Id: History,v 1.71 2003/08/25 15:16:55 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,14 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+25th August 2003  Gabriele Cosmo (examples-V05-02-00)
+- Updated reference outputs.
+- Includes on top of previous tag:
+   examples/extended/eventgenerator/HepMC         exHepMC-V05-02-00
+   examples/extended/g3tog4                       g3tog4Tests-V05-02-00
+   examples/extended/gdml                         exgdml-V05-02-00
+   examples/extended/parallel                     exparallel-V05-02-00
 
 27th June 2003  Gabriele Cosmo (examples-V05-01-01)
 - Updated reference outputs.

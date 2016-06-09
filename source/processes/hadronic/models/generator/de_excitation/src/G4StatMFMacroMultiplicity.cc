@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4StatMFMacroMultiplicity.cc,v 1.10 2003/06/16 17:06:43 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4StatMFMacroMultiplicity.cc,v 1.11 2003/06/30 07:43:58 gcosmo Exp $
+// GEANT4 tag $Name: ghad-deex-V05-02-00 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara
@@ -70,7 +70,7 @@ G4double G4StatMFMacroMultiplicity::CalcChemicalPotentialMu(void)
 	_ChemPotentialNu*ZA5 + 
 	G4StatMFParameters::GetGamma0()*(1.0-2.0*ZA5)*(1.0-2.0*ZA5) +
 	(2.0/3.0)*G4StatMFParameters::Beta(_MeanTemperature)/pow(5.,1./3.) +
-	(5.0/3.0)*CP*ZA5*ZA5*pow(5,2./3.) -
+	(5.0/3.0)*CP*ZA5*ZA5*pow(5.,2./3.) -
 	1.5*_MeanTemperature/5.0;
 		
 

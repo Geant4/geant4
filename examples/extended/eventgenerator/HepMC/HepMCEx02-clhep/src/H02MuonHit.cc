@@ -23,7 +23,7 @@
 // ====================================================================
 //
 //   H02MuonHit.cc
-//   $Id: H02MuonHit.cc,v 1.2 2003/06/16 16:48:50 gunter Exp $
+//   $Id: H02MuonHit.cc,v 1.3 2003/07/04 08:23:58 gcosmo Exp $
 //
 // ====================================================================
 #include "H02MuonHit.hh"
@@ -61,6 +61,7 @@ H02MuonHit::~H02MuonHit()
 /////////////////////////////////////////////
 H02MuonHit::H02MuonHit(const H02MuonHit& right)
 /////////////////////////////////////////////
+  : G4VHit()
 {
   *this= right;
 }
@@ -79,10 +80,10 @@ const H02MuonHit& H02MuonHit::operator=(const H02MuonHit& right)
 }
 
 /////////////////////////////////////////////////////////
-int H02MuonHit::operator==(const H02MuonHit& right) const
+G4int H02MuonHit::operator==(const H02MuonHit& right) const
 /////////////////////////////////////////////////////////
 {
-  return 0;
+  return (this==&right) ? 1 : 0;
 }
 
 ///////////////////////
@@ -117,9 +118,9 @@ void H02MuonHit::Print()
     id -=10;
     tag="E";
   }
-  G4cout << tag << id << " :" << setw(12) << pname.c_str()
-	 << " : pT=" << setprecision(3)  << momentum.perp()/GeV
-	 << " : TOF=" << setprecision(3) << tof/ns 
-	 << " : x="  << setprecision(3) << position*(1./m) 
+  G4cout << tag << id << " :" << std::setw(12) << pname.c_str()
+	 << " : pT=" << std::setprecision(3)  << momentum.perp()/GeV
+	 << " : TOF=" << std::setprecision(3) << tof/ns 
+	 << " : x="  << std::setprecision(3) << position*(1./m) 
 	 << G4endl;
 }

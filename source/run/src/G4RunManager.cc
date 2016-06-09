@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunManager.cc,v 1.81 2003/06/19 13:05:13 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4RunManager.cc,v 1.81.2.1 2003/08/25 15:44:06 gcosmo Exp $
+// GEANT4 tag $Name: geant4-05-02-patch-01 $
 //
 // 
 
@@ -106,7 +106,7 @@ G4RunManager::G4RunManager()
   G4ParticleTable::GetParticleTable()->CreateMessenger();
   G4ProcessTable::GetProcessTable()->CreateMessenger();
   randomNumberStatusDir = "./";
-  versionString = " Geant4 version $Name: geant4-05-02 $\n                                (27-June-2003)";
+  versionString = " Geant4 version $Name: geant4-05-02-patch-01 $\n                                (27-August-2003)";
   G4cout 
   << "**********************************************" << G4endl
   << versionString << G4endl

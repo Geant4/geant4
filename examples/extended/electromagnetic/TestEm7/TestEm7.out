@@ -1,5 +1,5 @@
 **********************************************
- Geant4 version $Name: geant4-05-02 $
+ Geant4 version $Name:  $
                                 (27-June-2003)
              Copyright : Geant4 Collaboration
 **********************************************
@@ -234,7 +234,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=212.54s Real=372.94s Sys=52.91s
+  User=189.43s Real=380.44s Sys=52.11s
 
 ---------------------------------------------------------
  Cumulated Doses : 	Edep      	Edep/Ebeam 	Dose

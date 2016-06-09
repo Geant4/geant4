@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: ParRandomState.hh,v 1.1 2002/03/05 15:21:58 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: ParRandomState.hh,v 1.2 2003/07/04 15:36:51 gcosmo Exp $
+// GEANT4 tag $Name: exparallel-V05-02-00 $
 //
 // --------------------------------------------------------------------
 //                   Parallel Library for Geant4
@@ -55,7 +55,7 @@ class ParMarshaledRandomState : public MarshaledObj
   }
 
   // Called on slave at beginning of new event.
-  inline void SetNextRandomStateForSlave( G4int eventID, void *randomState )
+  inline void SetNextRandomStateForSlave( G4int, void *randomState )
   { HepRandom::setTheSeed( *(long *)randomState );
 #ifdef TOPC_DEBUG
     G4cout << "SET SEED: " << *(long *)randomState << G4endl;

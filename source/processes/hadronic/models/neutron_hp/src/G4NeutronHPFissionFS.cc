@@ -85,12 +85,18 @@
     G4int it;
     unsigned int i;
     G4double random = G4UniformRand();
-    for(i=0; i<4; i++)
+    if(xSec[3]==0) 
     {
-      it =i;
-      if(random<xSec[i]/xSec[3]) break;
+      it=-1;
     }
-    if(xSec[3]==0) it=-1;
+    else
+    {
+      for(i=0; i<4; i++)
+      {
+        it =i;
+        if(random<xSec[i]/xSec[3]) break;
+      }
+    }
     
 // dice neutron multiplicities, energies and momenta in Lab. @@
 // no energy conservation on an event-to-event basis. we rely on the data to be ok. @@
