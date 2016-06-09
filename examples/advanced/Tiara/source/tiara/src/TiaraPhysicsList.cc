@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: TiaraPhysicsList.cc,v 1.2 2003/06/18 16:40:30 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: TiaraPhysicsList.cc,v 1.4 2003/11/20 08:31:26 vnivanch Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 
 #include "globals.hh"
@@ -133,6 +133,7 @@ void TiaraPhysicsList::ConstructProcess()
 #include "G4MuPairProduction.hh"
 
 #include "G4hIonisation.hh"
+#include "G4ionIonisation.hh"
 
 void TiaraPhysicsList::ConstructEM()
 {
@@ -176,7 +177,7 @@ void TiaraPhysicsList::ConstructEM()
      
     } else if( particleName == "GenericIon" ) {
       pmanager->AddProcess(new G4MultipleScattering(),-1,1,1);
-      pmanager->AddProcess(new G4hIonisation(),-1,2,2); 
+      pmanager->AddProcess(new G4ionIonisation(),-1,2,2); 
     } else { 
       if ((particle->GetPDGCharge() != 0.0) && 
           (particle->GetParticleName() != "chargedgeantino")&&

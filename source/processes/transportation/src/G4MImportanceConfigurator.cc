@@ -21,16 +21,14 @@
 // ********************************************************************
 //
 //
-// $Id: G4MImportanceConfigurator.cc,v 1.4 2003/04/02 16:59:12 dressel Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4MImportanceConfigurator.cc,v 1.5 2003/11/26 14:51:49 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // ----------------------------------------------------------------------
 // Class G4MImportanceConfigurator
 //
-
 // Author: Michael Dressel (Michael.Dressel@cern.ch)
 // ----------------------------------------------------------------------
-
 
 #include "G4MImportanceConfigurator.hh"
 
@@ -40,45 +38,54 @@
 
 G4MImportanceConfigurator::
 G4MImportanceConfigurator(const G4String &particlename,
-			  G4VIStore &istore,
-			  const G4VImportanceAlgorithm *ialg)
-  :
-  fPlacer(particlename),
-  fIStore(istore),
-  fDeleteIalg( ( ! ialg) ),
-  fIalgorithm(( (fDeleteIalg) ? 
-		new G4ImportanceAlgorithm : ialg)),
-  fMassImportanceProcess(0)
-{}
+                          G4VIStore &istore,
+                          const G4VImportanceAlgorithm *ialg)
+  : fPlacer(particlename),
+    fIStore(istore),
+    fDeleteIalg( ( ! ialg) ),
+    fIalgorithm(( (fDeleteIalg) ? 
+                  new G4ImportanceAlgorithm : ialg)),
+    fMassImportanceProcess(0)
+{
+}
 
-G4MImportanceConfigurator::
-~G4MImportanceConfigurator(){
-  if (fMassImportanceProcess) {
+G4MImportanceConfigurator::~G4MImportanceConfigurator()
+{
+  if (fMassImportanceProcess)
+  {
     fPlacer.RemoveProcess(fMassImportanceProcess);
     delete fMassImportanceProcess;
   }
-  if (fDeleteIalg) {
+  if (fDeleteIalg)
+  {
     delete fIalgorithm;
   }
 }
+
 void  
-G4MImportanceConfigurator::Configure(G4VSamplerConfigurator *preConf){
+G4MImportanceConfigurator::Configure(G4VSamplerConfigurator *preConf)
+{
   const G4VTrackTerminator *terminator = 0;
-  if (preConf) {
+  if (preConf)
+  {
     terminator = preConf->GetTrackTerminator();
   };
 
   fMassImportanceProcess = 
     new G4MassImportanceProcess(*fIalgorithm, 
-				fIStore, 
-				terminator);
-  if (!fMassImportanceProcess) {
-    G4Exception("ERROR: G4MImportanceConfigurator::Configure: new failed to create  G4MassImportanceProcess!");
+                                fIStore, 
+                                terminator);
+  if (!fMassImportanceProcess)
+  {
+    G4Exception("G4MImportanceConfigurator::Configure()",
+                "FatalError", FatalException,
+                "Failed allocation of G4MassImportanceProcess !");
   }
   fPlacer.AddProcessAsSecondDoIt(fMassImportanceProcess);
 }
 
 const G4VTrackTerminator *G4MImportanceConfigurator::
-GetTrackTerminator() const {
+GetTrackTerminator() const
+{
   return fMassImportanceProcess;
 }

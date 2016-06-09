@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Surface.cc,v 1.12 2003/06/16 16:52:59 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4Surface.cc,v 1.13 2003/10/28 13:42:30 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -135,7 +135,8 @@ G4int G4Surface::Intersect(const G4Ray&)
 {
   G4int Result = 0;
 
-  G4Exception("G4Surface::Intersect is not implemented. It should not be called. ");
+  G4Exception("G4Surface::Intersect()", "NotImplemented",
+              FatalException, "Sorry, not yet implemented.");
 
 #ifdef NEW_IMPLEMENTATION
   // get the intersection

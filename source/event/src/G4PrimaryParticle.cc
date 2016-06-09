@@ -21,14 +21,15 @@
 // ********************************************************************
 //
 //
-// $Id: G4PrimaryParticle.cc,v 1.10 2003/05/21 20:52:53 asaim Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4PrimaryParticle.cc,v 1.11 2003/09/12 21:51:34 asaim Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 
 #include "G4PrimaryParticle.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleTable.hh"
 #include "G4ios.hh"
+#include "G4VUserPrimaryParticleInformation.hh"
 
 G4Allocator<G4PrimaryParticle> aPrimaryParticleAllocator;
 
@@ -36,14 +37,14 @@ G4PrimaryParticle::G4PrimaryParticle()
 :PDGcode(0),G4code(0),Px(0.),Py(0.),Pz(0.),
  nextParticle(0),daughterParticle(0),trackID(-1),
  mass(0.),charge(DBL_MAX),polX(0.),polY(0.),polZ(0.),
- Weight0(1.0),properTime(0.0)
+ Weight0(1.0),properTime(0.0),userInfo(0)
 {;}
 
 G4PrimaryParticle::G4PrimaryParticle(G4int Pcode)
 :PDGcode(Pcode),Px(0.),Py(0.),Pz(0.),
  nextParticle(0),daughterParticle(0),trackID(-1),
  mass(0.),charge(DBL_MAX),polX(0.),polY(0.),polZ(0.),
- Weight0(1.0),properTime(0.0)
+ Weight0(1.0),properTime(0.0),userInfo(0)
 { G4code = G4ParticleTable::GetParticleTable()->FindParticle(Pcode); }
 
 G4PrimaryParticle::G4PrimaryParticle(G4int Pcode,
@@ -51,14 +52,14 @@ G4PrimaryParticle::G4PrimaryParticle(G4int Pcode,
 :PDGcode(Pcode),Px(px),Py(py),Pz(pz),
  nextParticle(0),daughterParticle(0),trackID(-1),
  mass(0.),charge(DBL_MAX),polX(0.),polY(0.),polZ(0.),
- Weight0(1.0),properTime(0.0)
+ Weight0(1.0),properTime(0.0),userInfo(0)
 { G4code = G4ParticleTable::GetParticleTable()->FindParticle(Pcode); }
 
 G4PrimaryParticle::G4PrimaryParticle(G4ParticleDefinition* Gcode)
 :G4code(Gcode),Px(0.),Py(0.),Pz(0.),
  nextParticle(0),daughterParticle(0),trackID(-1),
  mass(0.),charge(DBL_MAX),polX(0.),polY(0.),polZ(0.),
- Weight0(1.0),properTime(0.0)
+ Weight0(1.0),properTime(0.0),userInfo(0)
 { PDGcode = Gcode->GetPDGEncoding(); }
 
 G4PrimaryParticle::G4PrimaryParticle(G4ParticleDefinition* Gcode,
@@ -66,7 +67,7 @@ G4PrimaryParticle::G4PrimaryParticle(G4ParticleDefinition* Gcode,
 :G4code(Gcode),Px(px),Py(py),Pz(pz),
  nextParticle(0),daughterParticle(0),trackID(-1),
  mass(0.),charge(DBL_MAX),polX(0.),polY(0.),polZ(0.),
- Weight0(1.0),properTime(0.0)
+ Weight0(1.0),properTime(0.0),userInfo(0)
 { PDGcode = Gcode->GetPDGEncoding(); }
 
 G4PrimaryParticle::~G4PrimaryParticle()
@@ -75,6 +76,8 @@ G4PrimaryParticle::~G4PrimaryParticle()
   { delete nextParticle; }
   if(daughterParticle != 0)
   { delete daughterParticle; }
+  if(userInfo!=0)
+  { delete userInfo; }
 }
 
 void G4PrimaryParticle::SetPDGcode(G4int Pcode)
@@ -114,6 +117,7 @@ void G4PrimaryParticle::Print() const
   G4cout << "     Weight : " << Weight0 << G4endl;
   if(properTime>0.0)
   { G4cout << "     PreAssigned proper decay time : " << properTime/ns << " (nsec)" << G4endl; }
+  if(userInfo != 0) userInfo->Print();
   if(daughterParticle != 0)
   {
     G4cout << ">>>> Daughters" << G4endl;

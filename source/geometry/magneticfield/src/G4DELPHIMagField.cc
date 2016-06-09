@@ -20,30 +20,29 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
+//
+// $Id: G4DELPHIMagField.cc,v 1.4 2003/10/31 14:35:53 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-00 $
+// -------------------------------------------------------------------
+
 #include "G4DELPHIMagField.hh"
 #include "globals.hh"
-#include "geomdefs.hh"
-
-
 
 G4DELPHIMagField::G4DELPHIMagField()
 {
-   ;
 }
 
 ////////////////////////////////////////////////////////////////////////
 
 G4DELPHIMagField::~G4DELPHIMagField()
 {
-   ;
 }
 
 ///////////////////////////////////////////////////////////////////////
 
 
-void
-   G4DELPHIMagField::GetFieldValue( const G4double yTrack[7],
-                                          G4double B[3]         ) const 
+void G4DELPHIMagField::GetFieldValue( const G4double yTrack[7],
+                                            G4double B[3]     ) const 
 {
    G4int i, n = 8 ;
    G4double a = 0.001 ;   // mm -> m 
@@ -62,7 +61,8 @@ void
    P[1] = 4*rz*(r2 - 4.0*z2/3.0) ;
    P[2] = 6*rz*(r4 - 4*r2*z2 + 1.6*z4) ;
    P[3] = 8*rz*(r6 - 8*r4*z2 + 9.6*r2*z4 - 64.0*z6/35.0) ;
-   P[4] = 10*rz*(r8 - 40.0*r6*z2/3.0 + 32*r4*z4 - 128.0*r2*z6/7.0 + 128.0*z8/63.0);
+   P[4] = 10*rz*(r8 - 40.0*r6*z2/3.0 + 32*r4*z4
+                    - 128.0*r2*z6/7.0 + 128.0*z8/63.0);
    P[5] = 0 ;
    P[6] = 0 ;
    P[7] = 0 ;
@@ -90,4 +90,3 @@ void
 }
 
 // -----------------------------------------------------------------
-

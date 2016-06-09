@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4SurfaceOfLinearExtrusion.cc,v 1.3 2001/07/11 09:59:48 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file

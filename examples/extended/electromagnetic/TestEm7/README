@@ -1,4 +1,4 @@
-$Id: README,v 1.1 2003/04/22 16:25:03 maire Exp $
+$Id: README,v 1.2 2003/10/10 16:21:19 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -109,8 +109,9 @@ $Id: README,v 1.1 2003/04/22 16:25:03 maire Exp $
      The bin size is egal to stepMax. The number of bins is determined by 
      the thickness of the absorber (with a minimum of 100 bins).
      The total energy deposited is plotted in MeV/mm.  
-     
-     Note that histograms are disabled via the flag G4NOHIST in GNUmakefile.
+
+     Note that, by default, histograms are disabled. To activate them, uncomment
+     the flag G4ANALYSIS_USE in GNUmakefile.
      
   7- DOSE IN 'TEST-VOLUMES'
   

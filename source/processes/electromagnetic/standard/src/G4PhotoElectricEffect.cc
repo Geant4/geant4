@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4PhotoElectricEffect.cc,v 1.29 2003/06/16 17:02:11 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

@@ -4,7 +4,8 @@
 #
 /vis/scene/create
 /vis/open OGLIX
-#/vis/open DAWNFILE if you want DAWN instead of OGLIX
+#/vis/open VRML1
+#/vis/open DAWNFILE 
 /vis/viewer/flush
 #
 # draw scene/

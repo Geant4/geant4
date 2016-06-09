@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.22 2002/12/04 13:00:03 gcosmo Exp $
+# $Id: GNUmakefile,v 1.23 2003/10/03 14:39:01 gcosmo Exp $
 # -----------------------------------------------------------------------
 # GNUmakefile for persistency library.  Gabriele Cosmo, 16/11/96.
 # -----------------------------------------------------------------------
@@ -13,8 +13,8 @@ include $(G4INSTALL)/config/architecture.gmk
 
 CPPFLAGS += -I$(G4INSTALL)/source/global/management/include \
             -I$(G4INSTALL)/source/global/HEPGeometry/include \
-            -I$(G4INSTALL)/source/digits+hits/hits/include \
-            -I$(G4INSTALL)/source/digits+hits/digits/include \
+            -I$(G4INSTALL)/source/digits_hits/hits/include \
+            -I$(G4INSTALL)/source/digits_hits/digits/include \
             -I$(G4INSTALL)/source/particles/management/include \
             -I$(G4INSTALL)/source/run/include \
             -I$(G4INSTALL)/source/event/include \

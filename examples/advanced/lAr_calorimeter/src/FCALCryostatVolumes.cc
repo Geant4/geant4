@@ -19,6 +19,7 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
+//
 //   Author:             Mathieu Fontaine           Rachid Mazini
 //                       fontaine@lps.umontreal.ca  Rachid.Mazini@cern.ch
 //   Language:           C++
@@ -70,10 +71,10 @@ G4LogicalVolume * FCALCryostatVolumes::Construct()
 
 
 //-----------------------------------------
-   G4VisAttributes * ColorOfIron = new G4VisAttributes(G4Colour(0.3,0.3,0.3));
+//  G4VisAttributes * ColorOfIron = new G4VisAttributes(G4Colour(0.3,0.3,0.3));
   G4VisAttributes * ColorOfLead = new G4VisAttributes(G4Colour(0.5,0.5,0.5));
   G4VisAttributes * ColorOfAir  = new G4VisAttributes(G4Colour(1.,1.,1.));
-  G4VisAttributes * ColorOfLarg = new G4VisAttributes(G4Colour(1.0, 1.0, 0.0));
+//  G4VisAttributes * ColorOfLarg = new G4VisAttributes(G4Colour(1.0, 1.0, 0.0));
 
 
   //-----------------------------
@@ -99,7 +100,7 @@ G4LogicalVolume * FCALCryostatVolumes::Construct()
   G4LogicalVolume * LogicalInsulation = 
     new G4LogicalVolume(SolidInsulation, FCALMaterials->Material("Air"),
 			"InsulationLogical");
-  G4VPhysicalVolume * PhysicalInsulation = 
+//  G4VPhysicalVolume * PhysicalInsulation = 
     new G4PVPlacement(0, 0, LogicalInsulation, "InsulationPhysical",
 		      LogicalCryostat, 0, 0);
   
@@ -151,7 +152,7 @@ G4LogicalVolume * FCALCryostatVolumes::Construct()
     new G4LogicalVolume(SolidFrontExcluder, FCALMaterials->Material("Air")
 			, "FrontExcluderLogical");
 
-  G4VPhysicalVolume * PhysicalFrontExcluder =
+//  G4VPhysicalVolume * PhysicalFrontExcluder =
     new G4PVPlacement(0,G4ThreeVector(FrontExcluderPosX, FrontExcluderPosY,
 		      FrontExcluderPosZ), "FrontExcluderPhysical",
 		      LogicalFrontExcluder, PhysicalLArg, 0,0);
@@ -173,7 +174,7 @@ G4LogicalVolume * FCALCryostatVolumes::Construct()
   G4RotationMatrix * BackExcluderRotationMatrix = new G4RotationMatrix();
   BackExcluderRotationMatrix->rotateX(BackExcluderRotX);
 
-  G4VPhysicalVolume * PhysicalBackExcluder =
+//  G4VPhysicalVolume * PhysicalBackExcluder =
     new G4PVPlacement(BackExcluderRotationMatrix,
 		      G4ThreeVector(BackExcluderPosX, BackExcluderPosY,
 		      BackExcluderPosZ), "BackExcluder", LogicalBackExcluder, 
@@ -198,7 +199,7 @@ G4LogicalVolume * FCALCryostatVolumes::Construct()
   FCALRotationMatrix->rotateX(FCALEnvelopeRotX);
   //  FCALRotationMatrix->rotateY(FCALEnvelopeRotY);
 
-  G4VPhysicalVolume *  PhysicalFCALEnvelopp = 
+//  G4VPhysicalVolume *  PhysicalFCALEnvelopp = 
     new G4PVPlacement(FCALRotationMatrix, 
 		      G4ThreeVector(FCALEnvelopePosX,FCALEnvelopePosY,FCALEnvelopePosZ)
 		      , LogicalFCALEnvelope, "FCALEnvelopePhysical", LogicalLArg, 0,0);
@@ -215,7 +216,7 @@ G4LogicalVolume * FCALCryostatVolumes::Construct()
   G4RotationMatrix * EmModuleRot = new G4RotationMatrix();
   EmModuleRot->rotateZ(ModuleRotZ);
 
-  G4VPhysicalVolume * PhysicalFCALEmModule = 
+//  G4VPhysicalVolume * PhysicalFCALEmModule = 
     new G4PVPlacement(EmModuleRot, 
 		      G4ThreeVector(FCALEmModulePosX,FCALEmModulePosY,FCALEmModulePosZ),
 		      LogicalFCALEmModule,"FCALEmModulePhysical",LogicalFCALEnvelope,0,0);
@@ -230,7 +231,7 @@ G4LogicalVolume * FCALCryostatVolumes::Construct()
   G4RotationMatrix * HadModuleRot = new G4RotationMatrix();
   HadModuleRot->rotateZ(ModuleRotZ);
   
-  G4VPhysicalVolume * PhysicalFCALHadModule =
+//  G4VPhysicalVolume * PhysicalFCALHadModule =
     new G4PVPlacement(HadModuleRot, 
 		      G4ThreeVector(FCALHadModulePosX,FCALHadModulePosY,FCALHadModulePosZ),
 		      LogicalFCALHadModule, "FCALHadModulePhysical",LogicalFCALEnvelope,0,0);

@@ -1,25 +1,3 @@
-//
-// ********************************************************************
-// * DISCLAIMER                                                       *
-// *                                                                  *
-// * The following disclaimer summarizes all the specific disclaimers *
-// * of contributors to this software. The specific disclaimers,which *
-// * govern, are listed with their locations in:                      *
-// *   http://cern.ch/geant4/license                                  *
-// *                                                                  *
-// * Neither the authors of this software system, nor their employing *
-// * institutes,nor the agencies providing financial support for this *
-// * work  make  any representation or  warranty, express or implied, *
-// * regarding  this  software system or assume any liability for its *
-// * use.                                                             *
-// *                                                                  *
-// * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
-// * By copying,  distributing  or modifying the Program (or any work *
-// * based  on  the Program)  you indicate  your  acceptance of  this *
-// * statement, and all its terms.                                    *
-// ********************************************************************
-//
 
 #include <fstream>
 
@@ -28,24 +6,28 @@
 using namespace std;
 
 IndentPrintWriter::IndentPrintWriter(ostream* out, int level)
-    : out(out), indentLevel(level) {
-
-    indentString = "  ";
-    indented = false;
+    : out(out), 
+      closed(false), 
+      indentLevel(level),
+      indented(false),
+      indentString("  ") {
 }
 
 IndentPrintWriter::~IndentPrintWriter() {
 }
 
 void IndentPrintWriter::close() {
-    out->flush();
-    ofstream* fout = dynamic_cast<ofstream *>(out);
-    if (fout != NULL) {
-        fout->close();
+    if (!closed) {
+        out->flush();
+        ofstream* fout = dynamic_cast<ofstream *>(out);
+        if (fout != NULL) {
+            fout->close();
+        }
+        closed = true;
     }
 }
 
-IndentPrintWriter& IndentPrintWriter::operator<< (const char* s) {
+IndentPrintWriter& IndentPrintWriter::operator<< (const std::string & s) {
     if (!indented) doIndent();
     *out << s;
     return *this;
@@ -57,12 +39,12 @@ IndentPrintWriter& IndentPrintWriter::operator<< (ostream& (*)(ostream&)) {
     return *this;
 }
 
-void IndentPrintWriter::println(string s) {
-	*this << s.c_str() << endl;
+void IndentPrintWriter::println(const string & s) {
+	*this << s << endl;
 }
 
-void IndentPrintWriter::print(string s) {
-    *this << s.c_str();
+void IndentPrintWriter::print(const string & s) {
+    *this << s;
 }
 
 void IndentPrintWriter::println() {
@@ -72,7 +54,7 @@ void IndentPrintWriter::println() {
 
 void IndentPrintWriter::doIndent() {
 	for (int i=0; i<indentLevel; i++) {
-	    *out << indentString.c_str();
+	    *out << indentString;
 	}
 	indented = true;
 }
@@ -85,19 +67,19 @@ void IndentPrintWriter::outdent() {
     indentLevel--;
 }
 
-int IndentPrintWriter::getIndent() {
+int IndentPrintWriter::getIndent() const {
     return indentLevel;
 }
 
-void IndentPrintWriter::setIndent(int level) {
+void IndentPrintWriter::setIndent(const int level) {
     indentLevel = level;
 }
 
-string IndentPrintWriter::getIndentString() {
+string IndentPrintWriter::getIndentString() const {
     return indentString;
 }
 
-void IndentPrintWriter::setIndentString(string indent) {
+void IndentPrintWriter::setIndentString(const string & indent) {
     indentString = indent;
 }
 

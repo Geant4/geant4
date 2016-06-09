@@ -1,0 +1,195 @@
+$Id: History,v 1.19 2003/12/11 01:41:21 japost Exp $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                      Category History file
+                      ---------------------
+This file should be used by G4 developers and category coordinators
+to briefly summarize all major modifications introduced in the code
+and keep track of all category-tags.
+It DOES NOT substitute the  CVS log-message one should put at every
+committal in the CVS repository !
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+Dec 11th, 2003 - J.Apostolakis  (geomnav-V05-02-15)
+------------------------------
+- G4PropagatorInField.cc
+  o LocateIntersectionPoint: Refined re-setting of finalSection.
+    --> Endpoint recalculation is returned only for final section.
+    (trial fix in -14 is replaced by above code)
+  o Fixed ReEstimateEndPoint which ignored return code of AccurateAdvance
+    and moved to short end-point for long requests
+    It now leaves the endpoint unchanged, when it cannot improve it.
+  o Few format changes for PrintStatus
+
+Dec 10th, 2003 - J.Apostolakis  (geomnav-V05-02-14)
+------------------------------
+- G4PropagatorInField.cc on top of latest (not 1.7):
+  o Fix for the case where two previous corrections are 'operational'
+     Problem if the current endpoint is not the final one, and it has been
+     recalculated, and we need to go beyond the current section to the
+     final one -- the recalcuted endpoint no longer valid!
+
+Dec 10th, 2003 - J.Apostolakis  (geomnav-V05-02-13)
+------------------------------
+- G4PropagatorInField.cc
+  o Gone back to version 1.7, without the fix in LocateIntersectionPoint 
+      for the "long-standing error".
+
+Dec  5th, 2003 - G.Cosmo - (geomnav-V05-02-12)
+------------------------
+- G4TransportationManager.cc:
+  o removed initialisation of allocators for navigation levels, where they
+    were introduced as workaround for solving static initialisation a long
+    time ago. Now moved to "volumes" module, where they should belong, in
+    G4TouchableHistory.cc.
+- Restored original unit-tests, using inherited navigator.
+  --> Requires geomvol-V05-02-08
+ 
+Dec  4th, 2003 - J.Apostolakis  (geomnav-V05-02-11)
+------------------------------
+- G4PropagatorInField.cc 
+  o Corrected placement of #endif for two #ifdef VERBOSE
+
+Dec  2nd, 2003 - J.Apostolakis  (geomnav-V05-02-10)
+------------------------------
+- G4PropagatorInField[.hh.cc]:
+   o Fixed LocateIntersectionPoint for long-standing error.
+     A section of the chord was not considered in use case where
+     a previous chord at first appeared to have an intersection, but did not.
+
+Nov 26th, 2003 - J.Apostolakis  (geomnav-V05-02-09)
+------------------------------
+- G4PropagatorInField[.hh.cc]:
+  o Added argument Method LocateIntersectionPoint G4bool& recalculatedEndPt
+    to return 'true' if the endpoint has been recalculated.
+    This fixes a problem that can occasionally cause the skipping of a volume 
+    boundary - in the case when a re-integration was done near a boundary,
+    because the new endpoint was previously not passed back.
+  o ComputeStep also changed to accept above recalculation.
+  o New method GetVerboseLevel(),  closer to std naming than Verbose()
+
+Nov 14th, 2003 - J.Apostolakis  (geomnav-V05-02-08)
+------------------------------
+- Retagged the files of tag "geomnav-V05-02-07", due to tagging with same
+  name incorrectly files in another directory and, as such confusing Bonsai.
+
+Nov 13th, 2003 - J.Apostolakis  (geomnav-V05-02-07)
+------------------------------
+- G4PropagatorInField[.hh.icc.cc]:
+  o Pass safety sphere information to G4ChordFinder for optimisation
+  o Including G4ChordFinder.hh only in .cc file
+- Requires and coworks with "field-V05-02-08" tag. 
+
+
+Nov 10th, 2003 - G.Cosmo  (geomnav-V05-02-06)
+------------------------
+- G4Navigator[.hh.icc.cc] - methods review:
+  o Removed obsolete methods: IsExitNormalValid(), GetLocalExitNormal().
+  o Renamed method LocateGlobalPointAndSetup(p,v,history) to
+    ResetHistoryAndLocate(p,v,history).
+  o Moved to protected the following methods: GetCurrentLocalCoordinate(),
+    ComputeLocalPoint(), ComputeLocalAxis(), NetTranslation(),
+    NetRotation(), EnteredDaughterVolume().
+  o Fixed consistency of inline/not-inline implementations of methods.
+- Coworks with tag "tracking-V05-02-03".
+
+Nov 6th, 2003 - J.Apostolakis  (geomnav-V05-02-05)
+-----------------------------
+- G4PropagatorInField[.hh.icc.cc]:
+  o Implements move of EpsilonMin / Max to G4FieldManager.
+- Requires and coworks with "field-V05-02-04" or later tag.
+
+Nov 6th, 2003 - G.Cosmo  (geomnav-V05-02-04)
+-----------------------
+- G4Navigator[.hh.icc.cc]:
+  o Made relevant methods virtual to verify performance impact.
+    If tests will behave reasonably, a further refinement in the
+    design of the class will be applied, in view of a more consistent
+    design review next year.
+
+Nov 3rd, 2003 - G.Cosmo  (geomnav-V05-02-03)
+-----------------------
+- Code cleanup and headers inclusion review
+  (replaced by forward declarations where necessary).
+- Added build system to tests. Cleared compilation warnings.
+
+Oct 29th, 2003 - J.Apostolakis  (geomnav-V05-02-02)
+------------------------------
+- G4PropagatorInField: 
+  Added option to turn On/Off the optimisation of using the safety 
+  in calling G4Navigator. 
+- Unit tests: moved test testG4NavigatorX, X=1,2,3,4,5,6 here from
+  "volumes" module.
+
+Oct 24th, 2003 - G.Cosmo  (geomnav-V05-02-01)
+------------------------
+- Migrated calls to G4Exception to new scheme.
+- Fixed compilation warning in G4PropagationInField.
+
+Sep 29th, 2003 - G.Cosmo  (geomnav-V05-02-00)
+------------------------
+- Created.
+  Imported classes from "volumes", "management" and "verification" modules:
+    G4AuxiliaryNavServices[.hh.icc]		- from geometry/volumes
+    G4GeometryMessenger[.hh.cc]			-	"	"
+    G4Navigator[.hh.icc.cc]			-	"	"
+    G4NormalNavigation[.hh.icc.cc]		-	"	"
+    G4ParameterisedNavigation[.hh.icc.cc]	-	"	"
+    G4PropagatorInField[.hh.icc.cc]		-	"	"
+    G4ReplicaNavigation[.hh.icc.cc]		-	"	"
+    G4TransportationManager[.hh.icc.cc]		-	"	"
+    G4VoxelNavigation[.hh.icc.cc]		-	"	"
+    G4DrawVoxels[.hh.cc]			- from geometry/management
+    G4GeomTest*[.hh.cc]				- from geometry/verification
+- Cleared call to PV->Setup() according to changes in G4VPhysicalVolume.
+  Affected files: G4Navigator[.icc.cc], G4ParameterisedNavigation[.icc.cc],
+                  G4VoxelNavigation[.icc.cc], G4ReplicaNavigation[.icc.cc],
+                  G4NormalNavigation[.icc.cc].
+- G4DrawVoxels: retrieve top transformation through touchable history in
+  method DrawVoxels(). Removed old method GetAbsoluteTransformation().
+- G4GeomTestErrorList.cc: retrieve top transformation through touchable
+  history in method FindGlobalCoordinateSystem().
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Imported History file from old geometry/verification module
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+May 20th, 2003          G.Cosmo  (geomver-V05-01-00)
+- G4GeomTestVolume[.hh.cc]:
+  o Added methods TestRecursiveLine() and TestRecursiveCylinder() for
+    allowing recursion on line_test and cylinder_test respectively.
+  o Introduced ability to control depth and starting level of recursion.
+
+Jul 30th, 2002          G.Cosmo  (geomver-V04-01-00)
+- G4GeomTestVolume.cc: fixed recursive call to G4GeomTestVolume passing also
+  'tolerance' as argument in the recursive test algorithm.
+
+Apr 19th, 2002          G.Cosmo  (geomver-V04-00-00)
+- Moved inline constructors and destructors to no inline.
+  Affected files: G4GeomTestStreamLogger[.hh.cc].
+
+Oct 24th, 2001          G.Cosmo  (geomver-V03-02-02)
+- Fixed compilation error and warnings on HP-aCC. Modified files:
+  G4GeomTestVolume.cc, G4GeomTestStreamLogger.cc.
+
+Oct 24th, 2001          G.Cosmo  (geomver-V03-02-01)
+- Moved messenger to geometry/volumes and renamed G4GeometryMessenger.
+- Removed dependencies from intercoms and geometry/volumes.
+
+Oct 22nd, 2001		G.Cosmo  (geomver-V03-02-00)
+- Added "/geomtest/tolerance" command to set custom error tolerance.
+  Added Set/GetTolerance() methods to G4GeomTestVolume class.
+- Introduced additional diagnostics in G4GeomTestStreamLogger to report
+  in case no intersections/overlaps are detected.
+
+Oct 16th, 2001		G.Cosmo
+- Added messenger for geometry overlaps testing.
+- General source code formatting.
+- G4TestGeom* classes implementation by D.C.Williams (UCSC, BaBar).

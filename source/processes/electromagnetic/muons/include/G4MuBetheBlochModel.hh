@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MuBetheBlochModel.hh,v 1.7 2003/06/16 17:01:36 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4MuBetheBlochModel.hh,v 1.8 2003/07/21 12:52:35 vnivanch Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // -------------------------------------------------------------------
 //
@@ -76,15 +76,15 @@ public:
 
   G4double MinEnergyCut(const G4ParticleDefinition*,
                         const G4MaterialCutsCouple*);
- 
+
   G4bool IsInCharge(const G4ParticleDefinition*);
 
-  virtual G4double ComputeDEDX(const G4Material*,
+  virtual G4double ComputeDEDX(const G4MaterialCutsCouple*,
                        const G4ParticleDefinition*,
                              G4double kineticEnergy,
                              G4double cutEnergy);
 
-  virtual G4double CrossSection(const G4Material*,
+  virtual G4double CrossSection(const G4MaterialCutsCouple*,
                         const G4ParticleDefinition*,
                               G4double kineticEnergy,
                               G4double cutEnergy,

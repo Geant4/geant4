@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4hLowEnergyLoss.hh,v 1.15 2003/04/18 17:50:32 vnivanch Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // $Id: 
 // ------------------------------------------------------------

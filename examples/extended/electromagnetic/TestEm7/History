@@ -1,4 +1,4 @@
-$Id: History,v 1.6 2003/06/18 18:18:55 vnivanch Exp $
+$Id: History,v 1.13 2003/12/05 11:18:40 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,6 +15,29 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+05-12-03 V.Ivanchenko (testem7-V05-02-05)
+- Update hadronic physics according to the hadronics_lists
+
+25-11-03 V.Ivanchenko (testem7-V05-02-04)
+- Fix geometry (G.Cosmo)
+
+19-11-03 V.Ivanchenko (testem7-V05-02-03)
+- Update BinaryCascade add light ion interactions
+     
+13-11-03 John Allison
+- Removed OPACS from Vis Manager.
+
+24-10-03 mma (testem7-V05-02-02)
+- PhysListEmStandard: AddProcess(Bremsstrahlung,-1,3,3) ..etc..     
+     
+13-10-03 V.Ivanchenko (testem7-V05-02-01)
+- Update Binary cascade constructor
+
+10-10-03 mma (testem7-V05-02-00)
+ - migration em STD -> em standard
+ - NOHIST -> ANALYSIS_USE
+ - cosmetic in material definitions
+ 
 18-06-03 V.Ivant (testem7-V05-01-04)
  - remove wrappers G4std 
 

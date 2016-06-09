@@ -19,6 +19,7 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
+//
 #define RUN
 
 #include <math.h>
@@ -35,7 +36,7 @@ G4NonEquilibriumEvaporator::G4NonEquilibriumEvaporator()
   }
 };
 
-G4CollisionOutput G4NonEquilibriumEvaporator::collide(G4InuclParticle* bullet,
+G4CollisionOutput G4NonEquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
 						      G4InuclParticle* target) {
 
   if (verboseLevel > 3) {
@@ -459,7 +460,7 @@ G4double G4NonEquilibriumEvaporator::getMatrixElement(G4double A) const {
   return me;
 }
 
-G4double G4NonEquilibriumEvaporator::getE0(G4double A) const {
+G4double G4NonEquilibriumEvaporator::getE0(G4double ) const {
 
   if (verboseLevel > 3) {
     G4cout << " >>> G4NonEquilibriumEvaporator::getEO" << G4endl;
@@ -471,7 +472,7 @@ G4double G4NonEquilibriumEvaporator::getE0(G4double A) const {
 }
 
 G4double G4NonEquilibriumEvaporator::getParLev(G4double A, 
-					       G4double Z) const {
+					       G4double ) const {
 
   if (verboseLevel > 3) {
     G4cout << " >>> G4NonEquilibriumEvaporator::getParLev" << G4endl;

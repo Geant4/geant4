@@ -21,14 +21,14 @@
 // ********************************************************************
 //
 //
-// $Id: F02FieldMessenger.cc,v 1.4 2002/12/05 01:06:57 asaim Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: F02FieldMessenger.cc,v 1.5 2003/11/12 16:35:23 japost Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // 
 
 #include "F02FieldMessenger.hh"
 
-#include "F02ElectroMagneticField.hh"
+#include "F02ElectricFieldSetup.hh"
 #include "G4UIdirectory.hh"
 #include "G4UIcmdWithAString.hh"
 #include "G4UIcmdWithAnInteger.hh"
@@ -37,8 +37,8 @@
 
 //////////////////////////////////////////////////////////////////////////////
 
-F02FieldMessenger::F02FieldMessenger(F02ElectroMagneticField* pEMfield)
-  :fEMfield(pEMfield)
+F02FieldMessenger::F02FieldMessenger(F02ElectricFieldSetup* pEMfield)
+  :fEFieldSetup(pEMfield)
 { 
   F02detDir = new G4UIdirectory("/field/");
   F02detDir->SetGuidance("F02 field tracking control.");
@@ -100,19 +100,19 @@ void F02FieldMessenger::SetNewValue( G4UIcommand* command, G4String newValue)
 { 
   if( command == StepperCmd )
   { 
-    fEMfield->SetStepperType(StepperCmd->GetNewIntValue(newValue));
+    fEFieldSetup->SetStepperType(StepperCmd->GetNewIntValue(newValue));
   }  
   if( command == UpdateCmd )
   { 
-    fEMfield->UpdateField(); 
+    fEFieldSetup->UpdateField(); 
   }
   if( command == MagFieldCmd )
   { 
-    fEMfield->SetFieldValue(MagFieldCmd->GetNewDoubleValue(newValue));
+    fEFieldSetup->SetFieldValue(MagFieldCmd->GetNewDoubleValue(newValue));
   }
   if( command == MinStepCmd )
   { 
-    fEMfield->SetMinStep(MinStepCmd->GetNewDoubleValue(newValue));
+    fEFieldSetup->SetMinStep(MinStepCmd->GetNewDoubleValue(newValue));
   }
 }
 

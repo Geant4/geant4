@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4LogicalSkinSurface.hh,v 1.9 2003/06/16 16:54:43 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4LogicalSkinSurface.hh,v 1.12 2003/12/01 14:53:26 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // class G4LogicalSkinSurface
 //
@@ -36,15 +36,15 @@
 // Created:     1997-06-16
 // Author:      John Apostolakis (John.Apostolakis@cern.ch)
 //
-// ********************************************************************
-
+// ----------------------------------------------------------------------
 #ifndef G4LogicalSkinSurface_h
 #define G4LogicalSkinSurface_h 1
 
-#include "G4LogicalSurface.hh"
-#include "G4LogicalVolume.hh"
-
 #include <vector>
+
+#include "G4LogicalSurface.hh"
+
+class G4LogicalVolume;
 
 class G4LogicalSkinSurface : public G4LogicalSurface 
 {
@@ -53,7 +53,7 @@ class G4LogicalSkinSurface : public G4LogicalSurface
 
     G4LogicalSkinSurface( const G4String& name,
                                 G4LogicalVolume* vol,
-                                G4OpticalSurface* opticalSurface );
+                                G4SurfaceProperty* surfaceProperty );
     ~G4LogicalSkinSurface();
        // Constructor and destructor.
 

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: A01Trajectory.cc,v 1.4 2002/12/13 11:34:34 gunter Exp $
+// $Id: A01Trajectory.cc,v 1.5 2003/07/11 21:32:02 duns Exp $
 // --------------------------------------------------------------
 //
 
@@ -61,6 +61,7 @@ A01Trajectory::A01Trajectory(const G4Track* aTrack)
 }
 
 A01Trajectory::A01Trajectory(A01Trajectory & right)
+    : G4VTrajectory()
 {
   ParticleName = right.ParticleName;
   fpParticleDefinition = right.fpParticleDefinition;
@@ -103,7 +104,13 @@ void A01Trajectory::ShowTrajectory() const
    }
 }
 
-void A01Trajectory::DrawTrajectory(G4int i_mode) const
+void A01Trajectory::ShowTrajectory(std::ostream& o) const
+{
+    G4VTrajectory::ShowTrajectory(o);
+}
+
+
+void A01Trajectory::DrawTrajectory(G4int /*i_mode*/) const
 {
 
    G4VVisManager* pVVisManager = G4VVisManager::GetConcreteInstance();

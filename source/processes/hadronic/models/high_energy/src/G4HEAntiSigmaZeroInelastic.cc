@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4HEAntiSigmaZeroInelastic.cc,v 1.7 2002/12/12 19:18:00 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4HEAntiSigmaZeroInelastic.cc,v 1.8 2003/07/01 15:42:23 hpw Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 //
 
@@ -42,12 +42,11 @@
 #include "G4HEAntiSigmaZeroInelastic.hh"
 #include "G4Gamma.hh"
 
-G4VParticleChange * G4HEAntiSigmaZeroInelastic::
-ApplyYourself( const G4Track &aTrack, G4Nucleus &targetNucleus )
+G4HadFinalState *  G4HEAntiSigmaZeroInelastic::
+ApplyYourself( const G4HadProjectile &aTrack, G4Nucleus &targetNucleus )
   {
     G4HEVector * pv = new G4HEVector[MAXPART];
-    theParticleChange.Initialize( aTrack );
-    const G4DynamicParticle *aParticle = aTrack.GetDynamicParticle();
+    const G4HadProjectile *aParticle = &aTrack;
     G4HEVector incidentParticle(aParticle);
     G4HEAntiLambdaInelastic theAntiLambdaInelastic;
     theAntiLambdaInelastic.SetMaxNumberOfSecondaries(MAXPART);
@@ -60,9 +59,9 @@ ApplyYourself( const G4Track &aTrack, G4Nucleus &targetNucleus )
                                      (incidentTotalMomentum - pgam)/incidentTotalMomentum);                   
     G4DynamicParticle * aLambda = new G4DynamicParticle();
     aLambda->SetDefinition(G4AntiLambda::AntiLambda());
-    G4Track aLambdaTrack(aLambda, 0, aTrack.GetPosition());
     aLambda->SetMomentum(incidentAntiLambda.getMomentum());
-    G4VParticleChange * result = theAntiLambdaInelastic.ApplyYourself(aLambdaTrack, targetNucleus);         	
+    G4HadProjectile aLambdaTrack(*aLambda);
+    G4HadFinalState * result = theAntiLambdaInelastic.ApplyYourself(aLambdaTrack, targetNucleus);         	
     vecLength = theAntiLambdaInelastic.GetNumberOfSecondaries();
     pv[vecLength] = Gamma;
     pv[vecLength].setMomentum(incidentParticle.getMomentum());
@@ -70,8 +69,7 @@ ApplyYourself( const G4Track &aTrack, G4Nucleus &targetNucleus )
     G4DynamicParticle * aPhoton = new G4DynamicParticle();
     aPhoton->SetDefinition(G4Gamma::Gamma());
     aPhoton->SetMomentum(pv[vecLength].getMomentum());
-    G4Track * aGammaTrack = new G4Track(aPhoton, aTrack.GetGlobalTime(), aTrack.GetPosition());
-    result->AddSecondary(aGammaTrack);
+    result->AddSecondary(aPhoton);
       delete [] pv;
     return result;
   } 

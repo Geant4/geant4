@@ -19,6 +19,7 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
+//
 // File: G4VPHitsCollectionIO.hh
 //
 // History:

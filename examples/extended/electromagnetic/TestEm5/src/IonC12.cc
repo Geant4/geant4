@@ -21,14 +21,11 @@
 // ********************************************************************
 //
 //
-// $Id: IonC12.cc,v 1.2 2003/06/16 16:47:54 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: IonC12.cc,v 1.4 2003/08/11 10:27:14 maire Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-#include <fstream>
-#include <iomanip>
 
 #include "IonC12.hh"
 

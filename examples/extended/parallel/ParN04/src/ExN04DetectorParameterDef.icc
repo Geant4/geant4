@@ -72,5 +72,5 @@
   muBox_radius = 350.*cm;
   muBox_width  = muBox_radius - 5.*cm;
   muBox_thick  = 1.*cm;
-  muBox_length = 2.*muBox_radius;
+  muBox_length = expHall_z - 10.*cm;
 

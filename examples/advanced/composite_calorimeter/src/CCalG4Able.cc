@@ -54,6 +54,11 @@ CCalG4Able::CCalG4Able(G4String name):
     CCalSensitiveConfiguration::getInstance()->getSensitiveFlag(name);
 }
 
+CCalG4Able::~CCalG4Able() {
+  if (detPhysicalVolume) 
+    delete[] detPhysicalVolume;
+}
+
 G4VPhysicalVolume* CCalG4Able::PhysicalVolume(G4VPhysicalVolume* pv) {
   //If detPhysicalVolume is not (nil) the volume has already been built
   //so return it. In other case, construct it and its daughters, then

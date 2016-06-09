@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.5 2002/03/01 00:29:52 johna Exp $
+# $Id: GNUmakefile,v 1.6 2003/10/03 15:18:22 gcosmo Exp $
 
 # lib name
 name := G4VRML
@@ -20,7 +20,6 @@ CPPFLAGS += -I$(G4BASE)/geometry/solids/specific/include
 CPPFLAGS += -I$(G4BASE)/graphics_reps/include
 CPPFLAGS += -I$(G4BASE)/intercoms/include
 CPPFLAGS += -I$(G4BASE)/geometry/management/include
-CPPFLAGS += -I$(G4BASE)/geometry/volumes/include
 CPPFLAGS += -I$(G4BASE)/visualization/VRML/include
 
 include $(G4INSTALL)/config/common.gmk

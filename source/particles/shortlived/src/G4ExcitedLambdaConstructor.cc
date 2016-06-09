@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4ExcitedLambdaConstructor.cc,v 1.7 2003/05/20 10:05:35 kurasige Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // 
 // --------------------------------------------------------------

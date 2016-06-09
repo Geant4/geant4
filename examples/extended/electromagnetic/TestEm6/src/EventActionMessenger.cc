@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: EventActionMessenger.cc,v 1.3 2002/12/12 12:48:16 maire Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: EventActionMessenger.cc,v 1.4 2003/10/10 10:42:39 maire Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // 
 
@@ -34,7 +34,6 @@
 #include "EventAction.hh"
 #include "G4UIcmdWithAString.hh"
 #include "G4UIcmdWithAnInteger.hh"
-#include "globals.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

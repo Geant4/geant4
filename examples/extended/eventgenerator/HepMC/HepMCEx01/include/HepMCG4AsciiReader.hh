@@ -19,11 +19,11 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
-
+//
 // ====================================================================
 //
 //   HepMCG4AsciiReader.hh
-//   $Id: HepMCG4AsciiReader.hh,v 1.1 2002/05/28 13:52:40 murakami Exp $
+//   $Id: HepMCG4AsciiReader.hh,v 1.2 2003/12/09 15:30:42 gunter Exp $
 //
 // ====================================================================
 #ifndef HEPMC_G4_ASCII_READER_H

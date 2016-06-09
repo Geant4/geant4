@@ -21,10 +21,10 @@
 // ********************************************************************
 //
 //
-// $Id: B02DetectorConstruction.cc,v 1.8 2003/06/16 16:47:17 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: B02DetectorConstruction.cc,v 1.10 2003/07/31 11:59:40 dressel Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
-
+#include "G4Types.hh"
 #include <strstream>
 #include "globals.hh"
 
@@ -189,15 +189,15 @@ G4VPhysicalVolume* B02DetectorConstruction::Construct()
   pos_x = 0*cm;
   pos_y = 0*cm;
   pos_z = 0;
-  G4VPhysicalVolume *pvol = 
-    new G4PVPlacement(0, 
-		      G4ThreeVector(pos_x, pos_y, pos_z),
-		      aShield_log, 
-		      name, 
-		      worldCylinder_log, 
-		      false, 
-		      0);
 
+  new G4PVPlacement(0, 
+		    G4ThreeVector(pos_x, pos_y, pos_z),
+		    aShield_log, 
+		    name, 
+		    worldCylinder_log, 
+		    false, 
+		    0);
+  
   return pWorldVolume;
 }
 

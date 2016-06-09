@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4TouchableHistoryHandle.hh,v 1.4 2002/07/23 08:50:36 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4TouchableHistoryHandle.hh,v 1.5 2003/11/02 16:06:05 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 // 
 // Class G4TouchableHistoryHandle
 //
@@ -38,7 +38,6 @@
 
 // Author: Radovan Chytracek (Radovan.Chytracek@cern.ch), March 2001
 // ----------------------------------------------------------------------
-
 #ifndef _G4TOUCHABLEHISTORYHANDLE_H_
 #define _G4TOUCHABLEHISTORYHANDLE_H_ 1
 

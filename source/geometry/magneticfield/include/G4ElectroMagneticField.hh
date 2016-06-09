@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ElectroMagneticField.hh,v 1.7 2003/04/02 08:49:19 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4ElectroMagneticField.hh,v 1.9 2003/11/05 10:37:06 japost Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 //
 // class G4ElectroMagneticField
@@ -35,13 +35,14 @@
 
 // History:
 // - Created: J.Apostolakis, November 12th, 1998                   
+// -------------------------------------------------------------------
 
 #ifndef G4ELECTROMAGNETIC_FIELD_DEF
 #define G4ELECTROMAGNETIC_FIELD_DEF
 
-#include "G4MagneticField.hh"
+#include "G4Field.hh"
 
-class G4ElectroMagneticField : public G4MagneticField
+class G4ElectroMagneticField : public G4Field
 {
   public:  // with description
 
@@ -54,6 +55,12 @@ class G4ElectroMagneticField : public G4MagneticField
 
      virtual void  GetFieldValue(const G4double Point[4],
                                        G4double *Bfield ) const = 0;
+
+     virtual G4bool   DoesFieldChangeEnergy() const = 0;
+
+       //  For field with an electric component this should be true
+       //  For pure magnetic field this should be false
+       //    Alternative: default safe implementation { return true; }
 };
 
 #endif /* G4ELECTROMAGNETIC_FIELD_DEF */

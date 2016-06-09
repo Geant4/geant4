@@ -21,12 +21,12 @@
 // ********************************************************************
 //
 //
-// $Id: G4NavigationLevelRep.icc,v 1.6 2002/07/23 08:50:35 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4NavigationLevelRep.icc,v 1.9 2003/12/04 15:58:08 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 //  1 October 1997 J.Apostolakis Initial version. 
 //                        
-// ********************************************************************
+// ----------------------------------------------------------------------
 
 extern G4Allocator<G4NavigationLevelRep> aNavigLevelRepAllocator;
 
@@ -89,10 +89,12 @@ G4NavigationLevelRep::~G4NavigationLevelRep()
 #ifdef DEBUG_NAVIG_LEVEL
   if(fCountRef>0)
   {
-    G4cout << "ERROR! - A G4NavigationLevelRep is being deleted that has"
+    G4cerr << "ERROR! - A G4NavigationLevelRep is being deleted that has"
            << G4endl << " positive reference count (fCountRef > 0) !"
            << G4endl;
-    G4Exception( "ERROR - G4NavigationLevelRep::~G4NavigationLevelRep()" ); 
+    G4Exception("G4NavigationLevelRep::~G4NavigationLevelRep()",
+                "MemoryCorruption", FatalException,
+                "Deletion of data-level object with positive reference count.");
   } 
 #endif
 }
@@ -104,9 +106,7 @@ inline
 G4NavigationLevelRep& 
 G4NavigationLevelRep::operator=( const G4NavigationLevelRep &right )
 { 
-  if ( &right == this ) return *this;
-
-  if (&right)
+  if ( &right != this )
   {
     sTransform =  right.sTransform;  
     sPhysicalVolumePtr = right.sPhysicalVolumePtr;
@@ -114,7 +114,6 @@ G4NavigationLevelRep::operator=( const G4NavigationLevelRep &right )
     sReplicaNo =  right.sReplicaNo;
     fCountRef = right.fCountRef;
   }
-
   return *this;
 } 
 

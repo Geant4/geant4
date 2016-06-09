@@ -22,7 +22,7 @@
 //
 //
 // $Id: SAXSubscriberPool.cc,v 1.3 2002/06/03 12:09:33 radoone Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // 
 // --------------------------------------------------------------

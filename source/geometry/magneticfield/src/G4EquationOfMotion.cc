@@ -21,9 +21,11 @@
 // ********************************************************************
 //
 //
-// $Id: G4EquationOfMotion.cc,v 1.7 2002/06/11 08:34:27 japost Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4EquationOfMotion.cc,v 1.8 2003/10/31 14:35:53 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
+// -------------------------------------------------------------------
+
 #include "G4EquationOfMotion.hh"
 
 G4EquationOfMotion::~G4EquationOfMotion()

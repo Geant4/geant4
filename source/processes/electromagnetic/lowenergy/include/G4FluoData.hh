@@ -19,9 +19,6 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
-
-//
-//
 //
 // Author: Elena Guardincerri (Elena.Guardincerri@ge.infn.it)
 //

@@ -21,14 +21,15 @@
 // ********************************************************************
 //
 //
-// $Id: G4WeightCutOffProcess.hh,v 1.2 2002/10/16 16:26:59 dressel Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4WeightCutOffProcess.hh,v 1.3 2003/11/26 14:51:49 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // ----------------------------------------------------------------------
 // Class G4WeightCutOffProcess
 //
 // Class description:
 //
+// Process for biasing particle-change cutoff.
 
 // Author: Michael Dressel (Michael.Dressel@cern.ch)
 // ----------------------------------------------------------------------
@@ -48,11 +49,11 @@ class G4WeightCutOffProcess : public G4VProcess
 public:  // with description
 
   G4WeightCutOffProcess(G4double wsurvival,
-			G4double wlimit,
-			G4double isource,
-			G4VIStore *istore,
-			const G4VGCellFinder &aGCellFinder,
-			const G4String &aName = "WeightCutOffProcess");
+                        G4double wlimit,
+                        G4double isource,
+                        G4VIStore *istore,
+                        const G4VGCellFinder &aGCellFinder,
+                        const G4String &aName = "WeightCutOffProcess");
     // create a G4ParticleChange
 
   virtual ~G4WeightCutOffProcess();
@@ -60,31 +61,30 @@ public:  // with description
 
   virtual G4double 
   PostStepGetPhysicalInteractionLength(const G4Track& aTrack,
-				       G4double   previousStepSize,
-				       G4ForceCondition* condition);
+                                       G4double   previousStepSize,
+                                       G4ForceCondition* condition);
     // make the process beeing forced
 
   virtual G4VParticleChange * PostStepDoIt(const G4Track&, 
-				   const G4Step&);
+                                           const G4Step&);
 
 
   const G4String &GetName() const;
 
- 
 public:  // without description
 
   //  no operation in  AtRestDoIt and  AlongStepDoIt
 
   virtual G4double 
   AlongStepGetPhysicalInteractionLength(const G4Track&,
-					G4double  ,
-					G4double  ,
-					G4double& ,
-					G4GPILSelection*);
+                                        G4double  ,
+                                        G4double  ,
+                                        G4double& ,
+                                        G4GPILSelection*);
   
   virtual G4double 
   AtRestGetPhysicalInteractionLength(const G4Track& ,
-				     G4ForceCondition*);
+                                     G4ForceCondition*);
 
   virtual G4VParticleChange* AtRestDoIt(const G4Track&, const G4Step&);
   virtual G4VParticleChange* AlongStepDoIt(const G4Track&, const G4Step&);
@@ -104,8 +104,3 @@ private:
 };
 
 #endif
-
-
-
-
-

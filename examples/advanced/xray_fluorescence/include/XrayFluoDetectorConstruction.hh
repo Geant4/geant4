@@ -149,12 +149,13 @@ private:
   G4Material*        Al;
   G4Material*        Si;
   G4Material*        Cu;
+  G4Material*        matOx;
   G4Material*        HPGe;
   G4Material*        materialMg;
   G4Material*        materialNd;
   G4Material*        Sn;
   G4Material*        Ti;
-
+  G4Material*        U;
 
 
 

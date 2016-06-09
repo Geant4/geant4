@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Scene.hh,v 1.13 2003/06/16 17:14:03 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4Scene.hh,v 1.14 2003/11/27 11:48:03 johna Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // 
 // Scene  John Allison  19th July 1996.
@@ -87,6 +87,11 @@ public: // With description
   // "transient" objects, such as hits, at end of event.  Otherwise
   // they will be accumulated.
 
+  G4bool GetRefreshAtEndOfRun () const;
+  // If true, the visualization manager will request viewer to refresh
+  // "transient" objects, such as hits, at end of run.  Otherwise
+  // they will be accumulated.
+
   //////////////////////////////////////////////
   // Add, Set, Clear functions...
 
@@ -123,6 +128,11 @@ public: // With description
   // refresh "transient" objects, such as hits, at end of event.
   // Otherwise they will be accumulated.
 
+  void SetRefreshAtEndOfRun(G4bool);
+  // If set true, the visualization manager will request viewer to
+  // refresh "transient" objects, such as hits, at end of run.
+  // Otherwise they will be accumulated.
+
   void CalculateExtent();
   // (Re-)calculates the extent from the extents of its models.
 
@@ -133,6 +143,7 @@ private:
   G4VisExtent fExtent;
   G4Point3D   fStandardTargetPoint;
   G4bool      fRefreshAtEndOfEvent;
+  G4bool      fRefreshAtEndOfRun;
 };
 
 #include "G4Scene.icc"

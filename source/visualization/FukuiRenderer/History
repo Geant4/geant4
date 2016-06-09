@@ -1,3 +1,28 @@
+$Id: History,v 1.17 2003/10/03 15:21:20 gcosmo Exp $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                      Category History file
+                      ---------------------
+This file should be used by G4 developers and category coordinators
+to briefly summarize all major modifications introduced in the code
+and keep track of all category-tags.
+It DOES NOT substitute the  CVS log-message one should put at every
+committal in the CVS repository !
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+History file for visualization/FukuiRenderer sub-category
+---------------------------------------------------------
+
+4th October 2003  Gabriele Cosmo (vis-V05-02-01)
+- Simplified GNUmakefile.
+
 DAWN-V04-01-01 Satoshi TANAKA  Sept 01, 2002
 - Precision control with "setenv G4DAWNFILE_PRECISION number".  
 

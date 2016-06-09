@@ -21,12 +21,12 @@
 // ********************************************************************
 //
 //
-// $Id: Em10PhysicsList.cc,v 1.6 2003/06/16 16:47:35 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
-// 
+// $Id: Em10PhysicsList.cc,v 1.8 2003/08/28 09:36:12 vnivanch Exp $
+// GEANT4 tag $Name: geant4-06-00 $
+//
 
 #include "G4Timer.hh"
-   
+
 #include "Em10PhysicsList.hh"
 #include "Em10DetectorConstruction.hh"
 #include "Em10PhysicsListMessenger.hh"
@@ -42,7 +42,7 @@
 #include "G4UnitsTable.hh"
 #include "G4ios.hh"
 #include <iomanip>
-               
+
 #include "G4FastSimulationManagerProcess.hh"
 
 
@@ -68,7 +68,6 @@ Em10PhysicsList::Em10PhysicsList(Em10DetectorConstruction* p)
 
   cutForGamma = defaultCutValue ;
   cutForElectron = defaultCutValue ;
-  cutForProton = defaultCutValue ;
 
   SetVerboseLevel(1);
   physicsListMessenger = new Em10PhysicsListMessenger(this);
@@ -167,17 +166,17 @@ void Em10PhysicsList::ConstructProcess()
 #include "G4GammaConversion.hh"
 #include "G4PhotoElectricEffect.hh"
 
-#include "G4MultipleScattering.hh"
+#include "G4MultipleScattering52.hh"
 
-#include "G4eIonisation.hh"
-#include "G4eBremsstrahlung.hh"
+#include "G4eIonisation52.hh"
+#include "G4eBremsstrahlung52.hh"
 #include "G4eplusAnnihilation.hh"
 
-#include "G4MuIonisation.hh"
-#include "G4MuBremsstrahlung.hh"
-#include "G4MuPairProduction.hh"
+#include "G4MuIonisation52.hh"
+#include "G4MuBremsstrahlung52.hh"
+#include "G4MuPairProduction52.hh"
 
-#include "G4hIonisation.hh"
+#include "G4hIonisation52.hh"
 #include "G4PAIonisation.hh"
 
 #include "G4ForwardXrayTR.hh"
@@ -196,28 +195,28 @@ void Em10PhysicsList::ConstructEM()
     G4ParticleDefinition* particle = theParticleIterator->value();
     G4ProcessManager* pmanager = particle->GetProcessManager();
     G4String particleName = particle->GetParticleName();
-     
-    if (particleName == "gamma") 
+
+    if (particleName == "gamma")
     {
       // Construct processes for gamma
 
-      thePhotoElectricEffect = new G4PhotoElectricEffect();      
+      thePhotoElectricEffect = new G4PhotoElectricEffect();
       theComptonScattering   = new G4ComptonScattering();
       theGammaConversion     = new G4GammaConversion();
-      
+
       pmanager->AddDiscreteProcess(thePhotoElectricEffect);
       pmanager->AddDiscreteProcess(theComptonScattering);
 
       pmanager->AddDiscreteProcess(theGammaConversion);
-      
-    } 
-    else if (particleName == "e-") 
+
+    }
+    else if (particleName == "e-")
     {
-      // Construct processes for electron 
+      // Construct processes for electron
 
       // theeminusMultipleScattering = new G4MultipleScattering();
       //   theeminusIonisation = new G4eIonisation();
-      theeminusBremsstrahlung = new G4eBremsstrahlung();
+      theeminusBremsstrahlung = new G4eBremsstrahlung52();
 
      //   fPAIonisation = new G4PAIonisation("Xenon") ;
      // fForwardXrayTR = new G4ForwardXrayTR("Air","Polypropelene","XrayTR") ;
@@ -231,7 +230,7 @@ void Em10PhysicsList::ConstructEM()
        pmanager->AddProcess(new G4IonisationByLogicalVolume(particleName,
                                      pDet->GetLogicalAbsorber(),
                                     "IonisationByLogVol"),-1,1,-1);
-             
+
        pmanager->AddContinuousProcess(
                  new G4RegularXTRadiator(pDet->GetLogicalRadiator(),
 						    pDet->GetFoilMaterial(),
@@ -241,36 +240,36 @@ void Em10PhysicsList::ConstructEM()
 						    pDet->GetFoilNumber(),
 					 "RegularXTRadiator"));
        // ,-1,1,-1);
-       
-       pmanager->AddProcess(theeminusBremsstrahlung,-1,-1,-1); 
-       
+
+       pmanager->AddProcess(theeminusBremsstrahlung,-1,-1,-1);
+
        //   pmanager->AddProcess(fPAIonisation,-1,2,2);
- 
+
        //  pmanager->AddProcess(fForwardXrayTR,-1,-1,2);
-     
+
       pmanager->AddProcess(theeminusStepCut,-1,-1,4);
       theeminusStepCut->SetMaxStep(MaxChargedStep) ;
 
-    } 
-    else if (particleName == "e+") 
+    }
+    else if (particleName == "e+")
     {
-      // Construct processes for positron 
+      // Construct processes for positron
 
       //   theeplusMultipleScattering = new G4MultipleScattering();
-      theeplusIonisation = new G4eIonisation();
-      theeplusBremsstrahlung = new G4eBremsstrahlung();
+      theeplusIonisation = new G4eIonisation52();
+      theeplusBremsstrahlung = new G4eBremsstrahlung52();
       // theeplusAnnihilation = new G4eplusAnnihilation();
 
       //  fPAIonisation = new G4PAIonisation("Xenon") ;
       // fForwardXrayTR = new G4ForwardXrayTR("Air","Polypropelene","XrayTR") ;
 
       theeplusStepCut = new Em10StepCut();
-      
+
       //  pmanager->AddProcess(theeplusMultipleScattering,-1,1,1);
       pmanager->AddProcess(theeplusIonisation,-1,2,2);
       pmanager->AddProcess(theeplusBremsstrahlung,-1,-1,3);
-      //  pmanager->AddProcess(theeplusAnnihilation,0,-1,4); 
-     
+      //  pmanager->AddProcess(theeplusAnnihilation,0,-1,4);
+
       //  pmanager->AddProcess(fPAIonisation,-1,2,2);
 
 
@@ -278,12 +277,12 @@ void Em10PhysicsList::ConstructEM()
 
       pmanager->AddProcess(theeplusStepCut,-1,-1,5);
       theeplusStepCut->SetMaxStep(MaxChargedStep) ;
-  
-    } 
-    else if( particleName == "mu+" || 
-               particleName == "mu-"    ) 
+
+    }
+    else if( particleName == "mu+" ||
+               particleName == "mu-"    )
     {
-     // Construct processes for muon+ 
+     // Construct processes for muon+
 
       //   Em10StepCut* muonStepCut = new Em10StepCut();
 
@@ -291,25 +290,25 @@ void Em10PhysicsList::ConstructEM()
      //  pmanager->AddProcess(new G4MultipleScattering(),-1,1,1);
      //  pmanager->AddProcess(themuIonisation,-1,2,2);
      //  pmanager->AddProcess(new G4MuBremsstrahlung(),-1,-1,3);
-     //  pmanager->AddProcess(new G4MuPairProduction(),-1,-1,4); 
-      
+     //  pmanager->AddProcess(new G4MuPairProduction(),-1,-1,4);
+
       //  pmanager->AddProcess(new G4PAIonisation("Xenon"),-1,2,2) ;
       // pmanager->AddProcess( muonStepCut,-1,-1,3);
       //  muonStepCut->SetMaxStep(MaxChargedStep) ;
 
-    } 
+    }
     else if (
-                particleName == "proton"  
-               || particleName == "antiproton"  
-               || particleName == "pi+"  
+                particleName == "proton"
+               || particleName == "antiproton"
+               || particleName == "pi+"
                || particleName == "pi-"
-               || particleName == "kaon+"  
-               || particleName == "kaon-"  
+               || particleName == "kaon+"
+               || particleName == "kaon-"
               )
     {
         Em10StepCut* thehadronStepCut = new Em10StepCut();
 
-      //  G4hIonisation* thehIonisation = new G4hIonisation() ; 
+      //  G4hIonisation* thehIonisation = new G4hIonisation() ;
       //   G4MultipleScattering* thehMultipleScattering =
       //                  new G4MultipleScattering() ;
 
@@ -322,11 +321,11 @@ void Em10PhysicsList::ConstructEM()
 
       //  pmanager->AddProcess(new G4PAIonisation("Xenon"),-1,2,2) ;
       // pmanager->AddProcess(new G4PAIonisation("Argon"),-1,2,2) ;
-      
+
         pmanager->AddProcess( thehadronStepCut,-1,-1,3);
         thehadronStepCut->SetMaxStep(MaxChargedStep) ;
       // thehadronStepCut->SetMaxStep(10*mm) ;
-     
+
     }
   }
 }
@@ -412,7 +411,6 @@ void Em10PhysicsList::SetCuts()
 
 void Em10PhysicsList::SetGammaCut(G4double val)
 {
-  ResetCuts();
   cutForGamma = val;
 }
 
@@ -420,68 +418,7 @@ void Em10PhysicsList::SetGammaCut(G4double val)
 
 void Em10PhysicsList::SetElectronCut(G4double val)
 {
-  ResetCuts();
   cutForElectron = val;
-}
-
-//////////////////////////////////////////////////////////////////////
-
-void Em10PhysicsList::SetProtonCut(G4double val)
-{
-  ResetCuts();
-  cutForProton = val;
-}
-
-////////////////////////////////////////////////////////////////////////////
-
-void Em10PhysicsList::SetCutsByEnergy(G4double val)
-{
-  G4ParticleTable* theParticleTable =  G4ParticleTable::GetParticleTable();
-  G4Material* currMat = pDet->GetAbsorberMaterial();
-
-  // set cut values for gamma at first and for e- second and next for e+,
-  // because some processes for e+/e- need cut values for gamma
-
-  G4ParticleDefinition* part;
-  G4double cut;
-
-  part = theParticleTable->FindParticle("e-");
-  cut = G4EnergyLossTables::GetRange(part,val,currMat);
-  SetCutValue(cut, "e-");
-
-  part = theParticleTable->FindParticle("e+");
-  cut = G4EnergyLossTables::GetRange(part,val,currMat);
-  SetCutValue(cut, "e+");
-
-  // set cut values for proton and anti_proton before all other hadrons
-  // because some processes for hadrons need cut values for proton/anti_proton
-
-  part = theParticleTable->FindParticle("proton");
-  cut = G4EnergyLossTables::GetRange(part,val,currMat);
-  SetCutValue(cut, "proton");
-
-  part = theParticleTable->FindParticle("anti_proton");
-  cut = G4EnergyLossTables::GetRange(part,val,currMat);
-  SetCutValue(cut, "anti_proton");
-
-  SetCutValueForOthers(cut);
-}
-
-//////////////////////////////////////////////////////////////////////////////
-
-void Em10PhysicsList::GetRange(G4double val)
-{
-  G4ParticleTable* theParticleTable =  G4ParticleTable::GetParticleTable();
-  G4Material* currMat = pDet->GetAbsorberMaterial();
-
-  G4ParticleDefinition* part;
-  G4double cut;
-  part = theParticleTable->FindParticle("e-");
-  cut = G4EnergyLossTables::GetRange(part,val,currMat);
-  G4cout << "material : " << currMat->GetName() << G4endl;
-  G4cout << "particle : " << part->GetParticleName() << G4endl;
-  G4cout << "energy   : " << val / keV << " (keV)" << G4endl;
-  G4cout << "range    : " << cut / mm << " (mm)" << G4endl;
 }
 
 ////////////////////////////////////////////////////////////////////////////

@@ -19,7 +19,7 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
-
+//
 //
 // --------------------------------------------------------------
 //                 GEANT 4 - Brachytherapy example
@@ -33,8 +33,8 @@
 //    *                                      *
 //    ****************************************
 //
-// $Id: BrachyDetectorConstructionI.cc,v 1.5 2003/05/22 17:20:42 guatelli Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: BrachyDetectorConstructionI.cc,v 1.6 2003/12/09 15:29:56 gunter Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 #include "globals.hh"
 #include "BrachyDetectorConstructionI.hh"

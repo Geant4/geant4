@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4OpenGLImmediateXViewer.cc,v 1.8 2003/06/10 17:13:32 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // 
 // Andrew Walkden  7th February 1997

@@ -21,12 +21,13 @@
 // ********************************************************************
 //
 //
-// $Id: G4SmartVoxelHeader.icc,v 1.4 2002/05/15 10:06:36 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4SmartVoxelHeader.icc,v 1.5 2003/11/02 14:01:22 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 //
 // G4SmartVoxelHeader Inline implementation
 //
+// --------------------------------------------------------------------
 
 inline
 G4int G4SmartVoxelHeader::GetMaxEquivalentSliceNo() const

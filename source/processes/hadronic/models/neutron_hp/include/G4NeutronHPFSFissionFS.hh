@@ -21,14 +21,14 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPFSFissionFS.hh,v 1.7 2003/05/30 11:32:33 hpw Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4NeutronHPFSFissionFS.hh,v 1.8 2003/07/01 15:58:36 hpw Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 #ifndef G4NeutronHPFSFissionFS_h
 #define G4NeutronHPFSFissionFS_h 1
 
 #include "globals.hh"
-#include "G4Track.hh"
+#include "G4HadProjectile.hh"
 #include "G4DynamicParticleVector.hh"
 #include "G4NeutronHPFinalState.hh"
 #include "G4NeutronHPNames.hh"
@@ -85,8 +85,7 @@ class G4NeutronHPFSFissionFS : public G4NeutronHPFinalState
   
   private:
 
-  G4ParticleChange * ApplyYourself(const G4Track & ) { return NULL; }
-  
+  G4HadFinalState * ApplyYourself(const G4HadProjectile & ) { return NULL; }  
   G4double targetMass;
   
   G4NeutronHPNeutronYield theFinalStateNeutrons;

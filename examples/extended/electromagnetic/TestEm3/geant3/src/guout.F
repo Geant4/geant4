@@ -4,26 +4,16 @@
 *     User routine called at the end of each event
 *     
 #include "geant321/gcflag.inc"
-#include "geant321/gckine.inc"
 #include "calor.inc"
 #include "celoss.inc"
+#include "histo.inc"
 *
       CHARACTER*4 unit
-*                                                                               
-* *** drawing
-*                                                          
-#ifndef batch
-      IF (ISWIT(1).NE.0) THEN
-         CALL GDHEAD (110110,'TestEm3',0.)
-         CALL GDSHOW (3)
-         CALL GDXYZ  (0)
-      END IF
-#endif      
+
 *
 *     histo: energy deposit per tracking medium
       do k=1,NbAbsor
-        ratio = EdepAbs(k)/pkine(1)
-	call hfill (k,ratio,0.,1.)
+	if (histo(k)) call hfill (k,EdepAbs(k)/histUnit(k),0.,1.)
       enddo
 *
 *     cumul energy deposited and charged track length
@@ -43,7 +33,17 @@
 	enddo
 	print 749
       ENDIF
-          
+*      
+#ifndef batch      
+*                                                                               
+* *** drawing
+*                                                          
+      IF (ISWIT(1).NE.0) THEN
+         CALL GDHEAD (110110,'TestEm3',0.)
+         CALL GDSHOW (3)
+         CALL GDXYZ  (0)
+      END IF
+#endif                
   749 FORMAT(/) 
   751 FORMAT(1X,'Absorber',I2,' : Energy deposit: ',F8.3,A4,
      &                        '   Track length: '  ,F8.3,' cm')   

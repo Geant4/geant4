@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4AtomicTransitionManager.hh,v 1.2 ????
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4AtomicDeexcitation.cc,v 1.11 
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // Authors: Elena Guardincerri (Elena.Guardincerri@ge.infn.it)
 //          Alfonso Mantero (Alfonso.Mantero@ge.infn.it)
@@ -31,6 +31,7 @@
 // -----------
 //  
 //  16 Sept 2001  First committed to cvs
+//  12 Sep  2003  Bug in auger production fixed
 //
 // -------------------------------------------------------------------
 
@@ -274,7 +275,10 @@ G4DynamicParticle* G4AtomicDeexcitation::GenerateAuger(G4int Z, G4int shellId)
 	  shellNum++;
 	  if(shellNum == maxNumOfShells)
 	    {
-	      G4Exception("G4AtomicDeexcitation: No Auger transition found");
+	      G4cout << "G4AtomicDeexcitation warning: No Auger transition found" <<  G4endl;
+	      G4cout << "Absorbed enrgy deposited locally" << G4endl;
+	      return 0;
+	      //  G4Exception("G4AtomicDeexcitation: No Auger transition found");
 	    }
 	}
 	while (shellId != (transitionManager->ReachableAugerShell(Z,shellNum)->FinalShellId()) ) ;

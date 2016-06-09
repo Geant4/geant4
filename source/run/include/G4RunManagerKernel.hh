@@ -1,0 +1,171 @@
+//
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
+//
+//
+// $Id: G4RunManagerKernel.hh,v 1.3 2003/11/04 01:58:28 asaim Exp $
+// GEANT4 tag $Name: geant4-06-00 $
+//
+// 
+
+// class description:
+//
+//     This is a class for mandatory control of GEANT4 kernel. 
+//     
+//     This class is constructed by G4RunManager. If a user uses his/her own
+//     class instead of G4RunManager, this class must be instantiated by
+//     him/herself at the very beginning of the application and must be deleted
+//     at the very end of the application. Also, following methods must be
+//     invoked in the proper order.
+//       DefineWorldVolume
+//       InitializePhysics
+//       RunInitialization
+//       RunTermination
+// 
+//     User must provide his/her own classes derived from the following
+//     abstract class and register it to the RunManagerKernel. 
+//        G4VUserPhysicsList - Particle types, Processes and Cuts
+// 
+//     G4RunManagerKernel does not have any eveny loop. Handling of events
+//     is managed by G4RunManager.
+//
+
+#ifndef G4RunManagerKernel_h
+#define G4RunManagerKernel_h 1
+
+class G4VUserPhysicsList;
+class G4EventManager;
+
+class G4VPhysicalVolume;
+class G4Region;
+class G4ExceptionHandler;
+
+#include "globals.hh"
+
+class G4RunManagerKernel
+{
+  public: // with description
+    static G4RunManagerKernel* GetRunManagerKernel();
+    //  Static method which returns the singleton pointer of G4RunManagerKernel or
+    // its derived class.
+
+  private:
+    static G4RunManagerKernel* fRunManagerKernel;
+
+  public: // with description
+    G4RunManagerKernel();
+    virtual ~G4RunManagerKernel();
+    //  The constructor and the destructor. The user must construct this class
+    // object at the beginning of his/her main() and must delete it at the 
+    // bottom of the main(), unless he/she used G4RunManager.
+
+  public: // with description
+    void DefineWorldVolume(G4VPhysicalVolume * worldVol,
+                                   G4bool topologyIsChanged=true);
+    //  This method must be invoked if the geometry setup has been changed between
+    // runs. The flag 'topologyIsChanged' will specify if the geometry topology is
+    // different from the original one used in the previous run; if not, it must be
+    // set to false, so that the original optimisation and navigation history is
+    // preserved. This method is invoked also at initialisation.
+
+
+    void InitializePhysics(G4VUserPhysicsList* uPhys);
+    //  This method must be invoked at least once by the user with a valid
+    // concrete implementation of user physics list. 
+
+    G4bool RunInitialization();
+    //  Trigger geometry closing and physics table constructions.
+    // It returns TRUE is all procedures went well.
+
+    void RunTermination();
+    //  Set the application state to G4State_Idle so that the user can modify
+    // physics/geometry.
+
+  private:
+    void ResetNavigator();
+    void BuildPhysicsTables();
+    void CheckRegions();
+
+  public: // with description
+    void UpdateRegion();
+    // Update region list. 
+    // This method is mandatory before invoking following two dump methods.
+    // At RunInitialization(), this method is automatically invoked, and thus
+    // the user needs not invoke.
+
+    void DumpRegion(G4String rname) const;
+    // Dump information of a region.
+
+    void DumpRegion(G4Region* region=0) const;
+    // Dump information of a region.
+    // If the pointer is NULL, all regions are shown.
+
+  private:
+    G4VUserPhysicsList * physicsList;
+    G4VPhysicalVolume* currentWorld;
+    G4bool geometryInitialized;
+    G4bool physicsInitialized;
+    G4bool geometryNeedsToBeClosed;
+    G4bool geometryToBeOptimized;
+    G4bool physicsNeedsToBeReBuilt;
+    G4int verboseLevel;
+
+    G4EventManager * eventManager;
+    G4ExceptionHandler* defaultExceptionHandler;
+    G4Region* defaultRegion;
+    G4String versionString;
+
+  public: // with description
+    inline void GeometryHasBeenModified()
+    { geometryNeedsToBeClosed = true; }
+    //  This method must be invoked (or equivalent UI commands can be used)
+    // in case the user changes his/her detector geometry.
+    // This method is automatically invoked from DefineWorldVolume() method.
+
+    inline void PhysicsHasBeenModified()
+    { physicsNeedsToBeReBuilt = true; }
+    //  This method must be invoked in case the user changes his/her physics
+    // process(es), e.g. (in)activate some processes. Once this method is
+    // invoked, regardless of cuts are changed or not, BuildPhysicsTable()
+    // of PhysicsList is invoked for refreshing all physics tables.
+
+  public:
+    inline G4EventManager* GetEventManager() const
+    { return eventManager; }
+
+    inline G4String GetVersionString() const
+    { return versionString; }
+
+    inline void SetVerboseLevel(G4int vl)
+    { verboseLevel = vl; }
+
+    inline void SetGeometryToBeOptimized(G4bool vl)
+    { 
+      if(geometryToBeOptimized != vl)
+      {
+        geometryToBeOptimized = vl;
+        geometryNeedsToBeClosed = true;
+      }
+    }
+};
+
+#endif
+

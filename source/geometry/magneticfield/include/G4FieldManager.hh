@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4FieldManager.hh,v 1.9 2003/06/20 22:59:59 japost Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4FieldManager.hh,v 1.13 2003/11/08 03:55:16 japost Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 //  
 // class G4FieldManager
@@ -57,31 +57,32 @@
 
 // History:
 // - 10.03.97 John Apostolakis, design and implementation.
+// -------------------------------------------------------------------
 
 #ifndef G4FIELDMANAGER_HH
 #define G4FIELDMANAGER_HH 1
 
-#include "G4Field.hh"
-#include "G4MagneticField.hh"
-#include "G4ChordFinder.hh"
+#include "globals.hh"
 
-class    G4Track;  // Forward reference for parameter configuration
+class G4Field;
+class G4MagneticField;
+class G4ChordFinder;
+class G4Track;  // Forward reference for parameter configuration
 
 class G4FieldManager
 {
   public:  // with description
-
-     G4FieldManager();     // Useless unless SetField method is added
-     G4FieldManager(G4Field       *detectorField, 
-		    G4ChordFinder *pChordFinder, 
-		    G4bool        fieldChangesEnergy);
-          // New general constructor for any field
+     G4FieldManager(G4Field       *detectorField=0, 
+		    G4ChordFinder *pChordFinder=0, 
+		    G4bool       b=true ); // fieldChangesEnergy is taken from field
+          // General constructor for any field.
+          // -> Must be set with field and chordfinder for use.
      G4FieldManager(G4MagneticField *detectorMagneticField);
           // Creates ChordFinder
           //   - assumes pure magnetic field (so Energy constant)
      virtual ~G4FieldManager();
 
-     inline G4bool          SetDetectorField(G4Field *detectorField);
+     G4bool          SetDetectorField(G4Field *detectorField);
      inline const G4Field*  GetDetectorField() const;
      inline G4bool          DoesFieldExist() const;
         // Set, get and check the field object
@@ -95,23 +96,15 @@ class G4FieldManager
      virtual void   ConfigureForTrack( const G4Track * ); 
         // Setup the choice of the configurable parameters 
         //    relying on the current track's energy, particle identity, ..
-        //  
-        //    Note: In addition to the values of member variables, 
-        //         a user can change the ChordFinder, the field, ...
+        //  Note: In addition to the values of member variables, 
+        //         a user can use this to change the ChordFinder, the field, ...
 
-     // Alternative approach
-     // virtual G4FieldTrack* VariantConfiguration( const G4Track *)
-        // Return a variant field manager, only if different,
-        //  for tracks with particular criteria (E, pT, id, ...)
-
-  public:  // without description
-
-     // virtual ?
-     inline G4double GetDeltaIntersection() const;
+  public:  // with description
+   
+     inline G4double GetDeltaIntersection() const;  // virtual ?
        // Accuracy for boundary intersection.
 
-     // virtual ?
-     inline G4double GetDeltaOneStep() const;
+     inline G4double GetDeltaOneStep() const;      // virtual ?
        // Accuracy for one tracking/physics step.
 
      inline void     SetAccuraciesWithDeltaOneStep(G4double valDeltaOneStep); 
@@ -119,8 +112,18 @@ class G4FieldManager
        // of volume Intersection and Integration (in One Step) 
 
      inline void     SetDeltaOneStep(G4double valueD1step); 
+      // Set accuracy for integration of one step.   (only)
      inline void     SetDeltaIntersection(G4double valueDintersection); 
+      // Set accuracy of  intersection of a volume.  (only)
 
+     inline G4double  GetMinimumEpsilonStep() const;
+     inline void      SetMinimumEpsilonStep( G4double newEpsMin );
+     // Minimum for Relative accuracy of a Step 
+
+     inline G4double  GetMaximumEpsilonStep() const;
+     inline void      SetMaximumEpsilonStep( G4double newEpsMax );
+     // Maximum for Relative accuracy of a Step 
+ 
      inline G4bool   DoesFieldChangeEnergy() const;
      inline void     SetFieldChangesEnergy(G4bool value);
        //  For electric field this should be true
@@ -148,6 +151,14 @@ class G4FieldManager
 
      G4double  fDefault_Delta_One_Step_Value;   // = 0.25 * mm;
      G4double  fDefault_Delta_Intersection_Val; // = 0.1 * mm;
+
+     //  Values for the small possible relative accuracy of a step
+     //  (corresponding to the greatest possible integration accuracy)
+
+     G4double  fEpsilonMinDefault;   // Can be 1.0e-5 to 1.0e-10 ...
+     G4double  fEpsilonMaxDefault;   // Can be 1.0e-3 to 1.0e-8 ...
+     G4double  fEpsilonMin; 
+     G4double  fEpsilonMax;
 };
 
 // Our current design envisions that one Field manager is valid for a region of the detector.

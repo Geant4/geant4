@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4SmartVoxelStat.hh,v 1.2 2003/06/16 16:51:59 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4SmartVoxelStat.hh,v 1.3 2003/11/02 14:01:22 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // --------------------------------------------------------------------
 // GEANT 4 class header file
@@ -30,15 +30,16 @@
 //
 // Class description:
 //
-// Store information on the performance of the smart voxel algorithm
-// for an individual logical volume
+// Stores information on the performance of the smart voxel algorithm
+// for an individual logical volume.
 
 // Author: D.C.Williams, UCSC (davidw@scipp.ucsc.edu)
+// --------------------------------------------------------------------
 
 #ifndef G4SmartVoxelStat_hh
 #define G4SmartVoxelStat_hh
 
-#include "globals.hh"
+#include "G4Types.hh"
 #include <functional>
 
 class G4LogicalVolume;
@@ -102,9 +103,9 @@ class G4SmartVoxelStat
     //
     // Functor objects for sorting
     //
-    struct ByCpu : public std::binary_function< const G4SmartVoxelStat,
-                                                  const G4SmartVoxelStat,
-                                                        G4bool >
+    struct ByCpu
+      : public std::binary_function< const G4SmartVoxelStat,
+                                     const G4SmartVoxelStat, G4bool >
     {
       G4bool operator()( const G4SmartVoxelStat &a, const G4SmartVoxelStat &b )
       {
@@ -112,9 +113,9 @@ class G4SmartVoxelStat
       }
     };
   
-    struct ByMemory : public std::binary_function< const G4SmartVoxelStat,
-                                                     const G4SmartVoxelStat, 
-                                                           G4bool >
+    struct ByMemory
+      : public std::binary_function< const G4SmartVoxelStat,
+                                     const G4SmartVoxelStat, G4bool >
     {
       G4bool operator()( const G4SmartVoxelStat &a, const G4SmartVoxelStat &b )
       {

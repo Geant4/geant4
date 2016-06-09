@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPIsoData.hh,v 1.11 2003/06/16 17:10:48 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4NeutronHPIsoData.hh,v 1.12 2003/11/03 17:54:36 hpw Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 #ifndef G4NeutronHPIsoData_h
 #define G4NeutronHPIsoData_h 1
@@ -77,7 +77,7 @@ public:
   
   inline void FillChannelData(G4NeutronHPVector * aBuffer)
   {
-    if(theChannelData!=NULL) G4Exception("IsoData has channel full already!!!");
+    if(theChannelData!=NULL) throw G4HadronicException(__FILE__, __LINE__, "IsoData has channel full already!!!");
     theChannelData = new G4NeutronHPVector;
     for(G4int i=0; i<aBuffer->GetVectorLength(); i++)
     {

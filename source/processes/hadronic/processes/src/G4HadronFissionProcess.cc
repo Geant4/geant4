@@ -48,11 +48,9 @@
 
 G4HadronFissionProcess::
 G4HadronFissionProcess(const G4String& processName) : 
-   G4HadronicProcess(processName),
-   //   thePhysicsDictionary(G4HadronicFissionProcessHashFun)
-   theCrossSectionDataStore(new G4CrossSectionDataStore)
+   G4HadronicProcess(processName)
 {
-   theCrossSectionDataStore->AddDataSet(new G4HadronFissionDataSet);
+   AddDataSet(new G4HadronFissionDataSet);
 }
 
 G4HadronFissionProcess::~G4HadronFissionProcess()
@@ -63,13 +61,12 @@ G4HadronFissionProcess::~G4HadronFissionProcess()
 void 
 G4HadronFissionProcess::BuildThePhysicsTable(G4ParticleDefinition& aParticleType)
 {
-   if (!theCrossSectionDataStore) {
-      G4Exception("G4HadronFissionProcess: no cross section data set");
+   if (!G4HadronicProcess::GetCrossSectionDataStore()) {
+      G4Exception("G4HadronFissionProcess", "007", FatalException,
+                  "no cross section data set");
       return;
    }
-
-   theCrossSectionDataStore->BuildPhysicsTable(aParticleType);
-
+   G4HadronicProcess::GetCrossSectionDataStore()->BuildPhysicsTable(aParticleType);
 }
 
 
@@ -78,53 +75,22 @@ G4HadronFissionProcess::GetMicroscopicCrossSection(const G4DynamicParticle* aPar
                                        const G4Element* anElement, G4double aTemp)
 {
    // gives the microscopic cross section in GEANT4 internal units
-
-   if (!theCrossSectionDataStore) {
-      G4Exception("G4HadronFissionProcess: no cross section data Store");
+   if (!G4HadronicProcess::GetCrossSectionDataStore()) {
+      G4Exception("G4HadronFissionProcess", "007", FatalException,
+                  "no cross section data Store");
       return DBL_MIN;
    }
-   return theCrossSectionDataStore->GetCrossSection(aParticle, anElement, aTemp);
+   return G4HadronicProcess::GetCrossSectionDataStore()->GetCrossSection(aParticle, anElement, aTemp);
 }
-
-
-G4double
-G4HadronFissionProcess::GetMeanFreePathBasic(const G4DynamicParticle* aParticle,
-                                 const G4Material* aMaterial)
-{
-   // returns the mean free path in GEANT4 internal units
-
-   const G4ElementVector* theElementVector;
-   const G4double* theAtomicNumDensityVector;
-
-   theElementVector = aMaterial->GetElementVector();
-   theAtomicNumDensityVector = aMaterial->GetAtomicNumDensityVector();
-   G4double aTemp = aMaterial->GetTemperature();
-
-   G4double sigma = 0.;
-
-   for (unsigned int i = 0; i < aMaterial->GetNumberOfElements(); i++) {
-     sigma = sigma + theAtomicNumDensityVector[i] * 
-             GetMicroscopicCrossSection(aParticle, (*theElementVector)[i], aTemp);
-   }
-   if (verboseLevel > 1)
-     G4cout << "G4HadronFissionProcess::GetMeanFreePathBasic: sigma=" 
-          << sigma << G4endl;
-   if (sigma > 0.)
-      return 1./sigma;
-   else
-      return DBL_MAX;
-}
- 
 
 void
 G4HadronFissionProcess::
 DumpPhysicsTable(const G4ParticleDefinition& aParticleType)
 {
-   if (!theCrossSectionDataStore) {
-      G4Exception("G4HadronFissionProcess: no cross section data set");
+   if (!G4HadronicProcess::GetCrossSectionDataStore()) {
+      G4Exception("G4HadronFissionProcess", "111", JustWarning,
+                  "no cross section data set");
       return;
    }
-
-   theCrossSectionDataStore->DumpPhysicsTable(aParticleType);
-
+   G4HadronicProcess::GetCrossSectionDataStore()->DumpPhysicsTable(aParticleType);
 }

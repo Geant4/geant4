@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: SAXEventGun.cc,v 1.2 2002/06/03 12:09:33 radoone Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: SAXEventGun.cc,v 1.4 2003/10/27 10:55:48 radoone Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // 
 // --------------------------------------------------------------
@@ -46,13 +46,22 @@
 
 #include "SAXEventGun.hh"
 
+// Disable deprecated warnings for usage of strstream on Linux
+// architectures with gcc >= 3.0 release
+//
+#if (__GNUC__==3) && (__GNUC_MINOR__>0)
+  #undef __DEPRECATED
+#endif
+#include <iostream>
 #include <strstream>
+
+using namespace xercesc;
 
 StatusCode SAXEventGun::Run()
 {
   StatusCode sc;
 
-  fParser = new SAXParser();
+  fParser = new xercesc::SAXParser();
   
   fParser->setDocumentHandler( this );
   fParser->setErrorHandler( this );
@@ -220,7 +229,7 @@ void SAXEventGun::resetDocument()
 {
 }
 
-void SAXEventGun::setDocumentLocator(const Locator* const locator)
+void SAXEventGun::setDocumentLocator(const Locator* const)
 // Receive a Locator object for document events.
 {
 }
@@ -265,8 +274,8 @@ void SAXEventGun::startElement( const   XMLCh* const    name
 }
 
 //static XMLCh  sEmpty[] = { chLatin_e, chLatin_m, chLatin_p, chLatin_t, chLatin_y, chNull };
-InputSource* SAXEventGun::resolveEntity( const   XMLCh* const    publicId
-                                          , const XMLCh* const    systemId )
+InputSource* SAXEventGun::resolveEntity( const   XMLCh* const    // publicId
+                                          , const XMLCh* const ) // systemId
 // Resolve an external entity.
 {
   return 0;
@@ -381,9 +390,9 @@ void SAXEventGun::resetErrors()
 {
 }
 
-void SAXEventGun::notationDecl( const   XMLCh* const    name
-                                 , const XMLCh* const    publicId
-                                 , const XMLCh* const    systemId )
+void SAXEventGun::notationDecl( const   XMLCh* const     // name
+                                 , const XMLCh* const    // publicId
+                                 , const XMLCh* const  ) // systemId
 // Receive notification of a notation declaration.
 {
 }
@@ -393,10 +402,10 @@ void SAXEventGun::resetDocType()
 {
 }
 
-void SAXEventGun::unparsedEntityDecl( const   XMLCh* const    name
-                                       , const XMLCh* const    publicId
-                                       , const XMLCh* const    systemId
-                                       , const XMLCh* const    notationName )
+void SAXEventGun::unparsedEntityDecl( const   XMLCh* const    // name
+                                       , const XMLCh* const   // publicId
+                                       , const XMLCh* const   // systemId
+                                       , const XMLCh* const ) // notationName
 // Receive notification of an unparsed entity declaration.
 {
 }

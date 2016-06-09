@@ -1,6 +1,6 @@
-# $Id: GNUmakefile,v 1.3 2003/05/28 08:03:22 gcosmo Exp $
+# $Id: GNUmakefile,v 1.8 2003/10/02 17:57:10 stesting Exp $
 # --------------------------------------------------------------
-# GNUmakefile for config scripts.  Sergei Sadilov, 13/12/02.
+# GNUmakefile for tests module.  Gabriele Cosmo, 27/06/98.
 # --------------------------------------------------------------
 
 name := Marker

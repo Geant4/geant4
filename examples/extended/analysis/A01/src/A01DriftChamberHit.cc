@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: A01DriftChamberHit.cc,v 1.4 2002/12/13 11:34:33 gunter Exp $
+// $Id: A01DriftChamberHit.cc,v 1.5 2003/07/11 21:32:02 duns Exp $
 // --------------------------------------------------------------
 //
 #include "A01DriftChamberHit.hh"
@@ -49,7 +49,7 @@ A01DriftChamberHit::~A01DriftChamberHit()
 {;}
 
 A01DriftChamberHit::A01DriftChamberHit(const A01DriftChamberHit &right)
-{
+    : G4VHit() {
   layerID = right.layerID;
   worldPos = right.worldPos;
   localPos = right.localPos;
@@ -65,7 +65,7 @@ const A01DriftChamberHit& A01DriftChamberHit::operator=(const A01DriftChamberHit
   return *this;
 }
 
-int A01DriftChamberHit::operator==(const A01DriftChamberHit &right) const
+int A01DriftChamberHit::operator==(const A01DriftChamberHit &/*right*/) const
 {
   return 0;
 }

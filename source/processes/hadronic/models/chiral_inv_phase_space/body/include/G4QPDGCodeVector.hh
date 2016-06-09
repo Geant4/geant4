@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4QPDGCodeVector.hh,v 1.10 2003/06/16 17:04:09 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4QPDGCodeVector.hh,v 1.15 2003/12/09 15:38:09 gunter Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 //      ---------------- G4QCandidateVector ----------------
 //             by Mikhail Kossov, Sept 1999.
@@ -36,7 +36,15 @@
 #include <vector>
 
 typedef std::vector<G4QPDGCode *> G4QPDGCodeVector;
-struct DeleteQPDGCode{ void operator()(G4QPDGCode *aN){delete aN;} };
+struct DeleteQPDGCode
+{
+  void operator()(G4QPDGCode *aN)
+  {
+    //G4cout<<"G4QPDGCodeVector::DeleteQPDGCode: Before aN="<<aN<<G4endl; // TMP
+    if(aN) delete aN; // void Destructor
+    else G4cerr<<"***G4QPDGCodeVector::DeleteQPDGCode: aN="<<aN<<G4endl; // TMP
+  }
+};
 
 
 #endif

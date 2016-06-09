@@ -19,8 +19,8 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
-
-//$Id: HEPEvtcom.cc,v 1.1 2002/05/28 14:00:40 murakami Exp $
+//
+//$Id: HEPEvtcom.cc,v 1.2 2003/12/09 15:30:49 gunter Exp $
 // ======================================================================
 //      PARAMETER (NMXHEP=4000) 
 //      COMMON/HEPEVT/NEVHEP,NHEP,ISTHEP(NMXHEP),IDHEP(NMXHEP), 

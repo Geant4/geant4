@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4XXXSceneHandler.cc,v 1.11 2003/05/30 13:01:26 johna Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4XXXSceneHandler.cc,v 1.12 2003/11/12 13:16:56 johna Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // 
 // John Allison  5th April 2001
@@ -393,4 +393,13 @@ void G4XXXSceneHandler::EstablishSpecials
   pvModel.DefinePointersToWorkingSpace(&fCurrentDepth,
 				       &fpCurrentPV,
 				       &fpCurrentLV);
+}
+
+void G4XXXSceneHandler::ClearTransientStore () {
+  G4VSceneHandler::ClearTransientStore ();
+  if (fpViewer) {
+    fpViewer -> SetView ();
+    fpViewer -> ClearView ();
+    fpViewer -> DrawView ();
+  }
 }

@@ -1,4 +1,4 @@
-# $Id: G4VIS_USE.gmk,v 1.16 2003/06/11 13:18:57 gunter Exp $
+# $Id: G4VIS_USE.gmk,v 1.20 2003/11/13 09:54:41 gcosmo Exp $
 # -------------------------------------------------------------
 # GNUmakefile for CPPFLAGS for visualization USE phase.
 #   John Allison, 24th January 1998.
@@ -42,16 +42,6 @@ endif
 ifdef G4VIS_USE_DAWN
   CPPFLAGS += -DG4VIS_USE_DAWN
   # CPPFLAGS += -I... and VISLIBS += set above.
-endif
-
-ifdef G4VIS_USE_OPACS
-  INC_OPACS  = 1
-  LOAD_OPACS = 1
-  CPPFLAGS += -DG4VIS_USE_OPACS
-  ifneq ($(G4INCLUDE_EXEC),1)
-    CPPFLAGS += -I$(G4BASE)/visualization/OPACS/include
-  endif
-  VISLIBS += -lG4OPACS
 endif
 
 ifdef G4VIS_USE_OPENGLX

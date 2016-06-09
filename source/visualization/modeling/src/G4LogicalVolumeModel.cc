@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4LogicalVolumeModel.cc,v 1.8 2001/07/11 10:09:22 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4LogicalVolumeModel.cc,v 1.9 2003/11/03 17:08:50 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // 
 // John Allison  26th July 1999.
@@ -30,6 +30,7 @@
 
 #include "G4LogicalVolumeModel.hh"
 
+#include "G4VSolid.hh"
 #include "G4LogicalVolume.hh"
 #include "G4PVPlacement.hh"
 #include "G4ModelingParameters.hh"

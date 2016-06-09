@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4QHadron.hh,v 1.17 2002/12/12 19:14:31 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4QHadron.hh,v 1.26 2003/12/09 15:38:05 gunter Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 //      ---------------- G4QHadron ----------------
 //             by Mikhail Kossov, Sept 1999.
@@ -53,12 +53,12 @@ public:
   G4QHadron(G4QPDGCode QPDG, G4LorentzVector p, G4QContent QC);// Con. for Chipolino or Quasmon
   G4QHadron(G4QParticle* pPart, G4double maxM);     // Constructor for a resonance with RANDOM m
   G4QHadron(const G4QHadron& right);                // Copy constructor by object
-  G4QHadron(G4QHadron* right);                      // Copy constructor by pointer
-  virtual ~G4QHadron();                                     // Destructor
+  G4QHadron(const G4QHadron* right);                // Copy constructor by pointer
+  virtual ~G4QHadron();                             // Destructor
   // Operators
   const G4QHadron& operator=(const G4QHadron& right);
-  G4int           operator==(const G4QHadron& right) const;
-  G4int           operator!=(const G4QHadron& right) const;
+  G4bool           operator==(const G4QHadron& right) const;
+  G4bool           operator!=(const G4QHadron& right) const;
   // Selectors
   G4int                 GetPDGCode()      const;    // Get PDG code of the Hadron
   G4int                 GetQCode()        const;    // Get Q code of the Hadron
@@ -86,7 +86,7 @@ public:
   G4bool CorMDecayIn2(G4double corM, G4LorentzVector& fr4Mom);//->This(new mass corM)+fr4Mom(correct)
   G4bool CorEDecayIn2(G4double corE, G4LorentzVector& fr4Mom);//->This(E+=corE,P)+fr4Mom(fE-=corE,fP)
   G4bool RelDecayIn2(G4LorentzVector& f4Mom, G4LorentzVector& s4Mom, G4LorentzVector& dir,
-                  G4double maxCost, G4double minCost = -1.);
+                  G4double maxCost = 1., G4double minCost = -1.);
   G4bool DecayIn3(G4LorentzVector& f4Mom, G4LorentzVector& s4Mom, G4LorentzVector& t4Mom);
 
 private:
@@ -100,8 +100,8 @@ private:
   G4int                 nFragm;                     // =0 - stable, =N - decayed in N particles
 };
 
-inline G4int G4QHadron::operator==(const G4QHadron &right) const {return this==&right;}
-inline G4int G4QHadron::operator!=(const G4QHadron &right) const {return this!=&right;}
+inline G4bool G4QHadron::operator==(const G4QHadron &rhs) const {return this==&rhs;}
+inline G4bool G4QHadron::operator!=(const G4QHadron &rhs) const {return this!=&rhs;}
  
 inline G4int           G4QHadron::GetPDGCode()      const   {return theQPDG.GetPDGCode();}
 inline G4int           G4QHadron::GetQCode()        const   {return theQPDG.GetQCode();}
@@ -129,7 +129,7 @@ inline void            G4QHadron::SetQPDG(const G4QPDGCode& newQPDG)
   else
   {
     G4cerr<<"***G4QHadron::SetQPDG: QPDG="<<newQPDG<<G4endl;
-    G4Exception("***G4QHadron::SetQPDG: Impossible QPDG");
+    throw G4QException("***G4QHadron::SetQPDG: Impossible QPDG");
   }
 }
 inline void   G4QHadron::SetQC(const G4QContent& newQC)              {valQ=newQC;}

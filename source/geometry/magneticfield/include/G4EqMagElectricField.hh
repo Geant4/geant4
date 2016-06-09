@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4EqMagElectricField.hh,v 1.6 2001/07/11 09:59:07 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4EqMagElectricField.hh,v 1.8 2003/11/05 12:46:39 japost Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 //
 // class G4EqMagElectricField
@@ -34,29 +34,30 @@
 
 // History:
 // - Created. V.Grichine, 10.11.98
+// -------------------------------------------------------------------
 
 #ifndef G4EQMAGELECTRICFIELD_hh
 #define G4EQMAGELECTRICFIELD_hh
 
-#include "G4Mag_EqRhs.hh"
+#include "G4EquationOfMotion.hh"
 #include "G4ElectroMagneticField.hh"
 
-class G4EqMagElectricField : public G4Mag_EqRhs
+class G4EqMagElectricField : public G4EquationOfMotion
 {
   public:  // with description
 
     G4EqMagElectricField(G4ElectroMagneticField *emField )
-      : G4Mag_EqRhs( emField ) {;}
+      : G4EquationOfMotion( emField ) {;}
 
     ~G4EqMagElectricField() {;} 
 
     void  SetChargeMomentumMass(G4double particleCharge, // in e+ units
-			        G4double MomentumXc,
-				G4double mass);
+                                G4double MomentumXc,
+                                G4double mass);
 
     void EvaluateRhsGivenB(const G4double y[],
-			   const G4double Field[],
-			         G4double dydx[] ) const;
+                           const G4double Field[],
+                                 G4double dydx[] ) const;
       // Given the value of the electromagnetic field, this function 
       // calculates the value of the derivative dydx.
 

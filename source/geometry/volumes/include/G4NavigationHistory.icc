@@ -21,13 +21,13 @@
 // ********************************************************************
 //
 //
-// $Id: G4NavigationHistory.icc,v 1.8 2003/03/05 18:15:28 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4NavigationHistory.icc,v 1.10 2003/12/04 15:58:27 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 //
 // class G4NavigationHistory Inline implementation
 //
-// ********************************************************************
+// ----------------------------------------------------------------------
 
 inline
 G4NavigationHistory&
@@ -59,7 +59,7 @@ void G4NavigationHistory::Reset()
 inline
 void G4NavigationHistory::Clear()
 {
-  G4AffineTransform origin(G4ThreeVector(0.));
+  G4AffineTransform origin(G4ThreeVector(0.,0.,0.));
   G4NavigationLevel tmpNavLevel = G4NavigationLevel(0, origin, kNormal, -1) ;
 
   Reset();

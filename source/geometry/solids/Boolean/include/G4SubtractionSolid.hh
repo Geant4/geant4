@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4SubtractionSolid.hh,v 1.6 2002/10/28 11:36:28 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4SubtractionSolid.hh,v 1.7 2003/11/03 17:48:45 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 //
 // class G4SubtractionSolid
@@ -35,8 +35,7 @@
 //
 // 14.10.98 V.Grichine: first implementation
 //
-// ********************************************************************
-
+// --------------------------------------------------------------------
 #ifndef G4SUBTRACTIONSOLID_HH
 #define G4SUBTRACTIONSOLID_HH
 

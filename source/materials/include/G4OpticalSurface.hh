@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpticalSurface.hh,v 1.5 2001/07/11 10:01:26 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4OpticalSurface.hh,v 1.7 2003/12/01 15:13:41 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // 
 ////////////////////////////////////////////////////////////////////////
@@ -37,7 +37,6 @@
 // Updated:     1999-10-29 add method and class descriptors
 // mail:        gum@triumf.ca
 //
-// Cvs version: 
 ////////////////////////////////////////////////////////////////////////
 
 #ifndef G4OpticalSurface_h
@@ -47,8 +46,8 @@
 // Includes
 /////////////
 
-#include "globals.hh"
-#include "templates.hh"
+#include "G4Types.hh"
+#include "G4SurfaceProperty.hh"
 
 // Class Description:
 // A optical surface class for use in the G4OpBoundaryProcess class.
@@ -66,12 +65,6 @@ enum G4OpticalSurfaceFinish
    groundbackpainted            // same as 'ground' but with a back-paint
 };
 
-enum G4OpticalSurfaceType
-{
-   dielectric_metal,            // dielectric-metal interface
-   dielectric_dielectric        // dielectric-dielectric interface
-};
-
 enum G4OpticalSurfaceModel
 {
    glisur,                      // original GEANT3 model
@@ -84,18 +77,18 @@ class G4MaterialPropertiesTable;
 // Class Definition
 /////////////////////
 
-class G4OpticalSurface
+class G4OpticalSurface : public G4SurfaceProperty
 {
 
 public: // Without description
-
+  
         //////////////
         // Operators
         //////////////
-
-        G4OpticalSurface(const G4OpticalSurface &right);
+  
+	G4OpticalSurface(const G4OpticalSurface &right);
 	const G4OpticalSurface & operator=(const G4OpticalSurface &right);
-
+  
 	G4int operator==(const G4OpticalSurface &right) const;
 	G4int operator!=(const G4OpticalSurface &right) const;
 
@@ -108,7 +101,7 @@ public: // With description
 	G4OpticalSurface(const G4String& name,
 			 G4OpticalSurfaceModel model = glisur,
 			 G4OpticalSurfaceFinish finish = polished,
-			 G4OpticalSurfaceType type = dielectric_dielectric,
+			 G4SurfaceType type = dielectric_dielectric,
 			 G4double value = 1.0);
         // Constructor of an optical surface object.
 
@@ -123,16 +116,6 @@ public: // Without description
 	// public methods
 
 public: // With description
-
-	G4String GetName() const { return theName; };
-        // Returns the optical surface name.
-	void     SetName(const G4String& name){theName = name;};
-        // Sets the optical surface name.
-
-        G4OpticalSurfaceType GetType() const {return theType;};
-        // Returns the optical surface type.
-        void         SetType(const G4OpticalSurfaceType type){theType = type;};
-        // Sets the optical surface type.        
 
         G4OpticalSurfaceFinish GetFinish() const {return theFinish;};
         // Returns the optical surface finish.
@@ -175,11 +158,8 @@ private:
 // Basic data members ( To define an optical surface)
 // ------------------
 
-	G4String theName;			// Surface name
-
         G4OpticalSurfaceModel theModel;		// Surface model
         G4OpticalSurfaceFinish theFinish;	// Surface finish
-	G4OpticalSurfaceType theType;		// Surface type
 
 	G4double sigma_alpha;		// The sigma of micro-facet polar angle
 	G4double polish;		// Polish parameter in glisur model

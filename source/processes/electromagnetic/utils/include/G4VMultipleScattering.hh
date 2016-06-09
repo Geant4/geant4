@@ -20,6 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
+// $Id: G4VMultipleScattering.hh,v 1.15 2003/11/26 10:01:13 urban Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // -------------------------------------------------------------------
 //
@@ -34,11 +36,15 @@
 //
 // Modifications:
 //
+// 16-07-03 Update GetRange interface (V.Ivanchenko)
+//
 //
 // Class Description:
 //
 // It is the generic process of multiple scattering it includes common
 // part of calculations for all charged particles
+//
+// 26-11-03 bugfix in AlongStepDoIt (L.Urban)
 
 // -------------------------------------------------------------------
 //
@@ -54,10 +60,10 @@
 #include "G4ParticleChangeForMSC.hh"
 #include "G4Track.hh"
 #include "G4EmModelManager.hh"
+#include "G4VEmModel.hh"
 
 class G4Step;
 class G4ParticleDefinition;
-class G4VEmModel;
 class G4DataVector;
 class G4Navigator;
 class G4PhysicsTable;
@@ -198,7 +204,7 @@ private:
   G4PhysicsTable*             theLambdaTable;
 
   // cash
-  const G4Material*           currentMaterial;
+  const G4ParticleDefinition* currentParticle;
   const G4MaterialCutsCouple* currentCouple;
   size_t                      currentMaterialIndex;
 
@@ -226,7 +232,6 @@ inline void G4VMultipleScattering::DefineMaterial(const G4MaterialCutsCouple* co
 {
   if(couple != currentCouple) {
     currentCouple   = couple;
-    currentMaterial = couple->GetMaterial();
     currentMaterialIndex = couple->GetIndex();
   }
 }
@@ -276,7 +281,7 @@ inline G4double G4VMultipleScattering::GetContinuousStepLimit(
   truePathLength = TruePathLengthLimit(track,lambda0,currentMinimalStep);
   //G4cout << "StepLimit: tpl= " << truePathLength << " lambda0= "
   //       << lambda0 << " range= " << currentRange
-  //	 << " currentMinStep= " << currentMinimalStep << G4endl;
+  //       << " currentMinStep= " << currentMinimalStep << G4endl;
   if (truePathLength < currentMinimalStep) valueGPILSelectionMSC = CandidateForSelection;
   geomPathLength = currentModel->GeomPathLength(theLambdaTable,currentCouple,
            p,e,lambda0,currentRange,truePathLength);
@@ -288,7 +293,7 @@ inline G4double G4VMultipleScattering::GetContinuousStepLimit(
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 inline G4double G4VMultipleScattering::ContinuousStepLimit(
-                                 const G4Track& track,
+                                       const G4Track& track,
                                        G4double previousStepSize,
                                        G4double currentMinimalStep,
                                        G4double& currentSafety)
@@ -307,7 +312,7 @@ inline G4double G4VMultipleScattering::GetLambda(const G4ParticleDefinition* p, 
     x = ((*theLambdaTable)[currentMaterialIndex])->GetValue(e, b);
 
   } else {
-    x = currentModel->CrossSection(currentMaterial,p,e,0.0,1.0);
+    x = currentModel->CrossSection(currentCouple,p,e,0.0,1.0);
   }
   return x;
 }
@@ -320,10 +325,11 @@ inline G4VParticleChange* G4VMultipleScattering::AlongStepDoIt(
 {
   fParticleChange.Initialize(track);
   G4double geomStepLength = step.GetStepLength();
-  if (geomStepLength == geomPathLength) trueStepLength = truePathLength;
-  else    trueStepLength = currentModel->TrueStepLength(geomStepLength);
+  if((geomStepLength == geomPathLength) && (truePathLength <= currentRange))
+     trueStepLength = truePathLength;
+  else  
+     trueStepLength = currentModel->TrueStepLength(geomStepLength);
   fParticleChange.SetTrueStepLength(trueStepLength);
-//  G4cout << "AlongStep: trueLength= " << trueStepLength << " geomLength= "<< geomStepLength << " zlast= " << geomPathLength << G4endl;
   return &fParticleChange;
 }
 

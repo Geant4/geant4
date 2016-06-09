@@ -1,4 +1,4 @@
-$Id: README,v 1.10 2003/03/10 18:16:46 maire Exp $
+$Id: README,v 1.11 2003/09/22 14:15:05 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -58,27 +58,8 @@ $Id: README,v 1.10 2003/03/10 18:16:46 maire Exp $
  	PrimaryGeneratorMessenger class.
  	
  	A RUN is a set of events.
- 	
- 4- DETECTOR RESPONSE
- 
- 	A HIT is a record, event per event and volume per volume, of all the 
- 	informations needed to simulate and analyse the detector response.
- 	
- 	In this example a CalorHit is defined as a set of 2*N informations per
-	layer :
- 	- the total energy deposit in the absorber[i],
- 	- the total tracklength of all charged particles in the absorber[i],  
- 	
- 	Therefore all the absorbers are declared 'sensitive detector' (SD),
-        which means they can contribute to the hit.
- 	
- 	At the end of a run, from the CalorHitsCollection, one can study the
-	calorimeter performances such as :
-				- shower profile,
- 				- calorimeter resolution,
- 				- pi/e ratio ...
  				
- 5- VISUALIZATION
+ 4- VISUALIZATION
  
  	The Visualization Manager is set in the main().
  	The initialisation of the drawing is done via the commands
@@ -92,7 +73,7 @@ $Id: README,v 1.10 2003/03/10 18:16:46 maire Exp $
  	Optionaly one can choose to draw all particles, only the charged one,
  	or none. This command is defined in EventActionMessenger class.
  	
- 6- PHYSICS DEMO
+ 5- PHYSICS DEMO
  
  	The particle's type and the physic processes which will be available
  	in this example are set in PhysicsList class.
@@ -109,7 +90,7 @@ $Id: README,v 1.10 2003/03/10 18:16:46 maire Exp $
 	via G4UserLimit class and the command /tracking/stepMax  
 	(see DetectorConstruction and DetectorMessenger classes)
  	
- 7- HOW TO START ?
+ 6- HOW TO START ?
  
  	- compile and link to generate an executable
  		% cd TestEm3
@@ -126,18 +107,21 @@ $Id: README,v 1.10 2003/03/10 18:16:46 maire Exp $
  		....
  		Idle> exit
  	
- 8- Histograms
+ 7- HISTOGRAMS
  
  Testem3 produces histograms which are saved as testem3.paw : 
-  histo 1 : energy deposit in absorber 0 (edep/Ebeam)
-  histo 2 : energy deposit in absorber 1 (edep/Ebeam)
+  histo 1 : energy deposit in absorber 0
+  histo 2 : energy deposit in absorber 1
   ...etc...........
   
  One can control the binning of the histo with the command:
-  /run/setHisto   idAbsor  nbin  vmin  vmax 
+  /testem/run/setHisto   idAbsor  nbin  Emin  Emax  unit 
   ...etc...........
+  
+  where unit is the desired energy unit for that histo (see TestEm3.in).
 
- Note that histograms are disabled via the flag G4NOHIST in the GNUmakefile.
+ Note that, by default, histograms are disabled. To activate them, uncomment
+ the flag G4ANALYSIS_USE in GNUmakefile.
 
  8- Using the Anaphe implementation of the AIDA 3.0 histograms:
  --------------------------------------------------------------

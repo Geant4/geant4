@@ -1,4 +1,4 @@
-$Id: History,v 1.15 2003/05/28 11:20:40 gcosmo Exp $
+$Id: History,v 1.18 2003/12/09 08:42:05 kurasige Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,18 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+December 09, 2003 Hisaya Kurashige
+- Add protection for negative proposed step in ExN05MinEkineCuts.cc
+
+November 10, 2003 Gabriele Cosmo (exampleN05-V05-02-01)
+- Removed usage of G4ParticleWithCuts in physics-list (H.Kurasige).
+- Removed OPACS driver from vis-manager.
+- Cleared usage of LocateGlobalPointAndUpdateTouchable(). Use
+  LocateGlobalPointAndUpdateTouchableHandle() instead.
+- Cleared compilation warnings.
+
+August 27, 2003 Vladimir Ivanchenko (exampleN05-V05-02-00)
+- Migrade to cut per region
 
 May 28, 2003 Gabriele Cosmo (exampleN05-V05-01-00)
 - Get rid of pedantic warnings ...

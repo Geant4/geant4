@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: XrayTelAnalysis.cc,v 1.9 2003/06/16 16:46:57 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: XrayTelAnalysis.cc,v 1.10 2003/08/13 13:06:02 santin Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // Author:  A. Pfeiffer (Andreas.Pfeiffer@cern.ch) 
 //         (copied from his UserAnalyser class)
@@ -278,9 +278,15 @@ void XrayTelAnalysis::plotAll()
   }
 
   if (plotter) {
+    plotter->createRegions(2,1,0);
     AIDA::IHistogram1D* hp = dynamic_cast<AIDA::IHistogram1D *> ( tree->find("3") );
     AIDA::IHistogram1D& h  = *hp;  
     (plotter->currentRegion()).plot(h);
+    plotter->refresh();
+    plotter->setCurrentRegionNumber(1);
+    AIDA::IHistogram1D* hp2 = dynamic_cast<AIDA::IHistogram1D *> ( tree->find("1") );
+    AIDA::IHistogram1D& h2  = *hp2;  
+    (plotter->currentRegion()).plot(h2);
     plotter->refresh();
   }
 }

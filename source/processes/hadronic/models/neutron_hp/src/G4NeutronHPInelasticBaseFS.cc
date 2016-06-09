@@ -54,7 +54,7 @@ void G4NeutronHPInelasticBaseFS::Init (G4double A, G4double Z, G4String & dirNam
 {
   gammaPath = "/Inelastic/Gammas/";
     if(!getenv("NeutronHPCrossSections")) 
-       G4Exception("Please setenv NeutronHPCrossSections to point to the neutron cross-section files.");
+       throw G4HadronicException(__FILE__, __LINE__, "Please setenv NeutronHPCrossSections to point to the neutron cross-section files.");
   G4String tBase = getenv("NeutronHPCrossSections");
   gammaPath = tBase+gammaPath;
   G4String tString = dirName;
@@ -137,23 +137,23 @@ void G4NeutronHPInelasticBaseFS::Init (G4double A, G4double Z, G4String & dirNam
     }
     else
     {
-      G4Exception("Data-type unknown to G4NeutronHPInelasticBaseFS");
+      throw G4HadronicException(__FILE__, __LINE__, "Data-type unknown to G4NeutronHPInelasticBaseFS");
     }
   }
   theData.close();
 }
   
-void G4NeutronHPInelasticBaseFS::BaseApply(const G4Track & theTrack, 
+void G4NeutronHPInelasticBaseFS::BaseApply(const G4HadProjectile & theTrack, 
                                            G4ParticleDefinition ** theDefs, 
                                            G4int nDef)
 {
-  theResult.Initialize(theTrack); 
 
 // prepare neutron
+  theResult.Clear();
   G4double eKinetic = theTrack.GetKineticEnergy();
-  const G4DynamicParticle *incidentParticle = theTrack.GetDynamicParticle();
-  G4ReactionProduct theNeutron( incidentParticle->GetDefinition() );
-  theNeutron.SetMomentum( incidentParticle->GetMomentum() );
+  const G4HadProjectile *incidentParticle = &theTrack;
+  G4ReactionProduct theNeutron( const_cast<G4ParticleDefinition *>(incidentParticle->GetDefinition()) );
+  theNeutron.SetMomentum( incidentParticle->Get4Momentum().vect() );
   theNeutron.SetKineticEnergy( eKinetic );
 
 // prepare target
@@ -187,7 +187,6 @@ void G4NeutronHPInelasticBaseFS::BaseApply(const G4Track & theTrack,
     {
       aPhaseMass+=theDefs[ii]->GetPDGMass();
     }
-    theResult.SetNumberOfSecondaries(nDef);
     thePhaseSpaceDistribution.Init(aPhaseMass, nDef);
     thePhaseSpaceDistribution.SetNeutron(&theNeutron);
     thePhaseSpaceDistribution.SetTarget(&theTarget);
@@ -204,7 +203,7 @@ void G4NeutronHPInelasticBaseFS::BaseApply(const G4Track & theTrack,
       delete aSec;
       theResult.AddSecondary(aPart);     
     }   
-    theResult.SetStatusChange(fStopAndKill);
+    theResult.SetStatusChange(stopAndKill);
     return;
   }
 
@@ -271,7 +270,7 @@ void G4NeutronHPInelasticBaseFS::BaseApply(const G4Track & theTrack,
 	}
 	else
 	{
-	  G4Exception("No energy distribution to sample from in InelasticBaseFS::BaseApply");
+	  throw G4HadronicException(__FILE__, __LINE__, "No energy distribution to sample from in InelasticBaseFS::BaseApply");
 	}
 	theAngularDistribution->SampleAndUpdate(*aHadron);
 	if(theEnergyDistribution==NULL && nDef == 2)
@@ -320,7 +319,7 @@ void G4NeutronHPInelasticBaseFS::BaseApply(const G4Track & theTrack,
   }
   else
   {
-    G4Exception("No data to create the neutrons in NInelasticFS");
+    throw G4HadronicException(__FILE__, __LINE__, "No data to create the neutrons in NInelasticFS");
   }
 
   G4ReactionProductVector * thePhotons = NULL;
@@ -421,7 +420,6 @@ void G4NeutronHPInelasticBaseFS::BaseApply(const G4Track & theTrack,
   unsigned int nPhotons = 0;
   if(thePhotons!=NULL) nPhotons = thePhotons->size();
   nSecondaries += nPhotons;
-  theResult.SetNumberOfSecondaries(nSecondaries);
   G4DynamicParticle * theSec;
 
   for(i=0; i<nSecondaries-nPhotons; i++)
@@ -449,5 +447,5 @@ void G4NeutronHPInelasticBaseFS::BaseApply(const G4Track & theTrack,
   delete tmpHadrons;
 
 // clean up the primary neutron
-  theResult.SetStatusChange(fStopAndKill);
+  theResult.SetStatusChange(stopAndKill);
 }

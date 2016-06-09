@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4FRConst.hh,v 1.6 2001/07/11 10:08:44 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // Satoshi TANAKA, Tue Jul  2 15:30:49 JST 1996
 ///////////////////////////////////

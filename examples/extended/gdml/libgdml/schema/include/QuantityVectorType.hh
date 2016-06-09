@@ -22,7 +22,7 @@
 //
 //
 // $Id: QuantityVectorType.hh,v 1.3 2002/07/25 10:41:22 radoone Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // 
 // --------------------------------------------------------------

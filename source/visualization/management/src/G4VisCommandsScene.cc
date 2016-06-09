@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsScene.cc,v 1.32 2003/06/16 17:14:22 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4VisCommandsScene.cc,v 1.36 2003/11/27 11:48:20 johna Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 
 // /vis/scene commands - John Allison  9th August 1998
 
@@ -201,8 +201,11 @@ G4VisCommandSceneEndOfEventAction::G4VisCommandSceneEndOfEventAction () {
   fpCommand -> SetGuidance
     ("/vis/scene/endOfEventAction [accumulate|refresh]");
   fpCommand -> SetGuidance
-    ("Requests viewer to refresh hits, tracks, etc., at end of event."
-     "\n  Or they are accumulated.  Detector remains or is redrawn.");
+    ("Requests viewer"
+     "\na) to accumulate hits, etc., event by event, or"
+     "\nb) to show them at end of event or, for direct-screen viewers,"
+     "\n   to refresh the screen just before drawing the next event."
+     "\n Detector remains or is redrawn.");
   fpCommand -> SetParameterName ("action",
 				 omitable = true);
   fpCommand -> SetCandidates ("accumulate refresh");
@@ -234,6 +237,14 @@ void G4VisCommandSceneEndOfEventAction::SetNewValue (G4UIcommand*,
     return;
   }
 
+  G4VSceneHandler* pSceneHandler = fpVisManager->GetCurrentSceneHandler();
+  if (!pSceneHandler) {
+    if (verbosity >= G4VisManager::errors) {
+      G4cout <<	"ERROR: No current sceneHandler.  Please create one." << G4endl;
+    }
+    return;
+  }
+
   if (action == "accumulate") {
     pScene->SetRefreshAtEndOfEvent(false);
   }
@@ -252,6 +263,81 @@ void G4VisCommandSceneEndOfEventAction::SetNewValue (G4UIcommand*,
   if (verbosity >= G4VisManager::confirmations) {
     G4cout << "End of event action set to \"";
     if (pScene->GetRefreshAtEndOfEvent()) G4cout << "refresh";
+    else G4cout << "accumulate";
+    G4cout << "\"" << G4endl;
+  }
+}
+
+////////////// /vis/scene/endOfRunAction ////////////////////////////
+
+G4VisCommandSceneEndOfRunAction::G4VisCommandSceneEndOfRunAction () {
+  G4bool omitable;
+  fpCommand = new G4UIcmdWithAString ("/vis/scene/endOfRunAction", this);
+  fpCommand -> SetGuidance
+    ("/vis/scene/endOfRunAction [accumulate|refresh]");
+  fpCommand -> SetGuidance
+    ("Requests viewer"
+     "\na) to accumulate hits, etc., run by run, or"
+     "\nb) to show them at end of run or, for direct-screen viewers,"
+     "\n   to refresh the screen just before drawing the next event."
+     "\n Detector remains or is redrawn.");
+  fpCommand -> SetParameterName ("action",
+				 omitable = true);
+  fpCommand -> SetCandidates ("accumulate refresh");
+  fpCommand -> SetDefaultValue ("refresh");
+}
+
+G4VisCommandSceneEndOfRunAction::~G4VisCommandSceneEndOfRunAction () {
+  delete fpCommand;
+}
+
+G4String G4VisCommandSceneEndOfRunAction::GetCurrentValue(G4UIcommand*) {
+  return "";
+}
+
+void G4VisCommandSceneEndOfRunAction::SetNewValue (G4UIcommand*,
+						     G4String newValue) {
+
+  G4VisManager::Verbosity verbosity = fpVisManager->GetVerbosity();
+
+  G4String action;
+  std::istrstream is ((char*)newValue.data());
+  is >> action;
+
+  G4Scene* pScene = fpVisManager->GetCurrentScene();
+  if (!pScene) {
+    if (verbosity >= G4VisManager::errors) {
+      G4cout <<	"ERROR: No current scene.  Please create one." << G4endl;
+    }
+    return;
+  }
+
+  G4VSceneHandler* pSceneHandler = fpVisManager->GetCurrentSceneHandler();
+  if (!pSceneHandler) {
+    if (verbosity >= G4VisManager::errors) {
+      G4cout <<	"ERROR: No current sceneHandler.  Please create one." << G4endl;
+    }
+    return;
+  }
+
+  if (action == "accumulate") {
+    pScene->SetRefreshAtEndOfRun(false);
+  }
+  else if (action == "refresh") {
+    pScene->SetRefreshAtEndOfRun(true);
+  }
+  else {
+    if (verbosity >= G4VisManager::errors) {
+      G4cout <<
+	"ERROR: unrecognised parameter \"" << action << "\"."
+             << G4endl;
+    }
+    return;
+  }
+
+  if (verbosity >= G4VisManager::confirmations) {
+    G4cout << "End of run action set to \"";
+    if (pScene->GetRefreshAtEndOfRun()) G4cout << "refresh";
     else G4cout << "accumulate";
     G4cout << "\"" << G4endl;
   }
@@ -350,7 +436,8 @@ G4VisCommandSceneNotifyHandlers::G4VisCommandSceneNotifyHandlers () {
   fpCommand -> SetGuidance
     ("/vis/scene/notifyHandlers [<scene-name>] [r[efresh]|f[lush]]");
   fpCommand -> SetGuidance
-    ("Notifies scene handlers of possible changes of scene.");
+    ("Notifies scene handlers of possible changes of scene and forces a"
+     "reconstruction of any graphical databases.");
   fpCommand -> SetGuidance ("<scene-name> default is current scene name.");
   fpCommand -> SetGuidance
     ("Clears and refreshes all viewers of current scene."

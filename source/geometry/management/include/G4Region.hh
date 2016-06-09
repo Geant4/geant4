@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Region.hh,v 1.5 2003/06/16 16:51:54 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4Region.hh,v 1.7 2003/11/02 14:01:22 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // class G4Region
 //
@@ -37,18 +37,19 @@
 
 // History:
 // 18.09.02 G.Cosmo Initial version
-// ********************************************************************
-
+// --------------------------------------------------------------------
 #ifndef G4REGION_HH
 #define G4REGION_HH
 
 class G4ProductionCuts;
 class G4LogicalVolume;
 class G4Material;
+class G4VUserRegionInformation;
 
 #include <vector>
 
-#include "globals.hh"
+#include "G4Types.hh"
+#include "G4String.hh"
 
 class G4Region
 {
@@ -103,6 +104,10 @@ class G4Region
       // Scans recursively the 'lv' logical volume tree, retrieves
       // and places all materials in the list if becoming a region.
 
+    void SetUserInformation(G4VUserRegionInformation* ui);
+    G4VUserRegionInformation* GetUserInformation() const;
+      // Set and Get methods for user information
+
   private:
 
     G4Region(const G4Region&);
@@ -118,6 +123,8 @@ class G4Region
 
     G4bool fRegionMod;
     G4ProductionCuts* fCut;
+
+    G4VUserRegionInformation* fUserInfo;
 };
 
 #include "G4Region.icc"

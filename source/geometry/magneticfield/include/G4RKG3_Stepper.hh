@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4RKG3_Stepper.hh,v 1.8 2001/07/11 09:59:09 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4RKG3_Stepper.hh,v 1.10 2003/10/31 14:35:52 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 //
 // class G4RKG3_Stepper
@@ -33,51 +33,54 @@
 
 // History:
 // - Created. J.Apostolakis, V.Grichine - 30.01.97
+// -------------------------------------------------------------------
 
 #ifndef G4RKG3_Stepper_hh
 #define G4RKG3_Stepper_hh
 
+#include "G4Types.hh"
 #include "G4MagIntegratorStepper.hh"
 #include "G4ThreeVector.hh"
-#include "G4Mag_EqRhs.hh"
+
+class G4Mag_EqRhs;
 
 class G4RKG3_Stepper : public G4MagIntegratorStepper
 {
   public:  // with description
 
-    G4RKG3_Stepper(G4Mag_EqRhs *EqRhs)
-      : G4MagIntegratorStepper(EqRhs,6){ G4Exception(" G4RKG3_Stepper:  is not available in the current version.");}
+    G4RKG3_Stepper(G4Mag_EqRhs *EqRhs);
       // Integrate over 6 variables only:  position & velocity.
+      // Not implemented yet !
 
-    ~G4RKG3_Stepper(){;}
+    ~G4RKG3_Stepper();
 
     void Stepper( const G4double yIn[],
-	          const G4double dydx[],
-	                G4double h,
-		        G4double yOut[],
-		        G4double yErr[]  );
+                  const G4double dydx[],
+                        G4double h,
+                        G4double yOut[],
+                        G4double yErr[]  );
       // The method which must be provided, even if less efficient.
 
     G4double  DistChord() const ;
  
     void StepNoErr( const G4double tIn[7],
-		    const G4double dydx[7],
-		          G4double Step,
-			  G4double tOut[7],
-			  G4double B[3] );
+                    const G4double dydx[7],
+                          G4double Step,
+                          G4double tOut[7],
+                          G4double B[3] );
       // Integrator RK Stepper from G3 with only two field evaluation per 
       // Step. It is used in propagation initial Step by small substeps
       // after solution error and delta geometry considerations. 
       // B[3] is magnetic field which is passed from substep to substep.
 
     void StepWithEst( const G4double  tIn[7],
-		      const G4double dydx[7],
-		            G4double Step,
-			    G4double tOut[7],
-			    G4double& alpha2,    // to delete ?
-			    G4double& beta2,
-		      const G4double B1[3],
-			    G4double B2[3] );
+                      const G4double dydx[7],
+                            G4double Step,
+                            G4double tOut[7],
+                            G4double& alpha2,
+                            G4double& beta2,
+                      const G4double B1[3],
+                            G4double B2[3] );
       // Integrator for RK from G3 with evaluation of error in solution and delta
       // geometry based on naive similarity with the case of uniform magnetic field.
       // B1[3] is input  and is the first magnetic field values
@@ -86,17 +89,12 @@ class G4RKG3_Stepper : public G4MagIntegratorStepper
   public:  // without description
 
     G4int IntegratorOrder() const { return 4; }
-  
-  protected:
-    //	void Field( const G4double Point[3],
-    //			  G4double Bfield[3] )  const
-    //	  { EqRhs-> GetFieldValue( Point, Bfield ) ; }
 
   private:
 
     G4ThreeVector fyInitial,
-	          fyMidPoint,
-		  fyFinal ;
+                  fyMidPoint,
+                  fyFinal;
 };
 
 #endif

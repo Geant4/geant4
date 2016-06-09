@@ -186,46 +186,6 @@ void DicomPhysicsList::SetCuts()
     DumpCutValuesTable();
 }
 
-
-void DicomPhysicsList::SetGammaLowLimit(G4double lowcut)
-{
-  if (verboseLevel >0)
-    {
-      G4cout << "DicomPhysicsList::SetCuts:";
-      G4cout << "Gamma cut in energy: " << lowcut*MeV << " (MeV)" << G4endl;
-    }
-
-  G4Gamma::SetEnergyRange(lowcut,1e5);
-
-}
-
-void DicomPhysicsList::SetElectronLowLimit(G4double lowcut)
-{
-  if (verboseLevel >0)
-    {
-
-      G4cout << "DicomPhysicsList::SetCuts:";
-      G4cout << "Electron cut in energy: " << lowcut*MeV << " (MeV)" << G4endl;
-
-    }
-
-  G4Electron::SetEnergyRange(lowcut,1e5);
-}
-
-void DicomPhysicsList::SetGELowLimit(G4double lowcut)
-{
-  if (verboseLevel >0)
-    {
-      G4cout << "DicomPhysicsList::SetCuts:";
-      G4cout << "Gamma and Electron cut in energy: " << lowcut*MeV << " (MeV)" << G4endl;
-    }
-
-  G4Gamma::SetEnergyRange(lowcut,1e5);
-  G4Electron::SetEnergyRange(lowcut,1e5);
-  G4Positron::SetEnergyRange(lowcut,1e5);
-
-}
-
 void DicomPhysicsList::SetGammaCut(G4double val)
 {
   ResetCuts();
@@ -244,21 +204,3 @@ void DicomPhysicsList::SetPositronCut(G4double val)
   cutForPositron = val;
 }
 
-void DicomPhysicsList::SetLowEnSecPhotCut(G4double cut)
-{
-
-  G4cout<<"Low energy secondary photons cut is now set to: "<<cut*MeV<<" (MeV)"<<G4endl;
-  G4cout<<"for processes LowEnergyPhotoElectric, LowEnergyBremsstrahlung, LowEnergyIonisation"<<G4endl;
-  lowePhot->SetCutForLowEnSecPhotons(cut);
-  loweIon->SetCutForLowEnSecPhotons(cut);
-  loweBrem->SetCutForLowEnSecPhotons(cut);
-}
-
-void DicomPhysicsList::SetLowEnSecElecCut(G4double cut)
-{
-
-  G4cout<<"Low energy secondary electrons cut is now set to: "<<cut*MeV<<" (MeV)"<<G4endl;
-  G4cout<<"for processes LowEnergyIonisation"<<G4endl;
-  loweIon->SetCutForLowEnSecElectrons(cut);
-
-}

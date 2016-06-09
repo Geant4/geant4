@@ -21,9 +21,9 @@
 // ********************************************************************
 //
 //
-// $Id: G4Hype.cc,v 1.10 2003/06/16 16:53:58 gunter Exp $
+// $Id: G4Hype.cc,v 1.11 2003/10/28 17:15:56 gcosmo Exp $
 // $Original: G4Hype.cc,v 1.0 1998/06/09 16:57:50 safai Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // 
 // --------------------------------------------------------------------
@@ -85,13 +85,11 @@ G4Hype::G4Hype(const G4String& pName,
   }
   else
   {
-    G4cout << "ERROR - G4Hype::G4Hype(): " << GetName() << G4endl
-           << "        Invalid Z half-length: "
-           << newHalfLenZ/mm << " mm" << G4endl;
     G4cerr << "ERROR - G4Hype::G4Hype(): " << GetName() << G4endl
            << "        Invalid Z half-length: "
            << newHalfLenZ/mm << " mm" << G4endl;
-    G4Exception("G4Hype::G4Hype() - invalid Z half-length");
+    G4Exception("G4Hype::G4Hype()", "InvalidSetup", FatalException,
+                "Invalid Z half-length.");
   }
 
   // Check radii
@@ -109,32 +107,24 @@ G4Hype::G4Hype(const G4String& pName,
       //  outerRadius=newInnerRadius;
       // DCW: swapping is fine, but what about the stereo angles???
 
-      G4cout << "ERROR - G4Hype::G4Hype(): " << GetName() << G4endl
-             << "        Invalid radii !  Inner radius: "
-             << newInnerRadius/mm << " mm" << G4endl
-             << "                         Outer radius: "
-             << newOuterRadius/mm << " mm" << G4endl;
       G4cerr << "ERROR - G4Hype::G4Hype(): " << GetName() << G4endl
              << "        Invalid radii !  Inner radius: "
              << newInnerRadius/mm << " mm" << G4endl
              << "                         Outer radius: "
              << newOuterRadius/mm << " mm" << G4endl;
-      G4Exception("G4Hype::G4Hype() - outer > inner radius");
+      G4Exception("G4Hype::G4Hype()", "InvalidSetup", FatalException,
+                  "Error: outer > inner radius.");
     }
   }
   else
   {
-    G4cout << "ERROR - G4Hype::G4Hype(): " << GetName() << G4endl
-           << "        Invalid radii !  Inner radius: "
-           << newInnerRadius/mm << " mm" << G4endl
-           << "                         Outer radius: "
-           << newOuterRadius/mm << " mm" << G4endl;
     G4cerr << "ERROR - G4Hype::G4Hype(): " << GetName() << G4endl
            << "        Invalid radii !  Inner radius: "
            << newInnerRadius/mm << " mm" << G4endl
            << "                         Outer radius: "
            << newOuterRadius/mm << " mm" << G4endl;
-    G4Exception("G4Hype::G4Hype() - invalid radii");
+    G4Exception("G4Hype::G4Hype()", "InvalidSetup", FatalException,
+                "Invalid radii.");
   }
 
   innerRadius2=innerRadius*innerRadius;

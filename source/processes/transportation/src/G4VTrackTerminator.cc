@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VTrackTerminator.cc,v 1.2 2003/04/02 16:59:26 dressel Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4VTrackTerminator.cc,v 1.3 2003/11/26 14:51:50 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -31,10 +31,10 @@
 //
 // ----------------------------------------------------------------------
 
-
 #include "G4VTrackTerminator.hh"
 
 G4VTrackTerminator::G4VTrackTerminator()
 {}
+
 G4VTrackTerminator::~G4VTrackTerminator()
 {}

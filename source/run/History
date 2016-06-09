@@ -1,4 +1,4 @@
-$Id: History,v 1.95 2003/06/19 13:21:02 gcosmo Exp $
+$Id: History,v 1.106 2003/12/09 09:14:48 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,46 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+December 09, 2003, G.Cosmo (run-V05-02-10)
+- Changed date for release 6.0.
+
+November 12, 2003, M.Asai (run-V05-02-09)
+- Remove dedicated treatment of anti-proton, neutron and anti-neutron 
+  from BuildPhysicsTable of UserPhysicsList.
+
+November 04, 2003, M.Asai (run-V05-02-08)
+- Cosmetic changes of messages for storing/retreiving physics table
+
+November 03, 2003, M.Asai (run-V05-02-07)
+- Introducing PhysicsHasBeenModified() method in G4RunManagerKernel class
+  and relared wrapper methods in G4RunManager and G4RunMessenger.
+
+November 3, 2003, H.Kurashige (run-V05-02-06)
+- G4VUserPhysicsList:
+  o Clean Up error messages for store/retreiving physcs table
+
+October 21, 2003, M.Asai (run-V05-02-05)
+- G4RunManagerKernel:
+  o Protect against a region which does not have a cut pointer.
+
+October 4, 2003, G.Cosmo (run-V05-02-04)
+- GNUmakefile:
+  o added dependency to new module "geometry/navigation".
+  o replaced "digits+hits" with "digits_hits".
+- Coworks with "geometry-V05-02-00" and "digits_hits-V05-02-00".
+
+September 25, 2003, H.Kurashige (run-V05-02-03)
+- Modify GNUmakefile for processes/cuts category
+
+September 09, 2003, M.Asai (run-V05-02-02)
+- Fix a typo in G4VUserPhysicsList.
+
+August 25, 2003, G.Cosmo (run-V05-02-01)
+- G4RunManager.cc: changed date for release 5.2-patch01.
+
+August 01, 2003, M.Asai (run-V05-02-00)
+- Introducing G4RunManagerKernel class.
 
 June 19, 2003, G.Cosmo (run-V05-01-04)
 - G4VUserPhysicsList.cc: check IsShortLived() before building the

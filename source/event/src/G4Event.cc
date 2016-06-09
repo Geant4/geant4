@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Event.cc,v 1.5 2002/08/13 18:17:53 asaim Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4Event.cc,v 1.6 2003/09/09 20:09:18 asaim Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 
 // G4Event
@@ -40,13 +40,13 @@ G4Allocator<G4Event> anEventAllocator;
 G4Event::G4Event()
 :eventID(0),
  thePrimaryVertex(0),numberOfPrimaryVertex(0),
- HC(0),DC(0),trajectoryContainer(0),eventAborted(false)
+ HC(0),DC(0),trajectoryContainer(0),eventAborted(false),userInfo(0)
 {;}
 
 G4Event::G4Event(G4int evID)
 :eventID(evID),
  thePrimaryVertex(0),numberOfPrimaryVertex(0),
- HC(0),DC(0),trajectoryContainer(0),eventAborted(false)
+ HC(0),DC(0),trajectoryContainer(0),eventAborted(false),userInfo(0)
 {;}
 
 G4Event::~G4Event()
@@ -59,6 +59,7 @@ G4Event::~G4Event()
     trajectoryContainer->clearAndDestroy();
     delete trajectoryContainer;
   }
+  if(userInfo) delete userInfo;
 }
 
 G4int G4Event::operator==(const G4Event &right) const

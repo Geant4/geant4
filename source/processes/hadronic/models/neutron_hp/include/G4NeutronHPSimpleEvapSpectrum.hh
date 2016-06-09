@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4NeutronHPSimpleEvapSpectrum.hh,v 1.8 2003/06/16 17:11:04 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 #ifndef G4NeutronHPSimpleEvapSpectrum_h
 #define G4NeutronHPSimpleEvapSpectrum_h 1

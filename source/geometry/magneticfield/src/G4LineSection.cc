@@ -21,10 +21,10 @@
 // ********************************************************************
 //
 //
-// $Id: G4LineSection.cc,v 1.6 2001/12/04 15:10:01 grichine Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4LineSection.cc,v 1.8 2003/10/31 14:35:54 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
-// typedef double    G4double;  
+// --------------------------------------------------------------------
 
 #include "G4LineSection.hh" 
 
@@ -38,7 +38,8 @@ G4LineSection::G4LineSection( const G4ThreeVector& PntA,
   G4double distABsquared = VecAtoB.mag2() ;  
   if ( distABsquared == 0.0)
   {
-    G4Exception("Equal points in G4LineSection::G4LineSection: line->point ?") ;
+    G4Exception("G4LineSection::G4LineSection()", "WrongArgumentValue",
+                FatalException, "Equal points in input (line->point) ?") ;
   }
   else
   {
@@ -103,5 +104,3 @@ G4double G4LineSection::Distline( const G4ThreeVector& OtherPnt,
 
   return LineAB.Dist( OtherPnt );
 }
-
-

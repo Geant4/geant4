@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4TrackingManager.cc,v 1.14 2003/06/16 17:13:22 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4TrackingManager.cc,v 1.15 2003/11/18 18:39:39 asaim Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 //
 //---------------------------------------------------------------
@@ -79,6 +79,14 @@ void G4TrackingManager::ProcessOneTrack(G4Track* apValueG4Track)
   }
   GimmeSecondaries()->clear();  
   
+#ifdef G4VERBOSE
+                         // !!!!! Verbose
+                         if(verboseLevel>0) Verbose("ProcessOneTrack");
+#endif
+
+  // Give SteppingManger the pointer to the track which will be tracked 
+  fpSteppingManager->SetInitialStep(fpTrack);
+
   // Pre tracking user intervention process.
   fpTrajectory = 0;
   if( fpUserTrackingAction != NULL ) {
@@ -90,14 +98,6 @@ void G4TrackingManager::ProcessOneTrack(G4Track* apValueG4Track)
      fpTrajectory = new G4Trajectory(fpTrack); // default trajectory concrete class object
   }
 #endif
-
-#ifdef G4VERBOSE
-                         // !!!!! Verbose
-                         if(verboseLevel>0) Verbose("ProcessOneTrack");
-#endif
-
-  // Give SteppingManger the pointer to the track which will be tracked 
-  fpSteppingManager->SetInitialStep(fpTrack);
 
   // Give SteppingManger the maxmimum number of processes 
   fpSteppingManager->GetProcessNumber();

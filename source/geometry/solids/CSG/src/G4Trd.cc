@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Trd.cc,v 1.13 2003/06/16 16:53:43 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4Trd.cc,v 1.17 2003/11/03 18:17:32 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 //
 // Implementation for G4Trd class
@@ -30,8 +30,7 @@
 // History:
 //    ~1996, V.Grichine, 1st implementation based on old code of P.Kent
 // 07.05.00, V.Grichine, in d = DistanceToIn(p,v), if d<0.5*kCarTolerance, d=0
-//
-// ********************************************************************
+// --------------------------------------------------------------------
 
 #include "G4Trd.hh"
 
@@ -87,19 +86,15 @@ void G4Trd::CheckAndSetAllParameters ( G4double pdx1,  G4double pdx2,
     }
     else
     {
-      G4cout << "ERROR - G4Trd()::CheckAndSetAllParameters(): " << GetName()
-             << G4endl
-             << "        Invalid dimensions, some are < 0 !" << G4endl
-             << "          X - " << pdx1 << ", " << pdx2 << G4endl
-             << "          Y - " << pdy1 << ", " << pdy2 << G4endl
-             << "          Z - " << pdz << G4endl;
       G4cerr << "ERROR - G4Trd()::CheckAndSetAllParameters(): " << GetName()
              << G4endl
              << "        Invalid dimensions, some are < 0 !" << G4endl
              << "          X - " << pdx1 << ", " << pdx2 << G4endl
              << "          Y - " << pdy1 << ", " << pdy2 << G4endl
              << "          Z - " << pdz << G4endl;
-      G4Exception("G4Trd::CheckAndSetAllParameters() - Invalid parameters");
+      G4Exception("G4Trd::CheckAndSetAllParameters()",
+                  "InvalidSetup", FatalException,
+                  "Invalid parameters.");
     }
   }
 }
@@ -702,7 +697,7 @@ G4double G4Trd::DistanceToIn( const G4ThreeVector& p,
 
 G4double G4Trd::DistanceToIn( const G4ThreeVector& p ) const
 {
-  G4double safe;
+  G4double safe=0.0;
   G4double tanxz,distx,safx;
   G4double tanyz,disty,safy;
   G4double zbase;
@@ -1125,7 +1120,9 @@ G4double G4Trd::DistanceToOut( const G4ThreeVector& p,
         break;
       default:
         DumpInfo();
-        G4Exception("G4Trd::DistanceToOut() - Invalid enum");
+        G4Exception("G4Trd::DistanceToOut()",
+                    "LogicError", FatalException,
+                    "Undefined side for valid surface normal to solid.");
         break;
     }
   }
@@ -1139,7 +1136,7 @@ G4double G4Trd::DistanceToOut( const G4ThreeVector& p,
 
 G4double G4Trd::DistanceToOut( const G4ThreeVector& p ) const
 {
-  G4double safe;
+  G4double safe=0.0;
   G4double tanxz,xdist,saf1;
   G4double tanyz,ydist,saf2;
   G4double zbase;
@@ -1154,8 +1151,8 @@ G4double G4Trd::DistanceToOut( const G4ThreeVector& p ) const
      G4cout << "p.x() = "   << p.x()/mm << " mm" << G4endl ;
      G4cout << "p.y() = "   << p.y()/mm << " mm" << G4endl ;
      G4cout << "p.z() = "   << p.z()/mm << " mm" << G4endl << G4endl ;
-     G4cout << "G4Trd::DistanceToOut(p) - point p is outside ?!" << G4endl ;
-     G4cerr << "G4Trd::DistanceToOut(p) - point p is outside ?!" << G4endl ;
+     G4Exception("G4Trd::DistanceToOut(p)",
+                 "Notification", JustWarning, "Point p is outside !?" );
   }
 #endif
 
@@ -1222,7 +1219,9 @@ G4Trd::CreateRotatedVertices( const G4AffineTransform& pTransform ) const
   else
   {
     DumpInfo();
-    G4Exception("G4Trd::CreateRotatedVertices() - Out of memory");
+    G4Exception("G4Trd::CreateRotatedVertices()",
+                "FatalError", FatalException,
+                "Error in allocation of vertices. Out of memory !");
   }
   return vertices;
 }

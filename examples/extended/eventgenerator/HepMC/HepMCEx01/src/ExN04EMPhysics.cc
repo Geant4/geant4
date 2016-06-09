@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: ExN04EMPhysics.cc,v 1.3 2003/06/16 16:48:08 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: ExN04EMPhysics.cc,v 1.4 2003/12/03 11:03:06 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // 
 
@@ -81,29 +81,19 @@ void ExN04EMPhysics::ConstructProcess()
 
   // Electron Physics
   pManager = G4Electron::Electron()->GetProcessManager();
-   // add processes
-  pManager->AddDiscreteProcess(&theElectronBremsStrahlung);  
 
-  pManager->AddProcess(&theElectronIonisation, ordInActive,2, 2);
+  pManager->AddProcess(&theElectronMultipleScattering, -1, 1, 1);
+  pManager->AddProcess(&theElectronIonisation,         -1, 2, 2);
+  pManager->AddProcess(&theElectronBremsStrahlung,     -1, 3, 3);  
 
-  pManager->AddProcess(&theElectronMultipleScattering);
-  pManager->SetProcessOrdering(&theElectronMultipleScattering, idxAlongStep,  1);
-  pManager->SetProcessOrdering(&theElectronMultipleScattering, idxPostStep,  1);
 
   //Positron Physics
   pManager = G4Positron::Positron()->GetProcessManager();
-  // add processes
-  pManager->AddDiscreteProcess(&thePositronBremsStrahlung);
-
-  pManager->AddDiscreteProcess(&theAnnihilation);
-
-  pManager->AddRestProcess(&theAnnihilation);
-
-  pManager->AddProcess(&thePositronIonisation, ordInActive,2, 2);
-
-  pManager->AddProcess(&thePositronMultipleScattering);
-  pManager->SetProcessOrdering(&thePositronMultipleScattering, idxAlongStep,  1);
-  pManager->SetProcessOrdering(&thePositronMultipleScattering, idxPostStep,  1);
+ 
+  pManager->AddProcess(&thePositronMultipleScattering, -1, 1, 1);
+  pManager->AddProcess(&thePositronIonisation,         -1, 2, 2);
+  pManager->AddProcess(&thePositronBremsStrahlung,     -1, 3, 3);  
+  pManager->AddProcess(&theAnnihilation,                0,-1, 4);  
 
 }
 

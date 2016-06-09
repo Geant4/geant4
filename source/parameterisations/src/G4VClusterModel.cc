@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4VClusterModel.cc,v 1.6 2001/11/08 13:53:51 mverderi Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 
 #include "G4Timer.hh"

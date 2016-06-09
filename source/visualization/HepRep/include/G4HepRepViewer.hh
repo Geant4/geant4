@@ -46,7 +46,7 @@ class G4HepRepViewer: public G4VViewer {
         void FinishView ();
 
     private:
-        bool drawn;
+        bool geometryIncluded;
 };
 
 #endif

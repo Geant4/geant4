@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4VisFeaturesOfDAWNFILE.cc,v 1.5 2001/07/11 10:09:19 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 #include "G4VisFeaturesOfDAWNFILE.hh"
 

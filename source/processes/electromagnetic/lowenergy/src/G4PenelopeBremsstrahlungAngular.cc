@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4PenelopeBremsstrahlungAngular.cc,v 1.4 2003/06/16 17:00:17 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4PenelopeBremsstrahlungAngular.cc,v 1.5 2003/11/07 12:25:35 pandola Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 // 
 // --------------------------------------------------------------
 //
@@ -35,6 +35,8 @@
 // -----------
 // 04 Feb 2003  L. Pandola       1st implementation
 // 19 Mar 2003  L. Pandola       Bugs fixed
+// 07 Nov 2003  L. Pandola       Added GetAtomicNumber method for testing 
+//                               purposes
 //----------------------------------------------------------------
 
 #include "G4PenelopeBremsstrahlungAngular.hh"
@@ -52,6 +54,11 @@ G4PenelopeBremsstrahlungAngular::G4PenelopeBremsstrahlungAngular (G4int Zed)
 
 G4PenelopeBremsstrahlungAngular::~G4PenelopeBremsstrahlungAngular()
 {
+}
+
+G4int G4PenelopeBremsstrahlungAngular::GetAtomicNumber()
+{
+  return Zmat;
 }
 
 void G4PenelopeBremsstrahlungAngular::InterpolationTableForZ()
@@ -167,14 +174,14 @@ G4double G4PenelopeBremsstrahlungAngular::ExtractCosTheta(G4double e1,G4double e
 
   G4double beta = sqrt(e1*(e1+2*electron_mass_c2))/(e1+electron_mass_c2);
   
-  
+
+
   G4double RK=20.0*e2/e1;
   G4int ik=std::min((G4int) RK,19);
   
   G4double P10=0,P11=0,P1=0;
   G4double P20=0,P21=0,P2=0;
   G4double pX[NumberofEPoints];
-
   //First coefficient
   G4int i;
   G4int j = ik;

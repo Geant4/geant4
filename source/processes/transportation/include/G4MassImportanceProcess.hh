@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4MassImportanceProcess.hh,v 1.7 2003/06/13 09:27:04 dressel Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4MassImportanceProcess.hh,v 1.9 2003/11/26 14:51:48 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // ----------------------------------------------------------------------
 // Class G4MassImportanceProcess
@@ -40,13 +40,11 @@
 #define G4MassImportanceProcess_hh G4MassImportanceProcess_hh
 
 #include "G4VProcess.hh"
-#include "G4ImportanceFinder.hh"
 #include "G4VTrackTerminator.hh"
 
-class G4ImportancePostStepDoIt;
+class G4SamplingPostStepAction;
 class G4VImportanceAlgorithm;
 class G4VIStore;
-
 
 class G4MassImportanceProcess : public G4VProcess, public G4VTrackTerminator
 {
@@ -54,9 +52,9 @@ class G4MassImportanceProcess : public G4VProcess, public G4VTrackTerminator
 public:  // with description
 
   G4MassImportanceProcess(const G4VImportanceAlgorithm &aImportanceAlgorithm,
-			  const G4VIStore &aIstore,
-			  const G4VTrackTerminator *TrackTerminator,
-			  const G4String &aName = "MassImportanceProcess");
+                          const G4VIStore &aIstore,
+                          const G4VTrackTerminator *TrackTerminator,
+                          const G4String &aName = "MassImportanceProcess");
     // creates a G4ParticleChange
 
   virtual ~G4MassImportanceProcess();
@@ -64,8 +62,8 @@ public:  // with description
 
   virtual G4double 
   PostStepGetPhysicalInteractionLength(const G4Track& aTrack,
-				       G4double   previousStepSize,
-				       G4ForceCondition* condition);
+                                       G4double   previousStepSize,
+                                       G4ForceCondition* condition);
     // make process beeing forced
   virtual G4VParticleChange *PostStepDoIt(const G4Track&, const G4Step&);
     // manage the importance sampling in the "mass" geometry
@@ -82,13 +80,13 @@ public:  // without description
 
   virtual G4double 
   AlongStepGetPhysicalInteractionLength(const G4Track&,
-					G4double  ,
-					G4double  ,
-					G4double& ,
-					G4GPILSelection*);
+                                        G4double  ,
+                                        G4double  ,
+                                        G4double& ,
+                                        G4GPILSelection*);
   virtual G4double 
   AtRestGetPhysicalInteractionLength(const G4Track& ,
-				     G4ForceCondition*);
+                                     G4ForceCondition*);
   
   virtual G4VParticleChange* 
   AtRestDoIt(const G4Track&, const G4Step&);
@@ -106,8 +104,8 @@ private:
 
   G4ParticleChange *fParticleChange;
   const G4VImportanceAlgorithm &fImportanceAlgorithm;
-  G4ImportanceFinder fImportanceFinder;
-  G4ImportancePostStepDoIt *fImportancePostStepDoIt;
+  const G4VIStore &fIStore;
+  G4SamplingPostStepAction *fPostStepAction;
 };
 
 #endif

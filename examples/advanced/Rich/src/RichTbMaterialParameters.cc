@@ -127,12 +127,13 @@ void  HistoRichTbMaterialProperties(RichTbRunConfig* RConfig) {
 
   G4double stepsize=7.0;
 
-  G4double thickness=(GetCurAerogelLength(AerogelNum))/cm;
+  // G4double thickness=(GetCurAerogelLength(AerogelNum))/cm;
   AerogelType CurAerogelType=RConfig-> GetCurAerogelType(AerogelNum);
 
 
 
-  G4double Aparam, Cparam;
+  G4double Aparam=0.;
+  G4double Cparam=0.;
   if(CurAerogelType == AerogelTypeA ) {
     Aparam =   AerogelTypeATotTrans;
     Cparam =  AerogelTypeAClarity*cm/(micrometer*micrometer*micrometer*micrometer);
@@ -142,8 +143,8 @@ void  HistoRichTbMaterialProperties(RichTbRunConfig* RConfig) {
   
   for(G4int Iabin=0; Iabin<100; Iabin ++ ) {
    
-    G4double waLInmu = waL/1000.0;
-    G4double Aetr = Aparam* exp(-Cparam * thickness / pow(waLInmu,4) );
+    // G4double waLInmu = waL/1000.0;
+    // G4double Aetr = Aparam* exp(-Cparam * thickness / pow(waLInmu,4) );
 
     waL += stepsize;
   }
@@ -163,12 +164,12 @@ void  HistoRichTbMaterialProperties(RichTbRunConfig* RConfig) {
 }
   
 
-vector<G4int> getDeadPixelList(G4int ihpdNum,  G4int isectNum){
+vector<G4int> getDeadPixelList(G4int ihpdNum,  G4int){
   vector<G4int>DeadPixelList;
-  G4int isc,ipsc;
+  // G4int isc,ipsc;
 
 
-  if(DeadPixelList.size() >  MaxNumDeadPixelPerHpdSect ){
+  if(G4int(DeadPixelList.size()) >  MaxNumDeadPixelPerHpdSect ){
     G4cout<<" Too Many dead Pixels in Hpd "<<DeadPixelList.size()
           <<"   in Hpd "<<ihpdNum<<G4endl;
   }
@@ -179,7 +180,7 @@ vector<G4double>GetAerogelRScatLength(AerogelType CurrentAerogelType) {
 
   vector<G4double>AgelRayleighScatLength(NumPhotWaveLengthBins);
   vector<G4double>AgelPhotW = InitAgelPhotW();
-  G4double aClarity;
+  G4double aClarity=0.;
   if(CurrentAerogelType == AerogelTypeA ) {
     aClarity=AerogelTypeAClarity/(micrometer*micrometer*micrometer*micrometer);
     
@@ -213,7 +214,7 @@ G4double GetCurrentBulkTrans(G4double currentMatRefIndex,
                           G4double currentNeighbourRefIndex,
                           G4double MaxTotMeasuredTransmission){
   G4double ATrans=MaxTotMeasuredTransmission;
-  G4double ePhot;
+  // G4double ePhot;
   // in the following the energy of the photon is not used since
   // it is only an approximate calulation. 
   G4double na=  currentMatRefIndex;

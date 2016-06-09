@@ -1,0 +1,27 @@
+# $Id: TestEm2.large_N.in,v 1.1 2003/11/16 19:34:24 stesting Exp $
+#
+# Macro file for "TestEm2.cc" 
+# (can be run in batch, without graphic)
+#
+# PbWO4 L = 20 radl  R = 5 radl; electron 5 GeV
+#
+/control/verbose 2
+/run/verbose 1
+#
+/testem/phys/addPhysics  standard
+###/testem/phys/addPhysics  g4v52
+#
+/testem/phys/setCuts 1 mm
+#
+/run/initialize
+#
+###/run/particle/applyCuts
+#
+/gun/particle e-
+/gun/energy 5 GeV
+#
+/testem/event/printModulo 10
+#
+/run/beamOn 500
+
+

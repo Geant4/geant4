@@ -75,9 +75,6 @@ public:
   void SetGammaCut(G4double);
   void SetElectronCut(G4double);
 
-  void SetGammaLowLimit(G4double);
-  void SetElectronLowLimit(G4double);
-  void SetGELowLimit(G4double);
   void SetLowEnSecPhotCut(G4double);
   void SetLowEnSecElecCut(G4double);
   void SetProtonCut(G4double);

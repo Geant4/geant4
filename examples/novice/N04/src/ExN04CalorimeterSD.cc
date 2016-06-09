@@ -52,12 +52,14 @@ void ExN04CalorimeterSD::Initialize(G4HCofThisEvent*)
   {
     CellID[j][k] = -1;
   }
+  verboseLevel = 0;
 }
 
 G4bool ExN04CalorimeterSD::ProcessHits(G4Step*aStep,G4TouchableHistory*ROhist)
 {
   if(!ROhist) return false;
   G4double edep = aStep->GetTotalEnergyDeposit();
+  if(verboseLevel>1) G4cout << "Next step edep(MeV) = " << edep/MeV << G4endl;
   if(edep==0.) return false;
 
   G4VPhysicalVolume* physVol = ROhist->GetVolume();

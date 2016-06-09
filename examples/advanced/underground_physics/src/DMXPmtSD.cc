@@ -61,7 +61,7 @@ DMXPmtSD::~DMXPmtSD() {;}
 
 
 ////////////////////////////////////////////////////////////////////////////
-void DMXPmtSD::Initialize(G4HCofThisEvent* HCE) {
+void DMXPmtSD::Initialize(G4HCofThisEvent*) {
 
   pmtCollection = new DMXPmtHitsCollection
     (SensitiveDetectorName,collectionName[0]); 
@@ -75,7 +75,7 @@ void DMXPmtSD::Initialize(G4HCofThisEvent* HCE) {
 
 ////////////////////////////////////////////////////////////////////////////
 G4bool DMXPmtSD::ProcessHits
-  (G4Step* aStep, G4TouchableHistory* ROhist){
+  (G4Step* aStep, G4TouchableHistory*){
 
   // make known hit position
   DMXPmtHit* aPmtHit = new DMXPmtHit();

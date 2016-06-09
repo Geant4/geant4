@@ -25,7 +25,7 @@ chmod +x $name.xt
 #
 # cleanup
 #
-rm *.o
+rm -f *.o
 echo 'done'  
 exit
  

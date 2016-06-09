@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PrimaryVertex.hh,v 1.7 2001/07/13 15:01:46 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4PrimaryVertex.hh,v 1.8 2003/09/12 21:51:32 asaim Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 //
 
@@ -34,6 +34,7 @@
 #include "G4Allocator.hh"
 #include "G4ThreeVector.hh"
 #include "G4PrimaryParticle.hh"
+class G4VUserPrimaryVertexInformation;
 
 // class description:
 //
@@ -69,6 +70,7 @@ class G4PrimaryVertex
       G4PrimaryVertex* nextVertex;
       G4int numberOfParticle;
       G4double Weight0;
+      G4VUserPrimaryVertexInformation* userInfo;
 
   public:
       inline G4ThreeVector GetPosition() const
@@ -131,6 +133,10 @@ class G4PrimaryVertex
       { return Weight0; }
       inline void SetWeight(G4double w)
       { Weight0 = w; }
+      inline void SetUserInformation(G4VUserPrimaryVertexInformation* anInfo)
+      { userInfo = anInfo; }
+      inline G4VUserPrimaryVertexInformation* GetUserInformation() const
+      { return userInfo; }
 };
 
 extern G4Allocator<G4PrimaryVertex> aPrimaryVertexAllocator;

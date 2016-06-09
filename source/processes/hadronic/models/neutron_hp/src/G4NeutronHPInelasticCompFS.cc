@@ -51,7 +51,7 @@ void G4NeutronHPInelasticCompFS::Init (G4double A, G4double Z, G4String & dirNam
 {
   gammaPath = "/Inelastic/Gammas/";
     if(!getenv("NeutronHPCrossSections")) 
-       G4Exception("Please setenv NeutronHPCrossSections to point to the neutron cross-section files.");
+       throw G4HadronicException(__FILE__, __LINE__, "Please setenv NeutronHPCrossSections to point to the neutron cross-section files.");
   G4String tBase = getenv("NeutronHPCrossSections");
   gammaPath = tBase+gammaPath;
   G4String tString = dirName;
@@ -133,7 +133,7 @@ void G4NeutronHPInelasticCompFS::Init (G4double A, G4double Z, G4String & dirNam
     }
     else
     {
-      G4Exception("Data-type unknown to G4NeutronHPInelasticCompFS");
+      throw G4HadronicException(__FILE__, __LINE__, "Data-type unknown to G4NeutronHPInelasticCompFS");
     }
   }
   theData.close();
@@ -168,15 +168,15 @@ G4int G4NeutronHPInelasticCompFS::SelectExitChannel(G4double eKinetic)
   return it;
 }
 
-void G4NeutronHPInelasticCompFS::CompositeApply(const G4Track & theTrack, G4ParticleDefinition * aDefinition)
+void G4NeutronHPInelasticCompFS::CompositeApply(const G4HadProjectile & theTrack, G4ParticleDefinition * aDefinition)
 {
-    theResult.Initialize(theTrack); 
 
 // prepare neutron
+    theResult.Clear();
     G4double eKinetic = theTrack.GetKineticEnergy();
-    const G4DynamicParticle *incidentParticle = theTrack.GetDynamicParticle();
-    G4ReactionProduct theNeutron( incidentParticle->GetDefinition() );
-    theNeutron.SetMomentum( incidentParticle->GetMomentum() );
+    const G4HadProjectile *incidentParticle = &theTrack;
+    G4ReactionProduct theNeutron( const_cast<G4ParticleDefinition *>(incidentParticle->GetDefinition()) );
+    theNeutron.SetMomentum( incidentParticle->Get4Momentum().vect() );
     theNeutron.SetKineticEnergy( eKinetic );
 
 // prepare target
@@ -266,7 +266,7 @@ void G4NeutronHPInelasticCompFS::CompositeApply(const G4Track & theTrack, G4Part
 	
 	if(getenv("InelasticCompFSLogging") && eKinetic-eExcitation < 0) 
 	{
-	  G4Exception("SEVERE: InelasticCompFS: Consistency of data not good enough, please file report");
+	  throw G4HadronicException(__FILE__, __LINE__, "SEVERE: InelasticCompFS: Consistency of data not good enough, please file report");
 	}
 	if(eKinetic-eExcitation < 0) eExcitation = 0;
 	if(iLevel!= -1) aHadron.SetKineticEnergy(eKinetic - eExcitation);
@@ -429,9 +429,7 @@ void G4NeutronHPInelasticCompFS::CompositeApply(const G4Track & theTrack, G4Part
     G4int nPhotons = 0;
     if(thePhotons!=NULL) nPhotons = thePhotons->size();
     nSecondaries += nPhotons;
-    
-    theResult.SetNumberOfSecondaries(nSecondaries);
-    
+        
     G4DynamicParticle * theSec;
     
     if( theParticles==NULL )
@@ -503,5 +501,5 @@ void G4NeutronHPInelasticCompFS::CompositeApply(const G4Track & theTrack, G4Part
       delete thePhotons;
     }
 // clean up the primary neutron
-    theResult.SetStatusChange(fStopAndKill);
+    theResult.SetStatusChange(stopAndKill);
 }

@@ -1,0 +1,80 @@
+//
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
+//
+inline  G4FermiSplitter::G4FermiSplitter(G4FermiFragmentsPool* pool)
+  : theFragmentsPool(pool), A(0), Z(0), K(0)
+{
+}
+
+inline  G4FermiSplitter::G4FermiSplitter()
+  : theFragmentsPool(0), A(0), Z(0), K(0)
+{
+  // This is meant to not be accesable
+}
+
+inline  G4FermiSplitter::~G4FermiSplitter()
+{
+}
+
+inline G4FermiSplitter::G4FermiSplitter(const G4FermiSplitter& right)
+  : A(right.A), Z(right.Z), K(right.K), splits(right.splits)
+{
+}
+
+inline const G4FermiSplitter& 
+G4FermiSplitter::operator=(const G4FermiSplitter& right)
+{
+  A = right.A;
+  Z = right.Z;
+  K = right.Z;
+  splits = right.splits;
+  return *this;
+}
+
+inline G4bool 
+G4FermiSplitter::operator==(const G4FermiSplitter& right)
+{
+  return (A == right.A && Z == right.Z && K == right.K &&
+	  splits == right.splits);
+}
+
+inline G4bool 
+G4FermiSplitter::operator!=(const G4FermiSplitter& right)
+{
+  return (A != right.A || Z != right.Z || K != right.K ||
+	  splits != right.splits);
+}
+
+inline G4int G4FermiSplitter::GetNumberOfSplits() const
+{
+  return splits.size();
+}
+
+inline std::vector<const G4VFermiFragment*> G4FermiSplitter::GetSplit(const G4int i)
+{
+  if (i >= 0 && i < static_cast<G4int>(splits.size())) return splits[i];
+  else 
+    {
+      std::vector<const G4VFermiFragment*> dummy;
+      return dummy;
+    }
+}

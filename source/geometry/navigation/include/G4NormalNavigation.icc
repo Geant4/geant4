@@ -1,0 +1,88 @@
+//
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
+//
+//
+// $Id: G4NormalNavigation.icc,v 1.2 2003/11/03 17:15:20 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-00 $
+//
+// 
+// G4NormalNavigation Inline Implementation
+//
+// --------------------------------------------------------------------
+
+// ********************************************************************
+// LevelLocate
+// ********************************************************************
+//
+inline
+G4bool
+G4NormalNavigation::LevelLocate( G4NavigationHistory& history,
+                           const G4VPhysicalVolume* blockedVol,
+                           const G4int,
+                           const G4ThreeVector& globalPoint,
+                           const G4ThreeVector* globalDirection,
+                           const G4bool  pLocatedOnEdge, 
+                                 G4ThreeVector &localPoint )
+{
+  G4VPhysicalVolume *targetPhysical, *samplePhysical;
+  G4LogicalVolume *targetLogical;
+  G4VSolid *sampleSolid;
+  G4ThreeVector samplePoint;
+  G4int targetNoDaughters;
+  
+  targetPhysical = history.GetTopVolume();
+  targetLogical = targetPhysical->GetLogicalVolume();
+  targetNoDaughters = targetLogical->GetNoDaughters();
+  
+  if (targetNoDaughters==0) return false;
+  
+  //
+  // Search daughters in volume
+  //
+
+  for ( register int sampleNo=targetNoDaughters-1; sampleNo>=0; sampleNo-- )
+  {
+    samplePhysical = targetLogical->GetDaughter(sampleNo);
+    if ( samplePhysical!=blockedVol )
+    {
+      // Setup history
+      //
+      history.NewLevel(samplePhysical, kNormal, samplePhysical->GetCopyNo());
+      sampleSolid = samplePhysical->GetLogicalVolume()->GetSolid();
+      samplePoint = history.GetTopTransform().TransformPoint(globalPoint);
+      if( G4AuxiliaryNavServices::
+          CheckPointOnSurface(sampleSolid, samplePoint, globalDirection, 
+                              history.GetTopTransform(), pLocatedOnEdge) )
+      {
+        // Enter this daughter
+        //
+        localPoint = samplePoint;
+        return true;
+      }
+      else
+      {
+        history.BackLevel();
+      }
+    }
+  }
+  return false;
+}

@@ -21,14 +21,14 @@
 // ********************************************************************
 //
 //
-// $Id: G4PImportanceConfigurator.hh,v 1.3 2002/10/22 13:25:56 dressel Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4PImportanceConfigurator.hh,v 1.5 2003/11/26 14:51:48 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // ----------------------------------------------------------------------
 // Class G4PImportanceConfigurator
 //
 // Class description:
-// This class builds and places  the G4PImportanceProcess
+// This class builds and places the G4PImportanceProcess.
 // If the object is deleted the process is removed from the 
 // process list.
 
@@ -38,28 +38,30 @@
 #ifndef G4PImportanceConfigurator_hh
 #define G4PImportanceConfigurator_hh G4PImportanceConfigurator_hh
 
+#include "G4Types.hh"
 #include "G4VSamplerConfigurator.hh"
-
-#include "globals.hh"
 #include "G4ImportanceSplitExaminer.hh"
-#include "G4ParallelImportanceProcess.hh"
 #include "G4ProcessPlacer.hh"
 
 class G4ParallelWorld;
 class G4VImportanceAlgorithm;
+class G4ParallelImportanceProcess;
 
+class G4PImportanceConfigurator : public G4VSamplerConfigurator
+{
 
-class G4PImportanceConfigurator : public G4VSamplerConfigurator {
-public:
+public:  // with description
+
   G4PImportanceConfigurator(const G4String &particlename,
-			      G4ParallelWorld &parallelWorld,
-			      G4VIStore &istore,
-			      const G4VImportanceAlgorithm *ialg);
+                              G4ParallelWorld &parallelWorld,
+                              G4VIStore &istore,
+                              const G4VImportanceAlgorithm *ialg);
   virtual ~G4PImportanceConfigurator();
   virtual void Configure(G4VSamplerConfigurator *preConf);
   virtual const G4VTrackTerminator *GetTrackTerminator() const;
   
 private:
+
   G4PImportanceConfigurator(const G4PImportanceConfigurator &);
   G4PImportanceConfigurator &
   operator=(const G4PImportanceConfigurator &);
@@ -69,7 +71,7 @@ private:
   const G4VImportanceAlgorithm *fIalgorithm;
   G4ImportanceSplitExaminer fExaminer;
   G4ParallelImportanceProcess *fParallelImportanceProcess;
-};
 
+};
 
 #endif

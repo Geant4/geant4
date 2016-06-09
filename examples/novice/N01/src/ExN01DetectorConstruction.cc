@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: ExN01DetectorConstruction.cc,v 1.7 2003/03/25 14:40:07 maire Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: ExN01DetectorConstruction.cc,v 1.8 2003/10/06 08:59:11 maire Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 
 #include "ExN01DetectorConstruction.hh"
@@ -54,19 +54,15 @@ G4VPhysicalVolume* ExN01DetectorConstruction::Construct()
   G4double a;  // atomic mass
   G4double z;  // atomic number
   G4double density;
-  G4String name;
 
-  a = 39.95*g/mole;
-  density = 1.782e-03*g/cm3;
-  G4Material* Ar = new G4Material(name="ArgonGas", z=18., a, density);
+  G4Material* Ar = 
+  new G4Material("ArgonGas", z= 18., a= 39.95*g/mole, density= 1.782*mg/cm3);
 
-  a = 26.98*g/mole;
-  density = 2.7*g/cm3;
-  G4Material* Al = new G4Material(name="Aluminum", z=13., a, density);
+  G4Material* Al = 
+  new G4Material("Aluminum", z= 13., a= 26.98*g/mole, density= 2.7*g/cm3);
 
-  a = 207.19*g/mole;
-  density = 11.35*g/cm3;
-  G4Material* Pb = new G4Material(name="Lead", z=82., a, density);
+  G4Material* Pb = 
+  new G4Material("Lead", z= 82., a= 207.19*g/mole, density= 11.35*g/cm3);
 
   //------------------------------------------------------ volumes
 

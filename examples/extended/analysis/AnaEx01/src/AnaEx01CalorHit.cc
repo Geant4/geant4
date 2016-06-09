@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: AnaEx01CalorHit.cc,v 1.4 2003/06/20 14:55:45 gbarrand Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: AnaEx01CalorHit.cc,v 1.5 2003/12/03 10:33:21 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // 
 
@@ -49,6 +49,7 @@ AnaEx01CalorHit::~AnaEx01CalorHit()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 AnaEx01CalorHit::AnaEx01CalorHit(const AnaEx01CalorHit& right)
+  : G4VHit(right)
 {
   EdepAbs = right.EdepAbs; TrackLengthAbs = right.TrackLengthAbs;
   EdepGap = right.EdepGap; TrackLengthGap = right.TrackLengthGap;
@@ -67,7 +68,7 @@ const AnaEx01CalorHit& AnaEx01CalorHit::operator=(const AnaEx01CalorHit& right)
 
 int AnaEx01CalorHit::operator==(const AnaEx01CalorHit& right) const
 {
-  return 0;
+  return (this==&right) ? 1 : 0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

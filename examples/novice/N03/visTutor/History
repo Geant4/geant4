@@ -2,6 +2,10 @@
 examples/novice/N03/visTutor/History
 ====================================
 
+27-11-03 Gabriele Cosmo 
+- removed script exN03Vis5.mac of OPACS and renamed scripts 6/7/8/9 to
+  5/6/7/8 respectively. Added scripts to gui.mac.
+
 14-11-01 Satoshi Tanaka (exN03VisTutor-V03-02-02)
 - exN03Vis8.mac : Batch visualization with the DAWNFILE driver
 - exN03Vis9.mac : Multi-page PostScript file generation (old exN03Vis8.mac)

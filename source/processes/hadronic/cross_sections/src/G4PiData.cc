@@ -20,8 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4PiData.cc,v 1.6 2003/06/16 17:03:08 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // --------------------------------------------------------------------
 // by J.P Wellisch, Sun Sep 15 2002.
@@ -58,7 +57,11 @@ ReactionXSection(G4double kineticEnergy)
   G4double result = 0;
   G4PiData::iterator it=begin();
   while(it!=end()&&kineticEnergy>(*it).first) {it++;}
-  if(it==end()) G4Exception("G4PiData used outside validity range");
+  if(it==end()) 
+  {
+    G4Exception("G4PiData", "007", FatalException,
+                "ReactionXSection used outside validity range");
+  }
   if(it==begin()) it++;
   G4double x1,x2,e1,e2;
   e1=(*(it-1)).first;
@@ -75,7 +78,11 @@ ElasticXSection(G4double kineticEnergy)
   G4double result = 0;
   G4PiData::iterator it=begin();
   while(it!=end()&&kineticEnergy>(*it).first) {it++;}
-  if(it==end()) G4Exception("G4PiData used outside validity range");
+  if(it==end()) 
+  {
+    G4Exception("G4PiData", "007", FatalException,
+                "ElasticXSection used outside validity range");
+  }
   if(it==begin()) it++;
   G4double x1,x2,e1,e2;
   e1=(*(it-1)).first;

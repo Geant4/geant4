@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4gstpar.cc,v 1.7 2003/04/03 11:30:56 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 #include "G3toG4.hh"
 #include "G3VolTable.hh"

@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4BSplineSurface.hh,v 1.10 2001/07/11 09:59:31 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // ----------------------------------------------------------------------
 // Class G4BSplineSurface

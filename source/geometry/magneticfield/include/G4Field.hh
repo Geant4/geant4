@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Field.hh,v 1.6 2001/11/08 17:31:07 grichine Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4Field.hh,v 1.8 2003/11/05 10:35:55 japost Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 //
 // class G4Field
@@ -35,30 +35,37 @@
 
 // History:
 // - Created:  John Apostolakis, 10.03.1997
+// -------------------------------------------------------------------
 
 #ifndef G4FIELD_HH
 #define G4FIELD_HH
+
+#include "G4Types.hh"
 
 class G4Field
 {
   public:  // with description
 
       virtual void  GetFieldValue( const  double Point[4],
-					  double *Bfield ) const = 0;
+                                          double *Bfield ) const = 0;
       G4Field(){;}
       virtual ~G4Field(){;}
+      inline G4Field& operator = (const G4Field &p); 
 
      // A field signature function that can be used to insure
      // that the Equation of motion object and the G4Field object
      // have the same "field signature"?
+ 
+      virtual G4bool   DoesFieldChangeEnergy() const= 0 ;
+       //  For electric field this should be true
+       //  For pure magnetic field this should be false
+
 };
 
+inline G4Field& G4Field::operator = (const G4Field &p)
+{
+  if (&p != this) { *this = p; }
+  return *this;
+}
 
 #endif /* G4FIELD_HH */
-
-
-
-
-
-
-

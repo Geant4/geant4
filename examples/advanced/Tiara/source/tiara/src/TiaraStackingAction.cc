@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 // $Id: TiaraStackingAction.cc,v 1.4 2003/06/25 09:13:13 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 
 #include "TiaraStackingAction.hh"

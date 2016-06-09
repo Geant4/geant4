@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ExplicitEuler.cc,v 1.5 2002/11/29 13:50:18 japost Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4ExplicitEuler.cc,v 1.7 2003/11/05 16:31:49 japost Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 //
 //  Explicit Euler: x_1 = x_0 + h * dx_0
@@ -31,6 +31,7 @@
 //  Take the current derivative and add it to the current position.
 //
 //  W.Wander <wwc@mit.edu> 12/09/97 
+// -------------------------------------------------------------------
 
 #include "G4ExplicitEuler.hh"
 #include "G4ThreeVector.hh"
@@ -39,7 +40,7 @@
 //
 // Constructor
 
-G4ExplicitEuler::G4ExplicitEuler(G4Mag_EqRhs *EqRhs, 
+G4ExplicitEuler::G4ExplicitEuler(G4EquationOfMotion* EqRhs, 
                                  G4int numberOfVariables)
  : G4MagErrorStepper(EqRhs, numberOfVariables)
 {

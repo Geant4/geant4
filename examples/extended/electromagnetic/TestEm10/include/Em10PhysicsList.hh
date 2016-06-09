@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: Em10PhysicsList.hh,v 1.2 2001/07/11 09:57:20 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: Em10PhysicsList.hh,v 1.4 2003/08/28 09:36:12 vnivanch Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 
 #ifndef Em10PhysicsList_h
@@ -35,20 +35,19 @@ class G4PhotoElectricEffect;
 class G4ComptonScattering;
 class G4GammaConversion;
 
-class G4MultipleScattering;
+class G4MultipleScattering52;
 
 class G4PAIonisation ;
 class G4ForwardXrayTR ;
-class G4eIonisation;
-class G4eBremsstrahlung;
+class G4eIonisation52;
+class G4eBremsstrahlung52;
 class G4eplusAnnihilation;
 
-class G4MuIonisation;
-class G4MuBremsstrahlung;
-class G4MuPairProduction;
+class G4MuIonisation52;
+class G4MuBremsstrahlung52;
+class G4MuPairProduction52;
 
-class G4hIonisation;
-class G4hIonisationPlus;
+class G4hIonisation52;
 
 class Em10StepCut;
 
@@ -83,14 +82,11 @@ class Em10PhysicsList: public G4VUserPhysicsList
     void AddParameterisation();
     void ConstructGeneral();
     void ConstructEM();
-    
+
   public:
 
     void SetGammaCut(G4double);
     void SetElectronCut(G4double);
-    void SetProtonCut(G4double);
-    void SetCutsByEnergy(G4double);
-    void GetRange(G4double);
 
     void SetMaxStep(G4double);
 
@@ -103,17 +99,17 @@ class Em10PhysicsList: public G4VUserPhysicsList
     G4PhotoElectricEffect* thePhotoElectricEffect;
     G4ComptonScattering*   theComptonScattering;
     G4GammaConversion*     theGammaConversion;
-    
-    G4MultipleScattering*  theeminusMultipleScattering;
-    G4eIonisation*         theeminusIonisation;
-    G4eBremsstrahlung*     theeminusBremsstrahlung;
+
+    G4MultipleScattering52*  theeminusMultipleScattering;
+    G4eIonisation52*         theeminusIonisation;
+    G4eBremsstrahlung52*     theeminusBremsstrahlung;
 
     G4PAIonisation*        fPAIonisation ;
     G4ForwardXrayTR*       fForwardXrayTR ;
-    
-    G4MultipleScattering*  theeplusMultipleScattering;
-    G4eIonisation*         theeplusIonisation;
-    G4eBremsstrahlung*     theeplusBremsstrahlung;
+
+    G4MultipleScattering52*  theeplusMultipleScattering;
+    G4eIonisation52*         theeplusIonisation;
+    G4eBremsstrahlung52*     theeplusBremsstrahlung;
     G4eplusAnnihilation*   theeplusAnnihilation;
 
     Em10StepCut* theeminusStepCut ;
@@ -121,7 +117,6 @@ class Em10PhysicsList: public G4VUserPhysicsList
 
     G4double cutForGamma;
     G4double cutForElectron;
-    G4double cutForProton;
 
     Em10DetectorConstruction* pDet;
     Em10PhysicsListMessenger* physicsListMessenger;

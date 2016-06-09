@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ElectroMagneticField.cc,v 1.1 2003/04/02 08:49:11 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4ElectroMagneticField.cc,v 1.2 2003/11/05 10:41:00 japost Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // --------------------------------------------------------------------
 
@@ -37,7 +37,7 @@ G4ElectroMagneticField::~G4ElectroMagneticField()
 }
 
 G4ElectroMagneticField::G4ElectroMagneticField(const G4ElectroMagneticField &r)
-  : G4MagneticField(r)
+  : G4Field(r)
 {
 }
 

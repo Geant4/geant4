@@ -6,28 +6,43 @@
 /tracking/verbose 1
 /run/verbose 1
 #
-#
-#
 /field/setStepperType 4
 #
-#/field/setMinStep 10 mm
-#
-/field/setMinStep 1 mm
+/field/setMinStep 0.1 mm  
 #
 /field/update
 #
 /run/initialize
 #
-/run/particle/dumpCutValues
+# /run/particle/dumpCutValues
 #
 /gun/particle e-
 #
-#/gun/particle proton
-#
-#/gun/particle chargedgeantino
+#  /gun/particle proton
+#  /gun/particle chargedgeantino
 #
 /gun/energy 500.0 MeV
+/run/beamOn 1
 #
-#/event/printModulo 1
+/gun/energy 250.0 MeV
+/run/beamOn 1
+#
+/gun/energy 200.0 MeV
+/run/beamOn 1
+#
+/gun/energy 100.0 MeV
+/run/beamOn 1
+#
+/gun/energy  50.0 MeV
+/run/beamOn 1
+#
+/field/update
+/field/setFieldZ 1.0 kG
+
+/gun/energy 500.0 MeV
+/tracking/verbose 1
+/run/beamOn 1
+
+/tracking/verbose 0
+/event/printModulo 10
 /run/beamOn 100
-#

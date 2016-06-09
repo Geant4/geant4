@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: Em10DetectorConstruction.cc,v 1.8 2002/02/05 11:06:38 grichine Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: Em10DetectorConstruction.cc,v 1.9 2003/04/17 07:20:35 grichine Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // 
 
@@ -171,7 +171,7 @@ void Em10DetectorConstruction::DefineMaterials()
   a = 9.01*g/mole;
   G4Element* elBe  = new G4Element(name="Berillium",symbol="Be" , z= 4., a);
   
-  a = 6.01*g/mole;
+  a = 12.01*g/mole;
   G4Element* elC = new G4Element(name="Carbon", symbol="C", z=6., a);
   
   a = 14.01*g/mole;

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4NavigationLevelRep.hh,v 1.7 2002/07/23 08:50:35 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4NavigationLevelRep.hh,v 1.8 2003/11/02 16:06:05 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // class G4NavigationLevelRep
 //
@@ -38,12 +38,11 @@
 // History:
 //
 // - 1 October 1997, J.Apostolakis: initial version. 
-// ********************************************************************
-
+// ----------------------------------------------------------------------
 #ifndef G4NAVIGATIONLEVELREP_HH
 #define G4NAVIGATIONLEVELREP_HH
 
-#include "globals.hh"
+#include "G4Types.hh"
 
 #include "G4AffineTransform.hh"
 #include "G4VPhysicalVolume.hh"

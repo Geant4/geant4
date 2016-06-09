@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4BSplineCurve.cc,v 1.10 2003/03/28 13:11:52 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4BSplineCurve.cc,v 1.11 2003/10/28 13:42:30 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -326,8 +326,8 @@ G4Point3d G4BSplineCurve::GetBoundMax()
 
 G4bool G4BSplineCurve::Tangent(G4CurvePoint&, G4Vector3D&)
 {
-  G4Exception("G4BSplineCurve::Tangent - Not implemented !");
+  G4Exception("G4BSplineCurve::Tangent()", "NotImplemented",
+              FatalException, "Sorry, not implemented !");
   return false;
 }
-
 

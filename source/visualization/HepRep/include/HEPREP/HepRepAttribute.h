@@ -1,25 +1,3 @@
-//
-// ********************************************************************
-// * DISCLAIMER                                                       *
-// *                                                                  *
-// * The following disclaimer summarizes all the specific disclaimers *
-// * of contributors to this software. The specific disclaimers,which *
-// * govern, are listed with their locations in:                      *
-// *   http://cern.ch/geant4/license                                  *
-// *                                                                  *
-// * Neither the authors of this software system, nor their employing *
-// * institutes,nor the agencies providing financial support for this *
-// * work  make  any representation or  warranty, express or implied, *
-// * regarding  this  software system or assume any liability for its *
-// * use.                                                             *
-// *                                                                  *
-// * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
-// * By copying,  distributing  or modifying the Program (or any work *
-// * based  on  the Program)  you indicate  your  acceptance of  this *
-// * statement, and all its terms.                                    *
-// ********************************************************************
-//
 // -*- C++ -*-
 // AID-GENERATED
 // =========================================================================
@@ -62,7 +40,7 @@ public:
 
     /**
      * Adds a char* attValue as a String.
-     * This call is mapped to addAttValue(std::string, std::string, int); and necessary
+     * This call should be mapped to addAttValue(std::string, std::string, int); and necessary
      * because C++ converts char* into bool and would thus call addAttValue(std::string, bool, int)
      * for a call such as addAttValue("drawAs", "Cylinder", 0);
      *
@@ -71,10 +49,7 @@ public:
      * @param showLabel show this as label
      * @return false if an IOException was created.
      */
-    bool addAttValue(std::string key, char* value, int showLabel = HepRepConstants::SHOW_NONE) {
-        return addAttValue(key, std::string(value), showLabel);
-    }
-
+    virtual bool addAttValue(std::string key, char* value, int showLabel = HepRepConstants::SHOW_NONE) = 0;
     /**
      * Adds an attValue.
      *
@@ -170,5 +145,5 @@ public:
      */
     virtual HepRepAttValue * getAttValueFromNode(std::string lowerCaseName) = 0;
 }; // class
-}; // namespace HEPREP
+} // namespace HEPREP
 #endif /* ifndef HEPREP_HEPREPATTRIBUTE_H */

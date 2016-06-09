@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MuBremsstrahlungModel.hh,v 1.7 2003/06/16 17:01:38 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4MuBremsstrahlungModel.hh,v 1.8 2003/07/21 12:52:35 vnivanch Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // -------------------------------------------------------------------
 //
@@ -54,6 +54,8 @@
 
 #include "G4VEmModel.hh"
 
+class G4Element;
+
 class G4MuBremsstrahlungModel : public G4VEmModel
 {
 
@@ -78,12 +80,12 @@ public:
 
   G4bool IsInCharge(const G4ParticleDefinition*);
 
-  G4double ComputeDEDX(const G4Material*,
+  G4double ComputeDEDX(const G4MaterialCutsCouple*,
                        const G4ParticleDefinition*,
                              G4double kineticEnergy,
                              G4double cutEnergy);
 
-  G4double CrossSection(const G4Material*,
+  G4double CrossSection(const G4MaterialCutsCouple*,
                         const G4ParticleDefinition*,
                               G4double kineticEnergy,
                               G4double cutEnergy,

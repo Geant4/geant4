@@ -22,7 +22,7 @@
 //
 //
 // $Id: ExN05SteppingAction.cc,v 1.6 2002/01/09 17:24:20 ranjard Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 
 #include "ExN05SteppingAction.hh"

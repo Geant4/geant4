@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4UniformElectricField.cc,v 1.7 2003/04/02 08:50:38 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4UniformElectricField.cc,v 1.10 2003/11/05 10:41:00 japost Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // 
 //
@@ -30,9 +30,9 @@
 //
 // 30.1.97 V.Grichine
 //
+// -------------------------------------------------------------------
+
 #include "G4UniformElectricField.hh"
-#include "globals.hh"
-#include "geomdefs.hh"
 
 G4UniformElectricField::G4UniformElectricField(const G4ThreeVector FieldVector )
 {
@@ -61,7 +61,8 @@ G4UniformElectricField::G4UniformElectricField(G4double vField,
    }
    else
    {
-      G4Exception("Invalid parameters in G4UniformElectricField::G4UniformElectricField") ;
+      G4Exception("G4UniformElectricField::G4UniformElectricField()",
+                  "WrongArgumentValue", FatalException, "Invalid parameters.");
    }
 }
 
@@ -70,7 +71,7 @@ G4UniformElectricField::~G4UniformElectricField()
 }
 
 G4UniformElectricField::G4UniformElectricField (const G4UniformElectricField &p)
-   : G4ElectroMagneticField(p)
+   : G4ElectricField(p)
 {
    for (G4int i=0; i<6; i++)
       fFieldComponents[i] = p.fFieldComponents[i];
@@ -86,7 +87,6 @@ G4UniformElectricField::operator = (const G4UniformElectricField &p)
 
 // ------------------------------------------------------------------------
 
-
 void G4UniformElectricField::GetFieldValue (const G4double[4],
                                             G4double *fieldBandE ) const 
 {
@@ -96,6 +96,4 @@ void G4UniformElectricField::GetFieldValue (const G4double[4],
    fieldBandE[3]= fFieldComponents[3] ;
    fieldBandE[4]= fFieldComponents[4] ;
    fieldBandE[5]= fFieldComponents[5] ;
-   return ;
 }
-

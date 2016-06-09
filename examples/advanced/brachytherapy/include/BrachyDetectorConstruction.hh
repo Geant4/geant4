@@ -22,7 +22,7 @@
 //
 //
 // $Id: BrachyDetectorConstruction.hh,v 1.15 2003/05/22 17:20:40 guatelli Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// GEANT4 tag $Name: geant4-06-00 $
 //  
 //    ****************************************
 //    *                                      *

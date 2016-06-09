@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleGunMessenger.cc,v 1.9 2003/06/16 16:50:35 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4ParticleGunMessenger.cc,v 1.10 2003/11/19 19:28:43 asaim Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 
 #include "G4ParticleGunMessenger.hh"
@@ -66,8 +66,11 @@ G4ParticleGunMessenger::G4ParticleGunMessenger(G4ParticleGun * fPtclGun)
   G4int nPtcl = particleTable->entries();
   for(G4int i=0;i<nPtcl;i++)
   {
-    candidateList += particleTable->GetParticleName(i);
-    candidateList += " ";
+    if(!(particleTable->GetParticle(i)->IsShortLived()))
+    {
+      candidateList += particleTable->GetParticleName(i);
+      candidateList += " ";
+    }
   }
   candidateList += "ion ";
   particleCmd->SetCandidates(candidateList);

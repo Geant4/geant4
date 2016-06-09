@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G3toG4EventAction.cc,v 1.3 2001/10/23 13:32:35 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G3toG4EventAction.cc,v 1.4 2003/07/04 15:55:02 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // 
 
@@ -58,18 +58,16 @@ G3toG4EventAction::~G3toG4EventAction()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G3toG4EventAction::BeginOfEventAction(const G4Event* Ev)
+void G3toG4EventAction::BeginOfEventAction(const G4Event*)
 {;}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void G3toG4EventAction::EndOfEventAction(const G4Event* Ev)
 {
-  const G4Event* evt = fpEventManager->GetConstCurrentEvent();
-
-  G4cout << ">>> Event " << evt->GetEventID() << G4endl;
+  G4cout << ">>> Event " << Ev->GetEventID() << G4endl;
   
-  G4TrajectoryContainer * trajectoryContainer = evt->GetTrajectoryContainer();
+  G4TrajectoryContainer * trajectoryContainer = Ev->GetTrajectoryContainer();
   G4int n_trajectories = 0;
   if(trajectoryContainer){ 
     n_trajectories = trajectoryContainer->entries(); 
@@ -79,7 +77,7 @@ void G3toG4EventAction::EndOfEventAction(const G4Event* Ev)
 
   if(G4VVisManager::GetConcreteInstance()){
     for(G4int i=0; i<n_trajectories; i++) {
-      G4Trajectory* trj = (G4Trajectory*)(*(evt->GetTrajectoryContainer()))[i];
+      G4Trajectory* trj = (G4Trajectory*)(*(Ev->GetTrajectoryContainer()))[i];
       if (drawFlag == "all") trj->DrawTrajectory(50);
       else if ((drawFlag == "charged")&&(trj->GetCharge() != 0.))
 	trj->DrawTrajectory(50); 

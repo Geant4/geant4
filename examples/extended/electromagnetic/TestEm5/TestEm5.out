@@ -1,8 +1,9 @@
 **********************************************
- Geant4 version $Name: geant4-05-02 $
-                                (27-June-2003)
+ Geant4 version $Name: geant4-06-00 $
+                                (12-December-2003)
              Copyright : Geant4 Collaboration
 **********************************************
+G4Material: Mean excitation energy is changed for Water Iold= 70.8926eV; Inew= 75 eV;
 Visualization Manager instantiating...
 Visualization Manager initialising...
 Registering graphics systems...
@@ -19,152 +20,157 @@ Current available graphics systems are:
   VRML2FILE (VRML2FILE)
 /run/verbose 2
 #
-#  select EM PhysicsList
+/testem/det/setAbsMat Silicon   
+/testem/det/setAbsThick 20.5 mum  
+/testem/det/setAbsYZ     1 mm
 #
-#/testem/phys/addPhysics  model
 /testem/phys/addPhysics  standard
+###/testem/phys/addPhysics  g4v52
 #
 /testem/phys/setGCut 2.13 mm    
 /testem/phys/setECut 7.0  mum
+/testem/phys/setPCut 7.0  mum
 #
 /run/initialize
 userDetector->Construct() start.
-G4Material: Mean excitation energy is changed for Water Iold= 70.8926eV; Inew= 75 eV;
 
- The  WORLD   is made of 1.5 cm  of Galactic. The transverse size (YZ) of the world is 2.4 cm 
- The ABSORBER is made of 1 cm  of Silicon. The transverse size (YZ) is 2 cm 
+ Material: Galactic     density:  0.000 mg/cm3  temperature:   2.73 K  pressure:   0.00 atm  RadLength: 204727576.737 pc 
+   --->  Element: Galactic      Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+
+ Material:  Silicon     density:  2.330 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   9.368 cm 
+   --->  Element:  Silicon      Z = 14.0   N =  28.1   A =  28.09 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+
+ The  WORLD   is made of 30.75 mum of Galactic. The transverse size (YZ) of the world is 1.2 mm 
+ The ABSORBER is made of 20.5 mum of Silicon. The transverse size (YZ) is 1 mm 
  X position of the middle of the absorber 0 fm 
 World is registered to the default region.
+physicsList->Construct() start.
 physicsList->Construct() start.
 
 phot:  Total cross sections from Sandia parametrisation. 
 physicsList->setCut() start.
-Em5PhysicsList::SetCuts:CutLength : 1 mm 
-#
-/testem/det/setAbsMat Silicon   
-
- The  WORLD   is made of 1.5 cm  of Galactic. The transverse size (YZ) of the world is 2.4 cm 
- The ABSORBER is made of 1 cm  of Silicon. The transverse size (YZ) is 2 cm 
- X position of the middle of the absorber 0 fm 
-/testem/det/setAbsThick 20.5 mum  
-/testem/det/setAbsYZ    10 cm
-/testem/det/update
-
- The  WORLD   is made of 30.75 mum of Galactic. The transverse size (YZ) of the world is 12 cm 
- The ABSORBER is made of 20.5 mum of Silicon. The transverse size (YZ) is 10 cm 
- X position of the middle of the absorber 0 fm 
-World is registered to the default region.
-Start closing geometry.
-G4GeometryManager::ReportVoxelStats -- Voxel Statistics
-
-    Total memory consumed for geometry optimisation:   0 kByte
-    Total CPU time elapsed for geometry optimisation: 0 seconds
+PhysicsList::SetCuts:CutLength : 1 mm 
 #
 /testem/gun/setDefault
-#
-#  hist file name
-/testem/plots/sethistName run19.paw
- hist file = run19.paw
-#  PLOT: energy deposit distribution in absorber
-/testem/plots/setnbinEn 65
- Nb of bins in Edep plot = 65
-/testem/plots/setEnlow   0. keV
- Elow  in the  Edep plot = 0
-/testem/plots/setEnhigh 13. keV  
- Ehigh in the  Edep plot = 0.013
-#
 /gun/particle pi+ 
-/gun/energy 5. GeV
-/testem/event/printModulo 10000
+/gun/energy 5 GeV
 #
 /run/beamOn 100000
 
 compt:  Total cross sections from a parametrisation. Good description from 10 KeV to (100/Z) GeV. 
        Scattered gamma energy according Klein-Nishina.
-        PhysicsTables from 1 keV to 1e+02 GeV in 80 bins. 
+        PhysicsTables from 1 keV to 100 GeV in 80 bins. 
 
 conv:  Total cross sections from a parametrisation. Good description from 1.5 MeV to 100 GeV for all Z. 
         e+e- energies according Bethe-Heitler
-        PhysicsTables from 1 MeV to 1e+02 GeV in 100 bins. 
+        PhysicsTables from 1.022 MeV to 100 GeV in 100 bins. 
 
-msc:   Tables of transport mean free paths.
-          New model of MSC , computes the lateral 
-          displacement of the particle , too.
-        PhysicsTables from 1e+02 eV  to 1e+02 TeV in 100 bins. 
+msc:  Model variant of multiple scattering for e-
+      Lambda tables from 100 eV  to 100 TeV in 120 bins.
+      Boundary algorithm is active with facrange= 0.2
 
-eIoni:  delta cross sections from Moller+Bhabha. Good description from 1 KeV to 100 GeV.
-        delta ray energy sampled from  differential Xsection.
-        PhysicsTables from 1 keV to 1e+02 TeV in 100 bins.
-        Step function: finalRange(mm)= 1,  dRoverRange= 0.2
+eIoni:   tables are built for  e-
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Step function: finalRange(mm)= 1, dRoverRange= 1, integral: 1
+      Delta cross sections from Moller+Bhabha, good description from 1 KeV to 100 GeV.
 
-eBrem:  Total cross sections from a NEW parametrisation based on the EEDL data library. 
- Good description from 1 KeV to 100 GeV.
-        log scale extrapolation above 100 GeV 
-        Gamma energy sampled from a parametrised formula.
-        PhysicsTables from 1 keV to 1e+02 TeV in 100 bins. 
+eBrem:   tables are built for  e-
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Total cross sections from a parametrisation based on the EEDL data library. 
+      Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV.
+
+eIoni:   tables are built for  e+
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Step function: finalRange(mm)= 1, dRoverRange= 1, integral: 1
+      Delta cross sections from Moller+Bhabha, good description from 1 KeV to 100 GeV.
+
+eBrem:   tables are built for  e+
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Total cross sections from a parametrisation based on the EEDL data library. 
+      Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV.
 
 annihil:  Total cross section from Heilter formula(annihilation into 2 photons).
         gamma energies sampled according Heitler
         PhysicsTables from 10 keV to 10 TeV in 100 bins. 
 
-msc:   Tables of transport mean free paths.
-          New model of MSC , computes the lateral 
-          displacement of the particle , too.
-        PhysicsTables from 1e+02 eV  to 1e+02 TeV in 100 bins. 
+msc:  Model variant of multiple scattering for proton
+      Lambda tables from 100 eV  to 100 TeV in 120 bins.
+      Boundary algorithm is active with facrange= 0.199
 
-hIoni:    Knock-on electron cross sections . 
-         Good description above the mean excitation energy.
-         delta ray energy sampled from  differential Xsection.
-        PhysicsTables from 1 keV to 1e+02 TeV in 100 bins. 
-        Step function: finalRange(mm)= 1,  dRoverRange= 0.2
+hIoni:   tables are built for  proton
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 0
+      Bether-Bloch model for Escaled > 2 MeV, parametrisation of Bragg peak below, Integral mode 0
 
-msc:   Tables of transport mean free paths.
-          New model of MSC , computes the lateral 
-          displacement of the particle , too.
-        PhysicsTables from 1e+02 eV  to 1e+02 TeV in 100 bins. 
+msc:  Model variant of multiple scattering for mu+
+      Lambda tables from 100 eV  to 100 TeV in 120 bins.
+      Boundary algorithm is active with facrange= 0.199
 
-MuIoni:    Knock-on electron cross sections . 
-         Good description above the mean excitation energy.
-         delta ray energy sampled from  differential Xsection.
-        PhysicsTables from 1 keV to 1e+03 PeV in 150 bins. 
+MuIoni:   tables are built for  mu+
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 0
+      Bether-Bloch model for E > 0.2 MeV parametrisation of Bragg peak below.
 
-MuBrems:  theoretical cross section 
-          Good description up to 1000 PeV.
-    PhysicsTables from 1 keV to 1e+03 PeV in 150 bins. 
+MuBrems:   tables are built for  mu+
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Parametrised model 
 
-MuPairProd:  theoretical cross sections 
-          Good description up to 1000 PeV.
-    PhysicsTables from 1 keV to 1e+03 PeV in 150 bins. 
+MuPairProd:   tables are built for  mu+
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Parametrised model 
+### All dEdx and Range tables are built #####
+
+MuIoni:   tables are built for  mu-
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 0
+      Bether-Bloch model for E > 0.2 MeV parametrisation of Bragg peak below.
+
+msc:  Model variant of multiple scattering for pi-
+      Lambda tables from 100 eV  to 100 TeV in 120 bins.
+      Boundary algorithm is active with facrange= 0.199
+
+Region DefaultRegionForTheWorld
+ Materials : Galactic Silicon 
+ Production cuts :  gamma 2.13 mm     e- 7 mum    e+ 7 mum
 
 ========= Table of registered couples ==============================
 
 Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : Galactic
- Range cuts        :  gamma 2.1 mm     e- 7 mum    e+ 1 mm 
- Energy thresholds :  gamma 9.9e+02 eV     e- 9.9e+02 eV     e+ 9.9e+02 eV 
+ Range cuts        :  gamma 2.13 mm     e- 7 mum    e+ 7 mum
+ Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 1     used in the geometry : Yes     recalculation needed : No 
  Material : Silicon
- Range cuts        :  gamma 2.1 mm     e- 7 mum    e+ 1 mm 
- Energy thresholds :  gamma 9.9 keV    e- 10 keV    e+ 5.2e+02 keV
+ Range cuts        :  gamma 2.13 mm     e- 7 mum    e+ 7 mum
+ Energy thresholds :  gamma 9.93829 keV    e- 10.0803 keV    e+ 9.95695 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 ====================================================================
 
+Start closing geometry.
+G4GeometryManager::ReportVoxelStats -- Voxel Statistics
+
+    Total memory consumed for geometry optimisation:   0 kByte
+    Total CPU time elapsed for geometry optimisation: 0 seconds
 ### Run 0 start.
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
  Current couple of seeds = 9876, 54321
 ----------------------------------------
-Start closing geometry.
-G4GeometryManager::ReportVoxelStats -- Voxel Statistics
-
-    Total memory consumed for geometry optimisation:   0 kByte
-    Total CPU time elapsed for geometry optimisation: 0 seconds
 Start Run processing.
 
 ---> Begin of Event: 0
@@ -189,40 +195,41 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100000
-  User=72s Real=2.3e+03s Sys=2.8e+02s
- ================== run summary =====================
- end of Run TotNbofEvents = 100000
-    mean charged track length   in absorber=0.0209443 +- 1.36937e-05  mm  
+  User=92s Real=9.1e+02s Sys=90s
 
-            mean energy deposit in absorber=0.0066499 +- 2.01649e-05  MeV 
+ ======================== run summary ======================
 
- mean number of steps in absorber (charged) =0.0585 +- 0.00121168      
- mean number of steps in absorber (neutral) =2e-05 +- 1.4142e-05      
+ Number of Events = 100000
 
-   mean number of charged secondaries = 0.03811 +- 0.0006392
+ Total energy deposit in absorber per event = 6.694 keV +- 21.58 eV 
 
-   mean number of neutral secondaries = 0 +- 0
+ Total track length (charged) in absorber per event = 20.96 mum +- 14.68 nm 
+ Total track length (neutral) in absorber per event = 9.447 Ang +- 5.645 Ang
 
-   mean number of e-s =0.03811  and e+s =0
+ Number of steps (charged) in absorber per event = 1.079 +- 1.211e-05
+ Number of steps (neutral) in absorber per event = 4e-05 +- 1.211e-05
 
-(number) transmission coeff=1  reflection coeff=0
+ Number of secondaries per event : Gammas = 4e-05;   electrons = 0.03761;   positrons = 0
 
+ Number of events with the primary particle transmitted = 100 %
+ Number of events with at least  1 particle transmitted (same charge as primary) = 100 %
+
+ Number of events with the primary particle reflected = 0 %
+ Number of events with at least  1 particle reflected (same charge as primary) = 0 %
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1179260214, 2117767798
+ Current couple of seeds = 1827733351, 2092347044
 ----------------------------------------
-#
 Graphics systems deleted.
 Visualization Manager deleting...
-G4 kernel has come to Quit state.
-Deletion of G4 kernel class start.
 UserDetectorConstruction deleted.
 UserPhysicsList deleted.
 UserRunAction deleted.
 UserPrimaryGenerator deleted.
-G4SDManager deleted.
+G4 kernel has come to Quit state.
 EventManager deleted.
 UImanager deleted.
 StateManager deleted.
+RunManagerKernel is deleted.
 RunManager is deleting.

@@ -1,31 +1,32 @@
-# $Id: run02.mac,v 1.7 2003/03/06 18:16:15 maire Exp $
+# $Id: run02.mac,v 1.9 2003/10/06 10:09:20 maire Exp $
 #
 # Macro file for "TestEm3.cc" 
 # (can be run in batch, without graphic)
 #
-# Tungsten-Silicium 50 layers; electron 1 GeV
+# Tungsten-Silicon 50 layers; electron 1 GeV
 #
 /control/verbose 2
+/run/verbose 2
 #
-#  select EM PhysicsList
-#
-#/testem/phys/addPhysics  model
+###/testem/phys/addPhysics  g4v52
 /testem/phys/addPhysics  standard
-#
-/testem/phys/setCuts 100 mum
-/run/initialize
 #
 /testem/det/setNbOfLayers 50
 /testem/det/setNbOfAbsor 2
 /testem/det/setAbsor 0 Tungsten 2 mm
-/testem/det/setAbsor 1 Silicium 0.3 mm
-/testem/det/update
+/testem/det/setAbsor 1 Silicon 0.3 mm
+#
+/testem/phys/setCuts 100 mum
+#
+/run/initialize
 #
 /testem/gun/setDefault
-#
-/run/verbose 2
-/testem/event/printModulo 100
-#
 /gun/particle e-
 /gun/energy 1 GeV
-/run/beamOn 100
+#
+/testem/run/setHisto 0 100 900. 1000. MeV
+/testem/run/setHisto 1 100   0.   50. MeV
+#
+/testem/event/printModulo 50
+#
+/run/beamOn 200

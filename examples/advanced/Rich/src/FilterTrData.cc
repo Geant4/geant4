@@ -30,7 +30,8 @@
 #include <fstream.h>
 #include "FilterTrData.hh"
 #include "RichTbGeometryParameters.hh"
-#include "RichTbMaterialParameters.hh" 
+#include "RichTbMaterialParameters.hh"
+
 FilterTrData::FilterTrData(G4int FilterTypeNum, G4String FilterDataFileName )
    :NumberOfTrBins(NumFilterTransBins),
     TransWaveL(vector<G4double>(NumFilterTransBins)),
@@ -57,6 +58,7 @@ FilterTrData::FilterTrData(G4int FilterTypeNum, G4String FilterDataFileName )
   FilterThickness = 2.0*FilterHalfZArray[FilterTypeNum];
   }
 }
+
 void FilterTrData::ReadFilterTrans() {
   //first get the filter type index
   FilterType Ftype = GetFilterTypeIndex();
@@ -92,21 +94,21 @@ void FilterTrData::ReadFilterTrans() {
     G4cout<<" Please provide the Filter transmission Data " <<G4endl;
 
   }
-  
-
 }
+
 G4double FilterTrData::GetCurrentFilTrans(G4double trnData) {
   // No wavelength dependance yet for the Fresnel loss at the
   // surfaces. 
   G4double trn = trnData/100.0;
-  G4double na=  FilterRefIndexNominal;
-  G4double nb=  CurNeighbourRefIndexNominal;
-  G4double LossAtFEntrance=pow(((na-nb)/(na+nb)),2.0);
-  G4double LossAtFExit = pow(((nb-na)/(nb+na)),2.0);
+  // G4double na=  FilterRefIndexNominal;
+  // G4double nb=  CurNeighbourRefIndexNominal;
+  // G4double LossAtFEntrance=pow(((na-nb)/(na+nb)),2.0);
+  // G4double LossAtFExit = pow(((nb-na)/(nb+na)),2.0);
 
   if(trn > 1.0 ) trn=1.0;
   return trn;
 }
+
 G4double FilterTrData::GetTotFilTrans(G4double trnData) {
   // No wavelength dependance yet.
  

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4RTMessenger.cc,v 1.6 2002/12/05 01:37:36 asaim Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4RTMessenger.cc,v 1.7 2003/09/18 11:13:25 johna Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 //
 //
@@ -117,6 +117,11 @@ G4RTMessenger::G4RTMessenger(G4RayTracer* p1,G4RTSteppingAction* p2)
   transCmd->SetGuidance("Ignore transparency even if the alpha of G4Colour < 1.");
   transCmd->SetParameterName("flag",true);
   transCmd->SetDefaultValue(false);
+
+  bkgColCmd = new G4UIcmdWith3Vector("/vis/rayTracer/backgroundColour",this);
+  bkgColCmd->SetGuidance("Set background colour: red green blue: range 0.->1.");  bkgColCmd->SetGuidance("E.g: /vis/rayTracer/backgroundColour 0 0 0");
+  bkgColCmd->SetParameterName("red","green","blue",true);
+  bkgColCmd->SetDefaultValue(G4ThreeVector(1.,1.,1.));
 }
 
 G4RTMessenger::~G4RTMessenger()
@@ -132,6 +137,7 @@ G4RTMessenger::~G4RTMessenger()
   delete distCmd;
   delete transCmd;
   delete fileCmd;
+  delete bkgColCmd;
   delete rayDirectory;
 }
 
@@ -158,6 +164,8 @@ G4String G4RTMessenger::GetCurrentValue(G4UIcommand * command)
   { currentValue = distCmd->ConvertToString(theTracer->GetDistortion()); }
   else if(command==transCmd)
   { currentValue = transCmd->ConvertToString(theSteppingAction->GetIgnoreTransparency()); }
+  else if(command==bkgColCmd)
+  { currentValue = bkgColCmd->ConvertToString(theTracer->GetBackgroundColour()); }
   return currentValue;
 }
 
@@ -181,6 +189,8 @@ void G4RTMessenger::SetNewValue(G4UIcommand * command,G4String newValue)
   { theTracer->SetAttenuationLength(attCmd->GetNewDoubleValue(newValue)); }
   else if(command==distCmd)
   { theTracer->SetDistortion(distCmd->GetNewBoolValue(newValue)); }
+  else if(command==bkgColCmd)
+  { theTracer->SetBackgroundColour(bkgColCmd->GetNew3VectorValue(newValue)); }
   else if(command==transCmd)
   { theSteppingAction->SetIgnoreTransparency(transCmd->GetNewBoolValue(newValue)); }
   else if(command==fileCmd)

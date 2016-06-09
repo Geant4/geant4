@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.1.1.1 2003/06/12 13:08:25 dressel Exp $
+# $Id: GNUmakefile,v 1.2 2003/12/04 11:08:48 gcosmo Exp $
 # --------------------------------------------------------------
 # GNUmakefile   Michael Dressel
 # --------------------------------------------------------------
@@ -20,6 +20,8 @@ include $(G4INSTALL)/config/architecture.gmk
 
 CPPFLAGS += -I../tiaraPhysicsPackaging/include
 LDFLAGS += -L$(G4WORKDIR)/tmp/Linux-g++/tiaraPhysicsPackaging -ltiaraPhysicsPackaging
+
+include $(TIARA_BASE)/source/hadronic_lists.gmk
 
 include $(G4INSTALL)/config/binmake.gmk
 

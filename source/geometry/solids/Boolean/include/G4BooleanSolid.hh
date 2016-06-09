@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4BooleanSolid.hh,v 1.7 2003/06/16 16:53:10 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4BooleanSolid.hh,v 1.8 2003/11/03 17:48:45 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 //
 // class G4BooleanSolid
@@ -36,19 +36,17 @@
 //
 // 10.09.98 V.Grichine, created
 //
-// ********************************************************************
-
-
+// --------------------------------------------------------------------
 #ifndef G4BOOLEANSOLID_HH
 #define G4BOOLEANSOLID_HH
 
-#include "G4VSolid.hh"
 #include "G4DisplacedSolid.hh"
 
-#include "G4RotationMatrix.hh"
 #include "G4ThreeVector.hh"
+#include "G4RotationMatrix.hh"
 #include "G4Transform3D.hh"
-#include "G4AffineTransform.hh"
+
+class G4VSolid;
 
 class G4BooleanSolid : public G4VSolid
 {

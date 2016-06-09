@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPElastic.hh,v 1.6 2002/12/12 19:18:11 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4NeutronHPElastic.hh,v 1.7 2003/07/01 15:58:35 hpw Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
  // Hadronic Process: High Precision low E neutron tracking
  // original by H.P. Wellisch, TRIUMF, 14-Feb-97
@@ -51,7 +51,7 @@ class G4NeutronHPElastic : public G4HadronicInteraction
   
   ~G4NeutronHPElastic();
   
-  G4VParticleChange * ApplyYourself(const G4Track& aTrack, G4Nucleus& aTargetNucleus);
+  G4HadFinalState * ApplyYourself(const G4HadProjectile& aTrack, G4Nucleus& aTargetNucleus);
 
   G4int GetNiso() {return theElastic[0].GetNiso();}
   private:

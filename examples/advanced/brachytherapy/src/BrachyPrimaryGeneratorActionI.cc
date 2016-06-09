@@ -19,8 +19,7 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
-// ********************************************************************
-
+//
 //
 // --------------------------------------------------------------
 //                 GEANT 4 - Brachytherapy example
@@ -35,8 +34,8 @@
 //    *                                          *
 //    ********************************************
 //
-// $Id: BrachyPrimaryGeneratorActionI.cc,v 1.6 2003/05/22 17:20:43 guatelli Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: BrachyPrimaryGeneratorActionI.cc,v 1.7 2003/12/09 15:30:01 gunter Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 #include "BrachyPrimaryGeneratorActionI.hh"
 

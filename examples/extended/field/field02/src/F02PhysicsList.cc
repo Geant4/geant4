@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: F02PhysicsList.cc,v 1.6 2003/06/16 16:49:01 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: F02PhysicsList.cc,v 1.7 2003/08/27 17:44:08 vnivanch Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 // 
 
 #include "G4Timer.hh"
@@ -42,7 +42,7 @@
 #include "G4UnitsTable.hh"
 #include "G4ios.hh"
 #include <iomanip>
-               
+
 #include "G4FastSimulationManagerProcess.hh"
 
 
@@ -65,7 +65,6 @@ F02PhysicsList::F02PhysicsList(F02DetectorConstruction* p)
 
   cutForGamma = defaultCutValue ;
   cutForElectron = defaultCutValue ;
-  cutForProton = defaultCutValue ;
 
   SetVerboseLevel(1);
   physicsListMessenger = new F02PhysicsListMessenger(this);
@@ -363,7 +362,6 @@ void F02PhysicsList::SetCuts()
 
 void F02PhysicsList::SetGammaCut(G4double val)
 {
-  ResetCuts();
   cutForGamma = val;
 }
 
@@ -371,68 +369,7 @@ void F02PhysicsList::SetGammaCut(G4double val)
 
 void F02PhysicsList::SetElectronCut(G4double val)
 {
-  ResetCuts();
   cutForElectron = val;
-}
-
-//////////////////////////////////////////////////////////////////////
-
-void F02PhysicsList::SetProtonCut(G4double val)
-{
-  ResetCuts();
-  cutForProton = val;
-}
-
-////////////////////////////////////////////////////////////////////////////
-
-void F02PhysicsList::SetCutsByEnergy(G4double val)
-{
-  G4ParticleTable* theParticleTable =  G4ParticleTable::GetParticleTable();
-  G4Material* currMat = pDet->GetAbsorberMaterial();
-
-  // set cut values for gamma at first and for e- second and next for e+,
-  // because some processes for e+/e- need cut values for gamma
-
-  G4ParticleDefinition* part;
-  G4double cut;
-
-  part = theParticleTable->FindParticle("e-");
-  cut = G4EnergyLossTables::GetRange(part,val,currMat);
-  SetCutValue(cut, "e-");
-
-  part = theParticleTable->FindParticle("e+");
-  cut = G4EnergyLossTables::GetRange(part,val,currMat);
-  SetCutValue(cut, "e+");
-
-  // set cut values for proton and anti_proton before all other hadrons
-  // because some processes for hadrons need cut values for proton/anti_proton
-
-  part = theParticleTable->FindParticle("proton");
-  cut = G4EnergyLossTables::GetRange(part,val,currMat);
-  SetCutValue(cut, "proton");
-
-  part = theParticleTable->FindParticle("anti_proton");
-  cut = G4EnergyLossTables::GetRange(part,val,currMat);
-  SetCutValue(cut, "anti_proton");
-
-  SetCutValueForOthers(cut);
-}
-
-//////////////////////////////////////////////////////////////////////////////
-
-void F02PhysicsList::GetRange(G4double val)
-{
-  G4ParticleTable* theParticleTable =  G4ParticleTable::GetParticleTable();
-  G4Material* currMat = pDet->GetAbsorberMaterial();
-
-  G4ParticleDefinition* part;
-  G4double cut;
-  part = theParticleTable->FindParticle("e-");
-  cut = G4EnergyLossTables::GetRange(part,val,currMat);
-  G4cout << "material : " << currMat->GetName() << G4endl;
-  G4cout << "particle : " << part->GetParticleName() << G4endl;
-  G4cout << "energy   : " << val / keV << " (keV)" << G4endl;
-  G4cout << "range    : " << cut / mm << " (mm)" << G4endl;
 }
 
 ////////////////////////////////////////////////////////////////////////////

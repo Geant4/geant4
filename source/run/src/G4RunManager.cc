@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunManager.cc,v 1.81 2003/06/19 13:05:13 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4RunManager.cc,v 1.83 2003/08/01 19:30:14 asaim Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // 
 
@@ -31,100 +31,63 @@
 #include "G4Timer.hh"
 
 #include "G4RunManager.hh"
+#include "G4RunManagerKernel.hh"
 
+#include "G4StateManager.hh"
+#include "G4ApplicationState.hh"
 #include "Randomize.hh"
 #include "G4Run.hh"
 #include "G4RunMessenger.hh"
-#include "G4VUserDetectorConstruction.hh"
 #include "G4VUserPhysicsList.hh"
+#include "G4VUserDetectorConstruction.hh"
 #include "G4UserRunAction.hh"
 #include "G4VUserPrimaryGeneratorAction.hh"
-#include "G4GeometryManager.hh"
-#include "G4SDManager.hh"
-#include "G4Navigator.hh"
-#include "G4TransportationManager.hh"
-#include "G4VPhysicalVolume.hh"
-#include "G4LogicalVolume.hh"
-#include "G4Region.hh"
-#include "G4RegionStore.hh"
-#include "G4ProductionCuts.hh"
-#include "G4ProductionCutsTable.hh"
-#include "G4ApplicationState.hh"
-#include "G4StateManager.hh"
 #include "G4VPersistencyManager.hh"
-#include "G4UImanager.hh"
 #include "G4ParticleTable.hh"
 #include "G4ProcessTable.hh"
 #include "G4UnitsTable.hh"
 #include "G4VVisManager.hh"
 #include "G4Material.hh"
-#include "G4ExceptionHandler.hh"
+#include "G4SDManager.hh"
+#include "G4UImanager.hh"
 #include "G4ios.hh"
 #include <strstream>
+
 
 G4RunManager* G4RunManager::fRunManager = 0;
 
 G4RunManager* G4RunManager::GetRunManager()
 { return fRunManager; }
 
-//G4int G4RunManager::RegisterInteruption(int interuptionSignal)
-//{ 
-//  if(signal(interuptionSignal,ReceiveInteruption)==SIG_ERR) return -1;
-//  return 0;
-//}
-
-//void G4RunManager::ReceiveInteruption(int sig)
-//{
-//  if(!fRunManager) return;
-//  G4ApplicationState state 
-//   = G4StateManager::GetStateManager()->GetCurrentState();
-//  if(state==G4State_GeomClosed || state==G4State_EventProc)
-//  { fRunManager->AbortRun(true); }
-//}
-
 G4RunManager::G4RunManager()
 :userDetector(0),physicsList(0),
  userRunAction(0),userPrimaryGeneratorAction(0),userEventAction(0),
  userStackingAction(0),userTrackingAction(0),userSteppingAction(0),
- geometryInitialized(false),physicsInitialized(false),cutoffInitialized(false),
+ geometryInitialized(false),physicsInitialized(false),
  geometryNeedsToBeClosed(true),runAborted(false),initializedAtLeastOnce(false),
  geometryToBeOptimized(true),runIDCounter(0),verboseLevel(0),DCtable(0),
  currentRun(0),currentEvent(0),n_perviousEventsToBeStored(0),
  numberOfEventToBeProcessed(0),storeRandomNumberStatus(false),currentWorld(0)
 {
-  defaultExceptionHandler = new G4ExceptionHandler();
   if(fRunManager)
   { G4Exception("G4RunManager constructed twice."); }
-  //G4UnitDefinition::BuildUnitsTable();
   fRunManager = this;
-  eventManager = new G4EventManager();
+
+  kernel = new G4RunManagerKernel();
+  eventManager = kernel->GetEventManager();
+
   timer = new G4Timer();
   runMessenger = new G4RunMessenger(this);
   previousEvents = new std::vector<G4Event*>;
-  defaultRegion = new G4Region("DefaultRegionForTheWorld");
-  defaultRegion->SetProductionCuts(G4ProductionCutsTable::GetProductionCutsTable()->GetDefaultProductionCuts());
   G4ParticleTable::GetParticleTable()->CreateMessenger();
   G4ProcessTable::GetProcessTable()->CreateMessenger();
   randomNumberStatusDir = "./";
-  versionString = " Geant4 version $Name: geant4-05-02 $\n                                (27-June-2003)";
-  G4cout 
-  << "**********************************************" << G4endl
-  << versionString << G4endl
-  << "             Copyright : Geant4 Collaboration" << G4endl
-  << "**********************************************" << G4endl;
 }
 
 G4RunManager::~G4RunManager()
 {
-  if(verboseLevel>0) G4cout << "G4 kernel has come to Quit state." << G4endl;
-  G4StateManager* pStateManager = G4StateManager::GetStateManager();
-  pStateManager->SetNewState(G4State_Quit);
-
-  if(verboseLevel>1) G4cout << "Deletion of G4 kernel class start." << G4endl;
   delete timer;
   delete runMessenger;
-  G4GeometryManager::GetInstance()->OpenGeometry();
-  physicsList->RemoveProcessManager();
   G4ParticleTable::GetParticleTable()->DeleteMessenger();
   G4ProcessTable::GetProcessTable()->DeleteMessenger();
   delete previousEvents;
@@ -148,25 +111,9 @@ G4RunManager::~G4RunManager()
     delete userPrimaryGeneratorAction;
     if(verboseLevel>1) G4cout << "UserPrimaryGenerator deleted." << G4endl;
   }
-  G4SDManager* fSDM = G4SDManager::GetSDMpointerIfExist();
-  if(fSDM)
-  {
-    delete fSDM;
-    if(verboseLevel>1) G4cout << "G4SDManager deleted." << G4endl;
-  }
-  delete eventManager;
-  if(verboseLevel>1) G4cout << "EventManager deleted." << G4endl;
-  G4UImanager* pUImanager = G4UImanager::GetUIpointer();
-  {
-    if(pUImanager) delete pUImanager;
-    if(verboseLevel>1) G4cout << "UImanager deleted." << G4endl;
-  }
-  if(pStateManager) 
-  {
-    delete pStateManager;
-    if(verboseLevel>1) G4cout << "StateManager deleted." << G4endl;
-  }
-  delete defaultExceptionHandler;
+
+  delete kernel;
+
   if(verboseLevel>1) G4cout << "RunManager is deleting." << G4endl;
 }
 
@@ -200,14 +147,13 @@ G4bool G4RunManager::ConfirmBeamOnCondition()
     return false;
   }
 
-  if(!geometryInitialized || !physicsInitialized || !cutoffInitialized)
+  if(!geometryInitialized || !physicsInitialized)
   {
     if(verboseLevel>0)
     {
       G4cout << "Start re-initialization because " << G4endl;
       if(!geometryInitialized) G4cout << "  Geometry" << G4endl;
       if(!physicsInitialized)  G4cout << "  Physics processes" << G4endl;
-      if(!cutoffInitialized)  G4cout << "  SetCuts" << G4endl;
       G4cout << "has been modified since last Run." << G4endl;
     }
     Initialize();
@@ -217,16 +163,14 @@ G4bool G4RunManager::ConfirmBeamOnCondition()
 
 void G4RunManager::RunInitialization()
 {
+  if(!(kernel->RunInitialization())) return;
+
   currentRun = 0;
   if(userRunAction) currentRun = userRunAction->GenerateRun();
   if(!currentRun) currentRun = new G4Run();
 
-  G4StateManager* stateManager = G4StateManager::GetStateManager();
-  stateManager->SetNewState(G4State_GeomClosed);
   currentRun->SetRunID(runIDCounter);
   currentRun->SetNumberOfEventToBeProcessed(numberOfEventToBeProcessed);
-
-  BuildPhysicsTables();
 
   currentRun->SetDCtable(DCtable);
   G4SDManager* fSDM = G4SDManager::GetSDMpointerIfExist();
@@ -234,16 +178,7 @@ void G4RunManager::RunInitialization()
   { currentRun->SetHCtable(fSDM->GetHCtable()); }
   
   if(userRunAction) userRunAction->BeginOfRunAction(currentRun);
-  if(geometryNeedsToBeClosed)
-  {
-    if(verboseLevel>1) G4cout << "Start closing geometry." << G4endl;
-    G4GeometryManager* geomManager = G4GeometryManager::GetInstance();
-    geomManager->OpenGeometry();
-    geomManager->CloseGeometry(geometryToBeOptimized, verboseLevel>1);
-    geometryNeedsToBeClosed = false;
-  }
 
-  //previousEvents->clearAndDestroy();
   for(size_t itr=0;itr<previousEvents->size();itr++)
   { delete (*previousEvents)[itr]; }
   previousEvents->clear();
@@ -262,8 +197,6 @@ void G4RunManager::RunInitialization()
 
 void G4RunManager::DoEventLoop(G4int n_event,const char* macroFile,G4int n_select)
 {
-  G4StateManager* stateManager = G4StateManager::GetStateManager();
-
   if(verboseLevel>0) 
   { timer->Start(); }
 
@@ -277,19 +210,14 @@ void G4RunManager::DoEventLoop(G4int n_event,const char* macroFile,G4int n_selec
   else
   { n_select = -1; }
 
+// Event loop
   G4int i_event;
   for( i_event=0; i_event<n_event; i_event++ )
   {
-    stateManager->SetNewState(G4State_EventProc);
-
     currentEvent = GenerateEvent(i_event);
-
     eventManager->ProcessOneEvent(currentEvent);
-
     AnalyzeEvent(currentEvent);
-
     if(i_event<n_select) G4UImanager::GetUIpointer()->ApplyCommand(msg);
-    stateManager->SetNewState(G4State_GeomClosed);
     StackPreviousEvent(currentEvent);
     currentEvent = 0;
     if(runAborted) break;
@@ -336,9 +264,6 @@ void G4RunManager::AnalyzeEvent(G4Event* anEvent)
 
 void G4RunManager::RunTermination()
 {
-  G4StateManager* stateManager = G4StateManager::GetStateManager();
-
-  //previousEvents->clearAndDestroy();
   for(size_t itr=0;itr<previousEvents->size();itr++)
   { delete (*previousEvents)[itr]; }
   previousEvents->clear();
@@ -351,7 +276,7 @@ void G4RunManager::RunTermination()
   currentRun = 0;
   runIDCounter++;
 
-  stateManager->SetNewState(G4State_Idle);
+  kernel->RunTermination();
 }
 
 void G4RunManager::StackPreviousEvent(G4Event* anEvent)
@@ -379,11 +304,8 @@ void G4RunManager::Initialize()
     return;
   }
 
-  stateManager->SetNewState(G4State_Init);
   if(!geometryInitialized) InitializeGeometry();
   if(!physicsInitialized) InitializePhysics();
-  if(!cutoffInitialized) InitializeCutOff();
-  stateManager->SetNewState(G4State_Idle);
   initializedAtLeastOnce = true;
 }
 
@@ -396,7 +318,7 @@ void G4RunManager::InitializeGeometry()
   }
 
   if(verboseLevel>1) G4cout << "userDetector->Construct() start." << G4endl;
-  DefineWorldVolume(userDetector->Construct(),false);
+  kernel->DefineWorldVolume(userDetector->Construct(),false);
   geometryInitialized = true;
 }
 
@@ -405,7 +327,7 @@ void G4RunManager::InitializePhysics()
   if(physicsList)
   {
     if(verboseLevel>1) G4cout << "physicsList->Construct() start." << G4endl;
-    physicsList->Construct();
+    kernel->InitializePhysics(physicsList);
   }
   else
   {
@@ -414,42 +336,6 @@ void G4RunManager::InitializePhysics()
   physicsInitialized = true;
 }
 
-void G4RunManager::InitializeCutOff()
-{
-  if(physicsList)
-  {
-    if(verboseLevel>1) G4cout << "physicsList->setCut() start." << G4endl;
-    physicsList->SetCuts();
-    cutoffInitialized = true;
-  }
-  else
-  {
-    G4Exception("G4VUserPhysicsList is not defined");
-  }
-}
-
-void G4RunManager::BuildPhysicsTables()
-{
-  UpdateRegion();
-
-  // Let G4ProductionCutsTable create new couples
-  G4ProductionCutsTable::GetProductionCutsTable()->UpdateCoupleTable();
-
-  if(G4ProductionCutsTable::GetProductionCutsTable()->IsModified())
-  {
-    physicsList->BuildPhysicsTable();
-    G4ProductionCutsTable::GetProductionCutsTable()->PhysicsTableUpdated();
-  }
-
-  physicsList->DumpCutValuesTableIfRequested();
-}
-
-void G4RunManager::UpdateRegion()
-{
-  // Let G4RegionStore scan materials
-  G4RegionStore::GetInstance()->UpdateMaterialList();
-}
-  
 void G4RunManager::AbortRun(G4bool softAbort)
 {
   // This method is valid only for GeomClosed or EventProc state
@@ -489,85 +375,7 @@ void G4RunManager::AbortEvent()
 void G4RunManager::DefineWorldVolume(G4VPhysicalVolume* worldVol,
                                      G4bool topologyIsChanged)
 {
-  // The world volume MUST NOT have a region defined by the user
-  if(worldVol->GetLogicalVolume()->GetRegion())
-  {
-    if(worldVol->GetLogicalVolume()->GetRegion()!=defaultRegion)
-    {
-      G4cerr << "The world volume has a user-defined region <" 
-           << worldVol->GetLogicalVolume()->GetRegion()->GetName()
-           << ">." << G4endl;
-      G4Exception("G4RunManager::DefineWorldVolume",
-                "RUN:WorldHasUserDefinedRegion",
-                FatalException,
-                "World would have a default region assigned by RunManager.");
-    }
-  }
-
-  // Remove old world logical volume from the default region, if exist
-  if(defaultRegion->GetNumberOfRootVolumes())
-  {
-    if(defaultRegion->GetNumberOfRootVolumes()>size_t(1))
-    {
-      G4Exception("G4RunManager::DefineWorldVolume",
-                "RUN:DefaultRegionHasMoreThanOneVolume",
-                FatalException,
-                "Default world region should have a unique logical volume.");
-    }
-    std::vector<G4LogicalVolume*>::iterator lvItr
-     = defaultRegion->GetRootLogicalVolumeIterator();
-    defaultRegion->RemoveRootLogicalVolume(*lvItr);
-    if(verboseLevel>1) G4cout << (*lvItr)->GetName()
-     << " is removed from the default region." << G4endl;
-  }
-
-  // Set the default region to the world
-  G4LogicalVolume* worldLog = worldVol->GetLogicalVolume();
-  worldLog->SetRegion(defaultRegion);
-  defaultRegion->AddRootLogicalVolume(worldLog);
-  if(verboseLevel>1) G4cout << worldLog->GetName()
-   << " is registered to the default region." << G4endl;
-
-  // Set the world volume, notify the Navigator and reset its state
-  currentWorld = worldVol; 
-  G4TransportationManager::GetTransportationManager()
-      ->GetNavigatorForTracking()
-      ->SetWorldVolume(worldVol);
-  if (topologyIsChanged) ResetNavigator();
-
-  // Notify the VisManager as well
-  G4VVisManager* pVVisManager = G4VVisManager::GetConcreteInstance();
-  if(pVVisManager) pVVisManager->GeometryHasChanged();
-}
-
-void G4RunManager::ResetNavigator() const
-{
-  G4StateManager*    stateManager = G4StateManager::GetStateManager();
-  G4ApplicationState currentState = stateManager->GetCurrentState();
-  
-  if(!initializedAtLeastOnce) return;
-
-  if( currentState != G4State_Idle )
-  {
-    G4cerr << " Geant4 kernel not in Idle state" << G4endl;
-    G4cerr << " Navigator is not touched..."     << G4endl;
-    return;
-  }
-  
-  // We have to tweak the navigator's state in case a geometry has been
-  // modified between runs. By the following calls we ensure that navigator's
-  // state is reset properly. It is required the geometry to be closed
-  // and previous optimisations to be cleared.
-
-  G4GeometryManager* geomManager = G4GeometryManager::GetInstance();
-  if(verboseLevel>1) G4cout << "Start closing geometry." << G4endl;
-  geomManager->OpenGeometry();
-  geomManager->CloseGeometry(geometryToBeOptimized, verboseLevel>1);
-
-  G4ThreeVector center(0,0,0);
-  G4Navigator* navigator =
-      G4TransportationManager::GetTransportationManager()->GetNavigatorForTracking();
-  navigator->LocateGlobalPointAndSetup(center,0,false);
+  kernel->DefineWorldVolume(worldVol,topologyIsChanged);
 }
 
 void G4RunManager::rndmSaveThisRun()
@@ -629,34 +437,14 @@ void G4RunManager::RestoreRandomNumberStatus(G4String fileN)
 
 void G4RunManager::DumpRegion(G4String rname) const
 {
-  G4Region* region = G4RegionStore::GetInstance()->GetRegion(rname);
-  if(region) DumpRegion(region);
+  kernel->UpdateRegion();
+  kernel->DumpRegion(rname);
 }
 
 void G4RunManager::DumpRegion(G4Region* region) const
 {
-  if(!region)
-  {
-    for(size_t i=0;i<G4RegionStore::GetInstance()->size();i++)
-    { DumpRegion((*(G4RegionStore::GetInstance()))[i]); }
-  }
-  else
-  {
-    G4cout << "Region " << region->GetName() << G4endl;
-    G4cout << " Materials : ";
-    std::vector<G4Material*>::const_iterator mItr = region->GetMaterialIterator();
-    size_t nMaterial = region->GetNumberOfMaterials();
-    for(size_t iMate=0;iMate<nMaterial;iMate++)
-    {
-      G4cout << (*mItr)->GetName() << " ";
-      mItr++;
-    }
-    G4cout << G4endl;
-    G4ProductionCuts* cuts = region->GetProductionCuts();
-    G4cout << " Production cuts : "
-           << " gamma " << G4BestUnit(cuts->GetProductionCut("gamma"),"Length")
-           << "    e- " << G4BestUnit(cuts->GetProductionCut("e-"),"Length")
-           << "    e+ " << G4BestUnit(cuts->GetProductionCut("e+"),"Length")
-           << G4endl;
-  }
+  kernel->UpdateRegion();
+  kernel->DumpRegion(region);
 }
+
+

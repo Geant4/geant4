@@ -1,4 +1,4 @@
-$Id: History,v 1.184 2003/06/25 14:26:27 gcosmo Exp $
+$Id: History,v 1.191 2003/11/18 17:49:41 pia Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,133 +17,171 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-25.06-2003   G.Cosmo, tag emlowen-V05-01-04
+18.11.2003   MGP, tag emlowen-V05-02-10
+             Performance optimization in Bremsstrahlung angular distribution
+
+18.11.2003   MGP, tag emlowen-V05-02-09
+             Performance optimisation in Penelope Bremsstrahlung +
+             fix for local variable hiding a data member in G4PenelopeIonisation
+
+18.11.2003   MGP, tag emlowen-V05-02-08
+             Fixed compilation problem on Windows in G4Generator2BS.cc
+ 
+10.11.2003   MGP, tag emlowen-V05-02-07
+             Fix to Penelope Bremsstrahlung angular distribution
+  
+06.11.2003   MGP, tag emlowen-V05-02-06
+             New processes for electrons and positrons according to 
+             Penelope models
+
+06.11.2003   MGP, tag emlowen-V05-02-05
+             Improved user interface to select Bremsstrahlung angular
+             distribution models
+             System test coverage in test14-V05-02-01
+
+05.11.2003   MGP, tag emlowen-V05-02-04
+             New models of Bremsstrahlung angular distribution (2BN, 2BS),
+             provided by LIP group
+
+05.11.2003   MGP, tag emlowen-V05-02-03
+             Bug fix in G4hLowEnergyIonisation (provided by V. Ivanchenko)
+
+05.11.2003   MGP, tag emlowen-V05-02-02
+             Bug fix in G4AtomicDeexcitation (provided by A. Mantero)
+             
+?            A. Mantero, tag emlowen-V05-02-01
+             ?
+
+?            H. Kurashige, tag emlowen-V05-02-00
+             ?
+
+25.06.2003   G.Cosmo, tag emlowen-V05-01-04
              Added disclaimer of liability where needed.
              Fixed argument to pow() in G4LinLogLogInterpolation.cc
              and G4LogLogInterpolation.cc to allow for porting on .NET 7.1 compiler.
 
-20.05-2003   MGP, tag emlowen-V05-01-03
+20.05.2003   MGP, tag emlowen-V05-01-03
              Removed memory leaks in G4PenelopeCompton and 
              G4PenelopeBremsstrahlung
              Corrected design flaw in private interface of 
              G4eBremsstrahlungSpectrum
 
-20.05-2003   MGP, tag emlowen-V05-01-02
+20.05.2003   MGP, tag emlowen-V05-01-02
              Design iteration in G4LowEnergyBremsstrahlung: abstract class for 
              angular distribution + implementation in G4ModifiedTsai
              (physics unchanged)
 
-20.05-2003   MGP, tag emlowen-V05-01-01
+20.05.2003   MGP, tag emlowen-V05-01-01
              G4PenelopeCompton triggers atomic relaxation
 
-20.05-2003   MGP, tag emlowen-V05-01-00
+20.05.2003   MGP, tag emlowen-V05-01-00
              Removed compilation warnings related to config-V05-01-00
 
-26.04-2003   VI, tag emlowen-V05-00-17
+26.04.2003   VI, tag emlowen-V05-00-17
              Fixes of stepLimit 
 
-24.04-2003   MGP, tag emlowen-V05-00-16
+24.04.2003   MGP, tag emlowen-V05-00-16
              Fixes related to "cuts-per-region"
 
-24.04-2003   MGP, tag emlowen-V05-00-15
+24.04.2003   MGP, tag emlowen-V05-00-15
              Fixes for "final range" and fix in G4VeLowEnergyLoss
              related to "cuts per region"
 
-17.04-2003   MGP, tag emlowen-V05-00-14
+17.04.2003   MGP, tag emlowen-V05-00-14
              Bug fix to the Auger effect, in response to user report
 
-17.04-2003   MGP, tag emlowen-V05-00-13
+17.04.2003   MGP, tag emlowen-V05-00-13
              Modifications related to "cuts per region" by VI as below
              Bug fix to G4LowEnergyGammaConversion (angular distribution)
 
-12.04-2003   VI migration to cut per region for fluo AlongStep
+12.04.2003   VI migration to cut per region for fluo AlongStep
              G4ShellVacancy, G4hLowEnergyIonisation, G4LowEnergyIonisation
 
-28.03-2003   G.Cosmo, tag emlowen-V05-00-12
+28.03.2003   G.Cosmo, tag emlowen-V05-00-12
              Fixed compilation errors on SUN-CC for files:
               G4PenelopeBremsstrahlung.cc, G4PenelopeBremsstrahlungAngular.cc,
 	      G4PenelopeBremsstrahlungContinuous.cc, G4PenelopeInterpolator.cc.
              Variables defined in for-loops scope were used outside scope!
 
-27.03-2003   G.Cosmo, tag emlowen-V05-00-11
+27.03.2003   G.Cosmo, tag emlowen-V05-00-11
              Fixed usage of 'abs' in G4PenelopeInterpolator.cc and
 	     G4PenelopeBremsstrahlungContinuous.cc to allow porting
              on WIN32-VC platform. 'abs' should not be included in
              the std namespace.
 
-19.03-2003   MGP, tag emlowen-V05-00-10
+19.03.2003   MGP, tag emlowen-V05-00-10
              Includes the two minor items below, on top of emlowen-V05-00-09
 
-10.03-2003   VI remove cut per material warning
+10.03.2003   VI remove cut per material warning
              VI use SutType for ions
 
-28.02-2003   VI Minor design iteration on Bremsstrahlung, to accomodate
+28.02.2003   VI Minor design iteration on Bremsstrahlung, to accomodate
              variable name of file with parameters
 
-26.02-2003   G.Cosmo, tag emlowen-V05-00-09
+26.02.2003   G.Cosmo, tag emlowen-V05-00-09
              Fixed usage of 'abs' in G4PenelopeCompton.cc to allow porting
              on WIN32-VC platform. 'abs' should not be included in the std
              namespace.
 
-24.02-2003   MGP, tag emlowen-V05-00-08
+24.02.2003   MGP, tag emlowen-V05-00-08
              Small fixes related to Penelope processes for photons
 
-22.02-2003   MGP, tag emlowen-V05-00-07
+22.02.2003   MGP, tag emlowen-V05-00-07
              Porting Penelope processes for photons to SUN
 
-22.02-2003   MGP, tag emlowen-V05-00-06
+22.02.2003   MGP, tag emlowen-V05-00-06
              Minor design iteration on Bremsstrahlung, to accomodate
              variable number of parameters compatible with Penelope
              processes
 
-22.02-2003   MGP, tag emlowen-V05-00-05
+22.02.2003   MGP, tag emlowen-V05-00-05
              New Ziegler2000 parameterisation for G4hLowEnergyIonisation
              added by VI
 
-12.02-2003   MGP, tag emlowen-V05-00-04
+12.02.2003   MGP, tag emlowen-V05-00-04
              Corrected compilation error in G4LowEnergyLoss in tags V05-00-02/3
              Migrated Penelope processes to cuts-per-region 
              Removed some compilation warnings
 
-11.02-2003   MGP, tag emlowen-V05-00-03
+11.02.2003   MGP, tag emlowen-V05-00-03
              First tag including Penelope processes for photons and related
              unit tests, implemented by Luciano Pandola
 
-11.02-2003   MGP, tag emlowen-V05-00-02
+11.02.2003   MGP, tag emlowen-V05-00-02
              Included minor editing of header files in the cut-per-region
              migration and protection of energy loss fluctuations by VI 
 
-05.02-2003   CG, tag emlowen-V05-00-01
+05.02.2003   CG, tag emlowen-V05-00-01
              Removed redundant inclusion of headers for units and constants.
              Now using directly CLHEP headers. Affected files:
              G4QAOLowEnergyLoss.cc and few unit test .cc files.
 
-24.01-2003   MGP, tag emlowen-V05-00-00
+24.01.2003   MGP, tag emlowen-V05-00-00
              Included changes by VI for migration to cuts-by-region aware
              processes.
 
-10.12-2002   MGP, tag emlowen-V04-01-09
+10.12.2002   MGP, tag emlowen-V04-01-09
              VI G4hLowEnergyIonisation.cc - antiprotons: free electron gas 
              model replaces constant extension of quantum oscillator model 
              at low energies (< 25 keV), as for protons
 
-28.11-2002   MGP, tag emlowen-V04-01-08
+28.11.2002   MGP, tag emlowen-V04-01-08
              Update of G4ComptonTest and test/GNUmakefile by A. Pfeiffer
              for AIDA3/Anaphe5
 
-18.11-2002   MGP, tag emlowen-V04-01-07
+18.11.2002   MGP, tag emlowen-V04-01-07
              Bug fix in G4BremsstrahlungParameters, to load EEDL correctly
              (correction for PRS 430)
 
-08.11-2002   MGP, tag emlowen-V04-01-06
+08.11.2002   MGP, tag emlowen-V04-01-06
              New model for angular distribution in Rayleigh by Gerardo
              Depaola and Francesco Longo; corrects PRS problem 406
 
-08.11-2002   MGP, tag emlowen-V04-01-05
+08.11.2002   MGP, tag emlowen-V04-01-05
              VI optimisation of tables in G4LowEnergyIonisation,
                 G4eLowEnergyLoss, G4hLowEnergyLoss, G4hLowEnergyIonisation
 
-08.10-2002   MGP, tag emlowen-V04-01-04
+08.10.2002   MGP, tag emlowen-V04-01-04
              VI G4hLowEnergyIonisation.cc - clean up fluo flag definition and init
              VI G4hIonEffChargeSquare.cc - fix in charge definition
              VI G4hShellCrossSection.cc - fix in shell cross section for hadrons
@@ -153,47 +191,47 @@ committal in the CVS repository !
              VI G4LowEnergyIonisation.cc  - remove ActivateFluorescence from 
                                             SetCut.. methods
                 
-27.08-2002   CG,VI, tag emlowen-V04-01-03
+27.08.2002   CG,VI, tag emlowen-V04-01-03
              A. Mantero fix leakage in G4AtomicTransition.cc
 
-30.07-2002   CG,VI, tag emlowen-V04-01-02
+30.07.2002   CG,VI, tag emlowen-V04-01-02
              VI fix to G4LowEnergyIonisation.cc, for restricted energy loss
 
-30.07-2002   CG,VI, tag emlowen-V04-01-01
+30.07.2002   CG,VI, tag emlowen-V04-01-01
              CG fix to G4VCrossSectionHandler.cc, to fix compilation problems
                 on DEC-cxx non-ISO.
              VI fix to G4AugerData.cc, to clean warnings on gcc-3.1 and optimise
                 load of data in memory.
 
-15.06-2002   MGP, tag emlowen-V04-01-00
+15.06.2002   MGP, tag emlowen-V04-01-00
              VI Bug fix in G4eEnergySpectrum 
              VI Bug fix in G4VCrossSectionHandler, connected modifications in
                 other handlers
 
-15.06-2002   MGP, tag emlowen-V04-00-17
+15.06.2002   MGP, tag emlowen-V04-00-17
              VI Bug fix in fluctuations in G4hLowEnergyIonisation 
              VI Removed duplicate member function to activate fluorescence
 
-10.06-2002   MGP, tag emlowen-V04-00-16
+10.06.2002   MGP, tag emlowen-V04-00-16
              fStopAndKill moved to fStopAndAlive in G4hLowEnergyIonisation
              to satisfy UR for activation of further processes for ions
              (UR by UKDM)
 
-07.06-2002   MGP, tag emlowen-V04-00-15
+07.06.2002   MGP, tag emlowen-V04-00-15
              Fixes to Rayleigh by Francesco Longo and Gerardo Depaola (PRS 371)
 
-07.06-2002   MGP, tag emlowen-V04-00-14
+07.06.2002   MGP, tag emlowen-V04-00-14
              Added comments for Software Reference Manual
 
-03.06-2002   MGP, tag emlowen-V04-00-13
+03.06.2002   MGP, tag emlowen-V04-00-13
              Fixes to Auger by Alfonso Mantero
              Goes with new version of G4LEDATA G4EMLOW1.1
 
-03.06-2002   MGP, tag emlowen-V04-00-12
+03.06.2002   MGP, tag emlowen-V04-00-12
              Introduce Auger implementation (previously handled as
              local energy deposit)
 
-02.06-2002   MGP, tag emlowen-V04-00-11
+02.06.2002   MGP, tag emlowen-V04-00-11
              VI Fixes in Bremsstrahlung - interpolation above 10 MeV
              VI Change parametrisation of e- ionisation - 24-parameters
                  for each shell are used. Corresponding change is
@@ -202,22 +240,22 @@ committal in the CVS repository !
              New interpolation algorithm
              Goes with new version of G4LEDATA G4EMLOW1.0
 
-02.06-2002   MGP, tag emlowen-V04-00-10
+02.06.2002   MGP, tag emlowen-V04-00-10
              Improvements to PolarizedCompton by F. Longo and G. Depaola
 
-02.06-2002   MGP, tag emlowen-V04-00-09
+02.06.2002   MGP, tag emlowen-V04-00-09
              Fixed max length of ntuple variable names for HBOOK
              in test/G4ComptonTest
              Updates in unit tests and in hTest by V.I.
 
-28.05-2002   MGP, tag emlowen-V04-00-08
+28.05.2002   MGP, tag emlowen-V04-00-08
              Code and minor design improvements deriving from reviews,
              inspections and Code Wizard
 
-28.05-2002   MGP, tag emlowen-V04-00-07
+28.05.2002   MGP, tag emlowen-V04-00-07
              Added protection in G4eIonisationSpectrum
 
-28.05-2002   MGP, tag emlowen-V04-00-06
+28.05.2002   MGP, tag emlowen-V04-00-06
              G4ComptonTest and test/GNUmakefile updated to AIDA 2.2 and
              Anaphe 4.0.n
 

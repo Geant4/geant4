@@ -22,7 +22,7 @@
 //
 //
 // $Id: ExN07DetectorMessenger.cc,v 1.2 2003/04/08 15:47:00 asaim Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 
 #include "ExN07DetectorMessenger.hh"

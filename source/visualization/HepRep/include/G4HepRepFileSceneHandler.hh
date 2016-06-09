@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4HepRepFileSceneHandler.hh,v 1.12 2003/06/25 10:19:51 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4HepRepFileSceneHandler.hh,v 1.14 2003/11/13 01:11:41 perl Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 //
 // Joseph Perl  27th January 2002
@@ -47,7 +47,7 @@
 #include "G4Polyhedra.hh"
 
 // HepRep
-#include "HepRepXMLWriter.hh"
+#include "G4HepRepFileXMLWriter.hh"
 
 class G4VPhysicalVolume;
 class G4LogicalVolume;
@@ -111,12 +111,18 @@ public:
   void BeginModeling();
   void EndModeling();
 
+  //////////////////////////////////////////////////////////////
+  // Administration functions.
+
+  //void ClearStore ();
+  void ClearTransientStore ();
+
   ////////////////////////////////////////////////////////////////
   // Required...
 
   static G4int GetSceneCount() {return fSceneCount;}
 
-  HepRepXMLWriter *GetHepRepXMLWriter();
+  G4HepRepFileXMLWriter *GetHepRepXMLWriter();
 
 protected:
   static G4int         fSceneIdCount;  // Counter for HepRep scene handlers.
@@ -126,7 +132,7 @@ protected:
   G4LogicalVolume*     fpCurrentLV;    // Current logical volume.
 
 private:
-  HepRepXMLWriter *hepRepXMLWriter;
+  G4HepRepFileXMLWriter *hepRepXMLWriter;
   void AddHepRepInstance(const char* primName,
 			 const G4Visible visible);
   void CheckFileOpen();

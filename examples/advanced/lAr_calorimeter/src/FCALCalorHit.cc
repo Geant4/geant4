@@ -19,12 +19,9 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
-// By copying, distributing or modifying the Program (or any work
-// based on the Program) you indicate your acceptance of this statement,
-// and all its terms.
 //
-// $Id: FCALCalorHit.cc,v 1.2 2002/12/12 19:16:33 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: FCALCalorHit.cc,v 1.4 2003/12/09 15:30:23 gunter Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // 
 
@@ -51,6 +48,7 @@ FCALCalorHit::~FCALCalorHit()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 FCALCalorHit::FCALCalorHit(const FCALCalorHit& right)
+  : G4VHit(right)
 {
   EdepAbs = right.EdepAbs; TrackLengthAbs = right.TrackLengthAbs;
   EdepGap = right.EdepGap; TrackLengthGap = right.TrackLengthGap;
@@ -69,7 +67,7 @@ const FCALCalorHit& FCALCalorHit::operator=(const FCALCalorHit& right)
 
 int FCALCalorHit::operator==(const FCALCalorHit& right) const
 {
-  return 0;
+  return (this==&right) ? 1 : 0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

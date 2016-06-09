@@ -1,6 +1,6 @@
 **********************************************
- Geant4 version $Name: geant4-05-02 $
-                                (27-June-2003)
+ Geant4 version $Name: geant4-06-00 $
+                                (12-December-2003)
              Copyright : Geant4 Collaboration
 **********************************************
 Visualization Manager instantiating...
@@ -13,23 +13,50 @@ Current available graphics systems are:
   DAWNFILE (DAWNFILE)
   GAGTree (GAGTree)
   G4HepRepFile (HepRepFile)
+  G4HepRep (HepRepXML)
   RayTracer (RayTracer)
   VRML1FILE (VRML1FILE)
   VRML2FILE (VRML2FILE)
+/run/verbose 2
+#/tracking/verbose 2
+#
+#
+#  select EM PhysicsList
+#
+#/testem/phys/addPhysics  g4v52
+#
+/testem/phys/addPhysics  standard
+PhysicsList::AddPhysicsList: <standard>
+#
+#/testem/phys/addPhysics model
+#
+/testem/phys/setCuts    1 mm
+#/testem/phys/VertexCuts 0.1 mm
+#/testem/phys/MuonCuts  10.0 mm
+#/testem/stepMax         10 mm
+#
+#/process/eLoss/preciseRange  true
+#/process/eLoss/integral      true
+#
+#  hist file name
+#
+/plots/sethistName g4.p11
+ hist file = g4.p11
+#
+#  PLOT: energy deposit distribution in absorber
+#
+/plots/setnbinEn 20
+ Nb of bins in Edep plot = 20
+/plots/setEnlow 0.0 MeV
+ Elow  in the  Edep plot = 0
+/plots/setEnhigh 0.060  MeV  
+ Ehigh in the  Edep plot = 0.06
+#
+#
+/run/initialize
+userDetector->Construct() start.
 
-***** Table : Nb of materials = 12 *****
-
- Material: Aluminium     density:  2.700 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   8.893 cm 
-   --->  Element: Aluminium      Z = 13.0   N =  27.0   A =  26.98 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
-
- Material:    Mylar     density:  1.390 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:  28.743 cm 
-   --->  Element:   Oxygen  O   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:  33.30 %  Abundance  18.18 %
-   --->  Element:   Carbon  C   Z =  6.0   N =  12.0   A =  12.01 g/mole  fractionMass:  62.49 %  Abundance  45.45 %
-   --->  Element: Hydrogen  H   Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass:   4.20 %  Abundance  36.36 %
-
- Material: Polypropelene     density: 910.000 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:  49.214 cm 
-   --->  Element: Hydrogen  H   Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass:  14.40 %  Abundance  66.67 %
-   --->  Element:   Carbon  C   Z =  6.0   N =  12.0   A =  12.01 g/mole  fractionMass:  85.60 %  Abundance  33.33 %
+***** Table : Nb of materials = 7 *****
 
  Material:       Kr     density:  3.700 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:  30.736 m  
    --->  Element:       Kr      Z = 36.0   N =  83.8   A =  83.80 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
@@ -48,17 +75,9 @@ Current available graphics systems are:
    --->  Element:   Oxygen  O   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:  23.15 %  Abundance  21.05 %
    --->  Element:    Argon Ar   Z = 18.0   N =  39.9   A =  39.95 g/mole  fractionMass:   1.28 %  Abundance   0.47 %
 
- Material:    Xenon     density:  5.858 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:  14.478 m  
-   --->  Element:    Xenon      Z = 54.0   N = 131.3   A = 131.29 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
-
  Material:      CO2     density:  1.977 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength: 183.083 m  
    --->  Element:   Carbon  C   Z =  6.0   N =  12.0   A =  12.01 g/mole  fractionMass:  27.29 %  Abundance  33.33 %
    --->  Element:   Oxygen  O   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:  72.71 %  Abundance  66.67 %
-
- Material:  Xe20CO2     density:  5.082 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:  17.750 m  
-   --->  Element:    Xenon      Z = 54.0   N = 131.3   A = 131.29 g/mole  fractionMass:  92.20 %  Abundance  56.91 %
-   --->  Element:   Carbon  C   Z =  6.0   N =  12.0   A =  12.01 g/mole  fractionMass:   2.13 %  Abundance  14.36 %
-   --->  Element:   Oxygen  O   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:   5.67 %  Abundance  28.73 %
 
  Material:  Kr20CO2     density:  3.601 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:  34.158 m  
    --->  Element:       Kr      Z = 36.0   N =  83.8   A =  83.80 g/mole  fractionMass:  89.00 %  Abundance  58.62 %
@@ -71,53 +90,28 @@ Current available graphics systems are:
  The ABSORBER is made of 40mm of Kr20CO2, the transverse size (R) is 100 mm. 
  Z position of the (middle of the) absorber 360  mm.
 
-zRad = 153.85 mm
-radThick = 345.24 mm
+World is registered to the default region.
+physicsList->Construct() start.
+physicsList->Construct() start.
 
 phot:  Total cross sections from Sandia parametrisation. 
-Em8PhysicsList::SetCuts:CutLength : 1 mm 
-
-total time(SetCuts)=0 s 
+physicsList->setCut() start.
+PhysicsList::SetCuts:CutLength : 1 mm 
+/run/particle/dumpCutValues
 #
-#control/saveHistory
+#/gun/particle e-
 #
-/run/verbose 2
+/gun/particle proton
 #
-/run/initialize
-#
-#/calor/setAbsMat Xenon
-#  
-#/calor/setAbsThick  20.0 mm 
+#/gun/particle mu-
 # 
-#/calor/setAbsRad 100.0 mm
+/gun/energy 200000.00 MeV
 #
-#/calor/update
+#/gun/energy 200.0 MeV
 #
-#  hist file name
+#/tracking/verbose 1
 #
-#/plots/sethistName g4.p11
-#
-#  PLOT: energy deposit distribution in absorber
-#
-#/plots/setnbinEn 95
-#/plots/setEnlow 0.0 MeV
-#/plots/setEnhigh 0.1  MeV  
-#
-#/calor/cutG 3.0 mm    
-#
-#/calor/cutE 3.0 mm
-#
-/run/initialize
-#/run/dumpCouples
-#
-/gun/particle e-
-# 
-#/gun/energy 200.00 GeV
-#
-/gun/energy 9000.0 MeV
-#
-/tracking/verbose 0
-#
+/event/printModulo 100
 /run/beamOn 1000
 
 compt:  Total cross sections from a parametrisation. Good description from 10 KeV to (100/Z) GeV. 
@@ -127,164 +121,216 @@ compt:  Total cross sections from a parametrisation. Good description from 10 Ke
 conv:  Total cross sections from a parametrisation. Good description from 1.5 MeV to 100 GeV for all Z. 
         e+e- energies according Bethe-Heitler
         PhysicsTables from 1.022 MeV to 100 GeV in 100 bins. 
-PAI mat name  = Kr20CO2
-PAI mat index = 11
 
-PAI matcuts name  = Kr20CO2
-PAI matcuts index = 2
+msc:  Model variant of multiple scattering for e-
+      Lambda tables from 100 eV  to 100 TeV in 120 bins.
+      Boundary algorithm is active with facrange= 0.199
+PAIModel DeltaCutInKineticEnergyNow = 66.6945 keV
 
-PAI DeltaCutInKineticEnergyNow = 34.9467 keV
+eIoni:   tables are built for  e-
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Step function: finalRange(mm)= 1, dRoverRange= 1, integral: 1
+      Delta cross sections from Moller+Bhabha, good description from 1 KeV to 100 GeV.
 
-e-:  delta cross sections from Moller+Bhabha. Good description from 1 KeV to 100 GeV.
-        delta ray energy sampled from  differential Xsection.
-        PhysicsTables from 1 keV to 100 TeV in 100 bins.
-        Step function: finalRange(mm)= 1,  dRoverRange= 0.2
+eBrem:   tables are built for  e-
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Total cross sections from a parametrisation based on the EEDL data library. 
+      Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV.
 
-eBrem:  Total cross sections from a NEW parametrisation based on the EEDL data library. 
- Good description from 1 KeV to 100 GeV.
-        log scale extrapolation above 100 GeV 
-        Gamma energy sampled from a parametrised formula.
-        PhysicsTables from 1 keV to 100 TeV in 100 bins. 
-PAI mat name  = Kr20CO2
-PAI mat index = 11
+eIoni:   tables are built for  e+
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Step function: finalRange(mm)= 1, dRoverRange= 1, integral: 1
+      Delta cross sections from Moller+Bhabha, good description from 1 KeV to 100 GeV.
 
-PAI matcuts name  = Kr20CO2
-PAI matcuts index = 2
+eBrem:   tables are built for  e+
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Total cross sections from a parametrisation based on the EEDL data library. 
+      Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV.
 
-PAI DeltaCutInKineticEnergyNow = 34.9467 keV
+annihil:  Total cross section from Heilter formula(annihilation into 2 photons).
+        gamma energies sampled according Heitler
+        PhysicsTables from 10 keV to 10 TeV in 100 bins. 
 
-proton:    Knock-on electron cross sections . 
-         Good description above the mean excitation energy.
-         delta ray energy sampled from  differential Xsection.
-        PhysicsTables from 1 keV to 100 TeV in 100 bins. 
-        Step function: finalRange(mm)= 1,  dRoverRange= 0.2
+msc:  Model variant of multiple scattering for proton
+      Lambda tables from 100 eV  to 100 TeV in 120 bins.
+      Boundary algorithm is active with facrange= 0.199
+PAIModel DeltaCutInKineticEnergyNow = 66.6945 keV
+PAIModel DeltaCutInKineticEnergyNow = 66.6945 keV
+PAIModel DeltaCutInKineticEnergyNow = 66.6945 keV
+PAIModel DeltaCutInKineticEnergyNow = 66.6945 keV
+PAIModel DeltaCutInKineticEnergyNow = 66.6945 keV
+PAIModel DeltaCutInKineticEnergyNow = 66.6945 keV
+PAIModel DeltaCutInKineticEnergyNow = 66.6945 keV
+PAIModel DeltaCutInKineticEnergyNow = 66.6945 keV
+PAIModel DeltaCutInKineticEnergyNow = 66.6945 keV
+PAIModel DeltaCutInKineticEnergyNow = 66.6945 keV
+PAIModel DeltaCutInKineticEnergyNow = 66.6945 keV
 
-msc:   Tables of transport mean free paths.
-          New model of MSC , computes the lateral 
-          displacement of the particle , too.
-        PhysicsTables from 100 eV  to 100 TeV in 100 bins. 
-PAI mat name  = Kr20CO2
-PAI mat index = 11
+hIoni:   tables are built for  proton
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 0
+      Bether-Bloch model for Escaled > 2 MeV, parametrisation of Bragg peak below, Integral mode 0
 
-PAI matcuts name  = Kr20CO2
-PAI matcuts index = 2
+msc:  Model variant of multiple scattering for mu+
+      Lambda tables from 100 eV  to 100 TeV in 120 bins.
+      Boundary algorithm is active with facrange= 0.199
+PAIModel DeltaCutInKineticEnergyNow = 66.6945 keV
 
-PAI DeltaCutInKineticEnergyNow = 34.9467 keV
-PAI mat name  = Kr20CO2
-PAI mat index = 11
+MuIoni:   tables are built for  mu+
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 0
+      Bether-Bloch model for E > 0.2 MeV parametrisation of Bragg peak below.
 
-PAI matcuts name  = Kr20CO2
-PAI matcuts index = 2
+MuBrems:   tables are built for  mu+
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Parametrised model 
 
-PAI DeltaCutInKineticEnergyNow = 34.9467 keV
-PAI mat name  = Kr20CO2
-PAI mat index = 11
+MuPairProd:   tables are built for  mu+
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Parametrised model 
+PAIModel DeltaCutInKineticEnergyNow = 66.6945 keV
+### All dEdx and Range tables are built #####
 
-PAI matcuts name  = Kr20CO2
-PAI matcuts index = 2
+MuIoni:   tables are built for  mu-
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 0
+      Bether-Bloch model for E > 0.2 MeV parametrisation of Bragg peak below.
 
-PAI DeltaCutInKineticEnergyNow = 34.9467 keV
+msc:  Model variant of multiple scattering for pi-
+      Lambda tables from 100 eV  to 100 TeV in 120 bins.
+      Boundary algorithm is active with facrange= 0.199
 
-mu+:    Knock-on electron cross sections . 
-         Good description above the mean excitation energy.
-         delta ray energy sampled from  differential Xsection.
-        PhysicsTables from 1 keV to 1000 PeV in 150 bins. 
+Region DefaultRegionForTheWorld
+ Materials : Air 
+ Production cuts :  gamma 1 mm     e- 1 mm     e+ 1 mm 
 
-msc:   Tables of transport mean free paths.
-          New model of MSC , computes the lateral 
-          displacement of the particle , too.
-        PhysicsTables from 100 eV  to 100 TeV in 100 bins. 
+Region VertexDetector
+ Materials : Kr20CO2 
+ Production cuts :  gamma 3 cm     e- 3 cm     e+ 3 cm 
 
-MuBrems:  theoretical cross section 
-          Good description up to 1000 PeV.
-    PhysicsTables from 1 keV to 1000 PeV in 150 bins. 
+========= Table of registered couples ==============================
 
-MuPairProd:  theoretical cross sections 
-          Good description up to 1000 PeV.
-    PhysicsTables from 1 keV to 1000 PeV in 150 bins. 
-PAI mat name  = Kr20CO2
-PAI mat index = 11
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Air
+ Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
+ Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
 
-PAI matcuts name  = Kr20CO2
-PAI matcuts index = 2
+Index : 1     used in the geometry : Yes     recalculation needed : No 
+ Material : Kr20CO2
+ Range cuts        :  gamma 3 cm     e- 3 cm     e+ 3 cm 
+ Energy thresholds :  gamma 2.56669 keV    e- 66.6945 keV    e+ 65.4742 keV
+ Region(s) which use this couple : 
+    VertexDetector
 
-PAI DeltaCutInKineticEnergyNow = 34.9467 keV
-PAI mat name  = Kr20CO2
-PAI mat index = 11
+====================================================================
 
-PAI matcuts name  = Kr20CO2
-PAI matcuts index = 2
-
-PAI DeltaCutInKineticEnergyNow = 34.9467 keV
-PAI mat name  = Kr20CO2
-PAI mat index = 11
-
-PAI matcuts name  = Kr20CO2
-PAI matcuts index = 2
-
-PAI DeltaCutInKineticEnergyNow = 34.9467 keV
-### Run 0 start.
-
---------- Ranecu engine status ---------
- Initial seed (index) = 0
- Current couple of seeds = 9876, 54321
-----------------------------------------
 Start closing geometry.
 G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 
     Total memory consumed for geometry optimisation:   0 kByte
     Total CPU time elapsed for geometry optimisation: 0 seconds
+### Run 0 start.
 
-    Voxelisation: top CPU users:
-    Percent   Total CPU    System CPU       Memory  Volume
-    -------   ----------   ----------     --------  ----------
-       0.00         0.00         0.00            0k World
-
-    Voxelisation: top memory users:
-    Percent     Memory      Heads    Nodes   Pointers    Total CPU    Volume
-    -------   --------     ------   ------   --------   ----------    ----------
-     100.00          0k         3        7         20         0.00    World
+--------- Ranecu engine status ---------
+ Initial seed (index) = 0
+ Current couple of seeds = 1564919237, 736159499
+----------------------------------------
 Start Run processing.
 
 ---> Begin of Event: 0
+
+---> Begin of Event: 100
+
+---> Begin of Event: 200
+
+---> Begin of Event: 300
+
+---> Begin of Event: 400
+
+---> Begin of Event: 500
+
+---> Begin of Event: 600
+
+---> Begin of Event: 700
+
+---> Begin of Event: 800
+
+---> Begin of Event: 900
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=2.06s Real=2.09s Sys=0s
+  User=16s Real=16s Sys=0.27s
  ================== run summary =====================
  end of Run TotNbofEvents = 1000
-    mean charged track length   in absorber=40.2593 +- 0.20516  mm  
+    mean charged track length   in absorber=40.4937 +- 0.148843  mm  
 
-            mean energy deposit in absorber=0.0230573 +- 0.000247919  MeV 
+            mean energy deposit in absorber=0.0770138 +- 0.0441136  MeV 
 
- mean number of steps in absorber (charged) =1.025 +- 0.00586302      
- mean number of steps in absorber (neutral) =0.045 +- 0.00670634      
+ mean number of steps in absorber (charged) =13.047 +- 4.51311      
+ mean number of steps in absorber (neutral) =0 +- 0      
 
-   mean number of charged secondaries = 0.004 +- 0.001996
+   mean number of charged secondaries = 6.505 +- 2.25456
 
-   mean number of neutral secondaries = 0.02 +- 0.00442719
+   mean number of neutral secondaries = 0 +- 0
 
-   mean number of e-s =0.004  and e+s =0
+   mean number of e-s =6.505  and e+s =0
 
-(number) transmission coeff=0.003  reflection coeff=0
+(number) transmission coeff=0.513  reflection coeff=0
+
+ energy deposit distribution 
+#entries=1000    #underflows=0    #overflows=43
+ bin nb      Elow      entries     normalized 
+    0         0           0           0
+    1         3           0           0
+    2         6           0           0
+    3         9          18       0.018
+    4        12         104       0.104
+    5        15         248       0.248
+    6        18         241       0.241
+    7        21         132       0.132
+    8        24          66       0.066
+    9        27          41       0.041
+   10        30          28       0.028
+   11        33          17       0.017
+   12        36          16       0.016
+   13        39          17       0.017
+   14        42           8       0.008
+   15        45           4       0.004
+   16        48          10        0.01
+   17        51           1       0.001
+   18        54           3       0.003
+   19        57           3       0.003
+
+ Emp =           0.015   width=          0.006  MeV 
 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 222064562, 772903047
+ Current couple of seeds = 1618749842, 150377399
 ----------------------------------------
 #
 #
 Graphics systems deleted.
 Visualization Manager deleting...
-G4 kernel has come to Quit state.
-Deletion of G4 kernel class start.
 UserDetectorConstruction deleted.
 UserPhysicsList deleted.
 UserRunAction deleted.
 UserPrimaryGenerator deleted.
+G4 kernel has come to Quit state.
 G4SDManager deleted.
 EventManager deleted.
 UImanager deleted.
 StateManager deleted.
+RunManagerKernel is deleted.
 RunManager is deleting.

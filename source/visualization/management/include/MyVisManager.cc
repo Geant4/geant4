@@ -21,11 +21,13 @@
 // ********************************************************************
 //
 //
-// $Id: MyVisManager.cc,v 1.17 2002/11/27 12:34:36 johna Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: MyVisManager.cc,v 1.19 2003/11/06 15:24:52 johna Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // 
 // John Allison 24th January 1998.
+
+#ifdef G4VIS_USE
 
 #include "MyVisManager.hh"
 
@@ -45,11 +47,6 @@
 
 #ifdef G4VIS_USE_DAWN
 #include "G4FukuiRenderer.hh"
-#endif
-
-#ifdef G4VIS_USE_OPACS
-#include "G4Wo.hh"
-#include "G4Xo.hh"
 #endif
 
 #ifdef G4VIS_USE_OPENGLX
@@ -101,11 +98,6 @@ void MyVisManager::RegisterGraphicsSystems () {
   RegisterGraphicsSystem (new G4FukuiRenderer);
 #endif
 
-#ifdef G4VIS_USE_OPACS
-  RegisterGraphicsSystem (new G4Wo);
-  RegisterGraphicsSystem (new G4Xo);
-#endif
-
 #ifdef G4VIS_USE_OPENGLX
   RegisterGraphicsSystem (new G4OpenGLImmediateX);
   RegisterGraphicsSystem (new G4OpenGLStoredX);
@@ -134,3 +126,5 @@ void MyVisManager::RegisterGraphicsSystems () {
   RegisterGraphicsSystem (new G4VRML2);
 #endif
 }
+
+#endif

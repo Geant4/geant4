@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4BoundingBox3D.hh,v 1.5 2001/07/11 09:59:32 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // ----------------------------------------------------------------------
 // Class G4BoundingBox3D

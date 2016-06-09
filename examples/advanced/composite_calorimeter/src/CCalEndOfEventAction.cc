@@ -37,10 +37,12 @@
 #include "G4Event.hh"
 #include "G4SDManager.hh"
 #include "G4HCofThisEvent.hh"
-#include <iostream>
-#include <map>
 #include "G4RunManager.hh"
 #include "G4UserSteppingAction.hh"
+
+#include <iostream>
+#include <vector>
+#include <map>
 
 #include "G4TrajectoryContainer.hh"
 #include "G4Trajectory.hh"
@@ -77,7 +79,7 @@ CCalEndOfEventAction::~CCalEndOfEventAction() {
     delete theOrg;
   if (SDnames)
     delete SDnames;
-  G4cout << "Deleting CCalEndOfEventAction" << G4endl;
+  G4cout << "CCalEndOfEventAction deleted" << G4endl;
 }
 
 
@@ -89,8 +91,11 @@ void CCalEndOfEventAction::initialize() {
   G4cout << "CCalEndOfEventAction look for " << numberOfSD 
        << " calorimeter-like SD" << G4endl;
 #endif
-  if (numberOfSD > 0)
-    SDnames = new nameType[numberOfSD];
+  if (numberOfSD > 0) {
+    G4int n = numberOfSD;
+    if (n < 2) n = 2;
+    SDnames = new nameType[n];
+  }
   for (int i=0; i<numberOfSD; i++) {
     SDnames[i] = G4String(CCalSDList::getInstance()->getCaloSDName(i));
 #ifdef debug
@@ -133,7 +138,7 @@ void CCalEndOfEventAction::EndOfEventAction(const G4Event* evt){
   //
   
   //Now make summary
-  float hcalE[28], ecalE[49], fullE=0.;
+  float hcalE[28], ecalE[49], fullE=0., edec=0, edhc=0;
   int i = 0;
   for (i = 0; i < 28; i++) {hcalE[i]=0.;}
   for (i = 0; i < 49; i++) {ecalE[i]=0.;}
@@ -148,52 +153,60 @@ void CCalEndOfEventAction::EndOfEventAction(const G4Event* evt){
     edep[i] = 0;
     int caloHCid = G4SDManager::GetSDMpointer()->GetCollectionID(SDnames[i]);
 
-    CCalG4HitCollection* theHC = 
-      (CCalG4HitCollection*) allHC->GetHC(caloHCid);
-    if (theHC != 0) {
+    if (caloHCid >= 0) {
+      CCalG4HitCollection* theHC = 
+	(CCalG4HitCollection*) allHC->GetHC(caloHCid);
+    
+      if (theHC != 0) {
 
-      G4int nentries = theHC->entries();
+	G4int nentries = theHC->entries();
 #ifdef debug
-      G4cout << " There are " << nentries << " hits in " << SDnames[i] << " :" 
-	   << G4endl;
+	G4cout << " There are " << nentries << " hits in " << SDnames[i] 
+	       << " :" << G4endl;
 #endif
 
-      if (nentries > 0) {
+	if (nentries > 0) {
   
-	int j;
-	for (j=0; j<nentries; j++){
+	  int j;
+	  for (j=0; j<nentries; j++){
 #ifdef ddebug
-	  G4cout << "Considering hit " << j << G4endl;
+	    G4cout << "Hit " << j;
 #endif
-	  CCalG4Hit* aHit =  (*theHC)[j];
-	  float En = aHit->getEnergyDeposit();
-	  int unitID = aHit->getUnitID();
-	  int id=-1;
-	  if (unitID > 0 && unitID < 29) {
-	    id = unitID - 1; // HCal
-	    hcalE[id] += En/GeV;
-	  } else {
-	    int i0 = unitID/4096;
-	    int i1 = (unitID/64)%64;
-	    int i2 = unitID%64;
-	    if (i0 == 1 && i1 < 8 && i2 < 8) {
-	      id = i1*7 + i2; // ECal
-	      ecalE[id] += En/GeV;
+	    CCalG4Hit* aHit =  (*theHC)[j];
+	    float En = aHit->getEnergyDeposit();
+	    int unitID = aHit->getUnitID();
+	    int id=-1;
+	    if (unitID > 0 && unitID < 29) {
+	      id = unitID - 1; // HCal
+	      hcalE[id] += En/GeV;
+	    } else {
+	      int i0 = unitID/4096;
+	      int i1 = (unitID/64)%64;
+	      int i2 = unitID%64;
+	      if (i0 == 1 && i1 < 8 && i2 < 8) {
+		id = i1*7 + i2; // ECal
+		ecalE[id] += En/GeV;
+	      }
 	    }
+#ifdef ddebug
+	    G4cout << " with Energy = " << En/MeV << " MeV in Unit " << unitID 
+		   << " " << id << G4endl;
+#endif
+	    fullE   += En/GeV;
+	    edep[i] += En/GeV;
+	    nhit++;
 	  }
 #ifdef ddebug
-	  G4cout << "Seeing Energy = " << En/MeV << " MeV in Unit " << unitID 
-	       << " " << id << G4endl;
+	  G4cout << " ===> Total Energy Deposit in this Calorimeter = " 
+		 << edep[i]*1000.0 << "  MeV " << G4endl; 
 #endif
-	  fullE   += En/GeV;
-	  edep[i] += En/GeV;
-	  nhit++;
 	}
-#ifdef ddebug
-	G4cout << " ===> Total Energy Deposit in this Calorimeter = " 
-	     << edep[i]*1000.0 << "  MeV " << G4endl; 
-#endif
       }
+    }
+    if (SDnames[i] == "HadronCalorimeter") {
+      edhc = edep[i];
+    } else if (SDnames[i] == "CrystalMatrix") {
+      edec = edep[i];
     }
   }
 
@@ -202,8 +215,6 @@ void CCalEndOfEventAction::EndOfEventAction(const G4Event* evt){
   float x    = pos.x()/mm;
   float y    = pos.y()/mm;
   float z    = pos.z()/mm;
-  float edec = edep[1];
-  float edhc = edep[0];
   delete[] edep;
 
 #ifdef G4ANALYSIS_USE
@@ -213,6 +224,23 @@ void CCalEndOfEventAction::EndOfEventAction(const G4Event* evt){
   analysis->InsertEnergyEcal(ecalE);
   analysis->setNtuple(hcalE, ecalE, ener, x, y, z, fullE, edec, edhc);
   analysis->EndOfEvent(nhit);
+  for (i = 0; i < numberOfSD; i++){
+    int caloHCid = G4SDManager::GetSDMpointer()->GetCollectionID(SDnames[i]);
+    if (caloHCid >= 0) {
+      CCalG4HitCollection* theHC = 
+	(CCalG4HitCollection*) allHC->GetHC(caloHCid);
+      if (theHC != 0) {
+	G4int nentries = theHC->entries();
+	if (nentries > 0) {
+	  for (G4int k=0; k<nentries; k++) {
+	    CCalG4Hit* aHit =  (*theHC)[k];
+	    analysis->InsertTimeProfile(k,aHit->getTimeSlice(),
+					aHit->getEnergyDeposit()/GeV);
+	  }
+	}
+      }
+    }
+  }
 #endif
 
   //A.R. Add to visualize tracks

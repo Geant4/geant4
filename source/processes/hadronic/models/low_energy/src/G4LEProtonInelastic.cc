@@ -28,13 +28,12 @@
 #include "G4LEProtonInelastic.hh"
 #include "Randomize.hh"
  
- G4VParticleChange *
-  G4LEProtonInelastic::ApplyYourself( const G4Track &aTrack,
+ G4HadFinalState *
+  G4LEProtonInelastic::ApplyYourself( const G4HadProjectile &aTrack,
                                       G4Nucleus &targetNucleus )
   {
-    theParticleChange.Initialize( aTrack );
-    
-    const G4DynamicParticle *originalIncident = aTrack.GetDynamicParticle();
+    theParticleChange.Clear();
+    const G4HadProjectile *originalIncident = &aTrack;
     if (originalIncident->GetKineticEnergy()<= 0.1*MeV) return &theParticleChange;
     //
     // create the target particle
@@ -42,7 +41,7 @@
     G4DynamicParticle *originalTarget = targetNucleus.ReturnTargetParticle();
     if( verboseLevel > 1 )
     {
-      G4Material *targetMaterial = aTrack.GetMaterial();
+      const G4Material *targetMaterial = aTrack.GetMaterial();
       G4cout << "G4LEProtonInelastic::ApplyYourself called" << G4endl;
       G4cout << "kinetic energy = " << originalIncident->GetKineticEnergy()/MeV << "MeV, ";
       G4cout << "target material = " << targetMaterial->GetName() << ", ";
@@ -104,7 +103,7 @@
     G4bool incidentHasChanged = false;
     G4bool targetHasChanged = false;
     G4bool quasiElastic = false;
-    G4FastVector<G4ReactionProduct,128> vec;  // vec will contain the sec. particles
+    G4FastVector<G4ReactionProduct,GHADLISTSIZE> vec;  // vec will contain the sec. particles
     G4int vecLen = 0;
     vec.Initialize( 0 );
     
@@ -127,7 +126,7 @@
 
  void
   G4LEProtonInelastic::SlowProton(
-   const G4DynamicParticle *originalIncident,
+   const G4HadProjectile *originalIncident,
    G4Nucleus &targetNucleus )
   {
     const G4double N = targetNucleus.GetN();    // atomic weight
@@ -155,10 +154,9 @@
     theReactionDynamics.NuclearReaction( vec, vecLen, originalIncident,
                                          targetNucleus, theAtomicMass, massVec );
     
-    theParticleChange.SetStatusChange( fStopAndKill );
+    theParticleChange.SetStatusChange( stopAndKill );
     theParticleChange.SetEnergyChange( 0.0 );
     
-    theParticleChange.SetNumberOfSecondaries( vecLen );
     G4DynamicParticle *pd;
     for( G4int i=0; i<vecLen; ++i )
     {
@@ -172,9 +170,9 @@
  
  void
   G4LEProtonInelastic::Cascade(
-   G4FastVector<G4ReactionProduct,128> &vec,
+   G4FastVector<G4ReactionProduct,GHADLISTSIZE> &vec,
    G4int &vecLen,
-   const G4DynamicParticle *originalIncident,
+   const G4HadProjectile *originalIncident,
    G4ReactionProduct &currentParticle,
    G4ReactionProduct &targetParticle,
    G4bool &incidentHasChanged,

@@ -1,5 +1,5 @@
 
-$Id: History,v 1.39 2003/06/12 12:47:50 gcosmo Exp $
+$Id: History,v 1.44 2003/12/01 09:32:26 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,29 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+ Dec 01, 2003   G.Cosmo                   geom-bool-V05-02-04
+  - G4ReflectedSolid.cc: fixed trivial leak in constructor.
+
+ Nov 03, 2003   G.Cosmo                   geom-bool-V05-02-03
+  - Code cleanup and headers inclusion review
+    (replaced by forward declarations where necessary).
+
+ Oct 28, 2003   G.Cosmo                   geom-bool-V05-02-02
+  - Migration to new G4Exception scheme.
+
+ Oct 28, 2003   J.Apostolakis
+  - Modified test/GNUmakefile to delete un-necessary directories.
+    It no longer refers to navigator (old volumes), but includes
+    intercoms (for G4VVisManager).
+
+ Oct  9, 2003   V.Grichine                geom-bool-V05-02-01
+  - Fixes to default safety to zero in DistIn/Out(p) methods.
+    Note: Using previous test GNUmakefile (to be corrected).
+
+ Sep 30, 2003   G.Cosmo                   geom-bool-V05-02-00
+  - Updated GNUmakefile for unit tests, according to new structure
+    introduced in "geometry-V05-02-00".
 
  Jun 12, 2003   G.Cosmo                   geom-bool-V05-01-02
   - G4ReflectionFactory:

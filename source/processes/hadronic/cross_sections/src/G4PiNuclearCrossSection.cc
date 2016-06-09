@@ -19,7 +19,9 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
+//
 #include "G4PiNuclearCrossSection.hh"
+#include "G4HadronicException.hh"
 
 // by J.P Wellisch, Sun Sep 15 2002.
 // Implements P2-90-158;
@@ -168,7 +170,11 @@ GetCrossSection(const G4DynamicParticle* aParticle,
   G4bool ok = false;
   if(aParticle->GetDefinition() == G4PionMinus::PionMinus()) ok=true;
   if(aParticle->GetDefinition() == G4PionPlus::PionPlus())   ok=true;
-  if(!ok) G4Exception("Call to G4PiNuclearCrossSection failed.");
+  if(!ok) 
+  {
+    throw G4HadronicException(__FILE__, __LINE__,
+                           "Call to G4PiNuclearCrossSection failed.");
+  }
   G4double charge = aParticle->GetDefinition()->GetPDGCharge();
   G4double kineticEnergy = aParticle->GetKineticEnergy();
 
@@ -179,7 +185,8 @@ GetCrossSection(const G4DynamicParticle* aParticle,
   while(it<theZ.size() && Z>theZ[it]) it++;
   if(Z > theZ[it]) 
   {
-    G4Exception("Error: Calling G4PiNuclearCrossSection outside parametrization");
+    throw G4HadronicException(__FILE__, __LINE__,
+      "Called G4PiNuclearCrossSection outside parametrization");
   }
   G4int Z1, Z2;
   G4double x1, x2;

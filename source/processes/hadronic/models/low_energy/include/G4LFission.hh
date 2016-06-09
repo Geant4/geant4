@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4LFission.hh,v 1.8 2002/12/12 19:18:05 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4LFission.hh,v 1.9 2003/07/01 15:49:03 hpw Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 //
 // G4 Low-energy Model: Fission -- header file
@@ -69,7 +69,7 @@ public:
    G4LFission();
    ~G4LFission();
  
-   G4VParticleChange* ApplyYourself(const G4Track& aTrack,
+   G4HadFinalState * ApplyYourself(const G4HadProjectile & aTrack,
                                     G4Nucleus& targetNucleus);
 
    static G4double Atomas(const G4double A, const G4double Z);

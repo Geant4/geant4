@@ -19,11 +19,11 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
-
+//
 // ====================================================================
 //
 //   ExN04PrimaryGeneratorMessenger.hh
-//   $Id: ExN04PrimaryGeneratorMessenger.hh,v 1.1 2002/11/19 10:30:54 murakami Exp $
+//   $Id: ExN04PrimaryGeneratorMessenger.hh,v 1.2 2003/12/09 15:30:56 gunter Exp $
 //
 // ====================================================================
 #ifndef EXN04_PRIMARY_GENERATOR_MESSENGER_H

@@ -1,3 +1,31 @@
+$Id: History,v 1.10 2003/11/06 15:04:40 johna Exp $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                      Category History file
+                      ---------------------
+This file should be used by G4 developers and category coordinators
+to briefly summarize all major modifications introduced in the code
+and keep track of all category-tags.
+It DOES NOT substitute the  CVS log-message one should put at every
+committal in the CVS repository !
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+History file for visualization/VRML sub-category
+------------------------------------------------
+
+6th November 2003  John Allison  (vis-V05-02-03)
+- G4VRML2SceneHandlerFunc: changed const char* pv_name to G4String pv_name.
+
+4th October 2003  Gabriele Cosmo (vis-V05-02-01)
+- Simplified GNUmakefile.
+
 VRML-V05-00-00 17th February 2003 Satoshi Tanaka
 - A Small bug fixing of VRML2 driver
  (Explicit cast from G4String to char*).

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4LogicalVolumeStore.hh,v 1.8 2003/06/16 16:51:52 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4LogicalVolumeStore.hh,v 1.9 2003/11/02 14:01:22 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // class G4LogicalVolumeStore
 //
@@ -48,9 +48,9 @@
 // History:
 // 18.04.01 G.Cosmo Migrated to STL vector
 // 10.07.95 P.Kent  Initial version
-
-#ifndef G4VLOGICALVOLUMESTORE_HH
-#define G4VLOGICALVOLUMESTORE_HH
+// --------------------------------------------------------------------
+#ifndef G4LOGICALVOLUMESTORE_HH
+#define G4LOGICALVOLUMESTORE_HH
 
 #include <vector>
 

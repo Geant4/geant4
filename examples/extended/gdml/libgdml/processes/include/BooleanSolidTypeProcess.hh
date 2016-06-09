@@ -22,7 +22,7 @@
 //
 //
 // $Id: BooleanSolidTypeProcess.hh,v 1.3 2002/06/03 12:09:31 radoone Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // 
 // --------------------------------------------------------------

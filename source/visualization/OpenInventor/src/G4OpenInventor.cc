@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenInventor.cc,v 1.8 2001/07/11 10:09:00 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4OpenInventor.cc,v 1.9 2003/10/29 10:02:06 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 #ifdef G4VIS_BUILD_OI_DRIVER
 
@@ -45,7 +45,7 @@ G4OpenInventor::G4OpenInventor (
 ,G4VGraphicsSystem::Functionality f
 )
 :G4VGraphicsSystem(name,nickname,f)
-,interactorManager(NULL)
+,interactorManager(0)
 {
 }
 

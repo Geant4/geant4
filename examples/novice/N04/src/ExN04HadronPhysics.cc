@@ -22,7 +22,7 @@
 //
 //
 // $Id: ExN04HadronPhysics.cc,v 1.10 2003/06/16 16:49:54 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 
 #include "ExN04HadronPhysics.hh"

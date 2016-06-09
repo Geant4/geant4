@@ -1,0 +1,21 @@
+$Id: History,v 1.1 2003/11/25 09:29:45 gcosmo Exp $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                    BlineTracer History file
+                    ------------------------
+This file should be used by the G4 example coordinator to briefly
+summarize all major modifications introduced in the code and keep
+track of all tags.
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+Nov 25th, 2003 - G.Cosmo  (BlineTracer-V05-02-00)
+------------------------
+- Created from original sources, courtesy of L.Desorgher.
+

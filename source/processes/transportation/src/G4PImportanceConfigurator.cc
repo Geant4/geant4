@@ -21,13 +21,12 @@
 // ********************************************************************
 //
 //
-// $Id: G4PImportanceConfigurator.cc,v 1.4 2003/04/02 16:59:16 dressel Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4PImportanceConfigurator.cc,v 1.6 2003/11/26 14:51:49 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // ----------------------------------------------------------------------
 // Class G4PImportanceConfigurator
 //
-
 // Author: Michael Dressel (Michael.Dressel@cern.ch)
 // ----------------------------------------------------------------------
 
@@ -35,60 +34,66 @@
 
 #include "G4ParallelWorld.hh"
 #include "G4ImportanceAlgorithm.hh"
+#include "G4ParallelImportanceProcess.hh"
 
 G4PImportanceConfigurator::
 G4PImportanceConfigurator(const G4String &particlename,
-			  G4ParallelWorld &parallelWorld,
-			  G4VIStore &istore,
-			  const G4VImportanceAlgorithm *ialg) 
-  :
-  fPlacer(particlename),
-  fPWorld(parallelWorld),
-  fDeleteIalg( ( ! ialg) ),
-  fIalgorithm(( (fDeleteIalg) ? 
-		new G4ImportanceAlgorithm : ialg)),
-  fExaminer(*fIalgorithm, 
-	    parallelWorld.GetParallelStepper(),  
-	    istore),
-  fParallelImportanceProcess(0)
+                                G4ParallelWorld &parallelWorld,
+                                G4VIStore &istore,
+                          const G4VImportanceAlgorithm *ialg) 
+  : fPlacer(particlename),
+    fPWorld(parallelWorld),
+    fDeleteIalg( ( ! ialg) ),
+    fIalgorithm(( (fDeleteIalg) ? new G4ImportanceAlgorithm : ialg)),
+    fExaminer(*fIalgorithm, parallelWorld.GetParallelStepper(), istore),
+    fParallelImportanceProcess(0)
 {
-  if (!fIalgorithm) {
-    G4Exception("ERROR:G4PImportanceConfigurator::G4PImportanceConfigurator: no fIalgorithm!");
+  if (!fIalgorithm)
+  {
+    G4Exception("G4PImportanceConfigurator::G4PImportanceConfigurator()",
+                "InvalidSetup", FatalException, "No algorithm specified !");
   }
 }
 
-
-G4PImportanceConfigurator::~G4PImportanceConfigurator(){
-  if (fParallelImportanceProcess) {
+G4PImportanceConfigurator::~G4PImportanceConfigurator()
+{
+  if (fParallelImportanceProcess)
+  {
     fPlacer.RemoveProcess(fParallelImportanceProcess);
     delete fParallelImportanceProcess;
   }
-  if (fDeleteIalg) {
+  if (fDeleteIalg)
+  {
     delete fIalgorithm;
   }
 }
 
-void G4PImportanceConfigurator::
-Configure(G4VSamplerConfigurator *preConf){
+void
+G4PImportanceConfigurator::Configure(G4VSamplerConfigurator *preConf)
+{
   const G4VTrackTerminator *terminator = 0;
-  if (preConf) {
+  if (preConf)
+  {
     terminator = preConf->GetTrackTerminator();
-  };
+  }
 
   fParallelImportanceProcess = 
     new G4ParallelImportanceProcess(fExaminer, 
-				    fPWorld.GetGeoDriver(), 
-				    fPWorld.GetParallelStepper(),
-				    terminator);
-  if (!fParallelImportanceProcess) {
-    G4Exception("ERROR:G4PImportanceConfigurator::Configure: new failed to create G4ParallelImportanceProcess!");
+                                    fPWorld.GetGeoDriver(), 
+                                    fPWorld.GetParallelStepper(),
+                                    terminator);
+  if (!fParallelImportanceProcess)
+  {
+    G4Exception("G4PImportanceConfigurator::Configure()",
+                "FatalError", FatalException,
+                "Failed to allocate G4ParallelImportanceProcess !");
   }
-  
   fPlacer.AddProcessAsSecondDoIt(fParallelImportanceProcess); 
 }
 
-const G4VTrackTerminator *G4PImportanceConfigurator::
-GetTrackTerminator() const {
+const G4VTrackTerminator *
+G4PImportanceConfigurator::GetTrackTerminator() const
+{
   return fParallelImportanceProcess;
 }
 

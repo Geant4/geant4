@@ -1,3 +1,5 @@
+# $Id: run05.mac,v 1.2 2003/10/08 17:28:30 maire Exp $
+#
 #
 # Macro file for "TestEm2.cc"
 # (can be run in batch, without graphic)
@@ -6,8 +8,8 @@
 #
 /control/verbose 2
 #
-/testem/phys/addPhysics  model
-#/testem/phys/addPhysics  standard
+/testem/phys/addPhysics  standard
+###/testem/phys/addPhysics  g4v52
 /testem/phys/setCuts 1 mm
 #
 /run/initialize
@@ -29,10 +31,10 @@
 /run/beamOn 10
 /run/dumpCouples
 #
-/testem/det/setMat  lAr
+/testem/det/setMat  liquidArgon
 /testem/det/update
 /run/initialize
 /run/beamOn 10
 /run/dumpCouples
-#
+
 

@@ -1,61 +1,113 @@
 
       SUBROUTINE UGLAST
-C
-#include "geant321/gcbank.inc"
-#include "geant321/gcunit.inc"
+*
 #include "geant321/gcflag.inc"
-#include "geant321/gconst.inc"
-#include "geant321/gckine.inc"
-#include "edepo.inc"
-C
+*
+#include "runinfo.inc"
+#include "histo.inc"
+*
+      CHARACTER*4 unitm,unitr
+      DIMENSION transmit(2),reflect(2)
+*
       CALL GLAST
-C
-      IF(IEVENT.GT.0) THEN
-        AEV=FLOAT(IEVENT)
-        SEDEP=SEDEP/AEV
-        SE2=SEDEP2/AEV-SEDEP**2
-        SEDEP2=0.
-        IF(SE2.GT.0.) SEDEP2=SQRT(SE2/AEV)
 *
-        WRITE(CHMAIL,1002)SEDEP,SEDEP2
-        CALL GMAIL(0,0)
-        sstep=sstep/aev
-        s2step=s2step/aev-sstep*sstep
-        sigst=0.
-        if(s2step.gt.0.) sigst=sqrt(s2step/aev)
-        write(6,122)sstep,sigst
-122     format(/,'  mean number of steps=',f15.3,' +- ',f15.3) 
-        sanch=sanch/aev
-        sigch2=sanch2/aev-sanch*sanch
-        sigch=0.
-        if(sigch2.gt.0.) sigch=sqrt(sigch2/aev)
-        sanne=sanne/aev
-        signe2=sanne2/aev-sanne*sanne
-        signe=0.
-        if(signe2.gt.0.) signe=sqrt(signe2/aev)
-        write(6,123) sanch,sigch,sanne,signe
-123     format(/,'  mean nb of charged secondaries=',f15.4,' +- ',f15.4, 
-     +         /,'  mean nb of neutral secondaries=',f15.4,' +- ',f15.4) 
-        sanele=sanele/aev
-        sanpos=sanpos/aev
-        write(6,124)sanele,sanpos
-124     format(/,'  mean nb of e-s = ',f15.4,'  and e+s=',f15.4)
-        stra=stra/aev
-        sref=sref/aev
-        write(6,125)stra,sref
-125     format(/,'  (number) transmission coeff=',e12.4,
-     +           '  reflexion coeff=',e12.4)
-        write(6,126) nth0
-126     format(/,'  nb of (theta<0.001*bin) events=',i6)
+      IF(ievent.le.0) return
+*      
+      PRINT 749
+      PRINT 750,ievent
+*             
+      totevent = float(ievent)
 *
-CCC        CALL HISTDO
+*     energy deposit      
+      fmean = sedep/totevent
+      rms2 = sedep2/totevent-fmean**2
+      rms = 0.
+      if (rms2.gt.0.) rms = sqrt(rms2/totevent)
 *
-        CALL HPLEND
+      call gevkev (fmean,Emean,unitm)
+      call gevkev (rms  ,Erms ,unitr)      
+      print 752, Emean,unitm,Erms,unitr           
 *
-        CALL HRPUT(0,NAME,'N')
-C
-      ENDIF
-C
-1002  FORMAT(5X,'energy deposit=',E12.4,' +- ',E12.4)
-C
+*     track length (charged)      
+      fmean = strkch/totevent
+      rms2 = strkch2/totevent-fmean**2
+      rms = 0.
+      if (rms2.gt.0.) rms = sqrt(rms2/totevent)
+      print 753, fmean,rms
+*
+*     track length (neutral)      
+      fmean = strkne/totevent
+      rms2 = strkne2/totevent-fmean**2
+      rms = 0.
+      if (rms2.gt.0.) rms = sqrt(rms2/totevent)
+      print 754, fmean,rms
+*
+*     number of steps (charged)      
+      fmean = sstpch/totevent
+      rms2 = sstpch2/totevent-fmean**2
+      rms = 0.
+      if (rms2.gt.0.) rms = sqrt(rms2/totevent)
+      print 755, fmean,rms
+*
+*     number of steps (neutral)      
+      fmean = sstpne/totevent
+      rms2 = sstpne2/totevent-fmean**2
+      rms = 0.
+      if (rms2.gt.0.) rms = sqrt(rms2/totevent)
+      print 756, fmean,rms            
+*
+*     number of secondaries
+      gamma = ngamma/totevent
+      elect = nelect/totevent
+      posit = nposit/totevent
+      print 757, gamma,elect,posit
+*
+*     transmission & reflection coefficients
+      transmit(1) = 100.*nbtransm(1)/totevent
+      transmit(2) = 100.*nbtransm(2)/totevent
+      reflect (1) = 100.*nbreflec(1)/totevent
+      reflect (1) = 100.*nbreflec(2)/totevent                  
+      print 761, transmit(2)
+      print 762, transmit(1)
+      print 763, reflect (2)
+      print 764, reflect (1)
+*
+      print 749      
+*
+*
+* *** histograms
+*
+      call HPLEND      
+      call HRPUT(0,fileName,'N')
+*      
+* *** formats
+*
+  749 FORMAT(/ ,80(1H=),/)            
+  750 FORMAT(' Number of events = ', I7)
+*  
+  752 FORMAT(/,' Total energy deposit in absorber per event = ',
+     +       F8.3,A4,' +- ',F6.2,A4)
+*     
+  753 FORMAT(/,' Total track length (charged) in absorber per event = ',
+     +       F8.4,' cm +- ',F8.4, ' cm')
+  754 FORMAT(  ' Total track length (neutral) in absorber per event = ',
+     +       F8.4,' cm +- ',F8.4, ' cm')
+*     
+  755 FORMAT(/,' Number of steps (charged) in absorber per event = ',
+     +       F7.3,' +- ',F7.3)
+  756 FORMAT(  ' Number of steps (neutral) in absorber per event = ',
+     +       F7.3,' +- ',F7.3)
+*     
+  757 FORMAT(/,' Number of secondaries per event : ',
+     +  'gammas = ',F8.3, '; electrons = ',F8.3,'; positrons =',F8.3)
+*     
+  761 FORMAT(/,' Nb of events with the primary particle transmitted = ',
+     +       F6.2, ' %')
+  762 FORMAT(  ' Nb of events with at least 1 particle transmitted ',
+     +       '(same charge as primary) = ',F6.2, ' %')
+  763 FORMAT(/,' Nb of events with the primary particle reflected = ',
+     +       F6.2, ' %')
+  764 FORMAT(  ' Nb of events with at least 1 particle reflected ',
+     +       '(same charge as primary) = ',F6.2, ' %')                                                           
+*
       END

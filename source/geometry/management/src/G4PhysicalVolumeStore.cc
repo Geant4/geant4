@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicalVolumeStore.cc,v 1.12 2003/06/16 16:52:06 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4PhysicalVolumeStore.cc,v 1.13 2003/11/02 14:01:23 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // G4PhysicalVolumeStore
 //
@@ -30,11 +30,12 @@
 //
 // History:
 // 25.07.95 P.Kent Initial version
-// ********************************************************************
+// --------------------------------------------------------------------
 
-#include "globals.hh"
+#include "G4Types.hh"
 #include "G4PhysicalVolumeStore.hh"
 #include "G4GeometryManager.hh"
+#include "G4LogicalVolume.hh"
 
 // ***************************************************************************
 // Static class variables
@@ -153,10 +154,10 @@ void G4PhysicalVolumeStore::DeRegister(G4VPhysicalVolume* pVolume)
 //
 G4PhysicalVolumeStore* G4PhysicalVolumeStore::GetInstance()
 {
-    static G4PhysicalVolumeStore worldStore;
-    if (!fgInstance)
-	{
-	    fgInstance = &worldStore;
-	}
-    return fgInstance;
+  static G4PhysicalVolumeStore worldStore;
+  if (!fgInstance)
+  {
+    fgInstance = &worldStore;
+  }
+  return fgInstance;
 }

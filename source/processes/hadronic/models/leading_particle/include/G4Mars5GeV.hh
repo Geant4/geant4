@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Mars5GeV.hh,v 1.1 2001/12/13 14:59:46 kurasige Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4Mars5GeV.hh,v 1.2 2003/07/01 16:28:45 hpw Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // 
 // ------------------------------------------------------------
@@ -82,7 +82,7 @@ public: // with description
   ~G4Mars5GeV() { ; };
   
   // virtual methods derived from G4VEvtBiasMechanism
-  G4VParticleChange* ApplyYourself( const G4Track &aTrack,
+  G4HadFinalState* ApplyYourself( const G4HadProjectile &aTrack,
 				    G4Nucleus &targetNucleus );
 
  private:
@@ -158,7 +158,7 @@ public: // with description
  private:
   // incident information
   G4double                   incidentWeight;
-  const G4DynamicParticle*   incidentParticle; 
+  const G4HadProjectile*   incidentParticle; 
   G4int                      incidentMarsEncoding;
 
   void GetTargetNuclei(const G4Material*);  //fill up fANucle and fZnucl

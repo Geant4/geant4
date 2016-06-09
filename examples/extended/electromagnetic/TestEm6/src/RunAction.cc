@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: RunAction.cc,v 1.4 2003/06/10 11:49:18 maire Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: RunAction.cc,v 1.5 2003/10/10 10:42:39 maire Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -35,11 +35,10 @@
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"
 #include "G4VVisManager.hh"
-#include "G4ios.hh"
 
 #include "Randomize.hh"
 
-#ifndef G4NOHIST
+#ifdef G4ANALYSIS_USE
  #include "AIDA/AIDA.h"
 #endif
 
@@ -59,7 +58,7 @@ RunAction::~RunAction()
 
 void RunAction::bookHisto()
 {
-#ifndef G4NOHIST
+#ifdef G4ANALYSIS_USE
  // Creating the analysis factory
  AIDA::IAnalysisFactory* af = AIDA_createAnalysisFactory();
  
@@ -92,7 +91,7 @@ void RunAction::bookHisto()
 
 void RunAction::cleanHisto()
 {
-#ifndef G4NOHIST
+#ifdef G4ANALYSIS_USE
   tree->commit();       // Writing the histograms to the file
   tree->close();        // and closing the tree (and the file)
   

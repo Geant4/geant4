@@ -19,7 +19,7 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
-
+//
 #include "G4InuclCollider.hh"
 #include "G4InuclElementaryParticle.hh"
 #include "G4LorentzConvertor.hh"
@@ -30,7 +30,7 @@ typedef std::vector<G4InuclElementaryParticle>::iterator particleIterator;
 typedef std::vector<G4InuclNuclei>::iterator nucleiIterator;
 	 
 G4InuclCollider::G4InuclCollider()
-  : verboseLevel(2) {
+  : verboseLevel(0) {
 
   if (verboseLevel > 3) {
     G4cout << " >>> G4InuclCollider::G4InuclCollider" << G4endl;
@@ -40,7 +40,7 @@ G4InuclCollider::G4InuclCollider()
 G4CollisionOutput G4InuclCollider::collide(G4InuclParticle* bullet,
 					   G4InuclParticle* target) {
 
-  verboseLevel = 2;
+  verboseLevel = 0;
   if (verboseLevel > 3) {
     G4cout << " >>> G4InuclCollider::collide" << G4endl;
   }
@@ -53,40 +53,36 @@ G4CollisionOutput G4InuclCollider::collide(G4InuclParticle* bullet,
   G4InuclElementaryParticle* particle2 =
     dynamic_cast<G4InuclElementaryParticle*>(target);
   
-  if(particle1 && particle2) { // particle + particle 
+  if (particle1 && particle2) { // particle + particle (NOTE: also the h + H(1,1) treated here) 
     if (verboseLevel > 2) {
       particle1->printParticle();
       particle2->printParticle();
     }
-    globalOutput = theElementaryParticleCollider->collide(bullet, target);
-  }
-  else { // needs to call all machinery    	
 
+    globalOutput = theElementaryParticleCollider->collide(bullet, target);
+
+  } else { // needs to call all machinery    	
     G4LorentzConvertor convertToTargetRestFrame;
     G4InteractionCase interCase = bulletTargetSetter(bullet, target);
     G4int intcase = interCase.getInterCase();
      
-    if(intcase > 0) { // ok
-
+    if (intcase > 0) { // ok
       G4InuclNuclei* ntarget =
 	dynamic_cast<G4InuclNuclei*>(interCase.getTarget());
 
       convertToTargetRestFrame.setTarget(ntarget->getMomentum(),
 					 ntarget->getMass());
-
       G4int btype = 0;
       G4double ab = 0.0;
       G4double zb = 0.0;
       G4double at = ntarget->getA();
       G4double zt = ntarget->getZ();
        
-      if(intcase == 1) { // particle with nuclei
-
+      if (intcase == 1) { // particle with nuclei
 	G4InuclElementaryParticle* pbullet = 
 	  dynamic_cast<G4InuclElementaryParticle*>(interCase.getBullet());
          
-	if(pbullet->photon()) {
-
+	if (pbullet->photon()) {
 	  G4cout << " InuclCollider -> can not collide with photon " << G4endl;
 
 	  globalOutput.trivialise(bullet, target);
@@ -97,9 +93,8 @@ G4CollisionOutput G4InuclCollider::collide(G4InuclParticle* bullet,
 					     pbullet->getMass());   
 	  btype = pbullet->type();
 	}; 
-      }
-      else { // nuclei with nuclei
 
+      } else { // nuclei with nuclei
 	G4InuclNuclei* nbullet = 
 	  dynamic_cast<G4InuclNuclei*>(interCase.getBullet());
 
@@ -115,7 +110,7 @@ G4CollisionOutput G4InuclCollider::collide(G4InuclParticle* bullet,
 	G4cout << " ekin in trs " << ekin << G4endl;
       }
 
-      if(inelasticInteractionPossible(bullet, target, ekin)) {
+      if (inelasticInteractionPossible(bullet, target, ekin)) {
 	convertToTargetRestFrame.toTheTargetRestFrame();
 
 	if (verboseLevel > 3) {
@@ -137,21 +132,16 @@ G4CollisionOutput G4InuclCollider::collide(G4InuclParticle* bullet,
 	G4int itry = 0;
 	 
 	while (bad && itry < itry_max) {
-
 	  G4CollisionOutput TRFoutput;
 	  G4CollisionOutput output;
 
 	  itry++;
-	  if(intcase == 1) {
-
+	  if (intcase == 1) {
 	    G4InuclElementaryParticle pbullet(bmom, btype);
 
 	    output = theIntraNucleiCascader->collide(&pbullet, &ntarget);
-	  }
-	  else {
-
+	  } else {
 	    G4InuclNuclei nbullet(ab, zb);
-
 	    nbullet.setMomentum(bmom);
 	    nbullet.setEnergy();
 	    output = theIntraNucleiCascader->collide(&nbullet, &ntarget);
@@ -166,32 +156,25 @@ G4CollisionOutput G4InuclCollider::collide(G4InuclParticle* bullet,
 	  // the rest, if any
 	  TRFoutput.addOutgoingParticles(output.getOutgoingParticles());
 
-	  if(output.numberOfNucleiFragments() == 1) { // there is smth. after
-	    
+	  if (output.numberOfNucleiFragments() == 1) { // there is smth. after	    
 	    G4InuclNuclei cascad_rec_nuclei = output.getNucleiFragments()[0];
-
-	    if(explosion(&cascad_rec_nuclei)) {
-
+	    if (explosion(&cascad_rec_nuclei)) {
 	      if (verboseLevel > 3) {
 		G4cout << " big bang after cascade " << G4endl;
 	      };
 
 	      output = theBigBanger->collide(0,&cascad_rec_nuclei);
 	      TRFoutput.addOutgoingParticles(output.getOutgoingParticles());
-	    }
-	    else {
+	    } else {
 	      output = theNonEquilibriumEvaporator->collide(0, &cascad_rec_nuclei);
 
 	      if (verboseLevel > 3) {
 		G4cout << " After NonEquilibriumEvaporator " << G4endl;
-
 		output.printCollisionOutput();
 	      };
 
 	      TRFoutput.addOutgoingParticles(output.getOutgoingParticles());
-
 	      G4InuclNuclei exiton_rec_nuclei = output.getNucleiFragments()[0];
-
 	      output = theEquilibriumEvaporator->collide(0, &exiton_rec_nuclei);
 
 	      if (verboseLevel > 3) {
@@ -204,20 +187,18 @@ G4CollisionOutput G4InuclCollider::collide(G4InuclParticle* bullet,
 	      TRFoutput.addTargetFragments(output.getNucleiFragments());         
 	    };
 	  };
-
 	 
 	  // convert to the LAB       
 	  G4bool withReflection = convertToTargetRestFrame.reflectionNeeded();       
 	  std::vector<G4InuclElementaryParticle> particles = 
 	    TRFoutput.getOutgoingParticles();
 
-	  if(!particles.empty()) { 
+	  if (!particles.empty()) { 
 	    particleIterator ipart;
 	    for(ipart = particles.begin(); ipart != particles.end(); ipart++) {
-
 	      std::vector<G4double> mom = ipart->getMomentum();
 
-	      if(withReflection) mom[3] = -mom[3];
+	      if (withReflection) mom[3] = -mom[3];
 	      mom = convertToTargetRestFrame.rotate(mom);
 	      ipart->setMomentum(mom); 
 	      mom = convertToTargetRestFrame.backToTheLab(ipart->getMomentum());
@@ -228,11 +209,13 @@ G4CollisionOutput G4InuclCollider::collide(G4InuclParticle* bullet,
            
 	  std::vector<G4InuclNuclei> nucleus = TRFoutput.getNucleiFragments();
 
-	  if(!nucleus.empty()) { 
+	  if (!nucleus.empty()) { 
 	    nucleiIterator inuc;
-	    for(inuc = nucleus.begin(); inuc != nucleus.end(); inuc++) {
+
+	    for (inuc = nucleus.begin(); inuc != nucleus.end(); inuc++) {
 	      std::vector<G4double> mom = inuc->getMomentum(); 
-	      if(withReflection) mom[3] = -mom[3];
+
+	      if (withReflection) mom[3] = -mom[3];
 	      mom = convertToTargetRestFrame.rotate(mom);
 	      inuc->setMomentum(mom);
 	      inuc->setEnergy(); 
@@ -247,8 +230,7 @@ G4CollisionOutput G4InuclCollider::collide(G4InuclParticle* bullet,
 	  if(globalOutput.acceptable()) {
 
 	    return globalOutput;
-	  }
-	  else {
+	  } else {
 	    globalOutput.reset();
 	  }; 
 	};
@@ -261,8 +243,7 @@ G4CollisionOutput G4InuclCollider::collide(G4InuclParticle* bullet,
 	globalOutput.trivialise(bullet, target);
 
 	return globalOutput;        
-      }
-      else {
+      } else {
 
 	if (verboseLevel > 3) {
 	  G4cout << " InuclCollider -> inelastic interaction is impossible " << G4endl
@@ -272,9 +253,9 @@ G4CollisionOutput G4InuclCollider::collide(G4InuclParticle* bullet,
 	globalOutput.trivialise(bullet, target);
 
 	return globalOutput;
-      };	
-    }
-    else {
+      };
+	
+    } else {
 
       if (verboseLevel > 3) {
 	G4cout << " InuclCollider -> inter case " << intcase << G4endl;
@@ -302,23 +283,20 @@ G4bool G4InuclCollider::inelasticInteractionPossible(G4InuclParticle* bullet,
   G4double ab;
   G4double zb;
 
-  if(G4InuclNuclei* nuclei_target = dynamic_cast<G4InuclNuclei*>(target)) {
+  if (G4InuclNuclei* nuclei_target = dynamic_cast<G4InuclNuclei*>(target)) {
     at = nuclei_target->getA();
     zt = nuclei_target->getZ(); 
-    if(G4InuclNuclei* nuclei_bullet = dynamic_cast<G4InuclNuclei*>(bullet)) {
+    if (G4InuclNuclei* nuclei_bullet = dynamic_cast<G4InuclNuclei*>(bullet)) {
       ab = nuclei_bullet->getA();
       zb = nuclei_bullet->getZ();     
-    }
-    else {
-
+    } else {
       G4InuclElementaryParticle* particle =
 	dynamic_cast<G4InuclElementaryParticle*>(bullet);
 
       ab = 1;
       zb = particle->getCharge();
     }; 
-  }
-  else {
+  } else {
     if(G4InuclNuclei* nuclei_bullet = dynamic_cast<G4InuclNuclei*>(bullet)) {
       ab = nuclei_bullet->getA();
       zb = nuclei_bullet->getZ();     
@@ -328,16 +306,22 @@ G4bool G4InuclCollider::inelasticInteractionPossible(G4InuclParticle* bullet,
 
       at = 1;
       zt = particle->getCharge();    
-    }
-    else {
+    } else {
 
       return possible;
     };  
   }; 
 
-  G4double VCOL = coeff * zt * zb / (pow(at, one_third) + pow(ab, one_third));
+  // VCOL used  for testing if elastic collision possible
+  G4double VCOL = coeff * zt * zb / (pow(at, one_third) + pow(ab, one_third)); 
 
-  possible = VCOL < ekin;
+  // possible = VCOL < ekin; // NOTE: inelastic collision if not true
+  possible = true; // we force elastic
+
+  if (verboseLevel > 3) {
+    G4cout << " >>> G4InuclCollider::inelasticInteractionPossible" << G4endl;
+    G4cout << " VCOL: " << VCOL << " ekin: " << ekin << " inelastic possible: " << possible << G4endl;
+  }
 
   return possible;
 
@@ -352,29 +336,28 @@ G4InteractionCase G4InuclCollider::bulletTargetSetter(G4InuclParticle* bullet,
 
   G4InteractionCase interCase;
 
-  if(G4InuclNuclei* nuclei_target = dynamic_cast<G4InuclNuclei*>(target)) {     
-    if(G4InuclNuclei* nuclei_bullet = dynamic_cast<G4InuclNuclei*>(bullet)) { // A + A         
+  if (G4InuclNuclei* nuclei_target = dynamic_cast<G4InuclNuclei*>(target)) {     
+    if (G4InuclNuclei* nuclei_bullet = dynamic_cast<G4InuclNuclei*>(bullet)) { // A + A         
       interCase.setInterCase(2);
-      if(nuclei_target->getA() >= nuclei_bullet->getA()) {
+      if (nuclei_target->getA() >= nuclei_bullet->getA()) {
 	interCase.setBulletTarget(bullet, target);
-      }
-      else {
+      } else {
 	interCase.setBulletTarget(target, bullet);
       }; 
-    }
-    else {
+    } else {
       interCase.setInterCase(1);
       interCase.setBulletTarget(bullet, target);
     }; 
-  }
-  else {
-    if(G4InuclNuclei* nuclei_bullet = dynamic_cast<G4InuclNuclei*>(bullet)) { 
-      if(G4InuclElementaryParticle* part = 
-	 dynamic_cast<G4InuclElementaryParticle*>(target)) {
+  } else {
+    G4InuclNuclei* nuclei_bullet = dynamic_cast<G4InuclNuclei*>(bullet);
+    if (nuclei_bullet) { 
+      G4InuclElementaryParticle* part =
+	dynamic_cast<G4InuclElementaryParticle*>(target);
+      if (part) {
 	interCase.setInterCase(1);
 	interCase.setBulletTarget(target, bullet);
       };
-    };
+    }; 
   };
 
   return interCase;
@@ -394,11 +377,10 @@ G4bool G4InuclCollider::explosion(G4InuclNuclei* target) const {
   G4double eexs = target->getExitationEnergy();
   G4bool explo = true;
 
-  if(a > a_cut) {
+  if (a > a_cut) {
     explo = false;
-  }
-  else {
-    if(eexs < be_cut * bindingEnergy(a, z)) explo = false;
+  } else {
+    if (eexs < be_cut * bindingEnergy(a, z)) explo = false;
   };   
 
   return explo;

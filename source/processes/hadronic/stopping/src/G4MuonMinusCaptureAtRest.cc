@@ -3434,6 +3434,25 @@ void G4MuonMinusCaptureAtRest::DoMuCapture()
     302, 303, 303, 304, 304
   };
 
+  //V.Ivanchenko
+    static G4double zeff[100] = {
+    1.,1.98,2.95,3.89,4.8,5.72,6.61,7.49,8.32,9.12,9.95,10.69,11.48,12.22,
+    12.91,13.64,14.24,14.89,15.53,16.15,16.75,17.38,18.04,18.49,
+    19.06,19.59,20.1,20.66,21.12,21.61,22.02,22.43,22.84,23.24,
+    23.65,24.06,24.47,24.85,25.23,25.61,25.99,26.37,26.69,27.,
+    27.32,27.63,27.95,28.2,28.42,28.64,28.79,29.03,29.27,29.51,
+    29.75,29.99,30.2,30.36,30.53,30.69,30.85,31.01,31.18,31.34,
+    31.48,31.62,31.76,31.9,32.05,32.19,32.33,32.47,32.61,32.76,
+    32.94,33.11,33.29,33.46,33.64,33.81,34.21,34.18,34.,34.1,
+    34.21,34.31,34.42,34.52,34.63,34.73,34.84,34.94,35.04,35.15,
+    35.25,35.36,35.46,35.57,35.67,35.78 };
+
+  chargeTarget = G4int(targetCharge);
+  G4int idxx = chargeTarget-1;
+  if(idxx>99) idxx=99;  
+  G4double q = zeff[idxx];
+  zeff2 = q*q;
+
   // =======
   // === this routine interfaces to FLUKA routines to evaporate
   // === nucleons following muon capture
@@ -3448,7 +3467,6 @@ void G4MuonMinusCaptureAtRest::DoMuCapture()
   txi = cfe * pols;
   tyi = sfe * pols;
   tzi = polc;
-  chargeTarget = G4int(targetCharge);
   //  Choice of the mass number of the target nucleus: use the input
   rndm[0] = G4UniformRand();
   rndm[1] = G4UniformRand();

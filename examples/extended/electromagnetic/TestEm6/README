@@ -1,4 +1,4 @@
-$Id: README,v 1.7 2003/02/04 11:23:36 maire Exp $
+$Id: README,v 1.8 2003/10/10 10:42:35 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -113,9 +113,10 @@ $Id: README,v 1.7 2003/02/04 11:23:36 maire Exp $
      Testem6 produces 6 histograms (saved as testem6.paw) which illustrate
      the final state of the GammaConversionToMuons process.
      See their definitions in RunAction.cc
-     
-     Note that histograms are disabled via the flag G4NOHIST in GNUmakefile.
 
+     Note that, by default, histograms are disabled. To activate them, uncomment
+     the flag G4ANALYSIS_USE in GNUmakefile.
+ 
  8- Using the Anaphe implementation of the AIDA 3.0 histograms:
  --------------------------------------------------------------
 

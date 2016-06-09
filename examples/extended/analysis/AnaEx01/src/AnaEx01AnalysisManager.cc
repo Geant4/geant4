@@ -22,7 +22,7 @@
 //
 //
 // $Id: AnaEx01AnalysisManager.cc,v 1.12 2003/06/20 14:55:45 gbarrand Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // 
 // Guy Barrand 14th Septembre 2000.

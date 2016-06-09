@@ -19,11 +19,11 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
-
+//
 // ====================================================================
 //
 //   H02SteppingAction.cc
-//   $Id: H02SteppingAction.cc,v 1.1 2002/05/28 14:15:48 murakami Exp $
+//   $Id: H02SteppingAction.cc,v 1.2 2003/12/09 15:31:27 gunter Exp $
 //
 // ====================================================================
 

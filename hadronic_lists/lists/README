@@ -1,0 +1,21 @@
+Installation instructions:
+
+ - Download the tar files of the physics simulation engine you want to use.
+ - 'tar -xvf', whereever you want into a diretory called 'lists'.
+ - set the environment:
+   - G4INSTALL as usual to point to your geant4 installation.
+   - G4LISTS_BASE to point to the directory that contains the 'lists' directory
+     for your specific installation of the hadronic physics-lists.
+   - If you wish to work against the 'central' physics lists installation,
+     do NOT set G4LISTS_BASE, and use G4WORKDIR as usual.
+   - type 'gmake' for each physics list, and the packaging library.
+   - copy the example GNUmakefile (GNUmakefile.user.code.example), that comes
+     with the package, to our application area and uncomment the physics lists
+     you wish to use.
+   - To clean the installation of the physics-lists, you can type
+     "gmake clean_lists" from $G4INSTALL/source in your Geant4 installation.
+ 
+Setting default cut values:
+ - The default is: defaultCutValue = 0.7*mm;  
+ - To override this value, please call the 
+  "void SetDefaultCutValue(G4double newCutValue)" method.

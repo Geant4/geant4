@@ -30,6 +30,7 @@
 #include "G4Proton.hh"
 #include "G4Neutron.hh"
 #include "G4LorentzRotation.hh"
+#include "G4HadronicException.hh"
 // #define CHIPSdebug
 // #define CHIPSdebug_1
 
@@ -72,8 +73,8 @@ G4StringChipsParticleLevelInterface::G4StringChipsParticleLevelInterface()
   }
 }
 
-G4VParticleChange* G4StringChipsParticleLevelInterface::
-ApplyYourself(const G4Track& aTrack, G4Nucleus& theNucleus)
+G4HadFinalState* G4StringChipsParticleLevelInterface::
+ApplyYourself(const G4HadProjectile& aTrack, G4Nucleus& theNucleus)
 {
   return theModel.ApplyYourself(aTrack, theNucleus);
 }
@@ -93,7 +94,7 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
     theFastSec->SetMomentum(current4Mom.vect());
     theFastResult->push_back(theFastSec);
     return theFastResult;
-//    G4Exception("G4StringChipsParticleLevelInterface: Only one particle from String models!");
+//    throw G4HadronicException(__FILE__, __LINE__, "G4StringChipsParticleLevelInterface: Only one particle from String models!");
   }
   
   // target properties needed in constructor of quasmon, and for boosting to
@@ -347,12 +348,30 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
   G4QHadronVector * output = 0;
   if (particleCount!=0 && resA!=0)
   {
-    G4QCHIPSWorld aWorld(nop);              // Create CHIPS World of nop particles
+   //  G4QCHIPSWorld aWorld(nop);              // Create CHIPS World of nop particles
+    G4QCHIPSWorld::Get()->GetParticles(nop);
     G4QEnvironment* pan= new G4QEnvironment(projHV, targetPDGCode);
+    try
+    {
+      output = pan->Fragment();
+    }
+    catch(G4HadronicException & aR)
+    {
+      G4cerr << "Exception thrown passing through G4StringChipsParticleLevelInterface "<<G4endl;
+      G4cerr << " targetPDGCode = "<< targetPDGCode <<G4endl;
+      G4cerr << " The projectile momentum = "<<1./MeV*proj4Mom<<G4endl;
+      G4cerr << " The target momentum = "<<1./MeV*targ4Mom<<G4endl<<G4endl;
+      G4cerr << " Dumping the information in the pojectile list"<<G4endl;
+      for(size_t i=0; i< projHV.size(); i++)
+      {
+        G4cerr <<"  Incoming 4-momentum and PDG code of "<<i<<"'th hadron: "
+	       <<" "<< projHV[i]->Get4Momentum()<<" "<<projHV[i]->GetPDGCode()<<G4endl;
+      }
+      throw;
+    }
     // clean up particles
     std::for_each(projHV.begin(), projHV.end(), DeleteQHadron());
     projHV.clear();
-    output = pan->Fragment();
     delete pan;
   }
   else 
@@ -451,17 +470,26 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
     G4cout << "Particle code produced = "<< pdgCode <<G4endl;
 #endif
 
+    if(theDefinition)
+    {
     theSec = new G4ReactionProduct(theDefinition);
     G4LorentzVector current4Mom = output->operator[](particle)->Get4Momentum();
     current4Mom.boost(targ4Mom.boostVector());
     theSec->SetTotalEnergy(current4Mom.t());
     theSec->SetMomentum(current4Mom.vect());
     theResult->push_back(theSec);
+    }
+    else
+    {
+      G4cerr << G4endl<<"WARNING: "<<G4endl;
+      G4cerr << "Getting unknown pdgCode from chips in ParticleLevelInterface"<<G4endl;
+      G4cerr << "skipping particle with pdgCode = "<<pdgCode<<G4endl<<G4endl;
+    }
     
 #ifdef CHIPSdebug
     G4cout <<"CHIPS particles "<<theDefinition->GetPDGCharge()<<" "
            << theDefinition->GetPDGEncoding()<<" "
-	   << current4Mom <<G4endl; 
+	   << output->operator[](particle)->Get4Momentum() <<G4endl; 
 #endif
 
     delete output->operator[](particle);

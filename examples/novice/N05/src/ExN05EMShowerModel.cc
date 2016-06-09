@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: ExN05EMShowerModel.cc,v 1.7 2002/01/09 17:24:19 ranjard Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: ExN05EMShowerModel.cc,v 1.8 2003/11/10 14:41:14 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 #include "ExN05EMShowerModel.hh"
 #include "ExN05EnergySpot.hh"
@@ -227,16 +227,18 @@ void ExN05EMShowerModel::FillFakeStep(const ExN05EnergySpot &eSpot)
 	SetWorldVolume(G4TransportationManager::GetTransportationManager()->
 		       GetNavigatorForTracking()->GetWorldVolume());
       fpNavigator->
-	LocateGlobalPointAndUpdateTouchable(eSpot.GetPosition(),
-					    fTouchableHandle(),
+	LocateGlobalPointAndUpdateTouchableHandle(eSpot.GetPosition(),
+                                            G4ThreeVector(0.,0.,0.),
+					    fTouchableHandle,
 					    false);
       fNaviSetup = true;
     }
   else
     {
       fpNavigator->
-	LocateGlobalPointAndUpdateTouchable(eSpot.GetPosition(),
-					    fTouchableHandle());
+	LocateGlobalPointAndUpdateTouchableHandle(eSpot.GetPosition(),
+                                            G4ThreeVector(0.,0.,0.),
+					    fTouchableHandle);
      }
   //--------------------------------------
   // Fills attribute of the G4Step needed

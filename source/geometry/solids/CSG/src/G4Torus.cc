@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Torus.cc,v 1.29 2003/06/16 16:53:40 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4Torus.cc,v 1.33 2003/11/03 18:17:32 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // 
 // class G4Torus
@@ -39,7 +39,7 @@
 // 03.10.00 E.Medernach: SafeNewton added
 // 11.01.01 E.Medernach: Use G4PolynomialSolver to find roots
 //
-// ********************************************************************
+// --------------------------------------------------------------------
 
 #include "G4Torus.hh"
 
@@ -89,13 +89,11 @@ G4Torus::SetAllParameters( G4double pRmin,
   }
   else
   {
-    G4cout << "ERROR - G4Torus()::SetAllParameters(): " << GetName() << G4endl
-           << "        Invalid swept radius !" << G4endl
-           << "pRtor = " << pRtor << ", pRmax = " << pRmax << G4endl;
     G4cerr << "ERROR - G4Torus()::SetAllParameters(): " << GetName() << G4endl
            << "        Invalid swept radius !" << G4endl
            << "pRtor = " << pRtor << ", pRmax = " << pRmax << G4endl;
-    G4Exception("G4Torus::SetAllParameters() - invalid swept radius");
+    G4Exception("G4Torus::SetAllParameters()",
+                "InvalidSetup", FatalException, "Invalid swept radius.");
   }
 
   // Check radii
@@ -108,13 +106,11 @@ G4Torus::SetAllParameters( G4double pRmin,
   }
   else
   {
-    G4cout << "ERROR - G4Torus()::SetAllParameters(): " << GetName() << G4endl
-           << "        Invalid values for radii !" << G4endl
-           << "        pRmin = " << pRmin << ", pRmax = " << pRmax << G4endl;
     G4cerr << "ERROR - G4Torus()::SetAllParameters(): " << GetName() << G4endl
            << "        Invalid values for radii !" << G4endl
            << "        pRmin = " << pRmin << ", pRmax = " << pRmax << G4endl;
-    G4Exception("G4Torus::SetAllParameters() - invalid radii");
+    G4Exception("G4Torus::SetAllParameters()",
+                "InvalidSetup", FatalException, "Invalid radii.");
   }
 
   // Check angles
@@ -125,13 +121,11 @@ G4Torus::SetAllParameters( G4double pRmin,
     if (pDPhi > 0)   fDPhi = pDPhi ;
     else
     {
-      G4cout << "ERROR - G4Torus::SetAllParameters(): " << GetName() << G4endl
-             << "        Negative delta-Phi ! - "
-             << pDPhi << G4endl;
       G4cerr << "ERROR - G4Torus::SetAllParameters(): " << GetName() << G4endl
              << "        Negative Z delta-Phi ! - "
              << pDPhi << G4endl;
-      G4Exception("G4Torus::SetAllParameters() - invalid dphi");
+     G4Exception("G4Torus::SetAllParameters()",
+                 "InvalidSetup", FatalException, "Invalid dphi.");
     }
   }
   
@@ -1134,7 +1128,9 @@ G4ThreeVector G4Torus::SurfaceNormal( const G4ThreeVector& p ) const
       break;
     default:
       DumpInfo();
-      G4Exception("G4Torus::SurfaceNormal() - Logic error");
+      G4Exception("G4Torus::SurfaceNormal()",
+                  "LogicError", FatalException,
+                  "Undefined side for valid surface normal to solid.");
       break ;
   } 
   return norm ;
@@ -1508,7 +1504,7 @@ G4double G4Torus::DistanceToIn( const G4ThreeVector& p,
 
 G4double G4Torus::DistanceToIn( const G4ThreeVector& p ) const
 {
-  G4double safe, safe1, safe2 ;
+  G4double safe=0.0, safe1, safe2 ;
   G4double phiC, cosPhiC, sinPhiC, safePhi, ePhi, cosPsi ;
   G4double rho2, rho, pt2, pt ;
     
@@ -2075,7 +2071,9 @@ G4double G4Torus::DistanceToOut( const G4ThreeVector& p,
         G4cout << "v.z() = "   << v.z() << G4endl << G4endl;
         G4cout << "Proposed distance :" << G4endl << G4endl;
         G4cout << "snxt = " << snxt/mm << " mm" << G4endl << G4endl;
-        G4Exception("G4Torus::DistanceToOut() - Invalid enum");
+        G4Exception("G4Torus::DistanceToOut()",
+                    "LogicError", FatalException,
+                    "Undefined side for valid surface normal to solid.");
         break;
     }
   }
@@ -2094,7 +2092,7 @@ G4double G4Torus::DistanceToOut( const G4ThreeVector& p,
 
 G4double G4Torus::DistanceToOut( const G4ThreeVector& p ) const
 {
-  G4double safe,safeR1,safeR2;
+  G4double safe=0.0,safeR1,safeR2;
   G4double rho2,rho,pt2,pt ;
   G4double safePhi,phiC,cosPhiC,sinPhiC,ePhi;
   rho2 = p.x()*p.x() + p.y()*p.y() ;
@@ -2112,8 +2110,8 @@ G4double G4Torus::DistanceToOut( const G4ThreeVector& p ) const
      G4cout << "p.x() = "   << p.x()/mm << " mm" << G4endl ;
      G4cout << "p.y() = "   << p.y()/mm << " mm" << G4endl ;
      G4cout << "p.z() = "   << p.z()/mm << " mm" << G4endl << G4endl ;
-     G4cout << "G4Torus::DistanceToOut(p) - point p is outside ?!" << G4endl ;
-     G4cerr << "G4Torus::DistanceToOut(p) - point p is outside ?!" << G4endl ;
+     G4Exception("G4Torus::DistanceToOut(p)",
+                 "Notification", JustWarning, "Point p is outside !?" );
   }
 #endif
 #if DEBUGTORUS
@@ -2232,7 +2230,9 @@ G4Torus::CreateRotatedVertices( const G4AffineTransform& pTransform,
   else
   {
     DumpInfo();
-    G4Exception("G4Torus::CreateRotatedVertices() - Out of memory !");
+    G4Exception("G4Torus::CreateRotatedVertices()",
+                "FatalError", FatalException,
+                "Error in allocation of vertices. Out of memory !");
   }
   return vertices;
 }

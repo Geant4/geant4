@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4GlobalFastSimulationManager.cc,v 1.12 2002/12/04 21:29:50 asaim Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 //  
 //---------------------------------------------------------------

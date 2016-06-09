@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4UIGainServer.hh,v 1.4 2003/06/16 16:55:50 gunter Exp $
-// $Name: geant4-05-02 $
+// $Name: geant4-06-00 $
 //
 
 

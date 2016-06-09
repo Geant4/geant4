@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4UIWin32.cc,v 1.9 2003/06/16 16:55:59 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // G.Barrand
 

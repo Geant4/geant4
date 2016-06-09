@@ -20,11 +20,12 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
+// $Id: G4LineCurrentMagField.cc,v 1.4 2003/10/31 14:35:54 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-00 $
+// -------------------------------------------------------------------
+
 #include "G4LineCurrentMagField.hh"
 #include "globals.hh"
-#include "geomdefs.hh"
-
-
 
 G4LineCurrentMagField::G4LineCurrentMagField(G4double pFieldConstant)
 {
@@ -34,15 +35,13 @@ G4LineCurrentMagField::G4LineCurrentMagField(G4double pFieldConstant)
 
 G4LineCurrentMagField::~G4LineCurrentMagField()
 {
-   ;
 }
 
 ///////////////////////////////////////////////////////////////////////////
 
 
-void
-   G4LineCurrentMagField::GetFieldValue( const G4double yTrack[7],
-                                               G4double B[3]      ) const  
+void G4LineCurrentMagField::GetFieldValue( const G4double yTrack[7],
+                                                 G4double B[3]      ) const  
 {
    //   G4double fFieldConstant = 100 ;
    G4double a = 1.00*mm ;   // mm -> m 
@@ -53,8 +52,6 @@ void
    B[0] = -Br*y/r ;
    B[1] = Br*x/r ;
    B[2] = 0 ;
-   return ;
 }
 
 // -----------------------------------------------------------------
-

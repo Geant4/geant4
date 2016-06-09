@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4LowEnergyBremsstrahlung.cc,v 1.63 2003/06/16 17:00:10 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4LowEnergyBremsstrahlung.cc,v 1.66 2003/11/06 12:53:04 pia Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 // 
 // --------------------------------------------------------------
 //
@@ -56,6 +56,7 @@
 // 28.02.03 V.Ivanchenko    Filename is defined in the constructor
 // 24.03.2003 P.Rodrigues Changes to accommodate new angular generators
 // 20.05.2003 MGP  Removed memory leak related to angularDistribution
+// 06.11.2003 MGP  Improved user interface to select angular distribution model
 //
 // --------------------------------------------------------------
 
@@ -64,6 +65,8 @@
 #include "G4BremsstrahlungCrossSectionHandler.hh"
 #include "G4VBremAngularDistribution.hh"
 #include "G4ModifiedTsai.hh"
+#include "G4Generator2BS.hh"
+#include "G4Generator2BN.hh"
 #include "G4VDataSetAlgorithm.hh"
 #include "G4LogLogInterpolation.hh"
 #include "G4VEMDataSet.hh"
@@ -87,7 +90,6 @@ G4LowEnergyBremsstrahlung::G4LowEnergyBremsstrahlung(const G4String& nam)
 }
 
 /*
-// Commented out for release 5.2 (June 2003), allowing no interface change
 G4LowEnergyBremsstrahlung::G4LowEnergyBremsstrahlung(const G4String& nam, G4VBremAngularDistribution* distribution)
   : G4eLowEnergyLoss(nam),
     crossSectionHandler(0),
@@ -305,13 +307,8 @@ G4VParticleChange* G4LowEnergyBremsstrahlung::PostStepDoIt(const G4Track& track,
 
   G4double tGamma = energySpectrum->SampleEnergy(Z, tCut, kineticEnergy, kineticEnergy);
   G4double totalEnergy = kineticEnergy + electron_mass_c2;
-  G4double initial_momentum = sqrt((totalEnergy + electron_mass_c2)*kineticEnergy);
-
   G4double finalEnergy = kineticEnergy - tGamma; // electron/positron final energy  
-  G4double totalFinalEnergy = finalEnergy +  electron_mass_c2;
-  G4double final_momentum =  sqrt((totalFinalEnergy + electron_mass_c2)*finalEnergy);
-
-  G4double theta = angularDistribution->PolarAngle(kineticEnergy,initial_momentum,finalEnergy,final_momentum,Z);
+  G4double theta = angularDistribution->PolarAngle(kineticEnergy,finalEnergy,Z);
 
   G4double phi   = twopi * G4UniformRand();
   G4double dirZ  = cos(theta);
@@ -392,3 +389,29 @@ void G4LowEnergyBremsstrahlung::SetAngularGenerator(G4VBremAngularDistribution* 
   angularDistribution = distribution;
   angularDistribution->PrintGeneratorInformation();
 }
+
+void G4LowEnergyBremsstrahlung::SetAngularGenerator(const G4String& name)
+{
+  if (name == "tsai") 
+    {
+      delete angularDistribution;
+      angularDistribution = new G4ModifiedTsai("TsaiGenerator");
+    }
+  else if (name == "2bn")
+    {
+      delete angularDistribution;
+      angularDistribution = new G4Generator2BN("2BNGenerator");
+    }
+  else if (name == "2bs")
+    {
+       delete angularDistribution;
+       angularDistribution = new G4Generator2BS("2BSGenerator");
+    }
+  else
+    {
+      G4Exception("G4LowEnergyBremsstrahlung::SetAngularGenerator - generator does not exist");
+    }
+
+  angularDistribution->PrintGeneratorInformation();
+}
+

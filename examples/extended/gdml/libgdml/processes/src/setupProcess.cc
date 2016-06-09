@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: setupProcess.cc,v 1.3 2002/06/03 12:09:32 radoone Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: setupProcess.cc,v 1.4 2003/07/04 14:55:39 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // 
 // --------------------------------------------------------------
@@ -109,7 +109,7 @@ public:
   }
 
   // Analogical to SAX characters callback, it's called for ignorableWhitespace too!
-  virtual void Characters( const std::string& name ) {
+  virtual void Characters( const std::string& ) {
     // Irrelevant in this process
   }
 

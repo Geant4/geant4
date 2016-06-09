@@ -1,4 +1,4 @@
-$Id: README,v 1.10 2002/11/14 16:33:48 santin Exp $
+$Id: README,v 1.11 2003/12/02 17:30:37 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -6,7 +6,7 @@ $Id: README,v 1.10 2002/11/14 16:33:48 santin Exp $
      =========================================================
 
 
-NEW: Nov 2002: Migration to AIDA 3.0 - see below
+NEW: Nov 2002: Migration to AIDA 3 - see below
 
 
 Introduction
@@ -49,26 +49,19 @@ setenv G4UI_BUILD_GAG_SESSION       1
 setenv G4UI_USE_GAG                 1
 
 #set up VRMLview
-setenv G4VIS_BUILD_VRMLFILE_DRIVER  1
 setenv G4VIS_USE_VRML               1
-setenv G4VIS_USE_VRMLFILE           1
 setenv G4VRMLFILE_MAX_FILE_NUM     100
 setenv G4VRMLFILE_VIEWER        vrmlview    #if installed
 setenv G4VIS_USE_VRML               1
-setenv G4VIS_USE_VRMLFILE           1
-setenv PATH ${PATH}:"/afs/cern.ch/sw/contrib/VRML/bin/Linux"
+setenv PATH ${PATH}:"/afs/cern.ch/sw/contrib/VRML/bin/Linux"  # example at CERN
 
 #set up OpenGL or Mesa 
 setenv G4VIS_BUILD_OPENGLX_DRIVER   1
 setenv G4VIS_USE_OPENGLX            1
-setenv OGLHOME /afs/cern.ch/sw/geant4/dev/Mesa/Linux-g++
 
 #set up DAWN
 setenv G4VIS_BUILD_DAWN_DRIVER      1
-setenv G4VIS_BUILD_DAWNFILE_DRIVER  1  
 setenv G4VIS_USE_DAWN               1
-setenv G4VIS_USE_DAWNFILE           1
-setenv PATH ${PATH}:"/afs/cern.ch/sw/geant4/dev/DAWN/Linux-g++"
 
 NOTE: The geometry is refreshed on the viewer at the beginning of each run, 
       but the tracks are plotted only in case an interesting event occurs. 
@@ -81,11 +74,12 @@ Analysis
 Set up for the AIDA 3.0 interface:
 In case the variable G4ANALYSIS_USE is set:
 setenv G4ANALYSIS_USE               1
-relevant information from the simulation is processed in the XrayTelAnalysis class and 
-saved, through the AIDA interface, to Histograms and Tuples.
+relevant information from the simulation is processed in the XrayTelAnalysis
+class and saved, through the AIDA interface, to Histograms and Tuples.
 Compilation and link flags to hook any AIDA compliant system 
 are passed to the Geant4 GNUmakefile system by using the "aida-config" tool
-that should come with any AIDA compliant system. Specifically in the GNUmakefile you find the 2 lines
+that should come with any AIDA compliant system.
+Specifically in the GNUmakefile you find the 2 lines:
   CPPFLAGS += `aida-config --include`
   LDFLAGS += `aida-config --lib`
 
@@ -100,38 +94,30 @@ a new window is opened for on-line plotting.
 NOTE: The histograms are plotted or refreshed only in case an interesting event occurs. 
       This is the case only for about 1 every 10**4 events.
 
-
 You may need to add the AIDA tool path to your run-time library path 
 setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:`aida-config -r`
 
 
 
-
-IMPORTANT WARNING! 
-setenv G4ANALYSIS_BUILD  1 
-must always be set to build the example even if the analysis option 
-is not required 
-
-
 Sources
 -------
 
-GAG can be obtained from
+GAG can be found in:
 
-http://erpc1.naruto-u.ac.jp/~geant4/
+geant4/environments/MOMO
 
 OpenGL Mesa needs to be installed prior to building Geant4 and can be
-downloaded from
+downloaded from:
 
-http://www.mesa3d.org/download.html
+http://www.mesa3d.org
 
-DAWN can be obtained from
+DAWN can be obtained from:
 
-http://133.7.51.8/dawn/
+http://geant4.kek.jp/~tanaka/
 
-VRMLview for Linux can be obtained from
+VRMLview for Linux can be obtained from:
 
-
+http://www.sim.no
 
 2. Run
 To execute a sample simulation with visualisation of proton tracks
@@ -145,10 +131,6 @@ visualisation macros provided are
   - opengl.mac  for OpenGL display
   - vrml.mac    for VRML display and output file
   - dawn.mac    for dawn display and PS output file
-
-You may need to add some paths to your run-time libraries env. variable,
-for example:
-$ setenv LD_LIBRARY_PATH $OGLHOME/lib
 
 To execute a run without visualisation use 
   - test.mac
@@ -179,12 +161,11 @@ http://www.space.qinetiq.com/geant4/gspm.html
 
 6. Analysis
 
-Presently, the Anaphe tool (http://www.cern.ch/anaphe) 
-(version 5) provides an implementation of AIDA 3.0, 
+Presently, the Anaphe tool (http://cern.ch/anaphe) 
+(version 5) provides an implementation of AIDA 3, 
 other packages as JAS will follow soon.  
 
 To build and execute the example on platforms where there is no
 implementation of the analysis system, the environment variables 
-must not be set, except for G4ANALYSIS_BUILD which is required for 
-building the executable.
+must not be set.
 

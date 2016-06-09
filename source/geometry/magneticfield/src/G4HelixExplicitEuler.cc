@@ -21,23 +21,20 @@
 // ********************************************************************
 //
 //
-// $Id: G4HelixExplicitEuler.cc,v 1.4 2001/07/11 09:59:11 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4HelixExplicitEuler.cc,v 1.5 2003/10/31 14:35:54 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
-#include "G4HelixExplicitEuler.hh"
-#include "G4ThreeVector.hh"
-
 //
 //  Helix Explicit Euler: x_1 = x_0 + helix(h)
 //  with helix(h) being a helix piece of length h
+//  most simple approach for solving linear differential equations.
+//  Take the current derivative and add it to the current position.
+//
 //  W.Wander <wwc@mit.edu> 12/09/97 
-//
+// -------------------------------------------------------------------
 
-// -------------------------------------------------------------------------
-
-// most simple approach for solving linear differential equations.
-// Take the current derivative and add it to the current position.
-//
+#include "G4HelixExplicitEuler.hh"
+#include "G4ThreeVector.hh"
 
 void
 G4HelixExplicitEuler::DumbStepper( const G4double  yIn[],
@@ -48,5 +45,4 @@ G4HelixExplicitEuler::DumbStepper( const G4double  yIn[],
   AdvanceHelix(yIn, Bfld, h, yOut);
 
   // NormaliseTangentVector( yOut );  // this could harm more than it helps 
-  return ;
 }  

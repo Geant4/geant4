@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4LogicalVolumeStore.cc,v 1.11 2003/06/16 16:52:05 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4LogicalVolumeStore.cc,v 1.12 2003/11/02 14:01:23 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // G4LogicalVolumeStore
 //
@@ -30,9 +30,9 @@
 //
 // History:
 // 10.07.95 P.Kent Initial version
-// ********************************************************************
+// --------------------------------------------------------------------
 
-#include "globals.hh"
+#include "G4Types.hh"
 #include "G4LogicalVolumeStore.hh"
 #include "G4GeometryManager.hh"
 
@@ -113,7 +113,7 @@ void G4LogicalVolumeStore::Clean()
 //
 void G4LogicalVolumeStore::Register(G4LogicalVolume* pVolume)
 {
-    GetInstance()->push_back(pVolume);
+  GetInstance()->push_back(pVolume);
 }
 
 // ***************************************************************************
@@ -141,10 +141,10 @@ void G4LogicalVolumeStore::DeRegister(G4LogicalVolume* pVolume)
 //
 G4LogicalVolumeStore* G4LogicalVolumeStore::GetInstance()
 {
-    static G4LogicalVolumeStore worldStore;
-    if (!fgInstance)
-	{
-	    fgInstance = &worldStore;
-	}
-    return fgInstance;
+  static G4LogicalVolumeStore worldStore;
+  if (!fgInstance)
+  {
+    fgInstance = &worldStore;
+  }
+  return fgInstance;
 }

@@ -20,6 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
+// $Id: G4eBremsstrahlungModel.cc,v 1.14 2003/07/21 12:52:23 vnivanch Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // -------------------------------------------------------------------
 //
@@ -63,7 +65,7 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4eBremsstrahlungModel::G4eBremsstrahlungModel(const G4ParticleDefinition* p, 
+G4eBremsstrahlungModel::G4eBremsstrahlungModel(const G4ParticleDefinition* p,
                                                const G4String& nam)
   : G4VEmModel(nam),
   particle(0),
@@ -141,8 +143,8 @@ void G4eBremsstrahlungModel::Initialise(const G4ParticleDefinition* p,
 
   for (size_t ii=0; ii<partialSumSigma.size(); ii++){
     G4DataVector* a=partialSumSigma[ii];
-    if ( a )  delete a;    
-  } 
+    if ( a )  delete a;
+  }
   partialSumSigma.clear();
   for (size_t i=0; i<numOfCouples; i++) {
     const G4MaterialCutsCouple* couple = theCoupleTable->GetMaterialCutsCouple(i);
@@ -156,7 +158,7 @@ void G4eBremsstrahlungModel::Initialise(const G4ParticleDefinition* p,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4eBremsstrahlungModel::ComputeDEDX(const G4Material* material,
+G4double G4eBremsstrahlungModel::ComputeDEDX(const G4MaterialCutsCouple* couple,
                                              const G4ParticleDefinition* p,
                                                    G4double kineticEnergy,
                                                    G4double cutEnergy)
@@ -165,7 +167,7 @@ G4double G4eBremsstrahlungModel::ComputeDEDX(const G4Material* material,
   if(kineticEnergy < lowKinEnergy) return 0.0;
 
   const G4double thigh = 100.*GeV;
-  
+
   G4double cut = std::min(cutEnergy, kineticEnergy);
 
   G4double rate, loss;
@@ -173,6 +175,7 @@ G4double G4eBremsstrahlungModel::ComputeDEDX(const G4Material* material,
   const G4double coef1 = -0.5;
   const G4double coef2 = 2./9.;
 
+  const G4Material* material = couple->GetMaterial();
   const G4ElementVector* theElementVector = material->GetElementVector();
   const G4double* theAtomicNumDensityVector = material->GetAtomicNumDensityVector();
 
@@ -194,7 +197,7 @@ G4double G4eBremsstrahlungModel::ComputeDEDX(const G4Material* material,
 
     // extrapolation for KineticEnergy>100 GeV
     } else {
-      
+
       //      G4double xhigh = log(thigh/electron_mass_c2);
       G4double cuthigh = thigh*0.5;
 
@@ -330,9 +333,9 @@ G4double G4eBremsstrahlungModel::ComputeBremLoss(G4double Z, G4double T,
   G4double delz = 1.e6;
   for (G4int ii=0; ii<NZ; ii++)
     {
-      G4double dz = abs(Z-ZZ[ii]); 
+      G4double dz = abs(Z-ZZ[ii]);
       if(dz < delz)  {
-        iz = ii; 
+        iz = ii;
         delz = dz;
       }
     }
@@ -351,7 +354,7 @@ G4double G4eBremsstrahlungModel::ComputeBremLoss(G4double Z, G4double T,
   G4double E = T+electron_mass_c2 ;
 
   loss = Z*(Z+ksi)*E*E/(T+E)*exp(beta*log(Cut/T))*(2.-clossh*exp(log(Z)/4.));
-  if (T <= Tlim) loss /= exp(closslow*log(Tlim/T)); 
+  if (T <= Tlim) loss /= exp(closslow*log(Tlim/T));
   if( T <= Cut)  loss *= exp(alosslow*log(T/Cut));
 
   //  correction
@@ -390,7 +393,7 @@ G4double G4eBremsstrahlungModel::PositronCorrFactorLoss(G4double Z,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4eBremsstrahlungModel::CrossSection(const G4Material* material,
+G4double G4eBremsstrahlungModel::CrossSection(const G4MaterialCutsCouple* couple,
                                               const G4ParticleDefinition* p,
                                                     G4double kineticEnergy,
                                                     G4double cutEnergy,
@@ -402,6 +405,7 @@ G4double G4eBremsstrahlungModel::CrossSection(const G4Material* material,
   G4double cut  = std::max(cutEnergy, minThreshold);
   if(cut >= tmax) return cross;
 
+  const G4Material* material = couple->GetMaterial();
   const G4ElementVector* theElementVector = material->GetElementVector() ;
   const G4double* theAtomNumDensityVector = material->GetAtomicNumDensityVector();
 

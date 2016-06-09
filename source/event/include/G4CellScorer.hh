@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4CellScorer.hh,v 1.1 2002/10/28 10:06:00 dressel Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // ----------------------------------------------------------------------
 // Class G4CellScorer

@@ -1,4 +1,4 @@
-$Id: History,v 1.60 2003/05/22 15:46:52 gcosmo Exp $
+$Id: History,v 1.66 2003/12/01 14:54:14 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,50 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Dec 01, 2003  P.Gumplinger                 geommng-V05-02-05
+- G4LogicalSurface[.hh.icc]: modified to use G4SurfaceProperty instead
+  of G4OpticalSurface. Requires tag "materials-V05-02-00".
+
+Nov 04, 2003  G.Cosmo                      geommng-V05-02-04
+- G4LogicalVolume.hh: added inclusion of assert.h required by .icc file.
+
+Nov 01, 2003  G.Cosmo                      geommng-V05-02-03
+- Code cleanup and headers inclusion review (replaced by forward
+  declarations where necessary).
+- G4VPVParameterisation: added G4Polycone and G4Polyhedra to list of
+  possible parameterisations by dimension.
+
+Oct 24, 2003  G.Cosmo                      geommng-V05-02-02
+- Migrated calls to G4Exception to new scheme.
+
+Oct 21, 2003  M.Asai                       geommng-V05-02-01
+- Introducing G4VUserRegionInformation class.
+- G4VPVParameterisation: added G4Orb. (V.Grichine)
+
+Sep 30, 2003  G. Cosmo                     geommng-V05-02-00
+- Logical reorganisation and restructure of modules.
+  Moved files to geometry/volumes:
+    G4AssemblyVolume[.hh.icc.cc]
+    G4PVParameterised[.hh.cc]
+    G4PVPlacement[.hh.cc]
+    G4PVReplica[.hh.cc]
+  Moved files to new module geometry/navigation:
+    G4DrawVoxels[.hh.cc]
+  Imported files from geometry/volumes:
+    G4BlockingList[.hh.icc.cc]
+    G4IdentityTrajectoryFilter[.hh.cc]
+    G4VCurvedTrajectoryFilter[.hh.cc]
+- G4VPhysicalVolume[.hh.icc.cc]:
+  o Removed pointer to mother physical volume and related accessor
+    methods: SetMother()/GetMother().
+  o Removed pure virtual method Setup(G4VPhysicalVolume*), no longer
+    necessary. Subclasses will require modification as well.
+- G4LogicalVolume.icc:
+  o Updated/fixed initialisation of data and fast-simulation manager
+    according to above changes.
+- G4SmartVoxelHeader.cc:
+  o Cleared usage of PV-Setup(), according to above changes.
 
 May 19, 2003  G. Cosmo                     geommng-V05-01-01
 - G4LogicalVolume.cc: notify removal of root-logical-volume from G4Region

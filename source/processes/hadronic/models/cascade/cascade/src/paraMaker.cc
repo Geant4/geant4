@@ -19,7 +19,7 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
-
+//
 #include "G4InuclSpecialFunctions.hh"
 
 std::pair<std::vector<G4double>, std::vector<G4double> > G4InuclSpecialFunctions::paraMaker(G4double Z) {

@@ -1,11 +1,11 @@
 **********************************************
- Geant4 version $Name: geant4-05-02 $
-                                (27-June-2003)
+ Geant4 version $Name: geant4-06-00 $
+                                (12-December-2003)
              Copyright : Geant4 Collaboration
 **********************************************
 G4Material: Mean excitation energy is changed for Water Iold= 70.8926eV; Inew= 75 eV;
 
-***** Table : Nb of materials = 11 *****
+***** Table : Nb of materials = 12 *****
 
  Material:      Air     density:  1.290 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength: 285.161 m  
    --->  Element: Nitrogen  N   Z =  7.0   N =  14.0   A =  14.01 g/mole  fractionMass:  70.00 %  Abundance  72.71 %
@@ -29,6 +29,11 @@ G4Material: Mean excitation energy is changed for Water Iold= 70.8926eV; Inew= 7
 
  Material: Germanium     density:  5.323 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   2.301 cm 
    --->  Element: Germanium      Z = 32.0   N =  72.6   A =  72.61 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+
+ Material:      BGO     density:  7.100 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   1.123 cm 
+   --->  Element:   Oxygen  O   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:  15.41 %  Abundance  63.16 %
+   --->  Element: Germanium Ge   Z = 32.0   N =  72.6   A =  72.59 g/mole  fractionMass:  17.48 %  Abundance  15.79 %
+   --->  Element:  Bismuth Bi   Z = 83.0   N = 209.0   A = 208.98 g/mole  fractionMass:  67.10 %  Abundance  21.05 %
 
  Material:     Iron     density:  7.870 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   1.759 cm 
    --->  Element:     Iron      Z = 26.0   N =  55.9   A =  55.85 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
@@ -68,10 +73,9 @@ Current available graphics systems are:
  The Box is 20 m   of Aluminium
 
 phot:  Total cross sections from Sandia parametrisation. 
-Em1PhysicsList::SetCuts:CutLength : 1 mm 
+PhysicsList::SetCuts:CutLength : 1 mm 
 #
 /process/eLoss/StepFunction 0.183 1.70 micrometer
-#/process/eLoss/integral  false
 #
 /run/verbose 2
 #
@@ -87,54 +91,82 @@ conv:  Total cross sections from a parametrisation. Good description from 1.5 Me
         e+e- energies according Bethe-Heitler
         PhysicsTables from 1.022 MeV to 100 GeV in 100 bins. 
 
-msc:   Tables of transport mean free paths.
-          New model of MSC , computes the lateral 
-          displacement of the particle , too.
-        PhysicsTables from 100 eV  to 100 TeV in 100 bins. 
+msc:  Model variant of multiple scattering for e-
+      Lambda tables from 100 eV  to 100 TeV in 120 bins.
+      Boundary algorithm is active with facrange= 0.199
 
-eIoni:  delta cross sections from Moller+Bhabha. Good description from 1 KeV to 100 GeV.
-        delta ray energy sampled from  differential Xsection.
-        PhysicsTables from 1 keV to 100 TeV in 100 bins.
-        Step function: finalRange(mm)= 0.0017,  dRoverRange= 0.183
+eIoni:   tables are built for  e-
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Step function: finalRange(mm)= 0.0017, dRoverRange= 0.183, integral: 1
+      Delta cross sections from Moller+Bhabha, good description from 1 KeV to 100 GeV.
 
-eBrem:  Total cross sections from a NEW parametrisation based on the EEDL data library. 
- Good description from 1 KeV to 100 GeV.
-        log scale extrapolation above 100 GeV 
-        Gamma energy sampled from a parametrised formula.
-        PhysicsTables from 1 keV to 100 TeV in 100 bins. 
+eBrem:   tables are built for  e-
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Total cross sections from a parametrisation based on the EEDL data library. 
+      Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV.
+
+eIoni:   tables are built for  e+
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Step function: finalRange(mm)= 0.0017, dRoverRange= 0.183, integral: 1
+      Delta cross sections from Moller+Bhabha, good description from 1 KeV to 100 GeV.
+
+eBrem:   tables are built for  e+
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Total cross sections from a parametrisation based on the EEDL data library. 
+      Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV.
 
 annihil:  Total cross section from Heilter formula(annihilation into 2 photons).
         gamma energies sampled according Heitler
         PhysicsTables from 10 keV to 10 TeV in 100 bins. 
 
-msc:   Tables of transport mean free paths.
-          New model of MSC , computes the lateral 
-          displacement of the particle , too.
-        PhysicsTables from 100 eV  to 100 TeV in 100 bins. 
+msc:  Model variant of multiple scattering for proton
+      Lambda tables from 100 eV  to 100 TeV in 120 bins.
+      Boundary algorithm is active with facrange= 0.199
 
-hIoni:    Knock-on electron cross sections . 
-         Good description above the mean excitation energy.
-         delta ray energy sampled from  differential Xsection.
-        PhysicsTables from 1 keV to 100 TeV in 100 bins. 
-        Step function: finalRange(mm)= 0.0017,  dRoverRange= 0.183
+hIoni:   tables are built for  proton
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Step function: finalRange(mm)= 0.0017, dRoverRange= 0.183, integral: 0
+      Bether-Bloch model for Escaled > 2 MeV, parametrisation of Bragg peak below, Integral mode 0
 
-msc:   Tables of transport mean free paths.
-          New model of MSC , computes the lateral 
-          displacement of the particle , too.
-        PhysicsTables from 100 eV  to 100 TeV in 100 bins. 
+msc:  Model variant of multiple scattering for mu+
+      Lambda tables from 100 eV  to 100 TeV in 120 bins.
+      Boundary algorithm is active with facrange= 0.199
 
-MuIoni:    Knock-on electron cross sections . 
-         Good description above the mean excitation energy.
-         delta ray energy sampled from  differential Xsection.
-        PhysicsTables from 1 keV to 1000 PeV in 150 bins. 
+MuIoni:   tables are built for  mu+
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Step function: finalRange(mm)= 0.0017, dRoverRange= 0.183, integral: 0
+      Bether-Bloch model for E > 0.2 MeV parametrisation of Bragg peak below.
 
-MuBrems:  theoretical cross section 
-          Good description up to 1000 PeV.
-    PhysicsTables from 1 keV to 1000 PeV in 150 bins. 
+MuBrems:   tables are built for  mu+
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Parametrised model 
 
-MuPairProd:  theoretical cross sections 
-          Good description up to 1000 PeV.
-    PhysicsTables from 1 keV to 1000 PeV in 150 bins. 
+MuPairProd:   tables are built for  mu+
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Parametrised model 
+### All dEdx and Range tables are built #####
+
+MuIoni:   tables are built for  mu-
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Step function: finalRange(mm)= 0.0017, dRoverRange= 0.183, integral: 0
+      Bether-Bloch model for E > 0.2 MeV parametrisation of Bragg peak below.
+
+msc:  Model variant of multiple scattering for pi-
+      Lambda tables from 100 eV  to 100 TeV in 120 bins.
+      Boundary algorithm is active with facrange= 0.199
+
+Region DefaultRegionForTheWorld
+ Materials : Aluminium 
+ Production cuts :  gamma 2.2 mm     e- 6.05 mum    e+ 6.05 mum
 
 ========= Table of registered couples ==============================
 
@@ -147,45 +179,47 @@ Index : 0     used in the geometry : Yes     recalculation needed : No
 
 ====================================================================
 
+Start closing geometry.
+G4GeometryManager::ReportVoxelStats -- Voxel Statistics
+
+    Total memory consumed for geometry optimisation:   0 kByte
+    Total CPU time elapsed for geometry optimisation: 0 seconds
 ### Run 0 start.
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
  Current couple of seeds = 9876, 54321
 ----------------------------------------
-Start closing geometry.
-G4GeometryManager::ReportVoxelStats -- Voxel Statistics
-
-    Total memory consumed for geometry optimisation:   0 kByte
-    Total CPU time elapsed for geometry optimisation: 0 seconds
 Start Run processing.
 
 ---> Begin of Event: 0
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=29s Real=44s Sys=11s
+  User=93s Real=1.2e+02s Sys=16s
 
- nb tracks/event   neutral:    27.9700   charged:   701.2500
- nb  steps/event   neutral:   147.2700   charged:  3376.9000
+ nb tracks/event   neutral:    27.4000   charged:   688.9400
+ nb  steps/event   neutral:   145.5700   charged:  4748.9500
+
+ total energy deposit: 100.0000 MeV
 
  nb of process calls per event: 
           eIoni       eBrem       compt        phot        conv     annihil
-      3350.4700     24.8800    119.3000     26.4200      1.5500      1.5500
+      4721.6700     25.8800    118.1700     26.0000      1.4000      1.4000
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1487975150, 725420439
+ Current couple of seeds = 1804446829, 260016917
 ----------------------------------------
 Graphics systems deleted.
 Visualization Manager deleting...
-G4 kernel has come to Quit state.
-Deletion of G4 kernel class start.
 UserDetectorConstruction deleted.
 UserPhysicsList deleted.
 UserRunAction deleted.
 UserPrimaryGenerator deleted.
+G4 kernel has come to Quit state.
 EventManager deleted.
 UImanager deleted.
 StateManager deleted.
+RunManagerKernel is deleted.
 RunManager is deleting.

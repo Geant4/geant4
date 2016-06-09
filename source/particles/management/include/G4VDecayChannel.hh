@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4VDecayChannel.hh,v 1.10 2002/11/20 15:05:55 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 //
 // ------------------------------------------------------------

@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4RayTrajectoryPoint.hh,v 1.5 2002/10/16 11:42:48 johna Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 //
 

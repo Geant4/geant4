@@ -19,6 +19,7 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
+//
 //   Author:            Mathieu Fontaine           Rachid Mazini
 //                      fontaine@lps.umontreal.ca  Rachid.Mazini@cern.ch
 //   Language:          C++
@@ -67,6 +68,8 @@ FCALTestbeamSetup::~FCALTestbeamSetup() {};
 
 G4VPhysicalVolume * FCALTestbeamSetup::Construct()
 {
+  G4int i;
+
   //-----------------------------
   // construction of materials
   //-----------------------------
@@ -101,13 +104,13 @@ G4VPhysicalVolume * FCALTestbeamSetup::Construct()
     new G4LogicalVolume(SolidScintS2, FCALMaterials->Material("Polystyrene"),
 			"ScintS2Logical");
 
-  G4VPhysicalVolume * PhysicalScintS1 = 
+  // G4VPhysicalVolume * PhysicalScintS1 = 
     new G4PVPlacement(0, G4ThreeVector(ScintS1_S3PosX, ScintS1_S3PosY, ScintS1PosZ),
    		      "ScintS1Physical",LogicalScintS1andS3,PhysicalMother,0,0);
-  G4VPhysicalVolume * PhysicalScintS3 = 
+  // G4VPhysicalVolume * PhysicalScintS3 = 
     new G4PVPlacement(0, G4ThreeVector(ScintS1_S3PosX, ScintS1_S3PosY, ScintS3PosZ),
    		      "ScintS3Physical",LogicalScintS1andS3,PhysicalMother,0,0);  
-  G4VPhysicalVolume * PhysicalScintS2 = 
+  // G4VPhysicalVolume * PhysicalScintS2 = 
     new G4PVPlacement(0, G4ThreeVector(ScintS1_S3PosX, ScintS1_S3PosY, ScintS2PosZ),
 		      "ScintS2Physical", LogicalScintS2, PhysicalMother,0,0);
 
@@ -122,9 +125,9 @@ G4VPhysicalVolume * FCALTestbeamSetup::Construct()
   G4Box* SolidMWPC = new G4Box("MWPCSolid",MWPCSizeX,MWPCSizeY,MWPCSizeZ);
   G4LogicalVolume * LogicalMWPC = 
     new G4LogicalVolume(SolidMWPC,FCALMaterials->Material("MWPCArCO2"),"MWPCLogical");
-  for(G4int i=0; i<5; i++) 
+  for(i=0; i<5; i++) 
     {
-      G4VPhysicalVolume * PhysicalMWPC = 
+      // G4VPhysicalVolume * PhysicalMWPC = 
 	new G4PVPlacement(0,G4ThreeVector(MWPCPosX,MWPCPosY,MWPCPosZ[i]),
 			  "MWPCPhysical", LogicalMWPC, PhysicalMother,0,i+1);
     }
@@ -146,11 +149,12 @@ G4VPhysicalVolume * FCALTestbeamSetup::Construct()
 	       HoleStartPhi, HoleDPhi);
   G4LogicalVolume * LogicalHole = 
     new G4LogicalVolume(SolidHole, FCALMaterials->Material("Air"), "HoleLogical");
-  G4VPhysicalVolume * PhysicalHoleScint = 
+  // G4VPhysicalVolume * PhysicalHoleScint = 
     new G4PVPlacement(0, G4ThreeVector(HolePosX, HolePosY, HolePosZ), LogicalHole, 
 		      "HolePhysicalScint", LogicalHoleCntrScint, 0, 0);
   // Scintillator Hole counter placement
-  G4VPhysicalVolume * PhysicalHoleCntrScint = new G4PVPlacement(0, 
+  // G4VPhysicalVolume * PhysicalHoleCntrScint =
+    new G4PVPlacement(0, 
             G4ThreeVector(HoleCntrScintPosX, HoleCntrScintPosY, HoleCntrScintPosZ), 
             "HoleCntrScintPhysical", LogicalHoleCntrScint, PhysicalMother, 0, 0);
 
@@ -167,12 +171,12 @@ G4VPhysicalVolume * FCALTestbeamSetup::Construct()
 	       HoleStartPhi, HoleDPhi);
   G4LogicalVolume * LogicalHoleAbs = 
     new G4LogicalVolume(SolidHoleAbs, FCALMaterials->Material("Air"),"HoleAbsLogical");
-  G4VPhysicalVolume * PhysicalHolePb =
+  // G4VPhysicalVolume * PhysicalHolePb =
     new G4PVPlacement(0, G4ThreeVector(HolePosX, HolePosY, HolePosZ), LogicalHoleAbs,
 		      "HolePbPhysical", LogicalHoleCntrPb, 0, 0);
  
   // Lead Placement
-  G4VPhysicalVolume * PhysicalHoleCntrPb = 
+  // G4VPhysicalVolume * PhysicalHoleCntrPb = 
     new G4PVPlacement(0, G4ThreeVector(HoleCntrPbPosX, HoleCntrPbPosY, HoleCntrPbPosZ),
 		      "HoleCntrPbPhysical", LogicalHoleCntrPb, PhysicalMother, 0, 0);
 
@@ -180,10 +184,10 @@ G4VPhysicalVolume * FCALTestbeamSetup::Construct()
   G4LogicalVolume * LogicalHoleCntrAl = 
     new G4LogicalVolume(SolidHoleCntrAbsrb,  FCALMaterials->Material("Aluminium"),
 			"HoleCntrAlLoghical");
-  G4VPhysicalVolume * PhysicalHoleAl =
+  // G4VPhysicalVolume * PhysicalHoleAl =
     new G4PVPlacement(0, G4ThreeVector(HolePosX, HolePosY, HolePosZ), LogicalHoleAbs,
 		      "HoleAlPhysical", LogicalHoleCntrAl, 0, 0);
-   G4VPhysicalVolume * PhysicalHoleCntrAl = 
+  // G4VPhysicalVolume * PhysicalHoleCntrAl = 
     new G4PVPlacement(0, G4ThreeVector(HoleCntrAlPosX, HoleCntrAlPosY, HoleCntrAlPosZ),
 		      "HoleCntrAlPhysical", LogicalHoleCntrAl, PhysicalMother, 0, 0);
   
@@ -212,10 +216,10 @@ G4VPhysicalVolume * FCALTestbeamSetup::Construct()
 				 LeadWallSlitSizeZ);
    G4LogicalVolume * LogicalSlitPb = 
      new G4LogicalVolume(SolidSlitPb, FCALMaterials->Material("Air"), "SlitPbLogical");
-   G4VPhysicalVolume * PhysicalSlitPb = 
+   // G4VPhysicalVolume * PhysicalSlitPb = 
      new G4PVPlacement(0, 0, LogicalSlitPb, "SlitPbPhysical", LogicalLeadWall, 0, 0);
 
-   G4VPhysicalVolume * PhysicalLeadWall = 
+   // G4VPhysicalVolume * PhysicalLeadWall = 
      new G4PVPlacement(0, G4ThreeVector(LeadWallPosX,LeadWallPosY,LeadWallPosZ),
 		       "LeadWallPhysical", LogicalLeadWall, PhysicalMother, 0, 0);
 
@@ -236,10 +240,10 @@ G4VPhysicalVolume * FCALTestbeamSetup::Construct()
 				 IronWallSlitSizeZ);
    G4LogicalVolume * LogicalSlitFe = 
      new G4LogicalVolume(SolidSlitFe, FCALMaterials->Material("Air"), "SlitFeLogical");
-   G4VPhysicalVolume * PhysicalSlitFe = 
+   // G4VPhysicalVolume * PhysicalSlitFe = 
      new G4PVPlacement(0, 0, LogicalSlitFe, "SlitFePhysical", LogicalIronWall, 0, 0);
 
-   G4VPhysicalVolume * PhysicalIronWall = 
+   // G4VPhysicalVolume * PhysicalIronWall = 
      new G4PVPlacement(0, G4ThreeVector(IronWallPosX,IronWallPosY,IronWallPosZ),
 		       "IronWallPhysical", LogicalIronWall, PhysicalMother, 0, 0);
 
@@ -265,13 +269,13 @@ G4VPhysicalVolume * FCALTestbeamSetup::Construct()
    for( i=0; i<(NBigScint+NSmallScint); i++)
      { 
        if(i<NBigScint)  
-	 { G4VPhysicalVolume * PhysicalBigScint =
+	 { // G4VPhysicalVolume * PhysicalBigScint =
 	     new G4PVPlacement(0, G4ThreeVector(ScintPosX, ScintPosY, ScintPosZ[i]),
 			       "BigScintPhysical", LogicalBigScint, PhysicalMother, 
 			       0, i+1); 
 	 }
        else
-	 { G4VPhysicalVolume * PhysicalSmallScint =
+	 { // G4VPhysicalVolume * PhysicalSmallScint =
 	     new G4PVPlacement(0, G4ThreeVector(ScintPosX, ScintPosY, ScintPosZ[i]),
 			       "SmallScintPhysical", LogicalSmallScint, PhysicalMother,
 			       0, i+1);
@@ -296,13 +300,13 @@ G4VPhysicalVolume * FCALTestbeamSetup::Construct()
    for( i=0; i<(NBigIron+NSmallIron); i++)
      { 
        if(i<NBigIron)  
-	 { G4VPhysicalVolume * PhysicalBigIron =
+	 { // G4VPhysicalVolume * PhysicalBigIron =
 	     new G4PVPlacement(0, G4ThreeVector(IronPosX, IronPosY, IronPosZ[i]),
 			       "BigIronPhysical", LogicalBigIron, PhysicalMother, 
 			       0, i+1); 
 	 }
        else
-	 { G4VPhysicalVolume * PhysicalSmallIron =
+	 { // G4VPhysicalVolume * PhysicalSmallIron =
 	     new G4PVPlacement(0, G4ThreeVector(IronPosX, IronPosY, IronPosZ[i]),
 			       "SmallIronPhysical", LogicalSmallIron, PhysicalMother,
 			       0, i+1);
@@ -326,7 +330,7 @@ G4VPhysicalVolume * FCALTestbeamSetup::Construct()
    G4LogicalVolume * LogicalConcWallB =
      new G4LogicalVolume(SolidConcWall, FCALMaterials->Material("ShieldingConcrete"),
 			 "ConcWallBLogical");
-   G4VPhysicalVolume * PhysicalConcWallB = 
+   // G4VPhysicalVolume * PhysicalConcWallB = 
      new G4PVPlacement(0, G4ThreeVector(ConcWallPosX, ConcWallPosY, ConcWallBPosZ),
 		       "ConcWallBPhysical", LogicalConcWallB, PhysicalMother, 0, 0);
 
@@ -335,7 +339,7 @@ G4VPhysicalVolume * FCALTestbeamSetup::Construct()
     G4LogicalVolume * LogicalConcWallIns =
       new G4LogicalVolume(SolidConcWallIns, FCALMaterials->Material("Iron"),
 			  "LogicalConcWallIns");
-    G4VPhysicalVolume * PhysicalConcWallIns =
+    // G4VPhysicalVolume * PhysicalConcWallIns =
       new G4PVPlacement(0, 0, "ConcWallInsPhysical", LogicalConcWallIns, PhysicalConcWallA, 0, 0);
 
    G4VisAttributes * ColorOfConcrete = new G4VisAttributes(G4Colour(0.,0.,0.));
@@ -351,7 +355,7 @@ G4VPhysicalVolume * FCALTestbeamSetup::Construct()
    G4LogicalVolume * LogicalMuContr =
      new G4LogicalVolume(SolidMuContr, FCALMaterials->Material("Polystyrene"),
 			 "MuContrLogical");
-   G4VPhysicalVolume * PhysicalMuContr =
+   // G4VPhysicalVolume * PhysicalMuContr =
      new G4PVPlacement(0, G4ThreeVector(MuCntrPosX, MuCntrPosY, MuCntrPosZ),
 		       "MuContrPhyiscal", LogicalMuContr, PhysicalMother, 0, 0);
 
@@ -382,7 +386,7 @@ G4VPhysicalVolume * FCALTestbeamSetup::Construct()
 
   G4LogicalVolume * theCryostatVolumes = CryostatVolumes->Construct();
 
-  G4VPhysicalVolume * PhysiCryostatVolumes = 
+  // G4VPhysicalVolume * PhysiCryostatVolumes = 
     new G4PVPlacement(CryostatRotationMatrix, 
 		      G4ThreeVector(CryostatPosX,CryostatPosY,CryostatPosZ),"CryostatVolumes"
 		      , theCryostatVolumes, PhysicalMother, 0,0);

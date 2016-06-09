@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4HEKaonZeroLongInelastic.hh,v 1.9 2002/12/12 19:17:59 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4HEKaonZeroLongInelastic.hh,v 1.10 2003/07/01 15:42:22 hpw Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 //
 // G4 Gheisha High Energy model class -- header file
@@ -61,7 +61,7 @@ class G4HEKaonZeroLongInelastic : public G4HEInelastic
         G4int GetNumberOfSecondaries()
              { return vecLength;};           
 
-        G4VParticleChange * ApplyYourself( const G4Track &aTrack, G4Nucleus &targetNucleus );
+        G4HadFinalState * ApplyYourself( const G4HadProjectile &aTrack, G4Nucleus &targetNucleus );
 
 };
 #endif                     

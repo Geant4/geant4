@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenInventorSceneHandler.cc,v 1.14 2003/01/14 10:18:23 johna Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4OpenInventorSceneHandler.cc,v 1.15 2003/10/29 10:01:36 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // 
 // Jeff Kallenbach 01 Aug 1996
@@ -92,12 +92,12 @@ typedef SoDetectorTreeKit SoG4DetectorTreeKit;
 G4Point3D translation;
 
 G4OpenInventorSceneHandler::G4OpenInventorSceneHandler (G4OpenInventor& system,
-					  const G4String& name)
+                                          const G4String& name)
 :G4VSceneHandler (system, fSceneIdCount++, name)
-,root(NULL)
-,staticRoot(NULL)
-,transientRoot(NULL)
-,currentSeparator(NULL)
+,root(0)
+,staticRoot(0)
+,transientRoot(0)
+,currentSeparator(0)
 {
   //
   root = new SoSeparator;
@@ -127,7 +127,7 @@ G4OpenInventorSceneHandler::~G4OpenInventorSceneHandler ()
 // Method for handling G4Polyline objects (from tracking or wireframe).
 //
 void G4OpenInventorSceneHandler::AddPrimitive (const G4Polyline& line) {
-  if(currentSeparator==NULL) return;
+  if(currentSeparator==0) return;
   
   G4int nPoints = line.size();
   SbVec3f* pCoords = new SbVec3f[nPoints];
@@ -138,8 +138,8 @@ void G4OpenInventorSceneHandler::AddPrimitive (const G4Polyline& line) {
 
   for (G4int iPoint = 0; iPoint < nPoints ; iPoint++) {
     pCoords[iPoint].setValue(line[iPoint].x(),
-			     line[iPoint].y(),
-			     line[iPoint].z());
+                             line[iPoint].y(),
+                             line[iPoint].z());
   }
 
   //
@@ -181,7 +181,7 @@ void G4OpenInventorSceneHandler::AddPrimitive (const G4Polyline& line) {
 // Method for handling G4Text objects
 //
 void G4OpenInventorSceneHandler::AddPrimitive (const G4Text& text) {
-  if(currentSeparator==NULL) return;
+  if(currentSeparator==0) return;
   //
   // Color
   //
@@ -216,7 +216,7 @@ void G4OpenInventorSceneHandler::AddPrimitive (const G4Text& text) {
 // Method for handling G4Circle objects
 //
 void G4OpenInventorSceneHandler::AddPrimitive (const G4Circle& circle) {
-  if(currentSeparator==NULL) return;
+  if(currentSeparator==0) return;
   //
   // Color
   //
@@ -258,7 +258,7 @@ void G4OpenInventorSceneHandler::AddPrimitive (const G4Circle& circle) {
 // Method for handling G4Square objects - defaults to wireframe
 //
 void G4OpenInventorSceneHandler::AddPrimitive (const G4Square& Square) {
-  if(currentSeparator==NULL) return;
+  if(currentSeparator==0) return;
   //
   // Color
   //
@@ -293,9 +293,9 @@ void G4OpenInventorSceneHandler::AddPrimitive (const G4Square& Square) {
 // Method for handling G4Polyhedron objects for drawing solids.
 //
 void G4OpenInventorSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron) {
-  if(currentSeparator==NULL) return;
+  if(currentSeparator==0) return;
   if (polyhedron.GetNoFacets() == 0) return;
-#define MAXPOLYH	32767
+#define MAXPOLYH        32767
   //
   // Assume all facets are convex quadrilaterals.
   //
@@ -322,8 +322,8 @@ void G4OpenInventorSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron) {
     // Second, set the normal for all vertices in the facet...
     //
     polyNorms[polyIdx].setValue(SurfaceUnitNormal.x(),
-				SurfaceUnitNormal.y(),
-				SurfaceUnitNormal.z());
+                                SurfaceUnitNormal.y(),
+                                SurfaceUnitNormal.z());
     
     //
     // Loop through the four edges of each G4Facet...
@@ -336,8 +336,8 @@ void G4OpenInventorSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron) {
       notLastEdge = polyhedron.GetNextVertex (vertex, edgeFlag);
       
       polyVerts[vertIdx].setValue(vertex.x(),
-				  vertex.y(),
-				  vertex.z());
+                                  vertex.y(),
+                                  vertex.z());
 
       vertIdx++;
       faceIdx++;
@@ -398,7 +398,7 @@ void G4OpenInventorSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron) {
 // Knots and Ctrl Pnts MUST be arrays of GLfloats.
 //
 void G4OpenInventorSceneHandler::AddPrimitive (const G4NURBS& nurb) {
-  if(currentSeparator==NULL) return;
+  if(currentSeparator==0) return;
 
   G4float *u_knot_array, *u_knot_array_ptr;
   u_knot_array = u_knot_array_ptr = new G4float [nurb.GetnbrKnots(G4NURBS::U)];
@@ -438,10 +438,10 @@ void G4OpenInventorSceneHandler::AddPrimitive (const G4NURBS& nurb) {
   SbVec4f* points  = new SbVec4f[nPoints];
   for (G4int iPoint = 0; iPoint < nPoints ; iPoint++) {
     points[iPoint].setValue(
-			    ctrl_pnt_array[iPoint*4 + 0],
-			    ctrl_pnt_array[iPoint*4 + 1],
-			    ctrl_pnt_array[iPoint*4 + 2],
-			    ctrl_pnt_array[iPoint*4 + 3]);
+                            ctrl_pnt_array[iPoint*4 + 0],
+                            ctrl_pnt_array[iPoint*4 + 1],
+                            ctrl_pnt_array[iPoint*4 + 2],
+                            ctrl_pnt_array[iPoint*4 + 3]);
   }
   ctlPts->point.setValues (0,nPoints,points);
   oi_nurb->numUControlPoints = nurb.GetnbrCtrlPts(G4NURBS::U);
@@ -539,7 +539,7 @@ G4int G4OpenInventorSceneHandler::fSceneCount = 0;
 // These methods add primitives using the HEPVis classes
 //
 void G4OpenInventorSceneHandler::AddThis (const G4Box & Box) {
-  if(currentSeparator==NULL) return;
+  if(currentSeparator==0) return;
   SoCube *g4Box = new SoCube();
   g4Box->width =2*Box.GetXHalfLength();
   g4Box->height=2*Box.GetYHalfLength();
@@ -547,7 +547,7 @@ void G4OpenInventorSceneHandler::AddThis (const G4Box & Box) {
   currentSeparator->addChild(g4Box);
 }
 void G4OpenInventorSceneHandler::AddThis (const G4Tubs & Tubs) {
-  if(currentSeparator==NULL) return;
+  if(currentSeparator==0) return;
   SoG4Tubs *g4Tubs = new SoG4Tubs();
   g4Tubs->pRMin = Tubs.GetRMin();
   g4Tubs->pRMax = Tubs.GetRMax();
@@ -557,7 +557,7 @@ void G4OpenInventorSceneHandler::AddThis (const G4Tubs & Tubs) {
   currentSeparator->addChild(g4Tubs);
 }
 void G4OpenInventorSceneHandler::AddThis (const G4Cons &cons) {
-  if(currentSeparator==NULL) return;
+  if(currentSeparator==0) return;
   SoG4Cons *g4Cons = new SoG4Cons();
   g4Cons->fRmin1 = cons.GetRmin1();
   g4Cons->fRmin2 = cons.GetRmin2();
@@ -570,7 +570,7 @@ void G4OpenInventorSceneHandler::AddThis (const G4Cons &cons) {
 }
 
 void G4OpenInventorSceneHandler::AddThis (const G4Trap &trap) {
-  if(currentSeparator==NULL) return;
+  if(currentSeparator==0) return;
   G4ThreeVector SymAxis=trap.GetSymAxis();
     SoG4Trap *g4Trap = new SoG4Trap();
   g4Trap->pDz  = trap.GetZHalfLength();
@@ -586,7 +586,7 @@ void G4OpenInventorSceneHandler::AddThis (const G4Trap &trap) {
 }
 
 void G4OpenInventorSceneHandler::AddThis (const G4Trd &trd) {
-  if(currentSeparator==NULL) return;
+  if(currentSeparator==0) return;
   SoG4Trd *g4Trd = new SoG4Trd();
   g4Trd->fDx1 = trd.GetXHalfLength1();
   g4Trd->fDx2 = trd.GetXHalfLength2();
@@ -664,31 +664,25 @@ void G4OpenInventorSceneHandler::PreAddThis
    
     //
     // Add the full separator to the dictionary; it is indexed by the 
-    // address of the physical volume!
+    // address of the logical volume!
+    // NOTE: the map is no longer built iteratively from the whole hierarchy
+    //       of volumes since it is no longer possible to retrieve the mother
+    //       physical volume. The algorithm requires review !   - GC
     //
-    SeparatorMap[fpCurrentPV]=fullSeparator;
+    SeparatorMap[fpCurrentPV->GetLogicalVolume()]=fullSeparator;
 
     //
     // Find out where to add this volume.  This means locating its mother.  
     // If no mother can be found, it goes under root.
     //
-    G4VPhysicalVolume* MotherVolume = fpCurrentPV->GetMother();
-    while (MotherVolume) {
+    G4LogicalVolume* MotherVolume = fpCurrentPV->GetMotherLogical();
+    if (MotherVolume) {
       if (SeparatorMap.find(MotherVolume) != SeparatorMap.end()) {
-	SeparatorMap[MotherVolume]->addChild(g4DetectorTreeKit);
-        break;
+        SeparatorMap[MotherVolume]->addChild(g4DetectorTreeKit);
       }
-      else {
-	// Could happen if some non-leaf is invisible !
-        G4cerr << "OIScene non-leaf protocol error.  Mother volume " << 
-	          MotherVolume->GetName() << " missing." << G4endl;
-        G4cerr << "                         Daughter volume was: "
-	     << fpCurrentPV->GetName()
-	     << G4endl;
-      }
-      MotherVolume=MotherVolume->GetMother();
+    } else {
+      staticRoot->addChild(g4DetectorTreeKit);
     }
-    if (!MotherVolume) staticRoot->addChild(g4DetectorTreeKit);
     currentSeparator = previewSeparator;
   } else {
     //
@@ -697,21 +691,20 @@ void G4OpenInventorSceneHandler::PreAddThis
     //
     // Locate the mother volume and find it's corresponding full separator
     //
-    currentSeparator = NULL;
-    G4VPhysicalVolume* MotherVolume = fpCurrentPV->GetMother();
-    while (MotherVolume) {
+    currentSeparator = 0;
+    G4LogicalVolume* MotherVolume = fpCurrentPV->GetMotherLogical();
+    if (MotherVolume) {
       if (SeparatorMap.find(MotherVolume) != SeparatorMap.end()) {
-	currentSeparator=SeparatorMap[MotherVolume];
-        break;
+        currentSeparator=SeparatorMap[MotherVolume];
       }
       else {
-	G4cerr << "OIScene leaf protocol error.  Mother volume " << 
-	          MotherVolume->GetName() <<  " missing." << G4endl;
-	G4cerr << "                         Daughter volume was: "
-	     << fpCurrentPV->GetName()
-	     << G4endl;
+        G4cerr << "ERROR - G4OpenInventorSceneHandler::PreAddThis()"
+               << "        OIScene leaf protocol error. Mother volume "
+               << MotherVolume->GetName() <<  " missing." << G4endl;
+        G4cerr << "        Daughter volume was: "
+               << fpCurrentPV->GetName()
+               << G4endl;
       }
-      MotherVolume = MotherVolume->GetMother();
     }
     //
     // If the mother volume has no full separator, then the solid and its 
@@ -743,49 +736,49 @@ void G4OpenInventorSceneHandler::PreAddThis
 
 G4double  G4OpenInventorSceneHandler::GetMarkerSize ( const G4VMarker& mark ) 
 {
-	//----- return value ( marker radius in 3d units) 
-	G4double size       = 1.0 ; // initialization
+        //----- return value ( marker radius in 3d units) 
+        G4double size       = 1.0 ; // initialization
 
-	//----- parameters to calculate 3d size from 2d size
-	const double HALF_SCREEN_SIZE_2D = 300.0 ; // pixels
-	double zoom_factor  = fpViewer->GetViewParameters().GetZoomFactor() ;
-	if ( zoom_factor <=  0.0 ) { zoom_factor = 1.0 ; }
-	double extent_radius_3d = GetScene()->GetExtent().GetExtentRadius() ;
-	if ( extent_radius_3d <= 0.0 ) { extent_radius_3d = 1.0 ; } 
+        //----- parameters to calculate 3d size from 2d size
+        const double HALF_SCREEN_SIZE_2D = 300.0 ; // pixels
+        double zoom_factor  = fpViewer->GetViewParameters().GetZoomFactor() ;
+        if ( zoom_factor <=  0.0 ) { zoom_factor = 1.0 ; }
+        double extent_radius_3d = GetScene()->GetExtent().GetExtentRadius() ;
+        if ( extent_radius_3d <= 0.0 ) { extent_radius_3d = 1.0 ; } 
 
-	//----- get marker radius in 3D units
-	size = mark.GetWorldSize();
-	if        ( size  ) {
+        //----- get marker radius in 3D units
+        size = mark.GetWorldSize();
+        if        ( size  ) {
 
-		// get mark radius in 3D units
-		size = 0.5 * mark.GetWorldSize()  ; 
+                // get mark radius in 3D units
+                size = 0.5 * mark.GetWorldSize()  ; 
 
-	} else if ( (size = mark.GetScreenSize()) ) {
+        } else if ( (size = mark.GetScreenSize()) ) {
 
-		// local
-		double mark_radius_2d   = 0.5 * mark.GetScreenSize() ;
+                // local
+                double mark_radius_2d   = 0.5 * mark.GetScreenSize() ;
 
-		// get mark radius in 3D units
-		size \
-		 = extent_radius_3d * ( mark_radius_2d / HALF_SCREEN_SIZE_2D );
-		size *= zoom_factor ;
+                // get mark radius in 3D units
+                size \
+                 = extent_radius_3d * ( mark_radius_2d / HALF_SCREEN_SIZE_2D );
+                size *= zoom_factor ;
 
-	} else {
-		// local
-		double mark_radius_2d \
-		 = fpViewer->GetViewParameters().GetDefaultMarker().GetScreenSize();
+        } else {
+                // local
+                double mark_radius_2d \
+                 = fpViewer->GetViewParameters().GetDefaultMarker().GetScreenSize();
 
-		// get mark radius in 3D units
-		size \
-		 = extent_radius_3d * ( mark_radius_2d / HALF_SCREEN_SIZE_2D );
-		size *= zoom_factor ;
-	}
+                // get mark radius in 3D units
+                size \
+                 = extent_radius_3d * ( mark_radius_2d / HALF_SCREEN_SIZE_2D );
+                size *= zoom_factor ;
+        }
 
-		//----- global rescaling
-	size *= fpViewer->GetViewParameters().GetGlobalMarkerScale(); 
+                //----- global rescaling
+        size *= fpViewer->GetViewParameters().GetGlobalMarkerScale(); 
 
-		//----- return size
-	return size ;
+                //----- return size
+        return size ;
 
 } // G4OpenInventorSceneHandler::GetMarkerSize ()
 

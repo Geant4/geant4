@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4WeightWindowAlgorithm.cc,v 1.5 2002/10/16 14:29:07 dressel Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4WeightWindowAlgorithm.cc,v 1.7 2003/08/19 15:16:56 dressel Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -34,66 +34,76 @@
 #include "Randomize.hh"
 
 
-G4WeightWindowAlgorithm::G4WeightWindowAlgorithm() :
-  fUpper(1),
-  fLower(1)
+G4WeightWindowAlgorithm::
+G4WeightWindowAlgorithm(G4double upperLimitFaktor,
+			G4double survivalFaktor,
+			G4int maxNumberOfSplits) :
+  fUpperLimitFaktor(upperLimitFaktor),
+  fSurvivalFaktor(survivalFaktor),
+  fMaxNumberOfSplits(maxNumberOfSplits)
 {}
 
 G4WeightWindowAlgorithm::~G4WeightWindowAlgorithm()
 {}
 
 
-void G4WeightWindowAlgorithm::SetUpperLimit(G4double Upper){
-  fUpper = Upper;
-}
-  
-void G4WeightWindowAlgorithm::SetLowerLimit(G4double Lower){
-  fLower = Lower;
-}
-
 
 G4Nsplit_Weight 
-G4WeightWindowAlgorithm::Calculate(G4double init_w, 
-				   G4double importance) const {
+G4WeightWindowAlgorithm::Calculate(G4double init_w,
+				   G4double lowerWeightBound) const {
 
+  G4double survivalWeight = lowerWeightBound * fSurvivalFaktor;
+  G4double upperWeight = lowerWeightBound * fUpperLimitFaktor;
 
-  G4Nsplit_Weight nw = {1, init_w};
-  G4double iw =  importance * init_w;
-  if (iw>fUpper) {
-    // f is the factor by which the weight is greater 
-    // than allowed by fUpper
-    // it is almost the number of coppies to be produced
-    G4double f = iw / fUpper;
-    // calculate new weight
-    nw.fW/=f; 
+  // initialize return value for case weight in window
+  G4Nsplit_Weight nw;
+  nw.fN = 1;
+  nw.fW = init_w;
 
-    // calculate the number of coppies
-    nw.fN = static_cast<G4int>(f);
-    // correct the number of coppies in case f is not an integer
-    if (static_cast<G4double>(nw.fN) != f) {
-      // probabillity p for splitting into nw.fN+1 particles
-      G4double p = f - nw.fN;
-      // get a random number out of [0,1)
-      G4double r = G4UniformRand();
-      if (r<p) {
-	nw.fN++;
-      } 
+  if (init_w > upperWeight) {
+    // splitting
+
+    G4double wi_ws = init_w/survivalWeight;
+    G4int int_wi_ws = static_cast<int>(wi_ws);
+
+    // values in case integer mode or in csae of double
+    // mode and the lower number of splits will be diced
+    nw.fN = int_wi_ws;
+    nw.fW = survivalWeight;	
+
+    if (wi_ws <= fMaxNumberOfSplits) {
+      if (wi_ws > int_wi_ws) {
+	// double mode
+	G4double p2 =  wi_ws - int_wi_ws;
+	G4double r = G4UniformRand();
+	if (r<p2) {
+	  nw.fN = int_wi_ws + 1;
+	}
+      }
+    }
+    else {
+      // fMaxNumberOfSplits < wi_ws
+      nw.fN = fMaxNumberOfSplits;
+      nw.fW = init_w/fMaxNumberOfSplits;
     }
 
-  }
-  else if (iw < fLower) {
-    // play russian roulett
-    G4double p = iw / fLower; // survival prob.
+
+  } else if (init_w < lowerWeightBound) {
+    // Russian roulette
+    G4double wi_ws = init_w/survivalWeight;
+    G4double p = std::max(wi_ws,1./fMaxNumberOfSplits);
     G4double r = G4UniformRand();
-    if (r>=p) {
-      // kill track
-      nw.fN = 0;
+    if (r<p){
+      nw.fW = init_w/p;
+      nw.fN = 1;
+    } else {
       nw.fW = 0;
-    } 
-    else {
-      nw.fW*=1/p; // to be consistant with the survival prob.
-    }      
-  }
+      nw.fN = 0;
+    }
+  } 
+  // else do nothing
+  
+  
   return nw;
 }
 

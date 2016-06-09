@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4QChipolino.hh,v 1.11 2003/06/16 17:04:02 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4QChipolino.hh,v 1.19 2003/12/09 15:37:59 gunter Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 //      ---------------- G4QChipolino ----------------
 //             by Mikhail Kossov, Sept 1999.
@@ -33,7 +33,6 @@
 #define G4QChipolino_h 1
 
 #include "globals.hh"
-//#include "G4QContent.hh"
 #include "G4QPDGCode.hh"
 
 class G4QChipolino
@@ -45,12 +44,12 @@ public:
   G4QChipolino(const G4QChipolino& right);             // Copy constructor by value
   G4QChipolino(G4QChipolino* right);                   // Copy constructor by pointer
 
-  ~G4QChipolino();                                     // Destructor
+  ~G4QChipolino();                                     // Public Destructor
 
   // Operators
   const G4QChipolino& operator=(const G4QChipolino& right);
-  G4int              operator==(const G4QChipolino& right) const;
-  G4int              operator!=(const G4QChipolino& right) const;
+  G4bool              operator==(const G4QChipolino& right) const;
+  G4bool              operator!=(const G4QChipolino& right) const;
 
   // Selectors
   G4double              GetMass();            // Get mass of the Chipolino (MinDoubleHadronMass)
@@ -76,8 +75,8 @@ private:
 
 std::ostream& operator<<(std::ostream& lhs, G4QChipolino& rhs);
 //std::ostream& operator<<(std::ostream& lhs, const G4QChipolino& rhs);
-inline G4int G4QChipolino::operator==(const G4QChipolino& right) const {return this==&right;}
-inline G4int G4QChipolino::operator!=(const G4QChipolino& right) const {return this!=&right;}
+inline G4bool G4QChipolino::operator==(const G4QChipolino& rhs) const {return this==&rhs;}
+inline G4bool G4QChipolino::operator!=(const G4QChipolino& rhs) const {return this!=&rhs;}
  
 inline G4double   G4QChipolino::GetMass()      {return minM;}
 inline G4double   G4QChipolino::GetMass2()     {return minM*minM;}

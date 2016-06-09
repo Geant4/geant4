@@ -21,8 +21,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4DynamicParticleVector.hh,v 1.10 2003/06/16 17:12:18 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
 //
 //
 //	History: first implementation, alternative to G4FastVector

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ImportanceAlgorithm.cc,v 1.11 2003/06/16 16:51:04 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4ImportanceAlgorithm.cc,v 1.12 2003/10/22 13:52:10 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -57,7 +57,7 @@ G4ImportanceAlgorithm::Calculate(G4double ipre,
   G4Nsplit_Weight nw = {0,0};
   if (ipost>0.){
     if (!(ipre>0.)){
-      G4Exception("Error: G4ImportanceAlgorithm::Calculate: ipre==0.");
+      Error("G4ImportanceAlgorithm::Calculate() - ipre==0.");
     }
     G4double ipre_over_ipost = ipre/ipost;
     if ((ipre_over_ipost<0.25 || ipre_over_ipost> 4) && !fWorned) {
@@ -67,11 +67,11 @@ G4ImportanceAlgorithm::Calculate(G4double ipre,
       Warning(os.str());
       fWorned = true;
       if (ipre_over_ipost<=0) {
-	Error("Calculate: ipre_over_ipost<=0");
+	Error("G4ImportanceAlgorithm::Calculate() - ipre_over_ipost<=0");
       }
     }
     if (init_w<=0.) {
-      Error("Calculate:  iniitweight<= 0. found");
+      Error("G4ImportanceAlgorithm::Calculate() - iniitweight<= 0. found");
     }
 
     // default geometrical splitting 
@@ -116,11 +116,13 @@ G4ImportanceAlgorithm::Calculate(G4double ipre,
 
 void G4ImportanceAlgorithm::Error(const G4String &m) const
 {
-  G4cout << "ERROR - G4ImportanceAlgorithm::" << m << G4endl;
-  G4Exception("Program aborted.");
+  G4cerr << "ERROR - G4ImportanceAlgorithm: " << m << G4endl;
+  G4Exception("G4ImportanceAlgorithm::Error()",
+              "FatalException", FatalException, m);
 }
 
 void G4ImportanceAlgorithm::Warning(const G4String &m) const
 {
-  G4cout << "WARNING - G4ImportanceAlgorithm::" << m << G4endl;
+  G4Exception("G4ImportanceAlgorithm::Warning()",
+              "Notification", JustWarning, m);
 }

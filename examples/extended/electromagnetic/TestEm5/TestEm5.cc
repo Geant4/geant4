@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: TestEm5.cc,v 1.7 2001/11/05 17:57:58 maire Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: TestEm5.cc,v 1.8 2003/08/11 10:02:45 maire Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -34,16 +34,19 @@
 #include "Randomize.hh"
 
 #ifdef G4VIS_USE
-#include "Em5VisManager.hh"
+#include "VisManager.hh"
 #endif
 
-#include "Em5DetectorConstruction.hh"
-#include "Em5PhysicsList.hh"
-#include "Em5PrimaryGeneratorAction.hh"
-#include "Em5RunAction.hh"
-#include "Em5EventAction.hh"
-#include "Em5SteppingAction.hh"
-#include "Em5SteppingVerbose.hh"
+#include "DetectorConstruction.hh"
+#include "PhysicsList.hh"
+#include "PrimaryGeneratorAction.hh"
+#include "RunAction.hh"
+#include "EventAction.hh"
+#include "TrackingAction.hh"
+#include "SteppingAction.hh"
+#include "SteppingVerbose.hh"
+#include "StackingAction.hh"
+#include "HistoManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -53,34 +56,53 @@ int main(int argc,char** argv) {
   HepRandom::setTheEngine(new RanecuEngine);
   
   //my Verbose output class
-  G4VSteppingVerbose::SetInstance(new Em5SteppingVerbose);
+  G4VSteppingVerbose::SetInstance(new SteppingVerbose);
     
   // Construct the default run manager
   G4RunManager * runManager = new G4RunManager;
   
   // set mandatory initialization classes
-  Em5DetectorConstruction* detector;
-  detector = new Em5DetectorConstruction;
+  DetectorConstruction* detector;
+  detector = new DetectorConstruction;
   runManager->SetUserInitialization(detector);
-  runManager->SetUserInitialization(new Em5PhysicsList(detector));
+  runManager->SetUserInitialization(new PhysicsList(detector));
   
 #ifdef G4VIS_USE
   // visualization manager
-  G4VisManager* visManager = new Em5VisManager;
+  G4VisManager* visManager = new VisManager;
   visManager->Initialize();
 #endif 
+
+  HistoManager* histo = 0;
+#ifdef G4ANALYSIS_USE
+  histo = new HistoManager();
+#endif  
  
   // set user action classes
-  runManager->SetUserAction(new Em5PrimaryGeneratorAction(detector));
-  Em5RunAction* runaction = new Em5RunAction;
+  //
+  //primaryGenerator
+  runManager->SetUserAction(new PrimaryGeneratorAction(detector));
+  RunAction* runaction = new RunAction(histo);
   runManager->SetUserAction(runaction);
 
-  Em5EventAction* eventaction = new Em5EventAction(runaction);
+  //eventAction
+  EventAction* eventaction = new EventAction(runaction,histo);
   runManager->SetUserAction(eventaction);
+  
+  //trackAction
+  TrackingAction* trackingaction = new TrackingAction(detector, runaction,
+                                                      eventaction, histo);
+  runManager->SetUserAction(trackingaction);
 
-  Em5SteppingAction* steppingaction = new Em5SteppingAction(detector,
-                                               eventaction, runaction);
-  runManager->SetUserAction(steppingaction);    
+  //stepAction
+  SteppingAction* steppingaction = new SteppingAction(detector, runaction,
+                                                      eventaction, histo);
+  runManager->SetUserAction(steppingaction);
+  
+  //stackAction
+  StackingAction* stackingaction = new StackingAction(runaction, 
+                                                      eventaction, histo);
+  runManager->SetUserAction(stackingaction);      
    
   // get the pointer to the User Interface manager 
     G4UImanager* UI = G4UImanager::GetUIpointer();  
@@ -104,9 +126,13 @@ int main(int argc,char** argv) {
     }
     
   // job termination
+#ifdef G4ANALYSIS_USE
+  delete histo;
+#endif    
 #ifdef G4VIS_USE
   delete visManager;
-#endif  
+#endif
+  
   delete runManager;
 
   return 0;

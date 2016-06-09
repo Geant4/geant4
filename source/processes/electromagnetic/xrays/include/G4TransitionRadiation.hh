@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4TransitionRadiation.hh,v 1.7 2003/06/03 08:11:01 vnivanch Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // G4TransitionRadiation  -- header file
 //

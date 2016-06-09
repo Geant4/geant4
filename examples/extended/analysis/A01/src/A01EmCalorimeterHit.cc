@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: A01EmCalorimeterHit.cc,v 1.4 2002/12/13 11:34:34 gunter Exp $
+// $Id: A01EmCalorimeterHit.cc,v 1.6 2003/10/14 18:58:18 perl Exp $
 // --------------------------------------------------------------
 //
 
@@ -51,7 +51,7 @@ A01EmCalorimeterHit::~A01EmCalorimeterHit()
 {;}
 
 A01EmCalorimeterHit::A01EmCalorimeterHit(const A01EmCalorimeterHit &right)
-{
+    : G4VHit() {
   cellID = right.cellID;
   edep = right.edep;
   pos = right.pos;
@@ -89,7 +89,6 @@ void A01EmCalorimeterHit::Draw()
     if(rcol<0.4) rcol = 0.4;
     G4Colour colour(rcol,0.,0.);
     attribs.SetColour(colour);
-    attribs.SetForceWireframe(false);
     attribs.SetForceSolid(true);
     pVVisManager->Draw(*pLogV,attribs,trans);
   }

@@ -21,29 +21,30 @@
 // ********************************************************************
 //
 //
-// $Id: G4PrimaryVertex.cc,v 1.6 2003/05/21 20:52:54 asaim Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4PrimaryVertex.cc,v 1.7 2003/09/12 21:51:34 asaim Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 
 #include "G4PrimaryVertex.hh"
+#include "G4VUserPrimaryVertexInformation.hh"
 #include "G4ios.hh"
 
 G4Allocator<G4PrimaryVertex> aPrimaryVertexAllocator;
 
 G4PrimaryVertex::G4PrimaryVertex()
 :X0(0.),Y0(0.),Z0(0.),T0(0.),theParticle(0),theTail(0),
- nextVertex(0),numberOfParticle(0),Weight0(1.0)
+ nextVertex(0),numberOfParticle(0),Weight0(1.0),userInfo(0)
 {;}
 
 G4PrimaryVertex::G4PrimaryVertex(
           G4double x0,G4double y0,G4double z0,G4double t0)
 :X0(x0),Y0(y0),Z0(z0),T0(t0),theParticle(0),theTail(0),
- nextVertex(0),numberOfParticle(0),Weight0(1.0)
+ nextVertex(0),numberOfParticle(0),Weight0(1.0),userInfo(0)
 {;}
 
 G4PrimaryVertex::G4PrimaryVertex(G4ThreeVector xyz0,G4double t0)
 :T0(t0),theParticle(0),theTail(0),
- nextVertex(0),numberOfParticle(0),Weight0(1.0)
+ nextVertex(0),numberOfParticle(0),Weight0(1.0),userInfo(0)
 {
   X0=xyz0.x();
   Y0=xyz0.y();
@@ -56,6 +57,8 @@ G4PrimaryVertex::~G4PrimaryVertex()
   { delete theParticle; }
   if(nextVertex != 0)
   { delete nextVertex; }
+  if(userInfo != 0)
+  { delete userInfo; }
 }
 
 const G4PrimaryVertex & 
@@ -71,6 +74,7 @@ void G4PrimaryVertex::Print() const
   G4cout << "Vertex  ( "
        << X0 << ", " << Y0 << ", " << Z0 << ", " << T0 << " )" 
        << " Weight " << Weight0 << G4endl;
+  if(userInfo!=0) userInfo->Print();
   G4cout << "#### Primary particles" << G4endl;
   G4PrimaryParticle* aPrim = theParticle;
   if(aPrim != 0)

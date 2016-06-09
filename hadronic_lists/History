@@ -1,0 +1,27 @@
+$Id: History,v 1.3 2003/12/05 07:33:05 gcosmo Exp $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                  Hadronic physics-list History
+                  -----------------------------
+This file should be used by the G4 example coordinator to briefly
+summarize all major modifications introduced in the code and keep
+track of all tags.
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+05.12.2003, G.Cosmo - ghad-lists-V05-02-01
+- Changed LISTS_BASE to G4LISTS_BASE.
+
+04.12.2003, G.Cosmo - ghad-lists-V05-02-00
+- Corrected installation setup to point to default build area if
+  LISTS_BASE is not defined.
+
+03.12.2003, H.P.Wellisch
+- Imported hadronic physics lists from development branch.
+- Created.

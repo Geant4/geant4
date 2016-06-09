@@ -1,4 +1,4 @@
-$Id: README,v 1.7 2002/12/11 14:19:17 maire Exp $
+$Id: README,v 1.8 2003/10/06 10:02:19 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -102,7 +102,8 @@ $Id: README,v 1.7 2002/12/11 14:19:17 maire Exp $
       2 : number of steps per track (charged particle)
       3 : step length (charged particle)
 
- Note that histograms are disabled via the flag G4NOHIST in the GNUmakefile.
+ Note that, by default, histograms are disabled. To activate them, uncomment
+ the flag G4ANALYSIS_USE in GNUmakefile.
  
  8- Using the Anaphe implementation of the AIDA 3.0 histograms:
  --------------------------------------------------------------

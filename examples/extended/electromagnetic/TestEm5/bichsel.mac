@@ -1,0 +1,31 @@
+# $Id: bichsel.mac,v 1.1 2003/08/11 10:03:12 maire Exp $
+#
+# macro file for TestEm5.cc
+#
+# 0.766 MeV protons, transmitted through 1.37 mg/cm2 Al
+# H.Bichsel Phys.Rev. 112 (1958) page 182.
+#
+# proj. angle distr. exp(-(th/th0)**2)  th0 = 4.44+- 0.20 deg
+#
+/control/verbose 2
+/run/verbose 2
+#
+/testem/det/setAbsMat   Aluminium
+/testem/det/setAbsThick 5.0741 mum
+/testem/det/setAbsYZ    1 cm
+#
+/testem/phys/setCuts 1 mm
+#
+/run/initialize
+#
+/testem/gun/setDefault
+/gun/particle proton
+/gun/energy 766 keV
+#
+/testem/histo/setFileName bichsel.paw
+/testem/histo/setHisto 5 100   0  9 deg		#space angle  
+/testem/histo/setHisto 6 100  -9 +9 deg		#projected angle  
+#
+/testem/stack/killSecondaries
+#
+/run/beamOn 100000

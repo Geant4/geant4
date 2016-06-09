@@ -7,18 +7,17 @@
 #include "celoss.inc"
 #include "histo.inc"
 #include "geant321/gckine.inc"
+#include "geant321/gcbank.inc"
 *
       CHARACTER*20 filnam
 *
 * *** Define the GEANT parameters
-      CALL GINIT 
-                                                                          
-* *** read data cards
-      PRINT *, 'G3 > gives the filename of the data cards to be read:'
-      READ (*,'(A)') filnam
-      IF (filnam.EQ.' ') filnam = 'run01.dat'
-      OPEN (unit=5,file=filnam,status='unknown',form='formatted')
-                                              
+      CALL GINIT
+*
+* *** default values
+      do ih = 1,MaxHist
+        histo(ih) = .false.
+      enddo	                                                       
 *
 * *** Calor definition
       CALL FFKEY('CALOR',NbAbsor,4,'MIXED')
@@ -27,16 +26,25 @@
 * *** production cuts (bcute, dcute and ppcutm) for each absorber       
       CALL FFKEY('CUTPR',prodcut(1) ,4*MaxAbs,'REAL')      
 * *** histograms
-      CALL FFKEY('HISTO',idhist,4,'MIXED')
+      CALL FFKEY('HISTO',idhist,5,'MIXED')
 * *** max allowed step size       
-      CALL FFKEY('STEPMX',stepmax,1,'REAL')                  
-*
+      CALL FFKEY('STEPMX',stepmax,1,'REAL')
+*                                                                          
 * *** read data cards
+      PRINT *, 'G3 > gives the filename of the data cards to be read:'
+      READ (*,'(A)') filnam
+      IF (filnam.EQ.' ') filnam = 'run01.dat'
+      OPEN (unit=5,file=filnam,status='unknown',form='formatted')
+*
       CALL GFFGO 
 *
       CALL GZINIT
       CALL GPART
-      CALL GPIONS 
+      CALL GPIONS
+*
+* *** overwrite ITRTYP for ion C12
+      JPA = LQ(JPART-67)
+      Q(JPA+6) = 8.0       
 *
       CALL GDINIT
 *
@@ -49,8 +57,6 @@
       CALL GPRINT('MATE',0)                                                     
       CALL GPRINT('TMED',0)                                                     
       CALL GPRINT('VOLU',0)                                                     
-*
-      CALL UHINIT
 *
 * *** some initialisation
       do k=1,MaxAbs

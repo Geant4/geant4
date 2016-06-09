@@ -21,15 +21,15 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPInelasticCompFS.hh,v 1.9 2003/06/16 17:10:47 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4NeutronHPInelasticCompFS.hh,v 1.10 2003/07/01 15:58:36 hpw Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 #ifndef G4NeutronHPInelasticCompFS_h
 #define G4NeutronHPInelasticCompFS_h 1
 
 #include "globals.hh"
-#include "G4Track.hh"
-#include "G4ParticleChange.hh"
+#include "G4HadProjectile.hh"
+#include "G4HadFinalState.hh"
 #include "G4NeutronHPFinalState.hh"
 #include "G4NeutronHPAngular.hh"
 #include "G4NeutronHPEnergyDistribution.hh"
@@ -66,7 +66,7 @@ class G4NeutronHPInelasticCompFS : public G4NeutronHPFinalState
   }
   void Init (G4double A, G4double Z, G4String & dirName, G4String & aSFType);
   void InitGammas(G4double AR, G4double ZR);
-  virtual G4ParticleChange * ApplyYourself(const G4Track & theTrack) = 0;
+  virtual G4HadFinalState * ApplyYourself(const G4HadProjectile & theTrack) = 0;
   virtual G4NeutronHPFinalState * New() = 0;
   virtual G4double GetXsec(G4double anEnergy)
   {
@@ -74,7 +74,7 @@ class G4NeutronHPInelasticCompFS : public G4NeutronHPFinalState
   }
   virtual G4NeutronHPVector * GetXsec() { return theXsection[50]; }
   G4int SelectExitChannel(G4double eKinetic);
-  void CompositeApply(const G4Track & theTrack, G4ParticleDefinition * aHadron);
+  void CompositeApply(const G4HadProjectile & theTrack, G4ParticleDefinition * aHadron);
   inline void InitDistributionInitialState(G4ReactionProduct & aNeutron, 
                                            G4ReactionProduct & aTarget, 
                                            G4int it)

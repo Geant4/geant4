@@ -71,7 +71,7 @@ AtRestDoIt(const G4Track& aTrack, const G4Step&aStep)
 {
   if(aTrack.GetDynamicParticle()->GetDefinition() != G4PionMinus::PionMinus())
   {
-    G4Exception("Calling G4PionMinusNuclearAtRestChips with particle other than pi-!!!");
+    throw G4HadronicException(__FILE__, __LINE__, "Calling G4PionMinusNuclearAtRestChips with particle other than pi-!!!");
   }
   
   // Create target

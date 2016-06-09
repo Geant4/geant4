@@ -31,7 +31,7 @@
   {
     G4NeutronHPElasticFS * theFS = new G4NeutronHPElasticFS;
     if(!getenv("NeutronHPCrossSections")) 
-       G4Exception("Please setenv NeutronHPCrossSections to point to the neutron cross-section files.");
+       throw G4HadronicException(__FILE__, __LINE__, "Please setenv NeutronHPCrossSections to point to the neutron cross-section files.");
     dirName = getenv("NeutronHPCrossSections");
     G4String tString = "/Elastic/";
     dirName = dirName + tString;
@@ -55,9 +55,9 @@
   
   #include "G4NeutronHPThermalBoost.hh"
   
-  G4VParticleChange * G4NeutronHPElastic::ApplyYourself(const G4Track& aTrack, G4Nucleus& )
+  G4HadFinalState * G4NeutronHPElastic::ApplyYourself(const G4HadProjectile& aTrack, G4Nucleus& )
   {
-    G4Material * theMaterial = aTrack.GetMaterial();
+    const G4Material * theMaterial = aTrack.GetMaterial();
     G4int n = theMaterial->GetNumberOfElements();
     G4int index = theMaterial->GetElement(0)->GetIndex();
     if(n!=1)
@@ -72,7 +72,7 @@
       {
         index = theMaterial->GetElement(i)->GetIndex();
         rWeight = NumAtomsPerVolume[i];
-        xSec[i] = theElastic[index].GetXsec(aThermalE.GetThermalEnergy(aTrack.GetDynamicParticle(),
+        xSec[i] = theElastic[index].GetXsec(aThermalE.GetThermalEnergy(aTrack,
   		                                                     theMaterial->GetElement(i),
   								     theMaterial->GetTemperature()));
         xSec[i] *= rWeight;

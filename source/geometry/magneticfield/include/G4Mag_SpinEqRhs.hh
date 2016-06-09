@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Mag_SpinEqRhs.hh,v 1.8 2002/06/07 18:25:09 japost Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4Mag_SpinEqRhs.hh,v 1.9 2003/10/31 14:35:52 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 //
 // class G4Mag_SpinEqRhs
@@ -30,27 +30,27 @@
 // Class description:
 //
 // This is the equation of motion for a particle with spin in a pure
-//   magnetic field. 
-//   The three components of the particle's spin are treated 
-//    utilising BMT equation.
+// magnetic field. The three components of the particle's spin are
+// treated utilising BMT equation.
 
 // History:
 // - Created: J.Apostolakis, P.Gumplinger - February 8th, 1999.
-// - Modified: D. Cote-Ahern, P.Gumplinger - April 11th, 2001.
+// --------------------------------------------------------------------
 
 #ifndef G4MAG_SPIN_EQRHS
 #define G4MAG_SPIN_EQRHS
 
+#include "G4Types.hh"
 #include "G4Mag_EqRhs.hh"
-#include "G4MagneticField.hh"
+
+class G4MagneticField;
 
 class G4Mag_SpinEqRhs : public G4Mag_EqRhs
 {
    public:  // with description
 
-     G4Mag_SpinEqRhs( G4MagneticField* MagField )
-       : G4Mag_EqRhs( MagField ) {;}
-    ~G4Mag_SpinEqRhs() {;}
+     G4Mag_SpinEqRhs( G4MagneticField* MagField );
+    ~G4Mag_SpinEqRhs();
        // Constructor and destructor. No actions.
 
      void SetChargeMomentumMass(G4double particleCharge, // in e+ units
@@ -58,8 +58,8 @@ class G4Mag_SpinEqRhs : public G4Mag_EqRhs
                                 G4double mass); 
 
      void EvaluateRhsGivenB( const  G4double y[],
-			     const  G4double B[3],
-			     G4double dydx[] ) const;
+                             const  G4double B[3],
+                                    G4double dydx[] ) const;
        // Given the value of the magnetic field B, this function 
        // calculates the value of the derivative dydx.
 
@@ -72,7 +72,6 @@ class G4Mag_SpinEqRhs : public G4Mag_EqRhs
      G4double E;
      G4double gamma;
      G4double beta;
-
 };
 
 #endif /* G4MAG_SPIN_EQRHS */

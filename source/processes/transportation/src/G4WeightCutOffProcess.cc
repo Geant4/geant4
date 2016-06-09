@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4WeightCutOffProcess.cc,v 1.5 2003/04/02 16:59:35 dressel Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4WeightCutOffProcess.cc,v 1.6 2003/11/26 14:51:50 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -41,22 +41,24 @@
 
 G4WeightCutOffProcess::
 G4WeightCutOffProcess(G4double wsurvival,
-		      G4double wlimit,
-		      G4double isource,
-		      G4VIStore *istore,
-		      const G4VGCellFinder &aGCellFinder,
-		      const G4String &aName)
-  : 
-  G4VProcess(aName), 
-  fParticleChange(new G4ParticleChange),
-  fWeightSurvival(wsurvival),
-  fWeightLimit(wlimit),
-  fSourceImportance(isource),
-  fIStore(istore),
-  fGCellFinder(aGCellFinder)
+                      G4double wlimit,
+                      G4double isource,
+                      G4VIStore *istore,
+                      const G4VGCellFinder &aGCellFinder,
+                      const G4String &aName)
+  : G4VProcess(aName), 
+    fParticleChange(new G4ParticleChange),
+    fWeightSurvival(wsurvival),
+    fWeightLimit(wlimit),
+    fSourceImportance(isource),
+    fIStore(istore),
+    fGCellFinder(aGCellFinder)
 {
-  if (!fParticleChange) {
-    G4Exception("ERROR:G4WeightCutOffProcess::G4WeightCutOffProcess: new failed to create G4ParticleChange!");
+  if (!fParticleChange)
+  {
+    G4Exception("G4WeightCutOffProcess::G4WeightCutOffProcess()",
+                "FatalError", FatalException,
+                "Failed to allocate G4ParticleChange !");
   }
   G4VProcess::pParticleChange = fParticleChange;
 }
@@ -68,8 +70,7 @@ G4WeightCutOffProcess::~G4WeightCutOffProcess()
 
 G4double G4WeightCutOffProcess::
 PostStepGetPhysicalInteractionLength(const G4Track &,
-				     G4double ,
-				     G4ForceCondition* condition)
+                                     G4double, G4ForceCondition* condition)
 {
   *condition = Forced;
   return kInfinity;
@@ -77,58 +78,67 @@ PostStepGetPhysicalInteractionLength(const G4Track &,
   
 G4VParticleChange * 
 G4WeightCutOffProcess::PostStepDoIt(const G4Track& aTrack, 
-				    const G4Step &aStep)
+                                    const G4Step &aStep)
 {
   fParticleChange->Initialize(aTrack);
   G4GeometryCell postCell = fGCellFinder.GetPostGeometryCell(aStep);
   G4double R = fSourceImportance;
-  if (fIStore) {
+  if (fIStore)
+  {
     G4double i = fIStore->GetImportance(postCell);
-    if (i>0) {
+    if (i>0)
+    {
       R/=i;
     }
   }
   G4double w = aTrack.GetWeight();
-  if (w<R*fWeightLimit) {
+  if (w<R*fWeightLimit)
+  {
     G4double ws = fWeightSurvival*R;
     G4double p = w/(ws);
-    if (G4UniformRand()<p) {
+    if (G4UniformRand()<p)
+    {
       fParticleChange->SetStatusChange(fStopAndKill);
     }
-    else {
+    else
+    {
       fParticleChange->SetWeightChange(ws);
     }                  
   }
   return fParticleChange;
 }
 
-const G4String &G4WeightCutOffProcess::GetName() const {
+const G4String &G4WeightCutOffProcess::GetName() const
+{
   return theProcessName;
 }
 
-
 G4double G4WeightCutOffProcess::
 AlongStepGetPhysicalInteractionLength(const G4Track&,
-				      G4double  ,
-				      G4double  ,
-				      G4double& ,
-				      G4GPILSelection*) {
+                                      G4double  ,
+                                      G4double  ,
+                                      G4double& ,
+                                      G4GPILSelection*)
+{
   return -1.0;
 }
 
   
 G4double G4WeightCutOffProcess::
 AtRestGetPhysicalInteractionLength(const G4Track& ,
-				   G4ForceCondition*) {
+                                   G4ForceCondition*)
+{
   return -1.0;
 }
   
-G4VParticleChange* G4WeightCutOffProcess::
-AtRestDoIt(const G4Track&, const G4Step&) {
+G4VParticleChange*
+G4WeightCutOffProcess::AtRestDoIt(const G4Track&, const G4Step&)
+{
   return 0;
 }
 
-G4VParticleChange* G4WeightCutOffProcess::
-AlongStepDoIt(const G4Track&, const G4Step&) {
+G4VParticleChange*
+G4WeightCutOffProcess::AlongStepDoIt(const G4Track&, const G4Step&)
+{
   return 0;
 }

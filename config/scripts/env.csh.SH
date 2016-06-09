@@ -156,18 +156,6 @@ setenv G4UI_USE_WIN32 1
 echo "On this machine the G4UI_USE_WIN32=\$G4UI_USE_WIN32"
 endif
 
-#+
-if ( X$g4ui_build_wo_session == Xy ) then
-setenv G4UI_BUILD_WO_SESSION 1
-echo "On this machine the G4UI_BUILD_WO_SESSION=\$G4UI_BUILD_WO_SESSION"
-endif
-
-#+
-if ( X$g4ui_use_wo == Xy ) then
-setenv G4UI_USE_WO 1
-echo "On this machine the G4UI_USE_WO=\$G4UI_USE_WO"
-endif
-
 #
 # g4vis
 #
@@ -175,12 +163,6 @@ endif
 if ( X$g4vis_build_dawn_driver == Xy ) then
 setenv G4VIS_BUILD_DAWN_DRIVER 1
 echo "On this machine the G4VIS_BUILD_DAWN_DRIVER=\$G4VIS_BUILD_DAWN_DRIVER"
-endif
-
-#+
-if ( X$g4vis_build_opacs_driver == Xy ) then
-setenv G4VIS_BUILD_OPACS_DRIVER 1
-echo "On this machine the G4VIS_BUILD_OPACS_DRIVER=\$G4VIS_BUILD_OPACS_DRIVER"
 endif
 
 #+
@@ -223,12 +205,6 @@ endif
 if ( X$g4vis_use_dawn == Xy ) then
 setenv G4VIS_USE_DAWN 1
 echo "On this machine the G4VIS_USE_DAWN=\$G4VIS_USE_DAWN"
-endif
-
-#+
-if ( X$g4vis_use_opacs == Xy ) then
-setenv G4VIS_USE_OPACS 1
-echo "On this machine the G4VIS_USE_OPACS=\$G4VIS_USE_OPACS"
 endif
 
 #+
@@ -301,16 +277,6 @@ setenv G4LIB_BUILD_STATIC 1
 echo "On this machine the G4LIB_BUILD_STATIC=\$G4LIB_BUILD_STATIC"
 endif
 
-if ( X$g4lib_use_shared == Xy ) then
-setenv G4LIB_USE_SHARED 1
-echo "On this machine the G4LIB_USE_SHARED=\$G4LIB_USE_SHARED"
-endif
-
-if ( X$g4lib_use_static == Xy ) then
-setenv G4LIB_USE_STATIC 1
-echo "On this machine the G4LIB_USE_STATIC=\$G4LIB_USE_STATIC"
-endif
-
 #+
 #
 # g4granular
@@ -334,10 +300,37 @@ $spitshell >>env.csh <<'!NO!SUBS!'
 if ( ${?G4WORKDIR} ) then
 echo "In your environment you have the G4WORKDIR=$G4WORKDIR"
 else
-echo "G4WORKDIR will be set to HOME=$HOME."
-setenv G4WORKDIR $HOME
+# Check for Windows!
+if ( "X$G4SYSTEM" == "XWIN32-VC" || "X$G4SYSTEM" == "XWIN32-VC7" ) then
+
+setenv checkdrive `echo $HOME|cut -d"/" -f2`
+
+if ( "X$checkdrive" == "Xcygdrive" ) then
+
+setenv windrive `echo $HOME|cut -d"/" -f3`
+setenv winpath `echo $HOME|cut -d"/" -f4-`
+
+setenv fullwinpath "$windrive:/$winpath"
+setenv G4WORKDIR $fullwinpath
+
+endif # if cygwin syntax is used
+
+if ( "X$winpath" == "X" ) then
+echo "G4WORKDIR will be set to ${G4WORKDIR}geant4 (in "native" Windows syntax)."
+setenv G4WORKDIR ${G4WORKDIR}geant4
+else
+echo "G4WORKDIR will be set to $G4WORKDIR/geant4 (in "native" Windows syntax)."
+setenv G4WORKDIR $G4WORKDIR/geant4
 endif
 
+
+else # if Unix
+
+echo "G4WORKDIR will be set to HOME/geant4=$HOME/geant4"
+setenv G4WORKDIR $HOME/geant4
+
+endif
+endif
 
 !NO!SUBS!
 chmod 755 env.csh

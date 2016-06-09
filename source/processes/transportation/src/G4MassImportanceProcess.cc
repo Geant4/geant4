@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4MassImportanceProcess.cc,v 1.14 2003/06/13 09:35:09 dressel Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4MassImportanceProcess.cc,v 1.16 2003/11/26 14:51:49 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -34,42 +34,48 @@
 #include "G4MassImportanceProcess.hh"
 #include "G4VImportanceAlgorithm.hh"
 #include "G4GeometryCell.hh"
-#include "G4ImportancePostStepDoIt.hh"
+#include "G4SamplingPostStepAction.hh"
 #include "G4VTrackTerminator.hh"
+#include "G4VIStore.hh"
 
 G4MassImportanceProcess::
 G4MassImportanceProcess(const G4VImportanceAlgorithm &aImportanceAlgorithm,
-			const G4VIStore &aIstore,
-			const G4VTrackTerminator *TrackTerminator,
-			const G4String &aName)
+                        const G4VIStore &aIstore,
+                        const G4VTrackTerminator *TrackTerminator,
+                        const G4String &aName)
  : G4VProcess(aName),
    fParticleChange(new G4ParticleChange),
    fImportanceAlgorithm(aImportanceAlgorithm),
-   fImportanceFinder(aIstore),
-   fImportancePostStepDoIt(0)
+   fIStore(aIstore),
+   fPostStepAction(0)
 {
-  if (TrackTerminator) {
-    fImportancePostStepDoIt = new G4ImportancePostStepDoIt(*TrackTerminator);
+  if (TrackTerminator)
+  {
+    fPostStepAction = new G4SamplingPostStepAction(*TrackTerminator);
   }
-  else {
-    fImportancePostStepDoIt = new G4ImportancePostStepDoIt(*this);
+  else
+  {
+    fPostStepAction = new G4SamplingPostStepAction(*this);
   }
-  if (!fParticleChange) {
-    G4Exception("ERROR:G4MassImportanceProcess::G4MassImportanceProcess: new failed to create G4ParticleChange!");
+  if (!fParticleChange)
+  {
+    G4Exception("G4MassImportanceProcess::G4MassImportanceProcess()",
+                "FatalError", FatalException,
+                "Failed allocation of G4ParticleChange !");
   }
   G4VProcess::pParticleChange = fParticleChange;
 }
 
 G4MassImportanceProcess::~G4MassImportanceProcess()
 {
-  delete fImportancePostStepDoIt;
+  delete fPostStepAction;
   delete fParticleChange;
 }
 
 G4double G4MassImportanceProcess::
 PostStepGetPhysicalInteractionLength(const G4Track& ,
-				     G4double   ,
-				     G4ForceCondition* condition)
+                                     G4double   ,
+                                     G4ForceCondition* condition)
 {
   *condition = Forced;
   return kInfinity;
@@ -77,53 +83,58 @@ PostStepGetPhysicalInteractionLength(const G4Track& ,
   
 G4VParticleChange *
 G4MassImportanceProcess::PostStepDoIt(const G4Track &aTrack,
-				      const G4Step &aStep)
+                                      const G4Step &aStep)
 {
   fParticleChange->Initialize(aTrack);
-  if (aStep.GetPostStepPoint()->GetStepStatus() == fGeomBoundary
-      && aStep.GetStepLength() > kCarTolerance) {
-    if (aTrack.GetTrackStatus()==fStopAndKill) {
-      G4cout << "G4MassImportanceProcess::PostStepDoIt StopAndKill" << G4endl;
+  if ( (aStep.GetPostStepPoint()->GetStepStatus() == fGeomBoundary)
+    && (aStep.GetStepLength() > kCarTolerance) )
+  {
+    if (aTrack.GetTrackStatus()==fStopAndKill)
+    {
+      G4cout << "WARNING - G4MassImportanceProcess::PostStepDoIt()"
+             << "          StopAndKill track." << G4endl;
     }
 
-    G4StepPoint *prepoint = aStep.GetPreStepPoint();
+    G4StepPoint *prepoint  = aStep.GetPreStepPoint();
     G4StepPoint *postpoint = aStep.GetPostStepPoint();
-  
 
     G4GeometryCell prekey(*(prepoint->GetPhysicalVolume()), 
-			 prepoint->GetTouchable()->GetReplicaNumber());
+                         prepoint->GetTouchable()->GetReplicaNumber());
     G4GeometryCell postkey(*(postpoint->GetPhysicalVolume()), 
-			  postpoint->GetTouchable()->GetReplicaNumber());
+                          postpoint->GetTouchable()->GetReplicaNumber());
 
     G4Nsplit_Weight nw = fImportanceAlgorithm.
-      Calculate(fImportanceFinder.GetImportance(prekey),
-		fImportanceFinder.GetImportance(postkey), 
-		aTrack.GetWeight());
-    fImportancePostStepDoIt->DoIt(aTrack, fParticleChange, nw);
+      Calculate(fIStore.GetImportance(prekey),
+                fIStore.GetImportance(postkey), 
+                aTrack.GetWeight());
+    fPostStepAction->DoIt(aTrack, fParticleChange, nw);
   }
   return fParticleChange;
 }
 
-void G4MassImportanceProcess::KillTrack() const {
+void G4MassImportanceProcess::KillTrack() const
+{
   fParticleChange->SetStatusChange(fStopAndKill);
 }
 
-const G4String &G4MassImportanceProcess::GetName() const {
+const G4String &G4MassImportanceProcess::GetName() const
+{
   return theProcessName;
 }
 
 G4double G4MassImportanceProcess::
 AlongStepGetPhysicalInteractionLength(const G4Track&,
-				      G4double  ,
-				      G4double  ,
-				      G4double& ,
-				      G4GPILSelection*) {
+                                      G4double  ,
+                                      G4double  ,
+                                      G4double& ,
+                                      G4GPILSelection*)
+{
   return -1.0;
 }
 
 G4double G4MassImportanceProcess::
 AtRestGetPhysicalInteractionLength(const G4Track& ,
-				   G4ForceCondition*) 
+                                   G4ForceCondition*) 
 {
   return -1.0;
 }
@@ -135,7 +146,8 @@ AtRestDoIt(const G4Track&, const G4Step&)
 }
 
 G4VParticleChange* G4MassImportanceProcess::
-AlongStepDoIt(const G4Track&, const G4Step&) {
+AlongStepDoIt(const G4Track&, const G4Step&)
+{
   return 0;
 }
 

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4SteppingManager.hh,v 1.24 2003/06/16 17:13:09 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4SteppingManager.hh,v 1.25 2003/12/09 08:40:17 asaim Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 // 
 //---------------------------------------------------------------
 //
@@ -462,7 +462,7 @@ public: //without description
   }
 
   inline void G4SteppingManager::SetUserAction(G4UserSteppingAction* apAction){
-    if (apAction != NULL) fUserSteppingAction = apAction;
+    fUserSteppingAction = apAction;
   }
   inline G4UserSteppingAction* G4SteppingManager::GetUserAction(){
     return fUserSteppingAction;

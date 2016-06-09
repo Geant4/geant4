@@ -21,17 +21,20 @@
 // ********************************************************************
 //
 //
-// $Id: G4Region.cc,v 1.9 2003/06/16 16:52:07 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4Region.cc,v 1.11 2003/11/02 14:01:23 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // 
 // class G4Region Implementation
+//
+// --------------------------------------------------------------------
 
 #include "G4RegionStore.hh"
 #include "G4LogicalVolume.hh"
 #include "G4VPhysicalVolume.hh"
 #include "G4Region.hh"
 #include "G4VPVParameterisation.hh"
+#include "G4VUserRegionInformation.hh"
 
 // *******************************************************************
 // Constructor:
@@ -39,15 +42,16 @@
 // *******************************************************************
 //
 G4Region::G4Region(const G4String& pName)
-  : fName(pName), fRegionMod(true), fCut(0)
+  : fName(pName), fRegionMod(true), fCut(0), fUserInfo(0)
 {
   G4RegionStore* rStore = G4RegionStore::GetInstance();
   if (rStore->GetRegion(pName,false))
   {
     G4cerr << "WARNING - G4Region::G4Region()" << G4endl
            << "          Region " << pName << " already existing in store !"
-           << G4endl
-           << "          The region has NOT been registered !" << G4endl;
+           << G4endl;
+    G4Exception("G4Region::G4Region()", "InvalidSetup", JustWarning,
+                "The region has NOT been registered !");
   }
   else
   {
@@ -63,6 +67,7 @@ G4Region::G4Region(const G4String& pName)
 G4Region::~G4Region()
 {
   G4RegionStore::GetInstance()->DeRegister(this);
+  if(fUserInfo) delete fUserInfo;
 }
 
 // *******************************************************************

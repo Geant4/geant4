@@ -49,7 +49,7 @@ void ExN04MuonSD::Initialize(G4HCofThisEvent*HCE)
   HCE->AddHitsCollection(HCID,muonCollection);
 }
 
-G4bool ExN04MuonSD::ProcessHits(G4Step*aStep,G4TouchableHistory*ROhist)
+G4bool ExN04MuonSD::ProcessHits(G4Step* aStep, G4TouchableHistory*)
 {
   G4double edep = aStep->GetTotalEnergyDeposit();
 
@@ -77,7 +77,7 @@ G4bool ExN04MuonSD::ProcessHits(G4Step*aStep,G4TouchableHistory*ROhist)
   return true;
 }
 
-void ExN04MuonSD::EndOfEvent(G4HCofThisEvent*HCE)
+void ExN04MuonSD::EndOfEvent(G4HCofThisEvent*)
 {;}
 
 void ExN04MuonSD::clear()

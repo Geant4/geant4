@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: ExN04IonPhysics.hh,v 1.2 2002/11/19 10:15:51 murakami Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: ExN04IonPhysics.hh,v 1.3 2003/12/03 11:03:06 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // 
 // ------------------------------------------------------------
@@ -55,6 +55,7 @@
 #include "G4LEAlphaInelastic.hh"
 
 #include "G4hIonisation.hh"
+#include "G4ionIonisation.hh"
 #include "G4MultipleScattering.hh"
 
 class ExN04IonPhysics : public G4VPhysicsConstructor
@@ -75,12 +76,12 @@ class ExN04IonPhysics : public G4VPhysicsConstructor
 
   protected:
    // Elastic Process
-   G4HadronElasticProcess theElasticProcess;
-   G4LElastic*            theElasticModel;
+   G4HadronElasticProcess      theElasticProcess;
+   G4LElastic*                 theElasticModel;
 
    // Generic Ion physics
-   G4MultipleScattering   fIonMultipleScattering;
-   G4hIonisation          fIonIonisation;
+   G4MultipleScattering        fIonMultipleScattering;
+   G4ionIonisation             fIonIonisation;
 
    // Deuteron physics
    G4MultipleScattering        fDeuteronMultipleScattering;

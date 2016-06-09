@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VParticleChange.cc,v 1.12.2.1 2003/06/16 17:19:38 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4VParticleChange.cc,v 1.15 2003/06/19 14:45:12 gunter Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // 
 // --------------------------------------------------------------
@@ -37,6 +37,7 @@
 #include "G4Track.hh"
 #include "G4Step.hh"
 #include "G4TrackFastVector.hh"
+#include "G4ExceptionSeverity.hh"
 
 const G4double G4VParticleChange::accuracyForWarning = 1.0e-9;
 const G4double G4VParticleChange::accuracyForException = 0.001;
@@ -204,9 +205,11 @@ G4bool G4VParticleChange::CheckIt(const G4Track& )
   G4bool itsOKforEnergy = true;
   accuracy = -1.0*theLocalEnergyDeposit/MeV;
   if (accuracy > accuracyForWarning) {
+#ifdef G4VERBOSE
     G4cout << "  G4VParticleChange::CheckIt    : ";
     G4cout << "the energy deposit  is negative  !!" << G4endl;
     G4cout << "  Difference:  " << accuracy  << "[MeV] " <<G4endl;
+#endif
     itsOKforEnergy = false;
     if (accuracy > accuracyForException) exitWithError = true;
   }
@@ -215,22 +218,31 @@ G4bool G4VParticleChange::CheckIt(const G4Track& )
   G4bool itsOKforStepLength = true;
   accuracy = -1.0*theTrueStepLength/mm;
   if (accuracy > accuracyForWarning) {
+#ifdef G4VERBOSE
     G4cout << "  G4VParticleChange::CheckIt    : ";
     G4cout << "the true step length is negative  !!" << G4endl;
     G4cout << "  Difference:  " << accuracy  << "[MeV] " <<G4endl;
+#endif
     itsOKforStepLength = false;
     if (accuracy > accuracyForException) exitWithError = true;
   }
 
   G4bool itsOK = itsOKforStepLength && itsOKforEnergy ;
   // dump out information of this particle change
+#ifdef G4VERBOSE
   if (! itsOK ){
     G4cout << " G4VParticleChange::CheckIt " <<G4endl;
     DumpInfo();
   }
+#endif
 
   // Exit with error
-  if (exitWithError) G4Exception("G4VParticleChange::CheckIt");
+  if (exitWithError) {
+    G4Exception("G4VParticleChange::CheckIt",
+		"100",
+		EventMustBeAborted,
+		"step length and/or energy deposit was  illegal");
+  }
 
   // correction 
   if ( !itsOKforStepLength ) {
@@ -242,6 +254,77 @@ G4bool G4VParticleChange::CheckIt(const G4Track& )
   return itsOK;
 }
 
+G4bool G4VParticleChange::CheckSecondary(G4Track& aTrack)
+{
+  G4bool    exitWithError = false;
+  G4double  accuracy;
+
+  // MomentumDirection should be unit vector
+  G4bool itsOKforMomentum = true;  
+  accuracy = abs((aTrack.GetMomentumDirection()).mag2()-1.0);
+  if (accuracy > accuracyForWarning) {
+#ifdef G4VERBOSE
+    G4cout << " G4VParticleChange::CheckSecondary  :   ";
+    G4cout << "the Momentum direction is not unit vector !!" << G4endl;
+    G4cout << "  Difference:  " << accuracy << G4endl;
+#endif
+    itsOKforMomentum = false;
+    if (accuracy > accuracyForException) exitWithError = true;
+  }
+  
+  // Kinetic Energy should not be negative
+  G4bool itsOKforEnergy;
+  accuracy = -1.0*(aTrack.GetKineticEnergy())/MeV;
+  if (accuracy < accuracyForWarning) {
+    itsOKforEnergy = true;
+  } else {
+#ifdef G4VERBOSE
+    G4cout << " G4VParticleChange::CheckSecondary  :   ";
+    G4cout << "the kinetic energy is negative  !!" << G4endl;
+    G4cout << "  Difference:  " << accuracy  << "[MeV] " <<G4endl;
+#endif
+    itsOKforEnergy = false;
+    if (accuracy < accuracyForException) { exitWithError = false;}
+    else { exitWithError = true; }
+  }
+  G4bool itsOKforProperTime = true;
+  //accuracy = (aTrack.GetProperTime())/ns;
+  //  if (accuracy > accuracyForWarning) {
+#ifdef G4VERBOSE
+  //  G4cout << "  G4VParticleChange::CheckSecondary    : ";
+  //  G4cout << "the proper time goes back  !!" << G4endl;
+  //  G4cout << "  Difference:  " << accuracy  << "[ns] " <<G4endl;
+#endif
+  //  itsOKforProperTime = false;
+  //  if (accuracy > accuracyForException) exitWithError = true;
+  //}
+  
+  // Exit with error
+  if (exitWithError) {
+    G4Exception("G4VParticleChange::CheckSecondary",
+		"10",
+		EventMustBeAborted,  
+		"momentum, energy and/or proper time was illegal");
+  }
+
+  G4bool itsOK = itsOKforMomentum && itsOKforEnergy && itsOKforProperTime;
+
+  //correction
+  if (!itsOKforMomentum) {
+    G4double vmag = (aTrack.GetMomentumDirection()).mag();
+    aTrack.SetMomentumDirection((1./vmag)*aTrack.GetMomentumDirection());
+  }
+  //if (!itsOKforProperTime) {
+  //  aTrack.SetProperTime(0.0);
+  //}
+  if (!itsOKforEnergy) {
+    aTrack.SetKineticEnergy(0.0);
+  }
+
+  return itsOK;
+}
+
+
 const G4double G4VParticleChange::GetAccuracyForWarning() const
 {
   return accuracyForWarning;
@@ -251,3 +334,43 @@ const G4double G4VParticleChange::GetAccuracyForException() const
 {
   return accuracyForException;
 }
+
+void G4VParticleChange::AddSecondary(G4Track *aTrack)
+{
+  if (debugFlag) CheckSecondary(*aTrack);
+
+  if (!fSetSecondaryWeightByProcess){
+    // pass the weight of parent track 
+    aTrack->SetWeight(theParentWeight);
+  }
+
+  // add a secondary after size check
+  if (theSizeOftheListOfSecondaries > theNumberOfSecondaries) {
+    theListOfSecondaries->SetElement(theNumberOfSecondaries, aTrack);
+    theNumberOfSecondaries++;
+  } else {
+#ifdef G4VERBOSE
+    if (verboseLevel>0) {
+      G4cerr << "G4VParticleChange::AddSecondary() Warning  ";
+      G4cerr << "theListOfSecondaries is full !! " << G4endl;
+      G4cerr << " The object will not be added in theListOfSecondaries" << G4endl;
+    }
+#endif
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,6 +1,6 @@
-#  $Id: GNUmakefile,v 1.2 2003/06/16 17:06:43 dressel Exp $
+#  $Id: GNUmakefile,v 1.5 2003/12/08 17:53:25 gcosmo Exp $
 # -------------------------------------------------------------------
-# GEANT4 tag $Name: geant4-05-02 $
+# GEANT4 tag $Name: geant4-06-00 $
 # --------------------------------------------------------------
 
 
@@ -10,7 +10,8 @@ TIARA_SRC_SWIG_DIRS = CLHEPWrapper G4KernelWrapper TiaraWrapper
 
 include $(G4INSTALL)/config/architecture.gmk
 
-.PHONY: Tiara tiaraClean swigClean
+.PHONY: Tiara tiaraClean swigClean all
+all: Tiara
 
 Tiara:
 	@for dir in $(TIARA_SRC_DIRS); do ( cd source/$$dir && $(MAKE)); done;:
@@ -22,3 +23,4 @@ tiaraClean:
 
 swigClean:
 	@for dir in $(TIARA_SRC_SWIG_DIRS); do ( cd source/$$dir && $(MAKE) swigClean); done;:
+

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: PhysicsListMessenger.cc,v 1.4 2003/01/27 09:46:20 hbu Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: PhysicsListMessenger.cc,v 1.5 2003/10/10 10:42:39 maire Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // 
 
@@ -33,7 +33,6 @@
 
 #include "PhysicsList.hh"
 #include "G4UIcmdWithADouble.hh"
-#include "globals.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

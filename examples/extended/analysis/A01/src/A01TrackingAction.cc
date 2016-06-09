@@ -20,15 +20,14 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: A01TrackingAction.cc,v 1.3 2002/12/13 11:34:34 gunter Exp $
+// $Id: A01TrackingAction.cc,v 1.4 2003/10/12 19:50:37 perl Exp $
 // --------------------------------------------------------------
 //
 
 #include "A01TrackingAction.hh"
 #include "G4TrackingManager.hh"
 #include "G4Track.hh"
-
-#include "A01Trajectory.hh"
+#include "G4Trajectory.hh"
 
 A01TrackingAction::A01TrackingAction()
 {;}
@@ -39,7 +38,7 @@ A01TrackingAction::~A01TrackingAction()
 void A01TrackingAction::PreUserTrackingAction(const G4Track* aTrack)
 {
   fpTrackingManager->SetStoreTrajectory(true);
-  fpTrackingManager->SetTrajectory(new A01Trajectory(aTrack));
+  fpTrackingManager->SetTrajectory(new G4Trajectory(aTrack));
 }
 
 

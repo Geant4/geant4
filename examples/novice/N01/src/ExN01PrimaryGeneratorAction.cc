@@ -22,7 +22,7 @@
 //
 //
 // $Id: ExN01PrimaryGeneratorAction.cc,v 1.5 2002/05/14 01:50:31 asaim Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 
 #include "ExN01PrimaryGeneratorAction.hh"

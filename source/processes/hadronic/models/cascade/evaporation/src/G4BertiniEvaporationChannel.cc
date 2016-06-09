@@ -248,7 +248,7 @@ G4double G4BertiniEvaporationChannel::pairingEnergyProtons(G4int Z)
     0.00000000E+00, 0.60999995E+00, 0.00000000E+00, 0.41999996E+00, 0.00000000E+00,
     0.35999995E+00, 0.00000000E+00, 0.40999997E+00, 0.00000000E+00, 0.48999995E+00
   };
-  if ( Z>130 ) G4Exception( " G4BertiniEvaporationChannel: pairing energy for protons called with too large Z " ); 
+  if ( Z>130 ) throw G4HadronicException(__FILE__, __LINE__,  " G4BertiniEvaporationChannel: pairing energy for protons called with too large Z " ); 
   return table[ Z-1 ]*MeV;
 }
 
@@ -300,7 +300,7 @@ G4double G4BertiniEvaporationChannel::pairingEnergyNeutrons(G4int N)
     0.00000000E+00, 0.39999998E+00, 0.00000000E+00, 0.39999998E+00, 0.00000000E+00,
     0.39999998E+00, 0.00000000E+00, 0.39999998E+00, 0.00000000E+00, 0.39999998E+00
   };
-  if ( N > 200 ) G4Exception( " G4BertiniEvaporationChannel: pairing energy for neutrons called with too large Z " ); 
+  if ( N > 200 ) throw G4HadronicException(__FILE__, __LINE__,  " G4BertiniEvaporationChannel: pairing energy for neutrons called with too large Z " ); 
   return table[ N-1 ]*MeV;
 }
 
@@ -340,7 +340,7 @@ G4double G4BertiniEvaporationChannel::cameronShellCorrectionP(G4int Z)
     -0.50599995E+01, -0.67699995E+01, -0.74099998E+01, -0.91799994E+01, -0.10160000E+02,
     -0.11120000E+02, -0.97599993E+01, -0.92299995E+01, -0.79599991E+01, -0.76499996E+01,
   };
-  if ( Z > 130 ) G4Exception( " G4BertiniEvaporationChannel: shell correction for protons called with too large Z " ); 
+  if ( Z > 130 ) throw G4HadronicException(__FILE__, __LINE__,  " G4BertiniEvaporationChannel: shell correction for protons called with too large Z " ); 
   return table[ Z-1 ]*MeV;
 }
 
@@ -394,7 +394,7 @@ G4double G4BertiniEvaporationChannel::cameronShellCorrectionN(G4int N)
     0.72899990E+01,  0.73499994E+01,  0.79499998E+01,  0.76699991E+01,  0.81599998E+01,
     0.78299990E+01,  0.83099995E+01,  0.80099993E+01,  0.85299997E+01,  0.82699995E+01
   };
-  if ( N > 130 ) G4Exception( " G4BertiniEvaporationChannel: shell correction for protons called with too large N " ); 
+  if ( N > 130 ) throw G4HadronicException(__FILE__, __LINE__,  " G4BertiniEvaporationChannel: shell correction for protons called with too large N " ); 
   return table[ N-1 ]*MeV;
 }
 

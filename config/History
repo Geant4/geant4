@@ -1,5 +1,5 @@
-$Id: History,v 1.218 2003/06/26 07:54:59 gcosmo Exp $
-$Name: geant4-05-02 $
+$Id: History,v 1.231 2003/11/18 09:08:10 gcosmo Exp $
+$Name: geant4-06-00 $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,49 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+18th November 2003  Gabriele Cosmo (config-V05-02-05)
+- Updated binmake.gmk to include new hadronics modules.
+  Coworks with "ghad-V05-02-00" and HEAD of processes/GNUmakefile.
+
+4th November 2003  Gabriele Cosmo (config-V05-02-04)
+- Include removal of OPACS setup. Cowork with tags "interfaces-V05-02-00"
+  and "vis-V05-02-02".
+
+29th October 2003  Gabriele Cosmo (config-V05-02-03)
+- binmake.gmk:
+  o Added particles/utils module.
+- Does NOT include removal of OPACS setup yet.
+
+22th October 2003  Guy Barrand
+- OPACS : rm interfaces OPACS related things.
+
+17th October 2003  Guy Barrand
+- OPACS being (for long) deprecated, the OPACS related things
+  had been removed in the Geant4 repository.
+
+30th September 2003  Gabriele Cosmo (config-V05-02-02)
+- architecture.gmk, binmake.gmk:
+  o Added geometry/navigation module.
+  o Removed setup for STEP, now archived.
+  o Adopt new module and library "digits_hits", replacing "digits+hits".
+- Configure installation script:
+  o Fixed correct default name for data sets.
+  o Implemented automatic detection of OpenGL and CLHEP installations.
+  o Fixed behavior of script on Windows system, corrected definition of
+    paths and defaults.
+  o Cleared not allowed configuration drivers.
+
+19th September 2003  Gabriele Cosmo (config-V05-02-01)
+- binmake.gmk:
+  o added processes/cuts module.
+- architecture.gmk:
+  o fixed setup for OpenInventor libraries.
+
+1st July 2003  Gabriele Cosmo (config-V05-02-00)
+- WIN32-VC.gmk, WIN32-VC7.gmk:
+  o reinstated options "-D_CONSOLE -D_WIN32 -DOS" to allow correct
+    treatment/opening of data files from applications.
 
 24th June 2003  Gabriele Cosmo (config-V05-01-05)
 - Added UI32LIBS to interactivity.gmk to handle UI libraries on WIN32

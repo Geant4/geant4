@@ -1,0 +1,31 @@
+$Id: History,v 1.2 2003/10/03 10:29:19 gcosmo Exp $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                      Category History file
+                      ---------------------
+This file should be used by G4 developers and category coordinators
+to briefly summarize all major modifications introduced in the code
+and keep track of all category-tags.
+It DOES NOT substitute the  CVS log-message one should put at every
+committal in the CVS repository !
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+Oct,  4th 2003 G.Cosmo
+- Imported from digits+hits directory.
+
+Nov,  4th 2002 M.Dressel
+- Removed G4std:: where it does not belong to.
+
+Oct  28th, 2002 M.Dressel
+- Added G4CellScoreComposer[.hh.cc], G4CellScoreValues.hh,
+  G4CellStoreScorer[.hh.cc], G4TrackLogger[.hh.cc].
+
+June 6, 98 M.Asai
+- Created.

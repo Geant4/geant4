@@ -22,7 +22,7 @@
 //
 //
 // $Id: B02PrimaryGeneratorAction.cc,v 1.5 2002/11/08 14:47:48 dressel Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 
 #include "globals.hh"

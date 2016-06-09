@@ -53,7 +53,7 @@
 #include "G4SoWindow.hh"
 
 #ifdef HEPVisXt
-static XtTranslations trans_table = NULL;
+static XtTranslations trans_table = 0;
 static XtActionsRec closeAction = 
 {(String)"CloseG4SoWindow",G4SoWindow::closeWindow};
 //static void XWidgetSetDimension(Widget,Dimension,Dimension);
@@ -63,7 +63,7 @@ static LRESULT CALLBACK WindowProc (HWND,UINT,WPARAM,LPARAM);
 static const char className[] = "G4SoWindow";
 #endif
 
-SbDict* G4SoWindow::fWidgetDictionary = NULL;
+SbDict* G4SoWindow::fWidgetDictionary = 0;
 
 //////////////////////////////////////////////////////////////////////////////
 void G4SoWindow::clearClass (
@@ -71,21 +71,21 @@ void G4SoWindow::clearClass (
 //////////////////////////////////////////////////////////////////////////////
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!//
 {
-  if(fWidgetDictionary!=NULL) delete fWidgetDictionary;
-  fWidgetDictionary = NULL;
+  if(fWidgetDictionary!=0) delete fWidgetDictionary;
+  fWidgetDictionary = 0;
 }
 //////////////////////////////////////////////////////////////////////////////
 G4SoWindow::G4SoWindow(
  const char* aName
 ,SbBool aWMClose
 )
-:fWidget(NULL)
+:fWidget(0)
 ,fWMClose(aWMClose)
 //////////////////////////////////////////////////////////////////////////////
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!//
 {
 #ifdef HEPVisXt
-  if(trans_table==NULL) {
+  if(trans_table==0) {
     trans_table = 
       XtParseTranslationTable("<Message>WM_PROTOCOLS:CloseG4SoWindow()");
     XtAppAddActions(SoXt::getAppContext(),&closeAction,1);
@@ -99,10 +99,10 @@ G4SoWindow::G4SoWindow(
 				  topLevelShellWidgetClass,
 				  SoXt::getDisplay(),
 				  args,2); 
-  if(fWidget!=NULL) {
+  if(fWidget!=0) {
     XtOverrideTranslations(fWidget,trans_table);
     XtAddCallback(fWidget,XtNdestroyCallback,
-		  (XtCallbackProc)G4SoWindow::widgetDestroyedCB,NULL);
+		  (XtCallbackProc)G4SoWindow::widgetDestroyedCB,0);
   }
 #endif
 #ifdef HEPVisWin32
@@ -113,10 +113,10 @@ G4SoWindow::G4SoWindow(
     wc.lpfnWndProc = (WNDPROC)WindowProc;
     wc.cbClsExtra = 0;
     wc.cbWndExtra = 0;
-    wc.hInstance = ::GetModuleHandle(NULL);
-    wc.hIcon = ::LoadIcon(NULL, IDI_APPLICATION);
-    wc.hCursor = ::LoadCursor(NULL, IDC_ARROW);
-    wc.hbrBackground = NULL;
+    wc.hInstance = ::GetModuleHandle(0);
+    wc.hIcon = ::LoadIcon(0, IDI_APPLICATION);
+    wc.hCursor = ::LoadCursor(0, IDC_ARROW);
+    wc.hbrBackground = 0;
     wc.lpszMenuName = className;
     wc.lpszClassName = className;
     ::RegisterClass(&wc);
@@ -129,9 +129,9 @@ G4SoWindow::G4SoWindow(
 			   //CW_USEDEFAULT, CW_USEDEFAULT, 
 			   0,0, 
 			   400,400, 
-			   NULL, NULL,
-			   ::GetModuleHandle(NULL),
-			   NULL);
+			   0, 0,
+			   ::GetModuleHandle(0),
+			   0);
   // Retreive window and client sizez :
   RECT wrect,crect;
   GetWindowRect((HWND)fWidget,&wrect);
@@ -153,13 +153,13 @@ G4SoWindow::~G4SoWindow(
 //////////////////////////////////////////////////////////////////////////////
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!//
 {
-  if(fWidget==NULL) return;
+  if(fWidget==0) return;
   unregisterWidget(fWidget);
 #ifdef HEPVisXt
   XtDestroyWidget(fWidget);
 #endif
 #ifdef HEPVisWin32
-  ::SetWindowLong((HWND)fWidget,GWL_USERDATA,LONG(NULL));
+  ::SetWindowLong((HWND)fWidget,GWL_USERDATA,LONG(0));
   ::DestroyWindow((HWND)fWidget);
 #endif
 }
@@ -194,7 +194,7 @@ void G4SoWindow::show(
 //////////////////////////////////////////////////////////////////////////////
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!//
 {
-  if(fWidget==NULL) return;
+  if(fWidget==0) return;
   SoXt::show(fWidget);
 }
 //////////////////////////////////////////////////////////////////////////////
@@ -203,7 +203,7 @@ void G4SoWindow::hide(
 //////////////////////////////////////////////////////////////////////////////
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!//
 {
-  if(fWidget==NULL) return;
+  if(fWidget==0) return;
   SoXt::hide(fWidget);
 }
 //////////////////////////////////////////////////////////////////////////////
@@ -213,7 +213,7 @@ void G4SoWindow::setTitle(
 //////////////////////////////////////////////////////////////////////////////
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!//
 {
-  if(aString==NULL) return;
+  if(aString==0) return;
 #ifdef HEPVisXt
   Arg args[1];
   XtSetArg(args[0],XtNtitle,XtNewString(aString));
@@ -230,7 +230,7 @@ void G4SoWindow::setSize(
 //////////////////////////////////////////////////////////////////////////////
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!//
 {
-  if(fWidget==NULL) return;
+  if(fWidget==0) return;
 #ifdef HEPVisXt
   Arg args[1];
   char s[32];
@@ -260,7 +260,7 @@ SbVec2s G4SoWindow::getSize(
 //////////////////////////////////////////////////////////////////////////////
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!//
 {
-  if(fWidget==NULL) return SbVec2s();
+  if(fWidget==0) return SbVec2s();
 #ifdef HEPVisXt
   Dimension width,height;
   Arg args[2];
@@ -282,8 +282,8 @@ void G4SoWindow::registerWidget(
 //////////////////////////////////////////////////////////////////////////////
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!//
 {
-  if(aWidget==NULL) return;
-  if(fWidgetDictionary==NULL) fWidgetDictionary = new SbDict;
+  if(aWidget==0) return;
+  if(fWidgetDictionary==0) fWidgetDictionary = new SbDict;
   fWidgetDictionary->enter((unsigned long)aWidget,this);
 }
 //////////////////////////////////////////////////////////////////////////////
@@ -293,8 +293,8 @@ void G4SoWindow::unregisterWidget(
 //////////////////////////////////////////////////////////////////////////////
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!//
 {
-  if(aWidget==NULL) return;
-  if(fWidgetDictionary==NULL) return;
+  if(aWidget==0) return;
+  if(fWidgetDictionary==0) return;
   fWidgetDictionary->remove((unsigned long)aWidget);
 }
 //////////////////////////////////////////////////////////////////////////////
@@ -304,11 +304,11 @@ G4SoWindow* G4SoWindow::getWindow(
 //////////////////////////////////////////////////////////////////////////////
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!//
 {
-  if(aWidget==NULL) return NULL;
-  if(fWidgetDictionary==NULL) return NULL;
+  if(aWidget==0) return 0;
+  if(fWidgetDictionary==0) return 0;
   void*  value;
   SbBool found = fWidgetDictionary->find((unsigned long)aWidget,value);
-  return (G4SoWindow*)(found==FALSE ? NULL : value);
+  return (G4SoWindow*)(found==FALSE ? 0 : value);
 }
 #ifdef HEPVisXt
 //////////////////////////////////////////////////////////////////////////////
@@ -321,7 +321,7 @@ void G4SoWindow::widgetDestroyedCB(
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!//
 {
   G4SoWindow* This = G4SoWindow::getWindow(aWidget);
-  if(This==NULL) return; // XtDestroyWidget called from ~G4SoWindow.
+  if(This==0) return; // XtDestroyWidget called from ~G4SoWindow.
   //printf("debug : G4SoWindow::widgetDestroyCB\n");
   This->unregisterWidget(aWidget);
 }
@@ -336,7 +336,7 @@ void G4SoWindow::closeWindow(
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!//
 {
   G4SoWindow* This = G4SoWindow::getWindow(aWidget);
-  if( (This!=NULL) && (This->getWMClose()==TRUE) ) {
+  if( (This!=0) && (This->getWMClose()==TRUE) ) {
     //SbWarn ("debug : CloseWindow : close\n");
 #ifdef SoFreePackage
     SoXt::sendExit ();
@@ -351,7 +351,7 @@ void G4SoWindow::closeWindow(
 /*
 #include <X11/IntrinsicP.h> //Dangerous.
 void XWidgetSetDimension(Widget aWidget,Dimension a_width,Dimension a_height){
-  if(aWidget==NULL)      return;
+  if(aWidget==0)      return;
   if((a_width<=0)||(a_height<=0)) return;
   XtResizeWidget (aWidget,a_width,a_height,aWidget->core.border_width);
 }
@@ -378,17 +378,17 @@ LRESULT CALLBACK WindowProc (
     int height = HIWORD(aLParam);
     //printf("debug : G4SoWindow : WMS_SIZE : %d %d\n",width,height);
     HWND hwnd = ::GetFirstChild(aWindow);
-    if(hwnd!=NULL) {
+    if(hwnd!=0) {
       ::MoveWindow(hwnd,0,0,width,height,TRUE);
     }
   }return 0;
   case WM_SETFOCUS:{ // Assume one child window !
     HWND hwnd = ::GetFirstChild(aWindow);
-    if(hwnd!=NULL) ::SetFocus(hwnd);
+    if(hwnd!=0) ::SetFocus(hwnd);
   }return 0;
   case WM_DESTROY:{
     G4SoWindow* This = (G4SoWindow*)::GetWindowLong(aWindow,GWL_USERDATA);
-    if( (This!=NULL) && (This->getWMClose()==TRUE) ) {
+    if( (This!=0) && (This->getWMClose()==TRUE) ) {
       ::PostQuitMessage(0);
     }
   }return 0;

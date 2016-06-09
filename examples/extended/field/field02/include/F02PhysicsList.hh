@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: F02PhysicsList.hh,v 1.2 2001/07/11 09:58:02 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: F02PhysicsList.hh,v 1.3 2003/08/27 17:44:08 vnivanch Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 
 #ifndef F02PhysicsList_h
@@ -83,14 +83,11 @@ class F02PhysicsList: public G4VUserPhysicsList
     void AddParameterisation();
     void ConstructGeneral();
     void ConstructEM();
-    
+
   public:
 
     void SetGammaCut(G4double);
     void SetElectronCut(G4double);
-    void SetProtonCut(G4double);
-    void SetCutsByEnergy(G4double);
-    void GetRange(G4double);
 
     void SetMaxStep(G4double);
 
@@ -121,7 +118,6 @@ class F02PhysicsList: public G4VUserPhysicsList
 
     G4double cutForGamma;
     G4double cutForElectron;
-    G4double cutForProton;
 
     F02DetectorConstruction* pDet;
     F02PhysicsListMessenger* physicsListMessenger;

@@ -1,4 +1,4 @@
-$Id: History,v 1.15 2003/02/19 09:08:36 gcosmo Exp $
+$Id: History,v 1.17 2003/12/02 17:30:37 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+13.11.2003 - J.Allison, tag xraytel-V05-02-02
+             Removed OPACS from Vis Manager.
 
 19.02.2003 - G.Cosmo, tag xraytel-V05-00-00
              Removed redundant inclusion of SystemOfUnits.h.

@@ -1,4 +1,4 @@
-$Id: History,v 1.7 2003/06/20 15:02:41 gbarrand Exp $
+$Id: History,v 1.8 2003/12/03 10:34:02 gcosmo Exp $
 --------------------------------------------------
 
      =========================================================
@@ -14,6 +14,13 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+3rd December 2003  Gabriele Cosmo (AnaEx01-V05-02-01)
+- Fixed minor compilation warnings and added 'aida-config' in
+  GNUmakefile, activated through G4ANALYSIS_USE.
+
+17th October 2003  Guy Barrand
+- AnaEx01VisManager: removed OPACS driver.
 
 20th June 2003  Guy Barrand (AnaEx01-V05-02-00)
 - * : AIDA-3.0 compliant. Usage of AIDA namespace, etc...

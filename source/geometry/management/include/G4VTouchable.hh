@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VTouchable.hh,v 1.5 2001/07/11 09:59:19 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4VTouchable.hh,v 1.6 2003/11/02 14:01:22 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // 
 // class G4VTouchable
@@ -89,15 +89,11 @@
 
 // History:
 // Created: Paul Kent, August 1996
-//
-// Modified: John Apostolakis, July 1997: new methods to Retrieve replica
-//                                        and history information
-//                                        (intention is to hide NavigHistory)
-
+// --------------------------------------------------------------------
 #ifndef G4VTOUCHABLE_HH
 #define G4VTOUCHABLE_HH
 
-#include "globals.hh"
+#include "G4Types.hh"
 
 class G4VPhysicalVolume;
 class G4VSolid;

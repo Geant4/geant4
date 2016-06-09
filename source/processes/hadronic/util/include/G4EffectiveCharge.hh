@@ -36,7 +36,7 @@ class G4EffectiveCharge
 inline G4double G4EffectiveCharge::GetCharge(const G4Material* material, G4double kineticEnergy,
             G4double particleMass, G4double ionCharge)
 {
-  // This is cut and paste from low_energy electromagnetic to avoid coupling.
+  // This is cut and paste with minor changes from low_energy electromagnetic to avoid coupling.
   // A design iteration is necessary for next time, to generate a process utility.
   
   // Original Author: V Ivanchenko.
@@ -48,7 +48,7 @@ inline G4double G4EffectiveCharge::GetCharge(const G4Material* material, G4doubl
   // Fast ions or hadrons
   G4double reducedEnergy = kineticEnergy * proton_mass_c2/particleMass ;
   if( (reducedEnergy > ionCharge * 10.0 * MeV) || 
-      (ionCharge < 1.5) ) return ionCharge*ionCharge ;
+      (ionCharge < 1.5) ) return ionCharge ;
 
   static G4double vFermi[92] = {
     1.0309,  0.15976, 0.59782, 1.0781,  1.0486,  1.0,     1.058,   0.93942, 0.74562, 0.3424,
@@ -131,7 +131,7 @@ inline G4double G4EffectiveCharge::GetCharge(const G4Material* material, G4doubl
     }
     G4double q = 7.6 -  e ; 
     q = 1.0 + ( 0.007 + 0.00005 * z ) * exp( -q*q ) ;
-    return  4.0 * q * q * (1.0 - exp(-x)) ;
+    return  sqrt(4.0 * q * q * (1.0 - exp(-x))) ;
 
     // Heavy ion case
   } 
@@ -171,7 +171,7 @@ inline G4double G4EffectiveCharge::GetCharge(const G4Material* material, G4doubl
     G4double qeff   = ionCharge * s *
       ( q + 0.5*(1.0-q) * log(1.0 + lambda*lambda) / (vF*vF) ) ;
     if( 1.0 > qeff ) qeff = 1.0 ; 
-    return qeff*qeff ;    
+    return sqrt(qeff) ;    
   }
 }
 

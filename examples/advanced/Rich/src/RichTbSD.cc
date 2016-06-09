@@ -37,7 +37,7 @@
 
 RichTbSD::RichTbSD(G4String DetName, G4int Numhpd , G4int NumSect,
                    G4int NumPixel,
-                   G4String CollectionName)
+                   G4String ) // CollectionName)
   :G4VSensitiveDetector(DetName),NumberOfSensitiveHpds(Numhpd),
    NumberOfSensitiveSectorsInHpd(NumSect),
    NumberOfSensitivePixelsInSector(NumPixel),
@@ -52,7 +52,7 @@ RichTbSD::~RichTbSD(){
 
 }
 
-void RichTbSD::Initialize(G4HCofThisEvent* HCE)
+void RichTbSD::Initialize(G4HCofThisEvent*)
 {
   RichTbHitCollection = new RichTbHitsCollection
                           (SensitiveDetectorName,collectionName[0]); 
@@ -83,10 +83,10 @@ G4bool RichTbSD::ProcessHits(G4Step*aStep,G4TouchableHistory*ROhist)
   G4StepPoint* PrePosition =  aStep->GetPreStepPoint();
 
 
-  G4int CurrentHpdNumber =  PrePosition->GetPhysicalVolume() 
-    -> GetMother() -> GetCopyNo();
-  G4int CurrentSectorNumber= PrePosition->GetPhysicalVolume()
-    ->GetCopyNo(); 
+  G4int CurrentHpdNumber =  PrePosition->GetTouchableHandle() 
+    -> GetReplicaNumber(1);
+  G4int CurrentSectorNumber= PrePosition->GetTouchableHandle()
+    -> GetReplicaNumber(); 
   G4VPhysicalVolume* ROphysVol = ROhist -> GetVolume();
   G4int CurrentPixelNumber =  ROphysVol->GetCopyNo();
  

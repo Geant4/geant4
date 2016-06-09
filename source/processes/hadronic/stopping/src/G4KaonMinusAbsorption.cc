@@ -21,8 +21,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4KaonMinusAbsorption.cc,v 1.8 2003/06/16 17:12:00 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
 //
 // --------------------------------------------------------------
 //      GEANT 4 class implementation file --- Copyright CERN 1998
@@ -77,7 +75,12 @@ G4KaonMinusAbsorption::G4KaonMinusAbsorption(const G4String& processName)
  
 // destructor
  
-G4KaonMinusAbsorption::~G4KaonMinusAbsorption(){;}
+G4KaonMinusAbsorption::~G4KaonMinusAbsorption()
+{
+  delete [] pv;
+  delete [] eve;
+  delete [] gkin;
+}
  
  
 // methods.............................................................................

@@ -21,8 +21,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4AlphaInelasticProcess.hh,v 1.6 2002/12/12 19:18:33 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
 //
  // Hadronic Process: Alpha Inelastic Process
  // J.L. Chuma, TRIUMF, 21-Feb-1997

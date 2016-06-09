@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4ParticleTable.cc,v 1.19 2003/05/19 17:10:26 kurasige Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // class G4ParticleTable
 //

@@ -21,22 +21,22 @@
 // ********************************************************************
 //
 //
-// $Id: G4ImplicitEuler.cc,v 1.6 2003/06/16 16:51:13 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4ImplicitEuler.cc,v 1.8 2003/11/05 16:31:49 japost Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 //
 //  Implicit Euler:
 //
 //        x_1 = x_0 + h/2 * ( dx(t_0,x_0) + dx(t_0+h,x_0+h*dx(t_0,x_0) ) )
 //
-// second order solver
+// Second order solver.
 // Take the current derivative and add it to the current position.
 // Take the output and its derivative. Add the mean of both derivatives
-// to form the final output
+// to form the final output.
 //
-//  W.Wander <wwc@mit.edu> 12/09/97 
-// 6.11.98 V.Grichine, new constructor, fNumberOfVariables
+// W.Wander <wwc@mit.edu> 12/09/97
 //
+// --------------------------------------------------------------------
 
 #include "G4ImplicitEuler.hh"
 #include "G4ThreeVector.hh"
@@ -45,7 +45,7 @@
 //
 // Constructor
 
-G4ImplicitEuler::G4ImplicitEuler(G4Mag_EqRhs *EqRhs, 
+G4ImplicitEuler::G4ImplicitEuler(G4EquationOfMotion *EqRhs, 
                                  G4int numberOfVariables): 
 G4MagErrorStepper(EqRhs, numberOfVariables)
 {

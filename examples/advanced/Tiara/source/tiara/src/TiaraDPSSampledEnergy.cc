@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: TiaraDPSSampledEnergy.cc,v 1.5 2003/06/25 09:12:58 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: TiaraDPSSampledEnergy.cc,v 1.7 2003/12/08 17:53:27 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 
 #include "TiaraDPSSampledEnergy.hh"
@@ -63,7 +63,9 @@ TiaraDPSSampledEnergy::TiaraDPSSampledEnergy(const G4String &eng,
   }
 }
 
-TiaraDPSSampledEnergy::TiaraDPSSampledEnergy(const TiaraDPSSampledEnergy& rhs) {
+TiaraDPSSampledEnergy::TiaraDPSSampledEnergy(const TiaraDPSSampledEnergy& rhs)
+  : TiaraVSourceEnergyGenerator()
+{
   *this = rhs;
 }
 

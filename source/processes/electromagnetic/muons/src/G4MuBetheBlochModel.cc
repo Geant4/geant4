@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MuBetheBlochModel.cc,v 1.8 2003/06/16 17:01:46 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4MuBetheBlochModel.cc,v 1.9 2003/07/21 12:52:35 vnivanch Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // -------------------------------------------------------------------
 //
@@ -130,10 +130,10 @@ void G4MuBetheBlochModel::Initialise(const G4ParticleDefinition* p,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4MuBetheBlochModel::ComputeDEDX(const G4Material* material,
-                                        const G4ParticleDefinition* p,
-                                              G4double kineticEnergy,
-                                              G4double cutEnergy)
+G4double G4MuBetheBlochModel::ComputeDEDX(const G4MaterialCutsCouple* couple,
+                                          const G4ParticleDefinition* p,
+                                                G4double kineticEnergy,
+                                                G4double cutEnergy)
 {
   G4double tmax  = MaxSecondaryEnergy(p, kineticEnergy);
   G4double tau   = kineticEnergy/mass;
@@ -143,6 +143,7 @@ G4double G4MuBetheBlochModel::ComputeDEDX(const G4Material* material,
   G4double beta2 = 1. - 1./(gam*gam);
   G4double bg2   = tau * (tau+2.0);
 
+  const G4Material* material = couple->GetMaterial();
   G4double eexc  = material->GetIonisation()->GetMeanExcitationEnergy();
   G4double eexc2 = eexc*eexc;
   G4double taul  = material->GetIonisation()->GetTaul();
@@ -203,15 +204,17 @@ G4double G4MuBetheBlochModel::ComputeDEDX(const G4Material* material,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4MuBetheBlochModel::CrossSection(const G4Material* material,
+G4double G4MuBetheBlochModel::CrossSection(const G4MaterialCutsCouple* couple,
                                            const G4ParticleDefinition* p,
                                                  G4double kineticEnergy,
                                                  G4double cutEnergy,
-                                                 G4double maxEnergy) 
+                                                 G4double maxEnergy)
 {
   G4double cross = 0.0;
   G4double tmaxSecondary = MaxSecondaryEnergy(p, kineticEnergy);
   G4double tmax = std::min(tmaxSecondary, maxEnergy);
+  const G4Material* material = couple->GetMaterial();
+
   if(cutEnergy < tmax) {
 
     const G4ElementVector* theElementVector = material->GetElementVector();

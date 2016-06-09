@@ -22,7 +22,7 @@
 //
 //
 // $Id: materialSubscriber.cc,v 1.4 2002/08/19 07:38:49 radoone Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // 
 // --------------------------------------------------------------

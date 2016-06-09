@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: GammaRayTelCalorimeterSD.cc,v 1.5 2003/05/30 15:09:00 flongo Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: GammaRayTelCalorimeterSD.cc,v 1.6 2003/11/14 14:59:48 flongo Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file
 //      CERN Geneva Switzerland
@@ -100,7 +100,7 @@ G4bool GammaRayTelCalorimeterSD::ProcessHits(G4Step* aStep,G4TouchableHistory*)
     = (G4TouchableHistory*)(aStep->GetPreStepPoint()->GetTouchable());
   
   G4VPhysicalVolume* cal_bar = theTouchable->GetVolume();  
-  G4VPhysicalVolume* cal_plane = cal_bar->GetMother();
+  G4VPhysicalVolume* cal_plane = theTouchable->GetVolume(1);
 
   G4int CALBarNumber=cal_bar->GetCopyNo();
   G4String CALBarName = cal_bar->GetName();

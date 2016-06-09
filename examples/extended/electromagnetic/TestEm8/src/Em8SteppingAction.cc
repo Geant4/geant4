@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: Em8SteppingAction.cc,v 1.5 2003/06/16 16:48:03 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: Em8SteppingAction.cc,v 1.7 2003/11/24 17:52:48 vnivanch Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // 
 
@@ -39,7 +39,6 @@
 #include "Em8RunAction.hh"
 #include "G4Event.hh"
 #include "G4EventManager.hh"
-#include "Em8SteppingMessenger.hh"
 #include "G4ios.hh"
 #include <iomanip>
 #include "G4UImanager.hh"
@@ -49,26 +48,22 @@
 Em8SteppingAction::Em8SteppingAction(Em8DetectorConstruction* DET,
                                      Em8EventAction* EA,
                                      Em8RunAction* RA)
-:detector (DET),eventaction (EA),runaction (RA),steppingMessenger(NULL),
+:detector (DET),eventaction (EA),runaction (RA),
  IDold(-1) ,evnoold(-1)
-{
-  steppingMessenger = new Em8SteppingMessenger(this);
-}
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 Em8SteppingAction::~Em8SteppingAction()
-{
-  delete steppingMessenger ;
- }
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void Em8SteppingAction::UserSteppingAction(const G4Step* aStep)
 { 
 
-  G4double Edep,Theta,Thetaback,Ttrans,Tback,Tsec,Egamma,xend,yend,zend,rend ;
-  G4double Tkin ;
+  G4double Theta,Thetaback,Ttrans,Tback,Tsec,Egamma,yend,zend,rend ;
+  // G4double Tkin, Edep, xend;
   G4int evno = eventaction->GetEventno() ; 
 
   IDnow = evno+10000*(aStep->GetTrack()->GetTrackID())+

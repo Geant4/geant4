@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4FukuiRendererViewer.hh,v 1.7 2001/07/11 10:08:44 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // 
 // Satoshi TANAKA, Fri Jun 28 12:10:14 JST 1996

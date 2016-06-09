@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4FRofstream.hh,v 1.6 2003/06/16 17:13:28 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 #include <fstream>
 

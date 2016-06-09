@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.5 2003/05/26 12:51:17 pmendez Exp $
+# $Id: GNUmakefile,v 1.6 2003/12/02 14:39:03 gcosmo Exp $
 # --------------------------------------------------------------
 # GNUmakefile for examples module.  Gabriele Cosmo, 06/04/98.
 # --------------------------------------------------------------
@@ -11,17 +11,9 @@ ifndef G4INSTALL
   G4INSTALL = ../../..
 endif
 
-#ifdef G4ANALYSIS_USE
-#  CPPFLAGS += -DG4ANALYSIS_USE
-#endif
-
-
 include $(G4INSTALL)/config/architecture.gmk
 
-G4ANALYSIS_USE:= true
-#ifdef G4ANALYSIS_USE
-#  CPPFLAGS += -DG4ANALYSIS_USE
-#endif
+#G4ANALYSIS_USE:= true
 
 ifdef G4ANALYSIS_USE
   CPPFLAGS += `aida-config --include`
@@ -37,15 +29,4 @@ include $(G4INSTALL)/config/binmake.gmk
 visclean:
 	rm -f g4*.prim g4*.eps g4*.wrl
 	rm -f .DAWN_*
-
-
-
-
-
-
-
-
-
-
-
 

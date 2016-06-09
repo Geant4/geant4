@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4LogicalVolume.hh,v 1.14 2003/06/16 16:51:48 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4LogicalVolume.hh,v 1.16 2003/11/04 15:11:11 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // 
 // class G4LogicalVolume
@@ -103,12 +103,12 @@
 // 19.11.96 J.Allison: Replaced G4Visible with explicit const G4VisAttributes*
 // 19.08.96 P.Kent: Split -> hh/icc/cc files; G4VSensitiveDetector change
 // 11.07.95 P.Kent: Initial version.
-
+// ------------------------------------------------------------------------
 #ifndef G4LOGICALVOLUME_HH
 #define G4LOGICALVOLUME_HH
 
-#include "globals.hh"
-#include "G4Region.hh"
+#include "G4Types.hh"
+#include "G4Region.hh"           // Required by inline methods
 #include "G4VPhysicalVolume.hh"  // Need operator == for vector fdaughters
 #include <vector>
 #include <assert.h>

@@ -1,3 +1,0 @@
-#echo 'notify : end of run.'
-updatePlot EXPO_plot1
-updatePlot EXPO_plot2

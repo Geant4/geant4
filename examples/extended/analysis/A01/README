@@ -1,13 +1,212 @@
-A01 Example
------------
-By default (without sourcing setup-analysis) the compilation
-will link in a DummyAnalysisFactory which will not produce
-anything for analysis.
+$Id: README,v 1.8 2003/12/01 19:12:38 perl Exp $
 
-The default graphics drivers are always linked in and can be used
-to generate event output.
+    =========================================================
+    Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+    =========================================================
 
-You can link this example with a specific AIDA compliant
-analysis implementation. See other READMEs.
+                       Extended Example A01
+                       -------------------- 
 
-README.JAIDA for linking JAIDA to Geant4.
+  Example A01 implements a double-arm spectrometer with wire chambers, 
+  hodoscopes and calorimeters.  Event simulation and collection are 
+  enabled, as well as event display and analysis.  This example is
+  extensively documented on the Geant4 Workshop Tutorial CD available at:
+  http://geant4.slac.stanford.edu/g4cd/Welcome.html
+
+
+  1. GEOMETRY
+
+     The spectrometer consists of two detector arms.  One arm provides 
+     position and timing information of the incident particle while the 
+     other collects position, timing and energy information of the particle
+     after it has been deflected by a magnetic field centered at the 
+     spectrometer pivot point.
+ 
+       - First arm:  box filled with air, also containing:
+
+           1 hodoscope (15 vertical strips of plastic scintillator)
+           1 drift chamber (5 horizontal argon gas layers with a 
+                            "virtual wire" at the center of each layer)
+
+       - Magnetic field region: air-filled cylinder which contains
+                                the field
+
+       - Second arm:  box filled with air, also containing:
+
+           1 hodoscope (25 vertical strips of plastic scintillator)
+           1 drift chamber (5 horizontal argon gas layers with a 
+                            "virtual wire" at the center of each layer)
+           1 electromagnetic calorimeter: 
+                 a box sub-divided along x,y and z
+                 axes into cells of CsI 
+           1 hadronic calorimeter: 
+                 a box sub-divided along x,y, and z axes
+                 into cells of lead, with a layer of 
+                 plastic scintillator placed at the center 
+                 of each cell
+
+
+  2. PHYSICS
+
+     This example uses the following physics processes:
+
+       - electromagnetic:
+           photo-electric effect
+           Compton scattering
+           pair production
+           bremsstrahlung
+           ionization
+           multiple scattering
+           annihilation
+
+       - decay
+
+       - transportation in a field
+
+     and defines the following particles:
+        geantino, charged geantino, gamma, all leptons, 
+        pions, charged kaons
+
+     Note that even though hadrons are defined, no hadronic processes 
+     are invoked in this example.
+
+
+
+
+  3. EVENT:
+
+     An event consists of the generation of a single particle which is 
+     transported through the first spectrometer arm.  Here, a scintillator 
+     hodoscope records the reference time of the particle before it passes
+     through a drift chamber where the particle position is measured. 
+     Momentum analysis is performed as the particle passes through a magnetic
+     field at the spectrometer pivot and then into the second spectrometer 
+     arm.  In the second arm, the particle passes through another hodoscope
+     and drift chamber before interacting in the electromagnetic calorimeter.
+     Here it is likely that particles will induce electromagnetic showers.  
+     The shower energy is recorded in a three-dimensional array of CsI 
+     crystals.  Secondary particles from the shower, as well as primary 
+     particles which do not interact in the CsI crystals, pass into the 
+     hadronic calorimeter.  Here, the remaining energy is collected in a 
+     three-dimensional array of scintillator-lead sandwiches.
+
+     Several aspects of the event may be changed interactively by the user:
+
+       - initial particle type
+       - initial momentum and angle
+       - momentum and angle spreads
+       - type of initial particle may be randomized
+       - strength of magnetic field
+       - angle of the second spectrometer arm
+
+
+  4. DETECTOR RESPONSE:
+
+     All the information required to simulate and analyze an event is 
+     recorded in HITS.  This information is recorded in the following 
+     sensitive detectors:
+
+       - hodoscope: 
+           particle time
+           particle position
+           strip ID
+
+       - drift chamber: 
+           particle time
+           particle position
+           layer ID
+ 
+       - electromagnetic calorimeter: 
+           particle position 
+           energy deposited in cell
+           cell ID
+  
+       - hadronic calorimeter:   
+           particle position 
+           energy deposited in cell
+           cell ID
+
+
+  5. VISUALIZATION:
+  
+     Simulated events can be displayed on top of a representation of 
+     the spectrometer.
+
+     vis.mac outputs HepRep version 1 files suitable for viewing in WIRED.
+     Change the /vis/open line from HepRepFile to DAWNFILE to instead
+     make .prim files suitable for viewing in DAWN.
+
+     heprep2-000-gz.mac outputs a series of gzipped HepRep version 2 files
+     each containing a single event, suitable for viewing in WIRED (there
+     is no need to ungzip them since WIRED can do this itself).
+
+     heprep2zip.mac outputs a single zip file that unzips to a series of
+     HepRep version 2 files, each each containing a single event (unzip
+     the single file by hand, then view the resulting individial HepRep
+     files in WIRED).
+
+     heprep2-000-zip.mac outputs a series of zipped HepRep version 2 files
+     each containing a single event (not yet viewable in WIRED unless you
+     explicitly unzip them before viewing).
+
+     heprep2.mac outputs a HepRep version 2 file with multiple events
+     appended to a single file in an experimental manner (not yet viewable
+     in WIRED).
+
+     heprep2gz.mac outputs a HepRep version 2 file with multiple events
+     appended to a single file in an experimental manner (not yet viewable
+     in WIRED).
+
+     For more information on visualization with this A01 example,
+     see the visualization tutorials on the Geant4 Workshop Tutorial CD
+     available at:
+     http://geant4.slac.stanford.edu/g4cd/Welcome.html
+
+  6. ANALYSIS:
+
+     This example implements an AIDA-compliant analysis system which
+     creates histograms, ntuples and plotters.  At the completion of a 
+     simulation run a file A01.aida is produced which contains these
+     data structures.  This file can be used as an input to the Java
+     Analysis Studio (JAS) which allows the histograms and ntuples to 
+     examined, manipulated, saved and printed.  For further details,
+     see README.JAIDA.
+
+
+  7. GETTING STARTED:
+
+     Build the A01 executable:
+
+         cd to A01
+         gmake clean
+         gmake
+
+     gmake will create tmp and bin directories in your work directory. 
+     The executable, named A01app, will be in /bin/$G4SYSTEM/
+ 
+     While in directory A01, run the executable:
+
+         ../bin/$G4SYSTEM/A01app
+
+     which will bring up the interactive prompt:
+
+         Idle>
+
+     To run 10 events you can now enter:
+
+         /run/beamOn 10
+
+     If all goes well, a JAS window will appear containing two histograms 
+     and three scatterplots.
+
+     To terminate the job, at the prompt enter:
+
+         exit
+
+     Currently you must also close the JAS-AIDA window to get the job to stop.
+
+
+     In the A01 directory will be a file A01.aida which contains the plots. 
+     To examine them
+
+         /usr/local.bin/jas3 & or jas3 & 

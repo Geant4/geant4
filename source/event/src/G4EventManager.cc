@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4EventManager.cc,v 1.13 2003/05/21 20:52:53 asaim Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4EventManager.cc,v 1.18 2003/09/09 20:09:18 asaim Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 //
 //
@@ -34,6 +34,8 @@
 #include "G4UserEventAction.hh"
 #include "G4UserStackingAction.hh"
 #include "G4SDManager.hh"
+#include "G4StateManager.hh"
+#include "G4ApplicationState.hh"
 
 G4EventManager* G4EventManager::fpEventManager = 0;
 G4EventManager* G4EventManager::GetEventManager()
@@ -85,8 +87,21 @@ G4int G4EventManager::operator!=(const G4EventManager &right) const { }
 */
 
 
-void G4EventManager::ProcessOneEvent(G4Event* anEvent)
+
+void G4EventManager::DoProcessing(G4Event* anEvent)
 {
+  G4StateManager* stateManager = G4StateManager::GetStateManager();
+  G4ApplicationState currentState = stateManager->GetCurrentState();
+  if(currentState!=G4State_GeomClosed)
+  {
+    G4Exception("G4EventManager::ProcessOneEvent",
+                "IllegalApplicationState",
+                JustWarning,
+                "Geometry is not closed : cannot process an event.");
+    return;
+  }
+  stateManager->SetNewState(G4State_EventProc);
+
   currentEvent = anEvent;
   G4Track * track;
   G4TrackStatus istop;
@@ -100,7 +115,7 @@ void G4EventManager::ProcessOneEvent(G4Event* anEvent)
   }
 #endif
 
-  trackIDCounter = trackContainer->PrepareNewEvent();
+  trackContainer->PrepareNewEvent();
 
 #ifdef G4_STORE_TRAJECTORY
   trajectoryContainer = 0;
@@ -226,6 +241,7 @@ void G4EventManager::ProcessOneEvent(G4Event* anEvent)
   if(userEventAction) userEventAction->EndOfEventAction(currentEvent);
   currentEvent = 0;
 
+  stateManager->SetNewState(G4State_GeomClosed);
 }
 
 void G4EventManager::StackTracks(G4TrackVector *trackVector,G4bool IDhasAlreadySet)
@@ -241,7 +257,16 @@ void G4EventManager::StackTracks(G4TrackVector *trackVector,G4bool IDhasAlreadyS
     {
       newTrack = (*trackVector)[ i ];
       trackIDCounter++;
-      if(!IDhasAlreadySet) newTrack->SetTrackID( trackIDCounter );
+      if(!IDhasAlreadySet)
+      {
+        newTrack->SetTrackID( trackIDCounter );
+        if(newTrack->GetDynamicParticle()->GetPrimaryParticle())
+        {
+          G4PrimaryParticle* pp
+            = (G4PrimaryParticle*)(newTrack->GetDynamicParticle()->GetPrimaryParticle());
+          pp->SetTrackID(trackIDCounter);
+        }
+      }
       trackContainer->PushOneTrack( newTrack );
 #ifdef G4VERBOSE
       if ( verboseLevel > 1 )
@@ -280,5 +305,72 @@ void G4EventManager::SetUserAction(G4UserSteppingAction* userAction)
   userSteppingAction = userAction;
   trackManager->SetUserAction(userAction);
 }
+
+void G4EventManager::ProcessOneEvent(G4Event* anEvent)
+{
+  trackIDCounter = 0;
+  DoProcessing(anEvent);
+}
+
+#ifndef WIN32         // Temporarly disabled on Windows, until CLHEP
+                      // will support the HepMC module
+#include "G4HepMCInterface.hh"
+void G4EventManager::ProcessOneEvent(const HepMC::GenEvent* hepmcevt,G4Event* anEvent)
+{
+  trackIDCounter = 0;
+  G4bool tempEvent = false;
+  if(!anEvent)
+  {
+    anEvent = new G4Event();
+    tempEvent = true;
+  }
+  G4HepMCInterface::HepMC2G4(hepmcevt,anEvent);
+  DoProcessing(anEvent);
+  if(tempEvent)
+  { delete anEvent; }
+}
+#endif
+
+void G4EventManager::ProcessOneEvent(G4TrackVector* trackVector,G4Event* anEvent)
+{
+  trackIDCounter = 0;
+  G4bool tempEvent = false;
+  if(!anEvent)
+  {
+    anEvent = new G4Event();
+    tempEvent = true;
+  }
+  StackTracks(trackVector,false);
+  DoProcessing(anEvent);
+  if(tempEvent)
+  { delete anEvent; }
+}
+
+void G4EventManager::SetUserInformation(G4VUserEventInformation* anInfo)
+{ 
+  G4StateManager* stateManager = G4StateManager::GetStateManager();
+  G4ApplicationState currentState = stateManager->GetCurrentState();
+  if(currentState!=G4State_EventProc || currentEvent==0)
+  {
+    G4Exception("G4EventManager::SetUserInformation",
+                "IllegalApplicationState",
+                JustWarning,
+                "G4VUserEventInformation cannot be set because of ansense of G4Event.");
+    return;
+  }
+  
+  currentEvent->SetUserInformation(anInfo);
+}
+
+G4VUserEventInformation* G4EventManager::GetUserInformation()
+{ 
+  G4StateManager* stateManager = G4StateManager::GetStateManager();
+  G4ApplicationState currentState = stateManager->GetCurrentState();
+  if(currentState!=G4State_EventProc || currentEvent==0)
+  { return 0; }
+  
+  return currentEvent->GetUserInformation();
+}
+
 
 

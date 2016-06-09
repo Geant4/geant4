@@ -21,13 +21,27 @@
 // ********************************************************************
 //
 //
-// $Id: G4WeightWindowAlgorithm.hh,v 1.4 2002/10/14 12:36:01 dressel Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4WeightWindowAlgorithm.hh,v 1.6 2003/08/19 15:44:57 dressel Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // ----------------------------------------------------------------------
 // Class G4WeightWindowAlgorithm
 // 
 // Class description:
+// Implementation of a weight window algorithm. 
+// The arguments in the constructor configure the algorithm:
+//   - upperLimitFaktor: the factor defining the upper weight limit 
+//      W_u = upperLimitFaktor * W_l (W_l lower weight bound)
+//   - survivalFaktor: used in calculating  the survival weight
+//      W_s = survivalFaktor * W_l
+//   - maxNumberOfSplits: the maximal number of splits allowed
+//     to be created in one go, and the reciprocal of the minimal
+//     survival probability in case of Russian roulette
+//
+// In case of upperLimitFaktor=survivalFaktor=1 the algorithm
+// becomes the expected weight algorithm of the importance sampling 
+// technique.
+//
 // see also G4VWeightWindowAlgorithm.
 //
 
@@ -44,33 +58,21 @@ class G4WeightWindowAlgorithm : public G4VWeightWindowAlgorithm
 
 public:  // with description
   
-  G4WeightWindowAlgorithm();
+  G4WeightWindowAlgorithm(G4double upperLimitFaktor = 5,
+			  G4double survivalFaktor = 3,
+			  G4int maxNumberOfSplits = 5);
   
   virtual ~G4WeightWindowAlgorithm();
 
-  virtual void SetUpperLimit(G4double Upper);
-    // set upper limiting factor for window
-    // - Upper is the maximum factor by which the weight of a particle may
-    //   be higher than it should be according to the importance
-  
-  virtual void SetLowerLimit(G4double Lower);
-    // set lower limiting facotr for window
-    // - Lower is the minimal factor by which the wight may be
-    //   lower than it should be according to the importance
-
-
-
-  virtual G4Nsplit_Weight Calculate(G4double init_w, 
-				    G4double importance) const;
-    // calculate the number of tracks and their weight according 
-    // to the upper and lower limmiting factors of the window
-    // and the initial weight
-    // - init_w is the initial weight of the particle
-    // - importance is the importance of the cell
+  virtual G4Nsplit_Weight Calculate(G4double init_w,
+				    G4double lowerWeightBound) const;
+    // calculate number of tracks and their weight according
+    // to the initial track weight and the lower energy bound
 
 private:
-  G4double fUpper;
-  G4double fLower;
+  G4double fUpperLimitFaktor;
+  G4double fSurvivalFaktor;
+  G4int fMaxNumberOfSplits;
 };
 
 #endif

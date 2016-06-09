@@ -1,25 +1,3 @@
-//
-// ********************************************************************
-// * DISCLAIMER                                                       *
-// *                                                                  *
-// * The following disclaimer summarizes all the specific disclaimers *
-// * of contributors to this software. The specific disclaimers,which *
-// * govern, are listed with their locations in:                      *
-// *   http://cern.ch/geant4/license                                  *
-// *                                                                  *
-// * Neither the authors of this software system, nor their employing *
-// * institutes,nor the agencies providing financial support for this *
-// * work  make  any representation or  warranty, express or implied, *
-// * regarding  this  software system or assume any liability for its *
-// * use.                                                             *
-// *                                                                  *
-// * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
-// * By copying,  distributing  or modifying the Program (or any work *
-// * based  on  the Program)  you indicate  your  acceptance of  this *
-// * statement, and all its terms.                                    *
-// ********************************************************************
-//
 // -*- C++ -*-
 // AID-GENERATED
 // =========================================================================
@@ -40,6 +18,8 @@ namespace HEPREP {
  * HepRepIteratorListener interface. The implementor is called back for changes
  * of attributes while using the HepRepIterator to iterate over all the HepRepInstances.
  *
+ * All names are lowercased.
+ *
  * @author Mark Donszelmann
  */
 class HepRepIteratorListener {
@@ -53,9 +33,10 @@ public:
      *
      * @param key name of the changed attribute.
      * @param value value of the changed attribute.
+     * @param value value of the changed attribute.
      * @param showLabel value of showLabel.
      */
-    virtual void setAttribute(std::string key, std::string value, int showLabel) = 0;
+    virtual void setAttribute(std::string key, std::string value, std::string lowerCaseValue, int showLabel) = 0;
 
     /**
      * Called if attribute key changes its value.
@@ -109,5 +90,5 @@ public:
      */
     virtual void removeAttribute(std::string key) = 0;
 }; // class
-}; // namespace HEPREP
+} // namespace HEPREP
 #endif /* ifndef HEPREP_HEPREPITERATORLISTENER_H */

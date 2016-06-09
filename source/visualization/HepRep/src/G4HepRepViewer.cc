@@ -20,6 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
+//
+
 /**
  * @author Mark Donszelmann
  */
@@ -37,71 +39,78 @@
 #include "G4HepRepViewer.hh"
 
 using namespace HEPREP;
+using namespace std;
 
-G4HepRepViewer::G4HepRepViewer (G4VSceneHandler& scene, const G4String& name)
-        : G4VViewer (scene, scene.IncrementViewCount(), name),
-          drawn(false) {
+G4HepRepViewer::G4HepRepViewer (G4VSceneHandler& sceneHandler, const G4String& name)
+        : G4VViewer (sceneHandler, sceneHandler.IncrementViewCount(), name),
+        geometryIncluded(false) {
 
-#ifdef DEBUG
-    G4cout << "G4HepRepViewer::G4HepRepViewer" << G4endl;
+#ifdef SDEBUG
+    cout << "G4HepRepViewer::G4HepRepViewer " << name << endl;
 #endif
 
-  // Make changes to view parameters for HepRep...
-  fVP.SetCulling(false);
-  fDefaultVP.SetCulling(false);
+    // Make changes to view parameters for HepRep...
+    fVP.SetCulling(false);
+    fDefaultVP.SetCulling(false);
 }
 
 
 
 G4HepRepViewer::~G4HepRepViewer () {
+#ifdef SDEBUG
+    cout << "G4HepRepViewer::~G4HepRepViewer" << endl;
+#endif
+    dynamic_cast<G4HepRep*>(GetSceneHandler()->GetGraphicsSystem())->removeViewer();
 }
 
 
 void G4HepRepViewer::ClearView () {
-#ifdef DEBUG
-    G4cout << "G4HepRepViewer::ClearView" << G4endl;
+#ifdef SDEBUG
+    cout << "G4HepRepViewer::ClearView" << endl;
 #endif
 }
 
-/***************************************************************************/
-// Calculates view representation based on extent of object being
-// viewed and (initial) direction of camera.  (Note: it can change
-// later due to user interaction via visualization system's GUI.)
-/*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
 void G4HepRepViewer::SetView () {
-#ifdef DEBUG
-    G4cout << "G4HepRepViewer::SetView" << G4endl;
+#ifdef SDEBUG
+    cout << "G4HepRepViewer::SetView" << endl;
 #endif
 }
 
 
-
+/* NOTE:
+    /run/beamOn         calls ShowView for every event (unless accumulate is set)
+    /vis/viewer/flush   calls /vis/viewer/refresh followed by /vis/viewer/update
+    /vis/viewer/refresh calls SetView, ClearView, DrawView
+    /vis/viewer/update  calls ShowView
+*/
 void G4HepRepViewer::DrawView () {
-#ifdef DEBUG
-    G4cout << "G4HepRepViewer::DrawView" << G4endl;
+#ifdef SDEBUG
+    cout << "G4HepRepViewer::DrawView" << endl;
 #endif
-    NeedKernelVisit();
-    ProcessView();
-    drawn = true;
+    if (!geometryIncluded) {
+        // draws the geometry
+        NeedKernelVisit();
+        ProcessView();
+        geometryIncluded = true;
+    }
 }
 
 void G4HepRepViewer::ShowView () {
-#ifdef DEBUG
-    G4cout << "G4HepRepViewer::ShowView" << G4endl;
+#ifdef SDEBUG
+    cout << "G4HepRepViewer::ShowView" << endl;
 #endif
     G4VViewer::ShowView();
 
-    if (drawn) {
-        G4HepRepSceneHandler* sceneHandler = (G4HepRepSceneHandler*)GetSceneHandler();
-        sceneHandler->close();
-        drawn = false;
+    G4HepRepSceneHandler* sceneHandler = dynamic_cast<G4HepRepSceneHandler*>(GetSceneHandler());
+    if (sceneHandler->closeHepRep()) {
+        sceneHandler->openHepRep();
+        geometryIncluded = false;
     }
 }
 
 void G4HepRepViewer::FinishView () {
-#ifdef DEBUG
-    G4cout << "G4HepRepViewer::FinishView" << G4endl;
+#ifdef SDEBUG
+    cout << "G4HepRepViewer::FinishView" << endl;
 #endif
     G4VViewer::FinishView();
 }
-

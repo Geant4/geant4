@@ -20,160 +20,169 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
+// $Id: G4MuPairProduction.hh,v 1.16 2003/11/12 16:18:23 vnivanch Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
-// $Id: G4MuPairProduction.hh,v 1.14 2003/06/16 17:01:42 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// -------------------------------------------------------------------
 //
-//--------------- G4MuPairProduction physics process ------------------
-//                by Laszlo Urban, May 1998      
-//------------------------------------------------------------------------------
+// GEANT4 Class header file
+//
+//
+// File name:     G4MuPairProduction
+//
+// Author:        Laszlo Urban
+//
+// Creation date: 30.05.1998
+//
+// Modifications:
+
 // 10-02-00 modifications , new e.m. structure, L.Urban
 // 10-08-01 new methods Store/Retrieve PhysicsTable (mma)
-// 29-10-01 all static functions no more inlined (mma) 
-// 16-01-03 Migrade to cut per region (V.Ivanchenko)
-//------------------------------------------------------------------------------
+// 29-10-01 all static functions no more inlined (mma)
+// 10-05-02 V.Ivanchenko update to new design
+// 26-12-02 secondary production moved to derived classes (VI)
+// 27-01-03 Make models region aware (V.Ivanchenko)
+// 05-02-03 Fix compilation warnings (V.Ivanchenko)
+// 13-02-03 SubCutoff regime is assigned to a region (V.Ivanchenko)
+// 08-08-03 STD substitute standard  (V.Ivanchenko)
+// 12-11-03 G4EnergyLossSTD -> G4EnergyLossProcess (V.Ivanchenko)
+//
+// Class Description:
+//
+// This class manages the PairProduction process for muons.
+// it inherites from G4VContinuousDiscreteProcess via G4VEnergyLossProcess.
+//
 
-#ifndef G4MuPairproduction_h
-#define G4MuPairproduction_h 1
+// -------------------------------------------------------------------
+//
+
+#ifndef G4MuPairProduction_h
+#define G4MuPairProduction_h 1
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "G4ios.hh"
 #include "globals.hh"
-#include "Randomize.hh"
-#include "G4VMuEnergyLoss.hh"
-#include "G4Track.hh"
-#include "G4Step.hh"
-#include "G4OrderedTable.hh"
-#include "G4PhysicsTable.hh"
-#include "G4PhysicsLogVector.hh"
-#include "G4MaterialCutsCouple.hh"
+#include "G4VEnergyLossProcess.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class G4MuPairProduction : public G4VMuEnergyLoss
+class G4MuPairProduction : public G4VEnergyLossProcess
 
 {
-  public:
+public:
 
-     G4MuPairProduction(const G4String& processName = "MuPairProd");
+  G4MuPairProduction(const G4String& processName = "MuPairProd");
 
-    ~G4MuPairProduction();
+  ~G4MuPairProduction();
 
-     G4bool IsApplicable(const G4ParticleDefinition&);
+  G4bool IsApplicable(const G4ParticleDefinition& p)
+            {return (p.GetPDGCharge() != 0.0 && p.GetPDGMass() > 10.0*MeV);};
 
-     void BuildPhysicsTable(const G4ParticleDefinition& ParticleType);
+  virtual G4double MinPrimaryEnergy(const G4ParticleDefinition* p,
+                                    const G4Material*, G4double cut);
 
-     void BuildLossTable(const G4ParticleDefinition& ParticleType);
+  virtual std::vector<G4Track*>* SecondariesAlongStep(
+                             const G4Step&,
+			           G4double&,
+			           G4double&,
+                                   G4double&);
 
-     void BuildLambdaTable(const G4ParticleDefinition& ParticleType);
-
-     void PrintInfoDefinition();
-
-     G4double GetMeanFreePath( const G4Track& track,
-                               G4double previousStepSize,
-                               G4ForceCondition* condition );
-
-     G4VParticleChange *PostStepDoIt(const G4Track& track,
-                                     const G4Step& Step  );
-
-     G4double GetDMicroscopicCrossSection(
-                                      const G4ParticleDefinition* ParticleType,
-                                      G4double KineticEnergy,
-                                      G4double AtomicNumber,
-                                      G4double PairEnergy);
-
-     G4bool StorePhysicsTable(G4ParticleDefinition* ,
-  		              const G4String& directory, G4bool);
-      // store eLoss and MeanFreePath tables into an external file
-      // specified by 'directory' (must exist before invokation)
-
-     G4bool RetrievePhysicsTable(G4ParticleDefinition* ,
-			         const G4String& directory, G4bool);
-      // retrieve eLoss and MeanFreePath tables from an external file
-      // specified by 'directory'
-
-  protected:
-
-     G4double ComputeMeanFreePath(const G4ParticleDefinition* ParticleType,
-                                        G4double KineticEnergy,
-                                  const G4MaterialCutsCouple* couple);
-
-     void ComputePartialSumSigma(const G4ParticleDefinition* ParticleType,
-                                       G4double KineticEnergy,
-                                 const G4MaterialCutsCouple* couple);
-
-     virtual G4double ComputeMicroscopicCrossSection(
-                                      const G4ParticleDefinition* ParticleType,
-                                      G4double KineticEnergy,
-                                      G4double AtomicNumber,
-                                      G4double ElectronEnergyCut,
-                                      G4double PositronEnergyCut);
-
-     G4double ComputeDDMicroscopicCrossSection(
-                                      const G4ParticleDefinition* ParticleType,
-                                      G4double KineticEnergy,
-                                      G4double AtomicNumber,
-                                      G4double PairEnergy,
-                                      G4double asymmetry);
-
-     G4double ComputeDMicroscopicCrossSection(
-                                      const G4ParticleDefinition* ParticleType,
-                                      G4double KineticEnergy,
-                                      G4double AtomicNumber,
-                                      G4double PairEnergy);
-
-  private:
-
-     G4MuPairProduction & operator=(const G4MuPairProduction &right);
-     G4MuPairProduction(const G4MuPairProduction&);
-
-     G4double ComputePairLoss( const G4ParticleDefinition* ParticleType,
-                               G4double Z,G4double T,G4double ElectronCut,
-                                     G4double PositronCut);
-
-     G4Element* SelectRandomAtom(const G4MaterialCutsCouple* couple) const;
-
-     void MakeSamplingTables( const G4ParticleDefinition* ParticleType );
-
-  protected:
-
-     virtual G4double SecondaryEnergyThreshold(size_t index);
+  virtual void SecondariesPostStep(
+                                   G4VEmModel*,
+                             const G4MaterialCutsCouple*,
+                             const G4DynamicParticle*,
+                                   G4double&,
+                                   G4double&);
   
-  private:
+  void SetSubCutoff(G4bool val);
 
-     G4PhysicsTable* theMeanFreePathTable;
+  void PrintInfoDefinition();
+  // Print out of the class parameters
 
-     G4OrderedTable PartialSumSigma;
+protected:
 
-     static G4double LowerBoundLambda; // bining for lambda table
-     static G4double UpperBoundLambda;
-     static G4int    NbinLambda;
-     G4double LowestKineticEnergy,HighestKineticEnergy;
-     G4int    TotBin;
+  const G4ParticleDefinition* DefineBaseParticle(const G4ParticleDefinition* p);
 
-     const std::vector<G4double>* electronEnergyCuts;
-     const std::vector<G4double>* positronEnergyCuts;
+  virtual G4double MaxSecondaryEnergy(const G4DynamicParticle* dp);
 
-     // tables for sampling
-     static G4int nzdat,ntdat,NBIN;
-     static G4double zdat[5],tdat[8];
-     static G4double ya[1001],proba[5][8][1001];
-     static G4double MinPairEnergy;
+private:
 
-  public:
+  void InitialiseProcess();
 
-    static void SetLowerBoundLambda(G4double val);
-    static void SetUpperBoundLambda(G4double val);
-    static void SetNbinLambda(G4int n);
-    static G4double GetLowerBoundLambda();
-    static G4double GetUpperBoundLambda();
-    static G4int GetNbinLambda();
+
+  G4MuPairProduction & operator=(const G4MuPairProduction &right);
+  G4MuPairProduction(const G4MuPairProduction&);
+
+  const G4ParticleDefinition* theParticle;
+  const G4ParticleDefinition* theBaseParticle;
+
+  G4bool                      subCutoff;
 
 };
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-#include "G4MuPairProduction.icc"
+inline G4double G4MuPairProduction::MinPrimaryEnergy(const G4ParticleDefinition*,
+                                                        const G4Material*,
+                                                              G4double cut)
+{
+  return std::max(cut, 2.0*electron_mass_c2);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline G4double G4MuPairProduction::MaxSecondaryEnergy(const G4DynamicParticle* dp)
+{
+  return dp->GetKineticEnergy();
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+#include "G4VSubCutoffProcessor.hh"
+
+inline std::vector<G4Track*>*  G4MuPairProduction::SecondariesAlongStep(
+                           const G4Step&   step,
+	             	         G4double& tmax,
+			         G4double& eloss,
+                                 G4double& kinEnergy)
+{
+  std::vector<G4Track*>* newp = 0;
+  if(subCutoff) {
+    G4VSubCutoffProcessor* sp = SubCutoffProcessor(CurrentMaterialCutsCoupleIndex());
+    if (sp) {
+      G4VEmModel* model = SelectModel(kinEnergy);
+      newp = sp->SampleSecondaries(step,tmax,eloss,model);
+    }
+  }
+  return newp;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+#include "G4VEmModel.hh"
+
+inline void G4MuPairProduction::SecondariesPostStep(
+                                   G4VEmModel* model,
+                             const G4MaterialCutsCouple* couple,
+                             const G4DynamicParticle* dp,
+                                   G4double& tcut,
+                                   G4double& kinEnergy)
+{
+  std::vector<G4DynamicParticle*>* newp =
+         model->SampleSecondaries(couple, dp, tcut, kinEnergy);
+  if(newp) {
+    aParticleChange.SetNumberOfSecondaries(2);
+    G4DynamicParticle* elpos = (*newp)[0];
+    aParticleChange.AddSecondary(elpos);
+    kinEnergy -= elpos->GetKineticEnergy();
+    elpos = (*newp)[1];
+    aParticleChange.AddSecondary(elpos);
+    kinEnergy -= elpos->GetKineticEnergy();
+    delete newp;
+  }
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif

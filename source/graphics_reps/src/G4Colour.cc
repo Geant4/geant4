@@ -21,14 +21,35 @@
 // ********************************************************************
 //
 //
-// $Id: G4Colour.cc,v 1.5 2003/06/16 16:55:19 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4Colour.cc,v 1.6 2003/09/18 11:03:12 johna Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // 
 // John Allison 20th October 1996
 
 #include "G4Colour.hh"
 #include "G4ios.hh"
+
+G4Colour::G4Colour (G4double r, G4double g, G4double b, G4double a):
+red (r), green (g), blue (b), alpha (a)
+{
+  if( red   > 1.0 ){red   = 1.0;} if( red   < 0.0 ){red   = 0.0;}
+  if( green > 1.0 ){green = 1.0;} if( green < 0.0 ){green = 0.0;}
+  if( blue  > 1.0 ){blue  = 1.0;} if( blue  < 0.0 ){blue  = 0.0;}
+  if( alpha > 1.0 ){alpha = 1.0;} if( alpha < 0.0 ){alpha = 0.0;}
+}
+
+G4Colour::G4Colour (G4ThreeVector v):
+red (v.x()), green (v.y()), blue (v.z()), alpha (1.)
+{
+  if( red   > 1.0 ){red   = 1.0;} if( red   < 0.0 ){red   = 0.0;}
+  if( green > 1.0 ){green = 1.0;} if( green < 0.0 ){green = 0.0;}
+  if( blue  > 1.0 ){blue  = 1.0;} if( blue  < 0.0 ){blue  = 0.0;}
+}
+
+G4Colour::operator G4ThreeVector() {
+  return G4ThreeVector(red,green,blue);
+}
 
 std::ostream& operator << (std::ostream& os, const G4Colour& c) {
   return os << '(' << c.red << ',' << c.green << ',' << c.blue

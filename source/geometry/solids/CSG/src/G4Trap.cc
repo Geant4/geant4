@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Trap.cc,v 1.17 2003/06/16 16:53:42 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4Trap.cc,v 1.22 2003/12/04 10:44:07 grichine Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // class G4Trap
 //
@@ -36,10 +36,10 @@
 // 04.06.99 S.Giani: Fixed CalculateExtent in rotated case. 
 // 19.11.99 V.Grichine: kUndef was added to Eside enum
 // 13.12.99 V.Grichine: bug fixed in DistanceToIn(p,v)
-//
-// ********************************************************************
+// --------------------------------------------------------------------
 
 #include "G4Trap.hh"
+#include "globals.hh"
 
 #include "G4VoxelLimits.hh"
 #include "G4AffineTransform.hh"
@@ -106,19 +106,14 @@ G4Trap::G4Trap( const G4String& pName,
   }
   else
   {
-    G4cout << "ERROR - G4Trap()::G4Trap(): " << GetName() << G4endl
-           << "        Invalid dimensions !" << G4endl
-           << "          X - "
-           << pDx1 << ", " << pDx2 << ", " << pDx3 << ", " << pDx4 << G4endl
-           << "          Y - " << pDy1 << ", " << pDy2 << G4endl
-           << "          Z - " << pDz << G4endl;
     G4cerr << "ERROR - G4Trap()::G4Trap(): " << GetName() << G4endl
            << "        Invalid dimensions !" << G4endl
            << "          X - "
            << pDx1 << ", " << pDx2 << ", " << pDx3 << ", " << pDx4 << G4endl
            << "          Y - " << pDy1 << ", " << pDy2 << G4endl
            << "          Z - " << pDz << G4endl;
-    G4Exception("G4Trap::G4Trap() - Invalid length G4Trap parameters");
+    G4Exception("G4Trap::G4Trap()", "InvalidSetup", FatalException,
+                "Invalid length G4Trap parameters.");
   }
 }
 
@@ -149,7 +144,8 @@ G4Trap::G4Trap( const G4String& pName,
     if (!good)
     {
       DumpInfo();
-      G4Exception("G4Trap::G4Trap() - face at ~-Y not planar");
+      G4Exception("G4Trap::G4Trap()", "InvalidSetup", FatalException,
+                  "Face at ~-Y not planar.");
     }
 
     // Top side with normal approx. +Y
@@ -157,9 +153,9 @@ G4Trap::G4Trap( const G4String& pName,
     good=MakePlane(pt[2],pt[3],pt[7],pt[6],fPlanes[1]);
     if (!good)
     {
-      G4cout << "ERROR - G4Trap()::G4Trap(): " << GetName() << G4endl;
       G4cerr << "ERROR - G4Trap()::G4Trap(): " << GetName() << G4endl;
-      G4Exception("G4Trap::G4Trap() - face at ~+Y not planar");
+      G4Exception("G4Trap::G4Trap()", "InvalidSetup", FatalException,
+                  "Face at ~+Y not planar.");
     }
 
     // Front side with normal approx. -X
@@ -167,9 +163,9 @@ G4Trap::G4Trap( const G4String& pName,
     good=MakePlane(pt[0],pt[2],pt[6],pt[4],fPlanes[2]);
     if (!good)
     {
-      G4cout << "ERROR - G4Trap()::G4Trap(): " << GetName() << G4endl;
       G4cerr << "ERROR - G4Trap()::G4Trap(): " << GetName() << G4endl;
-      G4Exception("G4Trap::G4Trap() - face at ~-X not planar");
+      G4Exception("G4Trap::G4Trap()", "InvalidSetup", FatalException,
+                  "Face at ~-X not planar.");
     }
 
     // Back side iwth normal approx. +X
@@ -177,9 +173,9 @@ G4Trap::G4Trap( const G4String& pName,
     good=MakePlane(pt[1],pt[5],pt[7],pt[3],fPlanes[3]);
     if (!good)
     {
-      G4cout << "ERROR - G4Trap()::G4Trap(): " << GetName() << G4endl;
       G4cerr << "ERROR - G4Trap()::G4Trap(): " << GetName() << G4endl;
-      G4Exception("G4Trap::G4Trap() - face at ~+X not planar");
+      G4Exception("G4Trap::G4Trap()", "InvalidSetup", FatalException,
+                  "Face at ~+X not planar.");
     }
 
     fDz = (pt[7]).z() ;
@@ -199,9 +195,9 @@ G4Trap::G4Trap( const G4String& pName,
   }
   else
   {
-    G4cout << "ERROR - G4Trap()::G4Trap(): " << GetName() << G4endl;
     G4cerr << "ERROR - G4Trap()::G4Trap(): " << GetName() << G4endl;
-    G4Exception("G4Trap::G4Trap() - Invalid vertice coordinates");
+    G4Exception("G4Trap::G4Trap()", "InvalidSetup", FatalException,
+                  "Invalid vertice coordinates.");
   }
 }
 
@@ -258,9 +254,9 @@ G4Trap::G4Trap( const G4String& pName,
     good=MakePlane(pt[0],pt[4],pt[5],pt[1],fPlanes[0]);
     if (!good)
     {
-      G4cout << "ERROR - G4Trap()::G4Trap(): " << GetName() << G4endl;
       G4cerr << "ERROR - G4Trap()::G4Trap(): " << GetName() << G4endl;
-      G4Exception("G4Trap::G4Trap() - face at ~-Y not planar");
+      G4Exception("G4Trap::G4Trap()", "InvalidSetup", FatalException,
+                  "Face at ~-Y not planar.");
     }
 
     // Top side with normal approx. +Y
@@ -268,9 +264,9 @@ G4Trap::G4Trap( const G4String& pName,
     good=MakePlane(pt[2],pt[3],pt[7],pt[6],fPlanes[1]);
     if (!good)
     {
-      G4cout << "ERROR - G4Trap()::G4Trap(): " << GetName() << G4endl;
       G4cerr << "ERROR - G4Trap()::G4Trap(): " << GetName() << G4endl;
-      G4Exception("G4Trap::G4Trap() - face at ~+Y not planar");
+      G4Exception("G4Trap::G4Trap()", "InvalidSetup", FatalException,
+                  "Face at ~+Y not planar.");
     }
 
     // Front side with normal approx. -X
@@ -278,9 +274,9 @@ G4Trap::G4Trap( const G4String& pName,
     good=MakePlane(pt[0],pt[2],pt[6],pt[4],fPlanes[2]);
     if (!good)
     {
-      G4cout << "ERROR - G4Trap()::G4Trap(): " << GetName() << G4endl;
       G4cerr << "ERROR - G4Trap()::G4Trap(): " << GetName() << G4endl;
-      G4Exception("G4Trap::G4Trap() - face at ~-X not planar");
+      G4Exception("G4Trap::G4Trap()", "InvalidSetup", FatalException,
+                  "Face at ~-X not planar.");
     }
 
     // Back side iwth normal approx. +X
@@ -288,16 +284,16 @@ G4Trap::G4Trap( const G4String& pName,
     good=MakePlane(pt[1],pt[5],pt[7],pt[3],fPlanes[3]);
     if (!good)
     {
-      G4cout << "ERROR - G4Trap()::G4Trap(): " << GetName() << G4endl;
       G4cerr << "ERROR - G4Trap()::G4Trap(): " << GetName() << G4endl;
-      G4Exception("G4Trap::G4Trap() - face at ~+X not planar");
+      G4Exception("G4Trap::G4Trap()", "InvalidSetup", FatalException,
+                  "Face at ~+X not planar.");
     }
   }
     else
   {
-    G4cout << "ERROR - G4Trap()::G4Trap(): " << GetName() << G4endl;
     G4cerr << "ERROR - G4Trap()::G4Trap(): " << GetName() << G4endl;
-    G4Exception("G4Trap::G4Trap() - Invalid length G4Trap parameters");
+    G4Exception("G4Trap::G4Trap()", "InvalidSetup", FatalException,
+                "Invalid length G4Trap parameters.");
   }
 }
 
@@ -353,9 +349,9 @@ G4Trap::G4Trap( const G4String& pName,
     good=MakePlane(pt[0],pt[4],pt[5],pt[1],fPlanes[0]);
     if (!good)
     {
-      G4cout << "ERROR - G4Trap()::G4Trap(): " << GetName() << G4endl;
       G4cerr << "ERROR - G4Trap()::G4Trap(): " << GetName() << G4endl;
-      G4Exception("G4Trap::G4Trap() - face at ~-Y not planar");
+      G4Exception("G4Trap::G4Trap()", "InvalidSetup", FatalException,
+                  "Face at ~-Y not planar.");
     }
 
     // Top side with normal approx. +Y
@@ -363,9 +359,9 @@ G4Trap::G4Trap( const G4String& pName,
     good=MakePlane(pt[2],pt[3],pt[7],pt[6],fPlanes[1]);
     if (!good)
     {
-      G4cout << "ERROR - G4Trap()::G4Trap(): " << GetName() << G4endl;
       G4cerr << "ERROR - G4Trap()::G4Trap(): " << GetName() << G4endl;
-      G4Exception("G4Trap::G4Trap() - face at ~+Y not planar");
+      G4Exception("G4Trap::G4Trap()", "InvalidSetup", FatalException,
+                  "Face at ~+Y not planar.");
     }
 
     // Front side with normal approx. -X
@@ -373,9 +369,9 @@ G4Trap::G4Trap( const G4String& pName,
     good=MakePlane(pt[0],pt[2],pt[6],pt[4],fPlanes[2]);
     if (!good)
     {
-      G4cout << "ERROR - G4Trap()::G4Trap(): " << GetName() << G4endl;
       G4cerr << "ERROR - G4Trap()::G4Trap(): " << GetName() << G4endl;
-      G4Exception("G4Trap::G4Trap() - face at ~-X not planar");
+      G4Exception("G4Trap::G4Trap()", "InvalidSetup", FatalException,
+                  "Face at ~-X not planar.");
     }
 
     // Back side iwth normal approx. +X
@@ -383,16 +379,16 @@ G4Trap::G4Trap( const G4String& pName,
     good=MakePlane(pt[1],pt[5],pt[7],pt[3],fPlanes[3]);
     if (!good)
     {
-      G4cout << "ERROR - G4Trap()::G4Trap(): " << GetName() << G4endl;
       G4cerr << "ERROR - G4Trap()::G4Trap(): " << GetName() << G4endl;
-      G4Exception("G4Trap::G4Trap() - face at ~+X not planar");
+      G4Exception("G4Trap::G4Trap()", "InvalidSetup", FatalException,
+                  "Face at ~+X not planar.");
     }
   }
   else
   {
-    G4cout << "ERROR - G4Trap()::G4Trap(): " << GetName() << G4endl;
     G4cerr << "ERROR - G4Trap()::G4Trap(): " << GetName() << G4endl;
-    G4Exception("G4Trap::G4Trap() - Invalid length G4Trap parameters");
+    G4Exception("G4Trap::G4Trap()", "InvalidSetup", FatalException,
+                "Invalid length G4Trap parameters.");
   }
 }
 
@@ -449,9 +445,9 @@ G4Trap::G4Trap( const G4String& pName,
     good=MakePlane(pt[0],pt[4],pt[5],pt[1],fPlanes[0]);
     if (!good)
     {
-      G4cout << "ERROR - G4Trap()::G4Trap(): " << GetName() << G4endl;
       G4cerr << "ERROR - G4Trap()::G4Trap(): " << GetName() << G4endl;
-      G4Exception("G4Trap::G4Trap() - face at ~-Y not planar");
+      G4Exception("G4Trap::G4Trap()", "InvalidSetup", FatalException,
+                  "Face at ~-Y not planar.");
     }
 
     // Top side with normal approx. +Y
@@ -459,9 +455,9 @@ G4Trap::G4Trap( const G4String& pName,
     good=MakePlane(pt[2],pt[3],pt[7],pt[6],fPlanes[1]);
     if (!good)
     {
-      G4cout << "ERROR - G4Trap()::G4Trap(): " << GetName() << G4endl;
       G4cerr << "ERROR - G4Trap()::G4Trap(): " << GetName() << G4endl;
-      G4Exception("G4Trap::G4Trap() - face at ~+Y not planar");
+      G4Exception("G4Trap::G4Trap()", "InvalidSetup", FatalException,
+                  "Face at ~+Y not planar.");
     }
 
     // Front side with normal approx. -X
@@ -469,9 +465,9 @@ G4Trap::G4Trap( const G4String& pName,
     good=MakePlane(pt[0],pt[2],pt[6],pt[4],fPlanes[2]);
     if (!good)
     {
-      G4cout << "ERROR - G4Trap()::G4Trap(): " << GetName() << G4endl;
       G4cerr << "ERROR - G4Trap()::G4Trap(): " << GetName() << G4endl;
-      G4Exception("G4Trap::G4Trap() - face at ~-X not planar");
+      G4Exception("G4Trap::G4Trap()", "InvalidSetup", FatalException,
+                  "Face at ~-X not planar.");
     }
 
     // Back side iwth normal approx. +X
@@ -479,16 +475,16 @@ G4Trap::G4Trap( const G4String& pName,
     good=MakePlane(pt[1],pt[5],pt[7],pt[3],fPlanes[3]);
     if (!good)
     {
-      G4cout << "ERROR - G4Trap()::G4Trap(): " << GetName() << G4endl;
       G4cerr << "ERROR - G4Trap()::G4Trap(): " << GetName() << G4endl;
-      G4Exception("G4Trap::G4Trap() - face at ~+X not planar");
+      G4Exception("G4Trap::G4Trap()", "InvalidSetup", FatalException,
+                  "Face at ~+X not planar.");
     }
   }
   else
   {
-    G4cout << "ERROR - G4Trap()::G4Trap(): " << GetName() << G4endl;
     G4cerr << "ERROR - G4Trap()::G4Trap(): " << GetName() << G4endl;
-    G4Exception("G4Trap::G4Trap() - Invalid length G4Trap parameters");
+    G4Exception("G4Trap::G4Trap()", "InvalidSetup", FatalException,
+                "Invalid length G4Trap parameters.");
   }
 }
 
@@ -512,6 +508,7 @@ G4Trap::G4Trap( const G4String& pName )
     fDx4        (1.),
     fTalpha2    (0.)
 {
+ MakePlanes();
 }
 
 ///////////////////////////////////////////////////////////////////////
@@ -551,19 +548,14 @@ void G4Trap::SetAllParameters ( G4double pDz,
   }
   else
   {
-    G4cout << "ERROR - G4Trap()::SetAllParameters(): " << GetName() << G4endl
-           << "        Invalid dimensions !" << G4endl
-           << "          X - "
-           << pDx1 << ", " << pDx2 << ", " << pDx3 << ", " << pDx4 << G4endl
-           << "          Y - " << pDy1 << ", " << pDy2 << G4endl
-           << "          Z - " << pDz << G4endl;
     G4cerr << "ERROR - G4Trap()::SetAllParameters(): " << GetName() << G4endl
            << "        Invalid dimensions !" << G4endl
            << "          X - "
            << pDx1 << ", " << pDx2 << ", " << pDx3 << ", " << pDx4 << G4endl
            << "          Y - " << pDy1 << ", " << pDy2 << G4endl
            << "          Z - " << pDz << G4endl;
-    G4Exception("G4Trap::SetAllParameters() - Invalid Length Parameters");
+    G4Exception("G4Trap::SetAllParameters()", "InvalidSetup",
+                FatalException, "Invalid Length Parameters.");
   }
 }
 
@@ -599,9 +591,9 @@ G4bool G4Trap::MakePlanes()
   good=MakePlane(pt[0],pt[4],pt[5],pt[1],fPlanes[0]) ;
   if (!good)
   {
-    G4cout << "ERROR - G4Trap()::G4Trap(): " << GetName() << G4endl;
-    G4cerr << "ERROR - G4Trap()::G4Trap(): " << GetName() << G4endl;
-    G4Exception("G4Trap::G4Trap() - face at ~-Y not planar");
+    G4cerr << "ERROR - G4Trap()::MakePlanes(): " << GetName() << G4endl;
+    G4Exception("G4Trap::MakePlanes()", "InvalidSetup", FatalException,
+                "Face at ~-Y not planar.");
   }
 
   // Top side with normal approx. +Y
@@ -609,9 +601,9 @@ G4bool G4Trap::MakePlanes()
   good=MakePlane(pt[2],pt[3],pt[7],pt[6],fPlanes[1]);
   if (!good)
   {
-    G4cout << "ERROR - G4Trap()::G4Trap(): " << GetName() << G4endl;
-    G4cerr << "ERROR - G4Trap()::G4Trap(): " << GetName() << G4endl;
-    G4Exception("G4Trap::G4Trap() - face at ~+Y not planar");
+    G4cerr << "ERROR - G4Trap()::MakePlanes(): " << GetName() << G4endl;
+    G4Exception("G4Trap::MakePlanes()", "InvalidSetup", FatalException,
+                "Face at ~+Y not planar.");
   }
 
   // Front side with normal approx. -X
@@ -619,9 +611,9 @@ G4bool G4Trap::MakePlanes()
   good=MakePlane(pt[0],pt[2],pt[6],pt[4],fPlanes[2]);
   if (!good)
   {
-    G4cout << "ERROR - G4Trap()::G4Trap(): " << GetName() << G4endl;
-    G4cerr << "ERROR - G4Trap()::G4Trap(): " << GetName() << G4endl;
-    G4Exception("G4Trap::G4Trap() - face at ~-X not planar");
+    G4cerr << "ERROR - G4Trap()::MakePlanes(): " << GetName() << G4endl;
+    G4Exception("G4Trap::MakePlanes()", "InvalidSetup", FatalException,
+                "Face at ~-X not planar.");
   }
    
   // Back side iwth normal approx. +X
@@ -629,9 +621,9 @@ G4bool G4Trap::MakePlanes()
   good=MakePlane(pt[1],pt[5],pt[7],pt[3],fPlanes[3]);
   if (!good)
   {
-    G4cout << "ERROR - G4Trap()::G4Trap(): " << GetName() << G4endl;
-    G4cerr << "ERROR - G4Trap()::G4Trap(): " << GetName() << G4endl;
-    G4Exception("G4Trap::G4Trap() - face at ~+X not planar");
+    G4cerr << "ERROR - G4Trap()::MakePlanes(): " << GetName() << G4endl;
+    G4Exception("G4Trap::MakePlanes()", "InvalidSetup", FatalException,
+                "Face at ~+X not planar");
   }
 
   return good;
@@ -701,9 +693,9 @@ G4bool G4Trap::MakePlane( const G4ThreeVector& p1,
     }
     else
     {
-      G4cout << "ERROR - G4Trap()::MakePlane(): " << GetName() << G4endl;
       G4cerr << "ERROR - G4Trap()::MakePlane(): " << GetName() << G4endl;
-      G4Exception("G4Trap::MakePlane() - Invalid parameters") ;
+      G4Exception("G4Trap::MakePlanes()", "InvalidSetup", FatalException,
+                  "Invalid parameters.") ;
     }
 
     // Calculate D: p1 in in plane so D=-n.p1.Vect()
@@ -1236,7 +1228,7 @@ G4double G4Trap::DistanceToIn( const G4ThreeVector& p,
 
 G4double G4Trap::DistanceToIn( const G4ThreeVector& p ) const
 {
-  G4double safe,Dist;
+  G4double safe=0.0,Dist;
   G4int i;
   safe=fabs(p.z())-fDz;
   for (i=0;i<4;i++)
@@ -1531,7 +1523,7 @@ G4double G4Trap::DistanceToOut(const G4ThreeVector& p, const G4ThreeVector& v,
 
 G4double G4Trap::DistanceToOut( const G4ThreeVector& p ) const
 {
-  G4double safe,Dist;
+  G4double safe=0.0,Dist;
   G4int i;
 
 #ifdef G4CSGDEBUG
@@ -1544,8 +1536,8 @@ G4double G4Trap::DistanceToOut( const G4ThreeVector& p ) const
      G4cout << "p.x() = "   << p.x()/mm << " mm" << G4endl ;
      G4cout << "p.y() = "   << p.y()/mm << " mm" << G4endl ;
      G4cout << "p.z() = "   << p.z()/mm << " mm" << G4endl << G4endl ;
-     G4cout << "G4Trap::DistanceToOut(p) - point p is outside ?!" << G4endl ;
-     G4cerr << "G4Trap::DistanceToOut(p) - point p is outside ?!" << G4endl ;
+     G4Exception("G4Trap::DistanceToOut(p)",
+                 "Notification", JustWarning, "Point p is outside !?" );
   }
 #endif
 
@@ -1610,7 +1602,9 @@ G4Trap::CreateRotatedVertices( const G4AffineTransform& pTransform ) const
   else
   {
     DumpInfo();
-    G4Exception("G4Trap::CreateRotatedVertices() - Out of memory !");
+    G4Exception("G4Trap::CreateRotatedVertices()",
+                "FatalError", FatalException,
+                "Error in allocation of vertices. Out of memory !");
   }
   return vertices;
 }

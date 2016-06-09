@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: History,v 1.12 2003/06/12 15:25:20 ribon Exp $
+$Id: History,v 1.21 2003/12/05 07:38:38 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -8,6 +8,42 @@ $Id: History,v 1.12 2003/06/12 15:25:20 ribon Exp $
 
                       Example History file
                       ---------------------
+
+05.12.03 - G.Cosmo (ccal-V05-02-07)
+- Changed LISTS_BASE to G4LISTS_BASE for hadronic physics lists path.
+  Cowork with "ghad-lists-V05-02-01".
+
+04.12.03 - A.Ribon (ccal-V05-02-06)
+- Added some recent modifications and improvements from Sunanda.
+
+04.12.03 - G.Cosmo (ccal-V05-02-05)
+- Corrected GNUmakefile and updated scripts to Anaphe 5.0.6.
+
+03.12.03 - H.P.Wellisch
+- Removed physics-lists, now using default setup provided in
+  $G4INSTALL/hadronic_lists.
+
+25.11.03 - A.Ribon (ccal-V05-02-04)
+- Changes in the Physics Lists to be compatible with the latest
+  hadronic changes in geant4-06-00-cand-02.
+
+13.11.03 - John Allison
+- Brought Vis Manager up to date.
+
+05.11.03 - A.Ribon (ccal-V05-02-03)
+- Add some modifications from Sunanda on how to handle "GetReplicaNumber()".
+
+03.11.03 - A.Ribon (ccal-V05-02-02)
+- Removed "GetCopyNo()" and replaced it with "GetReplicaNumber()"
+  using G4TouchableHistory.
+
+31.10.03 - A.Ribon (ccal-V05-02-01)
+- Enables possibility of running the simulation in HCal alone or 
+  HCal+ECal mode with the correct B-field + a few small bug corrections.
+  Changed also the default stepper (in magnetic field).
+
+18.09.03 V.Ivanchenko (ccal-V05-02-00)
+- Complete migration to model EM physics
 
 12.06.2003 - A.Ribon (ccal-V05-01-02)
 - Updated the LHEP, QGSP, and QGSC Physics Lists. 

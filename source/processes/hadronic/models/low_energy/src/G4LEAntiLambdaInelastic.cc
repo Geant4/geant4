@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4LEAntiLambdaInelastic.cc,v 1.6 2003/06/16 17:10:07 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4LEAntiLambdaInelastic.cc,v 1.8 2003/10/31 18:04:16 hpw Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
  // Hadronic Process: AntiLambda Inelastic Process
  // J.L. Chuma, TRIUMF, 19-Feb-1997
@@ -32,13 +32,11 @@
 #include "G4LEAntiLambdaInelastic.hh"
 #include "Randomize.hh"
 
- G4VParticleChange *
-  G4LEAntiLambdaInelastic::ApplyYourself( const G4Track &aTrack,
+ G4HadFinalState *
+  G4LEAntiLambdaInelastic::ApplyYourself( const G4HadProjectile &aTrack,
                                           G4Nucleus &targetNucleus )
-  {
-    theParticleChange.Initialize( aTrack );
-    
-    const G4DynamicParticle *originalIncident = aTrack.GetDynamicParticle();
+  {    
+    const G4HadProjectile *originalIncident = &aTrack;
     //
     // create the target particle
     //
@@ -46,7 +44,7 @@
     
     if( verboseLevel > 1 )
     {
-      G4Material *targetMaterial = aTrack.GetMaterial();
+      const G4Material *targetMaterial = aTrack.GetMaterial();
       G4cout << "G4LEAntiLambdaInelastic::ApplyYourself called" << G4endl;
       G4cout << "kinetic energy = " << originalIncident->GetKineticEnergy()/MeV << "MeV, ";
       G4cout << "target material = " << targetMaterial->GetName() << ", ";
@@ -96,7 +94,7 @@
     G4bool incidentHasChanged = false;
     G4bool targetHasChanged = false;
     G4bool quasiElastic = false;    
-    G4FastVector<G4ReactionProduct,128> vec;  // vec will contain the secondary particles
+    G4FastVector<G4ReactionProduct,GHADLISTSIZE> vec;  // vec will contain the secondary particles
     G4int vecLen = 0;
     vec.Initialize( 0 );
     
@@ -122,9 +120,9 @@
  
  void
   G4LEAntiLambdaInelastic::Cascade(
-   G4FastVector<G4ReactionProduct,128> &vec,
+   G4FastVector<G4ReactionProduct,GHADLISTSIZE> &vec,
    G4int &vecLen,
-   const G4DynamicParticle *originalIncident,
+   const G4HadProjectile *originalIncident,
    G4ReactionProduct &currentParticle,
    G4ReactionProduct &targetParticle,
    G4bool &incidentHasChanged,

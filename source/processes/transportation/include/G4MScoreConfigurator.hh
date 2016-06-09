@@ -21,14 +21,14 @@
 // ********************************************************************
 //
 //
-// $Id: G4MScoreConfigurator.hh,v 1.3 2002/10/22 13:25:55 dressel Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4MScoreConfigurator.hh,v 1.5 2003/11/26 14:51:47 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // ----------------------------------------------------------------------
 // Class G4MScoreConfigurator
 //
 // Class description:
-// This class builds and places  the G4MScoreProcess.
+// This class builds and places the G4MScoreProcess.
 // If the object is deleted the process is removed from the 
 // process list.
 
@@ -38,26 +38,29 @@
 #ifndef G4MScoreConfigurator_hh
 #define G4MScoreConfigurator_hh G4MScoreConfigurator_hh
 
-#include "globals.hh"
-#include "G4MScoreProcess.hh"
+#include "G4Types.hh"
 #include "G4ProcessPlacer.hh"
 
 #include "G4VSamplerConfigurator.hh"
 
 class G4VScorer;
 class G4VTrackTerminator;
+class G4MScoreProcess;
 
-class G4MScoreConfigurator : public G4VSamplerConfigurator{
-public:
+class G4MScoreConfigurator : public G4VSamplerConfigurator
+{
+
+public:  // with description
+
   G4MScoreConfigurator(const G4String &particlename,
-		       G4VScorer &scorer);
+                       G4VScorer &scorer);
   virtual ~G4MScoreConfigurator();
   
   virtual void Configure(G4VSamplerConfigurator *preConf);
   virtual const G4VTrackTerminator *GetTrackTerminator() const;
 
-  
 private:
+
   G4MScoreConfigurator(const G4MScoreConfigurator&);
   G4MScoreConfigurator &operator=(const G4MScoreConfigurator&);
 

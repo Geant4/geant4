@@ -56,7 +56,8 @@ DMXMaxTimeCuts::DMXMaxTimeCuts(const G4String& aName)
 DMXMaxTimeCuts::~DMXMaxTimeCuts()
 {}
 
-DMXMaxTimeCuts::DMXMaxTimeCuts(DMXMaxTimeCuts& right)
+DMXMaxTimeCuts::DMXMaxTimeCuts(DMXMaxTimeCuts&)
+ : DMXSpecialCuts()
 {}
 
  

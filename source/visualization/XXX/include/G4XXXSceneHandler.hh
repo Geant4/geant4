@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4XXXSceneHandler.hh,v 1.9 2002/11/11 18:22:47 johna Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4XXXSceneHandler.hh,v 1.10 2003/11/12 13:16:52 johna Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // 
 // John Allison  5th April 2001
@@ -99,6 +99,12 @@ public:
 
   // void BeginModeling();
   // void EndModeling();
+
+  //////////////////////////////////////////////////////////////
+  // Administration functions.
+
+  //void ClearStore ();
+  void ClearTransientStore ();
 
   ////////////////////////////////////////////////////////////////
   // Required...

@@ -19,6 +19,7 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
+//
 #ifndef G4INUCL_SPECIAL_FUNC_HH
 #define G4INUCL_SPECIAL_FUNC_HH
 

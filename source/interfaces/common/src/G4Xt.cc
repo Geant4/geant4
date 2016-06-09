@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Xt.cc,v 1.9 2002/11/06 08:12:58 barrand Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4Xt.cc,v 1.10 2003/10/17 09:34:27 gbarrand Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // G.Barrand
 
@@ -185,35 +185,6 @@ void G4Xt::FlushAndWaitExecution (
   if(topWidget==NULL) return;
   XSync(XtDisplay(topWidget),False);
 }
-/***************************************************************************/
-/******* From OPACS Xx/v3 package ******************************************/
-/***************************************************************************/
-/*
-void XWidgetIconify ( Widget This ) {
-  if(This==NULL)          return;
-  if(!XtIsRealized(This)) return;
-  XIconifyWindow(XtDisplay(This),XtWindow(This),XScreenNumberOfScreen(XtScreen(This)));
-}
-void XWidgetUniconify ( Widget This ) {
-  if(This==NULL)          return;
-  if(!XtIsRealized(This)) return;
-  XDisplaySetWindowToNormalState (XtDisplay(This),XtWindow(This));
-}
-void XDisplaySetWindowToNormalState (
- Display* This
-,Window a_window
-)
-//  Used to deiconify a window.
-{
-  XWMHints         wh;
-  if(This==NULL)   return;
-  if(a_window==0L) return;
-  wh.initial_state = NormalState; 
-  wh.flags         = StateHint;
-  XSetWMHints      (This,a_window,&wh);
-  XMapWindow       (This,a_window);
-}
-*/
 
 #endif
 

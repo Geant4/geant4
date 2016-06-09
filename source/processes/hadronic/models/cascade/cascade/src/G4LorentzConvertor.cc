@@ -19,8 +19,9 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
-
+//
 #include "G4LorentzConvertor.hh"
+#include "G4HadronicException.hh"
 
 G4LorentzConvertor::G4LorentzConvertor() 
   : verboseLevel(2), degenerated(false) {
@@ -287,7 +288,7 @@ G4bool G4LorentzConvertor::reflectionNeeded() const {
     if(degenerated) return (scm_momentum[3] < 0.0);
     else 
     {
-      G4Exception("G4LorentzConvertor::reflectionNeeded - return value undefined");
+      throw G4HadronicException(__FILE__, __LINE__, "G4LorentzConvertor::reflectionNeeded - return value undefined");
       return false;
     }
   };

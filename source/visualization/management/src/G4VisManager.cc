@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisManager.cc,v 1.50 2003/06/16 17:14:27 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4VisManager.cc,v 1.56 2003/11/27 11:48:27 johna Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // 
 // GEANT4 Visualization Manager - John Allison 02/Jan/1996.
@@ -151,37 +151,12 @@ void G4VisManager::Initialise () {
   }
 
   if (fVerbosity >= parameters) {
-    PrintAllGraphicsSystems ();
-    PrintInstalledGraphicsSystems ();
     G4cout <<
       "\nYou have instantiated your own Visualization Manager, inheriting"
       "\n  G4VisManager and implementing RegisterGraphicsSystems(), in which"
       "\n  you should, normally, instantiate drivers which do not need"
-      "\n  external packages or libraries, namely:"
-      "\n    ASCIITree, DAWNFILE, HepRepFile, GAGTree, RayTracer, VRMLFILE"
-      "\n  and, optionally, drivers under control of the following"
-      "\n  environment variables:"
-#ifdef G4VIS_BUILD_DAWN_DRIVER
-      "\n    G4VIS_USE_DAWN"
-#endif
-#ifdef G4VIS_BUILD_OPACS_DRIVER
-      "\n    G4VIS_USE_OPACS"
-#endif
-#ifdef G4VIS_BUILD_OPENGLX_DRIVER
-      "\n    G4VIS_USE_OPENGLX"
-#endif
-#ifdef G4VIS_BUILD_OPENGLXM_DRIVER
-      "\n    G4VIS_USE_OPENGLXM"
-#endif
-#ifdef G4VIS_BUILD_OIX_DRIVER
-      "\n    G4VIS_USE_OIX"
-#endif
-#ifdef G4VIS_BUILD_OIWIN32_DRIVER
-      "\n    G4VIS_USE_OIWIN32"
-#endif
-#ifdef G4VIS_BUILD_VRML_DRIVER
-      "\n    G4VIS_USE_VRML"
-#endif
+      "\n  external packages or libraries, and, optionally, drivers under"
+      "\n  control of environment variables."
       "\n  See visualization/include/MyVisManager.hh/cc, for example."
       "\n  In your main() you will have something like:"
       "\n  #ifdef G4VIS_USE"
@@ -210,9 +185,6 @@ void G4VisManager::Initialise () {
 
   fInitialised = true;
 }
-
-// void G4VisManager::RegisterMessengers () - see separate file,
-// G4VisManagerRegisterMessengers.cc.
 
 void G4VisManager::Enable() {
   if (IsValidView ()) {
@@ -837,6 +809,7 @@ void G4VisManager::RegisterMessengers () {
   fDirectoryList.push_back (directory);
   fMessengerList.push_back (new G4VisCommandSceneCreate);
   fMessengerList.push_back (new G4VisCommandSceneEndOfEventAction);
+  fMessengerList.push_back (new G4VisCommandSceneEndOfRunAction);
   fMessengerList.push_back (new G4VisCommandSceneList);
   fMessengerList.push_back (new G4VisCommandSceneNotifyHandlers);
   fMessengerList.push_back (new G4VisCommandSceneRemove);
@@ -896,73 +869,6 @@ void G4VisManager::RegisterMessengers () {
   fMessengerList.push_back (new G4VisCommandSpecify);
 }
 
-void G4VisManager::PrintAllGraphicsSystems () const {
-  G4cout <<
-    "\nThe following graphics systems drivers are supported in the"
-    " GEANT4 distribution:"
-    "\n\n  ASCIITree (prints geometry hierarchy)"
-    "\n\n  DAWN (socket connection to the Fukui Renderer DAWN) "
-	 << G4VisFeaturesOfFukuiRenderer () <<
-    "\n\n  DAWNFILE (file connection to the Fukui Renderer DAWN  ) "
-	 << G4VisFeaturesOfDAWNFILE () <<
-    "\n\n  GAGTree (prints geometry hierarchy, connectable to GAG"
-    "\n  user interface)"
-    "\n\n  HepRepFile (file connection to HepRep viewers, e.g., WIRED)"
-    "\n\n  OPACS (the Orsay Package) "
-    "\n\n  OpenGLIX (direct/immediate drawing on X Windows)\n"
-       << G4VisFeaturesOfOpenGLIX () <<
-    "\n\n  OpenGLSX (display List/stored drawing on X Windows)\n"
-       << G4VisFeaturesOfOpenGLSX () <<
-    "\n\n  OpenGLIXm (with Motif widgets)\n"
-       << G4VisFeaturesOfOpenGLIXm () <<
-    "\n\n  OpenGLSXm (with Motif widgets)\n"
-       << G4VisFeaturesOfOpenGLSXm () <<
-    "\n\n  Open Inventor"
-       << G4VisFeaturesOfOpenInventor () <<
-    "\n\n  RayTracer (produces JPEG file)"
-    "\n\n  VRML1     (produces VRML 1 file over network)"
-    "\n\n  VRML1FILE (produces VRML 1 file locally    )"
-    "\n\n  VRML2     (produces VRML 2 file over network)"
-    "\n\n  VRML2FILE (produces VRML 2 file locally    )"
-       << G4endl;
-}
-
-void G4VisManager::PrintInstalledGraphicsSystems () const {
-  G4cout << "\nThe following graphics systems drivers are installed on your"
-    " system:"
-       << "\n  ASCII Tree (produces ASCII file of geometry hierarchy)"
-#ifdef G4VIS_BUILD_DAWN_DRIVER
-       << "\n  DAWN     (socket connection to the Fukui Renderer DAWN)"
-#endif
-       << "\n  DAWNFILE (file connection to the Fukui Renderer DAWN)"
-       << "\n  GAG Tree (produces ascii file of geometry hierarchy for GAG)"
-#ifdef G4VIS_BUILD_OPACS_DRIVER
-       << "\n  OPACS (the Orsay Package)"
-#endif
-#ifdef G4VIS_BUILD_OPENGLX_DRIVER
-       << "\n  OpenGLIX (direct/immediate drawing on X Windows)"
-       << "\n  OpenGLSX (display List/stored drawing on X Windows)"
-#endif
-#ifdef G4VIS_BUILD_OPENGLXM_DRIVER
-       << "\n  OpenGLIXm (with Motif widgets)"
-       << "\n  OpenGLSXm (with Motif widgets)"
-#endif
-#ifdef G4VIS_BUILD_OIX_DRIVER
-       << "\n  Open Inventor X11"
-#endif
-#ifdef G4VIS_BUILD_OIWIN32_DRIVER
-       << "\n  Open Inventor Win32"
-#endif
-       << "\n  RayTracer (produces JPEG file)"
-#ifdef G4VIS_BUILD_VRML_DRIVER
-       << "\n  VRML1 (produces VRML 1 file over network)"
-       << "\n  VRML2 (produces VRML 2 file over network)"
-#endif
-       << "\n  VRML1FILE (produces VRML 1 file locally)"
-       << "\n  VRML2FILE (produces VRML 2 file locally)"
-       << G4endl;
-}
-
 void G4VisManager::PrintAvailableGraphicsSystems () const {
   G4int nSystems = fAvailableGraphicsSystems.size ();
   G4cout << "Current available graphics systems are:";
@@ -1009,29 +915,35 @@ void G4VisManager::BeginOfEvent () {
 void G4VisManager::EndOfEvent () {
   //G4cout << "G4VisManager::EndOfEvent" << G4endl;
   if (GetConcreteInstance() && IsValidView ()) {
-    ClearTransientStoreIfMarked();
-    fVisManagerModelingParameters
-      = *(fpSceneHandler -> CreateModelingParameters ());
     const std::vector<G4VModel*>& EOEModelList =
       fpScene -> GetEndOfEventModelList ();
-    for (size_t i = 0; i < EOEModelList.size (); i++) {
-      G4VModel* pModel = EOEModelList [i];
-      pModel -> SetModelingParameters (&fVisManagerModelingParameters);
-      fpSceneHandler -> SetModel (pModel);
-      pModel -> DescribeYourselfTo (*fpSceneHandler);
+    size_t nModels = EOEModelList.size();
+    ClearTransientStoreIfMarked();
+    if (nModels) {
+      fVisManagerModelingParameters
+	= *(fpSceneHandler -> CreateModelingParameters ());
+      for (size_t i = 0; i < nModels; i++) {
+	G4VModel* pModel = EOEModelList [i];
+	pModel -> SetModelingParameters (&fVisManagerModelingParameters);
+	fpSceneHandler -> SetModel (pModel);
+	pModel -> DescribeYourselfTo (*fpSceneHandler);
+      }
+      fpSceneHandler -> SetModel (0);  // Flags invalid model.
     }
     if (fpScene->GetRefreshAtEndOfEvent()) {
       fpViewer->ShowView();  // ...for systems needing post processing.
       fpSceneHandler->SetMarkForClearingTransientStore(true);
     }
-    fpSceneHandler -> SetModel (0);  // Flags invalid model.
   }
 }
 
 void G4VisManager::EndOfRun () {
   //G4cout << "G4VisManager::EndOfRun" << G4endl;
   if (GetConcreteInstance() && IsValidView ()) {
-    fpSceneHandler->SetMarkForClearingTransientStore(true);
+    if (fpScene->GetRefreshAtEndOfRun()) {
+      fpViewer->ShowView();  // ...for systems needing post processing.
+      fpSceneHandler->SetMarkForClearingTransientStore(true);
+    }
   }
 }
 

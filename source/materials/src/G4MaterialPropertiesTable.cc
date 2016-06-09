@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4MaterialPropertiesTable.cc,v 1.13 2002/11/07 02:30:29 gum Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // 
 ////////////////////////////////////////////////////////////////////////

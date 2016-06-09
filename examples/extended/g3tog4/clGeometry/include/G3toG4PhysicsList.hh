@@ -22,7 +22,7 @@
 //
 //
 // $Id: G3toG4PhysicsList.hh,v 1.2 2001/07/11 09:58:09 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // 
 

@@ -19,7 +19,7 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
-
+//
 #include "G4CascadSpecialFunctions.hh"
 
   std::pair<G4int, G4double> G4CascadSpecialFunctions::getPositionInEnergyScale2(G4double e) {
@@ -100,7 +100,7 @@ G4double G4CascadSpecialFunctions::absorptionCrosSection(G4double e,
   G4int verboseLevel = 2;
 
   if (verboseLevel > 3) {
-    G4cout << " >>> G4CascadSpecialFunctions::absorptionCrosSection" << G4endl;
+    G4cout << " >>> G4CascadSpecialFunctions::absorptionCrosSection  type:" << type <<G4endl;
   }
 
   const G4double corr_fac = 0.2;

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VDiscreteProcess.cc,v 1.3 2001/07/11 10:08:21 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4VDiscreteProcess.cc,v 1.4 2003/11/03 03:27:28 kurasige Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // 
 // --------------------------------------------------------------
@@ -38,7 +38,8 @@
 G4VDiscreteProcess::G4VDiscreteProcess()
                    :G4VProcess("No Name Discrete Process") 
 {
-  G4Exception("G4VDiscreteProcess:: default constructor is called");
+  G4Exception("G4VDiscreteProcess::G4VDiscreteProcess()","Illegal operation",
+	      JustWarning,"Default constructor is called");
 }
 
 G4VDiscreteProcess::G4VDiscreteProcess(const G4String& aName , G4ProcessType aType)

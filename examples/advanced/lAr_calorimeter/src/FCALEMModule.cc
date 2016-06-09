@@ -19,6 +19,7 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
+//
 //   Author:             Rachid Mazini
 //                       Rachid.Mazini@cern.ch
 //   Language:           C++
@@ -100,7 +101,7 @@ G4LogicalVolume * FCALEMModule::Construct()
   FCALMaterials->construct();
 
   G4VisAttributes * ColorOfEMModule = new G4VisAttributes(G4Colour(1.,0.,0.5));
-  G4VisAttributes * ColorOfLArg = new G4VisAttributes(G4Colour(0.,0.,1.));
+//  G4VisAttributes * ColorOfLArg = new G4VisAttributes(G4Colour(0.,0.,1.));
 
   //----------------------------
   //      Read Parameters
@@ -136,9 +137,10 @@ G4LogicalVolume * FCALEMModule::Construct()
   G4ThreeVector F1CableTroffTrans(0.,0.,0.);
   G4RotationMatrix F1CableTroffRot;
 
-  for(G4int i=0 ; i < NCableTroff ; i++)
+  G4int i=0;
+  for(i=0 ; i < NCableTroff ; i++)
     {
-      G4VPhysicalVolume * PhysicalF1CableTroff =
+//      G4VPhysicalVolume * PhysicalF1CableTroff =
 	new G4PVPlacement(G4Transform3D(F1CableTroffRot,F1CableTroffTrans),
 			  LogicalF1CableTroff,"F1CableTroffPhysical",
 			  LogicalEmModule,0,i+1);
@@ -163,7 +165,7 @@ G4LogicalVolume * FCALEMModule::Construct()
 			 "LArg Gap");
   
    for(i=1; i < NF1LarGap; i++){
-     G4VPhysicalVolume * PhysicalF1LArGap =
+//     G4VPhysicalVolume * PhysicalF1LArGap =
        new G4PVPlacement(0,G4ThreeVector(F1LArGapPosX[i]*cm,F1LArGapPosY[i]*cm,0.*cm),
 			  LogicalF1LArGap,"F1LArGapPhysical", LogicalEmModule, 0, i); 
    };

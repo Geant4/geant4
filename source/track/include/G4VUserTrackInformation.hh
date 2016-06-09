@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4VUserTrackInformation.hh,v 1.4 2003/05/09 20:42:27 asaim Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 //
 //---------------------------------------------------------------

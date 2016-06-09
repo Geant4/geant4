@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.2 2002/07/11 16:07:07 dressel Exp $
+# $Id: GNUmakefile,v 1.3 2003/10/01 14:51:38 gcosmo Exp $
 # --------------------------------------------------------------------
 # GNUmakefile for geometry/biasing library.  Gabriele Cosmo, 25/03/02.
 # --------------------------------------------------------------------
@@ -18,6 +18,7 @@ CPPFLAGS += -I$(G4BASE)/geometry/solids/CSG/include \
             -I$(G4BASE)/global/management/include \
             -I$(G4BASE)/global/HEPRandom/include \
             -I$(G4BASE)/global/HEPGeometry/include \
+            -I$(G4BASE)/geometry/navigation/include \
             -I$(G4BASE)/geometry/volumes/include \
             -I$(G4BASE)/geometry/management/include
 

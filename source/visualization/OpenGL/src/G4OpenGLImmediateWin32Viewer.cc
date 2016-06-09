@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4OpenGLImmediateWin32Viewer.cc,v 1.7 2003/06/10 17:13:32 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // 
 // Class G4OpenGLImmediateWin32Viewer : a class derived from G4OpenGLWin32Viewer and

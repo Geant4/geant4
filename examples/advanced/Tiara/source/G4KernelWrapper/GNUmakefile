@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.3 2003/06/20 12:41:06 dressel Exp $
+# $Id: GNUmakefile,v 1.5 2003/12/08 17:53:26 gcosmo Exp $
 # --------------------------------------------------------------
 # GNUmakefile   Michael Dressel
 # --------------------------------------------------------------
@@ -12,19 +12,16 @@ ifndef G4INSTALL
 endif
 include $(G4INSTALL)/config/architecture.gmk
 
-
 SWIGFLAGS = -I./ \
 	-I${G4INSTALL}/source/global/management/include \
 	-I${G4INSTALL}/source/geometry/biasing/include \
-	-I${G4INSTALL}/source/digits+hits/detector/include \
+	-I${G4INSTALL}/source/digits_hits/detector/include \
 	-I${G4INSTALL}/source/event/include \
 	-I${G4INSTALL}/source/processes/transportation/include \
 	-I${TIARA_BASE}/source/CLHEPWrapper/include \
 	-I${CLHEP_BASE_DIR}/include
 
-
 include $(TIARA_BASE)/source/swig.gmk
-
 
 .PHONY: all tiaraClean
 
@@ -32,13 +29,8 @@ all: $(SWIGSO)
 
 include $(G4INSTALL)/config/binmake.gmk
 
-
-
 CPPFLAGS += -I$(PYTHON_INCLUDE_DIR)
-
-
 LDFLAGS += -L$(PYTHON_LIB_DIR)
-
 LDLIBS +=   -lpython$(PYTHONVERSION) \
 	    -lnsl \
 	    -ldl \
@@ -47,8 +39,6 @@ LDLIBS +=   -lpython$(PYTHONVERSION) \
 	    -lieee \
 	    -lpthread \
 	    -lutil 
-
-
 
 tiaraClean:
 	@echo Cleaning up $(G4WORKDIR)/tmp/$(G4SYSTEM)/$(name)

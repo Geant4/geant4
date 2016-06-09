@@ -21,8 +21,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4ReactionProduct.cc,v 1.6 2002/12/12 19:18:40 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
 //
  // J.L. Chuma, TRIUMF, 31-Oct-1996
  // last modified: 19-Dec-1996
@@ -110,6 +108,24 @@
     momentum = right.GetMomentum();
     mass = right.GetDefinition()->GetPDGMass();
     totalEnergy = right.GetTotalEnergy();
+    kineticEnergy = right.GetKineticEnergy();
+    (right.GetDefinition()->GetPDGEncoding()<0) ? timeOfFlight=-1.0 : timeOfFlight=1.0;
+    side = 0;
+    NewlyAdded = false;
+    MayBeKilled = true;
+    return *this;
+  }
+ 
+ G4ReactionProduct &G4ReactionProduct::operator=(
+  const G4HadProjectile &right )
+  {
+    theParticleDefinition = const_cast<G4ParticleDefinition *>(right.GetDefinition());
+    SetPositionInNucleus( 0.0, 0.0, 0.0 );
+    formationTime = 0.0;
+    hasInitialStateParton = false;
+    momentum = right.Get4Momentum().vect();
+    mass = right.GetDefinition()->GetPDGMass();
+    totalEnergy = right.Get4Momentum().e();
     kineticEnergy = right.GetKineticEnergy();
     (right.GetDefinition()->GetPDGEncoding()<0) ? timeOfFlight=-1.0 : timeOfFlight=1.0;
     side = 0;

@@ -104,7 +104,7 @@ private:
 
 inline G4double XrayTelStepCut::PostStepGetPhysicalInteractionLength(
 								     const G4Track& aTrack,
-								     G4double   previousStepSize,
+								     G4double,
 								     G4ForceCondition* condition
 								     )
 {
@@ -132,9 +132,9 @@ inline G4VParticleChange* XrayTelStepCut::PostStepDoIt(
   return &aParticleChange;
 }
 
-inline G4double XrayTelStepCut::GetMeanFreePath(const G4Track& aTrack,
-						G4double   previousStepSize,
-						G4ForceCondition* condition
+inline G4double XrayTelStepCut::GetMeanFreePath(const G4Track&,
+						G4double,
+						G4ForceCondition*
 						)
 {
   return 0.;

@@ -1,0 +1,30 @@
+# $Id: kulchi.mac,v 1.1 2003/08/11 10:04:09 maire Exp $
+#
+# macro file for TestEm5.cc
+#
+# 2.25 MeV e-, transmitted through 26.60 mg/cm2  Al
+# L.Kulchitsky Phys.Rev. 61 (1941) page 254.
+#
+# Gaussian th1/e = 9.50 +- 0.40 deg
+# proj. distr. fit: exp(-0.5*(th/th0)**2) ====> th0 = th1/e/sqrt(2)
+#
+/control/verbose 2
+/run/verbose 2
+#
+/testem/det/setAbsMat   Aluminium
+/testem/det/setAbsThick 98.5185 mum
+/testem/det/setAbsYZ     1 cm
+#
+/testem/phys/setCuts 1 mm
+#
+/run/initialize
+#
+/testem/gun/setDefault
+/gun/particle e-
+/gun/energy 2.25 MeV
+#
+/testem/histo/setFileName kulchi.paw
+/testem/histo/setHisto 5  100   0.  25. deg	#space angle  
+/testem/histo/setHisto 6  100 -25. +25. deg	#projected angle  
+#
+/run/beamOn 100000

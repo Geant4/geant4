@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4NeutronHPDeExGammas.hh,v 1.9 2003/06/16 17:10:36 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 #ifndef G4NeutronHPDeExGammas_h
 #define G4NeutronHPDeExGammas_h 1

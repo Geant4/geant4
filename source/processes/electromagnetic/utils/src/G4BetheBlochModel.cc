@@ -20,6 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
+// $Id: G4BetheBlochModel.cc,v 1.9 2003/11/12 10:24:18 vnivanch Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // -------------------------------------------------------------------
 //
@@ -59,7 +61,8 @@ G4BetheBlochModel::G4BetheBlochModel(const G4ParticleDefinition* p, const G4Stri
   lowKinEnergy(2.0*MeV),
   twoln10(2.0*log(10.0)),
   bg2lim(0.0169),
-  taulim(8.4146e-3)
+  taulim(8.4146e-3),
+  isIon(false)
 {
   if(p) SetParticle(p);
 }
@@ -73,14 +76,16 @@ G4BetheBlochModel::~G4BetheBlochModel()
 
 void G4BetheBlochModel::SetParticle(const G4ParticleDefinition* p)
 {
-  particle = p;
-  mass = particle->GetPDGMass();
-  spin = particle->GetPDGSpin();
-  G4double q = particle->GetPDGCharge()/eplus;
-  chargeSquare = q*q;
-  lowKinEnergy *= mass/proton_mass_c2;
-  ratio = electron_mass_c2/mass;
-  qc = mass/ratio;
+  if(particle != p) {
+    particle = p;
+    mass = particle->GetPDGMass();
+    spin = particle->GetPDGSpin();
+    G4double q = particle->GetPDGCharge()/eplus;
+    chargeSquare = q*q;
+    lowKinEnergy *= mass/proton_mass_c2;
+    ratio = electron_mass_c2/mass;
+    if(particle->GetParticleName() == "GenericIon") isIon = true;
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -125,11 +130,12 @@ void G4BetheBlochModel::Initialise(const G4ParticleDefinition* p,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4BetheBlochModel::ComputeDEDX(const G4Material* material,
+G4double G4BetheBlochModel::ComputeDEDX(const G4MaterialCutsCouple* couple,
                                         const G4ParticleDefinition* p,
                                               G4double kineticEnergy,
                                               G4double cutEnergy)
 {
+  const G4Material* material = couple->GetMaterial();
   G4double tmax  = MaxSecondaryEnergy(p, kineticEnergy);
   G4double tau   = kineticEnergy/mass;
   G4double x     = 1.0;
@@ -149,23 +155,23 @@ G4double G4BetheBlochModel::ComputeDEDX(const G4Material* material,
   G4double* shellCorrectionVector =
             material->GetIonisation()->GetShellCorrectionVector();
   G4double eDensity = material->GetElectronDensity();
-        
+
   G4double dedx = log(2.0*electron_mass_c2*bg2*tmax*x/eexc2)-(1.0 + x)*beta2;
-    
+
   if(0.5 == spin) {
     G4double del = 0.5*x*tmax/(kineticEnergy + mass);
     dedx += del*del;
   }
 
-  // density correction     
+  // density correction
   x = log(bg2)/twoln10;
   if ( x >= x0den ) {
     dedx -= twoln10*x - cden ;
     if ( x < x1den ) dedx -= aden*pow((x1den-x),mden) ;
   }
-    
-  // shell correction 
-  G4double sh = 0.0;      
+
+  // shell correction
+  G4double sh = 0.0;
   x  = 1.0;
 
   if ( bg2 > bg2lim ) {
@@ -182,23 +188,23 @@ G4double G4BetheBlochModel::ComputeDEDX(const G4Material* material,
     sh *= log(tau/taul)/log(taulim/taul);
   }
   dedx -= sh;
-    
+
   // now compute the total ionization loss
 
   if (dedx < 0.0) dedx = 0.0 ;
-  
+
   dedx *= twopi_mc2_rcl2*chargeSquare*eDensity/beta2;
 
-  return dedx; 
+  return dedx;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4BetheBlochModel::CrossSection(const G4Material* material,
+G4double G4BetheBlochModel::CrossSection(const G4MaterialCutsCouple* couple,
                                          const G4ParticleDefinition* p,
                                                G4double kineticEnergy,
                                                G4double cutEnergy,
-                                               G4double maxEnergy) 
+                                               G4double maxEnergy)
 {
   G4double cross = 0.0;
   G4double tmax = std::min(MaxSecondaryEnergy(p, kineticEnergy), maxEnergy);
@@ -217,15 +223,17 @@ G4double G4BetheBlochModel::CrossSection(const G4Material* material,
     // +term for spin=1 particle
     } else if( 0.9 < spin ) {
 
+      G4double qc = mass/ratio;
       cross += -log(x)/(3.0*qc) +
 	(tmax - cutEnergy) * ((1.0+ 0.25*tmax*(1.0 + x)/qc)/(energy*energy)
 	- beta2 / (tmax * qc) )/3.0;
     }
-    
-    cross *= twopi_mc2_rcl2*chargeSquare*material->GetElectronDensity()/beta2;
+
+    cross *= twopi_mc2_rcl2*chargeSquare*
+             (couple->GetMaterial()->GetElectronDensity())/beta2;
   }
-  //  G4cout << "tmin= " << cutEnergy << " tmax= " << tmax 
-  //       << " cross= " << cross << G4endl; 
+  //  G4cout << "tmin= " << cutEnergy << " tmax= " << tmax
+  //       << " cross= " << cross << G4endl;
   return cross;
 }
 
@@ -256,6 +264,7 @@ G4DynamicParticle* G4BetheBlochModel::SampleSecondary(
     if(spin < 0.9) {
       grej += xmax*xmax*x;
     } else {
+      G4double qc = mass/ratio;
       y = tmax/(3.0*qc);
       grej += (1.0 - beta2*xmin)*xmin*y + x*xmin*xmin*(2.0/3.0 + xmin*y);
     }

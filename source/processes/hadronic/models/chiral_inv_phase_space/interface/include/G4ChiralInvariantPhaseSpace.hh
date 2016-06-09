@@ -32,7 +32,7 @@
 //#include "G4Quasmon.hh"
 #include "G4QNucleus.hh"
 #include "G4QHadronVector.hh"
-#include "G4ParticleChange.hh"
+#include "G4HadFinalState.hh"
 #include "G4LorentzVector.hh"
 #include "G4DynamicParticle.hh"
 #include "G4IonTable.hh"
@@ -41,19 +41,21 @@
 class G4ChiralInvariantPhaseSpace 
 {
   public: 
-    G4VParticleChange * ApplyYourself(const G4Track& aTrack, 
+    virtual G4HadFinalState* ApplyYourself(const G4HadProjectile& aTrack, 
                                       G4Nucleus& aTargetNucleus, 
-				      G4ParticleChange * aChange = 0);
+				      G4HadFinalState * aChange = 0);
 
+    virtual ~G4ChiralInvariantPhaseSpace(){}
   private:
-    G4ParticleChange theResult;
+    G4HadFinalState theResult;
 };
 
 inline
-G4VParticleChange * G4ChiralInvariantPhaseSpace::
-ApplyYourself(const G4Track& aTrack, G4Nucleus& aTargetNucleus, G4ParticleChange * aChange)
+G4HadFinalState * G4ChiralInvariantPhaseSpace::
+ApplyYourself(const G4HadProjectile& aTrack, 
+G4Nucleus& aTargetNucleus, G4HadFinalState * aChange)
 {
-  G4ParticleChange * aResult;
+  G4HadFinalState * aResult;
   if(aChange != 0)
   {
     aResult = aChange;
@@ -61,14 +63,13 @@ ApplyYourself(const G4Track& aTrack, G4Nucleus& aTargetNucleus, G4ParticleChange
   else
   {
     aResult = & theResult;
-    aResult->Initialize(aTrack);
-    aResult->SetStatusChange(fStopAndKill);
+    aResult->Clear();
+    aResult->SetStatusChange(stopAndKill);
   }
   //projectile properties needed in constructor of quasmon
   G4LorentzVector proj4Mom;
-  proj4Mom = aTrack.GetDynamicParticle()->Get4Momentum();
-  G4int projectilePDGCode = aTrack.GetDynamicParticle()
-                                  ->GetDefinition()
+  proj4Mom = aTrack.Get4Momentum();
+  G4int projectilePDGCode = aTrack.GetDefinition()
 				  ->GetPDGEncoding();
   
   //target properties needed in constructor of quasmon
@@ -91,7 +92,8 @@ ApplyYourself(const G4Track& aTrack, G4Nucleus& aTargetNucleus, G4ParticleChange
   G4double etaToEtaPrime = 0.3;
   
   // construct and fragment the quasmon
-  G4QCHIPSWorld aWorld(nop);              // Create CHIPS World of nop particles
+  //G4QCHIPSWorld aWorld(nop);              // Create CHIPS World of nop particles
+  G4QCHIPSWorld::Get()->GetParticles(nop);  // Create CHIPS World of nop particles
   G4QNucleus::SetParameters(fractionOfSingleQuasiFreeNucleons,
                             fractionOfPairedQuasiFreeNucleons,
 			                clusteringCoefficient);
@@ -107,14 +109,29 @@ ApplyYourself(const G4Track& aTrack, G4Nucleus& aTargetNucleus, G4ParticleChange
   G4QHadron* iH = new G4QHadron(projectilePDGCode, 1./MeV*proj4Mom);
   projHV.push_back(iH);
   G4QEnvironment* pan= new G4QEnvironment(projHV, targetPDGCode);
+  //G4Quasmon* pan= new G4Quasmon(projectilePDGCode, targetPDGCode, 1./MeV*proj4Mom, 1./MeV*targ4Mom, nop);
+  G4QHadronVector* output=0;
+  try
+  {
+    output = pan->Fragment();
+  }
+  catch(G4HadronicException & aR)
+  {
+    G4cerr << "Exception thrown passing through G4ChiralInvariantPhaseSpace "<<G4endl;
+    G4cerr << " targetPDGCode = "<< targetPDGCode <<G4endl;
+    G4cerr << " Dumping the information in the pojectile list"<<G4endl;
+    for(size_t i=0; i< projHV.size(); i++)
+    {
+      G4cerr <<"  Incoming 4-momentum and PDG code of "<<i<<"'th hadron: "
+             <<" "<< projHV[i]->Get4Momentum()<<" "<<projHV[i]->GetPDGCode()<<G4endl;
+    }
+    throw;
+  }
   std::for_each(projHV.begin(), projHV.end(), DeleteQHadron());
   projHV.clear();
-  //G4Quasmon* pan= new G4Quasmon(projectilePDGCode, targetPDGCode, 1./MeV*proj4Mom, 1./MeV*targ4Mom, nop);
-  G4QHadronVector* output = pan->Fragment();
   delete pan;
   
   // Fill the particle change.
-  aResult->SetNumberOfSecondaries(output->size());
   G4DynamicParticle * theSec;
 #ifdef CHIPSdebug
   G4cout << "G4ChiralInvariantPhaseSpace: NEW EVENT #ofHadrons="<<output->size()<<endl;

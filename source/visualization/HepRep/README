@@ -5,7 +5,7 @@ The HepRep graphics format is further described at
 http://heprep.freehep.org
 
 
-Two different drivers area available for either HepRep1 or HepRep2.
+Two different drivers are available for either HepRep1 or HepRep2.
 
 
 Driver: HepRepFile
@@ -30,31 +30,84 @@ Driver: HepRepXML
 -----------------
 The version of HepRep produced by this driver is HepRep Version 2.
 
-To set the base part of the filename (filename = basefilename-seqno.heprep):
-/vis/scene/create basefilename
+It uses ZLIB and ZIPIOS (included in the HepRep driver) to
+compress the files if necessary. ZLIB and ZIPIOS are included in the
+zlib and zipios++ include directories and further licensed and described there.
 
-To route the HepRep XML output to stdout (or stderr) use:
+HepRep XML files can contain multiple HepRep events/geometries.
+If the file contains more than one HepRep it is not strictly XML anymore.
+Files can be written in .heprep.zip .heprep.gz or .heprep format. 
+The .heprep.zip is the default for file output, the .heprep is the default 
+for stdout and stderr.
+
+(Optional) To set the filename, where the extension should be .heprep.zip 
+.heprep.gz or .heprep (.zip and .gz will compress), use:
+
+/vis/scene/create filename.heprep.zip
+
+
+(Optional) To create separate files for each event, you can set a suffix such as 
+"-0001" to start writing files from filename-0001.heprep.zip to 
+filename-9999.heprep.zip (or up), while "-55-sub" will start write files 
+filename-55-sub.heprep.zip to filename-99-sub.heprep.zip (or up).
+
+/vis/heprep/setEventNumberSuffix -0001
+(Note: suffix has to contain at least one digit)
+
+
+(Optional) To route the HepRep XML output to stdout (or stderr), 
+by default uncompressed, use:
+
 /vis/scene/create stdout
 
-To select the driver
+
+To select the driver, where the file if not create by scene is set to 
+G4HepRepOutput.heprep.zip, use:
+
 /vis/open HepRepXML
 
-Any call to draw part of an event will open the file and start writing.
 
-Each file, apart from stdin/stderr, is closed by:
+(Optional) To write a geometry, use:
+
 /vis/viewer/flush
-(WARNING: files will not contain geometry if not flushed. G4 exit will only
-close file)
 
-Multiple events can be written by:
-/vis/scene/endOfSceneAction accumulate
+
+(Optional) To signal a change in geometry (to be written with the next event), use:
+
+/vis/viewer/refresh
+
+
+To write 10 events (and geometries), use:
+
+/run/beamOn 10
+
+
+(Optional) To accumulate multiple (5) G4 events into one HepRep event, use:
+/vis/scene/endOfEventAction accumulate
+/run/beamOn 5
+/vis/viewer/update
+
+
+(Optional) To add attributes to each point on a trajectory, use:
+/vis/heprep/addPointAttributes 1
+Be aware that this may increase the size of the output dramatically.
+
+
+(Optional) To close the file, remove the SceneHandler, use:
+
+/vis/sceneHandler/remove scene-handler-0
+
 
 View the file using the WIRED Event Display, available from:
-http://www.slac.stanford.edu/BFROOT/www/Computing/Graphics/Wired/
-
-or in future
 
 http://wired.freehep.org
 
-9 Dec 2002
-Mark Donszelmann
+
+Limitations:
+
+Only one SceneHandler can exist at any time, connected to a single Viewer. 
+Since the HepRep format is a model rather than a view this is not a real
+limitation. In WIRED you can create as many views (SceneHandlers) as you like.
+
+4 November 2003
+Mark.Donszelmann@slac.stanford.edu

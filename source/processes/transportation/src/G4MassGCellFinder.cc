@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4MassGCellFinder.cc,v 1.2 2003/04/02 16:59:14 dressel Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4MassGCellFinder.cc,v 1.3 2003/11/26 14:51:49 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -36,24 +36,27 @@
 #include "G4Step.hh"
 
 G4MassGCellFinder::G4MassGCellFinder()
-{}
+{
+}
 
 G4MassGCellFinder::~G4MassGCellFinder()
-{}
+{
+}
 
-G4GeometryCell G4MassGCellFinder::
-GetPreGeometryCell(const G4Step &aStep) const {
+G4GeometryCell
+G4MassGCellFinder::GetPreGeometryCell(const G4Step &aStep) const
+{
   const G4TouchableHandle& th =
     aStep.GetPreStepPoint()->GetTouchableHandle();
   G4GeometryCell g(*th->GetVolume(), th->GetReplicaNumber()); 
   return g;
 }
 
-G4GeometryCell G4MassGCellFinder::
-GetPostGeometryCell(const G4Step &aStep) const {
+G4GeometryCell
+G4MassGCellFinder::GetPostGeometryCell(const G4Step &aStep) const
+{
   const G4TouchableHandle& th =
     aStep.GetPostStepPoint()->GetTouchableHandle();
   G4GeometryCell g(*th->GetVolume(), th->GetReplicaNumber());    
   return g;
 }
-

@@ -23,59 +23,6 @@ ifdef LOAD_IV
   INTYLIBS += $(OIVLIBS)
 endif
 
-########################### OPACS #######################
-# OpenGL, X11 things must come after.
-
-ifdef INC_OPACS
-  CPPFLAGS += -I$(COROOT)/include -I$(XXROOT)/include -I$(WOROOT)/include
-# Let Wo knows Xm (or Xaw) and Xo widget sets
-  ifeq ($(G4_OPACS_WIDGET_SET),Xm)
-    INC_XM    = 1
-    CPPFLAGS += -DHAS_XM
-  endif
-  ifeq ($(G4_OPACS_WIDGET_SET),lesstif)
-    INC_XM    = 1
-    CPPFLAGS += -DHAS_XM
-  endif
-  ifeq ($(G4_OPACS_WIDGET_SET),Xaw)
-    INC_XAW   = 1
-    CPPFLAGS += -DHAS_XAW
-  endif
-  CPPFLAGS += -DHAS_XO  -DHAS_GO -I$(GOROOT)/include -I$(HOROOT)/include -I$(XOROOT)/include
-endif
-
-ifdef LOAD_OPACS
-ifeq ($(G4_OPACS_WIDGET_SET),Xm)
-  INC_XM   = 1
-  LOAD_XM  = 1
-  INTYLIBS += -L$(WOROOT)/$(OCONFIG) -lWoXm
-endif
-ifeq ($(G4_OPACS_WIDGET_SET),lesstif)
-  INC_XM    = 1
-  LOAD_XM   = 1
-  INTYLIBS += -L$(WOROOT)/$(OCONFIG) -lWoXm
-# lesstif is bugged on popup ; then OPACS/Xo uses Xaw for popup.
-  LOAD_XAW  = 1
-endif
-ifeq ($(G4_OPACS_WIDGET_SET),Xaw)
-  INC_XAW  = 1
-  LOAD_XAW = 1
-  INTYLIBS += -L$(WOROOT)/$(OCONFIG) -lWoXaw
-endif
-  INTYLIBS += -L$(WOROOT)/$(OCONFIG) -lWo 
-  INTYLIBS += -L$(XOROOT)/$(OCONFIG) -lXo 
-  INTYLIBS += -L$(GOROOT)/$(OCONFIG) -lGo 
-  INTYLIBS += -L$(HOROOT)/$(OCONFIG) -lHo
-  INTYLIBS += -L$(W3OROOT)/$(OCONFIG) -lW3o
-  INTYLIBS += -L$(HTMLOROOT)/$(OCONFIG) -lHTMLo
-ifndef LOAD_GL
-  INTYLIBS += -L$(GLOROOT)/$(OCONFIG) -lGLXo -lGLUo -lGLo
-endif
-  INTYLIBS += -L$(XXROOT)/$(OCONFIG) -lXx
-  INTYLIBS += -L$(COROOT)/$(OCONFIG) -lCo
-endif
-
-
 ########################### OpenGL ###############################
 
 ifdef INC_GL

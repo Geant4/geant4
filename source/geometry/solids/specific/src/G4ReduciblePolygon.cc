@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ReduciblePolygon.cc,v 1.6 2002/10/30 13:52:23 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4ReduciblePolygon.cc,v 1.8 2003/11/03 18:39:55 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // 
 // --------------------------------------------------------------------
@@ -38,8 +38,8 @@
 //
 // --------------------------------------------------------------------
 
-#include "globals.hh"
 #include "G4ReduciblePolygon.hh"
+#include "globals.hh"
 
 //
 // Constructor: with simple arrays
@@ -102,7 +102,8 @@ void G4ReduciblePolygon::Create( const G4double a[],
                                  const G4double b[], G4int n )
 {
   if (n<3)
-   G4Exception("G4ReduciblePolygon::Create() - less than 3 vertices specified");
+   G4Exception("G4ReduciblePolygon::Create()", "WrongArgumentValue",
+               FatalException, "Less than 3 vertices specified.");
   
   const G4double *anext = a, *bnext = b;
   ABVertex *prev = 0;

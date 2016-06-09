@@ -50,33 +50,34 @@
 
 using namespace AIDA;
 
-class G4Track;
-
 class AIDA::IAnalysisFactory;
 class AIDA::ITree;
 class AIDA::IHistogramFactory;
 class AIDA::ITupleFactory;
 class AIDA::IPlotter;
 
+class G4Track;
+
 class A01AnalysisManager {
 public:
 
   virtual ~A01AnalysisManager();
+  static A01AnalysisManager* getInstance();
+  static void dispose();
+
   IHistogramFactory* getHistogramFactory();
   ITupleFactory* getTupleFactory();
   IPlotter* createPlotter();
-  static A01AnalysisManager* getInstance();
-  static void dispose();
 
 private:
 
   A01AnalysisManager();
   static A01AnalysisManager* instance;
+
   IAnalysisFactory* analysisFactory;
   IHistogramFactory* hFactory;
   ITupleFactory* tFactory;
   ITree* tree;
-
 };
 
 #endif

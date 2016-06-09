@@ -219,8 +219,10 @@ G4VParticleChange* G4KaonMinusAbsorptionAtRest::AtRestDoIt
     }
 
   if (energyDeposit < 0.) 
-      G4Exception("G4KaonMinusAbsorptionAtRest::AtRestDoIt -- excitation energy < 0");
-
+  {
+      G4Exception("G4KaonMinusAbsorptionAtRest", "007", FatalException,
+                  "AtRestDoIt -- excitation energy < 0");
+  }
   delete nucleus;    
 
   G4ReactionProductVector* fragmentationProducts = stopDeexcitation.DoBreakUp(newA,newZ,energyDeposit,pNucleus);

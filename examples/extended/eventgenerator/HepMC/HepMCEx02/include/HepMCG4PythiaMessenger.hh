@@ -19,11 +19,11 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
-
+//
 // ====================================================================
 //
 //   HepMCG4GenericPythiaMessenger.hh
-//   $Id: HepMCG4PythiaMessenger.hh,v 1.2 2002/11/19 10:25:08 murakami Exp $
+//   $Id: HepMCG4PythiaMessenger.hh,v 1.3 2003/12/09 15:31:18 gunter Exp $
 //
 // ====================================================================
 #ifndef HEPMC_G4_PYTHIA_MESSENGER_H

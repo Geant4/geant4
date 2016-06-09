@@ -1,25 +1,3 @@
-//
-// ********************************************************************
-// * DISCLAIMER                                                       *
-// *                                                                  *
-// * The following disclaimer summarizes all the specific disclaimers *
-// * of contributors to this software. The specific disclaimers,which *
-// * govern, are listed with their locations in:                      *
-// *   http://cern.ch/geant4/license                                  *
-// *                                                                  *
-// * Neither the authors of this software system, nor their employing *
-// * institutes,nor the agencies providing financial support for this *
-// * work  make  any representation or  warranty, express or implied, *
-// * regarding  this  software system or assume any liability for its *
-// * use.                                                             *
-// *                                                                  *
-// * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
-// * By copying,  distributing  or modifying the Program (or any work *
-// * based  on  the Program)  you indicate  your  acceptance of  this *
-// * statement, and all its terms.                                    *
-// ********************************************************************
-//
 
 #include <cstdio>
 
@@ -27,12 +5,12 @@
 
 using namespace std;
 
-XMLWriter::XMLWriter(ostream* out, string, string defaultNameSpace)
+XMLWriter::XMLWriter(ostream* out, string indentString, string defaultNameSpace)
     : defaultNameSpace(defaultNameSpace) {
     writer = new IndentPrintWriter(out);
-    writer->setIndentString("  ");
-    closed = true;
-    dtdName = NULL;
+    writer->setIndentString(indentString);
+    closed = false;
+    dtdName = "";
 }
 
 XMLWriter::~XMLWriter() {
@@ -49,7 +27,6 @@ void XMLWriter::openDoc(string version, string encoding, bool standalone) {
     string indentString = writer->getIndentString();
     writer->setIndentString(indentString);
 
-    closed = false;
 //    if (!XMLCharacterProperties.validVersionNum(version)) throw new RuntimeException("Invalid version number: "+version);
     *writer << "<?xml version=\"" << version.c_str() << "\" ";
     if (encoding.compare("") != 0) {
@@ -65,28 +42,32 @@ void XMLWriter::openDoc(string version, string encoding, bool standalone) {
 }
 
 void XMLWriter::referToDTD(string name, string pid, string ref) {
-    if (dtdName != NULL) {
+    if (dtdName != "") {
         cerr << "XMLWriter::ReferToDTD cannot be called twice" << endl;
     }
-    dtdName = &name;
+    dtdName = name;
     *writer << "<!DOCTYPE " << name.c_str() << " PUBLIC \"" << pid.c_str() << "\" \"" << ref.c_str() << "\">" << endl;
 }
 
 void XMLWriter::referToDTD(string name, string system) {
-    if (dtdName != NULL) {
+    if (dtdName != "") {
         cerr << "XMLWriter::ReferToDTD cannot be called twice";
     }
-    dtdName = &name;
+    dtdName = name;
     *writer << "<!DOCTYPE " << name.c_str() << " SYSTEM \"" << system.c_str() << "\">" << endl;
 }
 
-void XMLWriter::closeDoc() {
+void XMLWriter::closeDoc(bool force) {
     if (!closed) {
         if (!openTags.empty()) {
-            cerr << "Not all tags were closed before closing XML document:" << endl;
+            if (!force) cerr << "Not all tags were closed before closing XML document:" << endl;
             while (!openTags.empty()) {
-                cerr << "   </" << openTags.top().c_str() << ">" << endl;
-                openTags.pop();
+                if (force) {
+                    closeTag();
+                } else {
+                    cerr << "   </" << openTags.top().c_str() << ">" << endl;
+                    openTags.pop();
+                }
             }
         }
         closed = true;
@@ -98,6 +79,10 @@ void XMLWriter::printComment(string comment) {
         cerr << "XMLWriter::printComment '--' sequence not allowed in comment" << endl;
     }
     *writer << "<!--" << normalizeText(comment).c_str() << "-->" << endl;
+}
+
+void XMLWriter::printPlain(string text) {
+    *writer << text.c_str();
 }
 
 void XMLWriter::print(string text) {
@@ -119,8 +104,8 @@ void XMLWriter::openTag(string ns, string name) {
 
 void XMLWriter::openTag(string name) {
     checkNameValid(name);
-    if (openTags.empty() && dtdName != NULL && dtdName->compare(name)) {
-        cerr << "XMLWriter::openTag(), First tag: '" << name.c_str() << "' not equal to DTD id: '" << dtdName->c_str() << "'" << endl;
+    if (openTags.empty() && dtdName.compare("") && dtdName.compare(name)) {
+        cerr << "XMLWriter::openTag(), First tag: '" << name << "' not equal to DTD id: '" << dtdName << "'" << endl;
     }
     *writer << "<" << name.c_str();
     printAttributes(name.length());
@@ -165,7 +150,7 @@ void XMLWriter::setAttribute(string ns, string name, string value) {
 
 void XMLWriter::setAttribute(string name, double value) {
     char buffer[40];
-    sprintf(buffer, "%f", value);
+    sprintf(buffer, "%g", value);
     attributes[name] = buffer;
 }
 

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicalVolumeModel.cc,v 1.21 2003/06/16 17:14:31 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4PhysicalVolumeModel.cc,v 1.23 2003/11/12 13:05:10 johna Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // 
 // John Allison  31st December 1997.
@@ -81,6 +81,8 @@ void G4PhysicalVolumeModel::CalculateExtent () {
   }
   else {
     G4BoundingSphereScene bsScene(this);
+    const G4int tempRequestedDepth = fRequestedDepth;
+    fRequestedDepth = -1;  // Always search to all depths to define extent.
     const G4ModelingParameters* tempMP = fpMP;
     G4ModelingParameters mParams
       (0,      // No default vis attributes.
@@ -98,6 +100,7 @@ void G4PhysicalVolumeModel::CalculateExtent () {
     DescribeYourselfTo (bsScene);
     fExtent = bsScene.GetBoundingSphereExtent ();
     fpMP = tempMP;
+    fRequestedDepth = tempRequestedDepth;
   }
 }
 
@@ -203,7 +206,6 @@ void G4PhysicalVolumeModel::VisitGeometryAndGetVisReps
 	pMaterial = pP -> ComputeMaterial (n, pVPV);
 	pP -> ComputeTransformation (n, pVPV);
 	pSol -> ComputeDimensions (pP, n, pVPV);
-	// pVPV -> SetCopyNo (n);  // Uncertain of effect of this.
 	DescribeAndDescend (pVPV, requestedDepth, pLV, pSol, pMaterial,
 			    theAT, sceneHandler);
       }

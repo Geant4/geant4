@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Colour.hh,v 1.8 2003/06/16 16:55:06 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4Colour.hh,v 1.9 2003/09/18 11:03:11 johna Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // 
 // John Allison 20th October 1996
@@ -71,6 +71,7 @@
 #define G4COLOUR_HH
 
 #include "globals.hh"
+#include "G4ThreeVector.hh"
 #include <iostream>
 
 class G4Colour {
@@ -80,6 +81,11 @@ public: // With description
 
   G4Colour (G4double r = 1., G4double g = 1., G4double b = 1.,
 	    G4double a = 1.);
+  G4Colour (G4ThreeVector);
+  // Converts the components of the 3-vector into red, green, blue.
+  // The opacity, alpha = 1.
+  operator G4ThreeVector();
+  // Converts red, green, blue into the components of a 3-vector.
   G4bool operator != (const G4Colour& c) const;
   G4double GetRed   () const;
   G4double GetGreen () const;
@@ -88,15 +94,6 @@ public: // With description
 private:
   G4double red, green, blue, alpha;
 };
-
-inline G4Colour::G4Colour (G4double r, G4double g, G4double b, G4double a):
-red (r), green (g), blue (b), alpha (a)
-{
-  if( red   > 1.0 ){red   = 1.0;} if( red   < 0.0 ){red   = 0.0;}
-  if( green > 1.0 ){green = 1.0;} if( green < 0.0 ){green = 0.0;}
-  if( blue  > 1.0 ){blue  = 1.0;} if( blue  < 0.0 ){blue  = 0.0;}
-  if( alpha > 1.0 ){alpha = 1.0;} if( alpha < 0.0 ){alpha = 0.0;}
-}
 
 inline G4double G4Colour::GetRed   () const {return red;}
 inline G4double G4Colour::GetGreen () const {return green;}

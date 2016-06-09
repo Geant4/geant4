@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: A01MagneticField.cc,v 1.3 2002/12/13 11:34:34 gunter Exp $
+// $Id: A01MagneticField.cc,v 1.4 2003/10/12 14:08:14 asaim Exp $
 // --------------------------------------------------------------
 //
 
@@ -42,7 +42,7 @@ void A01MagneticField::GetFieldValue(const double Point[3],double *Bfield) const
 {
   Bfield[0] = 0.;
   Bfield[2] = 0.;
-  if(abs(Point[2])<ymax && (sqr(Point[0])+sqr(Point[2]))<rmax_sq)
+  if(abs(Point[1])<ymax && (sqr(Point[0])+sqr(Point[2]))<rmax_sq)
   { Bfield[1] = By; }
   else
   { Bfield[1] = 0.; }

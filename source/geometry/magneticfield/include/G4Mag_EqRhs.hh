@@ -21,29 +21,27 @@
 // ********************************************************************
 //
 //
-// $Id: G4Mag_EqRhs.hh,v 1.6 2001/07/11 09:59:09 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4Mag_EqRhs.hh,v 1.8 2003/11/05 12:54:13 japost Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 //
 // class G4Mag_EqRhs
 //
 // Class description:
 //
-// The "standard" right-hand side for the equation of motion of a particle 
-// in a pure magnetic field.
-// Others that might be required are:
-//     i) when using a moving reference frame ... or
-//    ii) extending for other forces, eg an electric field.
+// The "standard" equation of motion of a particle in a pure magnetic field.
 
 // History:
-// - Created. J.Apostolakis, January 13th 1996
+// - Created. J.Apostolakis, January 13th 1997
+// --------------------------------------------------------------------
 
 #ifndef G4_MAG_EQRHS_DEF
 #define G4_MAG_EQRHS_DEF
 
-#include "globals.hh"
+#include "G4Types.hh"
 #include "G4EquationOfMotion.hh"
-#include "G4MagneticField.hh"      // class G4MagneticField;  not enough ??
+
+class G4MagneticField;
 
 class G4Mag_EqRhs : public G4EquationOfMotion
 {
@@ -54,8 +52,8 @@ class G4Mag_EqRhs : public G4EquationOfMotion
        // Constructor and destructor. No actions.
 
      virtual void EvaluateRhsGivenB( const  G4double y[],
-			             const  G4double B[3],
-				            G4double dydx[] ) const = 0;
+                                     const  G4double B[3],
+                                            G4double dydx[] ) const = 0;
        // Given the value of the  field "B", this function 
        // calculates the value of the derivative dydx.
        // This is the _only_ function a subclass must define.
@@ -64,15 +62,15 @@ class G4Mag_EqRhs : public G4EquationOfMotion
      inline G4double FCof() const;
 
      virtual void SetChargeMomentumMass( G4double particleCharge, // in e+ units
-			                 G4double MomentumXc,
-			                 G4double mass);
+                                         G4double MomentumXc,
+                                         G4double mass);
      
   private:
 
      G4double fCof_val;
 
      static const G4double fUnitConstant;     // Set in G4Mag_EqRhs.cc 
-					      // to 0.299792458
+                                              // to 0.299792458
        // Coefficient in the Lorentz motion equation (Lorentz force), if the
        //  magnetic field B is in Tesla, the particle charge in units of the 
        //  elementary (positron?) charge, the momentum P in MeV/c, and the

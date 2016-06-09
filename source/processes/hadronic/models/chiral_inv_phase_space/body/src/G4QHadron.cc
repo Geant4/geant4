@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4QHadron.cc,v 1.25 2002/12/12 19:14:34 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4QHadron.cc,v 1.36 2003/12/09 15:38:23 gunter Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 //      ---------------- G4QHadron ----------------
 //             by Mikhail Kossov, Sept 1999.
@@ -53,7 +53,7 @@ G4QHadron::G4QHadron(G4int PDGCode, G4LorentzVector p) :
     valQ=theQPDG.GetQuarkContent();
   }
   else if(PDGCode>80000000) DefineQC(PDGCode);
-  else G4cerr<<"***G4QHaron:(P) PDG="<<PDGCode<<", use other constructor"<<G4endl;
+  else G4cerr<<"***G4QHadron:(P) PDG="<<PDGCode<<", use other constructor"<<G4endl;
 }
 
 // For Chipolino or Quasmon doesn't make any sense
@@ -67,9 +67,9 @@ G4QHadron::G4QHadron(G4QPDGCode QPDG, G4LorentzVector p) :
   }
   else
   {
-    G4cerr<<"***G4QHaron:(QP) PDG="<<theQPDG.GetPDGCode()<<", use other constructor"<<G4endl;
+    G4cerr<<"***G4QHadr:(QP) PDG="<<theQPDG.GetPDGCode()<<" use other constructor"<<G4endl;
 #ifdef sdebug
-	G4Exception("***G4QHadron: QPDG Constructor failed");
+	//throw G4QException("***G4QHadron: QPDG Constructor failed for the wrong PDG");
 #endif
   }
 
@@ -80,6 +80,7 @@ G4QHadron::G4QHadron(G4QContent QC, G4LorentzVector p) :
   theMomentum(p),valQ(QC),nFragm(0)
 {
   G4int curPDG=valQ.GetSPDGCode();
+  if(curPDG==10&&valQ.GetBaryonNumber()>0) curPDG=valQ.GetZNSPDGCode();
   if(curPDG&&curPDG!=10) theQPDG.SetPDGCode(curPDG);
 }
 
@@ -106,7 +107,7 @@ G4QHadron::G4QHadron(G4QParticle* pPart, G4double maxM) :
   G4cout<<"G4QHadron is created & randomized with maxM="<<maxM<<G4endl;
 #endif
   G4int PDGCode = theQPDG.GetPDGCode();
-  if(PDGCode<2) G4cerr<<"***G4QHaron:(M) PDGC="<<PDGCode<<", use other constructor"<<G4endl;
+  if(PDGCode<2)G4cerr<<"***G4QHadron:(M) PDGC="<<PDGCode<<" use other constructor"<<G4endl;
   valQ=theQPDG.GetQuarkContent();
   theMomentum.setE(RandomizeMass(pPart, maxM));
 }
@@ -119,7 +120,7 @@ G4QHadron::G4QHadron(const G4QHadron& right)
   nFragm              = right.nFragm;
 }
 
-G4QHadron::G4QHadron(G4QHadron* right)
+G4QHadron::G4QHadron(const G4QHadron* right)
 {
   theMomentum         = right->theMomentum;
   theQPDG             = right->theQPDG;
@@ -139,42 +140,47 @@ const G4QHadron& G4QHadron::operator=(const G4QHadron &right)
 
 G4QHadron::~G4QHadron() {}
 
-// Decay of the Hadron in 2 particles (f + s) in respect to the direction of refference particle
+// Decay of Hadron In2Particles f&s, f is in respect to the direction of HadronMomentumDir
 G4bool G4QHadron::RelDecayIn2(G4LorentzVector& f4Mom, G4LorentzVector& s4Mom,
        G4LorentzVector& dir, G4double maxCost, G4double minCost)
 {//    ===================================================================
   G4double fM2 = f4Mom.m2();
-  G4double fM  = sqrt(fM2);                // Mass of the 1st Hadron
+  G4double fM  = sqrt(fM2);              // Mass of the 1st Hadron
   G4double sM2 = s4Mom.m2();
-  G4double sM  = sqrt(sM2);                // Mass of the 2nd Hadron
+  G4double sM  = sqrt(sM2);              // Mass of the 2nd Hadron
   G4double iM2 = theMomentum.m2();
-  G4double iM  = sqrt(iM2);                // Mass of the decaying hadron
-  if(theMomentum.e()<theMomentum.rho())G4cerr<<"*G4QH::RDIn2:*Boost* 4M="<<theMomentum<<",e-p="
+  G4double iM  = sqrt(iM2);              // Mass of the decaying hadron
+  if(theMomentum.e()<theMomentum.rho())G4cerr<<"*G4QH::RDI2:*Bst*,4="<<theMomentum<<",e-p="
                                              <<theMomentum.e()-theMomentum.rho()<<G4endl;
-  G4ThreeVector ltb = theMomentum.boostVector(); // Boost vector for backward Lorentz Trans.
-  G4ThreeVector ltf = -ltb;                      // Boost vector for forward Lorentz Trans.
-  G4LorentzVector cdir = dir;              // A copy to make a transformation to CMS
-  if(cdir.e()+.001<cdir.rho())G4cerr<<"*G4QH::RDIn2:*Boost* cd4M="<<cdir<<",e-p="
-                                    <<cdir.e()-cdir.rho()<<G4endl;
-  cdir.boost(ltf);                         // Direction transpormed to CMS of the Momentum
-  G4ThreeVector vdir = cdir.vect();        // 3-Vector of the direction-particle
+  G4ThreeVector ltb = theMomentum.boostVector();// Boost vector for backward Lorentz Trans.
+  G4ThreeVector ltf = -ltb;              // Boost vector for forward Lorentz Trans.
+  G4LorentzVector cdir = dir;            // A copy to make a transformation to CMS
 #ifdef debug
-  G4cout<<"G4QHadron::RelDecayIn2: dir="<<dir<<",ltf="<<ltf<<",cdir="<<cdir<<",vdir="<<vdir<<G4endl;
+  if(cdir.e()+.001<cdir.rho()) G4cerr<<"*G4QH::RDIn2:*Boost* cd4M="<<cdir<<",e-p="
+                                     <<cdir.e()-cdir.rho()<<G4endl;
 #endif
-  G4ThreeVector vx(0.,0.,1.);              // Ort in the direction of the reference particle
-  G4ThreeVector vy(0.,1.,0.);              // First ort orthogonal to the direction
-  G4ThreeVector vz(1.,0.,0.);              // Second ort orthoganal to the direction
-  if(vdir.mag2() > 0.)                     // the refference particle isn't at rest in CMS
+  cdir.boost(ltf);                       // Direction transpormed to CMS of the Momentum
+  G4ThreeVector vdir = cdir.vect();      // 3-Vector of the direction-particle
+#ifdef debug
+  G4cout<<"G4QHad::RelDI2:dir="<<dir<<",ltf="<<ltf<<",cdir="<<cdir<<",vdir="<<vdir<<G4endl;
+#endif
+  G4ThreeVector vx(0.,0.,1.);            // Ort in the direction of the reference particle
+  G4ThreeVector vy(0.,1.,0.);            // First ort orthogonal to the direction
+  G4ThreeVector vz(1.,0.,0.);            // Second ort orthoganal to the direction
+  if(vdir.mag2() > 0.)                   // the refference particle isn't at rest in CMS
   {
-    vx = vdir.unit();                      // Ort in the direction of the reference particle
-    G4ThreeVector vv= vx.orthogonal();     // Not normed orthogonal vector (!)
-    vy = vv.unit();                        // First ort orthogonal to the direction
-    vz = vx.cross(vy);                     // Second ort orthoganal to the direction
+    vx = vdir.unit();                    // Ort in the direction of the reference particle
+    G4ThreeVector vv= vx.orthogonal();   // Not normed orthogonal vector (!)
+    vy = vv.unit();                      // First ort orthogonal to the direction
+    vz = vx.cross(vy);                   // Second ort orthoganal to the direction
   }
 #ifdef debug
-  G4cout<<"G4QHadron::RelDecayIn2:iM="<<iM<<" => fM="<<fM<<" + sM="<<sM<<",ob="<<vx<<vy<<vz<<G4endl;
+  G4cout<<"G4QHad::RelDecIn2:iM="<<iM<<"=>fM="<<fM<<"+sM="<<sM<<",ob="<<vx<<vy<<vz<<G4endl;
 #endif
-  if(maxCost>1.) maxCost=1.;
+  if(maxCost> 1.) maxCost= 1.;
+  if(minCost<-1.) minCost=-1.;
+  if(maxCost<-1.) maxCost=-1.;
+  if(minCost> 1.) minCost= 1.;
   if (abs(iM-fM-sM)<.001)
   {
     G4double fR=fM/iM;
@@ -183,10 +189,9 @@ G4bool G4QHadron::RelDecayIn2(G4LorentzVector& f4Mom, G4LorentzVector& s4Mom,
     s4Mom=sR*theMomentum;
     return true;
   }
-  else if (iM+.001<fM+sM || iM==0. || maxCost<-1.)
+  else if (iM+.001<fM+sM || iM==0.)
   {//@@ Later on make a quark content check for the decay
-    G4cerr<<"***G4QHadron::RelDecayIn2:fM="<<fM<<"+sM="<<sM<<">iM="<<iM<<",d="<<iM-fM-sM<<",mC="
-          <<maxCost<<G4endl;
+    G4cerr<<"***G4QH::RelDecIn2: fM="<<fM<<"+sM="<<sM<<">iM="<<iM<<",d="<<iM-fM-sM<<G4endl;
     return false;
   }
   G4double d2 = iM2-fM2-sM2;
@@ -194,13 +199,13 @@ G4bool G4QHadron::RelDecayIn2(G4LorentzVector& f4Mom, G4LorentzVector& s4Mom,
   if(p2<0.)
   {
 #ifdef debug
-    G4cout<<"***G4QHadr:RelDecIn2:p2="<<p2<<"<0,d2^2="<<d2*d2/4.<<"<4*fM2*sM2="<<4*fM2*sM2<<G4endl;
+    G4cout<<"**G4QH:RDIn2:p2="<<p2<<"<0,d2^2="<<d2*d2/4.<<"<4*fM2*sM2="<<4*fM2*sM2<<G4endl;
 #endif
     p2=0.;
   }
   G4double p  = sqrt(p2);
   G4double ct = maxCost;
-  if(maxCost>minCost&&minCost>=-1.)
+  if(maxCost>minCost)
   {
     G4double dcost=maxCost-minCost;
     ct = minCost+dcost*G4UniformRand();
@@ -209,7 +214,7 @@ G4bool G4QHadron::RelDecayIn2(G4LorentzVector& f4Mom, G4LorentzVector& s4Mom,
   G4double ps = p * sqrt(1.-ct*ct);
   G4ThreeVector pVect=(ps*sin(phi))*vz+(ps*cos(phi))*vy+p*ct*vx;
 #ifdef debug
-  G4cout<<"G4QHadron::RelDecayIn2:ct="<<ct<<",p="<<p<<",ps="<<ps<<",ph="<<phi<<",v="<<pVect<<G4endl;
+  G4cout<<"G4QH::RelDIn2:ct="<<ct<<",p="<<p<<",ps="<<ps<<",ph="<<phi<<",v="<<pVect<<G4endl;
 #endif
 
   f4Mom.setVect(pVect);
@@ -218,7 +223,7 @@ G4bool G4QHadron::RelDecayIn2(G4LorentzVector& f4Mom, G4LorentzVector& s4Mom,
   s4Mom.setE(sqrt(sM2+p2));
   
 #ifdef debug
-  G4cout<<"G4QHadron::RelDecayIn2: p2="<<p2<<",v="<<ltb<<",f4Mom="<<f4Mom<<",s4Mom="<<s4Mom<<G4endl;
+  G4cout<<"G4QHadr::RelDecIn2:p2="<<p2<<",v="<<ltb<<",f4M="<<f4Mom<<",s4M="<<s4Mom<<G4endl;
 #endif
   if(f4Mom.e()+.001<f4Mom.rho())G4cerr<<"*G4QH::RDIn2:*Boost* f4M="<<f4Mom<<",e-p="
                                       <<f4Mom.e()-f4Mom.rho()<<G4endl;
@@ -241,8 +246,8 @@ G4bool G4QHadron::DecayIn2(G4LorentzVector& f4Mom, G4LorentzVector& s4Mom)
   G4double sM2 = s4Mom.m2();
   G4double iM  = theMomentum.m();          // Mass of the decaying hadron
   G4double iM2 = theMomentum.m2();
-#ifdef pdebug
-  G4cout<<"G4QHadron::DecayIn2: iM="<<iM<<theMomentum<<" => fM="<<fM<<" + sM="<<sM<<G4endl;
+#ifdef debug
+  G4cout<<"G4QHadron::DecIn2: iM="<<iM<<" => fM="<<fM<<" + sM="<<sM<<" = "<<fM+sM<<G4endl;
 #endif
   //@@ Later on make a quark content check for the decay
   if (abs(iM-fM-sM)<.001)
@@ -253,20 +258,21 @@ G4bool G4QHadron::DecayIn2(G4LorentzVector& f4Mom, G4LorentzVector& s4Mom)
     s4Mom=sR*theMomentum;
     return true;
   }
-#ifdef pdebug
   else if (iM+.001<fM+sM || iM==0.)
   {
-    G4cerr<<"***G4QHadron::DecayIn2*** fM="<<fM<<" + sM="<<sM<<"="<<fM+sM<<" > iM="<<iM<<", d="
-          <<iM-fM-sM<<G4endl;
+#ifdef pdebug
+    G4cerr<<"***G4QHadron::DecayIn2*** fM="<<fM<<" + sM="<<sM<<"="<<fM+sM<<" > iM="<<iM
+          <<", d="<<iM-fM-sM<<G4endl;
+#endif
     return false;
   }
-#endif
+
   G4double d2 = iM2-fM2-sM2;
   G4double p2 = (d2*d2/4.-fM2*sM2)/iM2;    // Decay momentum(^2) in CMS of Quasmon
   if (p2<0.)
   {
-#ifdef pdebug
-    G4cerr<<"***G4QHadr::DecayIn2:p2="<<p2<<"<0,d2^2="<<d2*d2/4.<<"<4*fM2*sM2="<<4*fM2*sM2<<G4endl;
+#ifdef debug
+    G4cerr<<"***G4QH::DI2:p2="<<p2<<"<0,d2^2="<<d2*d2/4.<<"<4*fM2*sM2="<<4*fM2*sM2<<G4endl;
 #endif
     p2=0.;
   }
@@ -288,11 +294,11 @@ G4bool G4QHadron::DecayIn2(G4LorentzVector& f4Mom, G4LorentzVector& s4Mom)
   {
 	G4cerr<<"*G4QH::DecIn2:*Boost* 4M="<<theMomentum<<",e-p="
           <<theMomentum.e()-theMomentum.rho()<<G4endl;
-	//G4Exception("***G4QHadron::DecayIn2: Decay of particle with zero mass");
+	//throw G4QException("G4QHadron::DecayIn2: Decay of particle with zero mass");
   }
   G4ThreeVector ltb = theMomentum.boostVector(); // Boost vector for backward Lor.Trans.
 #ifdef pdebug
-  G4cout<<"G4QHadron::DecIn2: LorTransform v="<<ltb<<", f4Mom="<<f4Mom<<", s4Mom="<<s4Mom<<G4endl;
+  G4cout<<"G4QHadron::DecIn2:LorTrans v="<<ltb<<",f4Mom="<<f4Mom<<",s4Mom="<<s4Mom<<G4endl;
 #endif
   if(f4Mom.e()+.001<f4Mom.rho())G4cerr<<"*G4QH::DecIn2:*Boost* f4M="<<f4Mom<<G4endl;
   f4Mom.boost(ltb);                        // Lor.Trans. of 1st hadron back to LS
@@ -311,7 +317,7 @@ G4bool G4QHadron::CorMDecayIn2(G4double corM, G4LorentzVector& fr4Mom)
   G4LorentzVector comp=theMomentum+fr4Mom;  // 4Mom of the decaying compound system
   G4double iM  = comp.m();                  // mass of the decaying compound system
 #ifdef pdebug
-  G4cout<<"G4QHadr::CorMDecayIn2: iM="<<iM<<comp<<"=>fM="<<fM<<"+corM="<<corM<<"="<<fM+corM<<G4endl;
+  G4cout<<"G4QH::CMDIn2: iM="<<iM<<comp<<"=>fM="<<fM<<"+corM="<<corM<<"="<<fM+corM<<G4endl;
 #endif
   G4double dE=iM-fM-corM;
   //@@ Later on make a quark content check for the decay
@@ -325,7 +331,7 @@ G4bool G4QHadron::CorMDecayIn2(G4double corM, G4LorentzVector& fr4Mom)
   }
   else if (dE<-.001 || iM==0.)
   {
-    G4cerr<<"***G4QHadron::CorMDecayIn2***fM="<<fM<<" + cM="<<corM<<" > iM="<<iM<<",d="<<dE<<G4endl;
+    G4cerr<<"***G4QH::CorMDIn2***fM="<<fM<<" + cM="<<corM<<" > iM="<<iM<<",d="<<dE<<G4endl;
     return false;
   }
   G4double corM2= corM*corM;
@@ -336,18 +342,18 @@ G4bool G4QHadron::CorMDecayIn2(G4double corM, G4LorentzVector& fr4Mom)
   if (p2<0.)
   {
 #ifdef pdebug
-    G4cerr<<"***G4QH::CorMDecayIn2:p2="<<p2<<"<0, d="<<d2*d2/4.<<"<4*fM2*hM2="<<4*fM2*corM2<<G4endl;
+    G4cerr<<"**G4QH::CMDI2:p2="<<p2<<"<0,d="<<d2*d2/4.<<"<4*fM2*hM2="<<4*fM2*corM2<<G4endl;
 #endif
     p2=0.;
   }
   G4double p  = sqrt(p2);
   if(comp.e()<comp.rho())G4cerr<<"*G4QH::CorMDecayIn2:*Boost* comp4M="<<comp<<",e-p="
                                <<comp.e()-comp.rho()<<G4endl;
-  G4ThreeVector ltb = comp.boostVector();        // Boost vector for backward Lor.Trans.
-  G4ThreeVector ltf = -ltb;                      // Boost vector for forward Lorentz Trans.
-  G4LorentzVector cm4Mom=fr4Mom;                 // Copy of fragment 4Mom to transform to CMS
-  if(cm4Mom.e()+.001<cm4Mom.rho())G4cerr<<"*G4QH::CorMDecayIn2:*Boost* cm4M="<<cm4Mom<<G4endl;
-  cm4Mom.boost(ltf);                             // Now it is in CMS (Forward Lor.Trans.)
+  G4ThreeVector ltb = comp.boostVector();      // Boost vector for backward Lor.Trans.
+  G4ThreeVector ltf = -ltb;                    // Boost vector for forward Lorentz Trans.
+  G4LorentzVector cm4Mom=fr4Mom;               // Copy of fragment 4Mom to transform to CMS
+  if(cm4Mom.e()+.001<cm4Mom.rho())G4cerr<<"*G4QH::CorMDecIn2:*Boost* c4M="<<cm4Mom<<G4endl;
+  cm4Mom.boost(ltf);                           // Now it is in CMS (Forward Lor.Trans.)
   G4double pfx= cm4Mom.px();
   G4double pfy= cm4Mom.py();
   G4double pfz= cm4Mom.pz();
@@ -389,15 +395,15 @@ G4bool G4QHadron::CorMDecayIn2(G4double corM, G4LorentzVector& fr4Mom)
   theMomentum.setE(sqrt(corM2+p2));
 #ifdef pdebug
   G4LorentzVector dif2=comp-fr4Mom-Momentum;
-  G4cout<<"G4QHadron::CorMDecayIn2:vBLT="<<ltb<<",f4M="<<fr4Mom<<",h4M="<<theMomentum<<dif1<<G4endl;
+  G4cout<<"G4QH::CorMDIn2:VBLT="<<ltb<<",f4M="<<fr4Mom<<",h4M="<<theMomentum<<dif1<<G4endl;
 #endif
-  if(fr4Mom.e()+.001<fr4Mom.rho())G4cerr<<"*G4QH::VorMDecIn2:*Boost* fr4M="<<fr4Mom<<G4endl;
+  if(fr4Mom.e()+.001<fr4Mom.rho())G4cerr<<"*G4QH::CorMDecIn2:*Boost*fr4M="<<fr4Mom<<G4endl;
   fr4Mom.boost(ltb);                        // Lor.Trans. of the Fragment back to LS
-  if(theMomentum.e()+.001<theMomentum.rho())G4cerr<<"*G4QH::CMDIn2:*Boost*4M="<<theMomentum<<G4endl;
+  if(theMomentum.e()+.001<theMomentum.rho())G4cerr<<"*G4QH::CMDI2:4="<<theMomentum<<G4endl;
   theMomentum.boost(ltb);                  // Lor.Trans. of the Hadron back to LS
 #ifdef pdebug
   G4LorentzVector dif2=comp-fr4Mom-Momentum;
-  G4cout<<"G4QHadr::CorMDecayIn2:OUTPUT:f4Mom="<<fr4Mom<<",h4Mom="<<theMomentum<<"d="<<dif2<<G4endl;
+  G4cout<<"G4QH::CorMDecIn2:OUTPUT:f4M="<<fr4Mom<<",h4M="<<theMomentum<<"d="<<dif2<<G4endl;
 #endif
   return true;
 } // End of "CorMDecayIn2"
@@ -408,12 +414,12 @@ G4bool G4QHadron::CorEDecayIn2(G4double corE, G4LorentzVector& fr4Mom)
 {//    ===============================================================
   G4double fE  = fr4Mom.m();                // Energy of the Fragment
 #ifdef pdebug
-  G4cout<<"G4QHadron::CorEDecayIn2:fE="<<fE<<fr4Mom<<" > corE="<<corE<<",h4M="<<theMomentum<<G4endl;
+  G4cout<<"G4QH::CorEDecIn2:fE="<<fE<<fr4Mom<<">corE="<<corE<<",h4M="<<theMomentum<<G4endl;
 #endif
   if (fE+.001<=corE)
   {
 #ifdef pdebug
-    G4cerr<<"***G4QHadron::CorEDecayIn2*** fE="<<fE<<" < corE="<<corE<<", d="<<corE-fE<<G4endl;
+    G4cerr<<"***G4QHadron::CorEDecIn2*** fE="<<fE<<"<corE="<<corE<<", d="<<corE-fE<<G4endl;
 #endif
     return false;
   }
@@ -437,25 +443,37 @@ G4bool G4QHadron::CorEDecayIn2(G4double corE, G4LorentzVector& fr4Mom)
 #ifdef pdebug
   G4double difF=fr4Mom.m2()-fM2;
   G4double difM=theMomentum.m2()-mM2;
-  G4cout<<"G4QHadr::CorEDecayIn2:dmM2="<<difM<<",dfM2="<<difF<<",out:"<<theMomentum<<fr4Mom<<G4endl;
+  G4cout<<"G4QH::CorEDecIn2:dM="<<difM<<",dF="<<difF<<",out:"<<theMomentum<<fr4Mom<<G4endl;
 #endif
   return true;
 } // End of "CorEDecayIn2"
 
 // Decay of the hadron in 3 particles i=>r+s+t
-G4bool G4QHadron::DecayIn3(G4LorentzVector& f4Mom,G4LorentzVector& s4Mom,G4LorentzVector& t4Mom)
-{//    =========================================================================================
+G4bool G4QHadron::DecayIn3
+                   (G4LorentzVector& f4Mom, G4LorentzVector& s4Mom, G4LorentzVector& t4Mom)
+{//    ====================================================================================
 #ifdef debug
-  G4cout<<"G4QHadron::DecayIn3:"<<theMomentum<<"=>pf="<<f4Mom<<"+ps="<<s4Mom<<"+pt="<<t4Mom<<G4endl;
+  G4cout<<"G4QH::DIn3:"<<theMomentum<<"=>pf="<<f4Mom<<"+ps="<<s4Mom<<"+pt="<<t4Mom<<G4endl;
 #endif
   G4double iM  = theMomentum.m();  // Mass of the decaying hadron
   G4double fM  = f4Mom.m();        // Mass of the 1st hadron
   G4double sM  = s4Mom.m();        // Mass of the 2nd hadron
   G4double tM  = t4Mom.m();        // Mass of the 3rd hadron
-  if (iM+.001<fM+sM+tM)
+  G4double eps = 0.001;            // Accuracy of the split condition
+  if (abs(iM-fM-sM-tM)<=eps)
   {
-    G4cerr<<"***G4QHadron::DecayIn3:fM="<<fM<<" + sM="<<sM<<" + tM="<<tM<<" > iM="<<iM<<",d="
-          <<iM-fM-sM-tM<<G4endl;
+    G4double fR=fM/iM;
+    G4double sR=sM/iM;
+    G4double tR=tM/iM;
+    f4Mom=fR*theMomentum;
+    s4Mom=sR*theMomentum;
+    t4Mom=tR*theMomentum;
+    return true;
+  }
+  if (iM+eps<fM+sM+tM)
+  {
+    G4cout<<"***G4QHadron::DecayIn3:fM="<<fM<<" + sM="<<sM<<" + tM="<<tM<<" > iM="<<iM
+          <<",d="<<iM-fM-sM-tM<<G4endl;
     return false;
   }
   G4double fM2 = fM*fM;
@@ -467,7 +485,9 @@ G4bool G4QHadron::DecayIn3(G4LorentzVector& f4Mom,G4LorentzVector& s4Mom,G4Loren
   G4double m12sBase=(iM-tM)*(iM-tM)-m12sMin;
   G4double rR = 0.;
   G4double rnd= 1.;
-  /////////////G4int    tr = 0;                 //@@ Comment if "cout" below is skiped @@
+#ifdef debug
+  G4int    tr = 0;                 //@@ Comment if "cout" below is skiped @@
+#endif
   G4double m12s = 0.;              // Fake definition before the Loop
   while (rnd > rR)
   {
@@ -479,14 +499,16 @@ G4bool G4QHadron::DecayIn3(G4LorentzVector& f4Mom,G4LorentzVector& s4Mom,G4Loren
     G4double dif=(e1*e1-four12*fM2)*(e2*e2-four12*tM2);
     if(dif<0.)
 	{
-      if(dif<-.01) G4cerr<<"*G4QHadron::DecayIn3: iM="<<iM<<", tM="<<tM<<", sM="<<sM<<", fM="<<fM
-                           <<", m12(s+f)="<<sqrt(m12s)<<", d="<<iM-fM-sM-tM<<G4endl;
+#ifdef debug
+      if(dif<-.01) G4cerr<<"*G4QHadron::DecayIn3:iM="<<iM<<",tM="<<tM<<",sM="<<sM<<",fM="
+                         <<fM<<",m12(s+f)="<<sqrt(m12s)<<", d="<<iM-fM-sM-tM<<G4endl;
+#endif
     }
     else m13sRange=sqrt(dif)/m12s;
     rR = m13sRange/m13sBase;
     rnd= G4UniformRand();
 #ifdef debug
-    G4cout<<"G4QHadron::DecayIn3: try to decay #"<<++tr<<", rR="<<rR<<", rnd="<<rnd<<G4endl;
+    G4cout<<"G4QHadron::DecayIn3: try to decay #"<<++tr<<", rR="<<rR<<",rnd="<<rnd<<G4endl;
 #endif
   }
   G4double m12 = sqrt(m12s);       // Mass of the H1+H2 system
@@ -495,7 +517,7 @@ G4bool G4QHadron::DecayIn3(G4LorentzVector& f4Mom,G4LorentzVector& s4Mom,G4Loren
   if(!DecayIn2(t4Mom,dh4Mom))
   {
     G4cerr<<"***G4QHadron::DecayIn3: Exception1"<<G4endl;
-	//G4Exception("***G4QHadron::DecayIn3(): DecayIn2 did not succeed");
+	//throw G4QException("G4QHadron::DecayIn3(): DecayIn2 did not succeed");
     return false;
   }
 #ifdef debug
@@ -503,8 +525,8 @@ G4bool G4QHadron::DecayIn3(G4LorentzVector& f4Mom,G4LorentzVector& s4Mom,G4Loren
 #endif
   if(!G4QHadron(dh4Mom).DecayIn2(f4Mom,s4Mom))
   {
-    G4cerr<<"***G4QHadron::DecayIn3: Exception2"<<G4endl;
-	//G4Exception("G4QHadron::DecayIn3(): DecayIn2 did not succeed");
+    G4cerr<<"***G4QHadron::DecayIn3: Error in DecayIn2 -> Exception2"<<G4endl;
+	//throw G4QException("G4QHadron::DecayIn3(): DecayIn2 did not succeed");
     return false;
   }
   return true;
@@ -522,7 +544,7 @@ G4double G4QHadron::RandomizeMass(G4QParticle* pPart, G4double maxM)
   if(maxM<meanM-3*width) 
   {
 #ifdef debug
-    G4cerr<<"***G4QHadr::RandMass:m=0 maxM="<<maxM<<"< meanM="<<meanM<<" - 3*halfW="<<width<<G4endl;
+    G4cout<<"***G4QH::RandM:m=0 maxM="<<maxM<<"<meanM="<<meanM<<"-3*halfW="<<width<<G4endl;
 #endif
     return 0.;
   }
@@ -530,21 +552,21 @@ G4double G4QHadron::RandomizeMass(G4QParticle* pPart, G4double maxM)
   if(width==0.)
   {
 #ifdef debug
-	if(meanM>maxM) G4cerr<<"***G4QHadron::RandomizeMass:Stable m="<<meanM<<" > maxM="<<maxM<<G4endl;
+	if(meanM>maxM) G4cerr<<"***G4QHadron::RandM:Stable m="<<meanM<<">maxM="<<maxM<<G4endl;
 #endif
     return meanM;
     //return 0.;
   }
   else if(width<0.)
   {
-	G4cerr<<"***G4QHadron::RandomizeMass: width="<<width<<"<0, PDGC="<<theQPDG.GetPDGCode()<<G4endl;
-	G4Exception("G4QHadron::RandomizeMass: width of the Hadron < 0");
+	G4cerr<<"***G4QHadron::RandM: width="<<width<<"<0,PDGC="<<theQPDG.GetPDGCode()<<G4endl;
+	throw G4QException("G4QHadron::RandomizeMass: with the width of the Hadron < 0.");
   }
   G4double minM = pPart->MinMassOfFragm();
   if(minM>maxM)
   {
 #ifdef debug
-	G4cerr<<"***G4QHadron::RandomizeMass:for PDG="<<theQPDG.GetPDGCode()<<" minM="<<minM
+	G4cout<<"***G4QHadron::RandomizeMass:for PDG="<<theQPDG.GetPDGCode()<<" minM="<<minM
           <<" > maxM="<<maxM<<G4endl;
 #endif
     return 0.;
@@ -554,7 +576,7 @@ G4double G4QHadron::RandomizeMass(G4QParticle* pPart, G4double maxM)
   G4double v2=atan((maxM-meanM)/width);
   G4double dv=v2-v1;
 #ifdef debug
-  G4cout<<"G4QHadron::RandomizeMass:Mi="<<minM<<",i="<<v1<<",Ma="<<maxM<<",a="<<v2<<","<<dv<<G4endl;
+  G4cout<<"G4QHadr::RandM:Mi="<<minM<<",i="<<v1<<",Ma="<<maxM<<",a="<<v2<<","<<dv<<G4endl;
 #endif
   return meanM+width*tan(v1+dv*G4UniformRand());
 }

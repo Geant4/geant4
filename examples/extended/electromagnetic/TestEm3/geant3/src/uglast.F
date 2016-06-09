@@ -2,8 +2,8 @@
       SUBROUTINE UGLAST                                                         
 *                                                                               
 *     Termination routine to print histograms and statistics                    
-*                                                                               
-#include "geant321/gcflag.inc"
+*
+#include "geant321/gcflag.inc"                                                                               
 #include "geant321/gctrak.inc"
 #include "calor.inc"
 #include "celoss.inc"
@@ -35,10 +35,9 @@
 * *** close HIGZ
       CALL HPLEND
 *                                                                               
-* *** Save ntuple                                                  
-      IF (ISWIT(2).EQ.1) THEN                                                   
-         CALL HRPUT(0,'testem3.paw','N')
-      ENDIF                                                                     
+* *** Save histo                                                  
+      CALL HRPUT(0,'testem3.paw','N')
+
 *      
 *
 * *** formats

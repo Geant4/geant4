@@ -42,17 +42,19 @@ CCalSteppingAction::CCalSteppingAction(){
 #ifdef G4ANALYSIS_USE  
   CCalAnalysis* analysis = CCalAnalysis::getInstance();
   timeHistoMaxBin=analysis->maxbin();
+#else
+  timeHistoMaxBin=1;
 #endif
 
   int i; 
-  for (i=0; i<40; i++){timeDeposit[i] = 0.;}
-  for (i=0; i<70; i++){LateralProfile[i] = 0.;}
+  for (i=0; i<200; i++) {timeDeposit[i] = 0.;}
+  for (i=0; i<70;  i++) {LateralProfile[i] = 0.;}
 
 }
 
 
 CCalSteppingAction::~CCalSteppingAction(){
-  G4cout <<"Deleting CCalSteppingAction"<<G4endl;
+  G4cout << "CCalSteppingAction deleted" << G4endl;
 }
   
 
@@ -62,7 +64,7 @@ void CCalSteppingAction::UserSteppingAction(const G4Step* aStep){
   G4StepPoint*  PreStepPoint= aStep->GetPreStepPoint(); 
   int TSliceID;
 
-  TSliceID = static_cast<int>( (PostStepPoint->GetGlobalTime() ) / nanosecond );
+  TSliceID = static_cast<int>( (PostStepPoint->GetGlobalTime() ) / nanosecond);
   TSliceID = TSliceID<timeHistoMaxBin ? TSliceID : timeHistoMaxBin-1;
   timeDeposit[TSliceID] += aStep->GetTotalEnergyDeposit() / GeV;
 
@@ -87,6 +89,6 @@ void CCalSteppingAction::endOfEvent(){
   
   int i=0;
   for (i=0; i<70; i++){LateralProfile[i] = 0.;}
-  for (i=0; i<40; i++){timeDeposit[i] = 0.;}
+  for (i=0; i<200; i++){timeDeposit[i] = 0.;}
   
 }  

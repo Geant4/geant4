@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicalVolumeStore.hh,v 1.10 2003/06/16 16:51:53 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4PhysicalVolumeStore.hh,v 1.11 2003/11/02 14:01:22 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // class G4PhysicalVolume
 //
@@ -48,7 +48,7 @@
 // History:
 // 18.04.01 G.Cosmo Migrated to STL vector
 // 25.07.95 P.Kent  Initial version
-
+// --------------------------------------------------------------------
 #ifndef G4PHYSICALVOLUMESTORE_HH
 #define G4PHYSICALVOLUMESTORE_HH
 

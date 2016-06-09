@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4VeLowEnergyLoss.hh,v 1.8 2003/01/22 18:42:24 vnivanch Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // 3.4.2000 Veronique Lefebure:
 //          Move utils/include/G4VEnergyLoss.hh to 

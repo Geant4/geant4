@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4NavigationLevel.hh,v 1.14 2002/07/23 08:50:35 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4NavigationLevel.hh,v 1.15 2003/11/02 16:06:05 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // class G4NavigationLevel
 //
@@ -35,12 +35,11 @@
 //
 // 30.09.97 J.Apostolakis Initial version. Services derived from
 //                        requirements of touchables & G4NavigatorHistory.
-// ********************************************************************
-
+// ----------------------------------------------------------------------
 #ifndef G4NAVIGATIONLEVEL_HH
 #define G4NAVIGATIONLEVEL_HH
 
-#include "globals.hh"
+#include "G4Types.hh"
 
 #include "G4AffineTransform.hh"
 #include "G4VPhysicalVolume.hh"

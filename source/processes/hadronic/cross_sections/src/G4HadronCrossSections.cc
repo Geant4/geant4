@@ -21,8 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4HadronCrossSections.cc,v 1.11 2003/06/16 17:03:06 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 //
 // G4 Hadron Physics class G4HadronCrossSections
@@ -1606,7 +1605,8 @@ G4HadronCrossSections::GetParticleCode(const G4DynamicParticle* aParticle)
    else if (aParticleType == G4OmegaMinus::OmegaMinus()) ipart = 33;
    else if (aParticleType == G4AntiOmegaMinus::AntiOmegaMinus()) ipart = 34;
    else {
-      G4Exception("G4HadronCrossSections: unsupported particle");
+      G4Exception("G4HadronCrossSections", "007", FatalException,
+                  "GetParticleCode: unsupported particle");
       return 0;
    }
    return ipart;

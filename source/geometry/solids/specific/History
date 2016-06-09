@@ -1,4 +1,4 @@
-$Id: History,v 1.24 2003/03/28 09:53:04 gcosmo Exp $
+$Id: History,v 1.33 2003/11/22 10:11:57 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,38 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+22-Nov-2003, G.Cosmo (geom-specific-V05-02-07)
+- Fixed upper bound for protection check introduced in G4Polycone and
+  G4Polyhedra constructors.
+
+17-Nov-2003, G.Cosmo (geom-specific-V05-02-06)
+- Added protections in G4Polycone and G4Polyhedra constructors for
+  invalid constructs with no contiguous segments in Z planes as input.
+
+04-Nov-2003, G.Cosmo (geom-specific-V05-02-05)
+- Added SetOriginalParameters() method to G4Polycone and G4Polyhedra.
+
+03-Nov-2003, G.Cosmo (geom-specific-V05-02-04)
+- Code cleanup and headers inclusion review
+  (replaced by forward declarations where necessary).
+
+28-Oct-2003, G.Cosmo (geom-specific-V05-02-03)
+- Migrated to new G4Exception scheme.
+
+20-Oct-2003, G.Cosmo (geom-specific-V05-02-02)
+- Added Reset() method in G4Polycone and G4Polyhedra to allow
+  recalculation and reshape of the solid if new original_parameters
+  are provided.
+
+30-Sep-2003, G.Cosmo (geom-specific-V05-02-01)
+- Updated GNUmakefile for unit tests, according to new structure
+  introduced in "geometry-V05-02-00".
+
+16-Jun-2003, G.Cosmo (geom-specific-V05-02-00)
+- Added accessors to original_parameters for G4Polycone and G4Polyhedra.
+  Made G4PolyconeHistorical and G4PolyhedraHistorical classes in global
+  scope (temporary solution).
 
 28-Mar-2003, G.Cosmo (geom-specific-V05-00-00)
 - Fixed initialisation of base class in copy contructor for:

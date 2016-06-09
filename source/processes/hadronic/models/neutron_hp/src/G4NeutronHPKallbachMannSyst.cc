@@ -26,6 +26,7 @@
 //
 #include "G4NeutronHPKallbachMannSyst.hh" 
 #include "Randomize.hh" 
+#include "G4HadronicException.hh" 
 
 G4double G4NeutronHPKallbachMannSyst::Sample(G4double anEnergy)
 {
@@ -111,7 +112,7 @@ G4double G4NeutronHPKallbachMannSyst::A(G4double anEnergy)
   }
   else
   {
-    G4Exception("Severe error in the sampling of Kallbach-Mann Systematics");
+    throw G4HadronicException(__FILE__, __LINE__, "Severe error in the sampling of Kallbach-Mann Systematics");
   }
   
   result = C1*X1 + C2*pow(X1, 3.) + C3*Ma*mb*pow(X3, 4.);

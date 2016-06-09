@@ -21,21 +21,21 @@
 // ********************************************************************
 //
 //
-// $Id: G4Transportation.hh,v 1.7 2002/08/29 15:32:00 dressel Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4Transportation.hh,v 1.9 2003/11/26 14:51:48 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // 
 // ------------------------------------------------------------
-//	GEANT 4  include file implementation
-//
+//        GEANT 4  include file implementation
 // ------------------------------------------------------------
 //
-//   This class' object is a process responsible for the transportation of 
-// a particle, ie the geometrical propagation that encounters the 
+// Class description:
+//
+// G4Transportation is a process responsible for the transportation of 
+// a particle, i.e. the geometrical propagation encountering the 
 // geometrical sub-volumes of the detectors.
-//
-//   It is also tasked with part of updating the "safety".
-//
+// It is also tasked with part of updating the "safety".
+
 // =======================================================================
 // Created:  19 March 1997, J. Apostolakis
 // =======================================================================
@@ -56,68 +56,75 @@ class G4Transportation : public G4VProcess
 {
   // Concrete class that does the geometrical transport 
 
-  public:
-     G4Transportation();
+  public:  // with description
+
+     G4Transportation( G4int verbosityLevel= 1);
      ~G4Transportation(); 
 
-     //  G4double          GetContinuousStepLimit  (
      G4double      AlongStepGetPhysicalInteractionLength(
                              const G4Track& track,
-				   G4double  previousStepSize,
-			           G4double  currentMinimumStep, 
-				   G4double& currentSafety,
-				   G4GPILSelection* selection
-			    );
+                                   G4double  previousStepSize,
+                                   G4double  currentMinimumStep, 
+                                   G4double& currentSafety,
+                                   G4GPILSelection* selection
+                            );
 
      G4VParticleChange* AlongStepDoIt(
-			     const G4Track& track,
-			     const G4Step& stepData
-			    );
+                             const G4Track& track,
+                             const G4Step& stepData
+                            );
 
-     // This only does the relocation
-     // 
      G4VParticleChange* PostStepDoIt(
-			     const G4Track& track,
-			     const G4Step&  stepData
-			    );
+                             const G4Track& track,
+                             const G4Step&  stepData
+                            );
+       // Responsible for the relocation.
 
-     // This forces the PostStepDoIt action to be called, 
-     //   but does not limit the step.
-     //
      G4double PostStepGetPhysicalInteractionLength(
                              const G4Track& ,
-			     G4double   previousStepSize,
-			     G4ForceCondition* pForceCond
-			    );
+                             G4double   previousStepSize,
+                             G4ForceCondition* pForceCond
+                            );
+       // Forces the PostStepDoIt action to be called, 
+       // but does not limit the step.
 
-     //  Access/set the assistant class that Propagate in a Field
      G4PropagatorInField* GetPropagatorInField();
      void SetPropagatorInField( G4PropagatorInField* pFieldPropagator);
+       // Access/set the assistant class that Propagate in a Field.
 
-     //  no operation in  AtRestDoIt
+     void   SetVerboseLevel( G4int verboseLevel );
+     G4int  GetVerboseLevel() const;
+       // Level of warnings regarding eg energy conservation
+       // in field integration.
+
+  public:  // without description
+
      G4double AtRestGetPhysicalInteractionLength(
                              const G4Track& ,
-			     G4ForceCondition* 
-			    ) { return -1.0; };
+                             G4ForceCondition* 
+                            ) { return -1.0; };
+       // No operation in  AtRestDoIt.
 
-     //  no operation in  AtRestDoIt
      G4VParticleChange* AtRestDoIt(
-			     const G4Track& ,
-			     const G4Step&
-			    ) {return NULL;};
+                             const G4Track& ,
+                             const G4Step&
+                            ) {return 0;};
+       // No operation in  AtRestDoIt.
+
   protected:
-     //  Checks whether a field exists for the "global" field manager.
+
      G4bool               DoesGlobalFieldExist();
+       // Checks whether a field exists for the "global" field manager.
 
   private:
-     // The Propagators used to transport the particle
+
      G4Navigator*         fLinearNavigator;
      G4PropagatorInField* fFieldPropagator;
+       // The Propagators used to transport the particle
 
-     // Field Manager for the whole Detector
      // G4FieldManager*      fGlobalFieldMgr;     // Used MagneticField CC
+       // Field Manager for the whole Detector
 
-     // The particle's state after this Step, Store for DoIt
      G4ThreeVector        fTransportEndPosition;
      G4ThreeVector        fTransportEndMomentumDir;
      G4double             fTransportEndKineticEnergy;
@@ -126,40 +133,34 @@ class G4Transportation : public G4VProcess
      G4bool               fEnergyChanged;
      G4bool               fEndGlobalTimeComputed; 
      G4double             fCandidateEndGlobalTime;
+       // The particle's state after this Step, Store for DoIt
 
      G4bool               fParticleIsLooping;
 
      G4TouchableHandle    fCurrentTouchableHandle;
      
-     // Whether a magnetic field exists ...
      // G4bool         fFieldExists;
-     //   The above data member is problematic: it is useful only if
-     // it is initialised.  However the transportation process(es) are not
-     // capable of doing this initialisation itself (themselves) and there
-     // seems no alternative agent capable of doing it right now.
-     // Eg, at construction time it is likely that the field manager has
-     // not yet been informed about the detector's field 
-     // I cannot foresee how the transportation can be informed later. JA 
-     //   The current answer is to ignore this data member and use 
-     // the member function DoesGlobalFieldExist() in its place ...
-     //    John Apostolakis, July 7, 1997
+       // Whether a magnetic field exists ...
+       // A data member for this is problematic: it is useful only if it
+       // can be initialised and updated -- and a scheme is not yet possible.
 
-     // Flag to determine whether a boundary was reached.
      G4bool fGeometryLimitedStep;
+       // Flag to determine whether a boundary was reached.
 
-     // Remember last safety origin & value.
      G4ThreeVector  fPreviousSftOrigin;
      G4double       fPreviousSafety; 
+       // Remember last safety origin & value.
 
-     // New ParticleChange
      G4ParticleChangeForTransport fParticleChange;
+       // New ParticleChange
 
      G4double endpointDistance;
-};
 
+     G4int    fVerboseLevel;
+       // Verbosity level for warnings
+       // eg about energy non-conservation in magnetic field.
+};
 
 #include "G4Transportation.icc"
 
 #endif  
-
-// End of G4Transportation.hh

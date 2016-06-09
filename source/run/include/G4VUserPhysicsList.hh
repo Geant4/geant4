@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VUserPhysicsList.hh,v 1.24 2003/05/21 21:06:00 asaim Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4VUserPhysicsList.hh,v 1.25 2003/11/03 02:16:36 kurasige Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // 
 // ------------------------------------------------------------
@@ -343,16 +343,6 @@ inline G4double G4VUserPhysicsList::GetDefaultCutValue() const
   return defaultCutValue;
 }
 
-inline void G4VUserPhysicsList::SetVerboseLevel(G4int value)
-{
-  verboseLevel = value;
-#ifdef G4VERBOSE
-  if (verboseLevel >1){
-    G4cout << "G4VUserPhysicsList::SetVerboseLevel  :";
-    G4cout << " Verbose level is set to " << verboseLevel << G4endl;
-  }
-#endif
-}
 
 inline  G4int G4VUserPhysicsList::GetVerboseLevel() const
 {

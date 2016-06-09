@@ -1,4 +1,4 @@
-$Id: History,v 1.7 2003/05/21 16:40:15 gcosmo Exp $
+$Id: History,v 1.9 2003/10/03 14:35:32 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,17 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Oct 4th, 2003 G.Cosmo (parmodels-V05-02-01)
+---------------------
+- GNUmakefile:
+  o replaced "digits+hits" with "digits_hits".
+  o added dependency to new module "geometry/navigation".
+- Coworks with "geometry-V05-02-00" and "digits_hits-V05-02-00".
+
+Sep 25th, 2003 H.Kurashige (parmodels-V05-02-00)
+--------------------------
+- Modify GNUmakefile to use  processes/cuts category
 
 May 21st, 2003 G.Cosmo - (parmodels-V05-01-00)
 ----------------------

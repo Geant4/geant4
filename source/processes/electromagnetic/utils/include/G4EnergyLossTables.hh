@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4EnergyLossTables.hh,v 1.17 2003/06/16 17:02:34 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4EnergyLossTables.hh,v 1.18 2003/07/23 11:36:25 vnivanch Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // $Id:
 //
@@ -162,11 +162,13 @@ public:
   static G4double GetDEDX(
     const G4ParticleDefinition *aParticle,
     G4double KineticEnergy,
-    const G4MaterialCutsCouple *couple);
+    const G4MaterialCutsCouple *couple,
+    G4bool check = true);
   static G4double GetRange(
     const G4ParticleDefinition *aParticle,
     G4double KineticEnergy,
-    const G4MaterialCutsCouple *couple);
+    const G4MaterialCutsCouple *couple,
+    G4bool check = true);
 
   static G4double GetPreciseDEDX(
     const G4ParticleDefinition *aParticle,
@@ -179,7 +181,8 @@ public:
   static G4double GetPreciseEnergyFromRange(
     const G4ParticleDefinition *aParticle,
     G4double range,
-    const G4MaterialCutsCouple *couple);
+    const G4MaterialCutsCouple *couple,
+    G4bool check = true);
 
   // to be called only by energy loss processes
   static void Register(
@@ -200,7 +203,7 @@ public:
 private:
 
   static void CPRWarning();
-  static void ParticleHaveNoLoss(const G4ParticleDefinition* aParticle);
+  static void ParticleHaveNoLoss(const G4ParticleDefinition* aParticle, const G4String&);
 
   typedef std::map<K,G4EnergyLossTablesHelper,std::less<K> > helper_map;
   static helper_map dict;

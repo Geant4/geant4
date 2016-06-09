@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4Globals.hh,v 1.4 2001/07/11 09:59:34 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // Author: A.Breakstone
 // Adaptation: J.Sulkimo, P.Urban.

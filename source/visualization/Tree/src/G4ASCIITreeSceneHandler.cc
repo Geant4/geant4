@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ASCIITreeSceneHandler.cc,v 1.12 2003/05/30 13:01:23 johna Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4ASCIITreeSceneHandler.cc,v 1.13 2003/11/06 15:01:34 johna Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // 
 // John Allison  5th April 2001
@@ -52,7 +52,7 @@ void G4ASCIITreeSceneHandler::BeginModeling () {
   const G4int verbosity = pSystem->GetVerbosity();
   G4cout << "\nG4ASCIITreeSceneHandler::BeginModeling:"
     "\n  set verbosity with \"/vis/ASCIITree/verbose <verbosity>\":"
-    "\n  <  10: - does not print daughters of repeated logical volumes."
+    "\n  <  10: - does not print daughters of repeated placements."
     "\n         - does not repeat replicas."
     "\n  >= 10: prints all physical volumes."
     "\n  For level of detail add:"
@@ -123,8 +123,8 @@ void G4ASCIITreeSceneHandler::RequestPrimitives(const G4VSolid&) {
   else {
     if (fLVSet.find(fpCurrentLV) != fLVSet.end()) {
       if (verbosity <  10) {
-	// Add printing for repeated logical volume...
-	G4cout << " (repeated logical volume)";
+	// Add printing for repeated placement...
+	G4cout << " (repeated placement)";
 	// Ignore if an already treated logical volume.
 	if (fpCurrentPV) {
 	  ((G4PhysicalVolumeModel*)fpModel)->CurtailDescent();

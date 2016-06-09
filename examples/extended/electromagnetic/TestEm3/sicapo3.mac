@@ -1,0 +1,38 @@
+# $Id: sicapo3.mac,v 1.2 2003/10/06 10:09:22 maire Exp $
+#
+# Macro file for "TestEm3.cc" 
+# (can be run in batch, without graphic)
+#
+# Lead-Silicon 10 layers; electron 2, 4, 6 GeV
+#
+# SICAPO Collaboration. NIM A345 (244-249) Oct.93
+#
+/control/verbose 2
+/run/verbose 2
+#
+###/testem/phys/addPhysics  g4v52
+/testem/phys/addPhysics  standard
+#
+/testem/det/setNbOfLayers 10
+/testem/det/setNbOfAbsor 4
+###/testem/det/setAbsor 0 Iron    35.7 mm
+/testem/det/setAbsor 0 Lead    19.0 mm
+/testem/det/setAbsor 1 NemaG10  0.2 mm
+/testem/det/setAbsor 2 Silicon  0.4 mm
+/testem/det/setAbsor 3 NemaG10  1.0 mm
+/testem/det/setSizeYZ 16. cm
+#
+/testem/phys/setCuts 1 mm
+#
+/run/initialize
+#
+/testem/gun/setDefault
+/gun/particle e-
+/gun/energy 6 GeV
+#
+/testem/run/setHisto 2 100 0. 50. MeV
+#
+/testem/event/printModulo 100
+#
+/run/beamOn 500
+

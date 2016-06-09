@@ -1,4 +1,4 @@
-$Id: History,v 1.59 2003/06/04 16:04:43 gcosmo Exp $
+$Id: History,v 1.69 2003/11/19 19:28:43 asaim Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,58 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Nov 19 2003, M.Asai (event-V05-02-09)
+- G4ParticleGun.cc, G4ParticleGunMessenger.cc:
+ - Added protection against shooting shortlived particle.
+
+Oct 13 2003, F.Lei (event-V05-02-08)
+- increased the array size from 256 to 1024 for user defined histograms.
+- Bug fix in G4GeneralParticleSource.cc: make sure the SideRefVec(1/2/3) are unit
+  vectors.
+
+Oct 03 2003, G.Cosmo (event-V05-02-07)
+- GNUmakefile:
+  o added dependency to new module "geometry/navigation".
+  o replaced "digits+hits" with "digits_hits".
+- Coworks with "geometry-V05-02-00" and "digits_hits-V05-02-00".
+
+Oct 01 2003, M.Asai (event-V05-02-06)
+- Set G4DynamicParicle the pointer to the corresponding primary particle.
+
+Sep 12 2003, M.Asai (event-V05-02-05)
+- Introducing G4VUserPrimaryVertexInformation and G4VUserPrimaryParticleInformation
+  classes, which can be associated with G4PrimaryVertex and G4PrimaryParticle,
+  respectively.
+- Adding a treatment of "proper decay time" for preassigned decay products.
+- Introducing G4StackChecker class, a utility class which can be used by a user.
+
+Sep 09 2003, M.Asai (event-V05-02-04)
+- Introducing G4VUserEventInformation class, which can be associated with G4Event.
+
+Aug 13 2003, M.Asai (event-V05-02-03)
+- Introducing another entry method G4EventManager::ProcessOneEvent which takes
+  G4TrackVector class object.
+- Adding a mechanism of merging more than one kinds of primaries (HepHC and
+  G4PrimaryVertex or G4TrackVector and G4PrimaryVertex).
+- Change the trackID numbering scheme for "PostposedToNextEvent" tracks.
+  Now they have negative trackID.
+
+Aug 11 2003, M.Asai (event-V05-02-02)
+- Maintain links between pre-assigned decay products and corresponding primary 
+  particle. Becuse of this, G4PrimaryParticle objects of pre-assigned decay
+  have proper track ID.
+
+Aug 01 2003, M.Asai (event-V05-02-01)
+- Introducing a new entry method G4EventManager::ProcessOneEvent which takes
+  HepMC event class object instead of G4Event object.
+- G4HepMCInterface::HepMC2G4 becomes a static service method.
+- G4HepMCInterface::CheckVertexInsideWorld is moved to G4VPrimaryGenerator and
+  also becomes a static servic method.
+
+Aug 01 2003, M.Asai (event-V05-02-00)
+- With introducing G4RunManagerKernel class in Run category, G4EventManager now
+  toggles the application states between G4State_GeomClosed and G4State_EventProc.
 
 Jun 04 2003, G.Cosmo (event-V05-01-02)
 - Fixes for inclusion of <strstream> in G4HEPEvtInterface.cc in view

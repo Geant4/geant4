@@ -1,0 +1,29 @@
+# $Id: tramu.mac,v 1.1 2003/08/11 10:09:39 maire Exp $
+#
+# macro file for TestEm5.cc
+#
+# 1 TeV mu+, transmitted through 3 m of iron
+# Rev. of Particle Physics Eur. Phys. Jour. C (2000) page 172.
+#
+/control/verbose 2
+/run/verbose 2
+#
+/testem/det/setAbsMat Iron   
+/testem/det/setAbsThick 3 m  
+/testem/det/setAbsYZ    3 m
+#
+/testem/phys/setCuts 1 mm
+#    
+/run/initialize
+#
+/testem/gun/setDefault
+/gun/particle mu+ 
+/gun/energy 1 TeV
+#
+/testem/histo/setFileName tramu.paw
+/testem/histo/setHisto 4  80  920 1000 GeV	#energy at exit  
+#
+/testem/stack/killSecondaries
+#
+/testem/event/printModulo 1000
+/run/beamOn 10000

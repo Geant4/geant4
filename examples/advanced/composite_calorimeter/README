@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: README,v 1.8 2003/06/12 15:25:20 ribon Exp $
+$Id: README,v 1.10 2003/12/04 16:49:55 ribon Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -57,7 +57,7 @@ $Id: README,v 1.8 2003/06/12 15:25:20 ribon Exp $
      >  . envExample.sh            in the case of bash-shell
  
  The analysis part is based on:
-        ***  AIDA version 3.0  &  Anaphe version 5.0.2  ***
+        ***  AIDA version 3.0  &  Anaphe version 5.0.6  ***
  
  NB) Be careful that if you want to have this analysis part,
      you have not only to set the variable G4ANALYSIS_USE but 
@@ -147,8 +147,20 @@ $Id: README,v 1.8 2003/06/12 15:25:20 ribon Exp $
    *DO FLDM
      0.0   9               652.0
  for example, if you want a magnetic field of 3.0 Tesla the last
- line must be set as follows:
-     3.0   9               652.0
+ line must be set as follows (the magnetic field unity is kilo Gauss).
+     30.0   9               652.0
+
+ The default stepper in magnetic field is G4ClassicalRK4, but other
+ possibilities can be selected by editing the file 
+ src/CCalDetectorConstruction.cc  (look at the string "***STEPPER***").
+
+ In order to deactivate either the ECAL or the HCAL, it is enough
+ to comment out the corresponding line in the file g4testbeamhcal96.conf, 
+ using "#" as the comment character. For instance, to have only the HCAL
+ without ECAL:
+ "HcalTB96"                      "tbhcal96"              1
+ #"CrystalMatrixModule"           "tbhcal96xtal"          1  
+
 
  In this test-beam setup, at the back of ECAL, there is also some 
  material for support and readout, which has been considered in the 
@@ -357,7 +369,7 @@ No Noise and Digitization
 
  The analysis part of CompositeCalorimeter is kept in class CCalAnalysis,
  and is based on the AIDA interfaces and their implementation in Anaphe:   
-        ***  AIDA version 3.0  &  Anaphe version 5.0.2  *** 
+        ***  AIDA version 3.0  &  Anaphe version 5.0.6  *** 
  please look at their documentation for more details:
  	http://anaphe.web.cern.ch/anaphe
  Both the histograms and the ntuple are saved at the end of the run in the 
@@ -400,7 +412,7 @@ No Noise and Digitization
                           ( ID histo = 400 + radial distance in cm ).
 
   Histogram  4000 : total energy deposit (in GeV) in the sensitive parts
-                   of either the electromagnetic or hadronic calorimeters. 
+                    of either the electromagnetic or hadronic calorimeters. 
   Ntuple variable  edep provides the same information.
 
   Other ntuple variables are the following:  
@@ -495,56 +507,6 @@ No Noise and Digitization
   CCalPrimaryGeneratorAction
   CCalPrimaryGeneratorMessenger
 	User action for primaries generator.	 
-
-  EMModelPhysics.hh
-  EMPhysics.hh
-  G4DataQuestionaire.hh
-  G4EMBuilder.hh
-  G4EMModelBuilder.hh
-  G4HadronModelQEDBuilder.hh
-  G4HadronQEDBuilder.hh
-  G4LEPNeutronBuilder.hh
-  G4LEPPiKBuilder.hh
-  G4LEPProtonBuilder.hh
-  G4LHEPNeutronBuilder.hh
-  G4LHEPPiKBuilder.hh
-  G4LHEPProtonBuilder.hh
-  G4MiscLHEPBuilder.hh
-  G4NeutronBuilder.hh
-  G4NeutronHPBuilder.hh
-  G4PiKBuilder.hh
-  G4PrecoNeutronBuilder.hh
-  G4PrecoProtonBuilder.hh
-  G4ProtonBuilder.hh
-  G4QGSCNeutronBuilder.hh
-  G4QGSCPiKBuilder.hh
-  G4QGSCProtonBuilder.hh
-  G4QGSPNeutronBuilder.hh
-  G4QGSPPiKBuilder.hh
-  G4QGSPProtonBuilder.hh
-  G4StoppingHadronBuilder.hh
-  G4VNeutronBuilder.hh
-  G4VPiKBuilder.hh
-  G4VProtonBuilder.hh
-  GeneralPhysics.hh
-  HadronPhysicsLHEP.hh
-  HadronPhysicsQGSC.hh
-  HadronPhysicsQGSP.hh
-  IonModelPhysics.hh
-  IonPhysics.hh
-  LHEP.hh
-  MuonModelPhysics.hh
-  MuonPhysics.hh
-  QGSC.hh
-  QGSP.hh
-	Determination of particles and processes active in this example.
-        The following three major Physics Lists for High Energy 
-        Calorimetry can been selected: LHEP, QGSC, QGSP. 
-        Most of these classes will be soon moved in the Geant4 kernel. 
-        Please refer to the Web page:
-            http://cmsdoc.cern.ch/~hpw/GHAD/HomePage/index.html
-        for more information of these (and others) Physics Lists,
-        and for eventual updated versions.
 
   CCalDetectorConstruction
   CCalAMaterial

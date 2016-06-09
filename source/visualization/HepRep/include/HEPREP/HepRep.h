@@ -1,25 +1,3 @@
-//
-// ********************************************************************
-// * DISCLAIMER                                                       *
-// *                                                                  *
-// * The following disclaimer summarizes all the specific disclaimers *
-// * of contributors to this software. The specific disclaimers,which *
-// * govern, are listed with their locations in:                      *
-// *   http://cern.ch/geant4/license                                  *
-// *                                                                  *
-// * Neither the authors of this software system, nor their employing *
-// * institutes,nor the agencies providing financial support for this *
-// * work  make  any representation or  warranty, express or implied, *
-// * regarding  this  software system or assume any liability for its *
-// * use.                                                             *
-// *                                                                  *
-// * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
-// * By copying,  distributing  or modifying the Program (or any work *
-// * based  on  the Program)  you indicate  your  acceptance of  this *
-// * statement, and all its terms.                                    *
-// ********************************************************************
-//
 // -*- C++ -*-
 // AID-GENERATED
 // =========================================================================
@@ -29,12 +7,13 @@
 #ifndef HEPREP_HEPREP_H
 #define HEPREP_HEPREP_H 1
 
-// Copyright 2000-2002, FreeHEP.
+// Copyright 2000-2003, FreeHEP.
 
 #include <string>
 #include <vector>
 
 // Include all other HepRep header files here for convenience
+#include "HEPREP/HasHepRep.h"
 #include "HEPREP/HepRepAction.h"
 #include "HEPREP/HepRepAttDef.h"
 #include "HEPREP/HepRepAttribute.h"
@@ -140,6 +119,13 @@ public:
     virtual bool addInstanceTree(HepRepInstanceTree * instanceTree) = 0;
 
     /**
+     * Overlays an instancetree to this heprep, overriding attributes and adding children.
+     *
+     * @param instanceTree to be overlaid.
+     */
+    virtual void overlayInstanceTree(HepRepInstanceTree * instanceTree) = 0;
+
+    /**
      * Remove an instanectree from this heprep.
      *
      * @param instanceTree to be removed.
@@ -223,5 +209,5 @@ public:
      */
     virtual HepRep * copy(HepRepSelectFilter * filter = NULL) = 0;
 }; // class
-}; // namespace HEPREP
+} // namespace HEPREP
 #endif /* ifndef HEPREP_HEPREP_H */

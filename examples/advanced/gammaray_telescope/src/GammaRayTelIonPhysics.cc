@@ -22,7 +22,7 @@
 //
 //
 // $Id: GammaRayTelIonPhysics.cc,v 1.2 2003/06/16 16:46:28 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // 
 

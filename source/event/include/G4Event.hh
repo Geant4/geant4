@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Event.hh,v 1.6 2002/08/13 18:17:53 asaim Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4Event.hh,v 1.7 2003/09/09 20:09:17 asaim Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 
 #ifndef G4Event_h
@@ -34,6 +34,7 @@
 #include "G4HCofThisEvent.hh"
 #include "G4DCofThisEvent.hh"
 #include "G4TrajectoryContainer.hh"
+#include "G4VUserEventInformation.hh"
 
 // class description:
 //
@@ -86,6 +87,9 @@ class G4Event
       // Boolean flag which shall be set to true if the event is aborted and 
       // thus the containing information is not to be used.
       G4bool eventAborted;
+
+      // UserEventInformation (optional)
+      G4VUserEventInformation* userInfo;
 
   public:
       inline void SetEventID(G4int i)
@@ -146,6 +150,9 @@ class G4Event
       inline G4bool IsAborted() const { return eventAborted; }
       //  Return a boolean which indicates the event has been aborted and thus
       // it should not be used for analysis.
+      inline void SetUserInformation(G4VUserEventInformation* anInfo) { userInfo = anInfo; }
+      inline G4VUserEventInformation* GetUserInformation() const { return userInfo; }
+      //  Set and Get method of G4VUserEventInformation
 };
 
 extern G4Allocator<G4Event> anEventAllocator;

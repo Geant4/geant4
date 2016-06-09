@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4QDecayChan.cc,v 1.16 2003/06/16 17:04:20 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4QDecayChan.cc,v 1.22 2003/12/09 15:38:20 gunter Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 //      ---------------- G4QDecayChan ----------------
 //             by Mikhail Kossov, Sept 1999.
@@ -35,7 +35,8 @@
 #include "G4QDecayChanVector.hh"
 #include <algorithm>
 
-G4QDecayChan::G4QDecayChan(){}
+G4QDecayChan::G4QDecayChan():aDecayChanLimit(0.),theMinMass(0.)
+{}
 
 G4QDecayChan::G4QDecayChan(G4double pLev, G4int PDG1, G4int PDG2, G4int PDG3):
   aDecayChanLimit(pLev)
@@ -86,7 +87,11 @@ G4QDecayChan::G4QDecayChan(G4QDecayChan* right)
 
 G4QDecayChan::~G4QDecayChan() 
 {
-  std::for_each(aVecOfSecHadrons.begin(), aVecOfSecHadrons.end(), DeleteQPDGCode());
+  G4int nSH=aVecOfSecHadrons.size();
+  //G4cout<<"G4QDecayChan::Destructor: Before nSH="<<nSH<<G4endl; // TMP
+  if(nSH)std::for_each(aVecOfSecHadrons.begin(), aVecOfSecHadrons.end(), DeleteQPDGCode());
+  //G4cout<<"G4QDecayChan::Destructor: After"<<G4endl; // TMP
+  aVecOfSecHadrons.clear();
 }
 
 // Assignment operator

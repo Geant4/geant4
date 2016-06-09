@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4UnionSolid.cc,v 1.22 2003/06/16 16:53:19 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4UnionSolid.cc,v 1.24 2003/11/03 17:48:46 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // Implementation of methods for the class G4IntersectionSolid
 //
@@ -33,14 +33,9 @@
 // 27.07.99 V.Grichine: modifications in DistToOut(p,v,...), while -> do-while
 // 16.03.01 V.Grichine: modifications in CalculateExtent()
 //
-// ********************************************************************
+// --------------------------------------------------------------------
 
 #include "G4UnionSolid.hh"
-
-#include "G4RotationMatrix.hh"
-#include "G4ThreeVector.hh"
-#include "G4Transform3D.hh"
-#include "G4AffineTransform.hh"
 
 #include "G4VoxelLimits.hh"
 #include "G4VPVParameterisation.hh"
@@ -48,7 +43,7 @@
 #include "G4VGraphicsScene.hh"
 #include "G4Polyhedron.hh"
 #include "G4NURBS.hh"
-#include "G4NURBSbox.hh"
+// #include "G4NURBSbox.hh"
 
 ///////////////////////////////////////////////////////////////////
 //
@@ -359,7 +354,7 @@ G4UnionSolid::DistanceToOut( const G4ThreeVector& p,
 G4double 
 G4UnionSolid::DistanceToOut( const G4ThreeVector& p ) const 
 {
-  G4double distout = kInfinity;
+  G4double distout = 0.0;
   if( Inside(p) == kOutside )
   {
 #ifdef G4BOOLDEBUG

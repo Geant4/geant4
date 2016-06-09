@@ -1,4 +1,4 @@
-$Id: History,v 1.30 2003/05/28 11:00:13 gcosmo Exp $
+$Id: History,v 1.37 2003/11/19 19:13:04 asaim Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,30 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Nov.19, 2003  Makoto Asai (exampleN04-V05-02-06)
+- ExN04GeneralPhysics.cc: 
+  Remove protection of assigning decay against short-lived particle
+
+19-11-03  V.Ivanchenko (exampleN04-V05-02-05)
+- Revome extra verbose
+
+10-11-03 G.Cosmo (exampleN04-V05-02-04)
+- Removed OPACS driver from vis-manager.
+- Cleared warnings for parameterised detectors.
+
+30-10-03 G.Cosmo (exampleN04-V05-02-03)
+- Cleared compilation warnings due to new class G4Orb.
+
+24-10-03 mma (exampleN04-V05-02-02)
+- PhysicsList: AddProcess(Bremsstrahlung,-1,3,3) ..etc..
+     
+06-10-03  mma (exampleN04-V05-02-01)
+- cosmetic cleanup in material definitions
+
+27-05-03  V.Ivanchenko (exampleN04-V05-02-00)
+- Include DefineMaterials() method in the constructor of DetectorConstruction
+- Clean up PhysicsLists
 
 28-05-03  G.Cosmo (exampleN04-V05-01-01)
 - Get rid of pedantic warnings ...

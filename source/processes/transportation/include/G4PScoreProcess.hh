@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PScoreProcess.hh,v 1.7 2002/10/22 13:25:56 dressel Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4PScoreProcess.hh,v 1.8 2003/11/26 14:51:48 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // ----------------------------------------------------------------------
 // Class G4PIScoreProcess
@@ -31,10 +31,10 @@
 //
 // Used internally by scoring in a "parallel" geometry.
 // This forced process messages a "scorer" derived from G4VScorer.
-// The scorer is  messaged with the current G4Step and G4GeometryCellStep.
+// The scorer is messaged with the current G4Step and G4GeometryCellStep.
 // This post step process is supposed to be placed as the 
 // process following directly after transportation and the 
-// importance sampling process if applied and before all physical
+// importance sampling process if applied, and before all physical
 // post step processes.
 
 // Author: Michael Dressel (Michael.Dressel@cern.ch)
@@ -49,14 +49,14 @@ class G4VParallelStepper;
 class G4VScorer;
 
 class G4PScoreProcess : public G4VProcess, 
-			public G4VTrackTerminator
+                        public G4VTrackTerminator
 {
 
 public:  // with description
 
   G4PScoreProcess(G4VParallelStepper  &astepper,
-		  G4VScorer &aScorer,
-		  const G4String &aName = "PScoreProcess");
+                  G4VScorer &aScorer,
+                  const G4String &aName = "PScoreProcess");
     // create a G4ParticleChange
 
   virtual ~G4PScoreProcess();
@@ -64,12 +64,12 @@ public:  // with description
 
   virtual G4double 
   PostStepGetPhysicalInteractionLength(const G4Track& aTrack,
-				       G4double   previousStepSize,
-				       G4ForceCondition* condition);
+                                       G4double   previousStepSize,
+                                       G4ForceCondition* condition);
     // make the process beeing forced
 
   virtual G4VParticleChange * PostStepDoIt(const G4Track&, 
-				   const G4Step&);
+                                           const G4Step&);
     // get G4GeometryCellStep and G4Step and message "scorer"
 
   virtual void KillTrack() const;
@@ -85,13 +85,13 @@ public:  // without description
   
   virtual G4double 
   AlongStepGetPhysicalInteractionLength(const G4Track&,
-					G4double  ,
-					G4double  ,
-					G4double& ,
-					G4GPILSelection*);
+                                        G4double  ,
+                                        G4double  ,
+                                        G4double& ,
+                                        G4GPILSelection*);
   
   virtual G4double AtRestGetPhysicalInteractionLength(const G4Track& ,
-						      G4ForceCondition*);
+                                                      G4ForceCondition*);
   
   virtual G4VParticleChange* AtRestDoIt(const G4Track&, const G4Step&);
   virtual G4VParticleChange* AlongStepDoIt(const G4Track&, const G4Step&);

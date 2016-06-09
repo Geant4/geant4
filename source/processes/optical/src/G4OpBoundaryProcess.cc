@@ -47,6 +47,8 @@
 //              2001-10-18 - avoid Linux (gcc-2.95.2) warning about variables
 //                           might be used uninitialized in this function
 //                           moved E2_perp, E2_parl and E2_total out of 'if'
+//              2003-11-27 - Modified line 168-9 to reflect changes made to
+//                           G4OpticalSurface class ( by Fan Lei)
 //
 // Author:      Peter Gumplinger
 // 		adopted from work by Werner Keil - April 2/96
@@ -150,20 +152,21 @@ G4OpBoundaryProcess::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
         theModel = glisur;
         theFinish = polished;
 
-        G4OpticalSurfaceType type = dielectric_dielectric;
+        G4SurfaceType type = dielectric_dielectric;
 
-        Rindex = NULL;
-        OpticalSurface = NULL;
+        Rindex = 0;
+        OpticalSurface = 0;
 
         G4LogicalSurface* Surface = G4LogicalBorderSurface::GetSurface
 				    (pPreStepPoint ->GetPhysicalVolume(),
 				     pPostStepPoint->GetPhysicalVolume());
 
-        if (Surface == NULL) Surface = G4LogicalSkinSurface::GetSurface
+        if (Surface == 0) Surface = G4LogicalSkinSurface::GetSurface
 				       (pPreStepPoint->GetPhysicalVolume()->
 						GetLogicalVolume());
 
-	if (Surface != NULL) OpticalSurface = Surface->GetOpticalSurface();
+	//	if (Surface != 0) OpticalSurface = dynamic_cast <G4OpticalSurface*> (Surface->GetSurfaceProperty());
+	if (Surface != 0) OpticalSurface = (G4OpticalSurface*) Surface->GetSurfaceProperty();
 
 	if (OpticalSurface) {
 

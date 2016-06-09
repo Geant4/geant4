@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: Em8CalorHit.cc,v 1.3 2001/07/11 09:57:55 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: Em8CalorHit.cc,v 1.4 2003/11/24 17:52:47 vnivanch Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // 
 
@@ -35,7 +35,7 @@ G4Allocator<Em8CalorHit> Em8CalorHitAllocator;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-Em8CalorHit::Em8CalorHit()
+Em8CalorHit::Em8CalorHit():G4VHit()
 {
    EdepAbs = 0.; TrackLengthAbs = 0.;
    EdepGap = 0.; TrackLengthGap = 0.;
@@ -44,11 +44,11 @@ Em8CalorHit::Em8CalorHit()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 Em8CalorHit::~Em8CalorHit()
-{;}
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-Em8CalorHit::Em8CalorHit(const Em8CalorHit& right)
+Em8CalorHit::Em8CalorHit(const Em8CalorHit& right):G4VHit(right)
 {
   EdepAbs = right.EdepAbs; TrackLengthAbs = right.TrackLengthAbs;
   EdepGap = right.EdepGap; TrackLengthGap = right.TrackLengthGap;
@@ -58,8 +58,10 @@ Em8CalorHit::Em8CalorHit(const Em8CalorHit& right)
 
 const Em8CalorHit& Em8CalorHit::operator=(const Em8CalorHit& right)
 {
-  EdepAbs = right.EdepAbs; TrackLengthAbs = right.TrackLengthAbs;
-  EdepGap = right.EdepGap; TrackLengthGap = right.TrackLengthGap;
+  if(this != &right) {
+    EdepAbs = right.EdepAbs; TrackLengthAbs = right.TrackLengthAbs;
+    EdepGap = right.EdepGap; TrackLengthGap = right.TrackLengthGap;
+  }
   return *this;
 }
 
@@ -67,7 +69,7 @@ const Em8CalorHit& Em8CalorHit::operator=(const Em8CalorHit& right)
 
 int Em8CalorHit::operator==(const Em8CalorHit& right) const
 {
-  return 0;
+  return ((Em8CalorHit *)this == (Em8CalorHit *) &right);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

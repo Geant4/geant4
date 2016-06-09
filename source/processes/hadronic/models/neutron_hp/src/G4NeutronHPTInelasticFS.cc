@@ -35,7 +35,7 @@ void G4NeutronHPTInelasticFS::Init (G4double A, G4double Z, G4String & dirName, 
    G4NeutronHPInelasticCompFS::InitGammas(ResidualA, ResidualZ);
 }
 
-G4ParticleChange * G4NeutronHPTInelasticFS::ApplyYourself(const G4Track & theTrack)
+G4HadFinalState * G4NeutronHPTInelasticFS::ApplyYourself(const G4HadProjectile & theTrack)
 {
 
 // do the final state

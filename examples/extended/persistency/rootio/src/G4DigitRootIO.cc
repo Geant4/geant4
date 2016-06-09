@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 // $Id: G4DigitRootIO.cc,v 1.4 2002/12/13 14:45:42 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // File: G4DigitRootIO.cc
 //

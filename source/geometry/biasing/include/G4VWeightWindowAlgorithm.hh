@@ -21,21 +21,18 @@
 // ********************************************************************
 //
 //
-// $Id: G4VWeightWindowAlgorithm.hh,v 1.5 2002/10/14 12:36:01 dressel Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4VWeightWindowAlgorithm.hh,v 1.7 2003/08/19 15:44:57 dressel Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // ----------------------------------------------------------------------
 // Class G4VWeightWindowAlgorithm
 //
 // Class description:
 // 
-// This is a base class for an algorithm used for 
-// weight window importance sampling. It calculates
-// the new weight of particles and the number of copies
-// it should be split into according to the initial weight 
-// of the track and the importance of the cell. The window
-// is defined by the values of Upper and Lower.
-// 
+// Interface class for an weight window algorithm. It calculates
+// the number of tracks and their weight according to the inital
+// track weight and the lower energy bound in the energy-space
+// cell.
 //
 
 // Author: Michael Dressel (Michael.Dressel@cern.ch)
@@ -51,20 +48,14 @@ class G4VWeightWindowAlgorithm
 public:  // with description
 
   G4VWeightWindowAlgorithm();
+
   virtual ~G4VWeightWindowAlgorithm();
 
-  virtual void SetUpperLimit(G4double Upper) = 0;
-    // set upper limiting factor for window
-  
-  virtual void SetLowerLimit(G4double Lower) = 0;
-    // set lower limiting facotr for window
+  virtual G4Nsplit_Weight Calculate(G4double init_w,
+				    G4double lowerWeightBound) const = 0;
+    // calculate number of tracks and their weight according
+    // to the initial track weight and the lower energy bound
 
-  virtual G4Nsplit_Weight Calculate(G4double init_w, 
-				    G4double importance) const = 0;
-    // calculate the number of tracks and their weight according 
-    // to the upper and lower limmiting factors of the window
-    // and the initial weight
-  
 };
 
 #endif

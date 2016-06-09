@@ -1,0 +1,31 @@
+# $Id: anthony.mac,v 1.1 2003/08/11 10:03:04 maire Exp $
+#
+# macro file for TestEm5.cc    
+#
+# LPM and dielectric effect measurement:
+# 25 GeV electrons through thin foils.
+# P.L. Anthony et al. Phys.Rev. D 56 (1997) page 1373.
+#     		    
+/control/verbose 2
+/run/verbose 2
+#
+/testem/det/setAbsMat Aluminium
+/testem/det/setAbsThick 5.30 mm
+###/testem/det/setAbsMat Lead      
+###/testem/det/setAbsThick 0.15 mm  
+/testem/det/setAbsYZ   10 cm
+#
+/testem/phys/setGCut 1 mm   
+/testem/phys/setECut 5 mum
+/testem/phys/setPCut 5 mum
+#
+/run/initialize
+#
+/testem/gun/setDefault
+/gun/particle e- 
+/gun/energy 25 GeV
+#
+/testem/histo/setFileName anthony.paw
+/testem/histo/setHisto 8  80 1.e-4 1. GeV	#gamma energy at exit  
+#
+/run/beamOn 100000

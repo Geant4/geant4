@@ -1,0 +1,280 @@
+**********************************************
+ Geant4 version $Name: geant4-06-00 $
+                                (3-October-2003)
+             Copyright : Geant4 Collaboration
+**********************************************
+
+phot:  Total cross sections from Sandia parametrisation. 
+B01PhysicsList::SetCuts:CutLength : 1 (mm)
+Going to assign importance: 1, to volume: cell_01
+Going to assign importance: 2, to volume: cell_02
+Going to assign importance: 4, to volume: cell_03
+Going to assign importance: 8, to volume: cell_04
+Going to assign importance: 16, to volume: cell_05
+Going to assign importance: 32, to volume: cell_06
+Going to assign importance: 64, to volume: cell_07
+Going to assign importance: 128, to volume: cell_08
+Going to assign importance: 256, to volume: cell_09
+Going to assign importance: 512, to volume: cell_10
+Going to assign importance: 1024, to volume: cell_11
+Going to assign importance: 2048, to volume: cell_12
+Going to assign importance: 4096, to volume: cell_13
+Going to assign importance: 8192, to volume: cell_14
+Going to assign importance: 16384, to volume: cell_15
+Going to assign importance: 32768, to volume: cell_16
+Going to assign importance: 65536, to volume: cell_17
+Going to assign importance: 131072, to volume: cell_18
+=== G4ProcessPlacer::AddProcessAsSecondDoIt: for: neutron
+  ProcessName: MScoreProcess
+The initial Vectors: 
+GPIL Vector: 
+   Decay
+   LCapture
+   LFission
+   inelastic
+   LElastic
+   Transportation
+DoIt Vector: 
+   Transportation
+   LElastic
+   inelastic
+   LFission
+   LCapture
+   Decay
+The final Vectors: 
+GPIL Vector: 
+   Decay
+   LCapture
+   LFission
+   inelastic
+   LElastic
+   MScoreProcess
+   Transportation
+DoIt Vector: 
+   Transportation
+   MScoreProcess
+   LElastic
+   inelastic
+   LFission
+   LCapture
+   Decay
+================================================
+=== G4ProcessPlacer::AddProcessAsSecondDoIt: for: neutron
+  ProcessName: MassImportanceProcess
+The initial Vectors: 
+GPIL Vector: 
+   Decay
+   LCapture
+   LFission
+   inelastic
+   LElastic
+   MScoreProcess
+   Transportation
+DoIt Vector: 
+   Transportation
+   MScoreProcess
+   LElastic
+   inelastic
+   LFission
+   LCapture
+   Decay
+The final Vectors: 
+GPIL Vector: 
+   Decay
+   LCapture
+   LFission
+   inelastic
+   LElastic
+   MScoreProcess
+   MassImportanceProcess
+   Transportation
+DoIt Vector: 
+   Transportation
+   MassImportanceProcess
+   MScoreProcess
+   LElastic
+   inelastic
+   LFission
+   LCapture
+   Decay
+================================================
+
+conv:  Total cross sections from a parametrisation. Good description from 1.5 MeV to 100 GeV for all Z. 
+        e+e- energies according Bethe-Heitler
+        PhysicsTables from 1.022 MeV to 100 GeV in 100 bins. 
+
+compt:  Total cross sections from a parametrisation. Good description from 10 KeV to (100/Z) GeV. 
+       Scattered gamma energy according Klein-Nishina.
+        PhysicsTables from 1 keV to 100 GeV in 80 bins. 
+
+msc:  Model variant of multiple scattering for e-
+      Lambda tables from 100 eV to 100 TeV in 120 bins.
+      Boundary algorithm is active with facrange= 0.199
+
+eIoni:   tables are built for  e-
+      dE/dx and range tables from 100 eV to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Step function: finalRange(mm)= 1, dRoverRange= 1, integral: 1
+      Delta cross sections from Moller+Bhabha, good description from 1 KeV to 100 GeV.
+
+eBrem:   tables are built for  e-
+      dE/dx and range tables from 100 eV to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Total cross sections from a parametrisation based on the EEDL data library. 
+      Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV.
+
+eIoni:   tables are built for  e+
+      dE/dx and range tables from 100 eV to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Step function: finalRange(mm)= 1, dRoverRange= 1, integral: 1
+      Delta cross sections from Moller+Bhabha, good description from 1 KeV to 100 GeV.
+
+eBrem:   tables are built for  e+
+      dE/dx and range tables from 100 eV to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Total cross sections from a parametrisation based on the EEDL data library. 
+      Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV.
+
+annihil:  Total cross section from Heilter formula(annihilation into 2 photons).
+        gamma energies sampled according Heitler
+        PhysicsTables from 10 keV to 10 TeV in 100 bins. 
+
+msc:  Model variant of multiple scattering for proton
+      Lambda tables from 100 eV to 100 TeV in 120 bins.
+      Boundary algorithm is active with facrange= 0.199
+
+hIoni:   tables are built for  proton
+      dE/dx and range tables from 100 eV to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 0
+      Bether-Bloch model for Escaled > 2 MeV, parametrisation of Bragg peak below, Integral mode 0
+
+msc:  Model variant of multiple scattering for mu+
+      Lambda tables from 100 eV to 100 TeV in 120 bins.
+      Boundary algorithm is active with facrange= 0.199
+
+MuIoni:   tables are built for  mu+
+      dE/dx and range tables from 100 eV to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 0
+      Bether-Bloch model for E > 0.2 MeV parametrisation of Bragg peak below.
+
+MuBrems:   tables are built for  mu+
+      dE/dx and range tables from 100 eV to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Parametrised model 
+
+MuPairProd:   tables are built for  mu+
+      dE/dx and range tables from 100 eV to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Parametrised model 
+### All dEdx and Range tables are built #####
+
+MuIoni:   tables are built for  mu-
+      dE/dx and range tables from 100 eV to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 0
+      Bether-Bloch model for E > 0.2 MeV parametrisation of Bragg peak below.
+
+msc:  Model variant of multiple scattering for pi-
+      Lambda tables from 100 eV to 100 TeV in 120 bins.
+      Boundary algorithm is active with facrange= 0.199
+Volume name               |   Importance|  Tr.Entering|   Population|   Collisions|     Coll*WGT|    NumWGTedE|   FluxWGTedE|    Av.Tr.WGT|
+cell_01_rep:0............ |           1 |         114 |         134 |         110 |         110 |     7.40303 |     9.22688 |           1 |
+cell_02_rep:0............ |           2 |          81 |         171 |         201 |       100.5 |     6.01133 |     8.47808 |           1 |
+cell_03_rep:0............ |           4 |         112 |         230 |         254 |        63.5 |     5.71079 |     8.28133 |           1 |
+cell_04_rep:0............ |           8 |         145 |         293 |         386 |       48.25 |     4.61676 |     7.73542 |           1 |
+cell_05_rep:0............ |          16 |         147 |         323 |         444 |       27.75 |     3.61001 |     7.51528 |           1 |
+cell_06_rep:0............ |          32 |         170 |         350 |         460 |      14.375 |    0.171091 |     7.41748 |           1 |
+cell_07_rep:0............ |          64 |         189 |         420 |         575 |     8.98438 |   0.0460408 |     7.47914 |           1 |
+cell_08_rep:0............ |         128 |         224 |         476 |         705 |     5.50781 |     2.69504 |      6.8239 |           1 |
+cell_09_rep:0............ |         256 |         229 |         496 |         820 |     3.20312 |    0.366871 |     6.32006 |           1 |
+cell_10_rep:0............ |         512 |         275 |         539 |         893 |     1.74414 |     2.05898 |     6.19657 |           1 |
+cell_11_rep:0............ |        1024 |         317 |         665 |        1146 |     1.11914 |    0.218009 |     5.85921 |           1 |
+cell_12_rep:0............ |        2048 |         322 |         668 |        1220 |    0.595703 |    0.124351 |     5.69458 |           1 |
+cell_13_rep:0............ |        4096 |         354 |         711 |        1467 |    0.358154 |     1.50433 |     4.97726 |           1 |
+cell_14_rep:0............ |        8192 |         377 |         785 |        1627 |    0.198608 |     1.40615 |     4.74936 |           1 |
+cell_15_rep:0............ |       16384 |         420 |         833 |        1728 |    0.105469 |     1.62041 |      4.7153 |           1 |
+cell_16_rep:0............ |       32768 |         379 |         756 |        1486 |   0.0453491 |     2.53735 |     5.00551 |           1 |
+cell_17_rep:0............ |       65536 |         406 |         844 |        1579 |   0.0240936 |   0.0346509 |     4.73638 |           1 |
+cell_18_rep:0............ |      131072 |         367 |         856 |        1694 |   0.0129242 |     2.43149 |     4.63503 |           1 |
+rest_rep:0............... |      131072 |         391 |         391 |           0 |           0 |           0 |           0 |           0 |
+shieldWorld_rep:0........ |           1 |           9 |         109 |           0 |           0 |          10 |          10 |           1 |
+=== G4ProcessPlacer::RemoveProcess: for: neutron
+  ProcessName: MassImportanceProcess, will be removed!
+  The initial Vectors: 
+GPIL Vector: 
+   Decay
+   LCapture
+   LFission
+   inelastic
+   LElastic
+   MScoreProcess
+   MassImportanceProcess
+   Transportation
+DoIt Vector: 
+   Transportation
+   MassImportanceProcess
+   MScoreProcess
+   LElastic
+   inelastic
+   LFission
+   LCapture
+   Decay
+  The final Vectors: 
+GPIL Vector: 
+   Decay
+   LCapture
+   LFission
+   inelastic
+   LElastic
+   MScoreProcess
+   Transportation
+DoIt Vector: 
+   Transportation
+   MScoreProcess
+   LElastic
+   inelastic
+   LFission
+   LCapture
+   Decay
+================================================
+=== G4ProcessPlacer::RemoveProcess: for: neutron
+  ProcessName: MScoreProcess, will be removed!
+  The initial Vectors: 
+GPIL Vector: 
+   Decay
+   LCapture
+   LFission
+   inelastic
+   LElastic
+   MScoreProcess
+   Transportation
+DoIt Vector: 
+   Transportation
+   MScoreProcess
+   LElastic
+   inelastic
+   LFission
+   LCapture
+   Decay
+  The final Vectors: 
+GPIL Vector: 
+   Decay
+   LCapture
+   LFission
+   inelastic
+   LElastic
+   Transportation
+DoIt Vector: 
+   Transportation
+   LElastic
+   inelastic
+   LFission
+   LCapture
+   Decay
+================================================
+WARNING - Attempt to delete the physical volume store while geometry closed !
+WARNING - Attempt to delete the logical volume store while geometry closed !
+WARNING - Attempt to delete the solid store while geometry closed !
+WARNING - Attempt to delete the region store while geometry closed !

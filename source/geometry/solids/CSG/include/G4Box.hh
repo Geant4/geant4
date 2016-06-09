@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Box.hh,v 1.9 2003/06/16 16:53:20 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4Box.hh,v 1.10 2003/11/03 18:17:30 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // --------------------------------------------------------------------
 // GEANT 4 class header file
@@ -44,7 +44,6 @@
 // 27.03.98 J.Apostolakis: Inherit from G4CSGSolid (not G4VSolid)
 // 18.11.99 J.Apostolakis, V.Grichine: kUndefined was added to ESide
 // --------------------------------------------------------------------
-
 #ifndef G4BOX_HH
 #define G4BOX_HH
 
@@ -64,9 +63,9 @@ class G4Box : public G4CSGSolid
                            const G4VPhysicalVolume* pRep);
 
     G4bool CalculateExtent(const EAxis pAxis,
-			   const G4VoxelLimits& pVoxelLimit,
-			   const G4AffineTransform& pTransform,
-			         G4double& pmin, G4double& pmax) const;
+                           const G4VoxelLimits& pVoxelLimit,
+                           const G4AffineTransform& pTransform,
+                                 G4double& pmin, G4double& pmax) const;
 
   // Accessors and modifiers
 
@@ -93,8 +92,8 @@ class G4Box : public G4CSGSolid
     G4double DistanceToIn(const G4ThreeVector& p) const;
 
     G4double DistanceToOut(const G4ThreeVector& p, const G4ThreeVector& v,
-			   const G4bool calcNorm=false,
-			         G4bool *validNorm=0, G4ThreeVector *n=0) const;
+                           const G4bool calcNorm=false,
+                                 G4bool *validNorm=0, G4ThreeVector *n=0) const;
 
     G4double DistanceToOut(const G4ThreeVector& p) const;
 

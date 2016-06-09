@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PolyPhiFace.cc,v 1.6 2003/03/28 09:52:50 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4PolyPhiFace.cc,v 1.7 2003/10/28 17:15:57 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // 
 // --------------------------------------------------------------------
@@ -252,7 +252,8 @@ void G4PolyPhiFace::Diagnose( G4VSolid *owner )
     test -= 1E-6*corner->norm3D;
     
     if (owner->Inside(test) != kInside) 
-      G4Exception( "G4PolyPhiFace::Diagnose() - Bad vertex normal found" );
+      G4Exception( "G4PolyPhiFace::Diagnose()", "InvalidSetup",
+                   FatalException, "Bad vertex normal found." );
   } while( ++corner < corners+numEdges );
 }
 

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: exampleN03.cc,v 1.18 2002/12/18 15:17:55 maire Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: exampleN03.cc,v 1.19 2003/09/15 15:38:08 maire Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -49,7 +49,6 @@
 #include "ExN03RunAction.hh"
 #include "ExN03EventAction.hh"
 #include "ExN03SteppingAction.hh"
-#include "ExN03TrackingAction.hh"
 #include "ExN03SteppingVerbose.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -95,9 +94,9 @@ int main(int argc,char** argv) {
   // set user action classes
   runManager->SetUserAction(new ExN03PrimaryGeneratorAction(detector));
   runManager->SetUserAction(new ExN03RunAction);
-  runManager->SetUserAction(new ExN03EventAction);
-  runManager->SetUserAction(new ExN03TrackingAction);  
-  runManager->SetUserAction(new ExN03SteppingAction);
+  ExN03EventAction* eventaction = new ExN03EventAction;
+  runManager->SetUserAction(eventaction);
+  runManager->SetUserAction(new ExN03SteppingAction(detector, eventaction));
   
   //Initialize G4 kernel
   runManager->Initialize();

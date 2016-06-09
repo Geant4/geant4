@@ -1,4 +1,4 @@
-$Id: History,v 1.7 2003/03/25 14:40:07 maire Exp $
+$Id: History,v 1.8 2003/10/06 08:58:59 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+     
+October 06, 2003  mma (exampleN01-V05-02-00)
+- cosmetic cleanup in material definitions
      
 March 25, 2003  mma (exampleN01-V05-00-00)
 - Use G4PVPlacement constructor in logical mother, even for the world.

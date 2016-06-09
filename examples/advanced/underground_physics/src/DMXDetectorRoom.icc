@@ -529,7 +529,7 @@
   desk_Z = 0.5*(desk4Height - labHeight);
   
   G4double crateWidth  = 60.0*cm; //Y
-  G4double crate_Y;
+  G4double crate_Y = 0.;
 
   G4RotationMatrix rotMatrixDesk4;
   rotMatrixDesk4.rotateZ(0.0*deg);

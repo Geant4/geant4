@@ -29,8 +29,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4NeutronHPInelastic.cc,v 1.14 2003/05/30 11:32:34 hpw Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4NeutronHPInelastic.cc,v 1.18 2003/11/20 13:02:28 hpw Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 #include "G4NeutronHPInelastic.hh"
 
@@ -41,7 +41,7 @@
     system("echo $NeutronHPCrossSections");
 //    G4cout << " entering G4NeutronHPInelastic constructor"<<G4endl;
     if(!getenv("NeutronHPCrossSections")) 
-       G4Exception("Please setenv NeutronHPCrossSections to point to the neutron cross-section files.");
+       throw G4HadronicException(__FILE__, __LINE__, "Please setenv NeutronHPCrossSections to point to the neutron cross-section files.");
     dirName = getenv("NeutronHPCrossSections");
     G4String tString = "/Inelastic/";
     dirName = dirName + tString;
@@ -102,9 +102,9 @@
   
   #include "G4NeutronHPThermalBoost.hh"
   
-  G4VParticleChange * G4NeutronHPInelastic::ApplyYourself(const G4Track& aTrack, G4Nucleus& )
+  G4HadFinalState * G4NeutronHPInelastic::ApplyYourself(const G4HadProjectile& aTrack, G4Nucleus& )
   {
-    G4Material * theMaterial = aTrack.GetMaterial();
+    const G4Material * theMaterial = aTrack.GetMaterial();
     G4int n = theMaterial->GetNumberOfElements();
     G4int index = theMaterial->GetElement(0)->GetIndex();
     G4int it=0;
@@ -120,7 +120,7 @@
       {
         index = theMaterial->GetElement(i)->GetIndex();
         rWeight = NumAtomsPerVolume[i];
-        xSec[i] = theInelastic[index].GetXsec(aThermalE.GetThermalEnergy(aTrack.GetDynamicParticle(),
+        xSec[i] = theInelastic[index].GetXsec(aThermalE.GetThermalEnergy(aTrack,
   		                                                         theMaterial->GetElement(i),
     								         theMaterial->GetTemperature()));
         xSec[i] *= rWeight;

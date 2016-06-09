@@ -1,6 +1,6 @@
-# $Id: detector.py,v 1.2 2003/06/16 17:06:44 dressel Exp $
+# $Id: detector.py,v 1.3 2003/06/26 11:54:13 dressel Exp $
 # -------------------------------------------------------------------
-# GEANT4 tag $Name: geant4-05-02 $
+# GEANT4 tag $Name: geant4-06-00 $
 # -------------------------------------------------------------------
 #
 
@@ -10,6 +10,7 @@
 # have different volumina at the different positions.
 # For convinience a class Detector is provided to link a detector
 # position and it's volume.
+
 
 d00Volume = 1608.8   # volume of the 12.9 cm x 12.9 cm cyinder
 d20Volume = 20268.3  # volume of the ring at 20 cm
@@ -23,6 +24,21 @@ RingDetectorVolume = {"00":d00Volume, "20":d20Volume, "40":d40Volume}
 # map of detector type to distance-volumina map
 DetectorVolume = {"simple":SimpleDetectorVolume,
                   "ring"  :RingDetectorVolume}
+
+
+# the area of the beam pipe needed for scaling
+beamPipeArea = 93.31
+
+# the source detector volume: beamPipeArea * 0.1 cm
+sourceDetectorVolume = 9.33
+
+# source flux from the TIARA paper
+Fexp43_Coli = 1.76E+04
+Fexp43 = 1.94E+04
+Fexp68_Coli = 2.04E+04
+Fexp68 = 2.46E+04
+
+
 
 class Detector(object):
     "Distance and volume of a Detector."
@@ -43,19 +59,19 @@ def detScale(ngen, energy, coli):
     the proton beam energy. If coli == 1, the flux at the
     colimator exit is used, else the flux at 401 cm is used.
     """
-    Asrc = 93.31
+    Asrc = beamPipeArea
     Fexp = 0
     if energy == "43":
         if coli == 1:
-            Fexp = 1.76E+04
+            Fexp = Fexp43_Coli
         else:
-            Fexp = 1.94E+04
+            Fexp = Fexp43
     else:
         if energy == "68":
             if coli == 1:
-                Fexp = 2.04E+04
+                Fexp = Fexp68_Coli
             else:
-                Fexp = 2.46E+04
+                Fexp = Fexp68
 
     S = Fexp * Asrc / ngen
 

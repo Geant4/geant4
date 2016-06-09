@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: A01VisManager.cc,v 1.3 2002/12/13 11:34:34 gunter Exp $
+// $Id: A01VisManager.cc,v 1.4 2003/11/13 15:10:55 johna Exp $
 // --------------------------------------------------------------
 //
 
@@ -44,11 +44,6 @@
 
 #ifdef G4VIS_USE_DAWN
 #include "G4FukuiRenderer.hh"
-#endif
-
-#ifdef G4VIS_USE_OPACS
-#include "G4Wo.hh"
-#include "G4Xo.hh"
 #endif
 
 #ifdef G4VIS_USE_OPENGLX
@@ -97,11 +92,6 @@ void A01VisManager::RegisterGraphicsSystems () {
 
 #ifdef G4VIS_USE_DAWN
   RegisterGraphicsSystem (new G4FukuiRenderer);
-#endif
-
-#ifdef G4VIS_USE_OPACS
-  RegisterGraphicsSystem (new G4Wo);
-  RegisterGraphicsSystem (new G4Xo);
 #endif
 
 #ifdef G4VIS_USE_OPENGLX

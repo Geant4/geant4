@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: AnaEx01VisManager.cc,v 1.6 2003/06/20 14:55:45 gbarrand Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: AnaEx01VisManager.cc,v 1.7 2003/10/17 10:19:57 gbarrand Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 //
 // John Allison 24th January 1998.
@@ -50,11 +50,6 @@
 
 #ifdef G4VIS_USE_DAWN
 #include "G4FukuiRenderer.hh"
-#endif
-
-#ifdef G4VIS_USE_OPACS
-#include "G4Wo.hh"
-#include "G4Xo.hh"
 #endif
 
 #ifdef G4VIS_USE_OPENGLX
@@ -107,11 +102,6 @@ void AnaEx01VisManager::RegisterGraphicsSystems () {
 
 #ifdef G4VIS_USE_DAWN
   RegisterGraphicsSystem (new G4FukuiRenderer);
-#endif
-
-#ifdef G4VIS_USE_OPACS
-  RegisterGraphicsSystem (new G4Wo);
-  RegisterGraphicsSystem (new G4Xo);
 #endif
 
 #ifdef G4VIS_USE_OPENGLX

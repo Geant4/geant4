@@ -1,0 +1,71 @@
+//
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
+//
+//
+// $Id: G4BlockingList.icc,v 1.2 2003/11/02 14:01:21 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-00 $
+//
+//
+// class G4BlockingList  Inlined Implementation
+//
+// --------------------------------------------------------------------
+
+inline G4int G4BlockingList::Length() const
+{
+  return fBlockingList.size();
+}
+
+inline void G4BlockingList::BlockVolume(const G4int v)
+{
+  fBlockingList[v] = fBlockTagNo;
+}
+
+inline G4bool G4BlockingList::IsBlocked(const G4int v) const
+{
+  return ( fBlockingList[v]==fBlockTagNo ) ? true : false;
+}
+
+inline void G4BlockingList::Reset()
+{
+  if ( fBlockTagNo!=kBlockTagNoMax )
+  {
+    fBlockTagNo += 1;
+  }
+  else
+  {
+    FullyReset();
+  }    
+}
+
+inline void G4BlockingList::Enlarge(const G4int nv)
+{
+  G4int len=fBlockingList.size();
+  if ( len<nv )
+  {
+    G4int newlen = (nv/fStride+1)*fStride;
+    fBlockingList.resize(newlen);
+    for (G4int i=len; i<newlen; i++)
+    {
+      fBlockingList[i] = 0;
+    }
+  }
+}

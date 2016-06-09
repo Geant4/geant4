@@ -1,4 +1,4 @@
-$Id: History,v 1.6 2003/06/25 17:33:55 gcosmo Exp $
+$Id: History,v 1.13 2003/12/02 09:17:20 japost Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,28 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+Dec  1st, 2003 John Apostolakis (fieldex03-V05-02-00)
+-----------------------------------------------------
+- Renamed F03ElectroMagneticField into F03FieldSetup (as it is a creator, 
+   not a field). 
+- FieldSetup is now called only in Detector Construction, not in main.
+
+Nov 25th, 2003 Gabriele Cosmo
+-----------------------------
+- Open geometry before clearing stores in DetectorConstruction class.
+
+Nov 14th, 2003 John Apostolakis
+-------------------------------
+- F03ElectroMagneticField:
+  o changed minimum step to 0.25 mm, from 1.0 mm.
+
+Nov 13th, 2003 John Allison
+---------------------------
+- Removed OPACS from Vis Manager.
+
+Aug 27th, 2003 V.Ivantchenko (fieldex-V05-02-00)
+------------------------------------------------
+ - Remove obsolete interfaces
 
 Jun 25th, 2003 - G.Cosmo (fieldex-V05-01-00)
 --------------------------------------------

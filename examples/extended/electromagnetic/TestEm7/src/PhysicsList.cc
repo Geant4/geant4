@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: PhysicsList.cc,v 1.7 2003/06/14 16:01:19 vnivanch Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: PhysicsList.cc,v 1.9 2003/11/19 10:16:18 vnivanch Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -34,16 +34,13 @@
 #include "PhysListParticles.hh"
 #include "PhysListGeneral.hh"
 #include "PhysListEmStandard.hh"
-#include "PhysListEmModel.hh"
+#include "PhysListEmG4v52.hh"
 #include "PhysListHadronElastic.hh"
 #include "PhysListBinaryCascade.hh"
+#include "PhysListIonBinaryCascade.hh"
 
-#include "G4Gamma.hh"
-#include "G4Electron.hh"
-#include "G4Positron.hh"
-
-#include "G4UnitsTable.hh"
 #include "G4LossTableManager.hh"
+#include "G4UnitsTable.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -117,11 +114,11 @@ void PhysicsList::AddPhysicsList(const G4String& name)
     delete emPhysicsList;
     emPhysicsList = new PhysListEmStandard(name);
 
-  } else if (name == "model") {
+  } else if (name == "g4v52") {
 
     emName = name;
     delete emPhysicsList;
-    emPhysicsList = new PhysListEmModel(name);
+    emPhysicsList = new PhysListEmG4v52(name);
 
   } else if (name == "elastic") {
 
@@ -130,6 +127,10 @@ void PhysicsList::AddPhysicsList(const G4String& name)
   } else if (name == "binary") {
 
     hadronPhys.push_back( new PhysListBinaryCascade(name));
+
+  } else if (name == "binary_ion") {
+
+    hadronPhys.push_back( new PhysListIonBinaryCascade(name));
 
   } else {
 
@@ -167,6 +168,10 @@ void PhysicsList::AddStepMax()
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+#include "G4Gamma.hh"
+#include "G4Electron.hh"
+#include "G4Positron.hh"
 
 void PhysicsList::SetCuts()
 {

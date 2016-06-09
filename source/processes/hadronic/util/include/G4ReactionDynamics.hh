@@ -21,8 +21,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4ReactionDynamics.hh,v 1.7 2002/12/12 19:18:39 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
 //
  // Hadronic Process: Reaction Dynamics
  // original by H.P. Wellisch
@@ -40,7 +38,10 @@
 #include "G4ReactionProduct.hh"
 #include "G4Nucleus.hh"
 #include "G4FastVector.hh"
- 
+#include "G4HadProjectile.hh"
+
+enum{ GHADLISTSIZE=256};
+
  class G4ReactionDynamics 
  {
  public:
@@ -56,10 +57,10 @@
     { return 0.0; }
     
     G4bool GenerateXandPt(                   // derived from GENXPT
-     G4FastVector<G4ReactionProduct,128> &vec,
+     G4FastVector<G4ReactionProduct,GHADLISTSIZE> &vec,
      G4int &vecLen,
      G4ReactionProduct &modifiedOriginal, // Fermi motion & evap. effect included
-     const G4DynamicParticle *originalIncident,
+     const G4HadProjectile *originalIncident,
      G4ReactionProduct &currentParticle,
      G4ReactionProduct &targetParticle,
      const G4Nucleus &targetNucleus,
@@ -69,7 +70,7 @@
      G4ReactionProduct &leadingStrangeParticle );
     
     void SuppressChargedPions(
-     G4FastVector<G4ReactionProduct,128> &vec,
+     G4FastVector<G4ReactionProduct,GHADLISTSIZE> &vec,
      G4int &vecLen,
      const G4ReactionProduct &modifiedOriginal,
      G4ReactionProduct &currentParticle,
@@ -79,10 +80,10 @@
      G4bool &targetHasChanged );
       
     G4bool TwoCluster(                       // derived from TWOCLU
-     G4FastVector<G4ReactionProduct,128> &vec,
+     G4FastVector<G4ReactionProduct,GHADLISTSIZE> &vec,
      G4int &vecLen,
      G4ReactionProduct &modifiedOriginal, // Fermi motion & evap. effect included
-     const G4DynamicParticle *originalIncident,
+     const G4HadProjectile *originalIncident,
      G4ReactionProduct &currentParticle,
      G4ReactionProduct &targetParticle,
      const G4Nucleus &targetNucleus,
@@ -92,7 +93,7 @@
      G4ReactionProduct &leadingStrangeParticle );
     
     void TwoBody(                         // derived from TWOB
-     G4FastVector<G4ReactionProduct,128> &vec,
+     G4FastVector<G4ReactionProduct,GHADLISTSIZE> &vec,
      G4int &vecLen,
      G4ReactionProduct &modifiedOriginal,
      const G4DynamicParticle *originalTarget,
@@ -106,11 +107,11 @@
     G4double GenerateNBodyEvent(                // derived from PHASP
      const G4double totalEnergy,
      const G4bool constantCrossSection,
-     G4FastVector<G4ReactionProduct,128> &vec,
+     G4FastVector<G4ReactionProduct,GHADLISTSIZE> &vec,
      G4int &vecLen );
     
     void ProduceStrangeParticlePairs(
-     G4FastVector<G4ReactionProduct,128> &vec,
+     G4FastVector<G4ReactionProduct,GHADLISTSIZE> &vec,
      G4int &vecLen,
      const G4ReactionProduct &modifiedOriginal,
      const G4DynamicParticle *originalTarget, 
@@ -122,7 +123,7 @@
     void NuclearReaction(                     // derived from NUCREC
      G4FastVector<G4ReactionProduct,4> &vec,
      G4int &vecLen,
-     const G4DynamicParticle *originalIncident,
+     const G4HadProjectile *originalIncident,
      const G4Nucleus &aNucleus,
      const G4double theAtomicMass,
      const G4double *massVec );
@@ -133,18 +134,18 @@
      const G4double numberofFinalStateNucleons,
      const G4ThreeVector &temp,
      const G4ReactionProduct &modifiedOriginal, // Fermi motion & evap. effect included
-     const G4DynamicParticle *originalIncident,
+     const G4HadProjectile *originalIncident,
      const G4Nucleus &targetNucleus,
      G4ReactionProduct &currentParticle,
      G4ReactionProduct &targetParticle,
-     G4FastVector<G4ReactionProduct,128> &vec,
+     G4FastVector<G4ReactionProduct,GHADLISTSIZE> &vec,
      G4int &vecLen );
     
     void Defs1(
      const G4ReactionProduct &modifiedOriginal,
      G4ReactionProduct &currentParticle,
      G4ReactionProduct &targetParticle,
-     G4FastVector<G4ReactionProduct,128> &vec,
+     G4FastVector<G4ReactionProduct,GHADLISTSIZE> &vec,
      G4int &vecLen );
     
     void AddBlackTrackParticles(
@@ -158,14 +159,14 @@
      const G4ReactionProduct &modifiedOriginal,
      G4double spall,
      const G4Nucleus &aNucleus,
-     G4FastVector<G4ReactionProduct,128> &vec,
+     G4FastVector<G4ReactionProduct,GHADLISTSIZE> &vec,
      G4int &vecLen );
     
     void MomentumCheck(
      const G4ReactionProduct &modifiedOriginal,
      G4ReactionProduct &currentParticle,
      G4ReactionProduct &targetParticle,
-     G4FastVector<G4ReactionProduct,128> &vec,
+     G4FastVector<G4ReactionProduct,GHADLISTSIZE> &vec,
      G4int &vecLen );
     
     G4double normal();

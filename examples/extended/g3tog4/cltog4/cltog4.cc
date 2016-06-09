@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: cltog4.cc,v 1.3 2003/06/16 16:49:11 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: cltog4.cc,v 1.4 2003/07/04 15:45:46 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // 
 #include "G4ios.hh"
@@ -44,7 +44,7 @@
 #include "G4UImanager.hh"
 #include "G4UIterminal.hh"
 
-G4int main(int argc, char** argv)
+int main(int argc, char** argv)
 {
   G4String inFile;
   G4String macroFile = "";

@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4FukuiRenderer.cc,v 1.7 2001/07/11 10:08:46 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // 
 // Satoshi TANAKA

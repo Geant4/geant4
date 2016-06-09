@@ -19,11 +19,11 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
-
+//
 // ====================================================================
 //
 //   HepMCG4PythiaInterface.hh
-//   $Id: HepMCG4PythiaInterface.hh,v 1.3 2003/06/16 16:48:32 gunter Exp $
+//   $Id: HepMCG4PythiaInterface.hh,v 1.4 2003/12/09 15:31:17 gunter Exp $
 //
 //   A generic interface class with Pythia event generator via HepMC.
 //

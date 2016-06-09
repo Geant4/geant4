@@ -1,25 +1,3 @@
-//
-// ********************************************************************
-// * DISCLAIMER                                                       *
-// *                                                                  *
-// * The following disclaimer summarizes all the specific disclaimers *
-// * of contributors to this software. The specific disclaimers,which *
-// * govern, are listed with their locations in:                      *
-// *   http://cern.ch/geant4/license                                  *
-// *                                                                  *
-// * Neither the authors of this software system, nor their employing *
-// * institutes,nor the agencies providing financial support for this *
-// * work  make  any representation or  warranty, express or implied, *
-// * regarding  this  software system or assume any liability for its *
-// * use.                                                             *
-// *                                                                  *
-// * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
-// * By copying,  distributing  or modifying the Program (or any work *
-// * based  on  the Program)  you indicate  your  acceptance of  this *
-// * statement, and all its terms.                                    *
-// ********************************************************************
-//
 // -*- C++ -*-
 // AID-GENERATED
 // =========================================================================
@@ -41,6 +19,7 @@ class HepRepAction;
 class HepRepInstance;
 class HepRepInstanceTree;
 class HepRepPoint;
+class HepRepReader;
 class HepRepTreeID;
 class HepRepType;
 class HepRepTypeTree;
@@ -58,11 +37,27 @@ public:
     virtual ~HepRepFactory() { /* nop */; }
 
     /**
+     * Creates a HepRepReader from a stream.
+     *
+     * @param in input stream.
+     */
+    virtual HepRepReader * createHepRepReader(std::istream * in) = 0;
+
+    /**
+     * Creates a HepRepReader from a file name.
+     *
+     * @param inputFileName file name.
+     */
+    virtual HepRepReader * createHepRepReader(std::string inputFileName) = 0;
+
+    /**
      * Creates a HepRepWriter.
      *
      * @param out output stream.
+     * @param randomAccess create a writer in a format that will allow random access (may be ignored).
+     * @param compress create a writer that uses compression (may be ignored).
      */
-    virtual HepRepWriter * createHepRepWriter(std::ostream * out) = 0;
+    virtual HepRepWriter * createHepRepWriter(std::ostream * out, bool randomAccess, bool compress) = 0;
 
     /**
      * Creates a HepRepPoint.
@@ -141,5 +136,5 @@ public:
      */
     virtual HepRep * createHepRep() = 0;
 }; // class
-}; // namespace HEPREP
+} // namespace HEPREP
 #endif /* ifndef HEPREP_HEPREPFACTORY_H */

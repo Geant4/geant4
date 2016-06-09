@@ -21,12 +21,12 @@
 // ********************************************************************
 //
 //
-// $Id: G4GRSSolid.icc,v 1.6 2002/07/23 08:50:34 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4GRSSolid.icc,v 1.8 2003/11/02 16:06:05 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // 
 // class G4GRSSolid inline implementation
-// ********************************************************************
+// ----------------------------------------------------------------------
 
 inline
 G4GRSSolid::G4GRSSolid( G4VSolid *pSolid,
@@ -40,7 +40,10 @@ G4GRSSolid::G4GRSSolid( G4VSolid *pSolid,
   {
     frot = new G4RotationMatrix(*pRot);
     if ( !frot )
-      G4Exception ("G4GRSSolid::G4GRSSolid cannot allocate G4RotationMatrix");
+    {
+      G4Exception("G4GRSSolid::G4GRSSolid()","NullPointer",FatalException,
+                  "Cannot allocate G4RotationMatrix, NULL pointer.");
+    }
   }
   else
   {
@@ -58,7 +61,10 @@ G4GRSSolid::G4GRSSolid( G4VSolid *pSolid,
 {
   frot = new G4RotationMatrix(rot);
   if ( !frot )
-    G4Exception ("G4GRSSolid::G4GRSSolid cannot allocate G4RotationMatrix");
+  {
+    G4Exception("G4GRSSolid::G4GRSSolid()","NullPointer",FatalException,
+                "Cannot allocate G4RotationMatrix, NULL pointer.");
+  }
 }
 
 inline
@@ -66,7 +72,8 @@ G4VSolid* G4GRSSolid::GetSolid( G4int depth ) const
 {
   if( depth != 0 )
   {
-    G4Exception("G4GRSSolid::GetSolid: has no meaning for depth!=0");
+    G4Exception("G4GRSSolid::GetSolid()", "WrongArgumentValue",
+                FatalException, "History depth in input must be 0 !");
   }
   return fsolid;
 }
@@ -76,7 +83,8 @@ const G4ThreeVector& G4GRSSolid::GetTranslation( G4int depth ) const
 {
   if( depth != 0 )
   {
-    G4Exception("G4GRSSolid::GetTranslation: has no meaning for depth!=0");
+    G4Exception("G4GRSSolid::GetTranslation()", "WrongArgumentValue",
+                FatalException, "History depth in input must be 0 !");
   }
   return ftlate;
 }
@@ -86,7 +94,8 @@ const G4RotationMatrix* G4GRSSolid::GetRotation( G4int depth ) const
 {
   if( depth != 0 )
   {
-    G4Exception("G4GRSSolid::GetRotation: has no meaning for depth!=0");
+    G4Exception("G4GRSSolid::GetRotation()", "WrongArgumentValue",
+                FatalException, "History depth in input must be 0 !");
   }
   return frot;
 }

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: ExN04VisManager.cc,v 1.2 2002/11/13 19:14:41 duns Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: ExN04VisManager.cc,v 1.3 2003/11/10 14:28:58 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 //
 // John Allison 24th January 1998.
@@ -50,11 +50,6 @@
 
 #ifdef G4VIS_USE_DAWN
 #include "G4FukuiRenderer.hh"
-#endif
-
-#ifdef G4VIS_USE_OPACS
-#include "G4Wo.hh"
-#include "G4Xo.hh"
 #endif
 
 #ifdef G4VIS_USE_OPENGLX
@@ -107,11 +102,6 @@ void ExN04VisManager::RegisterGraphicsSystems () {
 
 #ifdef G4VIS_USE_DAWN
   RegisterGraphicsSystem (new G4FukuiRenderer);
-#endif
-
-#ifdef G4VIS_USE_OPACS
-  RegisterGraphicsSystem (new G4Wo);
-  RegisterGraphicsSystem (new G4Xo);
 #endif
 
 #ifdef G4VIS_USE_OPENGLX

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPContAngularPar.hh,v 1.8 2003/06/16 17:10:34 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4NeutronHPContAngularPar.hh,v 1.9 2003/11/03 17:54:36 hpw Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 #ifndef G4NeutronHPContAngularPar_h
 #define G4NeutronHPContAngularPar_h 1
@@ -109,7 +109,7 @@ class G4NeutronHPContAngularPar
     if(currentMeanEnergy<-1)
     {
       return 0;
-      // G4Exception("G4NeutronHPContAngularPar: Logical error in Product class");
+      // throw G4HadronicException(__FILE__, __LINE__, "G4NeutronHPContAngularPar: Logical error in Product class");
     }
     else
     {

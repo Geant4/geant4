@@ -21,9 +21,11 @@
 // ********************************************************************
 //
 //
-// $Id: G4FieldTrack.cc,v 1.5 2003/06/16 16:51:12 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4FieldTrack.cc,v 1.6 2003/10/31 14:35:54 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
+// -------------------------------------------------------------------
+
 #include "G4FieldTrack.hh"
 
 std::ostream& operator<<( std::ostream& os, G4FieldTrack& SixVec)

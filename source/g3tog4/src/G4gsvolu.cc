@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4gsvolu.cc,v 1.9 2003/06/16 16:50:57 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // by I.Hrivnacova, 13.10.99
 

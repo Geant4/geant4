@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunManager.hh,v 1.34 2003/06/16 17:12:49 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4RunManager.hh,v 1.37 2003/11/04 01:58:00 asaim Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // 
 
@@ -81,13 +81,12 @@ class G4Timer;
 class G4RunMessenger;
 class G4DCtable;
 class G4Run;
-class G4ExceptionHandler;
 
+#include "G4RunManagerKernel.hh"
 #include "G4Event.hh"
 #include "G4EventManager.hh"
 #include "globals.hh"
 #include <vector>
-////////#include <signal.h>
 
 class G4RunManager
 {
@@ -95,11 +94,6 @@ class G4RunManager
     static G4RunManager* GetRunManager();
     //  Static method which returns the singleton pointer of G4RunManager or
     // its derived class.
-  public:
-////////    static G4int RegisterInteruption(int interuptionSignal = SIGQUIT);
-    //  Static method to define the interuption key
-////////    static void ReceiveInteruption(int sig);
-    //  Static method to accept interuption signal
 
   private:
     static G4RunManager* fRunManager;
@@ -126,8 +120,8 @@ class G4RunManager
     // loop. This method must be invoked at the Geant4 state of PreInit or Idle. The
     // state will be changed to Init during the initialization procedures and then
     // changed to Idle.
-    //  This method invokes three protected methods, InitializeGeometry(), 
-    // InitializePhysics(), and InitializeCutOff().
+    //  This method invokes two protected methods, InitializeGeometry() and
+    // InitializePhysics().
     //  After some event loops, the user can invoke this method once again. It is
     // required if the user changes geometry, physics process, and/or cut off value.
     // If the user forget the second invokation, G4RunManager will invoke BeamOn()
@@ -140,7 +134,7 @@ class G4RunManager
     // different from the original one used in the previous run; if not, it must be
     // set to false, so that the original optimisation and navigation history is
     // preserved. This method is invoked also at initialisation.
-    virtual void ResetNavigator() const;
+    //////////////////////////////////////////////////////virtual void ResetNavigator() const;
     //  Resets the state of the navigator for tracking; needed for geometry updates.
     // It forces the optimisation and navigation history to be reset.
     virtual void AbortRun(G4bool softAbort=false);
@@ -158,11 +152,10 @@ class G4RunManager
 
     virtual void InitializeGeometry();
     virtual void InitializePhysics();
-    virtual void InitializeCutOff();
-    //  These three protected methods are invoked from Initialize() method for the 
-    // initializations of geometry, physics processes, and cut off. The user's concrete
+    //  These protected methods are invoked from Initialize() method for the 
+    // initializations of geometry and physics processes. The user's concrete
     // G4VUserDetectorConstruction class will be accessed from InitializeGeometry() and
-    // G4VUserPhysicsList class will be accessed from other two methods.
+    // G4VUserPhysicsList class will be accessed from InitializePhysics().
 
     virtual G4bool ConfirmBeamOnCondition();
     virtual void RunInitialization();
@@ -182,7 +175,7 @@ class G4RunManager
     // object is deleted in this class. If the user uses ODBMS and wants to store the
     // G4Run class object, he/she must override this method.
 
-    virtual void BuildPhysicsTables();
+    ///////////////////////////////////////////////////////////virtual void BuildPhysicsTables();
     //  This method is invoked from RunInitialization() to create physics tables.
 
     virtual G4Event* GenerateEvent(G4int i_event);
@@ -197,7 +190,7 @@ class G4RunManager
     // class is defined.
 
   public: // with description
-    void UpdateRegion();
+    //////////////////////////////////////////////////////void UpdateRegion();
     // Update region list. 
     // This method is mandatory before invoking following two dump methods.
     // At RunInitialization(), this method is automatically invoked, and thus
@@ -214,12 +207,13 @@ class G4RunManager
     void StackPreviousEvent(G4Event* anEvent);
 
   protected:
+    G4RunManagerKernel * kernel;
     G4EventManager * eventManager;
+
     G4VUserDetectorConstruction * userDetector;
     G4VUserPhysicsList * physicsList;
     G4UserRunAction * userRunAction;
     G4VUserPrimaryGeneratorAction * userPrimaryGeneratorAction;
-
     G4UserEventAction * userEventAction;
     G4UserStackingAction * userStackingAction;
     G4UserTrackingAction * userTrackingAction;
@@ -227,12 +221,10 @@ class G4RunManager
 
   private:
     G4RunMessenger* runMessenger;
-    G4ExceptionHandler* defaultExceptionHandler;
 
   protected:
     G4bool geometryInitialized;
     G4bool physicsInitialized;
-    G4bool cutoffInitialized;
     G4bool geometryNeedsToBeClosed;
     G4bool runAborted;
     G4bool initializedAtLeastOnce;
@@ -251,10 +243,8 @@ class G4RunManager
 
     G4bool storeRandomNumberStatus;
     G4String randomNumberStatusDir;
-    G4String versionString;
 
     G4VPhysicalVolume* currentWorld;
-    G4Region* defaultRegion;
 
   public:
     virtual void rndmSaveThisRun();
@@ -317,7 +307,7 @@ class G4RunManager
       // he/she can use the corresponding ENUM in G4ClassificationOfNewTrack.
 
     inline G4String GetVersionString() const
-    { return versionString; }
+    { return kernel->GetVersionString(); }
 
   public:
     inline void SetRandomNumberStore(G4bool flag)
@@ -336,16 +326,29 @@ class G4RunManager
   public: // with description
     inline void GeometryHasBeenModified()
     { geometryNeedsToBeClosed = true; }
-    inline void CutOffHasBeenModified()
-    { cutoffInitialized = false; }
-    //  These two methods must be invoked (or equivalent UI commands can be used)
-    // in case the user changes his/her detector geometry or cut off value(s) after
+    //  This method must be invoked (or equivalent UI command can be used)
+    // in case the user changes his/her detector geometry after
     // Initialize() metho has been invoked. Then, at the begining of the next BeamOn(),
     // all necessary re-initialization will be done.
 
+    inline void PhysicsHasBeenModified()
+    { kernel->PhysicsHasBeenModified(); }
+    //  This method must be invoked (or equivalent UI command can be used)
+    // in case the user changes his/her physics process(es), e.g. (in)activate 
+    // some processes. Once this method is invoked, regardless of cuts are 
+    // changed or not, BuildPhysicsTable() of PhysicsList is invoked for 
+    // refreshing all physics tables.
+
+    inline void CutOffHasBeenModified()
+    {
+      G4cerr << "CutOffHasBeenModified becomes obsolete." << G4endl;
+      G4cerr << "It is safe to remove invoking this method." << G4endl;
+    }  
+
   public:
     inline void SetVerboseLevel(G4int vl)
-    { verboseLevel = vl; }
+    { verboseLevel = vl; 
+      kernel->SetVerboseLevel(vl); }
     inline G4int GetVerboseLevel() const
     { return verboseLevel; }
 
@@ -355,6 +358,7 @@ class G4RunManager
       {
         geometryToBeOptimized = vl;
         geometryNeedsToBeClosed = true;
+        kernel->SetGeometryToBeOptimized(vl);
       }
     }
     inline G4bool GetGeometryToBeOptimized()

@@ -1,6 +1,6 @@
 **********************************************
- Geant4 version $Name: geant4-05-02 $
-                                (27-June-2003)
+ Geant4 version $Name: geant4-06-00 $
+                                (12-December-2003)
              Copyright : Geant4 Collaboration
 **********************************************
 G4Material: Mean excitation energy is changed for Water Iold= 70.8926eV; Inew= 75 eV;
@@ -35,17 +35,6 @@ Current available graphics systems are:
   VRML2FILE (VRML2FILE)
 /run/verbose 2
 #
-#  select EM PhysicsList
-#
-/testem/phys/addPhysics  model
-PhysicsList::AddPhysicsList: <model>
-###/testem/phys/addPhysics  standard
-#
-#  select Hadronic PhysicsList
-#
-/testem/phys/addPhysics  binary
-PhysicsList::AddPhysicsList: <binary>
-#
 /testem/det/setMat Water
 /testem/det/setSizeX  20 cm
 /testem/det/setSizeYZ 20 cm
@@ -56,6 +45,12 @@ PhysicsList::AddPhysicsList: <binary>
 /testem/det/tallyPosition -5.  0. 0. cm
 /testem/det/tallyPosition  0.  0. 0. cm
 /testem/det/tallyPosition  5.  0. 0. cm
+#
+/testem/phys/addPhysics  standard	# em physics     
+PhysicsList::AddPhysicsList: <standard>
+###/testem/phys/addPhysics  g4v52	# em physics
+/testem/phys/addPhysics  binary		# hadronic physics
+PhysicsList::AddPhysicsList: <binary>
 #
 /run/initialize
 userDetector->Construct() start.
@@ -73,11 +68,11 @@ tally 3: position = 5 0 0 cm
 ---------------------------------------------------------
 World is registered to the default region.
 physicsList->Construct() start.
+physicsList->Construct() start.
 
 phot:  Total cross sections from Sandia parametrisation. 
 Thank you for using G4BinaryCascade. 
-Add hadronic physics for neutron
-Add hadronic physics for proton
+Thank you for using G4BinaryCascade. 
 physicsList->setCut() start.
 PhysicsList::SetCuts:CutLength : 1 mm 
 #
@@ -98,27 +93,29 @@ conv:  Total cross sections from a parametrisation. Good description from 1.5 Me
         e+e- energies according Bethe-Heitler
         PhysicsTables from 1.022 MeV to 100 GeV in 100 bins. 
 
-msc:  Model variant of multiple scattering 
-      Lambda tables from 100 eV  to 100 TeV in 100 bins.
+msc:  Model variant of multiple scattering for e-
+      Lambda tables from 100 eV  to 100 TeV in 120 bins.
       Boundary algorithm is active with facrange= 0.199
 
-eIoni:  
+eIoni:   tables are built for  e-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
+      Step function: finalRange(mm)= 1, dRoverRange= 1, integral: 1
       Delta cross sections from Moller+Bhabha, good description from 1 KeV to 100 GeV.
 
-eBrem:  
+eBrem:   tables are built for  e-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Total cross sections from a parametrisation based on the EEDL data library. 
       Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV.
 
-eIoni:  
+eIoni:   tables are built for  e+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
+      Step function: finalRange(mm)= 1, dRoverRange= 1, integral: 1
       Delta cross sections from Moller+Bhabha, good description from 1 KeV to 100 GeV.
 
-eBrem:  
+eBrem:   tables are built for  e+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Total cross sections from a parametrisation based on the EEDL data library. 
@@ -128,48 +125,50 @@ annihil:  Total cross section from Heilter formula(annihilation into 2 photons).
         gamma energies sampled according Heitler
         PhysicsTables from 10 keV to 10 TeV in 100 bins. 
 
-msc:  Model variant of multiple scattering 
-      Lambda tables from 100 eV  to 100 TeV in 100 bins.
+msc:  Model variant of multiple scattering for proton
+      Lambda tables from 100 eV  to 100 TeV in 120 bins.
       Boundary algorithm is active with facrange= 0.199
 
-hIoni:  
+hIoni:   tables are built for  proton
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
-      Bether-Bloch model for Escaled > 2 MeV, parametrisation of Bragg peak below.
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 0
+      Bether-Bloch model for Escaled > 2 MeV, parametrisation of Bragg peak below, Integral mode 0
 
-msc:  Model variant of multiple scattering 
-      Lambda tables from 100 eV  to 100 TeV in 100 bins.
+msc:  Model variant of multiple scattering for mu+
+      Lambda tables from 100 eV  to 100 TeV in 120 bins.
       Boundary algorithm is active with facrange= 0.199
 
-MuIoni:  
+MuIoni:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 0
       Bether-Bloch model for E > 0.2 MeV parametrisation of Bragg peak below.
 
-MuBrems:  
+MuBrems:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Parametrised model 
 
-MuPairProd:  
+MuPairProd:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Parametrised model 
+### All dEdx and Range tables are built #####
 
-MuIoni:  
+MuIoni:   tables are built for  mu-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 0
       Bether-Bloch model for E > 0.2 MeV parametrisation of Bragg peak below.
 
-MuBrems:  
-      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
-      Lambda tables from threshold to 100 TeV in 120 bins.
-      Parametrised model 
+msc:  Model variant of multiple scattering for pi-
+      Lambda tables from 100 eV  to 100 TeV in 120 bins.
+      Boundary algorithm is active with facrange= 0.199
 
-MuPairProd:  
-      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
-      Lambda tables from threshold to 100 TeV in 120 bins.
-      Parametrised model 
+Region DefaultRegionForTheWorld
+ Materials : Galactic Water 
+ Production cuts :  gamma 1 mm     e- 1 mm     e+ 1 mm 
 
 ========= Table of registered couples ==============================
 
@@ -189,12 +188,6 @@ Index : 1     used in the geometry : Yes     recalculation needed : No
 
 ====================================================================
 
-### Run 0 start.
-
---------- Ranecu engine status ---------
- Initial seed (index) = 0
- Current couple of seeds = 1692458005, 1054920321
-----------------------------------------
 Start closing geometry.
 G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 
@@ -210,6 +203,12 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
     Percent     Memory      Heads    Nodes   Pointers    Total CPU    Volume
     -------   --------     ------   ------   --------   ----------    ----------
      100.00          0k         1        5          8         0.00    Absorber
+### Run 0 start.
+
+--------- Ranecu engine status ---------
+ Initial seed (index) = 0
+ Current couple of seeds = 55312060, 333625511
+----------------------------------------
 Start Run processing.
 
 ---> Begin of Event: 0
@@ -234,30 +233,30 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=212.54s Real=372.94s Sys=52.91s
+  User=476.55s Real=864.12s Sys=75.98s
 
 ---------------------------------------------------------
  Cumulated Doses : 	Edep      	Edep/Ebeam 	Dose
-tally 0: 	 	10.556 GeV	0.659749 % 	0.000211407 Gy
-tally 1: 	 	7.76408 GeV	0.485255 % 	0.000155493 Gy
-tally 2: 	 	3.32639 GeV	0.207899 % 	6.66183e-05 Gy
-tally 3: 	 	1.63959 GeV	0.102475 % 	3.28365e-05 Gy
+tally 0: 	 	10.4962 GeV	0.656011 % 	0.000210209 Gy
+tally 1: 	 	7.50598 GeV	0.469124 % 	0.000150324 Gy
+tally 2: 	 	3.04074 GeV	0.190046 % 	6.08976e-05 Gy
+tally 3: 	 	1.39586 GeV	0.0872414 % 	2.79552e-05 Gy
 
 ---------------------------------------------------------
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 2084081781, 1451269122
+ Current couple of seeds = 595184325, 961500994
 ----------------------------------------
 Graphics systems deleted.
 Visualization Manager deleting...
-G4 kernel has come to Quit state.
-Deletion of G4 kernel class start.
 UserDetectorConstruction deleted.
 UserPhysicsList deleted.
 UserRunAction deleted.
 UserPrimaryGenerator deleted.
+G4 kernel has come to Quit state.
 EventManager deleted.
 UImanager deleted.
 StateManager deleted.
+RunManagerKernel is deleted.
 RunManager is deleting.

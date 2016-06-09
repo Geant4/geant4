@@ -1,0 +1,25 @@
+2002 March
+
+ Momo's default home directory in which the default src and include
+directories and the default four classes are placed.
+
+	src/MomoEventAction.cc
+        src/MomoRunAction.cc
+	src/MomoPrimaryGeneratorAction.cc
+	src/MomoVisManager.cc
+
+
+	include/MomoEventAction.hh
+        include/MomoRunAction.hh
+	include/MomoPrimaryGeneratorAction.hh
+	include/MomoVisManager.hh
+
+A macro file is included to visualise events and trajectories
+
+	./vis.mac
+
+And this file
+
+	./README
+
+

@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4BREPSolidPolyhedra.cc,v 1.25 2003/06/16 16:52:49 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4BREPSolidPolyhedra.cc,v 1.26 2003/10/28 13:42:30 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -101,18 +101,24 @@ G4BREPSolidPolyhedra::G4BREPSolidPolyhedra(const G4String& name,
   
   // Detecting minimal required number of sides
   if( sides < 3 ) {
-    G4Exception( "\nG4BREPSolidPolyhedra must have at least 3 sides!\a\n" );
+    G4Exception( "G4BREPSolidPolyhedra::G4BREPSolidPolyhedra()",
+                 "InvalidSetup", FatalException,
+                 "The solid must have at least 3 sides!" );
   }
   
   // Detecting minimal required number of z-sections
   if( num_z_planes < 2 ) {
-    G4Exception( "\nG4BREPSolidPolyhedra must have at least 2 z-sections!\a\n" );
+    G4Exception( "G4BREPSolidPolyhedra::G4BREPSolidPolyhedra()",
+                 "InvalidSetup", FatalException,
+                 "The solid must have at least 2 z-sections!" );
   }
 
   // Detect invalid configurations at the ends of polyhedra which would not lead to
   // a valid solid creation and likely to a crash
   if( z_values[0] == z_values[1] || z_values[sections-1] == z_values[sections] ) {
-    G4Exception( "\nG4BREPSolidPolyhedra must have the first 2 and the last 2 z-values different!\a\n" );
+    G4Exception( "G4BREPSolidPolyhedra::G4BREPSolidPolyhedra()",
+        "InvalidSetup", FatalException,
+        "The solid must have the first 2 and the last 2 z-values different!" );
   }
 
   // Find out how the z-values sequence is ordered
@@ -135,11 +141,14 @@ G4BREPSolidPolyhedra::G4BREPSolidPolyhedra(const G4String& name,
       // ERROR! Invalid sequence of z-values
       std::ostrstream msgstr;
       msgstr << G4endl
-             << "ERROR: The unordered, non-increasing or non-decreasing sequence of z_values detected!\a"
+             << "ERROR: unordered, non-increasing or non-decreasing sequence"
              << G4endl
-             << "Check z_values with indexes: "
-             << idx << " " << (idx+1) << G4endl << std::ends;
-      G4Exception( msgstr.str() );
+             << "       of z_values detected!"
+             << G4endl
+             << "       Check z_values with indexes: "
+             << idx << " " << (idx+1) << "." << G4endl << std::ends;
+      G4Exception( "G4BREPSolidPolyhedra::G4BREPSolidPolyhedra()",
+                   "InvalidSetup", FatalException, msgstr.str() );
     }
   }
   ///////////////////////////////////////////////////
@@ -182,11 +191,15 @@ G4BREPSolidPolyhedra::G4BREPSolidPolyhedra(const G4String& name,
           // ERROR! The surface conflict!
           std::ostrstream msgstr;
           msgstr << G4endl
-                 << "ERROR: The unordered sequence of z_values detected with conflicting RMAX or RMIN values!\a"
+                 << "ERROR: unordered sequence of z_values detected with"
                  << G4endl
-                 << "Check z_values with indexes: "
-                 << (idx-1) << " " << idx << " " << (idx+1) << G4endl << std::ends;
-          G4Exception( msgstr.str() );
+                 << "       conflicting RMAX or RMIN values!"
+                 << G4endl
+                 << "       Check z_values with indexes: "
+                 << (idx-1) << " " << idx << " " << (idx+1) << "."
+                 << G4endl << std::ends;
+          G4Exception( "G4BREPSolidPolyhedra::G4BREPSolidPolyhedra()",
+                       "InvalidSetup", FatalException, msgstr.str() );
         }
       }
     }
@@ -254,7 +267,9 @@ G4BREPSolidPolyhedra::G4BREPSolidPolyhedra(const G4String& name,
                                                             TmpAxis, PartAngle, ENormal );
         } else {
             // Two consecutive RMAX values can't be zero as it's against the definition of BREP polyhedra
-            G4Exception( "\nTwo consecutive RMAX values can't be zero!\n" );
+            G4Exception( "G4BREPSolidPolyhedra::G4BREPSolidPolyhedra()",
+                         "InvalidSetup", FatalException,
+                         "Two consecutive RMAX values cannot be zero!" );
         }
         
         Count++;
@@ -302,10 +317,12 @@ G4BREPSolidPolyhedra::G4BREPSolidPolyhedra(const G4String& name,
         // where i in in interval 0 < i < num_z_planes-1. So:
         if( RMIN[a] > RMAX[a+1] || RMAX[a] < RMIN[a+1] ) {
           std::strstream s;
-          s << G4endl  << "G4BREPSolidPolyhedra::G4BREPSolidPolyhedra() - The values "
-                       << "of RMIN[" << a << "] & RMAX[" << a+1 << "] or RMAX[" << a << "] & RMIN[" << a+1 << "] "
-                       << "make an invalid configuration of G4BREPSolidPolyhedra " << name.c_str() << "!" << G4endl << std::ends;
-          G4Exception( s.str() );
+          s << G4endl  << "The values of RMIN[" << a << "] & RMAX[" << a+1
+                       << "] or RMAX[" << a << "] & RMIN[" << a+1 << "] "
+                       << "generate an invalid configuration of solid: "
+                       << name.c_str() << "!" << G4endl << std::ends;
+          G4Exception( "G4BREPSolidPolyhedra::G4BREPSolidPolyhedra()",
+                       "InvalidSetup", FatalException, s.str() );
         }
 
         // We need to clasify all the cases in order to figure out the planar surface sense
@@ -408,9 +425,16 @@ G4BREPSolidPolyhedra::G4BREPSolidPolyhedra(const G4String& name,
             SurfSense = EInverse;
           }
         } else   {
-          G4cerr << "Error in construction of G4BREPSolidPolyhedra. \n"
-                 << "Exactly the same z, rmin and rmax given for \n"
-                 << "consecutive indices, " << a << " and " << a+1 << G4endl;
+          G4cerr << "ERROR - G4BREPSolidPolyhedra::G4BREPSolidPolyhedra()"
+                 << G4endl
+                 << "        Error in construction."
+                 << G4endl
+                 << "        Exactly the same z, rmin and rmax given for"
+                 << G4endl
+                 << "        consecutive indices, " << a << " and " << a+1
+                 << G4endl;
+          G4Exception( "G4BREPSolidPolyhedra::G4BREPSolidPolyhedra()",
+                       "Notification", JustWarning, "Construction Error!" );
           continue; 
         }
         
@@ -547,14 +571,17 @@ G4BREPSolidPolyhedra::G4BREPSolidPolyhedra(const G4String& name,
   }
 
   if( sf != nb_of_surfaces ) {
-    G4cerr << "Bad number of surfaces!\a\n"
-           << "sf: "              << sf
-           << " nb_of_surfaces: " << nb_of_surfaces
-           << " Count: "          << Count
+    G4cerr << "ERROR - G4BREPSolidPolyhedra::G4BREPSolidPolyhedra()" << G4endl
+           << "        Bad number of surfaces!" << G4endl
+           << "          sf            : "  << sf
+           << "          nb_of_surfaces: "  << nb_of_surfaces
+           << "          Count         : "  << Count
            << G4endl;
     // Should we call G4Exception here ?
     // Yes, because it usually leads to a crash
-    G4Exception( "INTERNAL ERROR: Going bananas!\a\n" );
+    G4Exception( "G4BREPSolidPolyhedra::G4BREPSolidPolyhedra()",
+                 "FatalError", FatalException,
+                 "INTERNAL ERROR: Going bananas!" );
   }
 
   // Clean up the temporary vector of surfaces
@@ -594,10 +621,13 @@ G4BREPSolidPolyhedra::G4BREPSolidPolyhedra(const G4String& name,
   
   if( z_values[0] != z_start )
   {
-    G4cerr << "ERROR in creating G4BREPSolidPolyhedra: "  << 
-      " z_values[0]= " << z_values[0] << " is not equal to " << 
-      " z_start= " << z_start;
-    // G4Exception(" Error in creating G4BREPSolidPolyhedra: z_values[0] must be equal to z_start" );
+    G4cerr << "ERROR - G4BREPSolidPolyhedra::G4BREPSolidPolyhedra()" << G4endl
+           << "        Wrong solid parameters: "
+           << " z_values[0]= " << z_values[0] << " is not equal to "
+           << " z_start= " << z_start << "." << G4endl;
+    G4Exception( "G4BREPSolidPolyhedra::G4BREPSolidPolyhedra()",
+                 "Notification", JustWarning,
+                 "Construction Error. z_values[0] must be equal to z_start!" );
     constructorParams.z_values[0]= z_start; 
   }
 

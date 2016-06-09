@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: A01Hodoscope.cc,v 1.3 2002/12/13 11:34:34 gunter Exp $
+// $Id: A01Hodoscope.cc,v 1.6 2003/08/20 16:32:50 duns Exp $
 // --------------------------------------------------------------
 //
 #include "A01Hodoscope.hh"
@@ -51,7 +51,8 @@ void A01Hodoscope::Initialize(G4HCofThisEvent*HCE)
   HCE->AddHitsCollection(HCID,hitsCollection);
 }
 
-G4bool A01Hodoscope::ProcessHits(G4Step*aStep,G4TouchableHistory*ROhist)
+
+G4bool A01Hodoscope::ProcessHits(G4Step*aStep,G4TouchableHistory* /*ROhist*/)
 {
   G4double edep = aStep->GetTotalEnergyDeposit();
   if(edep==0.) return true;
@@ -94,6 +95,6 @@ G4bool A01Hodoscope::ProcessHits(G4Step*aStep,G4TouchableHistory*ROhist)
   return true;
 }
 
-void A01Hodoscope::EndOfEvent(G4HCofThisEvent*HCE)
+void A01Hodoscope::EndOfEvent(G4HCofThisEvent* /*HCE*/)
 {;}
 

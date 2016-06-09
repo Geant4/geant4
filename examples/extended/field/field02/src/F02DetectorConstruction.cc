@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: F02DetectorConstruction.cc,v 1.8 2003/06/25 17:33:44 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: F02DetectorConstruction.cc,v 1.10 2003/11/25 14:51:15 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // 
 
@@ -30,7 +30,7 @@
 #include "F02DetectorMessenger.hh"
 
 #include "F02CalorimeterSD.hh"
-#include "F02ElectroMagneticField.hh"
+#include "F02ElectricFieldSetup.hh"
 
 #include "G4VClusterModel.hh"
 #include "G4PAIclusterModel.hh"
@@ -45,6 +45,7 @@
 #include "G4SDManager.hh"
 #include "G4RunManager.hh"
 
+#include "G4GeometryManager.hh"
 #include "G4PhysicalVolumeStore.hh"
 #include "G4LogicalVolumeStore.hh"
 #include "G4SolidStore.hh"
@@ -58,7 +59,7 @@
 F02DetectorConstruction::F02DetectorConstruction()
  : solidWorld(0), logicWorld(0), physiWorld(0),
    solidAbsorber(0),logicAbsorber(0), physiAbsorber(0),
-   magField(0), fEmField(0), calorimeterSD(0),
+   fEmFieldSetup(0), calorimeterSD(0),
    AbsorberMaterial(0), worldchanged(false), WorldMaterial(0)
 {
   // default parameter values of the calorimeter
@@ -77,7 +78,7 @@ F02DetectorConstruction::F02DetectorConstruction()
   
   DefineMaterials();
 
-  //  fEmField = new F02ElectroMagneticField() ;
+  fEmFieldSetup = new F02ElectricFieldSetup() ;
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -87,7 +88,7 @@ F02DetectorConstruction::F02DetectorConstruction()
 F02DetectorConstruction::~F02DetectorConstruction()
 { 
   delete detectorMessenger;
-  if (fEmField) delete fEmField ;
+  delete fEmFieldSetup ;
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -233,6 +234,7 @@ G4VPhysicalVolume* F02DetectorConstruction::ConstructCalorimeter()
 
   if (physiWorld)
   {
+    G4GeometryManager::GetInstance()->OpenGeometry();
     G4PhysicalVolumeStore::GetInstance()->Clean();
     G4LogicalVolumeStore::GetInstance()->Clean();
     G4SolidStore::GetInstance()->Clean();

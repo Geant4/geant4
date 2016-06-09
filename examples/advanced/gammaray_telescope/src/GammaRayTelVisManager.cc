@@ -22,8 +22,8 @@
 //
 
 //
-// $Id: GammaRayTelVisManager.cc,v 1.8 2003/05/30 15:09:01 flongo Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: GammaRayTelVisManager.cc,v 1.9 2003/11/13 15:09:33 johna Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file
 //      CERN Geneva Switzerland
@@ -55,11 +55,6 @@
 
 #ifdef G4VIS_USE_DAWN
 #include "G4FukuiRenderer.hh"
-#endif
-
-#ifdef G4VIS_USE_OPACS
-#include "G4Wo.hh"
-#include "G4Xo.hh"
 #endif
 
 #ifdef G4VIS_USE_OPENGLX
@@ -112,11 +107,6 @@ void GammaRayTelVisManager::RegisterGraphicsSystems () {
 
 #ifdef G4VIS_USE_DAWN
   RegisterGraphicsSystem (new G4FukuiRenderer);
-#endif
-
-#ifdef G4VIS_USE_OPACS
-  RegisterGraphicsSystem (new G4Wo);
-  RegisterGraphicsSystem (new G4Xo);
 #endif
 
 #ifdef G4VIS_USE_OPENGLX

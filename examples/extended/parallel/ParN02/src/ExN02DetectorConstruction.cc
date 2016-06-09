@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: ExN02DetectorConstruction.cc,v 1.1 2002/03/05 15:22:00 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: ExN02DetectorConstruction.cc,v 1.2 2003/12/03 14:15:03 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -76,37 +76,31 @@ G4VPhysicalVolume* ExN02DetectorConstruction::Construct()
 {
 //--------- Material definition ---------
 
-  G4double a, iz, z, density;
-  G4String name, symbol;
-  G4double temperature, pressure;
+  G4double a, z;
+  G4double density, temperature, pressure;
   G4int nel;
 
   //Air
-    a = 14.01*g/mole;
-    G4Element* elN = new G4Element(name="Nitrogen", symbol="N", iz=7., a);
-    a = 16.00*g/mole;
-    G4Element* elO = new G4Element(name="Oxigen", symbol="O", iz=8., a);
-    density = 1.29*mg/cm3;
-    G4Material* Air = new G4Material(name="Air", density, nel=2);
-    Air->AddElement(elN, .7);
-    Air->AddElement(elO, .3);
+  G4Element* N = new G4Element("Nitrogen", "N", z=7., a= 14.01*g/mole);
+  G4Element* O = new G4Element("Oxygen"  , "O", z=8., a= 16.00*g/mole);
+   
+  G4Material* Air = new G4Material("Air", density= 1.29*mg/cm3, nel=2);
+  Air->AddElement(N, 70*perCent);
+  Air->AddElement(O, 30*perCent);
 
-  //Pb
-    a = 207.19*g/mole;
-    density = 11.35*g/cm3;
-    G4Material* Pb = new G4Material(name="Pb", z=82., a, density);
+  //Lead
+  G4Material* Pb = 
+  new G4Material("Lead", z=82., a= 207.19*g/mole, density= 11.35*g/cm3);
     
   //Xenon gas
-    density     = 5.458*mg/cm3;    
-    pressure    = 1*atmosphere;
-    temperature = 293.15*kelvin;
-    G4Material* Xenon = new G4Material(name="XenonGas", z=54., a=131.29*g/mole,
-                        density, kStateGas,temperature,pressure);
+  G4Material* Xenon = 
+  new G4Material("XenonGas", z=54., a=131.29*g/mole, density= 5.458*mg/cm3,
+                 kStateGas, temperature= 1*atmosphere, pressure= 293.15*kelvin);
 
   // Print all the materials defined.
   //
-    G4cout << G4endl << "The materials defined are : " << G4endl << G4endl;
-    G4cout << *(G4Material::GetMaterialTable()) << G4endl;
+  G4cout << G4endl << "The materials defined are : " << G4endl << G4endl;
+  G4cout << *(G4Material::GetMaterialTable()) << G4endl;
 
 //--------- Sizes of the principal geometrical components (solids)  ---------
   
@@ -140,8 +134,8 @@ G4VPhysicalVolume* ExN02DetectorConstruction::Construct()
   // 
   physiWorld = new G4PVPlacement(0,               // no rotation
                                  G4ThreeVector(), // at (0,0,0)
-				 "World",         // its name
                                  logicWorld,      // its logical volume
+				 "World",         // its name
                                  0,               // its mother  volume
                                  false,           // no boolean operations
                                  0);              // no field specific to volume
@@ -156,9 +150,9 @@ G4VPhysicalVolume* ExN02DetectorConstruction::Construct()
   logicTarget = new G4LogicalVolume(solidTarget,TargetMater,"Target",0,0,0);
   physiTarget = new G4PVPlacement(0,               // no rotation
 				  positionTarget,  // at (x,y,z)
+				  logicTarget,     // its logical volume				  
 				  "Target",        // its name
-				  logicTarget,     // its logical volume
-				  physiWorld,      // its mother  volume
+				  logicWorld,      // its mother  volume
 				  false,           // no boolean operations
 				  0);              // no particular field 
 
@@ -175,9 +169,9 @@ G4VPhysicalVolume* ExN02DetectorConstruction::Construct()
   logicTracker = new G4LogicalVolume(solidTracker , Air, "Tracker",0,0,0);  
   physiTracker = new G4PVPlacement(0,              // no rotation
 				  positionTracker, // at (x,y,z)
+				  logicTracker,    // its logical volume				  
 				  "Tracker",       // its name
-				  logicTracker,    // its logical volume
-				  physiWorld,      // its mother  volume
+				  logicWorld,      // its mother  volume
 				  false,           // no boolean operations
 				  0);              // no particular field 
 
@@ -208,7 +202,7 @@ G4VPhysicalVolume* ExN02DetectorConstruction::Construct()
   physiChamber = new G4PVParameterised(
                             "Chamber",       // their name
                             logicChamber,    // their logical volume
-                            physiTracker,    // Mother physical volume
+                            logicTracker,    // Mother logical volume
 			    kZAxis,          // Are placed along this axis 
                             NbOfChambers,    // Number of chambers
                             chamberParam);   // The parametrisation

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4LEAntiKaonZeroInelastic.cc,v 1.3 2003/06/16 17:10:06 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4LEAntiKaonZeroInelastic.cc,v 1.7 2003/11/03 17:54:03 hpw Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
  // Hadronic Process: Low Energy KaonZeroLong Inelastic Process
  // J.L. Chuma, TRIUMF, 11-Feb-1997
@@ -31,14 +31,13 @@
  
 #include "G4LEAntiKaonZeroInelastic.hh"
 #include "Randomize.hh"
- 
- G4VParticleChange *
-  G4LEAntiKaonZeroInelastic::ApplyYourself( const G4Track &aTrack,
+#include "G4HadReentrentException.hh"
+
+ G4HadFinalState *
+  G4LEAntiKaonZeroInelastic::ApplyYourself( const G4HadProjectile &aTrack,
                                          G4Nucleus &targetNucleus )
-  {
-    theParticleChange.Initialize( aTrack );
-    
-    const G4DynamicParticle *originalIncident = aTrack.GetDynamicParticle();
+  {    
+    const G4HadProjectile *originalIncident = &aTrack;
     //
     // create the target particle
     //
@@ -46,7 +45,7 @@
     
     if( verboseLevel > 1 )
     {
-      G4Material *targetMaterial = aTrack.GetMaterial();
+      const G4Material *targetMaterial = aTrack.GetMaterial();
       G4cout << "G4LEAntiKaonZeroInelastic::ApplyYourself called" << G4endl;    
       G4cout << "kinetic energy = " << originalIncident->GetKineticEnergy()/MeV << "MeV, ";
       G4cout << "target material = " << targetMaterial->GetName() << ", ";
@@ -95,7 +94,7 @@
     G4bool incidentHasChanged = false;
     G4bool targetHasChanged = false;
     G4bool quasiElastic = false;
-    G4FastVector<G4ReactionProduct,128> vec;  // vec will contain the secondary particles
+    G4FastVector<G4ReactionProduct,GHADLISTSIZE> vec;  // vec will contain the secondary particles
     G4int vecLen = 0;
     vec.Initialize( 0 );
     
@@ -105,11 +104,18 @@
                originalIncident, currentParticle, targetParticle,
                incidentHasChanged, targetHasChanged, quasiElastic );
     
-    CalculateMomenta( vec, vecLen,
+    try
+    {
+        CalculateMomenta( vec, vecLen,
                       originalIncident, originalTarget, modifiedOriginal,
                       targetNucleus, currentParticle, targetParticle,
                       incidentHasChanged, targetHasChanged, quasiElastic );
-    
+    }
+    catch(G4HadReentrentException aR)
+    {
+      aR.Report(G4cout);
+      throw G4HadReentrentException(__FILE__, __LINE__, "Bailing out");
+    }
     SetUpChange( vec, vecLen,
                  currentParticle, targetParticle,
                  incidentHasChanged );
@@ -120,9 +126,9 @@
  
  void
   G4LEAntiKaonZeroInelastic::Cascade(
-   G4FastVector<G4ReactionProduct,128> &vec,
+   G4FastVector<G4ReactionProduct,GHADLISTSIZE> &vec,
    G4int& vecLen,
-   const G4DynamicParticle *originalIncident,
+   const G4HadProjectile *originalIncident,
    G4ReactionProduct &currentParticle,
    G4ReactionProduct &targetParticle,
    G4bool &incidentHasChanged,
@@ -140,8 +146,8 @@
     // multiplicity per Inelastic reaction.
     //
     const G4double mOriginal = originalIncident->GetDefinition()->GetPDGMass()/MeV;
-    const G4double etOriginal = originalIncident->GetTotalEnergy()/MeV;
-    const G4double pOriginal = originalIncident->GetTotalMomentum()/MeV;
+    const G4double etOriginal = originalIncident->Get4Momentum().e()/MeV;
+    const G4double pOriginal = originalIncident->Get4Momentum().vect().mag()/MeV;
     const G4double targetMass = targetParticle.GetMass()/MeV;
     G4double centerofmassEnergy = sqrt( mOriginal*mOriginal +
                                         targetMass*targetMass +

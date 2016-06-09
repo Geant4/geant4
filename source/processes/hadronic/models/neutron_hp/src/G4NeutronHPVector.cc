@@ -193,7 +193,7 @@
   
   void G4NeutronHPVector::Check(G4int i)
   {
-    if(i>nEntries) G4Exception("Skipped some index numbers in G4NeutronHPVector");
+    if(i>nEntries) throw G4HadronicException(__FILE__, __LINE__, "Skipped some index numbers in G4NeutronHPVector");
     if(i==nPoints)
     {
       nPoints = static_cast<G4int>(1.2*nPoints);

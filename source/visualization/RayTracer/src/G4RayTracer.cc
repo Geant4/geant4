@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4RayTracer.cc,v 1.11 2002/12/11 16:00:00 johna Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4RayTracer.cc,v 1.13 2003/09/18 11:14:04 johna Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 //
 //
@@ -41,6 +41,7 @@
 #include "G4RayTrajectory.hh"
 #include "G4RayTrajectoryPoint.hh"
 #include "G4RTJpegMaker.hh"
+#include "G4RTSimpleScanner.hh"
 #include "G4GeometryManager.hh"
 #include "G4SDManager.hh"
 #include "G4StateManager.hh"
@@ -50,13 +51,18 @@
 #include "G4VisAttributes.hh"
 #include "G4UImanager.hh"
 #include "G4TransportationManager.hh"
+#include "G4RegionStore.hh"
+#include "G4ProductionCutsTable.hh"
 
-G4RayTracer::G4RayTracer(G4VFigureFileMaker* figMaker)
+G4RayTracer::G4RayTracer(G4VFigureFileMaker* figMaker,
+			 G4VRTScanner* scanner)
 :G4VGraphicsSystem("RayTracer","RayTracer",RAYTRACER_FEATURES,
                      G4VGraphicsSystem::threeD)
 {
   theFigMaker = figMaker;
   if(!theFigMaker) theFigMaker = new G4RTJpegMaker();
+  theScanner = scanner;
+  if(!theScanner) theScanner = new G4RTSimpleScanner;
   theRayShooter = new G4RayShooter();
   theRayTracerEventAction = 0;
   theRayTracerStackingAction = 0;
@@ -76,6 +82,8 @@ G4RayTracer::G4RayTracer(G4VFigureFileMaker* figMaker)
   attenuationLength = 1.0*m;
 
   distortionOn = false;
+
+  backgroundColour = G4Colour(1.,1.,1.);
 }
 
 G4RayTracer::~G4RayTracer()
@@ -84,6 +92,7 @@ G4RayTracer::~G4RayTracer()
   delete theRayTracerTrackingAction;
   delete theRayTracerSteppingAction;
   delete theMessenger;
+  delete theScanner;
   delete theFigMaker;
 }
 
@@ -176,6 +185,10 @@ void G4RayTracer::RestoreUserActions()
   { theSDMan->Activate("/",true); }
 }
 
+#include "G4ProcessManager.hh"
+#include "G4ProcessVector.hh"
+#include "G4Geantino.hh"
+
 G4bool G4RayTracer::CreateBitMap()
 {
   G4int iEvent = 0;
@@ -183,10 +196,34 @@ G4bool G4RayTracer::CreateBitMap()
   G4double viewSpanX = stepAngle*nColumn;
   G4double viewSpanY = stepAngle*nRow;
   G4bool succeeded;
-  for(int iRow=0;iRow<nRow;iRow++)
-  {
-    for(int iColumn=0;iColumn<nColumn;iColumn++)
-    {
+
+// Confirm process(es) of Geantino is initialized
+  G4RegionStore::GetInstance()->UpdateMaterialList();
+  G4ProductionCutsTable::GetProductionCutsTable()->UpdateCoupleTable();
+  G4ProcessVector* pVector
+    = G4Geantino::GeantinoDefinition()->GetProcessManager()->GetProcessList();
+  for (G4int j=0; j < pVector->size(); ++j) {
+      (*pVector)[j]->BuildPhysicsTable(*(G4Geantino::GeantinoDefinition()));
+  }
+
+// Close geometry and set the application state
+  G4GeometryManager* geomManager = G4GeometryManager::GetInstance();
+  geomManager->OpenGeometry();
+  geomManager->CloseGeometry(1,0);
+  
+  G4ThreeVector center(0,0,0);
+  G4Navigator* navigator =
+      G4TransportationManager::GetTransportationManager()->GetNavigatorForTracking();
+  navigator->LocateGlobalPointAndSetup(center,0,false);
+
+  G4StateManager* theStateMan = G4StateManager::GetStateManager();
+  theStateMan->SetNewState(G4State_GeomClosed); 
+
+// Event loop
+  theScanner->Initialize(nRow,nColumn);
+  G4int iRow, iColumn;
+  while (theScanner->Coords(iRow,iColumn)) {
+      G4int iCoord = iRow * nColumn + iColumn;
       G4Event* anEvent = new G4Event(iEvent++);
       
       G4double angleX = -(viewSpanX/2. - iColumn*stepAngle);
@@ -225,21 +262,21 @@ G4bool G4RayTracer::CreateBitMap()
       if (interceptable) {
 	theRayShooter->Shoot(anEvent,rayPosition,rayDirection);
 	theEventManager->ProcessOneEvent(anEvent);
-	succeeded = GenerateColour(anEvent);
+	succeeded = GenerateColour(anEvent,iCoord);
   //G4cout << iColumn << " " << iRow << " " << anEvent->GetEventID() << G4endl;
       }
       else {  // Ray does not intercept world at all.
-	// Generate background colour...
-	G4int iEvent = anEvent->GetEventID();
-	colorR[iEvent] = 0;
-	colorG[iEvent] = 0;
-	colorB[iEvent] = 0;
+	// Store background colour...
+	colorR[iCoord] = (unsigned char)(int(255*backgroundColour.GetRed()));
+	colorG[iCoord] = (unsigned char)(int(255*backgroundColour.GetGreen()));
+	colorB[iCoord] = (unsigned char)(int(255*backgroundColour.GetBlue()));
 	succeeded = true;
       }
       delete anEvent;
       if(!succeeded) return false;
-    }
   }
+
+  theStateMan->SetNewState(G4State_Idle); 
   return true;
 }
 
@@ -249,7 +286,7 @@ void G4RayTracer::CreateFigureFile(G4String fileName)
   theFigMaker->CreateFigureFile(fileName,nColumn,nRow,colorR,colorG,colorB);
 }
 
-G4bool G4RayTracer::GenerateColour(G4Event* anEvent)
+G4bool G4RayTracer::GenerateColour(G4Event* anEvent, G4int iCoord)
 {
   G4TrajectoryContainer * trajectoryContainer = anEvent->GetTrajectoryContainer();
   
@@ -260,7 +297,7 @@ G4bool G4RayTracer::GenerateColour(G4Event* anEvent)
   if(nPoint==0) return false;
 
   G4Colour rayColour;
-  G4Colour initialColour(1.,1.,1.);
+  G4Colour initialColour(backgroundColour);
   if( trajectory->GetPointC(nPoint-1)->GetPostStepAtt() )
   { initialColour = GetSurfaceColour(trajectory->GetPointC(nPoint-1)); }
   rayColour = Attenuate(trajectory->GetPointC(nPoint-1),initialColour);
@@ -273,10 +310,9 @@ G4bool G4RayTracer::GenerateColour(G4Event* anEvent)
     rayColour = Attenuate(trajectory->GetPointC(i),mixedColour);
   }
     
-  G4int iEvent = anEvent->GetEventID();
-  colorR[iEvent] = (unsigned char)(int(255*rayColour.GetRed()));
-  colorG[iEvent] = (unsigned char)(int(255*rayColour.GetGreen()));
-  colorB[iEvent] = (unsigned char)(int(255*rayColour.GetBlue()));
+  colorR[iCoord] = (unsigned char)(int(255*rayColour.GetRed()));
+  colorG[iCoord] = (unsigned char)(int(255*rayColour.GetGreen()));
+  colorB[iCoord] = (unsigned char)(int(255*rayColour.GetBlue()));
   return true;
 }
 

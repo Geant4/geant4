@@ -22,7 +22,7 @@
 //
 //
 // $Id: TiaraCellScorerStore.hh,v 1.2 2003/06/18 16:40:23 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // ----------------------------------------------------------------------
 // Class TiaraCellScorerStore

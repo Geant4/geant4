@@ -1,4 +1,4 @@
-# $Id: architecture.gmk,v 1.87 2003/06/06 16:20:57 gcosmo Exp $
+# $Id: architecture.gmk,v 1.90 2003/10/17 10:17:11 gbarrand Exp $
 # ------------------------------------------------------------------------
 #       GEANT 4 - Architecture configuration script for GNU Make
 #
@@ -89,14 +89,6 @@ endif
 ifneq ($(G4LIB_BUILD_G3TOG4),)
   G4LIB_BUILD_G3TOG4 = 1
   G4USE_G3TOG4 = 1
-endif
-
-# Specify if to build the STEP and STEinterface modules or not.
-# Default is NO.
-#
-ifneq ($(G4LIB_BUILD_STEP),)
-  G4LIB_BUILD_STEP = 1
-  G4USE_STEP = 1
 endif
 
 # If not specified, the default path for G4 binaries G4BIN is
@@ -205,12 +197,15 @@ endif
 # ------------------ X11 ---------------------
 X11FLAGS  :=
 X11LIBS   := -lXmu -lXt -lXext -lX11
+#
 # ----------------- Motif --------------------
 XMFLAGS   :=
 XMLIBS    := -lXm
+#
 # ---------------- Athena --------------------
 XAWFLAGS   :=
 XAWLIBS    := -lXaw
+#
 # ---------------- OpenGL --------------------
 # The user can define his own values of OGLFLAGS and OGLLIBS.
 # OGLFLAGS gives the directory containing include files.
@@ -218,35 +213,28 @@ XAWLIBS    := -lXaw
 # OGLLIBS gives the libraries.
 #   E.g.: OGLLIBS   := -L$(OGLHOME)/lib -lGLU -lGL
 #   Or  : OGLLIBS   := -L$(OGLHOME)/lib -lMesaGLU -lMesaGL
-# OGLHOME is often /usr or /usr/local.  Or it can point to a special
-# installation.
+# OGLHOME is often /usr or /usr/local.  In such case, it is not necessary
+# to specify the path in OGLFLAGS, since added already by default by the
+# compiler.  OGLHOME can also point to a special installation.
 # If the user does not set his/her own values, system-dependent values
 # are set below.  Most system-dependent code assumes OGLHOME is set.
+#
 # ------------- OpenInventor -----------------
+# The path to the installation of HEPVis and OpenInventor must be specified
+# in HEPVISDIR -only- if the packages are installed in a location different
+# than default system directories (like... /usr or /usr/local).
+#
 ifndef HEPVISINC
   HEPVISINC := $(HEPVISDIR)/include
 endif
 ifndef HEPVISLIB
-  HEPVISLIB := $(HEPVISDIR)/source
+  HEPVISLIB := $(HEPVISDIR)/lib
 endif
 ifndef OIVFLAGS
   OIVFLAGS  := -I${HEPVISINC}
 endif
 ifndef OIVLIBS
-  OIVLIBS   := -L${HEPVISLIB} -lHEPVis -lInventorXt -lInventor -lGLU -lGL
-endif
-# ----------------- OPACS --------------------
-# lesstiff is bugged for popups ; then OPACS/Xo uses 
-# the Xaw widgets for handling popups. The OPACS distrib
-# for Linux assumes that lesstif is used by default. To be
-# coherent we set in Geant4 the default toolkit to lesstif 
-# on Linux in order to link with -lXaw, etc...
-ifndef G4_OPACS_WIDGET_SET
-  ifeq ($(findstring Linux,$(G4SYSTEM)),Linux)
-    G4_OPACS_WIDGET_SET := lesstif
-  else
-    G4_OPACS_WIDGET_SET := Xm
-  endif
+  OIVLIBS   := -L${HEPVISLIB} -lHEPVis -lHEPVisXt -lInventor -lInventorXt
 endif
 
 # For cfront compilers the repository location is set to

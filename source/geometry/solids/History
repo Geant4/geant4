@@ -1,4 +1,4 @@
-$Id: History,v 1.11 2003/05/28 07:56:19 gcosmo Exp $
+$Id: History,v 1.13 2003/10/28 17:22:02 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,17 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+October, 28th, 2003   G.Cosmo              -  geomsolids-V05-02-01
+- Include tags:
+  geom-specific-V05-02-03, geom-csg-V05-02-02, geom-bool-V05-02-02,
+  breps-V05-02-01.
+
+September, 30th, 2003   G.Cosmo            -  geomsolids-V05-02-00
+- Archived solids/STEP and solids/STEPinterface modules.
+  Modified GNUmakefiles to cope with this.
+  Include tags: breps-V05-02-00, geom-bool-V05-02-00, geom-csg-V05-02-00,
+                geom-specific-V05-02-01, 
 
 May   28th, 2003   G. Cosmo                -  geomsolids-V05-01-00
 - Modified GNUmakefile to make compilation of STEP and STEPinterface

@@ -21,14 +21,13 @@
 // ********************************************************************
 //
 //
-// $Id: G4VPhysicalVolume.cc,v 1.7 2003/05/13 18:38:36 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4VPhysicalVolume.cc,v 1.9 2003/11/02 14:01:24 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // 
 // class G4VPhysicalVolume Implementation
-// 09.11.99 J.Apostolakis  Made GetObjectRotation() non-inline (it uses static)
-//                         To be made obsolecent, in favour of more robust
-//                           GetObjectRotationValue()
+//
+// --------------------------------------------------------------------
 
 #include "G4VPhysicalVolume.hh"
 
@@ -41,9 +40,9 @@ G4VPhysicalVolume::G4VPhysicalVolume( G4RotationMatrix *pRot,
                                 const G4ThreeVector &tlate,
                                 const G4String& pName,
                                       G4LogicalVolume* pLogical,
-                                      G4VPhysicalVolume* pMother )
+                                      G4VPhysicalVolume* )
   : frot(pRot), ftrans(tlate), flogical(pLogical),
-    fname(pName), fpmother(pMother), flmother(0)
+    fname(pName), flmother(0)
 {
   G4PhysicalVolumeStore::Register(this);
 }

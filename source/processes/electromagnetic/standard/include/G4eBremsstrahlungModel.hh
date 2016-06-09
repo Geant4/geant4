@@ -20,6 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
+// $Id: G4eBremsstrahlungModel.hh,v 1.8 2003/07/21 12:52:23 vnivanch Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // -------------------------------------------------------------------
 //
@@ -52,6 +54,8 @@
 
 #include "G4VEmModel.hh"
 
+class G4Element;
+
 class G4eBremsstrahlungModel : public G4VEmModel
 {
 
@@ -76,12 +80,12 @@ public:
 
   G4bool IsInCharge(const G4ParticleDefinition*);
 
-  G4double ComputeDEDX(const G4Material*,
+  G4double ComputeDEDX(const G4MaterialCutsCouple*,
                        const G4ParticleDefinition*,
                              G4double kineticEnergy,
                              G4double cutEnergy);
 
-  G4double CrossSection(const G4Material*,
+  G4double CrossSection(const G4MaterialCutsCouple*,
                         const G4ParticleDefinition*,
                               G4double kineticEnergy,
                               G4double cutEnergy,
@@ -98,22 +102,22 @@ public:
                                 const G4DynamicParticle*,
                                       G4double tmin,
                                       G4double maxEnergy);
-  
+
   void   SetLPMflag(G4bool val) {theLPMflag = val;};
   G4bool LPMflag() const {return theLPMflag;};
 
   virtual G4double MaxSecondaryEnergy(
-				const G4DynamicParticle* dynParticle); 
+				const G4DynamicParticle* dynParticle);
 protected:
 
   virtual G4double MaxSecondaryEnergy(const G4ParticleDefinition*,
-    				            G4double kineticEnergy); 
+    				            G4double kineticEnergy);
 
 private:
 
   void SetParticle(const G4ParticleDefinition* p);
 
-  G4double ComputeBremLoss(G4double Z, G4double tkin, G4double cut);  
+  G4double ComputeBremLoss(G4double Z, G4double tkin, G4double cut);
 
   G4double PositronCorrFactorLoss(G4double Z, G4double tkin, G4double cut);
 
@@ -169,7 +173,7 @@ inline G4double G4eBremsstrahlungModel::ScreenFunction1(G4double ScreenVariable)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline 
+inline
 G4double G4eBremsstrahlungModel::ScreenFunction2(G4double ScreenVariable)
 
 // compute the value of the screening function 1.5*PHI1 - 0.5*PHI2

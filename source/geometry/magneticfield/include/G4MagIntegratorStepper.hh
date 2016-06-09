@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4MagIntegratorStepper.hh,v 1.9 2002/11/20 18:09:22 japost Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4MagIntegratorStepper.hh,v 1.10 2003/10/31 14:35:52 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 //
 // class G4MagIntegratorStepper
@@ -40,12 +40,12 @@
 
 // History:
 // - 15.01.97  J. Apostolakis (J.Apostolakis@cern.ch)
-// - 20.11.02  J. Apostolakis: Added new "State" elements
+// --------------------------------------------------------------------
 
 #ifndef G4MAGIntegratorSTEPPER
 #define G4MAGIntegratorSTEPPER
 
-#include "globals.hh"
+#include "G4Types.hh"
 #include "G4EquationOfMotion.hh"
 
 class G4MagIntegratorStepper
@@ -53,16 +53,16 @@ class G4MagIntegratorStepper
   public:  // with description
 
      G4MagIntegratorStepper(G4EquationOfMotion *Equation, 
-			    G4int              numIntegrationVariables,
-			    G4int              numStateVariables=12);
+                            G4int              numIntegrationVariables,
+                            G4int              numStateVariables=12);
      virtual ~G4MagIntegratorStepper();
        // Constructor and destructor. No actions.
 
      virtual  void  Stepper(  const G4double y[],
-			      const G4double dydx[],
-			            G4double h,
-				    G4double yout[],
-				    G4double yerr[]  ) = 0 ;
+                              const G4double dydx[],
+                                    G4double h,
+                                    G4double yout[],
+                                    G4double yerr[]  ) = 0 ;
        // The stepper for the Runge Kutta integration.
        // The stepsize is fixed, with the Step size given by h.
        // Integrates ODE starting values y[0 to 6].
@@ -100,7 +100,7 @@ class G4MagIntegratorStepper
 #if 0
      void
      SetChargeAndMomentum( G4double particleCharge, // in e+ units
-			   G4double MomentumXc)
+                           G4double MomentumXc)
        //  Supply the standard Evaluation of the Right Hand side 
        //   of the associated equation.
        {theEquation_Rhs -> SetChargeAndMomentum(particleCharge, MomentumXc);}

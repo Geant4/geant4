@@ -22,7 +22,7 @@
 //
 //
 // $Id: GammaRayTelEventAction.cc,v 1.17 2003/06/16 16:46:25 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// GEANT4 tag $Name: geant4-06-00 $
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file
 //      CERN Geneva Switzerland

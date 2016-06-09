@@ -38,8 +38,8 @@
 //       Technical Note (TN) on the physics and algorithms
 //
 ///////////////////////////////////////////////////////////////////////////////
-// $Id: G4GeneralParticleSource.cc,v 1.14 2001/10/19 16:48:28 flei Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4GeneralParticleSource.cc,v 1.15 2003/10/13 09:21:27 flei Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 ///////////////////////////////////////////////////////////////////////////////
 //
 // CHANGE HISTORY
@@ -551,9 +551,9 @@ void G4GeneralParticleSource::GeneratePointsOnSurface()
       zdash = zdash.unit();
       G4ThreeVector xdash = Rotz.cross(zdash);
       G4ThreeVector ydash = xdash.cross(zdash);
-      SideRefVec1 = xdash;
-      SideRefVec2 = ydash;
-      SideRefVec3 = zdash;
+      SideRefVec1 = xdash.unit();
+      SideRefVec2 = ydash.unit();
+      SideRefVec3 = zdash.unit();
     }
   else if(Shape == "Ellipsoid")
     {
@@ -652,9 +652,9 @@ void G4GeneralParticleSource::GeneratePointsOnSurface()
       zdash = zdash.unit();
       G4ThreeVector xdash = Rotz.cross(zdash);
       G4ThreeVector ydash = xdash.cross(zdash);
-      SideRefVec1 = xdash;
-      SideRefVec2 = ydash;
-      SideRefVec3 = zdash;
+      SideRefVec1 = xdash.unit();
+      SideRefVec2 = ydash.unit();
+      SideRefVec3 = zdash.unit();
     }
   else if(Shape == "Cylinder")
     {
@@ -747,9 +747,9 @@ void G4GeneralParticleSource::GeneratePointsOnSurface()
 	  zdash = zdash.unit();
 	  G4ThreeVector xdash = Rotz.cross(zdash);
 	  G4ThreeVector ydash = xdash.cross(zdash);
-	  SideRefVec1 = xdash;
-	  SideRefVec2 = ydash;
-	  SideRefVec3 = zdash;
+	  SideRefVec1 = xdash.unit();
+	  SideRefVec2 = ydash.unit();
+	  SideRefVec3 = zdash.unit();
 	}
       else
 	G4cout << "Error: testrand " << testrand << G4endl;
@@ -805,9 +805,9 @@ void G4GeneralParticleSource::GeneratePointsOnSurface()
 	  xdash = xdash.unit();
 	  ydash = ydash.unit();
 	  G4ThreeVector zdash = xdash.cross(ydash);
-	  SideRefVec1 = xdash;
-	  SideRefVec2 = ydash;
-	  SideRefVec3 = zdash;
+	  SideRefVec1 = xdash.unit();
+	  SideRefVec2 = ydash.unit();
+	  SideRefVec3 = zdash.unit();
 	}
       else if(testrand >= Probs[0] && testrand < Probs[1])
 	{
@@ -823,9 +823,9 @@ void G4GeneralParticleSource::GeneratePointsOnSurface()
 	  xdash = xdash.unit();
 	  ydash = ydash.unit();
 	  G4ThreeVector zdash = xdash.cross(ydash);
-	  SideRefVec1 = xdash;
-	  SideRefVec2 = -ydash;
-	  SideRefVec3 = -zdash;
+	  SideRefVec1 = xdash.unit();
+	  SideRefVec2 = -ydash.unit();
+	  SideRefVec3 = -zdash.unit();
 	}
       else if(testrand >= Probs[1] && testrand < Probs[2])
 	{
@@ -840,9 +840,9 @@ void G4GeneralParticleSource::GeneratePointsOnSurface()
 	  ydash = ydash.unit();
 	  G4ThreeVector xdash = Roty.cross(ydash);
 	  G4ThreeVector zdash = xdash.cross(ydash);
-	  SideRefVec1 = xdash;
-	  SideRefVec2 = ydash;
-	  SideRefVec3 = zdash;
+	  SideRefVec1 = xdash.unit();
+	  SideRefVec2 = ydash.unit();
+	  SideRefVec3 = zdash.unit();
 	}
       else if(testrand >= Probs[2] && testrand < Probs[3])
 	{
@@ -857,9 +857,9 @@ void G4GeneralParticleSource::GeneratePointsOnSurface()
 	  ydash = ydash.unit();
 	  G4ThreeVector xdash = Roty.cross(ydash);
 	  G4ThreeVector zdash = xdash.cross(ydash);
-	  SideRefVec1 = xdash;
-	  SideRefVec2 = -ydash;
-	  SideRefVec3 = -zdash;
+	  SideRefVec1 = xdash.unit();
+	  SideRefVec2 = -ydash.unit();
+	  SideRefVec3 = -zdash.unit();
 	}
       else if(testrand >= Probs[3] && testrand < Probs[4])
 	{
@@ -1026,9 +1026,9 @@ void G4GeneralParticleSource::GeneratePointsInVolume()
   zdash = zdash.unit();
   G4ThreeVector xdash = Rotz.cross(zdash);
   G4ThreeVector ydash = xdash.cross(zdash);
-  SideRefVec1 = xdash;
-  SideRefVec2 = ydash;
-  SideRefVec3 = zdash;
+  SideRefVec1 = xdash.unit();
+  SideRefVec2 = ydash.unit();
+  SideRefVec3 = zdash.unit();
 
   if(verbosityLevel == 2)
     {
@@ -1617,7 +1617,7 @@ G4double G4GeneralParticleSource::GenerateUserDefTheta()
       if(IPDFThetaExist == false)
 	{
 	  // IPDF has not been created, so create it
-	  G4double bins[256],vals[256], sum;
+	  G4double bins[1024],vals[1024], sum;
 	  G4int ii;
 	  G4int maxbin = G4int(UDefThetaH.GetVectorLength());
 	  bins[0] = UDefThetaH.GetLowEdgeEnergy(size_t(0));
@@ -1663,7 +1663,7 @@ G4double G4GeneralParticleSource::GenerateUserDefPhi()
       if(IPDFPhiExist == false)
 	{
 	  // IPDF has not been created, so create it
-	  G4double bins[256],vals[256], sum;
+	  G4double bins[1024],vals[1024], sum;
 	  G4int ii;
 	  G4int maxbin = G4int(UDefPhiH.GetVectorLength());
 	  bins[0] = UDefPhiH.GetLowEdgeEnergy(size_t(0));
@@ -1930,11 +1930,11 @@ void G4GeneralParticleSource::ArbInterpolate(G4String IType)
 void G4GeneralParticleSource::LinearInterpolation()
 {
   // Method to do linear interpolation on the Arb points
-  // Calculate equation of each line segment, max 256.
+  // Calculate equation of each line segment, max 1024.
   // Calculate Area under each segment
   // Create a cumulative array which is then normalised Arb_Cum_Area
-  G4double Area_seg[256]; // Stores area under each segment
-  G4double sum = 0., Arb_x[256], Arb_y[256], Arb_Cum_Area[256];
+  G4double Area_seg[1024]; // Stores area under each segment
+  G4double sum = 0., Arb_x[1024], Arb_y[1024], Arb_Cum_Area[1024];
   G4int i, count;
   G4int maxi = ArbEnergyH.GetVectorLength();
   for(i=0;i<maxi;i++)
@@ -2047,7 +2047,7 @@ void G4GeneralParticleSource::LogInterpolation()
   // y = Ax**alpha => log y = alpha*logx + logA
   // Find area under line segments
   // create normalised, cumulative array Arb_Cum_Area
-  G4double Area_seg[256], Arb_x[256], Arb_y[256], Arb_Cum_Area[256];
+  G4double Area_seg[1024], Arb_x[1024], Arb_y[1024], Arb_Cum_Area[1024];
   G4double alp, sum=0.;
   Arb_Cum_Area[0] = 0.;
   if(verbosityLevel == 2)
@@ -2160,7 +2160,7 @@ void G4GeneralParticleSource::ExpInterpolation()
   // y = Ae**-(x/e0) => ln y = -x/e0 + lnA
   // Find area under line segments
   // create normalised, cumulative array Arb_Cum_Area
-  G4double Area_seg[256], Arb_x[256], Arb_y[256], Arb_Cum_Area[256];
+  G4double Area_seg[1024], Arb_x[1024], Arb_y[1024], Arb_Cum_Area[1024];
   G4double sum=0.;
   Arb_Cum_Area[0] = 0.;
   if(verbosityLevel == 2)
@@ -2261,7 +2261,7 @@ void G4GeneralParticleSource::SplineInterpolation()
   // Interpolation using Splines.
   // Create Normalised arrays, make x 0->1 and y hold
   // the function (Energy)
-  G4double Arb_x[256], Arb_y[256];
+  G4double Arb_x[1024], Arb_y[1024];
   G4double sum = 0.;
   G4int i, count;
   if(verbosityLevel == 2)
@@ -2626,7 +2626,7 @@ void G4GeneralParticleSource::GenUserHistEnergies()
     {
       G4int ii;
       G4int maxbin = G4int(UDefEnergyH.GetVectorLength());
-      G4double bins[256], vals[256], sum;
+      G4double bins[1024], vals[1024], sum;
       sum=0.;
       //      UDefEnergyH.DumpValues();
       G4double mass = particle_definition->GetPDGMass();
@@ -2635,10 +2635,10 @@ void G4GeneralParticleSource::GenUserHistEnergies()
       if((EnergySpec == false) && (particle_definition == NULL))
 	G4cout << "Error: particle definition is NULL" << G4endl;
       
-      if(maxbin > 256)
+      if(maxbin > 1024)
 	{
-	  G4cout << "Maxbin > 256" << G4endl;
-	  G4cout << "Setting maxbin to 256, other bins are lost" << G4endl;
+	  G4cout << "Maxbin > 1024" << G4endl;
+	  G4cout << "Setting maxbin to 1024, other bins are lost" << G4endl;
 	}
 
       if(DiffSpec == false)
@@ -2785,7 +2785,7 @@ void G4GeneralParticleSource::GenEpnHistEnergies()
   if(IPDFEnergyExist == false)
     {
       // IPDF has not been created, so create it
-      G4double bins[256],vals[256], sum;
+      G4double bins[1024],vals[1024], sum;
       G4int ii;
       G4int maxbin = G4int(UDefEnergyH.GetVectorLength());
       bins[0] = UDefEnergyH.GetLowEdgeEnergy(size_t(0));
@@ -2833,12 +2833,12 @@ void G4GeneralParticleSource::ConvertEPNToEnergy()
       G4int count, maxcount;
       maxcount = G4int(EpnEnergyH.GetVectorLength());
       //      G4cout << maxcount << G4endl;
-      G4double ebins[256],evals[256];
-      if(maxcount > 256)
+      G4double ebins[1024],evals[1024];
+      if(maxcount > 1024)
 	{
-	  G4cout << "Histogram contains more than 256 bins!" << G4endl;
-	  G4cout << "Those above 256 will be ignored" << G4endl;
-	  maxcount = 256;
+	  G4cout << "Histogram contains more than 1024 bins!" << G4endl;
+	  G4cout << "Those above 1024 will be ignored" << G4endl;
+	  maxcount = 1024;
 	}
       for(count=0;count<maxcount;count++)
 	{
@@ -2988,7 +2988,7 @@ G4double G4GeneralParticleSource::GenRandX()
       if(IPDFXBias == false)
 	{
 	  // IPDF has not been created, so create it
-	  G4double bins[256],vals[256], sum;
+	  G4double bins[1024],vals[1024], sum;
 	  G4int ii;
 	  G4int maxbin = G4int(XBiasH.GetVectorLength());
 	  bins[0] = XBiasH.GetLowEdgeEnergy(size_t(0));
@@ -3057,7 +3057,7 @@ G4double G4GeneralParticleSource::GenRandY()
       if(IPDFYBias == false)
 	{
 	  // IPDF has not been created, so create it
-	  G4double bins[256],vals[256], sum;
+	  G4double bins[1024],vals[1024], sum;
 	  G4int ii;
 	  G4int maxbin = G4int(YBiasH.GetVectorLength());
 	  bins[0] = YBiasH.GetLowEdgeEnergy(size_t(0));
@@ -3118,7 +3118,7 @@ G4double G4GeneralParticleSource::GenRandZ()
       if(IPDFZBias == false)
 	{
 	  // IPDF has not been created, so create it
-	  G4double bins[256],vals[256], sum;
+	  G4double bins[1024],vals[1024], sum;
 	  G4int ii;
 	  G4int maxbin = G4int(ZBiasH.GetVectorLength());
 	  bins[0] = ZBiasH.GetLowEdgeEnergy(size_t(0));
@@ -3183,7 +3183,7 @@ G4double G4GeneralParticleSource::GenRandTheta()
       if(IPDFThetaBias == false)
 	{
 	  // IPDF has not been created, so create it
-	  G4double bins[256],vals[256], sum;
+	  G4double bins[1024],vals[1024], sum;
 	  G4int ii;
 	  G4int maxbin = G4int(ThetaBiasH.GetVectorLength());
 	  bins[0] = ThetaBiasH.GetLowEdgeEnergy(size_t(0));
@@ -3245,7 +3245,7 @@ G4double G4GeneralParticleSource::GenRandPhi()
       if(IPDFPhiBias == false)
 	{
 	  // IPDF has not been created, so create it
-	  G4double bins[256],vals[256], sum;
+	  G4double bins[1024],vals[1024], sum;
 	  G4int ii;
 	  G4int maxbin = G4int(PhiBiasH.GetVectorLength());
 	  bins[0] = PhiBiasH.GetLowEdgeEnergy(size_t(0));
@@ -3307,7 +3307,7 @@ G4double G4GeneralParticleSource::GenRandEnergy()
       if(IPDFEnergyBias == false)
 	{
 	  // IPDF has not been created, so create it
-	  G4double bins[256],vals[256], sum;
+	  G4double bins[1024],vals[1024], sum;
 	  G4int ii;
 	  G4int maxbin = G4int(EnergyBiasH.GetVectorLength());
 	  bins[0] = EnergyBiasH.GetLowEdgeEnergy(size_t(0));

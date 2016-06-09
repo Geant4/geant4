@@ -1,6 +1,6 @@
-# $Id: README,v 1.11 2003/06/18 12:27:46 dressel Exp $
+# $Id: README,v 1.15 2003/12/08 17:53:25 gcosmo Exp $
 # -------------------------------------------------------------------
-# GEANT4 tag $Name: geant4-05-02 $
+# GEANT4 tag $Name: geant4-06-00 $
 # -------------------------------------------------------------------
 
 Simulation of the TIARA experiment using importance sampling
@@ -20,14 +20,12 @@ behind the shields. Users may chose to run the simulation for different
 shielding configuration with or without importance sampling.
 The simulated neutron fluxes are compared to the published 
 experimental data. The efficiency of applying importance sampling
-depends strongly on the shied thickness and importance configuration.
+depends strongly on the shield thickness and importance configuration.
 The efficiency of the simulations may be obtained as FOM values.
 
 See also "Geant4 User's Guide 
 For Application Developers", Chapter "Toolkit Fundamentals"
 Section  "Event Biasing Techniques" and references there.
-
-
 
 The example has been tested on CERN RH 7.3 with the
 gcc-3.2 and gcc-2.95.2 compilers.
@@ -40,10 +38,10 @@ Note for system testing without analysis: see points 1, 1.3 and 3.2.
 1) Setting the environment
 ==========================
 
-You should have Geant4 compiled with:
-"G4LIB_BUILD_SHARED" set to 1.
+You must compile Geant4 with:
+   "G4LIB_BUILD_SHARED" set to 1.
 You need to set:
-"NeutronHPCrossSections" (e.g. to ${G4INSTALL}/data/G4NDL3.7)
+   "NeutronHPCrossSections" (e.g. to ${G4INSTALL}/data/G4NDL3.7)
 
 
 Three examples are given of how to set environment variables
@@ -58,13 +56,14 @@ in the three cases:
 
    "ANAPHETOP" (e.g. /afs/cern.ch/sw/lhcxx)
    "AIDA_DIR"  (e.g. /afs/cern.ch/sw/contrib/AIDA/3.0/src/cpp)
-   "ANAPHE_SCRIPTS" (e.g. /afs/cern.ch/sw/lhcxx/share/LHCXX/5.0.4/scripts)
+   "ANAPHE_SCRIPTS" (e.g. /afs/cern.ch/sw/lhcxx/share/LHCXX/5.0.6/scripts)
 
-   Finally source the script envCommon.csh
+   Finally source the script envCommon.csh from the directory
+   you have Tiara installed, e.g. ${G4INSTALL}/examples/advanced/Tiara
 
 
-1.2) No afs but a local Anphe and AIDA installation:
-----------------------------------------------------
+1.2) No afs but a local Anaphe and AIDA installation:
+-----------------------------------------------------
    You don't use afs but you have a local installation of Anaphe and AIDA
    (e.g. from http://anaphe.web.cern.ch/anaphe/.
    Set the following environment variables:
@@ -72,17 +71,18 @@ in the three cases:
  
    "ANAPHETOP" (e.g. <directory>/Anaphe/release)
    "AIDA_DIR"  (e.g. <directory>/AIDA/3.0.0/3.0.0/AIDA/3.0/src/cpp)
-   "ANAPHE_SCRIPTS" (e.g. ${ANAPHETOP}/share/LHCXX/5.0.5/scripts)
+   "ANAPHE_SCRIPTS" (e.g. ${ANAPHETOP}/share/LHCXX/5.0.6/scripts)
 
       here <directory> is a place holder for your directory with the
       respective installations of Anaphe and AIDA
 
-   Finally source the script envCommon.csh
+   Finally source the script envCommon.csh from the directory
+   you have Tiara installed, e.g. ${G4INSTALL}/examples/advanced/Tiara
 
 
-1.3) No afs and no Anaphe and no AIDA (e.g. for system testing):
-----------------------------------------------------------------
-   You don't want to use Anaphe and AIDA and you don't have no afs access.
+1.3) No afs, no Anaphe and no AIDA (e.g. for system testing):
+-------------------------------------------------------------
+   You don't want to use Anaphe and AIDA and you don't have afs access.
    Make sure "G4ANALYSIS_USE" is unset (e.g. unsetenv G4ANALYSIS_USE).
 
    Note: python must be built against a "libc". 
@@ -92,14 +92,13 @@ in the three cases:
 
    Set the following environment variables:
    "PYTHONVERSION" (2.2 or higher)
-   "PYTHON_BASE_DIR" (e.g. to  /usr/)
-
+   "PYTHON_BASE_DIR" (e.g. to  /usr)
    "SWIG_VERSION" (e.g. 1.3 or higher)
-   "SWIG_BASE_DIR" (e.g. /users/dressel/local)
+   "SWIG_BASE_DIR" (e.g. /usr)
+   "CLHEP_BASE_DIR" (e.g. to  /opt/local)
 
-   "CLHEP_BASE_DIR" (e.g. to  /users/dressel/CLHEP)
-
-   Finally source the script envCommon.csh
+   Finally source the script envCommon.csh from the directory
+   you have Tiara installed, e.g. ${G4INSTALL}/examples/advanced/Tiara
 
 
 2) Building the example
@@ -114,7 +113,7 @@ Type "gmake".
 2.1) In more detail
 -------------------
 
-Geant4 should be compiled into granular shared libraries.
+Geant4 must be compiled into granular shared libraries.
 Therefore before compiling Geant4 set "G4LIB_BUILD_SHARED" to "1".
 
 External packages used in this example are Anaphe, SWIG and Python.
@@ -126,7 +125,7 @@ this example if Anaphe is used.
 2.2) Cleaning up
 ----------------
 To remove the files created by swig ( *_wrap.cc, the corresponding 
-.py files) use "gmake swigClean.
+.py files) use "gmake swigClean".
 To remove the directories of compiled code related to this example under 
 $G4WORKDIR/tmp/$G4SYSTEM/ use "gmake tiaraClean".
 
@@ -152,7 +151,7 @@ results may be viewed e.g. using lizard and scripts:
 2) type: import dataAcess
 3) type: p = dataAcess.ExpMcPlot (shelveFileName,detectorposition)
          where "shelveFileName" is the name (enclosed in quotes) of the
-         shelve file created during the execution of anaSim.py. 
+         shelve file created during the execution of runSim.py. 
          The name is printed on the screen during execution of runSim.py.
          "detectorposition" may be "00, "20" or "40" and stand for the 
          detectors 00, 20, 40 cm off beam axis respectively. 
@@ -162,7 +161,7 @@ results may be viewed e.g. using lizard and scripts:
          p.she is the shelve object containing simulation results.
          This prints the FOM values for the used detectors
          for two energy regions below and in the peak region.
-         The FOM are should be compared to unbiased simulations. To run 
+         The FOM should be compared to unbiased simulations. To run 
          an unbiased simulation set the importance values to one (see  
          runSim.py)
   
@@ -249,7 +248,7 @@ run / - directory for running the example
  This example is composed out of a layer of classes written in C++
 (source/tiara/include, source/tiara/src), a layer of python
 shadow classes created by swig (source/CLHEPWrapper, 
-source/G4KernelWrapper, source/TiaraWrapper) and layer of 
+source/G4KernelWrapper, source/TiaraWrapper) and a layer of 
 python modules (source/py_modules). 
  The C++ layer under source/tiara provides lower level classes closely
 related to the Geant4 kernel. 
@@ -264,7 +263,7 @@ modules created by swig are imported into python (in a session or a
 script) the corresponding C++ library is automatically loaded as well.
  The python modules in source/py_modules provide classes and functions
 that may be changed or customized more frequently than the C++ classes
-in source/tiara. These classes complete the construction of geometries
+in source/tiara. These classes complete the construction of geometries,
 take care of the procedure of setting up the simulation, the run sequence
 and the analysis after the simulation has been ran.
  The script runSim.py is an commented example of using the python modules

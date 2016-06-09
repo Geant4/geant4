@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: History,v 1.4 2002/12/06 16:32:25 gcosmo Exp $
+$Id: History,v 1.6 2003/11/12 16:44:06 johna Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -8,6 +8,12 @@ $Id: History,v 1.4 2002/12/06 16:32:25 gcosmo Exp $
 
                       Category History file
                       ---------------------
+
+12.11.2003 - John Allison
+             Updated Vis Manager.
+
+20.10.2003 - Vladimir Ivanchenko, tag brachy-V05-02-00
+             Migration to cut per region
 
 06.12.2002 - Gabriele Cosmo, tag brachy-V04-01-04
              Migration to new G4ApplicationState.

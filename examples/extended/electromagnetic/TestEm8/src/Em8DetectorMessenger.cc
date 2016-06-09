@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: Em8DetectorMessenger.cc,v 1.4 2002/12/05 00:24:26 asaim Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: Em8DetectorMessenger.cc,v 1.5 2003/11/24 16:34:10 grichine Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // 
 
@@ -152,7 +152,9 @@ void Em8DetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
    { Em8Detector->UpdateGeometry(); }
 
   if( command == MagFieldCmd )
-   { Em8Detector->SetMagField(MagFieldCmd->GetNewDoubleValue(newValue));}
+  { 
+    // Em8Detector->SetMagField(MagFieldCmd->GetNewDoubleValue(newValue));
+  }
 
 }
 

@@ -25,6 +25,7 @@
 // A prototype of the low energy neutron transport model.
 //
 #include "G4InterpolationManager.hh"
+#include "G4HadronicException.hh"
 
    G4InterpolationScheme G4InterpolationManager::MakeScheme(G4int it)
    {
@@ -77,7 +78,7 @@
         result = ULOGLOG;
         break;
       default:
-        G4Exception("G4InterpolationManager: unknown interpolation scheme");
+        throw G4HadronicException(__FILE__, __LINE__, "G4InterpolationManager: unknown interpolation scheme");
         break;        
      }
      return result;
@@ -88,7 +89,7 @@
      if(aPoint!=nEntries) 
      {
        G4cout <<"G4InterpolationManager::AppendScheme - "<<aPoint<<" "<<nEntries<<G4endl;
-       G4Exception("Wrong usage of G4InterpolationManager::AppendScheme");
+       throw G4HadronicException(__FILE__, __LINE__, "Wrong usage of G4InterpolationManager::AppendScheme");
      }
      if(nEntries==0)
      {

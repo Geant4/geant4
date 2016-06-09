@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: voxeldefs.hh,v 1.5 2001/07/11 09:59:19 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: voxeldefs.hh,v 1.6 2003/11/02 14:01:22 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 //
 //
@@ -31,11 +31,11 @@
 // History:
 // 12.02.99 S.Giani made numerical values consistent with Geant3.21
 // 13.08.95 P.Kent Created separate file
-
+// --------------------------------------------------------------------
 #ifndef VOXELDEFS_HH
 #define VOXELDEFS_HH
 
-#include "globals.hh"
+#include "G4Types.hh"
 
 // Hard limit on no. voxel nodes per given header
 const G4int kMaxVoxelNodes=1000;  // PK chose 2000, Geant 3.21 used 1000

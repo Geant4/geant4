@@ -13,33 +13,36 @@
  The program will ask:
  G3 > gives the filename of the data cards to be read:
 
- run01.dat      (runNN.dat is the equivalent of the G4 runNN.mac)
+ myMacro.dat      (myMacro.dat is the equivalent of the G4 myMacro.mac)
 
- data cards:  most of the data cards used in runxx.dat are
- ----------   standard data cards of GEANT3, but some of them
-              are defined in testem5. These latter cards are:
+ data cards
+ ----------  
+ Most of the data cards used in xxxx.dat are standard data cards of GEANT3,
+ but some of them are defined in testem5:
 
-              KEY      VARIABLE/type     Short description
+      KEY      VARIABLE/type           Short description
 
-              NAME    NAME (character)   name of the hist.file <******* 
-
-              ABSO
-	              MATABS (integer)   mat.number  of the absorber
-		      XABSOR (real)      X thickness of the absorber
-		      YZABSO (real)      YZ size     of the absorber
-
-              HIS1
-                      NH1    (integer)   number of bins in 1-st histogram
-                      HI1(2) (real)      lower/upper limit in 1-st histogram
-              .......
-
-
-   ******>  the NAME data card should be the first , with the format
-              A4,A2,A25.
-
-   all the others are the so called free format data records used
-   in GEANT3 .
-
-   materials: the materials used in this test are defined in
-   ---------  ugeom.F with material numbers 21 - 30  
-
+      FILE    fileName (character)     fileName of the histos
+                                       (the FILE data card should be the
+				        first, with the format A4,A2,A25)
+					
+      ABSO    MATABS (integer)         mat.number  of the absorber
+	      XABSOR (real)            X thickness of the absorber
+	      YZABSO (real)            YZ size     of the absorber
+	      
+      KILL    kill (logical)           do not track the secondary particles
+      
+      STMA    stma (real)              control STEMAX
+      
+ histograms
+ ----------
+ The list of built-in histograms is identical to TestEm5.cc 
+ (see G4 README or histo.F)
+ 
+ One can control the binning of the histograms with the data card:
+  *HISTO  id1  nbBins  valMin  valMax  valUnit 
+  *HISTO  id2  nbBins  valMin  valMax  valUnit
+  ... etc ...........
+  
+  valMin and ValMax are given in the desired unit, whose numerical value must
+  be specified in valUnit. Remember that Geant3 defaults are: GeV, cm, rad. 

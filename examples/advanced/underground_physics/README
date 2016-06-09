@@ -153,9 +153,9 @@ Macros:
 Note: 
 The following environment variables need to be set:
 G4RADIOACTIVEDATA      : points to Radioactive Decay Data files
-G4LEDATA               : points to low energy data base - G4EMLOW0.5
+G4LEDATA               : points to low energy data base
 G4LEVELGAMMADATA       : points to PhotoEvaporation data
-NeutronHPCrossSections : points to neutron data files G4NDL3.5
+NeutronHPCrossSections : points to neutron data files
 
 In addition if you require to use the full General Particle Source then the
 variable DMXENV_GPS_USE can be set.  The DMX gun is still included in order to
@@ -164,15 +164,19 @@ allow forward compatibility should the GPS change.
 
 ANALYSIS:
 
-In order to use the AIDA 2.2 compliant analysis set the environment variable
+In order to use the AIDA 3 compliant analysis set the environment variable
 G4ANALYSIS_USE before building.  If a previous build exists a gmake clean has
 to be executed.  
 
-export G4ANALYSIS_USE=1
+setenv G4ANALYSIS_USE 1
 
-To link with anaphe, first execute the anaphe installation script:
+To link with anaphe, first execute the anaphe installation script
+(example for CERN installation):
 
-source anaphe
+source /afs/cern.ch/sw/lhcxx/share/LHCXX/5.0.5/scripts/setupAnaphe.csh
+setenv PATH ${PATH}:/afs/cern.ch/sw/lhcxx/share/LHCXX/5.0.5/scripts
+
+[Have a look at the Anaphe web page, http://cern.ch/anaphe for more info]
 
 then gmake
 

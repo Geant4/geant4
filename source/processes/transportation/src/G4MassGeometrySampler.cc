@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4MassGeometrySampler.cc,v 1.8 2003/04/02 16:59:15 dressel Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4MassGeometrySampler.cc,v 1.11 2003/11/26 14:51:49 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -31,143 +31,183 @@
 //
 // ----------------------------------------------------------------------
 
-
-
 #include "G4MassGeometrySampler.hh"
 
 #include "G4VIStore.hh"
+#include "G4WeightWindowStore.hh"
 #include "G4VScorer.hh"
 
 #include "G4MScoreConfigurator.hh"
 #include "G4MImportanceConfigurator.hh"
+#include "G4MWeightWindowConfigurator.hh"
 #include "G4WeightCutOffConfigurator.hh"
 #include "G4MassGCellFinder.hh"
 
 G4MassGeometrySampler::
 G4MassGeometrySampler(const G4String &particlename)
-  :
-  fParticleName(particlename),
-  fMImportanceConfigurator(0),
-  fMScoreConfigurator(0),
-  fGCellFinder(0),
-  fWeightCutOffConfigurator(0),
-  fIStore(0),
-  fIsConfigured(false)
-{}
+  : fParticleName(particlename),
+    fMImportanceConfigurator(0),
+    fMScoreConfigurator(0),
+    fGCellFinder(0),
+    fWeightCutOffConfigurator(0),
+    fIStore(0),
+    fMWeightWindowConfigurator(0),
+    fWWStore(0),
+    fIsConfigured(false)
+{
+}
 
-G4MassGeometrySampler::~G4MassGeometrySampler(){
+G4MassGeometrySampler::~G4MassGeometrySampler()
+{
   ClearSampling();
-};
+}
 
-void G4MassGeometrySampler::ClearSampling() {
-
-  if (fMImportanceConfigurator) {
+void G4MassGeometrySampler::ClearSampling()
+{
+  if (fMImportanceConfigurator)
+  {
     delete fMImportanceConfigurator;
     fMImportanceConfigurator = 0;
   }
-  if (fMScoreConfigurator) {
+  if (fMWeightWindowConfigurator)
+  {
+    delete fMWeightWindowConfigurator;
+    fMWeightWindowConfigurator = 0;
+  }
+  if (fMScoreConfigurator)
+  {
     delete fMScoreConfigurator;
     fMScoreConfigurator = 0;
   }
-  if (fWeightCutOffConfigurator) {
+  if (fWeightCutOffConfigurator)
+  {
     delete fWeightCutOffConfigurator;
     fWeightCutOffConfigurator = 0;
   }
-  if (fGCellFinder) {
+  if (fGCellFinder)
+  {
     delete fGCellFinder;
     fGCellFinder = 0;
   }
   fIStore = 0;
   fConfigurators.clear();
   fIsConfigured = false;
-};
+}
 
-G4bool G4MassGeometrySampler::IsConfigured() const{
-
+G4bool G4MassGeometrySampler::IsConfigured() const
+{
   G4bool isconf = false;
-  if (fIsConfigured) {
-   G4cout << "G4MassGeometrySampler::CheckIfInit some initalization exists, use  ClearSampling() before a new initialization" << G4endl;
+  if (fIsConfigured)
+  {
+   G4cout << "WARNING - G4MassGeometrySampler::IsConfigured()"
+          << "          Some initalization exists, use ClearSampling()"
+          << "          before a new initialization !" << G4endl;
    isconf = true;
   }
   return isconf;
 }
 
-void G4MassGeometrySampler::
-PrepareScoring(G4VScorer *scorer){
-  fMScoreConfigurator = 
-    new G4MScoreConfigurator(fParticleName, *scorer);
-  if (!fMScoreConfigurator) {
-    G4Exception("ERROR:G4MassGeometrySampler::PrepareScoring: new failed to ccreate G4MScoreConfigurator!");
+void G4MassGeometrySampler::PrepareScoring(G4VScorer *scorer)
+{
+  fMScoreConfigurator = new G4MScoreConfigurator(fParticleName, *scorer);
+  if (!fMScoreConfigurator)
+  {
+    G4Exception("G4MassGeometrySampler::PrepareScoring()",
+                "FatalError", FatalException,
+                "Failed allocation of G4MScoreConfigurator !");
   }
 }
 
-void G4MassGeometrySampler::
-PrepareImportanceSampling(G4VIStore *istore,
-			  const G4VImportanceAlgorithm 
-			  *ialg) {
+void
+G4MassGeometrySampler::PrepareImportanceSampling(G4VIStore *istore,
+                                           const G4VImportanceAlgorithm  *ialg)
+{
   fIStore = istore;
 
   fMImportanceConfigurator =
-    new G4MImportanceConfigurator(fParticleName,
-				    *fIStore,
-				    ialg);
-  if (!fMImportanceConfigurator) {
-    G4Exception("ERROR:G4MassGeometrySampler::PrepareImportanceSampling: new failed to ccreate G4MImportanceConfigurator!");
+    new G4MImportanceConfigurator(fParticleName, *fIStore, ialg);
+  if (!fMImportanceConfigurator)
+  {
+    G4Exception("G4MassGeometrySampler::PrepareImportanceSampling()",
+                "FatalError", FatalException,
+                "Failed allocation of G4MImportanceConfigurator !");
   }
-  
 }
 
-void G4MassGeometrySampler::
-PrepareWeightRoulett(G4double wsurvive, 
-		     G4double wlimit,
-		     G4double isource) {
+void
+G4MassGeometrySampler::PrepareWeightRoulett(G4double wsurvive, 
+                                            G4double wlimit,
+                                            G4double isource)
+{
   fGCellFinder = new G4MassGCellFinder;
-  if (!fGCellFinder) {
-    G4Exception("ERROR:G4MassGeometrySampler::PrepareWeightRoulett: new failed to create G4MassGCellFinder!");
+  if (!fGCellFinder)
+  {
+    G4Exception("G4MassGeometrySampler::PrepareWeightRoulett()",
+                "FatalError", FatalException,
+                "Failed allocation of G4MassGCellFinder !");
   }
   
   fWeightCutOffConfigurator = 
     new G4WeightCutOffConfigurator(fParticleName,
-				   wsurvive,
-				   wlimit,
-				   isource,
-				   fIStore,
-				   *fGCellFinder);
-  if (!fWeightCutOffConfigurator) {
-    G4Exception("ERROR:G4MassGeometrySampler::PrepareWeightRoulett: new failed to ccreate G4WeightCutOffConfigurator!");
+                                   wsurvive,
+                                   wlimit,
+                                   isource,
+                                   fIStore,
+                                   *fGCellFinder);
+  if (!fWeightCutOffConfigurator)
+  {
+    G4Exception("G4MassGeometrySampler::PrepareWeightRoulett()",
+                "FatalError", FatalException,
+                "Failed allocation of G4WeightCutOffConfigurator !");
   }
-  
-
 }
 
-void G4MassGeometrySampler::Configure(){
-  if (!IsConfigured()) {
+void
+G4MassGeometrySampler::PrepareWeightWindow(G4VWeightWindowStore *wwstore,
+                                           G4VWeightWindowAlgorithm *wwAlg,
+                                           G4PlaceOfAction placeOfAction)
+{
+
+  fWWStore = wwstore;
+  
+  fMWeightWindowConfigurator =
+    new G4MWeightWindowConfigurator(fParticleName,
+                                    *fWWStore,
+                                    wwAlg,
+                                    placeOfAction);
+}
+
+void G4MassGeometrySampler::Configure()
+{
+  if (!IsConfigured())
+  {
     fIsConfigured = true;
 
-    if (fMScoreConfigurator) {
+    if (fMScoreConfigurator)
+    {
       fConfigurators.push_back(fMScoreConfigurator);
     }
-    if (fMImportanceConfigurator) {
+    if (fMImportanceConfigurator)
+    {
       fConfigurators.push_back(fMImportanceConfigurator);
+    }
+    if (fMWeightWindowConfigurator)
+    {
+      fConfigurators.push_back(fMWeightWindowConfigurator);
     }
     
     G4VSamplerConfigurator *preConf = 0;
     for (G4Configurators::iterator it = fConfigurators.begin();
-	 it != fConfigurators.end(); it++) {
+         it != fConfigurators.end(); it++)
+    {
       G4VSamplerConfigurator *currConf =*it;
       currConf->Configure(preConf);
       preConf = *it;
     }
-    if (fWeightCutOffConfigurator) {
+    if (fWeightCutOffConfigurator)
+    {
       fWeightCutOffConfigurator->Configure(0);
     }
-    
   }
   return;
 }
-
-
-
-
-
-

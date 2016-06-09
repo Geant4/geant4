@@ -19,7 +19,7 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
-// ********************************************************************
+//
 //
 // Code developed by:
 //  S.Guatelli
@@ -31,8 +31,8 @@
 //    *                             *
 //    *******************************
 //
-// $Id: BrachyFactory.cc,v 1.4 2003/05/09 16:52:08 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: BrachyFactory.cc,v 1.5 2003/12/09 15:29:59 gunter Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 #include"BrachyFactory.hh"
 

@@ -30,13 +30,12 @@
 #include "G4Electron.hh"
 // #include "DumpFrame.hh"
 
- G4VParticleChange *
-  G4LENeutronInelastic::ApplyYourself( const G4Track &aTrack,
+ G4HadFinalState *
+  G4LENeutronInelastic::ApplyYourself( const G4HadProjectile &aTrack,
                                        G4Nucleus &targetNucleus )
   {
-    theParticleChange.Initialize( aTrack );
-    
-    const G4DynamicParticle *originalIncident = aTrack.GetDynamicParticle();
+    theParticleChange.Clear();
+    const G4HadProjectile *originalIncident = &aTrack;
     //
     // create the target particle
     //
@@ -44,7 +43,7 @@
     
     if( verboseLevel > 1 )
     {
-      G4Material *targetMaterial = aTrack.GetMaterial();
+      const G4Material *targetMaterial = aTrack.GetMaterial();
       G4cout << "G4LENeutronInelastic::ApplyYourself called" << G4endl;
       G4cout << "kinetic energy = " << originalIncident->GetKineticEnergy()/MeV << "MeV, ";
       G4cout << "target material = " << targetMaterial->GetName() << ", ";
@@ -53,9 +52,9 @@
     }
 /* not true, for example for Fe56, etc..
     if( originalIncident->GetKineticEnergy()/MeV < 0.000001 )
-      G4Exception("G4LENeutronInelastic: should be capture process!");
-    if( originalIncident->GetMomentum().mag()/MeV < 0.000001 )
-      G4Exception("G4LENeutronInelastic: should be capture process!");
+      throw G4HadronicException(__FILE__, __LINE__, "G4LENeutronInelastic: should be capture process!");
+    if( originalIncident->Get4Momentum().vect().mag()/MeV < 0.000001 )
+      throw G4HadronicException(__FILE__, __LINE__, "G4LENeutronInelastic: should be capture process!");
 */
     
     G4ReactionProduct modifiedOriginal;
@@ -113,7 +112,7 @@
     G4bool incidentHasChanged = false;
     G4bool targetHasChanged = false;
     G4bool quasiElastic = false;
-    G4FastVector<G4ReactionProduct,128> vec;  // vec will contain the secondary particles
+    G4FastVector<G4ReactionProduct,GHADLISTSIZE> vec;  // vec will contain the secondary particles
     G4int vecLen = 0;
     vec.Initialize( 0 );
     
@@ -136,7 +135,7 @@
  
  void
   G4LENeutronInelastic::SlowNeutron(
-   const G4DynamicParticle *originalIncident,
+   const G4HadProjectile *originalIncident,
    G4ReactionProduct &modifiedOriginal,
    G4ReactionProduct &targetParticle,
    G4Nucleus &targetNucleus )
@@ -172,9 +171,9 @@
       G4double py = sint*cos(phi);
       G4double pz = cost;
       targetParticle.SetMomentum( px*GeV, py*GeV, pz*GeV );
-      G4double pxO = originalIncident->GetMomentum().x()/GeV;
-      G4double pyO = originalIncident->GetMomentum().y()/GeV;
-      G4double pzO = originalIncident->GetMomentum().z()/GeV;
+      G4double pxO = originalIncident->Get4Momentum().x()/GeV;
+      G4double pyO = originalIncident->Get4Momentum().y()/GeV;
+      G4double pzO = originalIncident->Get4Momentum().z()/GeV;
       G4double ptO = pxO*pxO + pyO+pyO;
       if( ptO > 0.0 )
       {
@@ -199,13 +198,12 @@
       modifiedOriginal.SetKineticEnergy( ek*GeV );
       
       targetParticle.SetMomentum(
-       originalIncident->GetMomentum() - modifiedOriginal.GetMomentum() );
+       originalIncident->Get4Momentum().vect() - modifiedOriginal.GetMomentum() );
       G4double pp = targetParticle.GetMomentum().mag();
       G4double tarmas = targetParticle.GetMass();
       targetParticle.SetTotalEnergy( sqrt( pp*pp + tarmas*tarmas ) );
       
       theParticleChange.SetEnergyChange( modifiedOriginal.GetKineticEnergy() );
-      theParticleChange.SetNumberOfSecondaries( 1 );
       G4DynamicParticle *pd = new G4DynamicParticle;
       pd->SetDefinition( targetParticle.GetDefinition() );
       pd->SetMomentum( targetParticle.GetMomentum() );
@@ -231,10 +229,9 @@
     theReactionDynamics.NuclearReaction( vec, vecLen, originalIncident,
                                          targetNucleus, theAtomicMass, massVec );
     
-    theParticleChange.SetStatusChange( fStopAndKill );
+    theParticleChange.SetStatusChange( stopAndKill );
     theParticleChange.SetEnergyChange( 0.0 );
     
-    theParticleChange.SetNumberOfSecondaries( vecLen );
     G4DynamicParticle * pd;
     for( G4int i=0; i<vecLen; ++i )
     {
@@ -248,9 +245,9 @@
  
  void
   G4LENeutronInelastic::Cascade(
-   G4FastVector<G4ReactionProduct,128> &vec,
+   G4FastVector<G4ReactionProduct,GHADLISTSIZE> &vec,
    G4int& vecLen,
-   const G4DynamicParticle *originalIncident,
+   const G4HadProjectile *originalIncident,
    G4ReactionProduct &currentParticle,
    G4ReactionProduct &targetParticle,
    G4bool &incidentHasChanged,

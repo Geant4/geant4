@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4VVisManager.cc,v 1.5 2002/11/20 14:46:01 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // 
 // Abstract interface for GEANT4 Visualization Manager.

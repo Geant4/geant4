@@ -1,4 +1,4 @@
-$Id: History,v 1.104 2003/06/16 14:45:10 vnivanch Exp $
+$Id: History,v 1.129 2003/11/26 16:09:26 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,100 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+26 Nov 03: V.Ivant (utils-V05-02-17)
+- Close precise range feature for the time being
+
+26 Nov 03: L.Urban
+- Bugfix in G4VMultipleScattering:AlongStepDoIt + G4MscModel
+  truestep <= range 
+
+25 Nov 03: V.Ivant (utils-V05-02-16)
+- Fix wrong deletion and error in SetRangeTable
+
+25 Nov 03: V.Ivant (utils-V05-02-15)
+- Fix crash for case of inactivated ionisation and bremsstrahlung
+
+13 Nov 03: V.Ivant (utils-V05-02-14)
+- Fix negative energy loss 
+
+11 Nov 03: V.Ivant (utils-V05-02-13)
+- Update printout in RetrievePhysicsTable
+- Substitute G4VEnergyLossSTD by G4VEnergyLossProcess
+- For ions update ionisation (V.Ivanchenko) and multiple scattering (L.Urban) 
+
+10 Nov 03: Urban
+- highKinEnergy is set back to 100 TeV for multiple scattering
+- number of table bins set to 120             "
+- small change in the tail of the angular distribution (after tuning!)
+- code cleaning in G4MscModel.cc 
+
+07 Nov 03: mma (utils-V05-02-12)
+- Fix problem of rounding of double in G4UniversalFluctuations
+- Fix precision problems for high energy (PeV) particles
+- change in the tail of the angular distribution
+- highKinEnergy is set to 100 PeV
+ 
+03 Nov 03: V.Ivant (utils-V05-02-11)
+- Remove STD processes
+- Fix problem of RetrievePhysicsTable 
+
+30 Oct 03: G.Cosmo (utils-V05-02-10)
+- Fixed compilation problem on Windows in G4LossTableManager.cc for multiple
+  declaration of indeces ...
+
+24 Oct 03: V.Ivant (utils-V05-02-09)
+- Update logic of BuildPhysicsTable to take into account desactivate processes
+- Update defalts for stepping algorithm
+
+20 Oct 03: V.Ivant (utils-V05-02-08)
+- Minor change of interface to G4EmFluctuationModel for PAI development
+- Update logic of the messenger and G4LossTableManager to provide independence 
+  on command sequence
+- Increase verbosity for store/retrieve tables
+
+14 Oct 03: V.Ivant (utils-V05-02-07)
+- Update verbose/printout
+- Add new method DefineForRegion to G4VEmModel
+- Fix minor problems in messenger
+
+4 Oct 03: G.Cosmo (utils-V05-02-06)
+- Modified GNUmakefiles:
+  o added dependency to new module "geometry/navigation".
+  o replaced "digits+hits" with "digits_hits".
+- Coworks with "geometry-V05-02-00" and "digits_hits-V05-02-00".
+
+25 Sept 03: H.Kurashige (utils-V05-02-05)
+- Add "#include G4MaterialCutsCouple.hh" in G4MultipleScattering52.hh
+
+20 Sept 03: V.Ivant (utils-V05-02-04)
+-Use warning for obsolete interfaces which uses G4Material instead of
+ G4MaterialCutsCouple
+-Update initialization of energy loss processes
+-Update GNUmakefile
+
+12 September 03: L.Urban
+-fixed num. error for small stepsize in G4MscModel.cc (z sampling)
+
+27 August 03: V.Ivant (utils-V05-02-03)
+-Fix problems in compilation of some tests
+
+08 August 03: V.Ivant (utils-V05-02-02)
+-Substitute standerd by STD, freezing old standard as 52
+
+07 August 03: V.Ivant (utils-V05-02-01)
+- Update of the ion fluctuation model
+- Update design - STD processes can be mixed in physics list with 
+  old processes
+- Tunning of msc model: fix poblems for width and for tails of distribution
+  for the STD variant 
+
+24 July 03: V.Ivant (utils-V05-02-00)
+-Update model interface - substitute G4Material by G4MaterialCutsCouple
+ in dE/dx and CrossSection methods
+-Add Set methods to energy range of msc table
+-Add method to change the nergy range of model 
+-Add possibility to have STD and other processes in the same physics list
 
 16 June 03: V.Ivant (utils-V05-01-07)
 - ShortLived particles are not applicable for msc

@@ -22,7 +22,7 @@
 //
 //
 // $Id: ExN07Run.cc,v 1.3 2003/04/09 23:20:59 asaim Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 
 #include "ExN07Run.hh"

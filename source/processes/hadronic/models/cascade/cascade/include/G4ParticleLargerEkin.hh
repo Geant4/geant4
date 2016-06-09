@@ -19,6 +19,7 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
+//
 #ifndef G4PARTICLE_LARGER_EKIN_HH
 #define G4PARTICLE_LARGER_EKIN_HH
 

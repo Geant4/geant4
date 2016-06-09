@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ClippablePolygon.cc,v 1.8 2002/10/30 13:52:22 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4ClippablePolygon.cc,v 1.9 2003/10/28 17:15:56 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // 
 // --------------------------------------------------------------------
@@ -155,7 +155,8 @@ const G4ThreeVector *G4ClippablePolygon::GetMinPoint( const EAxis axis ) const
 {
   G4int noLeft = vertices.size();
   if (noLeft==0)
-    G4Exception("G4ClippablePolygon::GetMinPoint() - empty polygon");
+    G4Exception("G4ClippablePolygon::GetMinPoint()",
+                "InvalidSetup", FatalException, "Empty polygon.");
   
   const G4ThreeVector *answer = &(vertices[0]);
   G4double min = answer->operator()(axis);
@@ -185,7 +186,8 @@ const G4ThreeVector *G4ClippablePolygon::GetMaxPoint( const EAxis axis ) const
 {
   G4int noLeft = vertices.size();
   if (noLeft==0)
-    G4Exception("G4ClippablePolygon::GetMaxPoint() - empty polygon");
+    G4Exception("G4ClippablePolygon::GetMaxPoint()",
+                "InvalidSetup", FatalException, "Empty polygon.");
   
   const G4ThreeVector *answer = &(vertices[0]);
   G4double max = answer->operator()(axis);

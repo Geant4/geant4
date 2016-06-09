@@ -19,11 +19,11 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
-
+//
 // ====================================================================
 //
 //   H02PythiaMessenger.cc
-//   $Id: H02PythiaMessenger.cc,v 1.2 2003/06/16 16:48:54 gunter Exp $
+//   $Id: H02PythiaMessenger.cc,v 1.3 2003/12/09 15:31:58 gunter Exp $
 //
 // ====================================================================
 #include "H02PythiaMessenger.hh"

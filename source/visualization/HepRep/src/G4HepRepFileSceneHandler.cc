@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4HepRepFileSceneHandler.cc,v 1.11.2.1.2.2 2003/06/25 10:20:00 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4HepRepFileSceneHandler.cc,v 1.17 2003/12/09 15:39:26 gunter Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 //
 // Joseph Perl  27th January 2002
@@ -51,7 +51,7 @@
 #include "G4AttValue.hh"
 
 //HepRep
-#include "HepRepXMLWriter.hh"
+#include "G4HepRepFileXMLWriter.hh"
 
 G4int G4HepRepFileSceneHandler::fSceneIdCount = 0;
 // Counter for HepRep scene handlers.
@@ -369,8 +369,7 @@ void G4HepRepFileSceneHandler::AddThis (const G4VTrajectory& traj) {
   if (strcmp("Trajectory Points",previousName)!=0) {
     hepRepXMLWriter->addAttValue("DrawAs","Point");
     hepRepXMLWriter->addAttValue("Layer",110);
-    // Change to False once related problem is fixed in WIRED.
-    hepRepXMLWriter->addAttValue("Visibility","True");
+    hepRepXMLWriter->addAttValue("Visibility","False");
   }
 
   for (i = 0; i < traj.GetPointEntries(); i++) {
@@ -556,7 +555,7 @@ void G4HepRepFileSceneHandler::AddPrimitive(const G4NURBS&) {
     G4cout << "G4HepRepFileSceneHandler::AddPrimitive G4NURBS : not implemented. " << G4endl;
 }
 
-HepRepXMLWriter *G4HepRepFileSceneHandler::GetHepRepXMLWriter() {
+G4HepRepFileXMLWriter *G4HepRepFileSceneHandler::GetHepRepXMLWriter() {
     return hepRepXMLWriter;
 }
 
@@ -679,5 +678,14 @@ void G4HepRepFileSceneHandler::CheckFileOpen() {
     hepRepXMLWriter->addAttDef("Density", "Material Density", "Physics","");
     hepRepXMLWriter->addAttDef("State", "Material State", "Physics","");
     hepRepXMLWriter->addAttDef("Radlen", "Material Radiation Length", "Physics","");
+  }
+}
+
+void G4HepRepFileSceneHandler::ClearTransientStore () {
+  G4VSceneHandler::ClearTransientStore ();
+  if (fpViewer) {
+    fpViewer -> SetView ();
+    fpViewer -> ClearView ();
+    fpViewer -> DrawView ();
   }
 }

@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: RunAction.cc,v 1.2 2003/06/03 09:33:21 vnivanch Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: RunAction.cc,v 1.4 2003/11/19 10:16:18 vnivanch Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -41,7 +41,7 @@
 
 #include "Randomize.hh"
 
-#ifndef G4NOHIST
+#ifdef G4ANALYSIS_USE
  #include "AIDA/AIDA.h"
 #endif
 
@@ -66,13 +66,13 @@ RunAction::~RunAction()
 
 void RunAction::bookHisto()
 {
-#ifndef G4NOHIST
+#ifdef G4ANALYSIS_USE
  // Creating the analysis factory
  AIDA::IAnalysisFactory* af = AIDA_createAnalysisFactory();
- 
+
  // Creating the tree factory
  AIDA::ITreeFactory* tf = af->createTreeFactory();
- 
+
  // Creating a tree mapped to an hbook file.
  G4bool readOnly  = false;
  G4bool createNew = true;
@@ -90,23 +90,23 @@ void RunAction::bookHisto()
  binLength = length/nbBins;
  offsetX   = 0.5*length;
  histo[0] = hf->createHistogram1D("1","Edep (MeV/mm)",nbBins, 0,length);
-  
+
  delete hf;
  delete tf;
- delete af;     
-#endif   
+ delete af;
+#endif
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void RunAction::cleanHisto()
 {
-#ifndef G4NOHIST
+#ifdef G4ANALYSIS_USE
   tree->commit();       // Writing the histograms to the file
   tree->close();        // and closing the tree (and the file)
-  
-  delete tree;
-#endif   
+
+//  delete tree;
+#endif
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

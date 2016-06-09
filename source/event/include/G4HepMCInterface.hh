@@ -19,11 +19,11 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
-
+//
 // ====================================================================
 //
 //   G4HepMCInterface.hh
-//   $Id: G4HepMCInterface.hh,v 1.1 2002/11/18 22:43:13 asaim Exp $
+//   $Id: G4HepMCInterface.hh,v 1.3 2003/12/09 15:35:03 gunter Exp $
 //
 //   A base class for primary generation via HepMC object.
 //   This class is derived from G4VPrimaryGenerator.
@@ -36,20 +36,19 @@
 #include "CLHEP/HepMC/GenEvent.h"
 
 class G4HepMCInterface : public G4VPrimaryGenerator {
+public:
+  // static service method for conversion from HepMC::GenEvent to G4Event
+  static void HepMC2G4(const HepMC::GenEvent* hepmcevt, G4Event* g4event);
+
+  // static service method for checking a point is included in the (current) world
+  // static G4bool CheckVertexInsideWorld(const G4ThreeVector& pos);
+  // ------------> This method has been moved to the base class
+
 protected:
   // Note that the life of HepMC event object must be handled by users.
   // In the default implementation, a current HepMC event will be
   // deleted at GeneratePrimaryVertex() in the next event.
   HepMC::GenEvent* hepmcEvent; // (care for single event case only)
-
-  // We  have to take care for the position of primaries because
-  // primary vertices outside the world voulme give rise to G4Execption.
-  // If the default implementation is not adequate, an alternative 
-  // can be implemented in your own class.
-  virtual G4bool CheckVertexInsideWorld(const G4ThreeVector& pos) const;
-
-  // service method for conversion from HepMC::GenEvent to G4Event
-  void HepMC2G4(const HepMC::GenEvent* hepmcevt, G4Event* g4event);
 
   // Implement this method in his/her own concrete class.
   // An empty event will be created in default.

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VRML2SceneHandlerFunc.icc,v 1.13 2003/05/30 13:01:25 johna Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4VRML2SceneHandlerFunc.icc,v 1.14 2003/11/06 15:04:45 johna Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // G4VRML2SceneHandlerFunc.icc
 // Satoshi Tanaka & Yasuhide Sawada
@@ -178,8 +178,7 @@ void G4VRML2SCENEHANDLER::AddPrimitive(const G4Polyhedron& polyhedron)
 
 	// Current Model
 	const G4VModel* pv_model  = GetModel();
-//	const char* pv_name = pv_model->GetCurrentTag() ;
-	const char* pv_name = (const char*) pv_model->GetCurrentTag() ;
+	G4String pv_name = pv_model->GetCurrentTag() ;
 
 	// VRML codes are generated below
 

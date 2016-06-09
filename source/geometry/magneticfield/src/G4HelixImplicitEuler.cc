@@ -21,26 +21,24 @@
 // ********************************************************************
 //
 //
-// $Id: G4HelixImplicitEuler.cc,v 1.4 2001/07/11 09:59:12 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4HelixImplicitEuler.cc,v 1.5 2003/10/31 14:35:54 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
-#include "G4HelixImplicitEuler.hh"
-#include "G4ThreeVector.hh"
-
 //
 //  Helix Implicit Euler:
 //        x_1 = x_0 + 1/2 * ( helix(h,t_0,x_0)
 //                          + helix(h,t_0+h,x_0+helix(h,t0,x0) ) )
+//  Second order solver.
+//  Take the current derivative and add it to the current position.
+//  Take the output and its derivative. Add the mean of both derivatives
+//  to form the final output
+//
 //  W.Wander <wwc@mit.edu> 12/09/97 
 //
-
 // -------------------------------------------------------------------------
 
-// second order solver
-// Take the current derivative and add it to the current position.
-// Take the output and its derivative. Add the mean of both derivatives
-// to form the final output
-//
+#include "G4HelixImplicitEuler.hh"
+#include "G4ThreeVector.hh"
 
 void
 G4HelixImplicitEuler::DumbStepper( const G4double  yIn[],
@@ -68,6 +66,4 @@ G4HelixImplicitEuler::DumbStepper( const G4double  yIn[],
     yOut[i] = 0.5 * ( yTemp[i] + yTemp2[i] );
 
   // NormaliseTangentVector( yOut );           
-  
-  return ;
 }  

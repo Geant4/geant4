@@ -21,12 +21,13 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSolid.icc,v 1.6 2002/10/28 11:25:37 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4VSolid.icc,v 1.7 2003/11/02 14:01:22 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // 
 // G4VSolid Inline implementation
 //
+// --------------------------------------------------------------------
 
 inline
 G4bool G4VSolid::operator==( const G4VSolid& s) const

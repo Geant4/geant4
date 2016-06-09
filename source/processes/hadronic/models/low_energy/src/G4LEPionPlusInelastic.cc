@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4LEPionPlusInelastic.cc,v 1.9 2003/06/16 17:10:22 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4LEPionPlusInelastic.cc,v 1.11 2003/10/31 18:04:17 hpw Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
  // Hadronic Process: PionPlus Inelastic Process
  // J.L. Chuma, TRIUMF, 19-Nov-1996
@@ -33,13 +33,11 @@
 #include "G4LEPionPlusInelastic.hh"
 #include "Randomize.hh"
 
- G4VParticleChange *
-  G4LEPionPlusInelastic::ApplyYourself( const G4Track &aTrack,
+ G4HadFinalState *
+  G4LEPionPlusInelastic::ApplyYourself( const G4HadProjectile &aTrack,
                                         G4Nucleus &targetNucleus )
   {
-    theParticleChange.Initialize( aTrack );
-    
-    const G4DynamicParticle *originalIncident = aTrack.GetDynamicParticle();
+    const G4HadProjectile *originalIncident = &aTrack;
     if (originalIncident->GetKineticEnergy()<= 0.1*MeV) return &theParticleChange;
 
     // create the target particle
@@ -50,15 +48,16 @@
     
     if( verboseLevel > 1 )
     {
-      G4Material *targetMaterial = aTrack.GetMaterial();
+      const G4Material *targetMaterial = aTrack.GetMaterial();
       G4cout << "G4LEPionPlusInelastic::ApplyYourself called" << G4endl;
       G4cout << "kinetic energy = " << originalIncident->GetKineticEnergy() << "MeV, ";
       G4cout << "target material = " << targetMaterial->GetName() << ", ";
       G4cout << "target particle = " << originalTarget->GetDefinition()->GetParticleName()
            << G4endl;
     }
-    G4ReactionProduct currentParticle( originalIncident->GetDefinition() );
-    currentParticle.SetMomentum( originalIncident->GetMomentum() );
+    G4ReactionProduct currentParticle( 
+    const_cast<G4ParticleDefinition *>(originalIncident->GetDefinition() ) );
+    currentParticle.SetMomentum( originalIncident->Get4Momentum().vect() );
     currentParticle.SetKineticEnergy( originalIncident->GetKineticEnergy() );
     
     // Fermi motion and evaporation
@@ -100,7 +99,7 @@
     G4bool incidentHasChanged = false;
     G4bool targetHasChanged = false;
     G4bool quasiElastic = false;
-    G4FastVector<G4ReactionProduct,128> vec;  // vec will contain the secondary particles
+    G4FastVector<G4ReactionProduct,GHADLISTSIZE> vec;  // vec will contain the secondary particles
     G4int vecLen = 0;
     vec.Initialize( 0 );
     
@@ -125,9 +124,9 @@
  
  void
   G4LEPionPlusInelastic::Cascade(
-   G4FastVector<G4ReactionProduct,128> &vec,
+   G4FastVector<G4ReactionProduct,GHADLISTSIZE> &vec,
    G4int& vecLen,
-   const G4DynamicParticle *originalIncident,
+   const G4HadProjectile *originalIncident,
    G4ReactionProduct &currentParticle,
    G4ReactionProduct &targetParticle,
    G4bool &incidentHasChanged,

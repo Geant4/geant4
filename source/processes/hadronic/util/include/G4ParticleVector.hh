@@ -21,8 +21,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleVector.hh,v 1.9 2003/06/16 17:12:21 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
 //
 
 #ifndef G4ParticleVector_h

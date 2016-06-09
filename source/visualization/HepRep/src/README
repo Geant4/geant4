@@ -5,12 +5,14 @@ G4HepRepFileSceneHandler.cc
 G4HepRepFileViewer.cc
 HepRepXMLWriter.cc
 
+and the zlib sources
+
 the other sources (heprep2) are copies from the FreeHEP library
-(java.freehep.org) and are maintained there. 
+(java.freehep.org) and are maintained there.
 
 The files starting with G4 are geant4 compliant, the others may not be.
 
 Changes made here may be overwritten.
 
-12 Nov 2002
+11 July 2003
 Mark Donszelmann

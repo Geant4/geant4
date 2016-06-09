@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4SmartVoxelNode.hh,v 1.8 2003/06/16 16:51:58 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4SmartVoxelNode.hh,v 1.9 2003/11/02 14:01:22 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // class G4SmartVoxelNode
 //
@@ -45,14 +45,11 @@
 // History:
 // 18.04.01 G.Cosmo Migrated to STL vector
 // 12.07.95 P.Kent  Initial version
-
+// --------------------------------------------------------------------
 #ifndef G4SMARTVOXELNODE_HH
 #define G4SMARTVOXELNODE_HH
 
-#include "globals.hh"
-#include "voxeldefs.hh"
-
-#include "G4VPhysicalVolume.hh"
+#include "G4Types.hh"
 #include <vector>
 
 typedef std::vector<G4int> G4SliceVector;

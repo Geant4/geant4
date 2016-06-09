@@ -57,8 +57,8 @@ class G4LEnp : public G4HadronicInteraction
 
    ~G4LEnp();
  
-   G4VParticleChange* ApplyYourself(const G4Track& aTrack,
-                                    G4Nucleus& targetNucleus);
+   G4HadFinalState* ApplyYourself(const G4HadProjectile& aTrack,
+                                  G4Nucleus& targetNucleus);
 
 
  private:

@@ -20,6 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
+// $Id: G4UniversalFluctuation.hh,v 1.10 2003/11/06 17:18:36 vnivanch Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // -------------------------------------------------------------------
 //
@@ -29,7 +31,7 @@
 // File name:     G4UniversalFluctuation
 //
 // Author:        Vladimir Ivanchenko
-// 
+//
 // Creation date: 03.01.2002
 //
 // Modifications:
@@ -38,8 +40,9 @@
 // 28-12-02 add method Dispersion (V.Ivanchenko)
 // 07-02-03 change signature (V.Ivanchenko)
 // 13-02-03 Add name (V.Ivanchenko)
+// 16-10-03 Changed interface to Initialisation (V.Ivanchenko)
 //
-// Class Description: 
+// Class Description:
 //
 // Implementation of energy loss fluctuations
 
@@ -72,7 +75,7 @@ public:
  				G4double&,
                                 G4double&);
 
-  void Initialise(const G4ParticleDefinition*);
+  void InitialiseMe(const G4ParticleDefinition*);
 
 protected:
 
@@ -108,8 +111,8 @@ private:
   G4double problim;
   G4double sumalim;
   G4double alim;
-  G4int    nmaxCont1;
-  G4int    nmaxCont2;
+  G4double nmaxCont1;
+  G4double nmaxCont2;
 
 };
 

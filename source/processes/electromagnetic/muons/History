@@ -1,4 +1,4 @@
-$Id: History,v 1.51 2003/06/06 17:42:52 vnivanch Exp $
+$Id: History,v 1.63 2003/11/12 16:30:32 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,47 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+11 Nov 03: V.Ivant (muons-V05-02-09)
+- Remove force of verbose=0 for G4MuIonisation
+- Substitute G4VEnergyLossSTD by G4VEnergyLossProcess
+
+03 Nov 03: V.Ivant (muons-V05-02-08)
+- Remove STD processes
+- Minor update of defaults for processes
+     
+21 Oct 03: mma (muons-V05-02-07)
+- fixes in MuPairProductionodel.cc (R.Kokoulin):
+  - 2*xi in ComputeDDMicroscopicCrossSection
+  - 8 integration points in ComputeDMicroscopicCrossSection 
+
+3 Oct 03: G.Cosmo (muons-V05-02-06)
+- Modified GNUmakefiles:
+  o added dependency to new module "geometry/navigation".
+  o replaced "digits+hits" with "digits_hits".
+- Coworks with "geometry-V05-02-00" and "digits_hits-V05-02-00".
+
+27 Sept 03: V.Ivant (muons-V05-02-05)
+-Change secondary particle to be e+
+
+20 Sept 03: V.Ivant (muons-V05-02-04)
+-Update energy intervals for ionisation models
+-Update GNUmakefile
+
+08 August 03: V.Ivant (muons-V05-02-03)
+-Substitute standerd by STD, freezing old standard as 52
+
+07 August 03: V.Ivant (muons-V05-02-02)
+-Change defaults for STD processes
+
+24 July 03: V.Ivant (muons-V05-02-01)
+-Update model interface according utils-V05-02-00
+
+02 July 03: V.Ivant (muons-V05-02-00)
+-Redo previous tag for 5.2
+
+26 June 03: V.Ivant (muons-V05-01-07)
+-Bug fix in Printout of G4MuIonisation
 
 03 June 03: V.Ivant (muons-V05-01-06)
 -Bug fix in cross section at high energies in G4MuPairProductionSTD

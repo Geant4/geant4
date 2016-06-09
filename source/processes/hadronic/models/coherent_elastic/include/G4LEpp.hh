@@ -56,8 +56,8 @@ class G4LEpp : public G4HadronicInteraction
 
    ~G4LEpp();
  
-   G4VParticleChange* ApplyYourself(const G4Track& aTrack,
-                                    G4Nucleus& targetNucleus);
+   G4HadFinalState* ApplyYourself(const G4HadProjectile& aTrack,
+                                  G4Nucleus& targetNucleus);
 
    void SetCoulombEffects(G4int State);
   

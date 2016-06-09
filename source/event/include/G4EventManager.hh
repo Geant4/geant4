@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4EventManager.hh,v 1.9 2001/07/19 00:14:15 asaim Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4EventManager.hh,v 1.12 2003/09/09 20:09:17 asaim Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 //
 
@@ -46,6 +46,12 @@ class G4EvManMessenger;
 #include "G4TrackStatus.hh"
 class G4SDManager;
 #include "globals.hh"
+class G4VUserEventInformation;
+
+#ifndef WIN32         // Temporarly disabled on Windows, until CLHEP
+                      // will support the HepMC module
+#include "CLHEP/HepMC/GenEvent.h"
+#endif
 
 // class description:
 //
@@ -72,10 +78,42 @@ class G4EventManager
 
   public: // with description
       void ProcessOneEvent(G4Event* anEvent);
-      //  This method it the main entry to this class for simulating an event.
-      // This method must be exclusively invoked by G4RunManager.
+      //  This method is the main entry to this class for simulating an event.
+
+#ifndef WIN32         // Temporarly disabled on Windows, until CLHEP
+                      // will support the HepMC module
+      void ProcessOneEvent(const HepMC::GenEvent* hepmcevt,G4Event* anEvent=0);
+      //  This is an alternative entry for large HEP experiments which use
+      // HepMC event class. Dummy G4Event object will be created if "anEvent" is null
+      // for internal use, but this dummy object will be deleted at the end of this
+      // method and will never be available for the use after the processing.
+      // Note that in this case of null G4Event pointer no output of the simulated event
+      // is returned by this method, but the user must implement some mechanism
+      // of storing output by his/herself, e.g. in his/her UserEventAction and/or
+      // sensitive detectors.
+      //  If valid G4Event object is given, this object will not be deleted with
+      // this method and output objects such as hits collections and trajectories
+      // will be associated to this event object. If this event object has valid
+      // primary vertices/particles, they will be added to the given HepMC event input.
+#endif
+
+      void ProcessOneEvent(G4TrackVector* trackVector,G4Event* anEvent=0);
+      //  This is an alternative entry for large HEP experiments which create G4Track
+      // objects by themselves directly without using G4VPrimaryGenerator or user
+      // primary generator action. Dummy G4Event object will be created if "anEvent" is null
+      // for internal use, but this dummy object will be deleted at the end of this
+      // method and will never be available for the use after the processing.
+      // Note that in this case of null G4Event pointer no output of the simulated event 
+      // is returned by this method, but the user must implement some mechanism
+      // of storing output by his/herself, e.g. in his/her UserEventAction and/or
+      // sensitive detectors.
+      //  If valid G4Event object is given, this object will not be deleted with
+      // this method and output objects such as hits collections and trajectories
+      // will be associated to this event object. If this event object has valid
+      // primary vertices/particles, they will be added to the given trackvector input.
 
   private:
+      void DoProcessing(G4Event* anEvent);
       void StackTracks(G4TrackVector *trackVector, G4bool IDhasAlreadySet=false);
   
       G4Event* currentEvent;
@@ -145,6 +183,12 @@ class G4EventManager
         transformer->SetVerboseLevel( value );
       }
       // Set and get method of the verbose level
+
+      void SetUserInformation(G4VUserEventInformation* anInfo);
+      G4VUserEventInformation* GetUserInformation();
+      // Set and get method of G4VUserEventInformation object associating with
+      // the current event. Both methods are valid only for G4State_EventProc
+      // application state.
 
 };
 

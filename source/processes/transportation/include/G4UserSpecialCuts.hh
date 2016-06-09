@@ -21,19 +21,18 @@
 // ********************************************************************
 //
 //
-// $Id: G4UserSpecialCuts.hh,v 1.5 2002/08/29 15:32:00 dressel Exp $
-// GEANT4 tag $Name: geant4-05-02 $
-// ------------------------------------------------------------
-//                  15 April 1998  M.Maire
-// ------------------------------------------------------------
+// $Id: G4UserSpecialCuts.hh,v 1.7 2003/11/26 14:51:48 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // class description
 //
-// a "process" to be registered to the process manager of each particle,
-// in the UserPhysicsList, in order to take account the user limits defined in the 
-// G4UserLimits attached to a logical volume.
-//
+// A "process" to be registered to the process manager of each particle,
+// in the UserPhysicsList, in order to take into account the user limits
+// defined in the G4UserLimits object attached to a logical volume.
 
+// ------------------------------------------------------------
+//                  15 April 1998  M.Maire
+// ------------------------------------------------------------
 #ifndef G4UserSpecialCuts_h
 #define G4UserSpecialCuts_h 1
 
@@ -41,12 +40,11 @@
 #include "globals.hh"
 #include "G4VProcess.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+class G4LossTableManager;
 
 class G4UserSpecialCuts : public G4VProcess 
 {
-  public:  //with description     
+  public:  // with description     
 
      G4UserSpecialCuts(const G4String& processName ="UserSpecialCut" );
 
@@ -54,49 +52,51 @@ class G4UserSpecialCuts : public G4VProcess
 
      virtual G4double PostStepGetPhysicalInteractionLength(
                              const G4Track& track,
-			     G4double   previousStepSize,
-			     G4ForceCondition* condition
-			    );
+                             G4double   previousStepSize,
+                             G4ForceCondition* condition
+                            );
 
      virtual G4VParticleChange* PostStepDoIt(
-			     const G4Track& ,
-			     const G4Step& 
-			    );
-			    
-  public:  //without description 
-     			    
+                             const G4Track& ,
+                             const G4Step& 
+                            );
+                            
+  public:  // without description 
+                                 
      //  no operation in  AtRestGPIL
      virtual G4double AtRestGetPhysicalInteractionLength(
                              const G4Track& ,
-			     G4ForceCondition* 
-			    ){ return -1.0; };
-			    
+                             G4ForceCondition* 
+                            ){ return -1.0; };
+                            
      //  no operation in  AtRestDoIt      
      virtual G4VParticleChange* AtRestDoIt(
-			     const G4Track& ,
-			     const G4Step&
-			    ){return NULL;};
+                             const G4Track& ,
+                             const G4Step&
+                            ){return 0;};
 
      //  no operation in  AlongStepGPIL
      virtual G4double AlongStepGetPhysicalInteractionLength(
                              const G4Track&,
-			     G4double  ,
-			     G4double  ,
-			     G4double& ,
+                             G4double  ,
+                             G4double  ,
+                             G4double& ,
                              G4GPILSelection*
-			    ){ return -1.0; };
+                            ){ return -1.0; };
 
      //  no operation in  AlongStepDoIt
      virtual G4VParticleChange* AlongStepDoIt(
-			     const G4Track& ,
-			     const G4Step& 
-			    ) {return NULL;};
+                             const G4Track& ,
+                             const G4Step& 
+                            ) {return 0;};
 
   private:
   
   // hide assignment operator as private 
       G4UserSpecialCuts(G4UserSpecialCuts&);
       G4UserSpecialCuts& operator=(const G4UserSpecialCuts& right);
+
+  G4LossTableManager* theLossTableManager;
 
 };
 

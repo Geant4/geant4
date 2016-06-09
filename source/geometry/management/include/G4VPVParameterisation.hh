@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VPVParameterisation.hh,v 1.4 2001/07/11 09:59:18 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4VPVParameterisation.hh,v 1.6 2003/11/02 14:00:53 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // class G4VPVParamterisation
 //
@@ -37,27 +37,30 @@
 // 20.09.96 V.Grichine    Modifications for G4Trap/Cons/Sphere
 // 31.10.96 V.Grichine    Modifications for G4Torus/Para
 // 17.02.98 J.Apostolakis Allowing the parameterisation of Solid type
-
+// --------------------------------------------------------------------
 #ifndef G4VPVPARAMETERISATION_HH
 #define G4VPVPARAMETERISATION_HH
 
-#include "globals.hh"
+#include "G4Types.hh"
 
 class G4VPhysicalVolume;
+class G4VSolid;
+class G4Material;
 
 // CSG Entities which may be parameterised/replicated
-
+//
 class G4Box;
 class G4Tubs;
 class G4Trd;
 class G4Trap;
 class G4Cons;
 class G4Sphere;
+class G4Orb;
 class G4Torus;
 class G4Para;
+class G4Polycone;
+class G4Polyhedra;
 class G4Hype;
-class G4VSolid;
-class G4Material;
 
 class G4VPVParameterisation
 {
@@ -94,11 +97,23 @@ class G4VPVParameterisation
                                    const G4int,
                                    const G4VPhysicalVolume *) const {}
 
+    virtual void ComputeDimensions(G4Orb &,
+                                   const G4int,
+                                   const G4VPhysicalVolume *) const {}
+
     virtual void ComputeDimensions(G4Torus &,
                                    const G4int,
                                    const G4VPhysicalVolume *) const {}
 
     virtual void ComputeDimensions(G4Para &,
+                                   const G4int,
+                                   const G4VPhysicalVolume *) const {}
+
+    virtual void ComputeDimensions(G4Polycone &,
+                                   const G4int,
+                                   const G4VPhysicalVolume *) const {}
+
+    virtual void ComputeDimensions(G4Polyhedra &,
                                    const G4int,
                                    const G4VPhysicalVolume *) const {}
 

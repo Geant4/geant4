@@ -19,7 +19,8 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
-// $Id: example_MyPythia.cc,v 1.3 2002/12/13 11:42:38 gcosmo Exp $
+//
+// $Id: example_MyPythia.cc,v 1.4 2003/12/09 15:31:35 gunter Exp $
 // ====================================================================
 //   example_MyPythia.cc
 //

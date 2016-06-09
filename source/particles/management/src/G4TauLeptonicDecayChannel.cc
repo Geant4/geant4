@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4TauLeptonicDecayChannel.cc,v 1.2 2002/03/28 10:56:09 kurasige Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // 
 // ------------------------------------------------------------

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: A01EventActionMessenger.hh,v 1.3 2002/12/13 11:34:28 gunter Exp $
+// $Id: A01EventActionMessenger.hh,v 1.5 2003/10/13 17:57:49 duns Exp $
 // --------------------------------------------------------------
 //
 #ifndef A01EventActionMessenger_h

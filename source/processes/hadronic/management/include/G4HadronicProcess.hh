@@ -39,77 +39,45 @@
 #include "globals.hh"
 #include "G4VDiscreteProcess.hh"
 #include "G4EnergyRangeManager.hh"
-#include "G4Track.hh"
-#include "G4Step.hh"
-#include "G4Element.hh"
-#include "G4ElementVector.hh"
-#include "G4ElementTable.hh"
-#include "G4PhysicsTable.hh"
-#include "G4PhysicsVector.hh"
 #include "G4Nucleus.hh" 
 #include "G4ReactionProduct.hh"
 #include <vector>
 #include "G4VIsotopeProduction.hh"
 #include "G4IsoParticleChange.hh"
-#include "G4HadLeadBias.hh"
 #include "G4VCrossSectionDataSet.hh"
- 
+#include "G4VLeadingParticleBiasing.hh"
+#include "G4Delete.hh"
+#include "G4CrossSectionDataStore.hh"
+#include "G4HadronicException.hh"
+
+class G4Track;
+class G4Step;
+class G4Element;
+class G4ParticleChange;
+
  class G4HadronicProcess : public G4VDiscreteProcess
  {
  public:
     
-    G4HadronicProcess( const G4String &processName = "Hadronic" ) :
-      G4VDiscreteProcess( processName )
-    { 
-      isoIsOnAnyway = 0; 
-      theBias = new G4HadLeadBias();
-    }
-    
-    virtual ~G4HadronicProcess()
-    { 
-      unsigned int i; for(i=0; i<theProductionModels.size(); i++) delete theProductionModels[i]; 
-      delete theBias;
-    }
-    
-    inline void RegisterMe( G4HadronicInteraction *a )
-    { GetManagerPointer()->RegisterMe( a ); }
-    
-    inline G4HadronicInteraction *GetHadronicInteraction()
-    { return theInteraction; }
-    
-    inline G4HadronicInteraction *ChooseHadronicInteraction(
-     G4double kineticEnergy, G4Material *aMaterial, G4Element *anElement )
-    { return GetManagerPointer()->
-        GetHadronicInteraction( kineticEnergy, aMaterial, anElement ); }
-    
-    inline const G4EnergyRangeManager &GetEnergyRangeManager() const
-    { return theEnergyRangeManager; }
-    
-    inline void SetEnergyRangeManager( const G4EnergyRangeManager &value )
-    { theEnergyRangeManager = value; }
+    G4HadronicProcess( const G4String &processName = "Hadronic" );    
+    virtual ~G4HadronicProcess();
 
-    G4Element * ChooseAandZ( const G4DynamicParticle *aParticle,
-                             const G4Material *aMaterial );
+    void RegisterMe( G4HadronicInteraction *a );
 
+    void AddDataSet(G4VCrossSectionDataSet * aDataSet)
+    {
+       theCrossSectionDataStore->AddDataSet(aDataSet);
+    }
+        
     virtual G4VParticleChange *PostStepDoIt( const G4Track &aTrack, 
                                             const G4Step &aStep ) = 0;
-
-    G4VParticleChange *GeneralPostStepDoIt( const G4Track &aTrack, 
-                                           const G4Step &aStep );
-    
-    void SetDispatch( G4HadronicProcess *value )
-    { dispatch=value; }
-    
+        
     virtual G4double GetMicroscopicCrossSection( const G4DynamicParticle *aParticle, 
                                                  const G4Element *anElement, 
 						 G4double aTemp ) = 0;
     
-    G4double GetCurrentZ()
-    { return currentZ; }
-    
-    G4double GetCurrentN()
-    { return currentN; }
-    
+    G4double GetMeanFreePath(const G4Track &aTrack, G4double, G4ForceCondition *);
+
     // Set methods for isotope production
     
     static void EnableIsotopeProductionGlobally();
@@ -129,28 +97,111 @@
       return anIsoResult;
     }
 
+    void BiasCrossSectionByFactor(G4double aScale) 
+    {
+      xBiasOn = true;
+      aScaleFactor = aScale;
+      G4String it = GetProcessName(); 
+      if( (it != "PhotonInelastic") && 
+          (it != "ElectroNuclear") && 
+	  (it != "PositronNuclear") )
+      {
+        G4Exception("G4HadronicProcess", "007", FatalException,
+                    "Cross-section biasing available only for gamma and electro nuclear reactions.");
+      }
+      if(aScale<100)
+      {
+        G4Exception("G4HadronicProcess", "001", JustWarning,
+                    "Cross-section bias readjusted to be above safe limit. New value is 100");        
+        aScaleFactor = 100.;
+      }
+    }
+    
  protected:
+    
+    virtual void ResetNumberOfInteractionLengthLeft()
+    {
+      G4VProcess::theNumberOfInteractionLengthLeft =  -log( G4UniformRand() );
+      theInitialNumberOfInteractionLength = G4VProcess::theNumberOfInteractionLengthLeft;
+    }
+
+    G4VParticleChange *GeneralPostStepDoIt( const G4Track &aTrack, 
+                                           const G4Step &aStep );
+    
+    void SetDispatch( G4HadronicProcess *value )
+    { dispatch=value; }
+    
+    G4Element * ChooseAandZ( const G4DynamicParticle *aParticle,
+                             const G4Material *aMaterial );
+
+    inline const G4EnergyRangeManager &GetEnergyRangeManager() const
+    { return theEnergyRangeManager; }
+    
+    inline void SetEnergyRangeManager( const G4EnergyRangeManager &value )
+    { theEnergyRangeManager = value; }
+
+    inline G4HadronicInteraction *ChooseHadronicInteraction(
+     G4double kineticEnergy, G4Material *aMaterial, G4Element *anElement )
+    { 
+      return GetManagerPointer()->
+        GetHadronicInteraction( kineticEnergy, aMaterial, anElement );
+    }
+
+    inline G4HadronicInteraction *GetHadronicInteraction()
+    { return theInteraction; }
     
     inline G4EnergyRangeManager *GetManagerPointer()
     { return &theEnergyRangeManager; }
     
-    G4EnergyRangeManager theEnergyRangeManager;
+    G4double GetCurrentZ()
+    { return currentZ; }
     
-    G4HadronicInteraction *theInteraction;
-
-    G4Nucleus targetNucleus;
+    G4double GetCurrentN()
+    { return currentN; }
     
+    G4CrossSectionDataStore* GetCrossSectionDataStore()
+    {
+       return theCrossSectionDataStore;
+    }
+   
+    G4double GetLastCrossSection() {return theLastCrossSection;}
  private:
     
-    G4VParticleChange * DoIsotopeCounting(G4VParticleChange * aResult,
+    G4HadFinalState * DoIsotopeCounting(G4HadFinalState * aResult,
                                           const G4Track & aTrack,
                                           const G4Nucleus & aNucleus);
                                           
     G4IsoResult * ExtractResidualNucleus(const G4Track & aTrack,
                                          const G4Nucleus & aNucleus,
-                                         G4VParticleChange * aResult);
+                                         G4HadFinalState * aResult);
+
+    G4double GetTotalNumberOfInteractionLengthTraversed()
+    {
+      return theInitialNumberOfInteractionLength
+            -G4VProcess::theNumberOfInteractionLengthLeft;
+    }
+    
+    G4double GetDistanceToBoundary(const G4Track & aT);
+
+    void FillTotalResult(G4HadFinalState * aR, const G4Track & aT);
+    
+    void SetCrossSectionDataStore(G4CrossSectionDataStore* aDataStore)
+    {
+       theCrossSectionDataStore = aDataStore;
+    }
+    
+    G4double XBiasSurvivalProbability();
+    G4double XBiasSecondaryWeight();
     
  private:
+    
+    G4EnergyRangeManager theEnergyRangeManager;
+    
+    G4HadronicInteraction *theInteraction;
+
+    G4CrossSectionDataStore* theCrossSectionDataStore;
+ 
+    G4Nucleus targetNucleus;
     
     G4double currentZ;
     G4double currentN;
@@ -164,11 +215,18 @@
     G4IsoParticleChange theIsoPC;
     std::vector<G4VIsotopeProduction *> theProductionModels;
     
-    G4VLeadingParticleBiasing * theBias;
+    std::vector<G4VLeadingParticleBiasing *> theBias;
 
     static G4IsoParticleChange * theIsoResult;
     static G4IsoParticleChange * theOldIsoResult;
     
+    G4ParticleChange * theTotalResult; 
+    
+    G4double theInitialNumberOfInteractionLength;   
+
+    G4double aScaleFactor;
+    G4bool xBiasOn;
+    G4double theLastCrossSection;
  };
  
 #endif

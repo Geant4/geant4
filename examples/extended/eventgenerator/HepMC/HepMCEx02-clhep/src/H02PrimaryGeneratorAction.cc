@@ -19,11 +19,11 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
-
+//
 // ====================================================================
 //
 //   H02PrimaryGeneratorAction.cc
-//   $Id: H02PrimaryGeneratorAction.cc,v 1.1 2002/11/19 10:36:20 murakami Exp $
+//   $Id: H02PrimaryGeneratorAction.cc,v 1.2 2003/12/09 15:31:55 gunter Exp $
 //
 // ====================================================================
 #include "H02PrimaryGeneratorAction.hh"

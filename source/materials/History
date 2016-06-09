@@ -1,4 +1,4 @@
-$Id: History,v 1.44 2003/06/18 08:13:17 gcosmo Exp $
+$Id: History,v 1.45 2003/12/01 15:14:05 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+01.12.03 P.Gumplinger - materials-V05-02-00
+         Added base class G4SurfaceProperty.
+         G4OpticalSurface[.hh.cc]: modified to inherit from G4SurfaceProperty.
 
 18.06.03 G.Cosmo - materials-V05-01-01
          G4Isotope.cc G4Element.cc, G4Material.cc: removed usage of

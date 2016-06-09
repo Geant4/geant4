@@ -19,11 +19,11 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
-
+//
 // ====================================================================
 //
 //   ExN04PrimaryGeneratorMessenger.cc
-//   $Id: ExN04PrimaryGeneratorMessenger.cc,v 1.1 2002/04/29 20:44:06 asaim Exp $
+//   $Id: ExN04PrimaryGeneratorMessenger.cc,v 1.2 2003/12/09 15:30:48 gunter Exp $
 //
 // ====================================================================
 #include "G4UIcommand.hh"

@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gdml xmlns:gdml="http://cern.ch/2001/Schemas/GDML"
+     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+     xsi:noNamespaceSchemaLocation="../schema/gdml_1.0.xsd">
+  <define>
+    <constant name="HALFPI" value="pi/2."/>
+    <constant name="PI" value="1.*pi"/>
+    <constant name="TWOPI" value="2.*pi"/>
+    <position name="center"/>
+    <rotation name="identity"/>
+    <position name="shiftbyx" x="20.0"/>
+    <rotation name="rotatebyx" x="HALFPI"/>
+    <rotation name="rotatebyall" x="HALFPI" y="PI" z="TWOPI"/>
+   </define>
+
+  <materials>
+     <!--Elements-->
+     <element name="Hydrogen" formula="H" Z="1">
+      <atom value="1.00794"/>
+     </element>
+     <element name="Carbon" formula="C" Z="6">
+      <atom value="12.011"/>
+     </element>
+     <element name="Nitrogen" formula="N" Z="7">
+      <atom value="14.00674"/>
+     </element>
+     <element name="Oxygen" formula="O" Z="8">
+      <atom value="15.9994"/>
+     </element>
+     <element name="Sodium" formula="Na" Z="11">
+      <atom value="22.989768"/>
+     </element>
+     <element name="Magnesium" formula="Mg" Z="12">
+      <atom value="24.305"/>
+     </element>
+     <element name="Phosphorus" formula="P" Z="15">
+      <atom value="30.973762"/>
+     </element>
+     <element name="Sulfur" formula="S" Z="16">
+      <atom value="32.066"/>
+     </element>
+     <element name="Chlorine" formula="Cl" Z="17">
+      <atom value="35.4527"/>
+     </element>
+     <element name="Potassium" formula="K" Z="19">
+      <atom value="39.0983"/>
+     </element>
+     <element name="Calcium" formula="Ca" Z="20">
+      <atom value="40.078"/>
+     </element>
+     <element name="Iron" formula="Fe" Z="26">
+      <atom value="55.845"/>
+     </element>
+
+     <!--Materials from Combination-->
+     <material name="SkeletonSpongiosa">
+         <D type="denstiy" value="1159.0" unit="kg/m3"/>
+         <T type="temperature" value="273.15" unit="kelvin"/>
+         <P type="pascal" value="1.0" unit="atmosphere"/>
+         <fraction n="0.085" ref="H"/>
+         <fraction n="0.404" ref="C"/>
+         <fraction n="0.058" ref="N"/>
+         <fraction n="0.367" ref="O"/>
+         <fraction n="0.0010" ref="Na"/>
+         <fraction n="0.0010" ref="Mg"/>
+         <fraction n="0.034" ref="P"/>
+         <fraction n="0.0020" ref="S"/>
+         <fraction n="0.0020" ref="Cl"/>
+         <fraction n="0.0010" ref="K"/>
+         <fraction n="0.044" ref="Ca"/>
+         <fraction n="0.0010" ref="Fe"/>
+     </material>
+     <material name="SkeletonRibs">
+         <D type="denstiy" value="1575.0" unit="kg/m3"/>
+         <T type="temperature" value="273.15" unit="kelvin"/>
+         <P type="pascal" value="1.0" unit="atmosphere"/>
+         <fraction n="0.056" ref="H"/>
+         <fraction n="0.235" ref="C"/>
+         <fraction n="0.05" ref="N"/>
+         <fraction n="0.434" ref="O"/>
+         <fraction n="0.0010" ref="Na"/>
+         <fraction n="0.0010" ref="Mg"/>
+         <fraction n="0.072" ref="P"/>
+         <fraction n="0.0030" ref="S"/>
+         <fraction n="0.0010" ref="Cl"/>
+         <fraction n="0.0010" ref="K"/>
+         <fraction n="0.146" ref="Ca"/>
+     </material>
+     <material name="Liver">
+         <D type="denstiy" value="1071.0" unit="kg/m3"/>
+         <T type="temperature" value="273.15" unit="kelvin"/>
+         <P type="pascal" value="1.0" unit="atmosphere"/>
+         <fraction n="0.102" ref="H"/>
+         <fraction n="0.139" ref="C"/>
+         <fraction n="0.03" ref="N"/>
+         <fraction n="0.716" ref="O"/>
+         <fraction n="0.0020" ref="Na"/>
+         <fraction n="0.0030" ref="P"/>
+         <fraction n="0.0030" ref="S"/>
+         <fraction n="0.0020" ref="Cl"/>
+         <fraction n="0.0030" ref="K"/>
+     </material>
+     <material name="Muscle">
+         <D type="denstiy" value="1061.0" unit="kg/m3"/>
+         <T type="temperature" value="273.15" unit="kelvin"/>
+         <P type="pascal" value="1.0" unit="atmosphere"/>
+         <fraction n="0.102" ref="H"/>
+         <fraction n="0.143" ref="C"/>
+         <fraction n="0.034" ref="N"/>
+         <fraction n="0.71" ref="O"/>
+         <fraction n="0.0010" ref="Na"/>
+         <fraction n="0.0020" ref="P"/>
+         <fraction n="0.0030" ref="S"/>
+         <fraction n="0.0010" ref="Cl"/>
+         <fraction n="0.0040" ref="K"/>
+     </material>
+     <material name="Phantom">
+         <D type="denstiy" value="1018.0" unit="kg/m3"/>
+         <T type="temperature" value="273.15" unit="kelvin"/>
+         <P type="pascal" value="1.0" unit="atmosphere"/>
+         <fraction n="0.112" ref="H"/>
+         <fraction n="0.888" ref="O"/>
+     </material>
+     <material name="Breast">
+         <D type="denstiy" value="990.0" unit="kg/m3"/>
+         <T type="temperature" value="273.15" unit="kelvin"/>
+         <P type="pascal" value="1.0" unit="atmosphere"/>
+         <fraction n="0.109" ref="H"/>
+         <fraction n="0.506" ref="C"/>
+         <fraction n="0.023" ref="N"/>
+         <fraction n="0.358" ref="O"/>
+         <fraction n="0.0010" ref="Na"/>
+         <fraction n="0.0010" ref="P"/>
+         <fraction n="0.0010" ref="S"/>
+         <fraction n="0.0010" ref="Cl"/>
+     </material>
+     <material name="adiposeTissue">
+         <D type="denstiy" value="967.0" unit="kg/m3"/>
+         <T type="temperature" value="273.15" unit="kelvin"/>
+         <P type="pascal" value="1.0" unit="atmosphere"/>
+         <fraction n="0.114" ref="H"/>
+         <fraction n="0.598" ref="C"/>
+         <fraction n="0.0070" ref="N"/>
+         <fraction n="0.278" ref="O"/>
+         <fraction n="0.0010" ref="Na"/>
+         <fraction n="0.0010" ref="S"/>
+         <fraction n="0.0010" ref="Cl"/>
+     </material>
+     <material name="lungExhale">
+         <D type="denstiy" value="508.0" unit="kg/m3"/>
+         <T type="temperature" value="273.15" unit="kelvin"/>
+         <P type="pascal" value="1.0" unit="atmosphere"/>
+         <fraction n="0.103" ref="H"/>
+         <fraction n="0.105" ref="C"/>
+         <fraction n="0.031" ref="N"/>
+         <fraction n="0.749" ref="O"/>
+         <fraction n="0.0020" ref="Na"/>
+         <fraction n="0.0020" ref="P"/>
+         <fraction n="0.0030" ref="S"/>
+         <fraction n="0.0020" ref="Cl"/>
+         <fraction n="0.0030" ref="K"/>
+     </material>
+     <material name="lungInhale">
+         <D type="denstiy" value="217.0" unit="kg/m3"/>
+         <T type="temperature" value="273.15" unit="kelvin"/>
+         <P type="pascal" value="1.0" unit="atmosphere"/>
+         <fraction n="0.103" ref="H"/>
+         <fraction n="0.0105" ref="C"/>
+         <fraction n="0.031" ref="N"/>
+         <fraction n="0.749" ref="O"/>
+         <fraction n="0.0020" ref="Na"/>
+         <fraction n="0.0020" ref="P"/>
+         <fraction n="0.0030" ref="S"/>
+         <fraction n="0.0020" ref="Cl"/>
+         <fraction n="0.0030" ref="K"/>
+     </material>
+     <material name="Air">
+         <D type="denstiy" value="1.29" unit="mg/cm3"/>
+         <T type="temperature" value="273.15" unit="kelvin"/>
+         <P type="pascal" value="1.0" unit="atmosphere"/>
+         <fraction n="0.7" ref="N"/>
+         <fraction n="0.3" ref="O"/>
+     </material>
+
+     <!--Materials from Scratch-->
+  </materials>
+</gdml>

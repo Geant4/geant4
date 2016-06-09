@@ -40,14 +40,11 @@ CCalAnalysis* CCalAnalysis::instance = 0;
  
 CCalAnalysis::CCalAnalysis() :analysisFactory(0), tree(0), tuple(0), energy(0) {
 
-  for (int i=0; i<28; i++) {
-    hcalE[i] = 0;
-  }
-  for (int i=0; i<70; i++) {
-    lateralProfile[i] = 0;
-  }
+  for (int i=0; i<28; i++) {hcalE[i] = 0;}
+  for (int i=0; i<70; i++) {lateralProfile[i] = 0;}
   for (int i=0; i<49; i++) {ecalE[i] = 0;}
   for (int i=0; i<numberOfTimeSlices; i++) {timeHist[i] = 0;}
+  for (int i=0; i<2; i++)  {timeProfile[i] = 0;}
 
   analysisFactory = AIDA_createAnalysisFactory();
   if (analysisFactory) {
@@ -60,8 +57,9 @@ CCalAnalysis::CCalAnalysis() :analysisFactory(0), tree(0), tuple(0), energy(0) {
       G4String opFilestr = "ccal.his";
       if (opFileptr) opFilestr = opFileptr;
       G4cout << "********************************************" << G4endl
-	   << "* o/p file on " << opFilestr << G4endl
-	   << "********************************************" << G4endl << G4endl;
+	     << "* o/p file on " << opFilestr << G4endl
+	     << "********************************************" << G4endl 
+	     << G4endl;
       bool readOnly = false; // we want to write.
       bool createNew = true; // create file if it doesn't exist.
       tree = treeFactory->create(opFilestr, "hbook", readOnly,createNew);
@@ -109,7 +107,7 @@ CCalAnalysis::CCalAnalysis() :analysisFactory(0), tree(0), tuple(0), energy(0) {
 	  }
 	  // Total energy deposit
  	  energy  =  histoFactory->createHistogram1D("4000", "Total energy deposited   in GeV", 
-					    100, 0., 100.0);
+						     100, 0., 100.0);
 
 	  // Time slices	  
 	  for (int i=0; i<numberOfTimeSlices; i++){
@@ -120,10 +118,14 @@ CCalAnalysis::CCalAnalysis() :analysisFactory(0), tree(0), tuple(0), energy(0) {
 
 	  // Profile of lateral energy deposit in Hcal
 	  for (int i = 0; i<70; i++) {
-	    sprintf(id, "%d",i+400);
+	    sprintf(id, "%d",i+500);
 	    sprintf(ntupletag, "Lateral energy profile at %d cm  in GeV",i);
 	    lateralProfile[i] = histoFactory->createHistogram1D(id, ntupletag, 100, 0., 10.0);
 	  }
+
+	  // Time profile 
+	  timeProfile[0] = histoFactory->createHistogram1D("901", "Time Profile in Sensitive Detector", 200, 0., 200.);
+	  timeProfile[1] = histoFactory->createHistogram1D("902", "Time Profile in Sensitive+Passive", 200, 0., 200.);
 
 	  delete histoFactory;
 	}
@@ -178,7 +180,8 @@ void CCalAnalysis::InsertEnergyHcal(float* v) {
     }    
   }
 #ifdef debug
-      G4cout << "\t total filled Energy Hcal histo " << totalFilledEnergyHcal << G4endl;
+  G4cout << "CCalAnalysis::InsertEnergyHcal: Total filled Energy Hcal histo " 
+	 << totalFilledEnergyHcal << G4endl;
 #endif      
 }
 
@@ -199,7 +202,8 @@ void CCalAnalysis::InsertEnergyEcal(float* v) {
     }
   }
 #ifdef debug
-      G4cout << "\t total filled Energy Ecal histo " << totalFilledEnergyEcal << G4endl;
+  G4cout << "CCalAnalysis::InsertEnergyEcal: Total filled Energy Ecal histo " 
+	 << totalFilledEnergyEcal << G4endl;
 #endif      
 }
 
@@ -220,7 +224,8 @@ void CCalAnalysis::InsertLateralProfile(float* v) {
     }
   }
 #ifdef debug
-  G4cout << "\t total filled Profile Hcal histo " << totalFilledProfileHcal << G4endl;
+  G4cout << "CCalAnalysis::InsertLateralProfile: Total filled Profile Hcal"
+	 << " histo " << totalFilledProfileHcal << G4endl;
 #endif      
 }
 
@@ -231,13 +236,14 @@ void CCalAnalysis::InsertEnergy(float v) {
     double x = v;
     energy->fill(x);
 #ifdef debug
-    G4cout << "Fill Total energy Hcal histo with " << x << G4endl;
+    G4cout << "CCalAnalysis::InsertEnergy: Fill Total energy Hcal histo with " 
+	   << x << G4endl;
 #endif
   }
 }
 
 
-// This function fill the 1d histograms of time profiles
+// This function fill the 1d histograms of time profiles at stepping action
 void CCalAnalysis::InsertTime(float* v) {
 #ifdef debug
   double totalFilledTimeProfile = 0.0;
@@ -247,14 +253,38 @@ void CCalAnalysis::InsertTime(float* v) {
       double x = v[j];
       timeHist[j]->fill(x);
 #ifdef debug
-      G4cout << "Fill Time profile histo " << j << " with " << x << G4endl;
+      G4cout << "Fill Time slice histo " << j << " with " << x << G4endl;
       totalFilledTimeProfile += x;
+#endif
+    }
+    if (timeProfile[1]) {
+      double x = v[j];
+      double t = j + 0.5;
+      timeProfile[1]->fill(t,x);
+#ifdef debug
+      G4cout << "Fill Time profile histo 1 with " << t << " " << x << G4endl;
 #endif
     }
   }
 #ifdef debug
-  G4cout << "\t total filled Time profile histo " << totalFilledTimeProfile << G4endl;
+  G4cout << "CCalAnalysis::InsertTime: Total filled Time profile histo " 
+	 << totalFilledTimeProfile << G4endl;
 #endif      
+}
+
+
+// This function fill the 1d histograms of time profiles in SD
+void CCalAnalysis::InsertTimeProfile(int hit, double time, double edep) {
+  
+  if (timeProfile[0]) {
+    timeProfile[0]->fill(time,edep);
+#ifdef debug
+    G4cout << "CCalAnalysis:: Fill Time Profile with Hit " << hit
+	   << " Edeposit " << edep << " Gev at " << time << " ns" << G4endl;
+#else
+    hit=0;  // Just to avoid compiler warning!
+#endif
+  }
 }
 
 
@@ -281,6 +311,9 @@ void CCalAnalysis::setNtuple(float* hcalE, float* ecalE, float elab,
     ntuple->fill(tuple->findColumn("EDEC"),edec);
     ntuple->fill(tuple->findColumn("EDHC"),edhc);
     ntuple->addRow();
+#ifdef debug
+    G4cout << "CCalAnalysis:: Fill Ntuple " << G4endl;
+#endif
   }
 }
 

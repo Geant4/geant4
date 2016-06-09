@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Polyhedra.icc,v 1.1 2002/10/28 11:47:50 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4Polyhedra.icc,v 1.4 2003/11/05 17:41:24 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // --------------------------------------------------------------------
 // GEANT 4 inline definitions file
@@ -66,4 +66,19 @@ inline
 G4PolyhedraSideRZ G4Polyhedra::GetCorner( const G4int index ) const
 {
   return corners[index];
+}
+
+inline
+G4PolyhedraHistorical* G4Polyhedra::GetOriginalParameters() const
+{
+  return original_parameters;
+}
+
+inline
+void G4Polyhedra::SetOriginalParameters(G4PolyhedraHistorical* pars)
+{
+  if (!pars)
+    G4Exception("G4Polyhedra::SetOriginalParameters()", "InvalidSetup",
+                FatalException, "NULL pointer to parameters!");
+  *original_parameters = *pars;
 }

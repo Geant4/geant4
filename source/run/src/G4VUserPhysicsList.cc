@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VUserPhysicsList.cc,v 1.45 2003/06/19 13:20:28 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4VUserPhysicsList.cc,v 1.48 2003/11/10 15:49:39 kurasige Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // 
 // ------------------------------------------------------------
@@ -74,7 +74,6 @@ G4VUserPhysicsList::G4VUserPhysicsList()
   // default cut value  (1.0mm)
   defaultCutValue = 1.0*mm;
 
-
   // pointer to the particle table
   theParticleTable = G4ParticleTable::GetParticleTable();
   theParticleIterator = theParticleTable->GetIterator();
@@ -96,6 +95,21 @@ G4VUserPhysicsList::~G4VUserPhysicsList()
     delete theMessenger;
     theMessenger = 0;
   }
+}
+
+////////////////////////////////////////////////////////
+void G4VUserPhysicsList::SetVerboseLevel(G4int value)
+{
+  verboseLevel = value;
+  // set verboseLevel for G4ProductionCutsTable same as one for G4VUserPhysicsList: 
+  fCutsTable->SetVerboseLevel(value);
+
+#ifdef G4VERBOSE
+  if (verboseLevel >1){
+    G4cout << "G4VUserPhysicsList::SetVerboseLevel  :";
+    G4cout << " Verbose level is set to " << verboseLevel << G4endl;
+  }
+#endif
 }
 
 ////////////////////////////////////////////////////////
@@ -202,6 +216,12 @@ void G4VUserPhysicsList::AddTransportation()
 {
   G4Transportation* theTransportationProcess= new G4Transportation();
 
+#ifdef G4VERBOSE
+    if (verboseLevel >2){
+      G4cout << "G4VUserPhysicsList::AddTransportation()  "<< G4endl;
+    }
+#endif
+
   // loop over all particles in G4ParticleTable
   theParticleIterator->reset();
   while( (*theParticleIterator)() ){
@@ -211,7 +231,9 @@ void G4VUserPhysicsList::AddTransportation()
       // Add transportation process for all particles other than  "shortlived"
       if ( pmanager == 0) {
 	// Error !! no process manager
-	G4Exception("G4VUserPhysicsList::AddTransportation : no process manager!");
+	G4String particleName = particle->GetParticleName();
+	G4Exception("G4VUserPhysicsList::AddTransportation","No process manager",
+		    RunMustBeAborted, particleName );
       } else {
 	// add transportation with ordering = ( -1, "first", "first" )
 	pmanager ->AddProcess(theTransportationProcess);
@@ -295,16 +317,10 @@ void G4VUserPhysicsList::SetCutsWithDefault()
   SetCutValue(cut, "e-");
   SetCutValue(cut, "e+");
 
-  // set cut values for proton and anti_proton
-  //SetCutValue(cut, "proton");
-  //SetCutValue(cut, "anti_proton");
-  //SetCutValue(cut, "neutron");
-  //SetCutValue(cut, "anti_neutron");
-
-
-  //if (verboseLevel>1) {
-  //  DumpCutValuesTable();
-  //}
+  // dump Cut values if verboseLevel==3
+  if (verboseLevel>2) {
+    DumpCutValuesTable();
+  }
 }
 
 
@@ -316,7 +332,6 @@ void G4VUserPhysicsList::SetCutsForRegion(G4double aCut, const G4String& rname)
   SetCutValue(aCut, "e-", rname);
   SetCutValue(aCut, "e+", rname);
 }
-
 
 
 
@@ -333,71 +348,83 @@ void G4VUserPhysicsList::SetParticleCuts( G4double cut, G4ParticleDefinition* pa
 void G4VUserPhysicsList::BuildPhysicsTable()
 {
   if (fRetrievePhysicsTable) {
+    if (!fIsRestoredCutValues) fIsRestoredCutValues = fCutsTable->RetrieveCutsTable(directoryPhysicsTable, fStoredInAscii);
+    // check if retrieve Cut Table successfully
     if (!fIsRestoredCutValues) {
 #ifdef G4VERBOSE
-      if (verboseLevel>2){
-	G4cout << "G4VUserPhysicsList::SetParticleCuts  ";
-	G4cout << " Retrieve Cut Values for ";
+      if (verboseLevel>0){
+	G4cout << "G4VUserPhysicsList::BuildPhysicsTable";
+	G4cout << " Retrieve Cut Table failed !!" << G4endl;
       }
-#endif
-      fIsRestoredCutValues = fCutsTable->RetrieveCutsTable(directoryPhysicsTable, fStoredInAscii);
-    }
+#endif	
+      G4Exception("G4VUserPhysicsList::BuildPhysicsTable","Fail to Retreive",
+		  RunMustBeAborted,"Production Cut Table can not be retreived");
+    } else {
+#ifdef G4VERBOSE
+      if (verboseLevel>2){
+	G4cout << "G4VUserPhysicsList::BuildPhysicsTable";
+	G4cout << "  Retrieve Cut Table successfully " << G4endl;
+      }
+#endif 
+    }     
   }
   // Sets a value to particle
   // set cut values for gamma at first and for e- and e+
   G4String particleName;
-  G4ParticleDefinition* GammaP = theParticleTable->FindParticle(particleName="gamma");
+  G4ParticleDefinition* GammaP = theParticleTable->FindParticle("gamma");
   if(GammaP) BuildPhysicsTable(GammaP);
-  G4ParticleDefinition* EMinusP = theParticleTable->FindParticle(particleName="e-");
+  G4ParticleDefinition* EMinusP = theParticleTable->FindParticle("e-");
   if(EMinusP) BuildPhysicsTable(EMinusP);
-  G4ParticleDefinition* EPlusP = theParticleTable->FindParticle(particleName="e+");
+  G4ParticleDefinition* EPlusP = theParticleTable->FindParticle("e+");
   if(EPlusP) BuildPhysicsTable(EPlusP);
-  G4ParticleDefinition* ProtonP = theParticleTable->FindParticle(particleName="proton");
+  G4ParticleDefinition* ProtonP = theParticleTable->FindParticle("proton");
   if(ProtonP) BuildPhysicsTable(ProtonP);
-  G4ParticleDefinition* AntiProtonP = theParticleTable->FindParticle(particleName="anti_proton");
-  if(AntiProtonP) BuildPhysicsTable(AntiProtonP);
-  G4ParticleDefinition* NeutronP = theParticleTable->FindParticle(particleName="newtron");
-  if(NeutronP) BuildPhysicsTable(NeutronP);
-  G4ParticleDefinition* AntiNeutronP = theParticleTable->FindParticle(particleName="anti_neutron");
-  if(AntiNeutronP) BuildPhysicsTable(AntiNeutronP);
+
 
   theParticleIterator->reset();
   while( (*theParticleIterator)() ){
     G4ParticleDefinition* particle = theParticleIterator->value();
-    if(particle!=GammaP && particle!=EMinusP && particle!=EPlusP && particle!=ProtonP
-    && particle!=AntiProtonP && particle!=NeutronP && particle!=AntiNeutronP)
-    { BuildPhysicsTable(particle); }
+    if( particle!=GammaP && 
+	particle!=EMinusP && 
+	particle!=EPlusP && 
+	particle!=ProtonP   ){
+      BuildPhysicsTable(particle); 
+    }
   }
 }
 ///////////////////////////////////////////////////////////////
 void G4VUserPhysicsList::BuildPhysicsTable(G4ParticleDefinition* particle)
 {
   if (fRetrievePhysicsTable) {
+    if ( !fIsRestoredCutValues){
+      // fail to retreive cut tables
 #ifdef G4VERBOSE
-    if (verboseLevel>2){
-      G4cout << "G4VUserPhysicsList::BuildPhysicsTable  ";
-      G4cout << " Retrieve Physics Table for ";
-      G4cout << particle->GetParticleName() << G4endl;
-    }
+      if (verboseLevel>0){
+	G4cout << "G4VUserPhysicsList::BuildPhysicsTable  ";
+	G4cout << "Physics table can not be retreived and will be calculated "<< G4endl;
+      }
 #endif
-    if ( fIsRestoredCutValues){
-      //  Retrieve PhysicsTable from files for proccesses
-      RetrievePhysicsTable(particle, directoryPhysicsTable, fStoredInAscii);
-      return;
+      fRetrievePhysicsTable = false; 
+
     } else {
 #ifdef G4VERBOSE
       if (verboseLevel>2){
-	G4cout << "CheckForRetrievePhysicsTable failed " << G4endl;
+	G4cout << "G4VUserPhysicsList::BuildPhysicsTable  ";
+	G4cout << " Retrieve Physics Table for ";
+	G4cout << particle->GetParticleName() << G4endl;
       }
 #endif
+      //  Retrieve PhysicsTable from files for proccesses
+      RetrievePhysicsTable(particle, directoryPhysicsTable, fStoredInAscii);
+      return;
     }
   }
 
 #ifdef G4VERBOSE
-    if (verboseLevel>2){
-      G4cout << "G4VUserPhysicsList::BuildPhysicsTable  ";
-      G4cout << " for " << particle->GetParticleName() << G4endl;
-    }
+  if (verboseLevel>2){
+    G4cout << "G4VUserPhysicsList::BuildPhysicsTable  ";
+    G4cout << "Calculate Physics Table for " << particle->GetParticleName() << G4endl;
+  }
 #endif
   // Rebuild the physics tables for every process for this particle type
   // if particle is not ShortLived
@@ -459,7 +486,9 @@ void G4VUserPhysicsList::DumpList() const
 
 ///////////////////////////////////////////////////////////////
 void G4VUserPhysicsList::DumpCutValuesTable(G4int nParticles) 
-{ fDisplayThreshold = nParticles; }
+{ 
+  fDisplayThreshold = nParticles; 
+}
 
 ///////////////////////////////////////////////////////////////
 void G4VUserPhysicsList::DumpCutValuesTableIfRequested()
@@ -480,7 +509,11 @@ G4bool G4VUserPhysicsList::StorePhysicsTable(const G4String& directory)
   else directoryPhysicsTable = dir; 
   
   // store CutsTable info
-  if (!fCutsTable->StoreCutsTable(dir, ascii)) return false;
+  if (!fCutsTable->StoreCutsTable(dir, ascii)) {
+    G4Exception("G4VUserPhysicsList::StorePhysicsTable","Faile to store ",
+		JustWarning,"Cut Table can not be stored"); 	
+    return false;
+  }
 #ifdef G4VERBOSE  
   if (verboseLevel>2){
     G4cout << "G4VUserPhysicsList::StorePhysicsTable   ";
@@ -499,14 +532,10 @@ G4bool G4VUserPhysicsList::StorePhysicsTable(const G4String& directory)
     G4int  j;
     for ( j=0; j < pVector->size(); ++j) {
       if (!(*pVector)[j]->StorePhysicsTable(particle,dir,ascii)){   
-#ifdef G4VERBOSE  
-	if (verboseLevel>2){
-	  G4cout << "G4VUserPhysicsList::StorePhysicsTable   ";
-	  G4cout << " Fail to store for ";
-	  G4cout << (*pVector)[j]->GetProcessName();
-	  G4cout << "(" << particle->GetParticleName() <<")" << G4endl;
-	}
-#endif
+	G4String comment =  "Fail to store for " + (*pVector)[j]->GetProcessName();
+	comment += "(" + particle->GetParticleName()  + ")";
+	G4Exception("G4VUserPhysicsList::StorePhysicsTable","Faile to store ",
+		    JustWarning,comment); 	
 	success = false;
       }
     }
@@ -546,9 +575,9 @@ void G4VUserPhysicsList::RetrievePhysicsTable(G4ParticleDefinition* particle,
 #ifdef G4VERBOSE  
       if (verboseLevel>2){
 	G4cout << "G4VUserPhysicsList::RetrievePhysicsTable   ";
-	G4cout << " Fail to retrieve for ";
-        G4cout << (*pVector)[j]->GetProcessName();
-        G4cout << "(" << particle->GetParticleName() <<")" << G4endl;
+	G4cout << " Fail to retrieve Physics Table for ";
+        G4cout << (*pVector)[j]->GetProcessName() << G4endl;
+	G4cout << "Calculate Physics Table for " << particle->GetParticleName() << G4endl;
       }
 #endif
       (*pVector)[j]->BuildPhysicsTable(*particle);
@@ -572,14 +601,16 @@ void G4VUserPhysicsList::ResetCuts()
 
 void G4VUserPhysicsList::SetApplyCuts(G4bool value, const G4String& name)
 {
-  if(name=="all")
-  {
+#ifdef G4VERBOSE  
+  if (verboseLevel>2){
+    G4cout << "G4VUserPhysicsList::SetApplyCuts for " << name << G4endl;
+  }
+#endif
+  if(name=="all") {
     theParticleTable->FindParticle("gamma")->SetApplyCutsFlag(value);
     theParticleTable->FindParticle("e-")->SetApplyCutsFlag(value);
     theParticleTable->FindParticle("e+")->SetApplyCutsFlag(value);
-  }
-  else
-  {
+  } else {
     theParticleTable->FindParticle(name)->SetApplyCutsFlag(value);
   }
 }
@@ -588,6 +619,8 @@ G4bool G4VUserPhysicsList::GetApplyCuts(const G4String& name) const
 {
   return theParticleTable->FindParticle(name)->GetApplyCutsFlag();
 }
+
+
 
 
 

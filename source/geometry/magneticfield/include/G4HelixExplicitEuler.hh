@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4HelixExplicitEuler.hh,v 1.6 2001/07/11 09:59:08 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4HelixExplicitEuler.hh,v 1.7 2003/10/31 14:35:51 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 //
 // class G4HelixExplicitEuler
@@ -36,6 +36,7 @@
 
 // History:
 // - Created. W.Wander <wwc@mit.edu>, 12/09/97
+// -------------------------------------------------------------------
 
 #ifndef G4HELIXEXPLICITEULER_HH
 #define G4HELIXEXPLICITEULER_HH
@@ -44,18 +45,17 @@
 
 class G4HelixExplicitEuler : public G4MagHelicalStepper
 {
-
-  public:
+  public:  // with description
 
     G4HelixExplicitEuler(G4Mag_EqRhs *EqRhs)
-      : G4MagHelicalStepper(EqRhs) {;}
+      : G4MagHelicalStepper(EqRhs) {}
  
-    ~G4HelixExplicitEuler() {;}
+    ~G4HelixExplicitEuler() {}
   
     void DumbStepper( const G4double y[],
-		      G4ThreeVector  Bfld,
-		      G4double       h,
-		      G4double       yout[]);
+                            G4ThreeVector  Bfld,
+                            G4double       h,
+                            G4double       yout[]);
 
   public:  // without description
 

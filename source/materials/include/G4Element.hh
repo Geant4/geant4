@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4Element.hh,v 1.17 2003/06/16 16:56:13 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 
 // class description

@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4HEPlot.hh,v 1.7 2002/12/12 19:17:59 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 //
 // G4 Gheisha friend class G4HEPlot  -- header file

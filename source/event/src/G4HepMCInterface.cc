@@ -19,11 +19,11 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
-
+//
 // ====================================================================
 //
 //   G4HepMCInterface.cc
-//   $Id: G4HepMCInterface.cc,v 1.2 2002/12/03 14:44:33 gcosmo Exp $
+//   $Id: G4HepMCInterface.cc,v 1.4 2003/12/09 15:35:06 gunter Exp $
 //
 // ====================================================================
 
@@ -37,7 +37,6 @@
 #include "G4Event.hh"
 #include "G4PrimaryParticle.hh"
 #include "G4PrimaryVertex.hh"
-#include "G4TransportationManager.hh"
 
 ////////////////////////////////////
 G4HepMCInterface::G4HepMCInterface()
@@ -51,22 +50,6 @@ G4HepMCInterface::~G4HepMCInterface()
 /////////////////////////////////////
 {
   delete hepmcEvent;
-}
-
-/////////////////////////////////////////////////////////
-G4bool G4HepMCInterface::CheckVertexInsideWorld
-                         (const G4ThreeVector& pos) const
-/////////////////////////////////////////////////////////
-{
-  G4Navigator* navigator= G4TransportationManager::GetTransportationManager()
-                                                 -> GetNavigatorForTracking();
-
-  G4VPhysicalVolume* world= navigator-> GetWorldVolume();
-  G4VSolid* solid= world-> GetLogicalVolume()-> GetSolid();
-  EInside qinside= solid-> Inside(pos);
-
-  if( qinside != kInside) return false;
-  else return true;
 }
 
 ////////////////////////////////////////////////////////////////

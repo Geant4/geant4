@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4HepRepFile.hh,v 1.6 2003/06/25 10:19:50 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4HepRepFile.hh,v 1.7 2003/07/12 19:48:15 duns Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // 
 // John Allison  5th April 2001
@@ -34,7 +34,7 @@
 #include "G4VGraphicsSystem.hh"
 
 // HepRep
-#include "HepRepXMLWriter.hh"
+#include "G4HepRepFileXMLWriter.hh"
 
 class G4HepRepFile: public G4VGraphicsSystem {
 public:
@@ -43,7 +43,7 @@ public:
   G4VSceneHandler* CreateSceneHandler(const G4String& name = "");
   G4VViewer* CreateViewer (G4VSceneHandler&, const G4String& name = "");
 
-  HepRepXMLWriter *GetHepRepXMLWriter();
+  G4HepRepFileXMLWriter *GetHepRepXMLWriter();
 };
 
 #endif

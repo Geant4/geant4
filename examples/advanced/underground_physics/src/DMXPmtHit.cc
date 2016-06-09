@@ -60,7 +60,7 @@ DMXPmtHit::DMXPmtHit() {
 DMXPmtHit::~DMXPmtHit() {;}
 
 
-DMXPmtHit::DMXPmtHit(const DMXPmtHit& right) {
+DMXPmtHit::DMXPmtHit(const DMXPmtHit& right) : G4VHit(right) {
 
   pos  = right.pos;
   time = right.time;
@@ -81,7 +81,8 @@ const DMXPmtHit& DMXPmtHit::operator=(const DMXPmtHit& right) {
 
 int DMXPmtHit::operator==(const DMXPmtHit& right) const {
 
-  return 0;
+  return (this==&right) ? 1 : 0;
+
 }
 
 

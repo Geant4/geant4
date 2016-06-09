@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpRayleigh.cc,v 1.8 2001/10/18 17:13:54 gum Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4OpRayleigh.cc,v 1.9 2003/12/01 15:20:05 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // 
 ////////////////////////////////////////////////////////////////////////
@@ -74,7 +74,7 @@ G4OpRayleigh::G4OpRayleigh(const G4String& processName)
            : G4VDiscreteProcess(processName)
 {
 
-        thePhysicsTable = NULL;
+        thePhysicsTable = 0;
 
         if (verboseLevel>0) {
            G4cout << GetProcessName() << " is created " << G4endl;
@@ -93,7 +93,7 @@ G4OpRayleigh::G4OpRayleigh(const G4String& processName)
 
 G4OpRayleigh::~G4OpRayleigh()
 {
-        if (thePhysicsTable!= NULL) {
+        if (thePhysicsTable!= 0) {
            thePhysicsTable->clearAndDestroy();
            delete thePhysicsTable;
         }

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParallelWorld.cc,v 1.6 2002/11/04 10:43:07 dressel Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4ParallelWorld.cc,v 1.7 2003/10/22 13:52:10 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -41,10 +41,12 @@ G4ParallelWorld::G4ParallelWorld(G4VPhysicalVolume &worldvolume)
    fPdriver(new G4ParallelNavigator(worldvolume))
 {
   if (!fPstepper) {
-    G4Exception("ERROR: G4ParallelWorld::G4ParallelWorld: new failed to create a G4ParallelStepper");
+    G4Exception("G4ParallelWorld::G4ParallelWorld()", "FatalException",
+                FatalException, "NULL stepper. Failure in creation.");
   }
   if (!fPdriver) {
-     G4Exception("ERROR: G4ParallelWorld::G4ParallelWorld: new failed to create a G4ParallelNavigator");
+    G4Exception("G4ParallelWorld::G4ParallelWorld()", "FatalException",
+                FatalException, "NULL navigator driver. Failure in creation.");
   }
 }
 

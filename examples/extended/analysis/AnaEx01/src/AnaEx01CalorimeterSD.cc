@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: AnaEx01CalorimeterSD.cc,v 1.3 2001/11/16 14:31:12 barrand Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: AnaEx01CalorimeterSD.cc,v 1.4 2003/12/03 10:33:21 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // 
 
@@ -61,7 +61,7 @@ AnaEx01CalorimeterSD::~AnaEx01CalorimeterSD()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void AnaEx01CalorimeterSD::Initialize(G4HCofThisEvent*HCE)
+void AnaEx01CalorimeterSD::Initialize(G4HCofThisEvent*)
 {
   CalCollection = new AnaEx01CalorHitsCollection
                       (SensitiveDetectorName,collectionName[0]); 
@@ -70,7 +70,7 @@ void AnaEx01CalorimeterSD::Initialize(G4HCofThisEvent*HCE)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4bool AnaEx01CalorimeterSD::ProcessHits(G4Step* aStep,G4TouchableHistory* ROhist)
+G4bool AnaEx01CalorimeterSD::ProcessHits(G4Step* aStep,G4TouchableHistory*)
 {
   G4double edep = aStep->GetTotalEnergyDeposit();
   

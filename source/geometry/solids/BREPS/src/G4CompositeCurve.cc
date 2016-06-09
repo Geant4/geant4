@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4CompositeCurve.cc,v 1.11 2003/03/28 13:11:56 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4CompositeCurve.cc,v 1.12 2003/10/28 13:42:30 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -121,20 +121,23 @@ G4Curve* G4CompositeCurve::Project(const G4Transform3D& tr)
 
 G4double G4CompositeCurve::GetPMax() const
 {
-  G4Exception("G4CompositeCurve::GetPMax");
+  G4Exception("G4CompositeCurve::GetPMax()", "NotApplicable",
+              FatalException, "Not applicable to base class.");
   return 0;
 }
 
 G4Point3D G4CompositeCurve::GetPoint(G4double) const
 {
-  G4Exception("G4CompositeCurve::GetPoint");
+  G4Exception("G4CompositeCurve::GetPoint()", "NotApplicable",
+              FatalException, "Not applicable to base class.");
   // Fake return value
   return G4Point3D();
 }
 
 G4double G4CompositeCurve::GetPPoint(const G4Point3D&) const
 {
-  G4Exception("G4CompositeCurve::GetPPoint");
+  G4Exception("G4CompositeCurve::GetPPoint()", "NotApplicable",
+              FatalException, "Not applicable to base class.");
   return 0;
 }
 

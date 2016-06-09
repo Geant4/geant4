@@ -1,0 +1,90 @@
+
+                 Geant4 5.2 - patch-01 Release Notes
+                 -----------------------------------
+
+                                                            27 August 2003
+
+List of fixes included in this public patch to release 5.2:
+
+  o Configuration scripts:
+    ---------------------
+    + WIN32-VC.gmk, WIN32-VC7.gmk:
+      o reinstated options "-D_CONSOLE -D_WIN32 -DOS" to allow correct
+        treatment/opening of data files at run-time.
+
+  o Electromagnetic processes (standard):
+    ------------------------------------
+    + muons:
+      o Fixed bug of printout in G4MuIonisation.
+
+  o Hadronic processes:
+    ------------------
+    + models/chiral_inv_phase_space
+      o Added protection against a rounding problem in the CHIPS
+        evaporation. Fixes a problem observed in gamma-nuclear reactions.
+    + models/generator/de_excitation
+      o Fixed usage of arguments to pow() function (porting on
+        .NET 7.1 compiler).
+    + models/generator/quark_gluon_string
+    + models/generator/string_fragmentation
+      - Implemented the handling of diffractive photon scattering in
+        the parton string models. Mandatory for high energy gamma and
+        electro-nuclear reactions.
+    + models/neutron_hp:
+      o Corrected an error affecting the neutron energy distribution 
+        in Fission. Mandatory for fission in Uranium 235.
+    + stopping:
+      o Fixed few cases of memory leaks occuring at every new run.
+
+  o Particles:
+    ---------
+    + Add one void pointer to G4DynamicParticle for the sake of maintaining
+      links between pre-assigned decay products and corresponding primary
+      particle.
+
+  o Transportation:
+    --------------
+    + G4Transportation: 
+      o Added verbosity level to control the printing of warnings. 
+      o Attempt to correct photon problem by using the velocity from current
+        medium for massless particles. 
+      o Use the finalVelocity to update TofF for optical photons.
+
+  o Visualization:
+    -------------
+    + RayTracer:
+      o Fixed incomplete migration to Cuts per Region scheme, causing
+        tracing process to crash in release 5.2.
+
+  o Examples:
+    --------
+  - Updated reference outputs.
+  - extended:
+    o eventgenerator/HepMC
+      + fixed compilation errors due to incorrect code migration from
+        g4std wrappers. 
+      + fixed pedantic compilation warnings on Linux-g++. 
+    o gdml
+      + Fixed trivial compilation errors originated by recent g4std
+        migration. 
+      + Fixed pedantic compilation warnings on Linux-g++.
+    o g3tog4
+      + Fixed pedantic compilation warnings on Linux-g++.
+    o parallel
+      + Fixed pedantic compilation warnings on Linux-g++.
+
+ ----------------------------------------------------------------------------
+
+                             Technical Notes
+                             --------------- 
+
+  o  This patch should be applied on top of release 5.2.
+  o  Technical notes distributed for release 5.2 are also applicable and
+     valid for this patch.
+
+The code and rebuilt binary libraries for release 5.2 are available through
+our "Source Code" Web page:  http://cern.ch/geant4
+
+Please refer to the Geant4 User Documentation:
+   http://cern.ch/geant4/G4UsersDocuments/Overview/html
+for further information about using Geant4.

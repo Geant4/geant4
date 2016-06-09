@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4EquationOfMotion.hh,v 1.7 2002/06/11 08:38:56 japost Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4EquationOfMotion.hh,v 1.9 2003/11/05 12:48:45 japost Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 //
 // class G4EquationOfMotion
@@ -34,12 +34,13 @@
 
 // History:
 // - Created. J.Apostolakis
+// -------------------------------------------------------------------
 
 #ifndef G4_EquationOfMotion_DEF
 #define G4_EquationOfMotion_DEF
 
-#include  "globals.hh"
-#include  "G4Field.hh"
+#include "G4Types.hh"      // "globals.hh"
+#include "G4Field.hh"   // required in inline method implementations
 
 class G4EquationOfMotion 
 {
@@ -50,8 +51,8 @@ class G4EquationOfMotion
        // Constructor and virtual destructor. No operations.
 
      virtual void EvaluateRhsGivenB( const  G4double y[],
-			             const  G4double B[3],
-				     G4double dydx[] ) const = 0;
+                                     const  G4double B[3],
+                                     G4double dydx[] ) const = 0;
        // Given the value of the  field "B", this function 
        // calculates the value of the derivative dydx.
        // --------------------------------------------------------
@@ -66,20 +67,20 @@ class G4EquationOfMotion
 
      inline
      void RightHandSide( const  G4double y[],
-				G4double dydx[] ) const;
+                                G4double dydx[] ) const;
        // This calculates the value of the derivative dydx at y.
        // It is the usual enquiry function.
        // ---------------------------
        // (It is not virtual, but calls the virtual function above.)
 
      void EvaluateRhsReturnB( const  G4double y[],
-			      G4double dydx[],
-			      G4double Field[]  ) const;
+                              G4double dydx[],
+                              G4double Field[]  ) const;
        // Same as RHS above, but also returns the value of B.
        // Should be made the new default ? after putting dydx & B in a class.
 
      void GetFieldValue( const  G4double Point[4],
-			        G4double Field[] )  const;
+                                G4double Field[] )  const;
        // Obtain only the field - the stepper assumes it is pure Magnetic.
        // Not protected, because G4RKG3_Stepper uses it directly.
 

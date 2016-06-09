@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4IStore.cc,v 1.12 2003/04/03 10:45:51 dressel Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4IStore.cc,v 1.13 2003/10/22 13:52:10 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -145,6 +145,6 @@ G4bool G4IStore::IsInWorld(const G4VPhysicalVolume &aVolume) const
 
 void G4IStore::Error(const G4String &m) const
 {
-  G4cout << "ERROR - G4IStore::" << m << G4endl;
-  G4Exception("Program aborted.");
+  G4cerr << "ERROR - G4IStore::" << m << G4endl;
+  G4Exception("G4IStore::Error()", "FatalException", FatalException, m);
 }

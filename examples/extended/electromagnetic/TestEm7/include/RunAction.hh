@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: RunAction.hh,v 1.1 2003/04/22 16:25:05 maire Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: RunAction.hh,v 1.2 2003/10/10 16:21:27 maire Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -37,7 +37,7 @@ class PhysicsList;
 class PrimaryGeneratorAction;
 class G4Run;
 
-#ifndef G4NOHIST
+#ifdef G4ANALYSIS_USE
 namespace AIDA {
  class ITree;
  class IHistogram1D;
@@ -58,7 +58,7 @@ class RunAction : public G4UserRunAction
     
     G4double* GetTallyEdep() {return tallyEdep;};
     
-#ifndef G4NOHIST   
+#ifdef G4ANALYSIS_USE
     AIDA::IHistogram1D* GetHisto(G4int id) {return histo[id];}
     
     G4double GetBinLength() {return binLength;};
@@ -75,7 +75,7 @@ class RunAction : public G4UserRunAction
     PrimaryGeneratorAction* kinematic;
     G4double*               tallyEdep;   
 
-#ifndef G4NOHIST 
+#ifdef G4ANALYSIS_USE
   private:        
     AIDA::ITree* tree;
     AIDA::IHistogram1D* histo[1];

@@ -41,90 +41,45 @@
 // 14-APR-98 FWJ: variant G4HadronElastic process for
 // G4CrossSectionDataSet/DataStore class design.
 // 29-JUN-98 FWJ: default data set G4HadronCrossSections
-//
+// design re-done JPW 2003.
 
 
 #include "G4HadronElasticProcess.hh"
  
-// Can this be brought into the class?
-//unsigned G4HadronElasticProcessHashFun(const G4ParticleDefinition& aParticleDefinition) {
-//   return aParticleDefinition.GetParticleName().hash();
-//}
-
 G4HadronElasticProcess::
 G4HadronElasticProcess(const G4String& processName) : 
-      G4HadronicProcess(processName),
-      //      thePhysicsDictionary(G4HadronElasticProcessHashFun),
-      theCrossSectionDataStore(new G4CrossSectionDataStore)
+      G4HadronicProcess(processName)
 {
-   theCrossSectionDataStore->AddDataSet(new G4HadronElasticDataSet);
-   aParticleChange.SetNumberOfSecondaries(1);
+  AddDataSet(new G4HadronElasticDataSet);
 }
 
 G4HadronElasticProcess::~G4HadronElasticProcess()
 {
-   aParticleChange.Clear();
 }
  
 
-void 
-G4HadronElasticProcess::
+void G4HadronElasticProcess::
 BuildPhysicsTable(const G4ParticleDefinition& aParticleType)
 {
-   if (!theCrossSectionDataStore) {
-      G4Exception("G4HadronElasticProcess: no cross section data set");
+   if (!G4HadronicProcess::GetCrossSectionDataStore()) {
       return;
    }
-
-   theCrossSectionDataStore->BuildPhysicsTable(aParticleType);
+   G4HadronicProcess::GetCrossSectionDataStore()->BuildPhysicsTable(aParticleType);
 }
 
 
-G4double 
-G4HadronElasticProcess::GetMicroscopicCrossSection(
+G4double G4HadronElasticProcess::
+GetMicroscopicCrossSection(
       const G4DynamicParticle* aParticle, const G4Element* anElement, G4double aTemp)
 {
    // gives the microscopic cross section in GEANT4 internal units
-
-   if (!theCrossSectionDataStore) {
-      G4Exception("G4HadronElasticProcess: no cross section data Store");
+   if (!G4HadronicProcess::GetCrossSectionDataStore()) {
+      G4Exception("G4HadronElasticProcess", "007", FatalException,
+                  "no cross section data Store");
       return DBL_MIN;
    }
-   return theCrossSectionDataStore->GetCrossSection(aParticle, anElement, aTemp);
-}
-
-
-G4double
-G4HadronElasticProcess::
-GetMeanFreePathBasic(const G4DynamicParticle* aParticle,
-                     const G4Material* aMaterial)
-{
-   // Returns the mean free path in GEANT4 internal units.
-   // The cross section data is stored for individual elements, 
-   // so the total macroscopic cross section is summed over the elements.
-   // (Cf. G4MuPairProduction which uses the material's effective Z to
-   // calculate directly the cross section.
-
-   const G4ElementVector* theElementVector;
-   const G4double* theAtomicNumDensityVector;
-
-   theElementVector = aMaterial->GetElementVector();
-   theAtomicNumDensityVector = aMaterial->GetAtomicNumDensityVector();
-   G4double aTemp = aMaterial->GetTemperature();
-
-   G4double sigma = 0.;
-
-   for (unsigned int i = 0; i < aMaterial->GetNumberOfElements(); i++) {
-     sigma = sigma + theAtomicNumDensityVector[i] *
-             GetMicroscopicCrossSection(aParticle, (*theElementVector)[i], aTemp);
-   }
-   if (verboseLevel > 1)
-     G4cout << "G4HadronElasticProcess::GetMeanFreePathBasic: sigma="
-          << sigma << G4endl;
-   if (sigma > 0.)
-      return 1./sigma;
-   else
-      return DBL_MAX;
+   return G4HadronicProcess::GetCrossSectionDataStore()
+          ->GetCrossSection(aParticle, anElement, aTemp);
 }
 
 
@@ -167,10 +122,10 @@ void
 G4HadronElasticProcess::
 DumpPhysicsTable(const G4ParticleDefinition& aParticleType)
 {
-   if (!theCrossSectionDataStore) {
-      G4Exception("G4HadronElasticProcess: no cross section data set");
+   if (!G4HadronicProcess::GetCrossSectionDataStore()) {
+      G4Exception("G4HadronElasticProcess", "111", JustWarning, "G4HadronElasticProcess: no cross section data set");
       return;
    }
 
-   theCrossSectionDataStore->DumpPhysicsTable(aParticleType);
+   G4HadronicProcess::GetCrossSectionDataStore()->DumpPhysicsTable(aParticleType);
 }

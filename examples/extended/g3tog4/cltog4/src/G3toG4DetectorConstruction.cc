@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G3toG4DetectorConstruction.cc,v 1.3 2003/02/20 08:52:39 vnivanch Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G3toG4DetectorConstruction.cc,v 1.4 2003/07/04 15:45:46 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 //--------------------------------------------------------------------------
 // G3toG4DetectorConstruction. Most the work is Done in
@@ -95,12 +95,13 @@ G3toG4DetectorConstruction::SimpleConstruct(){
 						       Air,	//its material
 						       "LTestDaughter"); 
 
-  G4VPhysicalVolume* physiDaughter = new G4PVPlacement(0,
-						       G4ThreeVector(),
-						       logicDaughter,
-						       "PTestDaughter",
-						       logicMother, 
-						       false,0);
+  // G4VPhysicalVolume* physiDaughter =
+     new G4PVPlacement(0,
+		       G4ThreeVector(),
+		       logicDaughter,
+		       "PTestDaughter",
+		       logicMother, 
+		       false,0);
   //                                        
   // Visualization attributes
   //

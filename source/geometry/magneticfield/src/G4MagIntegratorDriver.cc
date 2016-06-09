@@ -21,26 +21,27 @@
 // ********************************************************************
 //
 //
-// $Id: G4MagIntegratorDriver.cc,v 1.39 2003/06/25 09:03:27 japost Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4MagIntegratorDriver.cc,v 1.41 2003/10/31 14:35:55 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // 
 //
 // Implementation for class G4MagInt_Driver
-//   Tracking in space dependent magnetic field
+// Tracking in space dependent magnetic field
 //
 // History of major changes:
 //  8 Nov 01  J. Apostolakis:   Respect minimum step in AccurateAdvance
 // 27 Jul 99  J. Apostolakis:   Ensured that AccurateAdvance does not loop 
-//                                due to very small eps & step size (precision)
+//                              due to very small eps & step size (precision)
 // 28 Jan 98  W. Wander:        Added ability for low order integrators
 //  7 Oct 96  V. Grichine       First version
-#include <math.h>
-#include "G4ios.hh"
-#include "G4MagIntegratorDriver.hh"
-#include "G4FieldTrack.hh"
+// --------------------------------------------------------------------
+
+#include "globals.hh"
 #include "geomdefs.hh"         //  for kCarTolerance
 #include <iomanip>
+#include "G4MagIntegratorDriver.hh"
+#include "G4FieldTrack.hh"
 
 //  Stepsize can increase by no more than 5.0
 //           and decrease by no more than 1/10. = 0.1
@@ -568,7 +569,8 @@ G4bool  G4MagInt_Driver::QuickAdvance(
 			    //    G4double&    dyerr_ener_sq // Future
  )  
 {
-      G4Exception("Not implemented in this version"); 
+      G4Exception("G4MagInt_Driver::QuickAdvance()", "NotImplemented",
+                  FatalException, "Not yet implemented."); 
 
       // Use the parameters of this method, to please compiler
       dchord_step = dyerr_pos_sq = hstep * hstep * dydx[0]; 
@@ -652,7 +654,8 @@ G4bool  G4MagInt_Driver::QuickAdvance(
 			          G4double&    dchord_step,
 			          G4double&    dyerr )      // in length
 {
-   G4Exception("Not implemented in current version");
+   G4Exception("G4MagInt_Driver::QuickAdvance()", "NotImplemented",
+                FatalException, "Not yet implemented.");
 
    dyerr = dchord_step = hstep * yarrin[0] * dydx[0];
    yarrout[0]= yarrin[0];

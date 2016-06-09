@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: tiara.cc,v 1.2 2003/06/18 16:40:23 gunter Exp $
+// $Id: tiara.cc,v 1.3 2003/12/04 11:08:48 gcosmo Exp $
 // GEANT4 tag 
 //
 // 
@@ -40,7 +40,7 @@
 #include "TiaraTally.hh"
 #include "Randomize.hh"
 
-int main(int argc, char **argv)
+int main(int, char **)
 {  
 
   std::vector<G4double> binEdges;

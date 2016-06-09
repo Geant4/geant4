@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4RayTracer.hh,v 1.8 2001/07/27 22:33:03 johna Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4RayTracer.hh,v 1.9 2003/09/18 11:14:03 johna Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 //
 
@@ -57,6 +57,7 @@
 #include "globals.hh"
 #include "G4ThreeVector.hh"
 #include "G4VGraphicsSystem.hh"
+#include "G4Colour.hh"
 
 class G4Event;
 class G4EventManager;
@@ -66,22 +67,27 @@ class G4UserTrackingAction;
 class G4UserSteppingAction;
 class G4RTTrackingAction;
 class G4RTSteppingAction;
-class G4Colour;
 class G4RTMessenger;
 class G4RayShooter;
 class G4VFigureFileMaker;
 class G4RayTrajectoryPoint;
 class G4VisAttributes;
+class G4VRTScanner;
 
 
 class G4RayTracer : public G4VGraphicsSystem
 {
   public: // with description
-    G4RayTracer(G4VFigureFileMaker* figMaker = 0);
-    // Constructor. The argument is the pointer to G4VFigureFileMaker concrete
-    // class object. If it is not set and SetFigureFileMaker() method is not
-    // invoked before Trace() command is invoked, then G4RTJpegMaker will be
-    // used and JPEG file will be generated.
+    G4RayTracer(G4VFigureFileMaker* figMaker = 0,
+		G4VRTScanner* scanner = 0);
+    // Constructor. The argument is the pointer to G4VFigureFileMaker
+    // concrete class object. If it is not set and
+    // SetFigureFileMaker() method is not invoked before Trace()
+    // command is invoked, then G4RTJpegMaker will be used and JPEG
+    // file will be generated.  The second argument is a scanner that
+    // produces a sequence of window coordinates.  If it is not set
+    // here or if SetScanner is not invoked before Trace(), a default
+    // G4RTSimpleScanner will be used.
 
   public:
     ~G4RayTracer();
@@ -96,13 +102,13 @@ class G4RayTracer : public G4VGraphicsSystem
     virtual G4VSceneHandler* CreateSceneHandler (const G4String& );
     virtual G4VViewer* CreateViewer (G4VSceneHandler&, const G4String& );
 
-  private:
+  protected:
     G4bool CreateBitMap();
     // Event loop
     void CreateFigureFile(G4String fileName);
     // Create figure file after an event loop
-    G4bool GenerateColour(G4Event* anEvent);
-    // Calcurate RGB for one trajectory
+    G4bool GenerateColour(G4Event* anEvent, G4int iCoord);
+    // Calcurate RGB for one trajectory stored at location iCoord
     void StoreUserActions();
     void RestoreUserActions();
     // Store and restore user action classes if defined
@@ -117,11 +123,16 @@ class G4RayTracer : public G4VGraphicsSystem
     // Set a concrete class of G4VFigureFileMaker for assigning the format of
     // output figure file.
     { theFigMaker = figMaker; }
+    inline void SetScanner(G4VRTScanner* scanner)
+    // Set a concrete class of G4VRTScanner for producing a sequence
+    // of window coordinates.
+    { theScanner = scanner; }
 
-  private:
+  protected:
     G4RayShooter * theRayShooter;
     G4VFigureFileMaker * theFigMaker;
     G4RTMessenger * theMessenger;
+    G4VRTScanner * theScanner;
 
     G4EventManager * theEventManager;
 
@@ -152,6 +163,8 @@ class G4RayTracer : public G4VGraphicsSystem
 
     G4bool distortionOn;
 
+    G4Colour backgroundColour;
+
   public:
     inline void SetNColumn(G4int val) { nColumn = val; }
     inline G4int GetNColumn() const { return nColumn; }
@@ -171,6 +184,8 @@ class G4RayTracer : public G4VGraphicsSystem
     inline G4double GetAttenuationLength() const { return attenuationLength; }
     inline void SetDistortion(G4bool val) { distortionOn = val; }
     inline G4bool GetDistortion() const { return distortionOn; }
+    inline void SetBackgroundColour(G4Colour val) { backgroundColour = val; }
+    inline G4Colour GetBackgroundColour() const { return backgroundColour; }
 };
 
 #endif

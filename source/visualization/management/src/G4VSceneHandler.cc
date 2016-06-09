@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSceneHandler.cc,v 1.27 2003/06/16 17:14:17 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4VSceneHandler.cc,v 1.28 2003/11/12 13:43:25 johna Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // 
 // John Allison  19th July 1996
@@ -75,7 +75,7 @@ G4VSceneHandler::G4VSceneHandler (G4VGraphicsSystem& system, G4int id, const G4S
   fViewCount             (0),
   fpViewer               (0),
   fpScene                (0),
-  fMarkForClearingTransientStore (false),
+  fMarkForClearingTransientStore (true), // Always clear and refesh first time.
   fReadyForTransients    (false),
   fpModel                (0),
   fpObjectTransformation (&G4Transform3D::Identity),

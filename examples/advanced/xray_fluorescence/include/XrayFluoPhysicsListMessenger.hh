@@ -61,9 +61,7 @@ private:
   XrayFluoPhysicsList*          XrayFluoList;
 
   G4UIdirectory* lowEnDir;
-  G4UIcmdWithADoubleAndUnit* cutGLowLimCmd;
-  G4UIcmdWithADoubleAndUnit* cutELowLimCmd;
-  G4UIcmdWithADoubleAndUnit* cutGELowLimCmd;
+
   G4UIcmdWithADoubleAndUnit* cutSecPhotCmd;
   G4UIcmdWithADoubleAndUnit* cutSecElecCmd;
   G4UIcmdWithADoubleAndUnit* cutGCmd;

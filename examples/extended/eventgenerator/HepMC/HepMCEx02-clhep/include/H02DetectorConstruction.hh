@@ -19,11 +19,11 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
-
+//
 // ====================================================================
 //
 //   H02DetectorConstruction.hh
-//   $Id: H02DetectorConstruction.hh,v 1.1 2002/11/19 10:35:48 murakami Exp $
+//   $Id: H02DetectorConstruction.hh,v 1.2 2003/12/09 15:31:36 gunter Exp $
 //
 // ====================================================================
 #ifndef H02_DETECTOR_CONSTRUCTION_H

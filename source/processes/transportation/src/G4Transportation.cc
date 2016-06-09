@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Transportation.cc,v 1.38 2003/06/21 01:34:02 japost Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4Transportation.cc,v 1.44 2003/11/26 14:51:50 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 // 
 // ------------------------------------------------------------
 //  GEANT 4  include file implementation
@@ -37,6 +37,10 @@
 //
 // =======================================================================
 // Modified:   
+//            21 June 2003, J.Apostolakis: Calling field manager with 
+//                            track, to enable it to configure its accuracy
+//            13 May  2003, J.Apostolakis: Zero field areas now taken into
+//                            account correclty in all cases (thanks to W Pokorski).
 //            29 June 2001, J.Apostolakis, D.Cote-Ahern, P.Gumplinger: 
 //                          correction for spin tracking   
 //            20 Febr 2001, J.Apostolakis:  update for new FieldTrack
@@ -50,47 +54,37 @@
 
 #include "G4Transportation.hh"
 #include "G4ProductionCutsTable.hh"
+#include "G4ParticleTable.hh"
+#include "G4ChordFinder.hh"
 
 //////////////////////////////////////////////////////////////////////////
 //
 // Constructor
 
-G4Transportation::G4Transportation()
-  : G4VProcess( G4String("Transportation") )
+G4Transportation::G4Transportation( G4int verboseLevel )
+  : G4VProcess( G4String("Transportation") ),
+    fParticleIsLooping( false ),
+    fPreviousSftOrigin (0.,0.,0.),
+    fPreviousSafety    ( 0.0 ),
+    fVerboseLevel( verboseLevel )
 {
   G4TransportationManager* transportMgr ; 
 
   transportMgr = G4TransportationManager::GetTransportationManager() ; 
 
   fLinearNavigator = transportMgr->GetNavigatorForTracking() ; 
-  fFieldPropagator = 0 ; 
 
-  // fFieldExists= false ; 
-
-  fParticleIsLooping = false ; 
- 
   // fGlobalFieldMgr = transportMgr->GetFieldManager() ;
 
   fFieldPropagator = transportMgr->GetPropagatorInField() ;
 
-  // Find out if an electromagnetic field exists
-  // 
-  // fFieldExists= transportMgr->GetFieldManager()->DoesFieldExist() ;
-  // 
-  // The above code is problematic, because it only works if
-  // the field manager has informed about the detector's field 
-  // before this transportation process is constructed.
-  // I cannot foresee how the transportation can be informed later.
-  // The current answer is to ignore this data member and use 
-  // the member function DoesGlobalFieldExist() in its place ...
-  //    John Apostolakis, July 7, 1997
+  // Cannot determine whether a field exists here,
+  //  because it would only work if the field manager has informed 
+  //  about the detector's field before this transportation process 
+  //  is constructed.
+  // Instead later the method DoesGlobalFieldExist() is called
 
   fCurrentTouchableHandle = new G4TouchableHistory();
-  
-  // Initial value for safety and point-of-origin of safety
-
-  fPreviousSafety    = 0.0 ; 
-  fPreviousSftOrigin = G4ThreeVector(0.,0.,0.) ;
   
   fEndGlobalTimeComputed  = false;
   fCandidateEndGlobalTime = 0;
@@ -330,10 +324,64 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
      }
      else
      {
-        // The energy is unchanged by field transport,
+        // The energy should be unchanged by field transport,
         //    - so the time changed will be calculated elsewhere
         //
         fEndGlobalTimeComputed = false;
+
+        // Check that the integration preserved the energy 
+        //     -  and if not correct this!
+        G4double  startEnergy= track.GetKineticEnergy();
+        G4double  endEnergy= fTransportEndKineticEnergy; 
+
+        static G4int no_inexact_steps=0, no_large_ediff;
+        G4double absEdiff = fabs(startEnergy- endEnergy);
+        if( absEdiff > perMillion * endEnergy )
+        {
+          no_inexact_steps++;
+          // Possible statistics keeping here ...
+        }
+        if( fVerboseLevel > 1 )
+        {
+          if( fabs(startEnergy- endEnergy) > perThousand * endEnergy )
+          {
+            static G4int no_warnings= 0, warnModulo=1,  moduloFactor= 10; 
+            no_large_ediff ++;
+            if( (no_large_ediff% warnModulo) == 0 )
+            {
+               no_warnings++;
+               G4cout << "WARNING - G4Transportation::AlongStepGetPIL()"
+                      << G4endl
+	              << "          Energy changed in Step, more than 1/1000: "
+                      << G4endl
+                      << "          Start= " << startEnergy
+                      << G4endl
+                      << "          End= "   << endEnergy
+                      << G4endl
+                      << "          Relative change= "
+                      << (startEnergy-endEnergy)/startEnergy << G4endl;
+               G4cout << " Energy has been corrected -- however, review"
+                      << " field propagation parameters for accuracy."
+                      << G4endl;
+               G4cerr << "ERROR - G4Transportation::AlongStepGetPIL()"
+                      << G4endl
+	              << "        Bad 'endpoint'. Energy change detected"
+                      << " and corrected,"
+                      << G4endl
+                      << "        occurred already "
+                      << no_large_ediff << " times." << G4endl;
+               if( no_large_ediff == warnModulo * moduloFactor )
+               {
+                  warnModulo *= moduloFactor;
+               }
+            }
+          }
+        }  // end of if (fVerboseLevel)
+
+        // Correct the energy for fields that conserve it
+        //  This - hides the integration error
+        //       - but gives a better physical answer
+        fTransportEndKineticEnergy= track.GetKineticEnergy(); 
      }
 
      fTransportEndSpin = aFieldTrack.GetSpin();
@@ -416,19 +464,28 @@ G4VParticleChange* G4Transportation::AlongStepDoIt( const G4Track& track,
      G4double initialVelocity = stepData.GetPreStepPoint()->GetVelocity() ;
      G4double stepLength      = track.GetStepLength() ;
 
-     if (finalVelocity > 0.0)
-     { 
+     static const G4ParticleDefinition* fOpticalPhoton =
+           G4ParticleTable::GetParticleTable()->FindParticle("opticalphoton");
+     const G4DynamicParticle* fpDynamicParticle = track.GetDynamicParticle();
+     if (fpDynamicParticle->GetDefinition()== fOpticalPhoton)
+     {
+        //  A photon is in the medium of the final point
+        //  during the step, so it has the final velocity.
+        deltaTime = stepLength/finalVelocity ;
+     }
+     else if (finalVelocity > 0.0)
+     {
         G4double meanInverseVelocity ;
-        // deltaTime = stepLength/finalVelocity ;  
+        // deltaTime = stepLength/finalVelocity ;
         meanInverseVelocity = 0.5
                             * ( 1.0 / initialVelocity + 1.0 / finalVelocity ) ;
-        deltaTime = stepLength * meanInverseVelocity ; 
+        deltaTime = stepLength * meanInverseVelocity ;
      }
      else
      {
-        deltaTime = stepLength/initialVelocity ;     
+        deltaTime = stepLength/initialVelocity ;
      }
-     fCandidateEndGlobalTime   = startTime + deltaTime ; 
+     fCandidateEndGlobalTime   = startTime + deltaTime ;
   }
   else
   {

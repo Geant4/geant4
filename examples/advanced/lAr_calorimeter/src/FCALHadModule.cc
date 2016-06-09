@@ -19,6 +19,7 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
+//
 //   Name of file:       FCALHadModule.cc
 //   Author:             Mathieu Fontaine           Rachid Mazini
 //                       fontainerlps.umontreal.ca  Rachid.Mazinircern.ch
@@ -140,7 +141,7 @@ G4LogicalVolume * FCALHadModule::Construct()
   G4LogicalVolume * LogicalWAbsorber = 
     new G4LogicalVolume(SolidWAbsorber, FCALMaterials->Material("FCAL2WFeNi"),
 			"SolidWLogical");
-  G4VPhysicalVolume * PhysicalWAbsorber =
+//  G4VPhysicalVolume * PhysicalWAbsorber =
     new G4PVPlacement(0, G4ThreeVector(), LogicalWAbsorber, "WAbsorberPhysical",
 		      LogicalHadModule, 0, 0);
 
@@ -157,10 +158,10 @@ G4LogicalVolume * FCALHadModule::Construct()
   G4LogicalVolume * LogicalCuPlate =
     new G4LogicalVolume(SolidCuPlate, FCALMaterials->Material("Copper"), "CuPlateLogical");
 
-  G4VPhysicalVolume * PhysicalCuPlateA =
+//  G4VPhysicalVolume * PhysicalCuPlateA =
     new G4PVPlacement(0, G4ThreeVector(0.,0.,CuPlateAPosZ), LogicalCuPlate, 
 		      "CuPlateAPhysical", LogicalHadModule, 0, 0);
-  G4VPhysicalVolume * PhysicalCuPlateB =
+//  G4VPhysicalVolume * PhysicalCuPlateB =
     new G4PVPlacement(0, G4ThreeVector(0.,0.,CuPlateBPosZ), LogicalCuPlate, 
 		      "CuPlateBPhysical", LogicalHadModule, 0, 0);
 
@@ -187,13 +188,14 @@ G4LogicalVolume * FCALHadModule::Construct()
   G4ThreeVector F2TroffMainTrans(0.,0.,0.);
   G4ThreeVector F2TroffABTrans(0.,0.,0.);
   G4RotationMatrix F2TroffRot;
-    for(G4int i=0 ; i < NCableTroff ; i++)
+  G4int i=0;
+    for(i=0 ; i < NCableTroff ; i++)
       {
-      G4VPhysicalVolume * PhysicalF2TroffMain =
+//      G4VPhysicalVolume * PhysicalF2TroffMain =
 	new G4PVPlacement(G4Transform3D(F2TroffRot,F2TroffMainTrans), LogicalF2TroffMain,
 			  "F2TroffMainPhysical", LogicalWAbsorber,0,i+1);
       
-      G4VPhysicalVolume * PhysicalF2TroffAB = 
+//      G4VPhysicalVolume * PhysicalF2TroffAB = 
 	new G4PVPlacement(G4Transform3D(F2TroffRot,F2TroffABTrans), LogicalF2TroffAB, 
 			  "F2TroffAPhysical", LogicalCuPlate, 0, i+1);
       
@@ -223,7 +225,7 @@ G4LogicalVolume * FCALHadModule::Construct()
       new G4Tubs("F2RodSolid", F2RodRmin, F2RodRmax, F2RodLenght, F2RodStartPhi, F2RodDphi);
    G4LogicalVolume * LogicalF2Rod = 
       new G4LogicalVolume(SolidF2Rod, FCALMaterials->Material("Tungsten"),"F2RodLogical");
-    G4VPhysicalVolume * PhysicalF2Rod = 
+//    G4VPhysicalVolume * PhysicalF2Rod = 
       new G4PVPlacement(0,G4ThreeVector(),LogicalF2Rod,"F2RodPhysical",LogicalF2LArGap,0, 0);
 
     LogicalF2Rod->SetVisAttributes(ColorOfTungsten);
@@ -233,7 +235,7 @@ G4LogicalVolume * FCALHadModule::Construct()
     // Electrod (Rod + LArg) placement
     //---------------------------------
     for(i=1; i < NF2LarGap; i++){ 
-      G4VPhysicalVolume * PhysicalF2LArGap =
+//      G4VPhysicalVolume * PhysicalF2LArGap =
 	new G4PVPlacement(0,G4ThreeVector(F2LArGapPosX[i]*cm,F2LArGapPosY[i]*cm,0.*cm),
 			  LogicalF2LArGap,"F2LArGapPhysical",
 			  LogicalHadModule, 0, i); 

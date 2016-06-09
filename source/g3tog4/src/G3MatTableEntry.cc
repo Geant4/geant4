@@ -22,7 +22,7 @@
 //
 //
 // $Id: G3MatTableEntry.cc,v 1.3 2001/07/11 09:58:59 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // by I.Hrivnacova, 27 Sep 99
 

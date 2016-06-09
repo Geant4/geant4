@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4GeometryManager.hh,v 1.7 2003/06/16 16:51:47 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4GeometryManager.hh,v 1.8 2003/11/02 14:01:21 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // class G4GeometryManager
 //
@@ -40,22 +40,13 @@
 
 // Author:
 // 26.07.95 P.Kent Initial version, including optimisation Build
-
+// --------------------------------------------------------------------
 #ifndef G4GEOMETRYMANAGER_HH
 #define G4GEOMETRYMANAGER_HH
 
 #include <vector>
-#include "globals.hh"
-
-// Needed for building optimisations
-#include "geomdefs.hh"
-#include "G4LogicalVolumeStore.hh"
-#include "G4LogicalVolume.hh"
+#include "G4Types.hh"
 #include "G4SmartVoxelStat.hh"
-#include "G4SmartVoxelHeader.hh"
-#ifdef  G4GEOMETRY_VOXELDEBUG
-#include "G4ios.hh"
-#endif
 
 class G4GeometryManager
 {

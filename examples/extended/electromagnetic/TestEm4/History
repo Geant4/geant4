@@ -1,4 +1,4 @@
-$Id: History,v 1.22 2003/06/03 10:42:04 vnivanch Exp $
+$Id: History,v 1.28 2003/11/25 18:36:18 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,24 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+25-11-03 V.Ivanchenko (testem4-V05-02-03)
+
+13-11-03 John Allison
+- Removed OPACS from Vis Manager.
+
+24-10-03 mma (testem4-V05-02-02)
+- PhysListEmStandard: AddProcess(Bremsstrahlung,-1,3,3) ..etc..
+     
+06-10-03 mma (testem4-V05-02-01)
+- migration STD -> standard
+- G4ANALYSIS_USE
+
+29-09-03 V.Ivanchenko (testem4-V05-02-00)
+- substitute obsolete interface to cut energy range
+
+23-06-03 mma (testem4-V05-01-01)
+- remove 'Em4' from all class names
 
 03-06-03 V.Ivanchenko (testem4-V05-01-00)
 - Fix compilation warnings, remove from default save of random number

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: AnaEx01.cc,v 1.8 2001/11/16 14:35:10 barrand Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: AnaEx01.cc,v 1.9 2003/12/03 10:33:39 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // 
 // --------------------------------------------------------------
@@ -53,7 +53,7 @@
 #include "AnaEx01SteppingAction.hh"
 #include "AnaEx01SteppingVerbose.hh"
 
-int main(int argc,char** argv) {
+int main(int,char**) {
 
   // choose the Random engine
   HepRandom::setTheEngine(new RanecuEngine);

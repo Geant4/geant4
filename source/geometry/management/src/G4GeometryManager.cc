@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4GeometryManager.cc,v 1.13 2003/06/16 16:52:04 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4GeometryManager.cc,v 1.15 2003/11/02 14:01:23 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // class G4GeometryManager
 //
@@ -30,11 +30,22 @@
 //
 // Author:
 // 26.07.95 P.Kent Initial version, including optimisation Build
-// ********************************************************************
+// --------------------------------------------------------------------
 
 #include <iomanip>
 #include "G4Timer.hh"
 #include "G4GeometryManager.hh"
+
+#ifdef  G4GEOMETRY_VOXELDEBUG
+#include "G4ios.hh"
+#endif
+
+// Needed for building optimisations
+//
+#include "G4LogicalVolumeStore.hh"
+#include "G4LogicalVolume.hh"
+#include "G4SmartVoxelHeader.hh"
+#include "voxeldefs.hh"
 
 // ***************************************************************************
 // Static class variable: ptr to single instance of class
@@ -153,8 +164,9 @@ void G4GeometryManager::BuildOptimisations(G4bool allOpts, G4bool verbose)
        }
        else
        {
-         G4cout << "ERROR - VoxelHeader new failed." << G4endl;
-         G4Exception("ERROR - G4GeometryManager::BuildOptimisations");
+         G4cerr << "ERROR - Allocation of new VoxelHeader failed." << G4endl;
+         G4Exception("G4GeometryManager::BuildOptimisations()", "FatalError",
+	             FatalException, "VoxelHeader allocation error.");
        }
        if (verbose)
        {

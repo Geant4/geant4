@@ -114,13 +114,12 @@ void AerogelRefData::ReadStdAerogelRefIndex() {
       }
       
       }
-
 }
 
 vector<G4double> AerogelRefData::GetCurAerogelRefIndValueVect (G4int AerogelTnum ) {
   // no  test for tdr rich. now put back to TB conditions.
   vector<G4double>CAgel(NumberOfRefIndBins);
-  AerogelType Ctype;
+  // AerogelType Ctype;
   G4double CRn = GetRefnominal( AerogelTnum );
   for (G4int ib=0; ib < NumberOfRefIndBins; ib++ ){
 
@@ -128,9 +127,7 @@ vector<G4double> AerogelRefData::GetCurAerogelRefIndValueVect (G4int AerogelTnum
       - StdAerogelNominalRefractiveIndex-AerogelRefIndShift[ AerogelTnum] + CRn;
 
   }
-
   return CAgel;
-
 }
 
 G4double AerogelRefData:: GetCurAerogelRefIndValue( G4int rbinw , G4int AerogelTnum ){
@@ -163,9 +160,11 @@ G4double AerogelRefData::GetRefnominal(G4int AgelTnum ) {
 
   } else {G4cout<<"Unknown Aerogel Type "<<G4endl; }
 
+  return CRnominal;
 }
+
 AerogelType AerogelRefData::GetAerogelType(G4int AgelTnum ) {
-  AerogelType Ctype;
+  AerogelType Ctype=AerogelTypeA;
 
   if(AgelTnum == 0 ){
     Ctype=AerogelTypeA;
@@ -185,7 +184,9 @@ AerogelType AerogelRefData::GetAerogelType(G4int AgelTnum ) {
 
   } else {G4cout<<"Unknown Aerogel Type "<<G4endl; }
 
+  return Ctype;
 }
+
 AerogelRefData::~AerogelRefData(){ ; }
 
 

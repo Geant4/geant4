@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: ExN03PhysicsList.cc,v 1.15 2003/05/21 15:27:00 vnivanch Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: ExN03PhysicsList.cc,v 1.17 2003/10/24 12:34:15 maire Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // 
 
@@ -32,7 +32,6 @@
 #include "ExN03PhysicsList.hh"
 
 #include "G4ParticleDefinition.hh"
-#include "G4ParticleWithCuts.hh"
 #include "G4ProcessManager.hh"
 #include "G4ProcessVector.hh"
 #include "G4ParticleTypes.hh"
@@ -186,6 +185,7 @@ void ExN03PhysicsList::ConstructEM()
       // set ordering for AlongStepDoIt
       pmanager->SetProcessOrdering(theeminusMultipleScattering, idxAlongStep,1);
       pmanager->SetProcessOrdering(theeminusIonisation,         idxAlongStep,2);
+      pmanager->SetProcessOrdering(theeminusBremsstrahlung,     idxAlongStep,3);      
       //
       // set ordering for PostStepDoIt
       pmanager->SetProcessOrdering(theeminusMultipleScattering, idxPostStep,1);
@@ -211,6 +211,7 @@ void ExN03PhysicsList::ConstructEM()
       // set ordering for AlongStepDoIt
       pmanager->SetProcessOrdering(theeplusMultipleScattering, idxAlongStep,1);
       pmanager->SetProcessOrdering(theeplusIonisation,         idxAlongStep,2);
+      pmanager->SetProcessOrdering(theeplusBremsstrahlung,     idxAlongStep,3);      
       //
       // set ordering for PostStepDoIt
       pmanager->SetProcessOrdering(theeplusMultipleScattering, idxPostStep,1);
@@ -235,6 +236,8 @@ void ExN03PhysicsList::ConstructEM()
       // set ordering for AlongStepDoIt
       pmanager->SetProcessOrdering(aMultipleScattering, idxAlongStep,1);
       pmanager->SetProcessOrdering(anIonisation,        idxAlongStep,2);
+      pmanager->SetProcessOrdering(aBremsstrahlung,     idxAlongStep,3);
+      pmanager->SetProcessOrdering(aPairProduction,     idxAlongStep,4);      
       //
       // set ordering for PostStepDoIt
       pmanager->SetProcessOrdering(aMultipleScattering, idxPostStep,1);

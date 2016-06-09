@@ -19,7 +19,7 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
-
+//
 #include "G4CollisionOutput.hh"
 #include "G4ParticleLargerEkin.hh"
 #include <algorithm>

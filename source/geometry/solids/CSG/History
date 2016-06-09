@@ -1,4 +1,4 @@
-$Id: History,v 1.54 2003/06/25 13:05:33 gcosmo Exp $
+$Id: History,v 1.61 2003/12/04 11:41:08 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,37 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Dec 4, 2003   V.Grichine                 geom-csg-V05-02-06
+- G4Trap.cc: fixed initialisation of planes in default constructor.
+- Added new unit test for G4Sphere and new test case for G4Cons.
+
+Nov 5, 2003   V.Grichine                 geom-csg-V05-02-05
+- G4Orb[.hh.cc]: introduced relative tolerance accuracy on fRmax surface
+  in all methods.
+
+Nov 3, 2003   G.Cosmo                    geom-csg-V05-02-04
+- Code cleanup and headers inclusion review
+  (replaced by forward declarations where necessary).
+
+Nov 2, 2003   V.Grichine
+- G4Sphere, G4Orb: revision of algorithm for Phi sections in
+  method Inside().
+
+Oct 29, 2003   J.Apostolakis             geom-csg-V05-02-03
+- G4Sphere.cc: fix for in Inside() for a point with Phi angle:
+  0.5 kAngTol < phi < Phi_start
+
+Oct 28, 2003   G.Cosmo                   geom-csg-V05-02-02
+- Migrated to new G4Exception scheme.
+
+Oct 09, 2003   V.Grichine                geom-csg-V05-02-01
+- Initialise safe=0.0 in DistanceToIn/Out(p) in all solids.
+- Introduced G4Orb solid: a simple sphere with only outer radius.
+
+Sep 30, 2003   G.Cosmo                   geom-csg-V05-02-00
+- Updated GNUmakefile for unit tests, according to new structure
+  introduced in "geometry-V05-02-00".
 
 Jun 25, 2003   G.Folger                  geom-csg-V05-01-00
 - Added disclaimer of liability where needed.

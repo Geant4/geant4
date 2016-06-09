@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4AntiOmegaMinus.hh,v 1.7 2001/10/16 08:15:45 kurasige Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // 
 // ------------------------------------------------------------

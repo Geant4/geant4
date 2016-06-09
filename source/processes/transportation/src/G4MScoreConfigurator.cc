@@ -21,46 +21,52 @@
 // ********************************************************************
 //
 //
-// $Id: G4MScoreConfigurator.cc,v 1.5 2003/04/02 16:59:12 dressel Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4MScoreConfigurator.cc,v 1.7 2003/11/26 14:51:49 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // ----------------------------------------------------------------------
 // Class G4MScoreConfigurator
 //
-
 // Author: Michael Dressel (Michael.Dressel@cern.ch)
 // ----------------------------------------------------------------------
 
 #include "G4MScoreConfigurator.hh"
 #include "G4VScorer.hh"
 #include "G4VTrackTerminator.hh"
+#include "G4MScoreProcess.hh"
 
 G4MScoreConfigurator::
 G4MScoreConfigurator(const G4String &particlename,
-		       G4VScorer &scorer) 
-  :
-  fPlacer(particlename),
-  fScorer(scorer),
-  fMScoreProcess(0)
-{}
+                           G4VScorer &scorer) 
+  : fPlacer(particlename),
+    fScorer(scorer),
+    fMScoreProcess(0)
+{
+}
 
-G4MScoreConfigurator::~G4MScoreConfigurator(){
-  if (fMScoreProcess) {
+G4MScoreConfigurator::~G4MScoreConfigurator()
+{
+  if (fMScoreProcess)
+  {
     fPlacer.RemoveProcess(fMScoreProcess);
     delete fMScoreProcess;
   }
 }
   
-const G4VTrackTerminator *G4MScoreConfigurator::
-GetTrackTerminator() const{
+const G4VTrackTerminator *
+G4MScoreConfigurator::GetTrackTerminator() const
+{
   return fMScoreProcess;
 }
 
 void G4MScoreConfigurator::Configure(G4VSamplerConfigurator *)
 {
   fMScoreProcess = new G4MScoreProcess(fScorer);
-  if (!fMScoreProcess) {
-    G4Exception("ERROR: G4MScoreConfigurator::Configure: new failed to create G4MScoreProcess!");
+  if (!fMScoreProcess)
+  {
+    G4Exception("G4MScoreConfigurator::Configure()",
+                "FatalError", FatalException,
+                "Failed allocation of G4MScoreProcess !");
   }
   fPlacer.AddProcessAsSecondDoIt(fMScoreProcess);
 }

@@ -21,12 +21,12 @@
 // ********************************************************************
 //
 //
-// $Id: G4NavigationLevel.icc,v 1.13 2003/04/02 14:28:04 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4NavigationLevel.icc,v 1.15 2003/12/04 15:58:08 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // 30.09.97 J.Apostolakis Initial version. 
 //                        
-// ********************************************************************
+// ----------------------------------------------------------------------
 
 extern G4Allocator<G4NavigationLevel> aNavigationLevelAllocator;
 
@@ -76,15 +76,13 @@ G4NavigationLevel::~G4NavigationLevel()
 inline
 G4NavigationLevel& G4NavigationLevel::operator=(const G4NavigationLevel &right)
 { 
-  if ( &right == this ) return *this;
-
-  // The order of these two statements is needed to handle "a=a"
-  //
-  right.fLevelRep->AddAReference(); 
-  if( fLevelRep->RemoveAReference() )
-    delete fLevelRep; 
-
-  fLevelRep = right.fLevelRep;
+  if ( &right != this )
+  {
+    right.fLevelRep->AddAReference(); 
+    if( fLevelRep->RemoveAReference() )
+      delete fLevelRep; 
+    fLevelRep = right.fLevelRep;
+  }
   return *this;
 } 
 

@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.13 2002/06/16 15:05:45 mantero Exp $
+# $Id: GNUmakefile,v 1.15 2003/12/04 11:01:47 guatelli Exp $
 # --------------------------------------------------------------
 # GNUmakefile for examples module.  Gabriele Cosmo, 06/04/98.
 # --------------------------------------------------------------
@@ -25,10 +25,11 @@ include $(G4INSTALL)/config/binmake.gmk
 # As the dependency is checked before "all" is reached, we need
 # to do some tricks here ...
 
-CPPFLAGS += -I${LHCXX_REL_DIR}/include -I/afs/cern.ch/sw/contrib/AIDA/2.2/cpp
-LOADLIBS  += -L/usr/local/gcc-alt-2.95.2
-
-
+ifdef G4ANALYSIS_USE  
+ CPPFLAGS += `aida-config --include`
+ LDFLAGS  += `aida-config --lib`
+ LOADLIBS += `aida-config --lib` 
+endif
 
 visclean:
 	rm -f g4*.prim g4*.eps g4*.wrl

@@ -22,7 +22,7 @@
 //
 //
 // $Id: exampleN02.cc,v 1.8 2002/01/09 17:23:49 ranjard Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

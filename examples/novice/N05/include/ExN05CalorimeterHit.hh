@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: ExN05CalorimeterHit.hh,v 1.6 2003/05/28 11:20:24 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: ExN05CalorimeterHit.hh,v 1.7 2003/11/10 14:41:33 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 
 #ifndef ExN05CalorimeterHit_h
@@ -52,7 +52,7 @@ class ExN05CalorimeterHit : public G4VHit
       inline void operator delete(void *aHit);
       void *operator new(size_t,void*p){return p;}
 #ifndef G4NOT_ISO_DELETES
-      void operator delete(void *aHit,void*){}
+      void operator delete(void *,void*){}
 #endif
 
       void Draw();

@@ -19,9 +19,16 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
-//========================
-// taken from example N04 of G4 distribution
-//========================
+//
+// $Id: ExN04HadronPhysics.hh,v 1.6 2003/12/03 11:03:06 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-00 $
+//
+// ------------------------------------------------------------
+//	GEANT 4 class header file 
+//
+//      This class is an derived class of G4VPhysicsConstructor
+//
+// ------------------------------------------------------------
 #ifndef ExN04HadronPhysics_h
 #define ExN04HadronPhysics_h 1
 

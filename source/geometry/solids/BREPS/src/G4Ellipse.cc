@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4Ellipse.cc,v 1.9 2003/06/16 16:52:55 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file

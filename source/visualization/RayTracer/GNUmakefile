@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.3 2000/04/07 13:32:41 gcosmo Exp $
+# $Id: GNUmakefile,v 1.7 2003/11/12 22:46:00 duns Exp $
 
 name := G4RayTracer
 
@@ -10,33 +10,26 @@ include $(G4INSTALL)/config/architecture.gmk
 include $(G4INSTALL)/config/G4VIS_BUILD.gmk
 include $(G4INSTALL)/config/interactivity.gmk
 
-CPPFLAGS += -I$(G4BASE)/graphics_reps/include \
-            -I$(G4BASE)/event/include \
-            -I$(G4BASE)/digits+hits/detector/include \
-            -I$(G4BASE)/global/management/include \
-            -I$(G4BASE)/global/HEPRandom/include \
-            -I$(G4BASE)/global/HEPGeometry/include \
-            -I$(G4BASE)/track/include \
-            -I$(G4BASE)/tracking/include \
-            -I$(G4BASE)/processes/management/include \
-            -I$(G4BASE)/processes/electromagnetic/utils/include \
-            -I$(G4BASE)/particles/management/include \
-            -I$(G4BASE)/particles/leptons/include \
-            -I$(G4BASE)/particles/leptons/include \
-            -I$(G4BASE)/particles/bosons/include \
-            -I$(G4BASE)/particles/hadrons/barions/include \
-            -I$(G4BASE)/particles/hadrons/ions/include \
-            -I$(G4BASE)/particles/hadrons/mesons/include \
-            -I$(G4BASE)/materials/include \
-            -I$(G4BASE)/geometry/management/include \
-            -I$(G4BASE)/geometry/volumes/include \
-            -I$(G4BASE)/geometry/solids/CSG/include \
-            -I$(G4BASE)/geometry/solids/specific/include \
-            -I$(G4BASE)/digits+hits/detector/include \
-            -I$(G4BASE)/digits+hits/hits/include \
-            -I$(G4BASE)/digits+hits/digits/include \
-            -I$(G4BASE)/intercoms/include \
-            -I$(G4BASE)/visualization/management/include \
-            -I$(G4BASE)/visualization/modeling/include
+CPPFLAGS += -I$(G4BASE)/visualization/modeling/include
+CPPFLAGS += -I$(G4BASE)/visualization/management/include
+CPPFLAGS += -I$(G4BASE)/graphics_reps/include
+CPPFLAGS += -I$(G4BASE)/global/management/include
+CPPFLAGS += -I$(G4BASE)/global/HEPGeometry/include
+CPPFLAGS += -I$(G4BASE)/global/HEPRandom/include
+CPPFLAGS += -I$(G4BASE)/geometry/management/include
+CPPFLAGS += -I$(G4BASE)/geometry/navigation/include
+CPPFLAGS += -I$(G4BASE)/geometry/volumes/include
+CPPFLAGS += -I$(G4BASE)/digits_hits/detector/include
+CPPFLAGS += -I$(G4BASE)/digits_hits/digits/include
+CPPFLAGS += -I$(G4BASE)/intercoms/include
+CPPFLAGS += -I$(G4BASE)/event/include
+CPPFLAGS += -I$(G4BASE)/track/include
+CPPFLAGS += -I$(G4BASE)/tracking/include
+CPPFLAGS += -I$(G4BASE)/digits_hits/hits/include
+CPPFLAGS += -I$(G4BASE)/particles/bosons/include
+CPPFLAGS += -I$(G4BASE)/particles/management/include
+CPPFLAGS += -I$(G4BASE)/processes/management/include
+CPPFLAGS += -I$(G4BASE)/processes/cuts/include
+CPPFLAGS += -I$(G4BASE)/materials/include
 
 include $(G4INSTALL)/config/common.gmk

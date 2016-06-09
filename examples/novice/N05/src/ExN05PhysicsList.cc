@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: ExN05PhysicsList.cc,v 1.8 2003/06/16 16:50:03 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: ExN05PhysicsList.cc,v 1.9 2003/09/29 04:54:11 kurasige Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // 
 
@@ -30,7 +30,6 @@
 
 #include "globals.hh"
 #include "G4ParticleDefinition.hh"
-#include "G4ParticleWithCuts.hh"
 #include "G4ProcessManager.hh"
 #include "G4ProcessVector.hh"
 #include "G4ParticleTypes.hh"

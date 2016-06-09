@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VParticleChange.hh,v 1.8 2002/11/20 16:52:49 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4VParticleChange.hh,v 1.9 2003/06/11 07:16:28 kurasige Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // 
 // ------------------------------------------------------------
@@ -65,6 +65,7 @@
 //   Implement Event Biasing Scheme   9 Nov.,98 H.Kurashige
 //   add CheckIt                    13  Apr.,99 H.Kurashige
 //   add accuracy leveles            5  May, 99 H.Kurashige
+//   add check secondaries          11  June, 03 H.Kurashige
 #ifndef G4VParticleChange_h
 #define G4VParticleChange_h 1
 
@@ -241,6 +242,9 @@ class G4VParticleChange
     G4bool GetDebugFlag() const; 
 
   protected:
+    // CheckSecondary method is provided for debug
+    G4bool CheckSecondary(G4Track&);
+ 
     const G4double GetAccuracyForWarning() const;
     const G4double GetAccuracyForException() const;
 

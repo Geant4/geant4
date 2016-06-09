@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4IStore.hh,v 1.9 2002/10/22 13:18:44 dressel Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // ----------------------------------------------------------------------
 // Class G4IStore

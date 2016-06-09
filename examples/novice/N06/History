@@ -1,4 +1,4 @@
-$Id: History,v 1.15 2003/04/22 12:12:03 gcosmo Exp $
+$Id: History,v 1.19 2003/12/01 16:25:27 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,18 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+December 1, 2003 Peter Gumplinger (exampleN06-V05-02-02)
+- DetectorConstruction: use G4SurfaceProperty.
+
+November 13, 2003 John Allison
+- Removed OPACS from Vis Manager.
+
+October 24, 2003 mma (exampleN06-V05-02-01)
+- PhysicsList: AddProcess(Bremsstrahlung,-1,3,3) ..etc..
+     
+October 06, 2003 mma (exampleN06-V05-02-00)
+- cosmetic cleanup of material definition
 
 April 17, 2003 Peter Gumplinger (exampleN06-V05-00-03)
 - changed OpWaterSurface to dielectric_dielectric in class

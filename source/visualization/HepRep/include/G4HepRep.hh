@@ -31,13 +31,22 @@
 //G4
 #include "G4VGraphicsSystem.hh"
 
+class G4HepRepMessenger;
+
 class G4HepRep: public G4VGraphicsSystem {
     public:
         G4HepRep ();
         virtual ~G4HepRep ();
         G4VSceneHandler* CreateSceneHandler (const G4String& name = "");
-        G4VViewer* CreateViewer  (G4VSceneHandler&, const G4String& name = "");
+        G4VViewer* CreateViewer (G4VSceneHandler&, const G4String& name = "");
 
+        void removeSceneHandler();
+        void removeViewer();
+
+    private:
+        G4VSceneHandler* sceneHandler;
+        G4VViewer* viewer;
+        G4HepRepMessenger* messenger;        
 };
 
 #endif

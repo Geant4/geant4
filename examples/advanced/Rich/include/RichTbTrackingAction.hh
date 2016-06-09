@@ -35,8 +35,8 @@ class RichTbTrackingAction : public G4UserTrackingAction {
  public:
     RichTbTrackingAction();
   virtual ~RichTbTrackingAction();
-  void PreUserTrackingAction(const G4Track* aTrack){;}
-  void PostUserTrackingAction(const G4Track* aTrack){;}
+  void PreUserTrackingAction(const G4Track*){;}
+  void PostUserTrackingAction(const G4Track*){;}
 
 
 private:

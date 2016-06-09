@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: ExN03DetectorConstruction.hh,v 1.5 2002/01/09 17:24:11 ranjard Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: ExN03DetectorConstruction.hh,v 1.6 2003/09/15 15:38:14 maire Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // 
 
@@ -41,7 +41,6 @@ class G4VPhysicalVolume;
 class G4Material;
 class G4UniformMagField;
 class ExN03DetectorMessenger;
-class ExN03CalorimeterSD;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -132,7 +131,6 @@ class ExN03DetectorConstruction : public G4VUserDetectorConstruction
      G4UniformMagField* magField;      //pointer to the magnetic field
      
      ExN03DetectorMessenger* detectorMessenger;  //pointer to the Messenger
-     ExN03CalorimeterSD* calorimeterSD;  //pointer to the sensitive detector
       
   private:
     

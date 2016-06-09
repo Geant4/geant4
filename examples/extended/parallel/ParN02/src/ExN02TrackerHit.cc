@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: ExN02TrackerHit.cc,v 1.1 2002/03/05 15:22:02 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: ExN02TrackerHit.cc,v 1.2 2003/07/04 15:36:51 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -47,6 +47,7 @@ ExN02TrackerHit::~ExN02TrackerHit() {}
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 ExN02TrackerHit::ExN02TrackerHit(const ExN02TrackerHit& right)
+  : G4VHit()
 {
   trackID   = right.trackID;
   chamberNb = right.chamberNb;
@@ -67,9 +68,9 @@ const ExN02TrackerHit& ExN02TrackerHit::operator=(const ExN02TrackerHit& right)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-int ExN02TrackerHit::operator==(const ExN02TrackerHit& right) const
+G4int ExN02TrackerHit::operator==(const ExN02TrackerHit& right) const
 {
-  return 0;
+  return (this==&right) ? 1 : 0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

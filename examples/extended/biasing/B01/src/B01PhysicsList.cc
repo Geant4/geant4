@@ -22,7 +22,7 @@
 //
 //
 // $Id: B01PhysicsList.cc,v 1.5 2003/06/16 16:47:10 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 
 #include "globals.hh"

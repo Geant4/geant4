@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: A01PhysicsList.cc,v 1.4 2003/06/16 16:47:06 gunter Exp $
+// $Id: A01PhysicsList.cc,v 1.5 2003/10/11 03:00:00 tkoi Exp $
 // --------------------------------------------------------------
 //
 
@@ -65,7 +65,7 @@ A01PhysicsList::A01PhysicsList():  G4VModularPhysicsList()
   RegisterPhysics(  new A01HadronPhysics("hadron"));
 
   // Ion Physics
-////////////////////////////////////////////  RegisterPhysics( new A01IonPhysics("ion"));
+  RegisterPhysics( new A01IonPhysics("ion"));
 
 
 }

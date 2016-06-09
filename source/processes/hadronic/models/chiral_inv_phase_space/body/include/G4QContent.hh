@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4QContent.hh,v 1.16 2003/06/16 17:04:03 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4QContent.hh,v 1.24 2003/12/09 15:38:00 gunter Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 //      ---------------- G4QContent ----------------
 //             by Mikhail Kossov, Sept 1999.
@@ -35,6 +35,7 @@
 #include <iostream>
 #include "globals.hh"
 #include "Randomize.hh"
+#include "G4QException.hh"
 
 class G4QContent
 {
@@ -43,12 +44,12 @@ public:
   G4QContent(const G4QContent& rhs);     // Copy constructor by value
   G4QContent(G4QContent* rhs);           // Copy constructor by pointer
 
-  ~G4QContent();
+  ~G4QContent();                         // Public Destructor
 
   // Overloaded operators
   const G4QContent& operator=(const G4QContent& rhs);
-  G4int             operator==(const G4QContent& rhs) const;
-  G4int             operator!=(const G4QContent& rhs) const;
+  G4bool            operator==(const G4QContent& rhs) const;
+  G4bool            operator!=(const G4QContent& rhs) const;
   G4QContent        operator+=(G4QContent& rhs);
   G4QContent        operator-=(G4QContent& rhs);
   G4QContent        operator*=(G4int& rhs);
@@ -159,8 +160,8 @@ G4QContent operator*(const G4int&      lhs, const G4QContent& rhs);
 // Not member functions
 //----------------------------------------------------------------------------------------
 
-inline G4int      G4QContent::operator==(const G4QContent& rhs) const {return this==&rhs;}	
-inline G4int      G4QContent::operator!=(const G4QContent& rhs) const {return this!=&rhs;}
+inline G4bool     G4QContent::operator==(const G4QContent& rhs) const {return this==&rhs;}	
+inline G4bool     G4QContent::operator!=(const G4QContent& rhs) const {return this!=&rhs;}
 inline G4int      G4QContent::GetQ() const {return nU+nD+nS;}
 inline G4int      G4QContent::GetAQ() const {return nAU+nAD+nAS;}
 inline G4int      G4QContent::GetTot() const {return nU+nD+nS+nAU+nAD+nAS;}
@@ -218,6 +219,7 @@ inline G4int G4QContent::GetZNSPDGCode() const
   //else
   //{
     G4int b=(kU+kD-kS-kS)/3;                 // Baryon number-n*{LAMBDA=kS)
+    if(!b && !kS) return GetSPDGCode();      // Not a nucleus
     G4int d=kU-kD;                           // Isotopic shift
     G4int n=(b-d)/2;                         // A#of neutrons
     return 90000000+1000*(1000*kS+n+d)+n;

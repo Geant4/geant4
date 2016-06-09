@@ -195,44 +195,6 @@ void XrayFluoPhysicsList::ConstructEM()
 
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-void XrayFluoPhysicsList::SetGELowLimit(G4double lowcut)
-{
-  if (verboseLevel >0){
-    G4cout << "XrayFluoPhysicsList::SetCuts:";
-    G4cout << "Gamma and Electron cut in energy: " << lowcut*MeV << " (MeV)" << G4endl;
-  }  
-
-  G4Gamma::SetEnergyRange(lowcut,1e5);
-  G4Electron::SetEnergyRange(lowcut,1e5);
-  G4Positron::SetEnergyRange(lowcut,1e5);
-
-}
-
-void XrayFluoPhysicsList::SetGammaLowLimit(G4double lowcut)
-{
-  if (verboseLevel >0){
-    G4cout << "XrayFluoPhysicsList::SetCuts:";
-    G4cout << "Gamma cut in energy: " << lowcut*MeV << " (MeV)" << G4endl;
-  }  
-
-  G4Gamma::SetEnergyRange(lowcut,1e5);
-
-}
-
-void XrayFluoPhysicsList::SetElectronLowLimit(G4double lowcut)
-{
-  if (verboseLevel >0){
-
-    G4cout << "XrayFluoPhysicsList::SetCuts:";
-    G4cout << "Electron cut in energy: " << lowcut*MeV << " (MeV)" << G4endl;
-
-  }  
-
-  G4Electron::SetEnergyRange(lowcut,1e5);
-
-}
 void XrayFluoPhysicsList::SetGammaCut(G4double val)
 {
   ResetCuts();
@@ -253,7 +215,7 @@ void XrayFluoPhysicsList::SetCuts(){
    SetCutValue(cutForElectron,"e-");
    SetCutValue(cutForElectron,"e+");
    SetCutValue(cutForProton, "proton");
-   SetCutValueForOthers(cutForProton);
+   SetCutValue(cutForProton, "alpha");
    if (verboseLevel>0) DumpCutValuesTable();
 }
 

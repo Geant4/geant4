@@ -21,13 +21,11 @@
 // ********************************************************************
 //
 //
-// $Id: TestEm1.cc,v 1.8 2001/12/07 11:49:08 maire Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: TestEm1.cc,v 1.9 2003/10/06 10:02:20 maire Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
-
-#define Em1NoOptimize 1
 
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"
@@ -35,20 +33,18 @@
 #include "G4UItcsh.hh"
 #include "Randomize.hh"
 
-#include "Em1DetectorConstruction.hh"
-#include "Em1PhysicsList.hh"
-#include "Em1PrimaryGeneratorAction.hh"
-#include "Em1SteppingVerbose.hh"
+#include "DetectorConstruction.hh"
+#include "PhysicsList.hh"
+#include "PrimaryGeneratorAction.hh"
+#include "SteppingVerbose.hh"
 
-#ifdef Em1NoOptimize
- #include "Em1RunAction.hh"
- #include "Em1EventAction.hh"
- #include "Em1TrackingAction.hh"
- #include "Em1SteppingAction.hh"
+#include "RunAction.hh"
+#include "EventAction.hh"
+#include "TrackingAction.hh"
+#include "SteppingAction.hh"
 
- #ifdef G4VIS_USE
-  #include "Em1VisManager.hh"
- #endif
+#ifdef G4VIS_USE
+ #include "VisManager.hh"
 #endif
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -59,33 +55,31 @@ int main(int argc,char** argv) {
   HepRandom::setTheEngine(new RanecuEngine);
   
   //my Verbose output class
-  G4VSteppingVerbose::SetInstance(new Em1SteppingVerbose);
+  G4VSteppingVerbose::SetInstance(new SteppingVerbose);
     
   // Construct the default run manager
   G4RunManager * runManager = new G4RunManager;
 
   // set mandatory initialization classes
-  Em1DetectorConstruction* det;
-  runManager->SetUserInitialization(det = new Em1DetectorConstruction);
-  runManager->SetUserInitialization(new Em1PhysicsList(det));
-  runManager->SetUserAction(new Em1PrimaryGeneratorAction(det));
+  DetectorConstruction* det;
+  runManager->SetUserInitialization(det = new DetectorConstruction);
+  runManager->SetUserInitialization(new PhysicsList(det));
+  runManager->SetUserAction(new PrimaryGeneratorAction(det));
   
-#ifdef Em1NoOptimize  
   #ifdef G4VIS_USE
    // visualization manager
-   G4VisManager* visManager = new Em1VisManager;
+   G4VisManager* visManager = new VisManager;
    visManager->Initialize();
   #endif
     
   // set user action classes
-  Em1RunAction*   RunAct;
-  Em1EventAction* EvtAct;
+  RunAction*   RunAct;
+  EventAction* EvtAct;
   
-  runManager->SetUserAction(RunAct = new Em1RunAction); 
-  runManager->SetUserAction(EvtAct = new Em1EventAction);
-  runManager->SetUserAction(new Em1TrackingAction(RunAct));
-  runManager->SetUserAction(new Em1SteppingAction(RunAct,EvtAct));
-#endif
+  runManager->SetUserAction(RunAct = new RunAction); 
+  runManager->SetUserAction(EvtAct = new EventAction);
+  runManager->SetUserAction(new TrackingAction(RunAct));
+  runManager->SetUserAction(new SteppingAction(RunAct,EvtAct));
    
   // get the pointer to the User Interface manager 
     G4UImanager* UI = G4UImanager::GetUIpointer();  
@@ -108,11 +102,9 @@ int main(int argc,char** argv) {
      UI->ApplyCommand(command+fileName);
     }
 
-  // job termination
-#ifdef Em1NoOptimize   
- #ifdef G4VIS_USE
-  delete visManager;
- #endif
+  // job termination 
+#ifdef G4VIS_USE
+ delete visManager;
 #endif
  
   delete runManager;

@@ -21,12 +21,13 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPProduct.hh,v 1.8 2003/06/16 17:11:03 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4NeutronHPProduct.hh,v 1.9 2003/11/03 17:54:37 hpw Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 #ifndef G4NeutronHPProduct_h
 #define G4NeutronHPProduct_h 1
 
+#include "G4HadronicException.hh"
 #include "globals.hh"
 #include "G4NeutronHPVector.hh"
 #include "Randomize.hh"
@@ -108,7 +109,7 @@ class G4NeutronHPProduct
     }
     else
     {
-      G4Exception("distribution law unknown to G4NeutronHPProduct");
+      throw G4HadronicException(__FILE__, __LINE__, "distribution law unknown to G4NeutronHPProduct");
     }
     if(theDist!=NULL)
     {

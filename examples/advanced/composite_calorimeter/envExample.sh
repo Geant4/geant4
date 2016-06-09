@@ -8,9 +8,9 @@
 # G4ANALYSIS_USE must be set to 1).
 #------------------------------------------------------------------
 #
-# --- Aida 3.0 , Anaphe 5.0.2 ---
-#. /afs/cern.ch/sw/lhcxx/share/LHCXX/5.0.2/scripts/setupAnaphe
-#export PATH=$PATH:/afs/cern.ch/sw/lhcxx/share/LHCXX/5.0.2/scripts/
+# --- Aida 3.0 , Anaphe 5.0.6 ---
+#. /afs/cern.ch/sw/lhcxx/share/LHCXX/5.0.6/scripts/setupAnaphe
+#export PATH=$PATH:/afs/cern.ch/sw/lhcxx/share/LHCXX/5.0.6/scripts
 #
 # --- Specific setup for this test-beam example ---
 export CCAL_CONFPATH=./dataconf

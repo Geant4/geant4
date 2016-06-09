@@ -19,11 +19,11 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
-
+//
 // ====================================================================
 //
 //   H01PythiaInterface.cc
-//   $Id: H01PythiaInterface.cc,v 1.2 2003/06/16 16:48:28 gunter Exp $
+//   $Id: H01PythiaInterface.cc,v 1.3 2003/12/09 15:31:01 gunter Exp $
 //
 // ====================================================================
 #include "H01PythiaInterface.hh"

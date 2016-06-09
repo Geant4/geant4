@@ -21,14 +21,14 @@
 // ********************************************************************
 //
 //
-// $Id: G4Region.icc,v 1.4 2003/06/16 16:51:55 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4Region.icc,v 1.6 2003/11/02 14:01:22 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // 
 // class G4Region Inline Implementation file
 //
 // 19.09.02 - G.Cosmo: Created
-// ********************************************************************
+// --------------------------------------------------------------------
 
 // ********************************************************************
 // Equality operator, defined by address only
@@ -144,3 +144,25 @@ size_t G4Region::GetNumberOfRootVolumes() const
 {
   return fRootVolumes.size();
 }
+
+// ********************************************************************
+// SetUserInformation
+// ********************************************************************
+//
+inline
+void G4Region::SetUserInformation(G4VUserRegionInformation* ui)
+{
+  fUserInfo = ui;
+}
+
+// ********************************************************************
+// GetUserInformation
+// ********************************************************************
+//
+inline
+G4VUserRegionInformation* G4Region::GetUserInformation() const
+{
+  return fUserInfo;
+}
+
+

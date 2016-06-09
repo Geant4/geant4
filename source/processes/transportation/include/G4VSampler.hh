@@ -21,37 +21,38 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSampler.hh,v 1.7 2003/06/13 09:55:16 dressel Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4VSampler.hh,v 1.9 2003/11/26 14:51:49 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // ----------------------------------------------------------------------
 // Class G4VSampler
 //
 // Class description:
 //
-// This interface discribes a configurable sampler.
+// This interface describes a configurable sampler.
 // It applies to a given particle type.
 // Concrete classes with this interface may be used for 
-// scoring, importance sampling and weigth cutoff (weight roulett).
-//
+// scoring, importance sampling and weight cutoff (weight roulette).
 
 // Author: Michael Dressel (Michael.Dressel@cern.ch)
 // ----------------------------------------------------------------------
 #ifndef G4VSampler_hh
 #define G4VSampler_hh G4VSampler_hh
 
-
-#include "globals.hh"
+#include "G4Types.hh"
+#include "G4PlaceOfAction.hh"
 
 class G4VPhysicalVolume;
 class G4VImportanceAlgorithm;
 class G4VIStore;
+class G4VWeightWindowAlgorithm;
+class G4VWeightWindowStore;
 class G4VScorer;
 
+class G4VSampler
+{
 
-class G4VSampler {
-
-public:  
+public:  // with description
   
   G4VSampler();
   virtual ~G4VSampler();
@@ -59,13 +60,18 @@ public:
   virtual void PrepareScoring(G4VScorer *Scorer) = 0;
 
   virtual void PrepareImportanceSampling(G4VIStore *istore,
-					 const G4VImportanceAlgorithm 
-					 *ialg = 0) = 0;
+                                         const G4VImportanceAlgorithm 
+                                         *ialg = 0) = 0;
 
 
   virtual void PrepareWeightRoulett(G4double wsurvive = 0.5, 
-				    G4double wlimit = 0.25,
-				    G4double isource = 1) = 0;
+                                    G4double wlimit = 0.25,
+                                    G4double isource = 1) = 0;
+
+  virtual void PrepareWeightWindow(G4VWeightWindowStore *wwstore,
+                                   G4VWeightWindowAlgorithm *wwAlg = 0,
+                                   G4PlaceOfAction placeOfAction = 
+                                   onBoundary) = 0;
 
   virtual void Configure() = 0;
 
@@ -77,4 +83,3 @@ public:
 };
   
 #endif
-

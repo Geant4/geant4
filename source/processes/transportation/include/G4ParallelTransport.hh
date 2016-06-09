@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParallelTransport.hh,v 1.7 2003/06/16 17:12:40 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4ParallelTransport.hh,v 1.8 2003/11/26 14:51:48 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // ----------------------------------------------------------------------
 // Class G4ParallelTransport
@@ -32,7 +32,7 @@
 // Used internally by importance sampling and scoring in a "parallel"
 // geometry.
 // This process "moves" a particle in a "parallel" geometry.
-// It should be placed in the post step process do it vector after the 
+// It should be placed in the post step process do-it vector after the 
 // G4Transportation process.
 
 // Author: Michael Dressel (Michael.Dressel@cern.ch)
@@ -40,10 +40,10 @@
 #ifndef G4ParallelTransport_hh
 #define G4ParallelTransport_hh G4ParallelTransport_hh
 
+#include "G4Types.hh"
 #include <strstream>
 
 #include "G4VProcess.hh"
-#include "globals.hh"
 
 class G4VPGeoDriver;
 class G4VParallelStepper;
@@ -54,8 +54,8 @@ class G4ParallelTransport : public G4VProcess
 public:  // with description
 
   G4ParallelTransport(G4VPGeoDriver &pgeodriver, 
-		      G4VParallelStepper &aStepper,
-		      const G4String &aName = "ParallelTransport");
+                      G4VParallelStepper &aStepper,
+                      const G4String &aName = "ParallelTransport");
     // create G4ParticleChange
 
   virtual ~G4ParallelTransport();
@@ -66,8 +66,8 @@ public:  // with description
 
   virtual G4double 
   PostStepGetPhysicalInteractionLength(const G4Track& aTrack,
-				       G4double   previousStepSize,
-				       G4ForceCondition* condition);
+                                       G4double   previousStepSize,
+                                       G4ForceCondition* condition);
     // straight distance to the boundary in the "parallel" geometry
     // in the direction of the track   
 
@@ -94,20 +94,18 @@ public:  // without description
                                        G4GPILSelection*);
    virtual G4double 
    AtRestGetPhysicalInteractionLength(const G4Track& ,
-				      G4ForceCondition*);
+                                      G4ForceCondition*);
 
    virtual G4VParticleChange*  AtRestDoIt(const G4Track&, 
-					  const G4Step&);
+                                          const G4Step&);
    virtual G4VParticleChange* AlongStepDoIt(const G4Track&, 
-					    const G4Step&);
-  
+                                            const G4Step&);
 protected:
 
   virtual void Error(const G4String &m);
   virtual void Warning(const G4String &m);
 
   G4ParticleChange *fParticleChange;
-
 
 private:
 
@@ -123,9 +121,11 @@ private:
 
 };
 
+// ------------------------------------------------------------
 
-inline const G4VParallelStepper &G4ParallelTransport::
-GetPStepper() const {
+inline const G4VParallelStepper &
+G4ParallelTransport::GetPStepper() const
+{
   return fPStepper;
 }
 

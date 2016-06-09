@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VPrimaryGenerator.hh,v 1.6 2001/11/21 13:48:40 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4VPrimaryGenerator.hh,v 1.7 2003/08/02 00:18:30 asaim Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 
 #ifndef G4VPrimaryGenerator_h
@@ -42,10 +42,17 @@ class G4Event;
 
 class G4VPrimaryGenerator
 {
-  public:
+  public: // with description
+  // static service method for checking a point is included in the (current) world
+     static G4bool CheckVertexInsideWorld(const G4ThreeVector& pos);
+
+  public: // with description
+     // Constructor and destrucot of this base class
      G4VPrimaryGenerator();
      virtual ~G4VPrimaryGenerator();
 
+     // Pure virtual method which a concrete class derived from this base class must
+     // have a concrete implementation
      virtual void GeneratePrimaryVertex(G4Event* evt) = 0;
 
   protected:

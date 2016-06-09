@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicsTable.hh,v 1.12 2003/06/06 16:17:14 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4PhysicsTable.hh,v 1.13 2003/11/04 10:38:03 kurasige Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // 
 // ------------------------------------------------------------
@@ -95,6 +95,9 @@ class G4PhysicsTable : public std::vector<G4PhysicsVector*>
 
   G4bool isEmpty() const;
     // Flags if collection is empty or not.
+
+  G4bool ExistPhysicsTable(const G4String& fileName) const;
+    // Check if the specified file exists or not
 
   G4bool StorePhysicsTable(const G4String& filename, G4bool ascii=false);
     // Stores PhysicsTable in a file (returns false in case of failure).

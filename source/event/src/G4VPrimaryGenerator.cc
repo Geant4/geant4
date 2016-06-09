@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VPrimaryGenerator.cc,v 1.3 2001/07/11 09:58:54 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4VPrimaryGenerator.cc,v 1.4 2003/08/02 00:18:30 asaim Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 
 // G4VPrimaryGenerator
@@ -34,4 +34,22 @@ G4VPrimaryGenerator::G4VPrimaryGenerator()
 G4VPrimaryGenerator::~G4VPrimaryGenerator()
 {;}
 
+#include "G4TransportationManager.hh"
+#include "G4Navigator.hh"
+#include "G4VPhysicalVolume.hh"
+#include "G4VSolid.hh"
+
+G4bool G4VPrimaryGenerator::CheckVertexInsideWorld
+                         (const G4ThreeVector& pos)
+{
+  G4Navigator* navigator= G4TransportationManager::GetTransportationManager()
+                                                 -> GetNavigatorForTracking();
+  
+  G4VPhysicalVolume* world= navigator-> GetWorldVolume();
+  G4VSolid* solid= world-> GetLogicalVolume()-> GetSolid();
+  EInside qinside= solid-> Inside(pos);
+  
+  if( qinside != kInside) return false;
+  else return true;
+}
 

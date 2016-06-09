@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ReflectionFactory.cc,v 1.9 2003/06/12 12:47:33 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4ReflectionFactory.cc,v 1.11 2003/11/03 17:48:46 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // Author: Ivana Hrivnacova, 16.10.2001  (Ivana.Hrivnacova@cern.ch)
 
@@ -49,7 +49,7 @@
 //        = TV * R * TD * x(inD)
 //        = TV * R*TD*R-1 * R*x(inD)
 //        = TV * ReflTD * x(inReflD)
-// ********************************************************************
+// --------------------------------------------------------------------
 
 #include "G4ReflectionFactory.hh"
 #include "G4ReflectedSolid.hh"  
@@ -268,15 +268,13 @@ G4LogicalVolume* G4ReflectionFactory::CreateReflectedLV(G4LogicalVolume* LV)
   //
   if (fReflectedLVMap.find(LV) != fReflectedLVMap.end())
   {
-    G4cout << "ERROR - G4ReflectionFactory::CreateReflectedLV(): "
-           << LV->GetName() << G4endl
-           << "        Cannot be applied to an already reflected volume !"
-           << G4endl;
     G4cerr << "ERROR - G4ReflectionFactory::CreateReflectedLV(): "
            << LV->GetName() << G4endl
            << "        Cannot be applied to an already reflected volume !"
            << G4endl;
-    G4Exception("G4ReflectionFactory::CreateReflectedLV() - Invalid call");
+    G4Exception("G4ReflectionFactory::CreateReflectedLV()",
+                "NotApplicable", FatalException,
+                "Cannot be applied to a volume already reflected.");
   }        
               
   G4VSolid* refSolid 
@@ -464,15 +462,13 @@ void G4ReflectionFactory::ReflectPVParameterised(G4VPhysicalVolume* dPV,
   // a constituent volume into a reflected volume. 
   // ---
 
-  G4cout << "ERROR - G4ReflectionFactory::ReflectPVParameterised(): "
-         << dPV->GetName() << G4endl
-         << "        Reflection of parameterised volumes "
-         << "is not yet implemented." << G4endl;
   G4cerr << "ERROR - G4ReflectionFactory::ReflectPVParameterised(): "
          << dPV->GetName() << G4endl
          << "        Reflection of parameterised volumes "
          << "is not yet implemented." << G4endl;
- G4Exception("G4ReflectionFactory::ReflectPVParameterised() - not implemented");
+  G4Exception("G4ReflectionFactory::ReflectPVParameterised()",
+              "NotImplemented", FatalException,
+              "Sorry, not yet implemented.");
 }
 
 //_____________________________________________________________________________
@@ -582,11 +578,11 @@ void G4ReflectionFactory::CheckScale(const G4Scale3D& scale) const
 
   if (diff > fScalePrecision)
   {
-    G4cout << "ERROR - G4ReflectionFactory::CheckScale()" << G4endl
-           << "        Unexpected scale. Difference: " << diff << G4endl;
     G4cerr << "ERROR - G4ReflectionFactory::CheckScale()" << G4endl
            << "        Unexpected scale. Difference: " << diff << G4endl;
-    G4Exception("G4ReflectionFactory::CheckScale() - unexpected scale");
+    G4Exception("G4ReflectionFactory::CheckScale()",
+                "WrongArgumentValue", FatalException,
+                "Unexpected scale in input !");
   }
 }    
 

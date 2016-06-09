@@ -48,15 +48,15 @@
     ~G4LENeutronInelastic()
     { }
     
-    G4VParticleChange *ApplyYourself( const G4Track &aTrack,
+    G4HadFinalState * ApplyYourself(const G4HadProjectile &aTrack,
                                       G4Nucleus &targetNucleus );
     
  private:
     
     void Cascade(                               // derived from CASN
-      G4FastVector<G4ReactionProduct,128> &vec,
+      G4FastVector<G4ReactionProduct,GHADLISTSIZE> &vec,
       G4int &vecLen,
-      const G4DynamicParticle *originalIncident,
+      const G4HadProjectile *originalIncident,
       G4ReactionProduct &currentParticle,
       G4ReactionProduct &targetParticle,
       G4bool &incidentHasChanged, 
@@ -64,7 +64,7 @@
       G4bool &quasiElastic );
     
     void SlowNeutron(
-     const G4DynamicParticle *originalIncident,
+     const G4HadProjectile *originalIncident,
      G4ReactionProduct &modifiedOriginal,
      G4ReactionProduct &targetParticle,
      G4Nucleus & targetNucleus );

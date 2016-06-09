@@ -1,0 +1,52 @@
+#
+# Macro file for A01app
+#
+# Create a scene handler and viewer for HepRep
+#
+/vis/open HepRepFile
+#/vis/open DAWNFILE
+#
+# Create a new empty scene
+#
+/vis/scene/create
+#
+# Declare that the world volume should be added to the scene
+#
+/vis/scene/add/volume
+#
+# Attach scene to scenehandler
+#
+/vis/sceneHandler/attach
+#
+# Draw a picture that has just the detector (no trajectories or hits).
+#
+/vis/viewer/flush
+#
+# Declare that trajectories and hits should be added to the scene
+#
+/vis/scene/add/trajectories
+/vis/scene/add/hits
+#
+# Store particle trajactories for visualisation
+#
+/tracking/storeTrajectory 1
+#
+# Execute the visualization via the /vis/viewer/flush that comes
+# automatically at the end of each /run.
+#
+/mydet/armAngle 60. deg
+/mydet/fieldValue 2. tesla
+/run/beamOn 1
+#
+/mydet/armAngle 30. deg
+/mydet/momentum 2. GeV
+/mydet/sigmaMomentum 0. 
+/mydet/sigmaAngle 0.
+/run/beamOn 1
+#
+# This time, set visualization to accumulate many events into one picture
+#
+/vis/scene/endOfEventAction accumulate
+/mydet/sigmaAngle 2. deg
+/run/beamOn 4
+#

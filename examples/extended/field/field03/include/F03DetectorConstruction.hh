@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: F03DetectorConstruction.hh,v 1.4 2001/10/25 10:03:53 grichine Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: F03DetectorConstruction.hh,v 1.5 2003/12/01 17:28:26 japost Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // 
 
@@ -41,7 +41,7 @@ class G4Material;
 class G4UniformMagField;
 class F03DetectorMessenger;
 class F03CalorimeterSD;
-class F03ElectroMagneticField;
+class F03FieldSetup;
 
 
 class F03DetectorConstruction : public G4VUserDetectorConstruction
@@ -98,7 +98,7 @@ class F03DetectorConstruction : public G4VUserDetectorConstruction
      G4VPhysicalVolume* physiAbsorber; // pointer to the physical Absorber
      
      G4UniformMagField* magField;      // pointer to the magnetic field
-     F03ElectroMagneticField* fEmField;     
+     F03FieldSetup*        fEmFieldSetup;     
      F03DetectorMessenger* detectorMessenger;  // pointer to the Messenger
      F03CalorimeterSD* calorimeterSD;  // pointer to the sensitive detector
       

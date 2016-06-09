@@ -1,4 +1,4 @@
-# $Id: run05.mac,v 1.5 2002/12/11 14:19:18 maire Exp $
+# $Id: run05.mac,v 1.7 2003/10/17 17:57:49 vnivanch Exp $
 #
 # Macro file for "TestEm1.cc"
 # (can be run in batch, without graphic)
@@ -7,8 +7,12 @@
 #
 /control/verbose 2
 #
+##/testem/phys/addPhysics g4v52
+/testem/phys/addPhysics standard
+#
 /testem/phys/setGCut  2.2 mm
 /testem/phys/setECut  95 cm
+/testem/phys/setPCut  95 cm
 #
 /run/initialize
 #
@@ -17,6 +21,7 @@
 /process/inactivate conv
 /process/inactivate msc
 #
+/process/eLoss/integral false
 /process/eLoss/StepFunction 0.183 170 micrometer
 #
 /run/verbose 2

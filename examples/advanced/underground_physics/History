@@ -1,0 +1,23 @@
+-------------------------------------------------------------------
+$Id:
+-------------------------------------------------------------------
+
+     =========================================================
+            Geant4 - Underground Dark Matter experiment
+     =========================================================
+
+                      Category History file
+                      ---------------------
+
+02.12.2003 - G.Cosmo (DMX-V05-02-01)
+             Migrated to new hadronic processes for release 6.0.
+             Fixed compilation warnings.
+
+12.11.2003 - John Allison
+             Updated Vis Manager.
+
+08.11.2002 - A.Howard
+             Migrated to AIDA 3.
+
+28.11.2001 - A.Howard
+             Created, first version.

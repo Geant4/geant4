@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: B01DetectorConstruction.hh,v 1.5 2002/11/07 13:47:59 dressel Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: B01DetectorConstruction.hh,v 1.6 2003/08/25 12:32:29 dressel Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 
 #ifndef B01DetectorConstruction_hh
@@ -30,9 +30,10 @@
 
 #include "globals.hh"
 #include "G4VUserDetectorConstruction.hh"
-
+#include <vector>
 class G4VPhysicalVolume;
-class G4IStore;
+class G4VIStore;
+class G4VWeightWindowStore;
 
 class B01DetectorConstruction : public G4VUserDetectorConstruction
 {
@@ -41,13 +42,18 @@ public:
   ~B01DetectorConstruction();
   
   G4VPhysicalVolume* Construct();
-  G4IStore* GetIStore();
-  
+
+  G4VIStore* CreateImportanceStore();
+    // create an importance store, caller is responsible for deleting it
+
+  G4VWeightWindowStore *CreateWeightWindowStore();
+    // create an weight window  store, caller is responsible for 
+    // deleting it
+
   G4String GetCellName(G4int i);
-
-
 private:
-  G4IStore *fIStore;
+  std::vector< G4VPhysicalVolume * > fPhysicalVolumeVector;
+
 };
 
 #endif

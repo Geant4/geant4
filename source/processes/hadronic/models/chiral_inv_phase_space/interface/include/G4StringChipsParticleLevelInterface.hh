@@ -30,7 +30,7 @@ class G4StringChipsParticleLevelInterface : public G4VIntraNuclearTransportModel
 {
   public:
     G4StringChipsParticleLevelInterface();
-    virtual G4VParticleChange* ApplyYourself(const G4Track& aTrack, 
+    virtual G4HadFinalState* ApplyYourself(const G4HadProjectile& aTrack, 
                                              G4Nucleus& theNucleus);
 
     virtual G4ReactionProductVector* Propagate(G4KineticTrackVector* theSecondaries,

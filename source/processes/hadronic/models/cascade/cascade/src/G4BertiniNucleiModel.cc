@@ -19,7 +19,7 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
-
+//
 #include "G4BertiniNucleiModel.hh"
 #include "G4LorentzConvertor.hh"
 #include "G4CollisionOutput.hh"
@@ -91,7 +91,6 @@ void G4BertiniNucleiModel::generateModel(G4double a,
       };
 
     } else {
-
       number_of_zones = 3;
       icase = 1;
       ur.push_back(0.0);
@@ -117,14 +116,13 @@ void G4BertiniNucleiModel::generateModel(G4double a,
 	v0 = volNumInt(ur[i], ur[i + 1], CU, D1);
 
       } else {
-
 	v0 = volNumInt1(ur[i], ur[i + 1], CU2);
       }; 
 
       v.push_back(v0);
       tot_vol += v0;
-      v0 = (i == 0 ? pow(zone_radii[i], 3) : pow(zone_radii[i], 3) -
-	    pow(zone_radii[i - 1], 3));
+      v0 = (i == 0 ? pow(zone_radii[i], G4double(3)) : pow(zone_radii[i], G4double(3)) -
+	    pow(zone_radii[i - 1], G4double(3)));
       v1.push_back(v0);
     };
 
@@ -168,10 +166,9 @@ void G4BertiniNucleiModel::generateModel(G4double a,
     zone_potentials.push_back(vp);
 
   } else { /// a < 4
-
     number_of_zones = 1;
     zone_radii.push_back(radForSmall);
-    G4double vol = 1.0 / piTimes4thirds / pow(zone_radii[0], 3);
+    G4double vol = 1.0 / piTimes4thirds / pow(zone_radii[0], G4double(3));
     std::vector<G4double> rod;
     std::vector<G4double> pf;
     std::vector<G4double> vz;
@@ -216,7 +213,7 @@ void G4BertiniNucleiModel::generateModel(G4double a,
 
 G4double G4BertiniNucleiModel::volNumInt(G4double r1, 
 					 G4double r2, 
-					 G4double cu,
+					 G4double /*cu*/,
 					 G4double d1) const {
 
   if (verboseLevel > 3) {
@@ -240,7 +237,7 @@ G4double G4BertiniNucleiModel::volNumInt(G4double r1,
     itry++;
     G4double r = r1 - dr;
     fi = 0.0;
-    G4int jc1 = G4int(pow(2.0, jc - 1) + 0.1);
+    G4int jc1 = G4int(pow(G4double(2.0), jc - 1) + 0.1);
 
     for (G4int i = 0; i < jc1; i++) { 
       r += dr1; 
@@ -314,12 +311,11 @@ G4double G4BertiniNucleiModel::volNumInt1(G4double r1,
   }; 
 
   if (verboseLevel > 2){
-
     if (itry == itry_max) G4cout << " volNumInt1-> n iter " << itry_max << G4endl;
 
   }
 
-  return pow(cu2, 3) * fun;
+  return pow(cu2, G4double(3)) * fun;
 }
 
 void G4BertiniNucleiModel::printModel() const {
@@ -431,12 +427,10 @@ partners G4BertiniNucleiModel::generateInteractionPartners(G4CascadParticle& cpa
     r_out = 0.0;
 
   } else if (zone == 0) { /// particle is outside core
-
     r_in = 0.0;
     r_out = zone_radii[0];
 
   } else {
-
     r_in = zone_radii[zone - 1];
     r_out = zone_radii[zone];
   };  
@@ -451,7 +445,6 @@ partners G4BertiniNucleiModel::generateInteractionPartners(G4CascadParticle& cpa
     return thePartners;
 
   } else if(fabs(path) < small) { /// just on the bounday
-
     path = 0.0; 
 
     G4InuclElementaryParticle particle;
@@ -459,7 +452,6 @@ partners G4BertiniNucleiModel::generateInteractionPartners(G4CascadParticle& cpa
     thePartners.push_back(partner(particle, path));
 
   } else { /// normal case  
-  
     std::vector<G4InuclElementaryParticle> particles;
     G4LorentzConvertor dummy_convertor;
 
@@ -513,7 +505,7 @@ partners G4BertiniNucleiModel::generateInteractionPartners(G4CascadParticle& cpa
       std::vector<G4double> acsecs;
       G4double tot_abs_csec = 0.0;
       G4double abs_sec;
-      G4double vol = pow(zone_radii[zone], 3);
+      G4double vol = pow(zone_radii[zone], G4double(3) );
 
       if(zone > 0) vol -= pow(zone_radii[zone - 1], 3);
       vol *= pi4by3; 
@@ -532,7 +524,6 @@ partners G4BertiniNucleiModel::generateInteractionPartners(G4CascadParticle& cpa
 	  rat * rat * vol; 
 
       } else {
-
 	abs_sec = 0.0;
       }; 
 
@@ -666,7 +657,6 @@ std::vector<G4CascadParticle> G4BertiniNucleiModel::generateParticleFate(G4Casca
     G4cout << " generateParticleFate-> can not be here " << G4endl;
 
   } else {
-
     G4int npart = thePartners.size();
 
     if (npart == 1) { /// cparticle is on the next zone entry
@@ -681,7 +671,6 @@ std::vector<G4CascadParticle> G4BertiniNucleiModel::generateParticleFate(G4Casca
       }
 
     } else { /// there are possible interactions
- 
       std::vector<G4double> old_position = cparticle.getPosition();
       G4InuclElementaryParticle bullet = cparticle.getParticle();
       G4bool no_interaction = true;
@@ -754,7 +743,6 @@ std::vector<G4CascadParticle> G4BertiniNucleiModel::generateParticleFate(G4Casca
 	    protonNumberCurrent -= 1.0;
 
 	  } else {
-
 	    neutronNumberCurrent -= 1.0;
 	  }; 
 
@@ -762,7 +750,6 @@ std::vector<G4CascadParticle> G4BertiniNucleiModel::generateParticleFate(G4Casca
 	    protonNumberCurrent -= 1.0;
 
 	  } else if(current_nucl2 == 2) {
-
 	    neutronNumberCurrent -= 1.0;
 	  };
  
@@ -898,7 +885,6 @@ G4double G4BertiniNucleiModel::getRatio(G4int ip) const {
   G4double rat;
 
   if (ip == 1) {
-
     if (verboseLevel > 2){
       G4cout << " current " << protonNumberCurrent << " inp " << protonNumber << G4endl;
     }
@@ -1048,7 +1034,6 @@ G4BertiniNucleiModel::initializeCascad(G4InuclNuclei* bullet,
 	  if (ab < 4.0) { /// a == 3
 
 	    while (badco && itry < itry_max) {
-
 	      if (itry > 0) coordinates.resize(0);
 	      itry++;	
 	      G4int i(0);    
@@ -1108,11 +1093,10 @@ G4BertiniNucleiModel::initializeCascad(G4InuclNuclei* bullet,
 	      G4bool large_dist = false;
 
 	      for (i = 0; i < 2; i++) {
-
 		for (G4int j = i+1; j < 3; j++) {
-		  G4double r2 = pow(coordinates[i][0] - coordinates[j][0], 2) +
-		    pow(coordinates[i][1] - coordinates[j][1], 2) +
-		    pow(coordinates[i][2] - coordinates[j][2], 2);
+		  G4double r2 = pow(coordinates[i][0] - coordinates[j][0], G4double(2)) +
+		    pow(coordinates[i][1] - coordinates[j][1], G4double(2)) +
+		    pow(coordinates[i][2] - coordinates[j][2], G4double(2));
 
 		  if (verboseLevel > 2) {
 		    G4cout << " i " << i << " j " << j << " r2 " << r2 << G4endl;
@@ -1169,7 +1153,6 @@ G4BertiniNucleiModel::initializeCascad(G4InuclNuclei* bullet,
 							    coord1[1] * coord1[1] + 
 							    coord1[2] * coord1[2]) << G4endl;
 		    }
-
 		    break;
 		  };
 		};
@@ -1201,9 +1184,9 @@ G4BertiniNucleiModel::initializeCascad(G4InuclNuclei* bullet,
 	      for (i = 0; i < ia-1; i++) {
 
 		for (G4int j = i+1; j < ia; j++) {	     
-		  G4double r2 = pow(coordinates[i][0] - coordinates[j][0], 2) +
-		    pow(coordinates[i][1]-coordinates[j][1], 2) +
-		    pow(coordinates[i][2] - coordinates[j][2], 2);
+		  G4double r2 = pow(coordinates[i][0] - coordinates[j][0], G4double(2)) +
+		    pow(coordinates[i][1]-coordinates[j][1], G4double(2)) +
+		    pow(coordinates[i][2] - coordinates[j][2], G4double(2));
 
 		  if (verboseLevel > 2){
 		    G4cout << " i " << i << " j " << j << " r2 " << r2 << G4endl;
@@ -1235,7 +1218,7 @@ G4BertiniNucleiModel::initializeCascad(G4InuclNuclei* bullet,
 	    G4double u;
 	    G4double x;
 	    std::vector<G4double> mom(4);
-	    ///	    G4bool badp = True;
+	    /// G4bool badp = True;
 	    G4int i(0);
 
 	    for (i = 0; i < ia - 1; i++) {

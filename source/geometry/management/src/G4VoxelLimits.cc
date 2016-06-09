@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VoxelLimits.cc,v 1.8 2003/06/16 16:52:12 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4VoxelLimits.cc,v 1.9 2003/11/02 14:01:24 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // class G4VoxelLimits
 // 
@@ -32,6 +32,7 @@
 //
 // 14.03.02 V. Grichine, cosmetics
 // 13.07.95 P.Kent Initial version
+// --------------------------------------------------------------------
 
 #include "G4VoxelLimits.hh"
 
@@ -61,24 +62,24 @@ G4VoxelLimits::~G4VoxelLimits()
 
 void G4VoxelLimits::AddLimit( const EAxis pAxis, 
                               const G4double pMin,
-			      const G4double pMax )
+                              const G4double pMax )
 {
   if ( pAxis == kXAxis )
   {
     if ( pMin > fxAxisMin ) fxAxisMin = pMin ;    
-    if ( pMax < fxAxisMax ) fxAxisMax = pMax ;	    
+    if ( pMax < fxAxisMax ) fxAxisMax = pMax ;    
   }
   else if ( pAxis == kYAxis )
   {
-    if ( pMin > fyAxisMin ) fyAxisMin = pMin ;		    
-    if ( pMax < fyAxisMax ) fyAxisMax = pMax ;		    
+    if ( pMin > fyAxisMin ) fyAxisMin = pMin ;    
+    if ( pMax < fyAxisMax ) fyAxisMax = pMax ;
   }
   else
   { 
     assert( pAxis == kZAxis ) ;
 
-    if ( pMin > fzAxisMin ) fzAxisMin = pMin ;		    
-    if ( pMax < fzAxisMax ) fzAxisMax = pMax ;	    
+    if ( pMin > fzAxisMin ) fzAxisMin = pMin ;
+    if ( pMax < fzAxisMax ) fzAxisMax = pMax ;
   }
 }
 
@@ -97,34 +98,33 @@ void G4VoxelLimits::AddLimit( const EAxis pAxis,
 //
 
 G4bool G4VoxelLimits::ClipToLimits( G4ThreeVector& pStart,
-				    G4ThreeVector& pEnd      ) const
+                                    G4ThreeVector& pEnd      ) const
 {
   G4int sCode, eCode ;
   G4bool remainsAfterClip ;
     
-// Determine if line is trivially inside (both outcodes==0) or outside
-// (logical AND of outcodes !=0)
+  // Determine if line is trivially inside (both outcodes==0) or outside
+  // (logical AND of outcodes !=0)
 
   sCode = OutCode(pStart) ;
   eCode = OutCode(pEnd)   ;
 
   if ( sCode & eCode )
   {
-// Trivially outside, no intersection with region
+    // Trivially outside, no intersection with region
 
     remainsAfterClip = false;
   }
   else if ( sCode == 0 && eCode == 0 )
   {
-// Trivially inside, no intersections
+    // Trivially inside, no intersections
 
     remainsAfterClip = true ;
   }
   else
   {
-	    
-// Line segment *may* cut volume boundaries
-// At most, one end point is inside
+    // Line segment *may* cut volume boundaries
+    // At most, one end point is inside
 
     G4double x1, y1, z1, x2, y2, z2 ;
 
@@ -151,87 +151,87 @@ G4bool G4VoxelLimits::ClipToLimits( G4ThreeVector& pStart,
     */  
     while ( sCode != eCode )
     {
-// Copy vectors to work variables x1-z1,x2-z2
-// Ensure x1-z1 lies outside volume, swapping vectors and outcodes
-// if necessary
+      // Copy vectors to work variables x1-z1,x2-z2
+      // Ensure x1-z1 lies outside volume, swapping vectors and outcodes
+      // if necessary
 
       if ( sCode )
-      {		    
+      {
         if ( sCode & 0x01 )  // Clip against fxAxisMin
-	{
+        {
           z1 += (fxAxisMin-x1)*(z2-z1)/(x2-x1);
-	  y1 += (fxAxisMin-x1)*(y2-y1)/(x2-x1);
-	  x1  = fxAxisMin;
-	}
-	else if ( sCode & 0x02 ) // Clip against fxAxisMax
-	{
-	  z1 += (fxAxisMax-x1)*(z2-z1)/(x2-x1);
-	  y1 += (fxAxisMax-x1)*(y2-y1)/(x2-x1);
-	  x1  = fxAxisMax ;
-	}
-	else if ( sCode & 0x04 )  // Clip against fyAxisMin
-	{
-	  x1 += (fyAxisMin-y1)*(x2-x1)/(y2-y1);
-	  z1 += (fyAxisMin-y1)*(z2-z1)/(y2-y1);
-	  y1  = fyAxisMin;
-	}
+          y1 += (fxAxisMin-x1)*(y2-y1)/(x2-x1);
+          x1  = fxAxisMin;
+        }
+        else if ( sCode & 0x02 ) // Clip against fxAxisMax
+        {
+          z1 += (fxAxisMax-x1)*(z2-z1)/(x2-x1);
+          y1 += (fxAxisMax-x1)*(y2-y1)/(x2-x1);
+          x1  = fxAxisMax ;
+        }
+        else if ( sCode & 0x04 )  // Clip against fyAxisMin
+        {
+          x1 += (fyAxisMin-y1)*(x2-x1)/(y2-y1);
+          z1 += (fyAxisMin-y1)*(z2-z1)/(y2-y1);
+          y1  = fyAxisMin;
+        }
         else if ( sCode & 0x08 )  // Clip against fyAxisMax
-	{
-	  x1 += (fyAxisMax-y1)*(x2-x1)/(y2-y1);
-	  z1 += (fyAxisMax-y1)*(z2-z1)/(y2-y1);
-	  y1  = fyAxisMax;
-	}
+        {
+          x1 += (fyAxisMax-y1)*(x2-x1)/(y2-y1);
+          z1 += (fyAxisMax-y1)*(z2-z1)/(y2-y1);
+          y1  = fyAxisMax;
+        }
         else if ( sCode & 0x10 )  // Clip against fzAxisMin
-	{
-	  x1 += (fzAxisMin-z1)*(x2-x1)/(z2-z1);
-	  y1 += (fzAxisMin-z1)*(y2-y1)/(z2-z1);
-	  z1  = fzAxisMin;
-	}
-	else if ( sCode & 0x20 )  // Clip against fzAxisMax
-	{
-	  x1 += (fzAxisMax-z1)*(x2-x1)/(z2-z1);
-	  y1 += (fzAxisMax-z1)*(y2-y1)/(z2-z1);
-	  z1  = fzAxisMax;
-	}
+        {
+          x1 += (fzAxisMin-z1)*(x2-x1)/(z2-z1);
+          y1 += (fzAxisMin-z1)*(y2-y1)/(z2-z1);
+          z1  = fzAxisMin;
+        }
+        else if ( sCode & 0x20 )  // Clip against fzAxisMax
+        {
+          x1 += (fzAxisMax-z1)*(x2-x1)/(z2-z1);
+          y1 += (fzAxisMax-z1)*(y2-y1)/(z2-z1);
+          z1  = fzAxisMax;
+        }
       }
       if ( eCode )  // Clip 2nd end: repeat of 1st, but 1<>2
       {
         if ( eCode & 0x01 )  // Clip against fxAxisMin
-	{
-	  z2 += (fxAxisMin-x2)*(z1-z2)/(x1-x2);
-	  y2 += (fxAxisMin-x2)*(y1-y2)/(x1-x2);
-	  x2  = fxAxisMin;
-	}
+        {
+          z2 += (fxAxisMin-x2)*(z1-z2)/(x1-x2);
+          y2 += (fxAxisMin-x2)*(y1-y2)/(x1-x2);
+          x2  = fxAxisMin;
+        }
         else if ( eCode & 0x02 )  // Clip against fxAxisMax
-	{
-	  z2 += (fxAxisMax-x2)*(z1-z2)/(x1-x2);
-	  y2 += (fxAxisMax-x2)*(y1-y2)/(x1-x2);
-	  x2  = fxAxisMax;
-	}
-	else if ( eCode & 0x04 )  // Clip against fyAxisMin
         {
-	  x2 += (fyAxisMin-y2)*(x1-x2)/(y1-y2);
-	  z2 += (fyAxisMin-y2)*(z1-z2)/(y1-y2);
-	  y2  = fyAxisMin;
-	}
-	else if (eCode&0x08)  // Clip against fyAxisMax
+          z2 += (fxAxisMax-x2)*(z1-z2)/(x1-x2);
+          y2 += (fxAxisMax-x2)*(y1-y2)/(x1-x2);
+          x2  = fxAxisMax;
+        }
+        else if ( eCode & 0x04 )  // Clip against fyAxisMin
         {
-	  x2 += (fyAxisMax-y2)*(x1-x2)/(y1-y2);
-	  z2 += (fyAxisMax-y2)*(z1-z2)/(y1-y2);
-	  y2  = fyAxisMax;
-	}
-	else if ( eCode & 0x10 )  // Clip against fzAxisMin
-	{
-	  x2 += (fzAxisMin-z2)*(x1-x2)/(z1-z2);
-	  y2 += (fzAxisMin-z2)*(y1-y2)/(z1-z2);
-	  z2  = fzAxisMin;
-	}
-	else if ( eCode & 0x20 )  // Clip against fzAxisMax
+          x2 += (fyAxisMin-y2)*(x1-x2)/(y1-y2);
+          z2 += (fyAxisMin-y2)*(z1-z2)/(y1-y2);
+          y2  = fyAxisMin;
+        }
+        else if (eCode&0x08)  // Clip against fyAxisMax
         {
-	  x2 += (fzAxisMax-z2)*(x1-x2)/(z1-z2);
-	  y2 += (fzAxisMax-z2)*(y1-y2)/(z1-z2);
-	  z2  = fzAxisMax;
-	}
+          x2 += (fyAxisMax-y2)*(x1-x2)/(y1-y2);
+          z2 += (fyAxisMax-y2)*(z1-z2)/(y1-y2);
+          y2  = fyAxisMax;
+        }
+        else if ( eCode & 0x10 )  // Clip against fzAxisMin
+        {
+          x2 += (fzAxisMin-z2)*(x1-x2)/(z1-z2);
+          y2 += (fzAxisMin-z2)*(y1-y2)/(z1-z2);
+          z2  = fzAxisMin;
+        }
+        else if ( eCode & 0x20 )  // Clip against fzAxisMax
+        {
+          x2 += (fzAxisMax-z2)*(x1-x2)/(z1-z2);
+          y2 += (fzAxisMax-z2)*(y1-y2)/(z1-z2);
+          z2  = fzAxisMax;
+        }
       }
       //  G4endl; G4cout<<"x1 = "<<x1<<"\t"<<"x2 = "<<x2<<G4endl<<G4endl;
       pStart = G4ThreeVector(x1,y1,z1);
@@ -239,8 +239,8 @@ G4bool G4VoxelLimits::ClipToLimits( G4ThreeVector& pStart,
       sCode  = OutCode(pStart);
       eCode  = OutCode(pEnd);
     }
-    if ( sCode == 0 && eCode == 0 ) remainsAfterClip = true;	
-    else                            remainsAfterClip = false;	
+    if ( sCode == 0 && eCode == 0 ) remainsAfterClip = true;
+    else                            remainsAfterClip = false;
   }
   return remainsAfterClip;
 }
@@ -259,22 +259,22 @@ G4bool G4VoxelLimits::ClipToLimits( G4ThreeVector& pStart,
 
 G4int G4VoxelLimits::OutCode( const G4ThreeVector& pVec ) const
 {
-  G4int code = 0 ;		// The outcode
+  G4int code = 0 ;                // The outcode
 
   if ( IsXLimited() )
   {
-    if ( pVec.x() < fxAxisMin ) code |= 0x01 ;	
-    if ( pVec.x() > fxAxisMax ) code |= 0x02 ;	
+    if ( pVec.x() < fxAxisMin ) code |= 0x01 ;
+    if ( pVec.x() > fxAxisMax ) code |= 0x02 ;
   }
   if ( IsYLimited() )
   {
-    if ( pVec.y() < fyAxisMin ) code |= 0x04 ;		
+    if ( pVec.y() < fyAxisMin ) code |= 0x04 ;
     if ( pVec.y() > fyAxisMax ) code |= 0x08 ;
   }
   if (IsZLimited())
   {
-    if ( pVec.z() < fzAxisMin ) code |= 0x10 ;		
-    if ( pVec.z() > fzAxisMax ) code |= 0x20 ;	
+    if ( pVec.z() < fzAxisMin ) code |= 0x10 ;
+    if ( pVec.z() > fzAxisMax ) code |= 0x20 ;
   }
   return code;
 }
@@ -285,32 +285,32 @@ std::ostream& operator << (std::ostream& os, const G4VoxelLimits& pLim)
 {
     os << "{";
     if (pLim.IsXLimited())
-	{
-	    os << "(" << pLim.GetMinXExtent() 
-	       << "," << pLim.GetMaxXExtent() << ") ";
-	}
+        {
+            os << "(" << pLim.GetMinXExtent() 
+               << "," << pLim.GetMaxXExtent() << ") ";
+        }
     else
-	{
-	    os << "(-,-) ";
-	}
+        {
+            os << "(-,-) ";
+        }
     if (pLim.IsYLimited())
-	{
-	    os << "(" << pLim.GetMinYExtent() 
-	       << "," << pLim.GetMaxYExtent() << ") ";
-	}
+        {
+            os << "(" << pLim.GetMinYExtent() 
+               << "," << pLim.GetMaxYExtent() << ") ";
+        }
     else
-	{
-	    os << "(-,-) ";
-	}
+        {
+            os << "(-,-) ";
+        }
     if (pLim.IsZLimited())
-	{
-	    os << "(" << pLim.GetMinZExtent()
-	       << "," << pLim.GetMaxZExtent() << ")";
-	}
+        {
+            os << "(" << pLim.GetMinZExtent()
+               << "," << pLim.GetMaxZExtent() << ")";
+        }
     else
-	{
-	    os << "(-,-)";
-	}
+        {
+            os << "(-,-)";
+        }
     os << "}";
     return os;
 }

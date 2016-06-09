@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPChannel.hh,v 1.9 2002/12/12 19:18:10 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4NeutronHPChannel.hh,v 1.10 2003/07/01 15:58:35 hpw Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
  // Hadronic Process: Very Low Energy Neutron X-Sections
  // original by H.P. Wellisch, TRIUMF, 14-Feb-97
@@ -36,7 +36,7 @@
 #include "G4NeutronHPIsoData.hh"
 #include "G4NeutronHPVector.hh"
 #include "G4Material.hh"
-#include "G4Track.hh"
+#include "G4HadProjectile.hh"
 #include "G4NeutronInelasticProcess.hh"
 #include "G4HadronFissionProcess.hh"
 #include "G4HadronElasticProcess.hh"
@@ -105,7 +105,7 @@ public:
   
   void Harmonise(G4NeutronHPVector *& theStore, G4NeutronHPVector * theNew);
 
-  G4ParticleChange * ApplyYourself(const G4Track & theTrack, G4int isoNumber=-1);
+  G4HadFinalState * ApplyYourself(const G4HadProjectile & theTrack, G4int isoNumber=-1);
     
   inline G4int GetNiso() {return niso;}
   

@@ -21,11 +21,23 @@
 // ********************************************************************
 //
 //
-// $Id: G4HelixSimpleRunge.hh,v 1.5 2001/07/11 09:59:08 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4HelixSimpleRunge.hh,v 1.6 2003/10/31 14:35:51 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 //
+// class G4HelixSimpleRunge
+//
+// Class description:
+//
+//  Helix Simple Runge-Kutta stepper for magnetic field:
+//        x_1 = x_0 + h * ( dx( t_0+h/2, x_0 + h/2 * dx( t_0, x_0) ) )
+//
+//  Second order solver.
+//  Take the derivative at a position to be assumed at the middle of the
+//  Step and add it to the current position.
+
 // W. Wander <wwc@mit.edu> 03/12/98
+// -------------------------------------------------------------------
 
 #ifndef G4HELIXSIMPLERUNGE_HH
 #define G4HELIXSIMPLERUNGE_HH
@@ -33,20 +45,21 @@
 
 class G4HelixSimpleRunge : public G4MagHelicalStepper
 {
+  public:  // with description
 
-  public:
+    G4HelixSimpleRunge(G4Mag_EqRhs *EqRhs)
+      : G4MagHelicalStepper(EqRhs){}
 
-  G4HelixSimpleRunge(G4Mag_EqRhs *EqRhs)
-    : G4MagHelicalStepper(EqRhs){}
-
-  ~G4HelixSimpleRunge(){}
+    ~G4HelixSimpleRunge(){}
   
-  void  DumbStepper(  const G4double y[],
-		      G4ThreeVector   Bfld,
-		      G4double        h,
-		      G4double        yout[]);
+    void  DumbStepper(  const G4double y[],
+                              G4ThreeVector   Bfld,
+                              G4double        h,
+                              G4double        yout[]);
+
+  public:  // without description
   
-  G4int IntegratorOrder() const { return 2; }
+    G4int IntegratorOrder() const { return 2; }
 };
 
 #endif /* G4HELIXSIMPLERUNGE_HH */

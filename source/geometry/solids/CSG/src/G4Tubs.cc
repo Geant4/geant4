@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Tubs.cc,v 1.36 2003/06/16 16:53:44 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4Tubs.cc,v 1.40 2003/11/03 18:17:32 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // 
 // class G4Tubs
@@ -48,8 +48,7 @@
 // 20.02.01 V.Grichine: bug fixed in Inside(p) and CalculateExtent was 
 //                      simplified base on G4Box::CalculateExtent
 // 20.07.01 V.Grichine: bug fixed in Inside(p)
-//
-// ********************************************************************
+// --------------------------------------------------------------------
 
 #include "G4Tubs.hh"
 
@@ -85,13 +84,11 @@ G4Tubs::G4Tubs( const G4String &pName,
   }
   else
   {
-    G4cout << "ERROR - G4Tubs()::G4Tubs(): " << GetName() << G4endl
-           << "        Negative Z half-length ! - "
-           << pDz << G4endl;
     G4cerr << "ERROR - G4Tubs()::G4Tubs(): " << GetName() << G4endl
            << "        Negative Z half-length ! - "
            << pDz << G4endl;
-    G4Exception("G4Tubs::G4Tubs() - invalid Z half-length");
+    G4Exception("G4Tubs::G4Tubs()", "InvalidSetup", FatalException,
+                "Invalid Z half-length");
   }
   if ( pRMin < pRMax && pRMin >= 0 ) // Check radii
   {
@@ -100,13 +97,11 @@ G4Tubs::G4Tubs( const G4String &pName,
   }
   else
   {
-    G4cout << "ERROR - G4Tubs()::G4Tubs(): " << GetName() << G4endl
-           << "        Invalid values for radii !" << G4endl
-           << "        pRMin = " << pRMin << ", pRMax = " << pRMax << G4endl;
     G4cerr << "ERROR - G4Tubs()::G4Tubs(): " << GetName() << G4endl
            << "        Invalid values for radii !" << G4endl
            << "        pRMin = " << pRMin << ", pRMax = " << pRMax << G4endl;
-    G4Exception("G4Tubs::G4Tubs() - invalid radii");
+    G4Exception("G4Tubs::G4Tubs()", "InvalidSetup", FatalException,
+                "Invalid radii.");
   }
   if ( pDPhi >= 2.0*M_PI ) // Check angles
   {
@@ -120,13 +115,11 @@ G4Tubs::G4Tubs( const G4String &pName,
     }
     else
     {
-      G4cout << "ERROR - G4Tubs()::G4Tubs(): " << GetName() << G4endl
-             << "        Negative delta-Phi ! - "
-             << pDPhi << G4endl;
       G4cerr << "ERROR - G4Tubs()::G4Tubs(): " << GetName() << G4endl
              << "        Negative delta-Phi ! - "
              << pDPhi << G4endl;
-      G4Exception("G4Tubs::G4Tubs() - invalid dphi");
+      G4Exception("G4Tubs::G4Tubs()", "InvalidSetup", FatalException,
+                  "Invalid dphi.");
     }
   }
   
@@ -656,7 +649,8 @@ G4ThreeVector G4Tubs::SurfaceNormal( const G4ThreeVector& p ) const
     default:
     {
       DumpInfo();
-      G4Exception("G4Tubs::SurfaceNormal() - Logic error") ;
+      G4Exception("G4Tubs::SurfaceNormal()", "LogicError", FatalException,
+                  "Undefined side for valid surface normal to solid.");
       break ;
     }    
   }                
@@ -1037,7 +1031,7 @@ G4double G4Tubs::DistanceToIn( const G4ThreeVector& p,
 
 G4double G4Tubs::DistanceToIn( const G4ThreeVector& p ) const
 {
-  G4double safe, rho, safe1, safe2, safe3 ;
+  G4double safe=0.0, rho, safe1, safe2, safe3 ;
   G4double phiC, cosPhiC, sinPhiC, safePhi, ePhi, cosPsi ;
 
   rho   = sqrt(p.x()*p.x() + p.y()*p.y()) ;
@@ -1441,8 +1435,8 @@ G4double G4Tubs::DistanceToOut( const G4ThreeVector& p,
         G4cout << "v.z() = "   << v.z() << G4endl << G4endl ;
         G4cout << "Proposed distance :" << G4endl << G4endl ;
         G4cout << "snxt = "    << snxt/mm << " mm" << G4endl << G4endl ;
-
-        G4Exception("G4Tubs::DistanceToOut() - Invalid enum") ;
+        G4Exception("G4Tubs::DistanceToOut()", "LogicError", FatalException,
+                    "Undefined side for valid surface normal to solid.");
         break ;
     }
   }
@@ -1456,7 +1450,7 @@ G4double G4Tubs::DistanceToOut( const G4ThreeVector& p,
 
 G4double G4Tubs::DistanceToOut( const G4ThreeVector& p ) const
 {
-  G4double safe, rho, safeR1, safeR2, safeZ ;
+  G4double safe=0.0, rho, safeR1, safeR2, safeZ ;
   G4double safePhi, phiC, cosPhiC, sinPhiC, ePhi ;
   rho = sqrt(p.x()*p.x() + p.y()*p.y()) ;
 
@@ -1470,8 +1464,8 @@ G4double G4Tubs::DistanceToOut( const G4ThreeVector& p ) const
     G4cout << "p.x() = "   << p.x()/mm << " mm" << G4endl ;
     G4cout << "p.y() = "   << p.y()/mm << " mm" << G4endl ;
     G4cout << "p.z() = "   << p.z()/mm << " mm" << G4endl << G4endl ;
-    G4cout << "G4Tubs::DistanceToOut(p) - point p is outside !?" << G4endl ;
-    G4cerr << "G4Tubs::DistanceToOut(p) - point p is outside !?" << G4endl ;
+    G4Exception("G4Tubs::DistanceToOut(p)",
+                "Notification", JustWarning, "Point p is outside !?");
   }
 #endif
 
@@ -1604,7 +1598,9 @@ G4Tubs::CreateRotatedVertices( const G4AffineTransform& pTransform ) const
   else
   {
     DumpInfo();
-    G4Exception("G4Tubs::CreateRotatedVertices() - Out of memory !");
+    G4Exception("G4Tubs::CreateRotatedVertices()",
+                "FatalError", FatalException,
+                "Error in allocation of vertices. Out of memory !");
   }
   return vertices ;
 }

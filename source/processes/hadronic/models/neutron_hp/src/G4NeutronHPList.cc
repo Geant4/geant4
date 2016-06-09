@@ -25,14 +25,15 @@
 // A prototype of the low energy neutron transport model.
 //
 #include "G4NeutronHPList.hh"
+#include "G4HadronicException.hh"
 
   void G4NeutronHPList::Check(G4int i)
   {
     if(i<0) 
     {
-      G4Exception("G4NeutronHPList::Check(G4int) called with negative index");
+      throw G4HadronicException(__FILE__, __LINE__, "G4NeutronHPList::Check(G4int) called with negative index");
     }
-    if(i>nEntries) G4Exception("Skipped some index numbers in G4NeutronHPList");
+    if(i>nEntries) throw G4HadronicException(__FILE__, __LINE__, "Skipped some index numbers in G4NeutronHPList");
     if(i==nPoints)
     {
       nPoints = static_cast<G4int>(1.5*nPoints);

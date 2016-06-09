@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: ExN02DetectorConstruction.cc,v 1.12 2003/03/25 16:23:24 maire Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: ExN02DetectorConstruction.cc,v 1.13 2003/10/06 08:59:40 maire Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -76,37 +76,31 @@ G4VPhysicalVolume* ExN02DetectorConstruction::Construct()
 {
 //--------- Material definition ---------
 
-  G4double a, iz, z, density;
-  G4String name, symbol;
-  G4double temperature, pressure;
+  G4double a, z;
+  G4double density, temperature, pressure;
   G4int nel;
 
   //Air
-    a = 14.01*g/mole;
-    G4Element* elN = new G4Element(name="Nitrogen", symbol="N", iz=7., a);
-    a = 16.00*g/mole;
-    G4Element* elO = new G4Element(name="Oxigen", symbol="O", iz=8., a);
-    density = 1.29*mg/cm3;
-    G4Material* Air = new G4Material(name="Air", density, nel=2);
-    Air->AddElement(elN, .7);
-    Air->AddElement(elO, .3);
+  G4Element* N = new G4Element("Nitrogen", "N", z=7., a= 14.01*g/mole);
+  G4Element* O = new G4Element("Oxygen"  , "O", z=8., a= 16.00*g/mole);
+   
+  G4Material* Air = new G4Material("Air", density= 1.29*mg/cm3, nel=2);
+  Air->AddElement(N, 70*perCent);
+  Air->AddElement(O, 30*perCent);
 
-  //Pb
-    a = 207.19*g/mole;
-    density = 11.35*g/cm3;
-    G4Material* Pb = new G4Material(name="Pb", z=82., a, density);
+  //Lead
+  G4Material* Pb = 
+  new G4Material("Lead", z=82., a= 207.19*g/mole, density= 11.35*g/cm3);
     
   //Xenon gas
-    density     = 5.458*mg/cm3;    
-    pressure    = 1*atmosphere;
-    temperature = 293.15*kelvin;
-    G4Material* Xenon = new G4Material(name="XenonGas", z=54., a=131.29*g/mole,
-                        density, kStateGas,temperature,pressure);
+  G4Material* Xenon = 
+  new G4Material("XenonGas", z=54., a=131.29*g/mole, density= 5.458*mg/cm3,
+                 kStateGas, temperature= 1*atmosphere, pressure= 293.15*kelvin);
 
   // Print all the materials defined.
   //
-    G4cout << G4endl << "The materials defined are : " << G4endl << G4endl;
-    G4cout << *(G4Material::GetMaterialTable()) << G4endl;
+  G4cout << G4endl << "The materials defined are : " << G4endl << G4endl;
+  G4cout << *(G4Material::GetMaterialTable()) << G4endl;
 
 //--------- Sizes of the principal geometrical components (solids)  ---------
   

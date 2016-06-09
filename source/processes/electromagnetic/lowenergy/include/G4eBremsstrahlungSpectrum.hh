@@ -19,9 +19,9 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
-// 
-// $Id: G4eBremsstrahlungSpectrum.hh,v 1.6 2003/05/25 14:35:41 pia Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+//
+// $Id: G4eBremsstrahlungSpectrum.hh,v 1.7 2003/12/09 15:36:39 gunter Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // -------------------------------------------------------------------
 //

@@ -19,12 +19,9 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
-// By copying, distributing or modifying the Program (or any work
-// based on the Program) you indicate your acceptance of this statement,
-// and all its terms.
 //
-// $Id: FCALTestbeamSetupSD.cc,v 1.5 2002/12/17 15:53:30 pmendez Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: FCALTestbeamSetupSD.cc,v 1.7 2003/12/09 15:30:37 gunter Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // 
 
@@ -60,19 +57,20 @@ FCALTestbeamSetupSD::~FCALTestbeamSetupSD()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void FCALTestbeamSetupSD::Initialize(G4HCofThisEvent*HCE)
+void FCALTestbeamSetupSD::Initialize(G4HCofThisEvent*)
 {
   EBeamS1 = EBeamS2 = EBeamS3 = 0.;
   EHoleScint = EBeamHole = 0.;
   EBeamDead = 0;
-  for (G4int j =0 ; j<8 ; j++) { ETailVis[j] = 0.;};
-  for ( j =0 ; j<7 ; j++) { ETailDep[j] = 0.;};
+  G4int j;
+  for (j =0 ; j<8 ; j++) { ETailVis[j] = 0.;};
+  for (j =0 ; j<7 ; j++) { ETailDep[j] = 0.;};
   TailCatcherID = 0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4bool FCALTestbeamSetupSD::ProcessHits(G4Step* aStep,G4TouchableHistory* ROhist)
+G4bool FCALTestbeamSetupSD::ProcessHits(G4Step* aStep,G4TouchableHistory*)
 {
   
   G4double edep = aStep->GetTotalEnergyDeposit();
@@ -125,7 +123,7 @@ G4bool FCALTestbeamSetupSD::ProcessHits(G4Step* aStep,G4TouchableHistory* ROhist
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void FCALTestbeamSetupSD::EndOfEvent(G4HCofThisEvent* HCE)
+void FCALTestbeamSetupSD::EndOfEvent(G4HCofThisEvent*)
 {
   G4cout << " Visisble Energy in S1 , S2 , S3 in (MeV)" << G4endl;
   G4cout << EBeamS1/MeV << " " << EBeamS2/MeV << " " << EBeamS3/MeV << " " << G4endl;
@@ -137,7 +135,8 @@ void FCALTestbeamSetupSD::EndOfEvent(G4HCofThisEvent* HCE)
   G4cout << EBeamDead/MeV << G4endl;
 
   G4cout << " Visible Energy in Tail Catcher Scintillator" << G4endl;
-  for (G4int j=1; j<8 ; j++) {G4cout <<  ETailVis[j]/MeV << " " ;};  G4cout << G4endl;
+  G4int j;
+  for (j=1; j<8 ; j++) {G4cout <<  ETailVis[j]/MeV << " " ;};  G4cout << G4endl;
  
   G4cout << " Visible Energy in Tail Catcher Absorber" << G4endl;
   for (j=1; j<7 ; j++) {G4cout <<  ETailDep[j]/MeV << " " ;};  G4cout << G4endl;

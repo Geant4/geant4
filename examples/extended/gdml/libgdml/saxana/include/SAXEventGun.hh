@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: SAXEventGun.hh,v 1.2 2002/06/03 12:09:33 radoone Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: SAXEventGun.hh,v 1.3 2003/10/27 10:55:48 radoone Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // 
 // --------------------------------------------------------------
@@ -34,10 +34,13 @@
 #define SAX_EVENT_GUN_H 1
 
 #include <xercesc/sax/HandlerBase.hpp>
+#include <xercesc/parsers/SAXParser.hpp>
 
 #include "StatusCode.hh"
 
-class SAXParser;
+#if defined( XERCES_HAS_CPP_NAMESPACE )
+  using namespace xercesc;
+#endif
 
 class SAXProcessor;
 class ProcessingConfigurator;
@@ -116,7 +119,7 @@ private:
   SAXProcessor*           fTarget;
 
 protected:
-  SAXParser*              fParser;
+  SAXParser* fParser;
   ProcessingConfigurator* fConfig;
 };
 

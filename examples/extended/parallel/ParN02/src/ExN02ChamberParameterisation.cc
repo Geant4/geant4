@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: ExN02ChamberParameterisation.cc,v 1.1 2002/03/05 15:21:59 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: ExN02ChamberParameterisation.cc,v 1.2 2003/12/03 14:15:03 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -77,8 +77,7 @@ void ExN02ChamberParameterisation::ComputeTransformation
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void ExN02ChamberParameterisation::ComputeDimensions
-(G4Box& trackerChamber, const G4int copyNo,
- const G4VPhysicalVolume* physVol) const
+(G4Box& trackerChamber, const G4int copyNo, const G4VPhysicalVolume*) const
 {
   G4double  halfLength= fHalfLengthFirst + copyNo * fHalfLengthIncr;
   trackerChamber.SetXHalfLength(halfLength);

@@ -21,15 +21,15 @@
 // ********************************************************************
 //
 //
-// $Id: G4NavigationHistory.cc,v 1.7 2003/06/16 16:54:54 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4NavigationHistory.cc,v 1.9 2003/12/04 15:59:05 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // 
 // G4NavigationHistory Implementation
 //
 // Author: P.Kent, August 96
 //
-// ********************************************************************
+// ----------------------------------------------------------------------
 
 #include "G4NavigationHistory.hh"
 #include "G4ios.hh"
@@ -37,7 +37,6 @@
 G4NavigationHistory::G4NavigationHistory()
   : fNavHistory(kHistoryMax), fStackDepth(0)
 {
-  Reset();  // Reset depth
   Clear();
 }
 
@@ -49,7 +48,6 @@ G4NavigationHistory::G4NavigationHistory(const G4NavigationHistory &h)
 G4NavigationHistory::~G4NavigationHistory()
 {
   Reset();  // To delete all but one current entries!
-  // delete fNavHistory(0);
 }
 
 std::ostream&

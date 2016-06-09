@@ -20,8 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4HadLeadBias.hh,v 1.4 2003/06/16 17:03:10 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // --------------------------------------------------------------------
 #ifndef G4HadLeadBias_h
@@ -29,12 +28,12 @@
 
 #include "G4VLeadingParticleBiasing.hh"
 #include <vector>
-#include "G4VParticleChange.hh"
+#include "G4HadFinalState.hh"
 
 class G4HadLeadBias : public G4VLeadingParticleBiasing
 {
   public:
-  virtual G4VParticleChange * Bias(G4VParticleChange * result);
+  virtual G4HadFinalState * Bias(G4HadFinalState * result);
   virtual ~G4HadLeadBias() {};
 };
 

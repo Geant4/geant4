@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Mag_UsualEqRhs.hh,v 1.5 2002/04/29 16:54:02 japost Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4Mag_UsualEqRhs.hh,v 1.6 2003/10/31 14:35:52 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 //
 // class G4Mag_UsualEqRhs
@@ -36,33 +36,35 @@
 
 // History:
 // - Created: J. Apostolakis, January 13th 1997.
+// --------------------------------------------------------------------
 
 #ifndef G4MAG_USUAL_EQRHS
 #define G4MAG_USUAL_EQRHS
 
 #include "G4Mag_EqRhs.hh"
-#include "G4MagneticField.hh"
+
+class G4MagneticField;
 
 class G4Mag_UsualEqRhs : public G4Mag_EqRhs
 {
    public:  // with description
 
-     G4Mag_UsualEqRhs( G4MagneticField* MagField )
-       : G4Mag_EqRhs( MagField ) {;}
-    ~G4Mag_UsualEqRhs() {;}
+     G4Mag_UsualEqRhs( G4MagneticField* MagField );
+    ~G4Mag_UsualEqRhs();
        // Constructor and destructor. No actions.
 
      void EvaluateRhsGivenB( const G4double y[],
-			     const G4double B[3],
-				   G4double dydx[] ) const;
+                             const G4double B[3],
+                                   G4double dydx[] ) const;
        // Given the value of the magnetic field B, this function 
        // calculates the value of the derivative dydx.
 
      virtual void SetChargeMomentumMass( G4double particleCharge, // in e+ units
-			                 G4double MomentumXc,
-			                 G4double mass);
+                                         G4double MomentumXc,
+                                         G4double mass);
      
-private:  // without description
+  private:
+
     G4double  fInvCurrentMomentumXc;   // This extra state enables us 
                                     // to save a square root in a
                                     // critical method.

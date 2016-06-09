@@ -21,19 +21,19 @@
 // ********************************************************************
 //
 //
-// $Id: meshdefs.hh,v 1.4 2001/07/11 09:59:19 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: meshdefs.hh,v 1.5 2003/11/02 14:01:22 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 //
 // Tube/Cone Meshing constants for extent calculations
 
 // History:
 // 13.08.95 P.Kent Created separate file
-
+// --------------------------------------------------------------------
 #ifndef MESHDEFS_HH
 #define MESHDEFS_HH
 
-#include "globals.hh"
+#include "G4Types.hh"
 
 const G4double kMeshAngleDefault=(M_PI/4); // Angle for mesh `wedges' in rads
                                  // Works best when simple fraction of M_PI/2

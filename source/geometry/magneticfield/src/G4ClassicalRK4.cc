@@ -21,18 +21,19 @@
 // ********************************************************************
 //
 //
-// $Id: G4ClassicalRK4.cc,v 1.8 2003/06/16 16:51:11 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4ClassicalRK4.cc,v 1.11 2003/11/05 16:31:48 japost Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
+// -------------------------------------------------------------------
+
 #include "G4ClassicalRK4.hh"
 #include "G4ThreeVector.hh"
-
 
 //////////////////////////////////////////////////////////////////
 //
 // Constructor sets the number of variables (default = 6)
 
-G4ClassicalRK4::G4ClassicalRK4(G4Mag_EqRhs *EqRhs, G4int numberOfVariables)
+G4ClassicalRK4::G4ClassicalRK4(G4EquationOfMotion* EqRhs, G4int numberOfVariables)
   : G4MagErrorStepper(EqRhs, numberOfVariables)
     // fNumberOfVariables(numberOfVariables)
 {
@@ -105,12 +106,11 @@ G4ClassicalRK4::DumbStepper( const G4double  yIn[],
   }
   // NormaliseTangentVector( yOut );
   
-  return ;
 }  // end of DumbStepper ....................................................
 
 ////////////////////////////////////////////////////////////////////
 //
-//   
+// StepWithEst
 
 void
 G4ClassicalRK4::StepWithEst( const G4double*,
@@ -122,8 +122,8 @@ G4ClassicalRK4::StepWithEst( const G4double*,
                              const G4double*,
                                    G4double*  ) 
 {
+  G4Exception("G4ClassicalRK4::StepWithEst()", "ObsoleteMethod",
+              FatalException, "Method no longer used.");
 
- G4Exception("ERROR - G4ClassicalRK4::StepWithEst(): method no longer used.");
-
- return ;
 }  // end of StepWithEst ......................................................
+

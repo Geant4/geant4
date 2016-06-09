@@ -1,4 +1,4 @@
-$Id: History,v 1.29 2003/04/01 16:44:15 gcosmo Exp $
+$Id: History,v 1.30 2003/11/03 03:27:27 kurasige Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+- Nov.03, 2003   H.Kurashige (procman-V05-02-00)
+- Use G4ExceptionSeverity for all G4Exception
 
 - Apr.01, 2003   G.Cosmo (procman-V05-00-01)
 - Cleared few trivial strict pedantic warnings

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLXViewer.cc,v 1.18 2002/11/11 18:12:03 johna Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4OpenGLXViewer.cc,v 1.19 2003/09/22 10:37:50 johna Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // 
 // Andrew Walkden  7th February 1997
@@ -730,7 +730,7 @@ G4float* G4OpenGLXViewer::spewPrimitiveEPS (FILE* file, GLfloat* loc) {
   return loc;
 }
 
-typedef struct _DepthIndex {
+typedef struct G4OpenGLXViewerDepthIndex {
   GLfloat *ptr;
   GLfloat depth;
 } DepthIndex;

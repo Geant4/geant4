@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4OpenGLTransform3D.hh,v 1.5 2003/06/10 17:41:04 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // 
 // Andrew Walkden  24th October 1996

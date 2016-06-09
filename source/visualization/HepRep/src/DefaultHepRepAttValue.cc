@@ -1,31 +1,10 @@
-//
-// ********************************************************************
-// * DISCLAIMER                                                       *
-// *                                                                  *
-// * The following disclaimer summarizes all the specific disclaimers *
-// * of contributors to this software. The specific disclaimers,which *
-// * govern, are listed with their locations in:                      *
-// *   http://cern.ch/geant4/license                                  *
-// *                                                                  *
-// * Neither the authors of this software system, nor their employing *
-// * institutes,nor the agencies providing financial support for this *
-// * work  make  any representation or  warranty, express or implied, *
-// * regarding  this  software system or assume any liability for its *
-// * use.                                                             *
-// *                                                                  *
-// * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
-// * By copying,  distributing  or modifying the Program (or any work *
-// * based  on  the Program)  you indicate  your  acceptance of  this *
-// * statement, and all its terms.                                    *
-// ********************************************************************
-//
 
 #include <cstdlib>
 #include <cstring>
 #include <cctype>
 #include <cstdio>
 #include <iostream>
+#include <algorithm>
 
 #include "HEPREP/HepRepConstants.h"
 
@@ -81,7 +60,15 @@ void DefaultHepRepAttValue::init() {
 }
 
 HepRepAttValue* DefaultHepRepAttValue::copy() {
-    return NULL;
+    switch(type) {
+        case HepRepConstants::TYPE_COLOR: new DefaultHepRepAttValue(name, colorValue, showLabelValue);
+        case HepRepConstants::TYPE_STRING: new DefaultHepRepAttValue(name, stringValue, showLabelValue);
+        case HepRepConstants::TYPE_LONG: new DefaultHepRepAttValue(name, longValue, showLabelValue);
+        case HepRepConstants::TYPE_INT: new DefaultHepRepAttValue(name, (int)longValue, showLabelValue);
+        case HepRepConstants::TYPE_DOUBLE: new DefaultHepRepAttValue(name, doubleValue, showLabelValue);
+        case HepRepConstants::TYPE_BOOLEAN: new DefaultHepRepAttValue(name, booleanValue, showLabelValue);
+        default: return new DefaultHepRepAttValue(name, "Unknown type stored in HepRepAttDef", showLabelValue);
+    }
 }
 
 string DefaultHepRepAttValue::getName() {
@@ -89,14 +76,9 @@ string DefaultHepRepAttValue::getName() {
 }
 
 string DefaultHepRepAttValue::getLowerCaseName() {
-    char *tmp = new char[strlen(name.c_str())];
-    strcpy(tmp, name.c_str());
-    int i = -1;
-    do {
-        i++;
-        tmp[i] = tolower(tmp[i]);
-    } while (tmp[i] != 0);
-    return tmp;
+    string s = name;
+    transform(s.begin(), s.end(), s.begin(), (int(*)(int)) tolower);
+    return s;
 }
 
 int DefaultHepRepAttValue::getType() {
@@ -120,32 +102,39 @@ int DefaultHepRepAttValue::showLabel() {
 }
 
 string DefaultHepRepAttValue::getString() {
-    if (type != HepRepConstants::TYPE_STRING) cerr << "Trying to access AttValue as 'string'" << endl;
+    if (type != HepRepConstants::TYPE_STRING) cerr << "Trying to access AttValue '" << getName() << "' as 'string'" << endl;
     return stringValue;
 }
 
+string DefaultHepRepAttValue::getLowerCaseString() {
+    if (type != HepRepConstants::TYPE_STRING) cerr << "Trying to access AttValue '" << getName() << "' as 'string'" << endl;
+    string s = stringValue;
+    transform(s.begin(), s.end(), s.begin(), (int(*)(int)) tolower);
+    return s;
+}
+
 long DefaultHepRepAttValue::getLong() {
-    if (type != HepRepConstants::TYPE_LONG) cerr << "Trying to access AttValue as 'long'" << endl;
+    if (type != HepRepConstants::TYPE_LONG) cerr << "Trying to access AttValue '" << getName() << "' as 'long'" << endl;
     return longValue;
 }
 
 int DefaultHepRepAttValue::getInteger() {
-    if (type != HepRepConstants::TYPE_INT) cerr << "Trying to access AttValue as 'int'" << endl;
+    if (type != HepRepConstants::TYPE_INT) cerr << "Trying to access AttValue '" << getName() << "' as 'int'" << endl;
     return (int)longValue;
 }
 
 double DefaultHepRepAttValue::getDouble() {
-    if (type != HepRepConstants::TYPE_DOUBLE) cerr << "Trying to access AttValue as 'double'" << endl;
+    if (type != HepRepConstants::TYPE_DOUBLE) cerr << "Trying to access AttValue '" << getName() << "' as 'double'" << endl;
     return doubleValue;
 }
 
 bool DefaultHepRepAttValue::getBoolean() {
-    if (type != HepRepConstants::TYPE_BOOLEAN) cerr << "Trying to access AttValue as 'boolean'" << endl;
+    if (type != HepRepConstants::TYPE_BOOLEAN) cerr << "Trying to access AttValue '" << getName() << "' as 'boolean'" << endl;
     return booleanValue;
 }
 
 vector<double> DefaultHepRepAttValue::getColor() {
-    if (type != HepRepConstants::TYPE_COLOR) cerr << "Trying to access AttValue as 'color'" << endl;
+    if (type != HepRepConstants::TYPE_COLOR) cerr << "Trying to access AttValue '" << getName() << "' as 'color'" << endl;
     return colorValue;
 }
 
@@ -164,7 +153,7 @@ string DefaultHepRepAttValue::getAsString() {
                                             return buffer;
         case HepRepConstants::TYPE_INT:     sprintf(buffer, "%d", getInteger());
                                             return buffer;
-        case HepRepConstants::TYPE_DOUBLE:  sprintf(buffer, "%f", getDouble());
+        case HepRepConstants::TYPE_DOUBLE:  sprintf(buffer, "%g", getDouble());
                                             return buffer;
         case HepRepConstants::TYPE_BOOLEAN: return (getBoolean()) ? "true" : "false";
         default:                            return "Unknown typecode";

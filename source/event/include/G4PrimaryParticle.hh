@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PrimaryParticle.hh,v 1.10 2001/07/13 15:01:46 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4PrimaryParticle.hh,v 1.11 2003/09/12 21:51:32 asaim Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 //
 
@@ -35,6 +35,7 @@
 #include "G4ThreeVector.hh"
 
 class G4ParticleDefinition;
+class G4VUserPrimaryParticleInformation;
 
 // class description:
 //
@@ -105,6 +106,7 @@ class G4PrimaryParticle
       G4double polZ;
       G4double Weight0;
       G4double properTime;
+      G4VUserPrimaryParticleInformation* userInfo;
 
   public: // with description
       // followings are get methods available.
@@ -143,6 +145,10 @@ class G4PrimaryParticle
       inline void SetWeight(G4double w) { Weight0 = w; }
       inline void SetProperTime(G4double t) { properTime = t; }
       inline G4double GetProperTime() const { return properTime; }
+      inline void SetUserInformation(G4VUserPrimaryParticleInformation* anInfo)
+      { userInfo = anInfo; }
+      inline G4VUserPrimaryParticleInformation* GetUserInformation() const
+      { return userInfo; }
 
   public: // with description
       // Followings are available Set methods.

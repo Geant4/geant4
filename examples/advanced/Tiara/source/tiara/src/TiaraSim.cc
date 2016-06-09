@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: TiaraSim.cc,v 1.4 2003/06/25 09:13:12 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: TiaraSim.cc,v 1.5 2003/11/07 12:39:11 vnivanch Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 
 #include "TiaraSim.hh"
@@ -152,7 +152,7 @@ void TiaraSim::BeamOn(G4int nEvents){
 }
 
 TiaraSim::~TiaraSim(){
-  for (G4int i = 0; i < fCutProcessVector.size(); i++) {
+  for (size_t i = 0; i < fCutProcessVector.size(); i++) {
     fPlacers[i].RemoveProcess(fCutProcessVector[i]);
     delete fCutProcessVector[i];
   }

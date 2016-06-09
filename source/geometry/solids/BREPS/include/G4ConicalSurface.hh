@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4ConicalSurface.hh,v 1.9 2003/06/16 16:52:32 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // ----------------------------------------------------------------------
 // Class G4ConicalSurface

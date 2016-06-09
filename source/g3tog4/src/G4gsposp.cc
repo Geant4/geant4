@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4gsposp.cc,v 1.15 2002/10/23 17:21:18 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // by I.Hrivnacova, 13.10.99
 

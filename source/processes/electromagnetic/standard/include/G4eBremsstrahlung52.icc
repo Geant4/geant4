@@ -1,0 +1,124 @@
+//
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
+//
+//
+// $Id: G4eBremsstrahlung52.icc,v 1.1 2003/08/08 11:30:00 vnivanch Exp $
+// GEANT4 tag $Name: geant4-06-00 $
+//
+//      ------------ G4eBremsstrahlung52 physics process ---------
+//                     by Michel Maire, 27 July 1996
+// 
+// 13-12-96 : Sign corrected in the ScreenFunctions, L.Urban
+// 20/03/97 : new energy loss+ionisation+brems scheme, L.Urban
+// 28/05/01 : V.Ivanchenko minor changes to provide ANSI -wall compilation 
+// 16-01-03 Migrade to cut per region (V.Ivanchenko)
+// 08-08-03 This class is frozen at the release 5.2 (V.Ivanchenko)
+// ---------------------------------------------------------------------------
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline G4bool G4eBremsstrahlung52::IsApplicable(
+                            const G4ParticleDefinition& particle)
+{
+   return(  (&particle == G4Electron::Electron())
+          ||(&particle == G4Positron::Positron()) );
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline G4double G4eBremsstrahlung52::GetMeanFreePath(const G4Track& track,
+                                                         G4double,
+                                                         G4ForceCondition*)
+ 
+// gives the MeanFreePath in GEANT4 internal units
+
+{
+   const G4DynamicParticle* aDynamicParticle = track.GetDynamicParticle();
+   G4double KineticEnergy = aDynamicParticle->GetKineticEnergy();
+   const G4MaterialCutsCouple* couple  = track.GetMaterialCutsCouple();
+
+   G4double MeanFreePath;
+   G4bool isOutRange;
+
+   if (KineticEnergy < LowestKineticEnergy) MeanFreePath = DBL_MAX;
+   else {
+     if (KineticEnergy > HighestKineticEnergy) KineticEnergy = 0.99*HighestKineticEnergy ;
+     MeanFreePath = (*theMeanFreePathTable)(couple->GetIndex())->
+                    GetValue( KineticEnergy, isOutRange );
+   }
+
+   return MeanFreePath;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline G4double G4eBremsstrahlung52::ScreenFunction1(G4double ScreenVariable)
+
+// compute the value of the screening function 3*PHI1 - PHI2
+
+{
+   G4double screenVal;
+
+   if (ScreenVariable > 1.)
+     screenVal = 42.24 - 8.368*log(ScreenVariable+0.952);
+   else
+     screenVal = 42.392 - ScreenVariable* (7.796 - 1.961*ScreenVariable);
+
+   return screenVal;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline G4double G4eBremsstrahlung52::ScreenFunction2(G4double ScreenVariable)
+
+// compute the value of the screening function 1.5*PHI1 - 0.5*PHI2
+
+{
+   G4double screenVal;
+
+   if (ScreenVariable > 1.)
+     screenVal = 42.24 - 8.368*log(ScreenVariable+0.952);
+   else
+     screenVal = 41.734 - ScreenVariable* (6.484 - 1.250*ScreenVariable);
+
+   return screenVal;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline G4double G4eBremsstrahlung52::GetLambda(
+                              G4double KineticEnergy,
+                              const G4MaterialCutsCouple* couple)
+{
+  G4bool isOut;
+  return (*theMeanFreePathTable)[couple->GetIndex()]->
+                                           GetValue(KineticEnergy,isOut);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+inline G4double G4eBremsstrahlung52::SecondaryEnergyThreshold(size_t index)
+{
+  return (*secondaryEnergyCuts)[index];
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

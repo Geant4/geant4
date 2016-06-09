@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4LElastic.hh,v 1.8 2002/12/12 19:18:05 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4LElastic.hh,v 1.9 2003/07/01 15:49:03 hpw Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 //
 // G4 Model: Low energy elastic scattering -- header file
@@ -72,7 +72,7 @@ public:
 
    ~G4LElastic() {};
  
-   G4VParticleChange* ApplyYourself(const G4Track& aTrack, 
+   G4HadFinalState * ApplyYourself(const G4HadProjectile & aTrack, 
                                     G4Nucleus & targetNucleus);
 
 private:

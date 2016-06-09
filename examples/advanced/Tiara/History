@@ -1,6 +1,6 @@
-# $Id: History,v 1.8 2003/06/20 15:34:37 dressel Exp $
+# $Id: History,v 1.18 2003/12/09 08:48:33 daquinog Exp $
 # -------------------------------------------------------------------
-# GEANT4 tag $Name: geant4-05-02 $
+# GEANT4 tag $Name: geant4-06-00 $
 # -------------------------------------------------------------------
 
      =========================================================
@@ -18,6 +18,45 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Dec  9th, 2003 G.Daquino - Tiara-V05-02-06
+- Fixed implementation of TiaraPrimaryGeneratorAction, where copy
+  constructor and operator=() definitions were commented out by mistake
+  by V.Ivantchenko.
+
+Dec  8th, 2003 G.Cosmo - Tiara-V05-02-05
+- Restored some classes in physics_lists package and fixed setup
+  configuration.
+
+Dec  5th, 2003 G.Cosmo - Tiara-V05-02-04
+- Changed LISTS_BASE to G4LISTS_BASE for hadronic physics lists path.
+  Cowork with "ghad-lists-V05-02-01".
+
+Dec  4th, 2003 G.Cosmo - Tiara-V05-02-03
+- Fixed build setup. Added references to new physics-lists structure.
+- Corrected setup for SWIG to point to default installation under /usr.
+
+Dec  3rd, 2003 H.P.Wellisch
+- Removed hadronics physics-lists. Now using default setup provided
+  in $G4INSTALL/hadronic_lists.
+
+Nov  20th, 2003 V.Ivanchenko - Tiara-V05-02-02
+- Decays for all particles
+
+Nov  13th, 2003  John Allison
+- Removed OPACS from Vis Manager.
+
+Nov  07th, 2003 V.Ivanchenko - Tiara-V05-02-01
+- Remove STD from physics
+- Cleanup GNUmakefiles and warnings
+
+Aug  08th, 2003 M.Dressel - Tiara-V05-02-00
+- important update of README
+
+Jul  08th, 2003 M.Dressel - Tiara-B05-01-05
+- this together with geant4-05-02-ref-00 is used for the check for 
+  large deviations in 68c100 simulation
+
 Jun  20th, 2003 M.Dressel - Tiara-V05-01-04
 - using CLHEP units replacing G4Dimensions.hh
 
@@ -27,10 +66,8 @@ Jun  18th, 2003 M.Dressel - Tiara-V05-01-03
 Jun  17th, 2003 M.Dressel - Tiara-V05-01-02
 - changes for rh73 with gcc-2.95.2 and rh73 with gcc-3.2
 
-June 16th, 2003 M.Dressel - Tiara-V05-01-01
+Jun  16th, 2003 M.Dressel - Tiara-V05-01-01
 - building with gmake supported, cvs meta info  added
 
-
-June 12th, 2003 M.Dressel - Tiara-V05-01-00
+Jun  12th, 2003 M.Dressel - Tiara-V05-01-00
 - Created
-

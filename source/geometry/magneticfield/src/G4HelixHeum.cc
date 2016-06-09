@@ -21,23 +21,22 @@
 // ********************************************************************
 //
 //
-// $Id: G4HelixHeum.cc,v 1.4 2001/07/11 09:59:12 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4HelixHeum.cc,v 1.5 2003/10/31 14:35:54 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
-#include "G4HelixHeum.hh"
-#include "G4ThreeVector.hh"
-
 //
 //  Simple Heum:
 //        x_1 = x_0 + h *
 //                1/4 * dx(t0,x0)  +
 //                3/4 * dx(t0+2/3*h, x0+2/3*h*(dx(t0+h/3,x0+h/3*dx(t0,x0)))) 
+//
+//  Third order solver.
+//
 //  W.Wander <wwc@mit.edu> 12/09/97 
-//
-// -------------------------------------------------------------------------
+// -------------------------------------------------------------------
 
-// third order solver
-//
+#include "G4HelixHeum.hh"
+#include "G4ThreeVector.hh"
 
 void
 G4HelixHeum::DumbStepper( const G4double  yIn[],
@@ -68,6 +67,4 @@ G4HelixHeum::DumbStepper( const G4double  yIn[],
   }
 
   // NormaliseTangentVector( yOut );           
-  
-  return ;
 }  

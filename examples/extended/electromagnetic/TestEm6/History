@@ -1,4 +1,4 @@
-$Id: History,v 1.12 2003/06/10 11:49:17 maire Exp $
+$Id: History,v 1.16 2003/11/25 18:31:47 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,20 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+25-11-03 V.Ivanchenko (testem6-V05-02-02)
+- Fix geometry (G.Cosmo)
+
+13-11-03 John Allison
+- Removed OPACS from Vis Manager.
+
+24-10-03 mma (testem6-V05-02-01)
+- PhysListEmStandard: AddProcess(Bremsstrahlung,-1,3,3) ..etc..
+     
+10-10-03 mma (testem6-V05-02-00)
+ - NOHIST replaced by ANALYSIS_USE
+ - cosmetic in material definitions
+ - SetMaterial() in constructor. all macros updated for /run/initialize
      
 10-06-03 mma (testem6-V05-01-00)
  - proper deletion of old geometry in case of update

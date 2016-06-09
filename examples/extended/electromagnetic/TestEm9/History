@@ -1,0 +1,58 @@
+$Id: History,v 1.16 2003/12/05 11:22:45 vnivanch Exp $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                    TestEm9 History file
+                    --------------------
+This file should be used by the G4 example coordinator to briefly
+summarize all major modifications introduced in the code and keep
+track of all tags.
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+
+     ----------------------------------------------------------
+
+05-12-03 V.Ivanchenko (testem9-V05-02-10)
+- Update hadronic physics according to the hadronics_lists
+
+26-11-03 V.Ivanchenko (testem9-V05-02-09)
+- Fix StepMax
+
+25-11-03 V.Ivanchenko (testem9-V05-02-08)
+- Fix geometry (G.Cosmo)
+
+20-11-03 V.Ivanchenko (testem9-V05-02-07)
+- Update decay physics
+
+19-11-03 V.Ivanchenko (testem9-V05-02-06)
+- Update BinaryCascade add light ion interactions
+
+13-11-03 John Allison
+- Removed OPACS from Vis Manager.
+
+07-11-03 V.Ivanchenko (testem9-V05-02-05)
+- Fix misprint in the HistoManager
+- Use of the last msc for PhysList52 
+
+31-10-03 V.Ivanchenko (testem9-V05-02-04)
+- Update geometry and visualisation
+- Update README
+- Add Histo and HistoMessenger classes - generic analysis modules
+
+24-10-03 mma (testem9-V05-02-03)
+- PhysListEmStandard: AddProcess(Bremsstrahlung,-1,3,3) ..etc..
+
+13-10-03 V.Ivanchenko (testem9-V05-02-02)
+- Fix a problem in interactive mode
+- Add EventMessenger
+- Update Binary cascade constructor
+
+18-09-03 V.Ivanchenko (testem9-V05-02-01)
+- Complete migration to model EM physics
+
+29-08-03 V.Ivant (testem9-V05-02-00)
+ - Creation. Derived from test26

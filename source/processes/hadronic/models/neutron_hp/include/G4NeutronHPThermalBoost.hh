@@ -23,7 +23,7 @@
 #ifndef G4NeutronHPThermalBoost_h
 #define G4NeutronHPThermalBoost_h
 
-#include "G4DynamicParticle.hh"
+#include "G4HadProjectile.hh"
 #include "G4Element.hh"
 #include "G4ReactionProduct.hh"
 #include "G4Nucleus.hh"
@@ -34,7 +34,7 @@
 class G4NeutronHPThermalBoost
 {
 public: 
-  G4double GetThermalEnergy(const G4DynamicParticle * aP, 
+  G4double GetThermalEnergy(const G4HadProjectile & aP, 
                             const G4Element * anE, 
 			    G4double aT)
   {
@@ -43,16 +43,16 @@ public:
     return GetThermalEnergy(aP, theA ,theZ, aT);
   }
   			    
-  G4double GetThermalEnergy(const G4DynamicParticle * aP, 
+  G4double GetThermalEnergy(const G4HadProjectile & aP, 
                             G4double theA, G4double theZ,
 			    G4double aT)
   {
     // prepare neutron
-    G4double eKinetic = aP->GetKineticEnergy();
-    G4ReactionProduct theNeutron( aP->GetDefinition() );
-    theNeutron.SetMomentum( aP->GetMomentum() );
+    G4double eKinetic = aP.GetKineticEnergy();
+    G4ReactionProduct theNeutron( const_cast<G4ParticleDefinition *>(aP.GetDefinition()) );
+    theNeutron.SetMomentum( aP.Get4Momentum().vect() );
     theNeutron.SetKineticEnergy( eKinetic );
-    G4ThreeVector neuVelo = (1./aP->GetDefinition()->GetPDGMass())*theNeutron.GetMomentum();
+    G4ThreeVector neuVelo = (1./aP.GetDefinition()->GetPDGMass())*theNeutron.GetMomentum();
 
     // prepare properly biased thermal nucleus
     G4Nucleus aNuc;

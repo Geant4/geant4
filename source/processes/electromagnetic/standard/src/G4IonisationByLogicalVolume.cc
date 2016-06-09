@@ -47,15 +47,15 @@ G4IonisationByLogicalVolume( const G4String& particleName,
 
   if ( fParticleName == "e+" || fParticleName == "e-" )
   {
-    feIonisation = new G4eIonisation(particleName) ;
+    feIonisation = new G4eIonisation52(particleName) ;
   }
   else if ( fParticleName == "mu+" || fParticleName == "mu-" )
   {
-    fMuIonisation = new G4MuIonisation(particleName) ;
+    fMuIonisation = new G4MuIonisation52(particleName) ;
   }
   else
   {
-    fhIonisation = new G4hIonisation(particleName) ;
+    fhIonisation = new G4hIonisation52(particleName) ;
   }
 
 }

@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4SigmacPlus.hh,v 1.6 2001/10/15 10:09:28 kurasige Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // 
 // ------------------------------------------------------------

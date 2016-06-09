@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4LCapture.cc,v 1.8 2002/12/12 19:18:06 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4LCapture.cc,v 1.9 2003/07/01 15:49:04 hpw Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 //
 // G4 Model: Low-energy Neutron Capture
@@ -44,9 +44,7 @@
 
 G4LCapture::G4LCapture() : 
    G4HadronicInteraction()
-{
-   theParticleChange.SetNumberOfSecondaries(2);
-   
+{   
    SetMinEnergy( 0.0*GeV );
    SetMaxEnergy( DBL_MAX );
 }
@@ -56,25 +54,24 @@ G4LCapture::~G4LCapture()
    theParticleChange.Clear();
 }
 
-G4VParticleChange*
-G4LCapture::ApplyYourself(const G4Track& aTrack, G4Nucleus& targetNucleus)
+G4HadFinalState*
+G4LCapture::ApplyYourself(const G4HadProjectile & aTrack, G4Nucleus& targetNucleus)
 {
-   theParticleChange.Initialize(aTrack);
 
-   const G4DynamicParticle* aParticle = aTrack.GetDynamicParticle();
-//   const G4Material* aMaterial = aTrack.GetMaterial();
+   theParticleChange.Clear();
+   theParticleChange.SetStatusChange(stopAndKill);
 
-   theParticleChange.SetStatusChange(fStopAndKill);
    G4double N = targetNucleus.GetN();
    G4double Z = targetNucleus.GetZ();
 
-   G4double P = aParticle->GetTotalMomentum()/GeV;
-   G4double Px = P*(aParticle->GetMomentumDirection().x());
-   G4double Py = P*(aParticle->GetMomentumDirection().y());
-   G4double Pz = P*(aParticle->GetMomentumDirection().z());
-   G4double E = aParticle->GetTotalEnergy()/GeV;
-   G4double E0 = aParticle->GetDefinition()->GetPDGMass()/GeV;
-   G4double Q = aParticle->GetDefinition()->GetPDGCharge();
+   const G4LorentzVector theMom = aTrack.Get4Momentum();
+   G4double P = theMom.vect().mag()/GeV;
+   G4double Px = theMom.vect().x();
+   G4double Py = theMom.vect().y();
+   G4double Pz = theMom.vect().z();
+   G4double E = theMom.e()/GeV;
+   G4double E0 = aTrack.GetDefinition()->GetPDGMass()/GeV;
+   G4double Q = aTrack.GetDefinition()->GetPDGCharge();
    if (verboseLevel > 1) {
       G4cout << "G4LCapture:ApplyYourself: incident particle:" << G4endl;
       G4cout << "P      " << P << " GeV/c" << G4endl;

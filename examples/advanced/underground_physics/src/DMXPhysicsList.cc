@@ -66,9 +66,6 @@ DMXPhysicsList::DMXPhysicsList() : G4VUserPhysicsList()
   cutForGamma         = defaultCutValue;
   cutForElectron      = 1.0*nanometer;
   cutForPositron      = defaultCutValue;
-  cutForProton        = defaultCutValue;
-  cutForAlpha         = 1.0*nanometer;
-  cutForGenericIon    = 1.0*nanometer;
 
   VerboseLevel = 1;
   OpVerbLevel = 0;
@@ -655,11 +652,8 @@ void DMXPhysicsList::ConstructHad()
 	theNeutronElasticProcess->RegisterMe(theElasticModel1);
 	theElasticModel1->SetMinEnergy(19*MeV);
 	theNeutronElasticProcess->RegisterMe(theElasticNeutron);
-	G4CrossSectionDataStore * theStore = 
-	  ((G4HadronElasticProcess*)theNeutronElasticProcess)
-	  ->GetCrossSectionDataStore();
 	G4NeutronHPElasticData * theNeutronData = new G4NeutronHPElasticData;
-	theStore->AddDataSet(theNeutronData);
+	theNeutronElasticProcess->AddDataSet(theNeutronData);
 	pmanager->AddDiscreteProcess(theNeutronElasticProcess);
 	// inelastic scattering
 	G4NeutronInelasticProcess* theInelasticProcess =
@@ -670,12 +664,9 @@ void DMXPhysicsList::ConstructHad()
 	G4NeutronHPInelastic * theLENeutronInelasticModel =
 	  new G4NeutronHPInelastic;
 	theInelasticProcess->RegisterMe(theLENeutronInelasticModel);
-	G4CrossSectionDataStore * theStore1 = 
-	  ((G4HadronInelasticProcess*)theInelasticProcess)
-	  ->GetCrossSectionDataStore();
 	G4NeutronHPInelasticData * theNeutronData1 = 
 	  new G4NeutronHPInelasticData;
-	theStore1->AddDataSet(theNeutronData1);
+	theInelasticProcess->AddDataSet(theNeutronData1);
 	pmanager->AddDiscreteProcess(theInelasticProcess);
 	// capture
 	G4HadronCaptureProcess* theCaptureProcess =
@@ -685,11 +676,8 @@ void DMXPhysicsList::ConstructHad()
 	theCaptureProcess->RegisterMe(theCaptureModel);
 	G4NeutronHPCapture * theLENeutronCaptureModel = new G4NeutronHPCapture;
 	theCaptureProcess->RegisterMe(theLENeutronCaptureModel);
-	G4CrossSectionDataStore * theStore3 = 
-	  ((G4HadronCaptureProcess*)theCaptureProcess)->
-	  GetCrossSectionDataStore();
 	G4NeutronHPCaptureData * theNeutronData3 = new G4NeutronHPCaptureData;
-	theStore3->AddDataSet(theNeutronData3);
+	theCaptureProcess->AddDataSet(theNeutronData3);
 	pmanager->AddDiscreteProcess(theCaptureProcess);
 	//  G4ProcessManager* pmanager = G4Neutron::Neutron->GetProcessManager();
 	//  pmanager->AddProcess(new G4UserSpecialCuts(),-1,-1,1);
@@ -807,22 +795,13 @@ void DMXPhysicsList::SetCuts()
 
   //special for low energy physics
   G4double lowlimit=250*eV;  
-  G4Gamma   ::SetEnergyRange(lowlimit,100*GeV);
-  G4Electron::SetEnergyRange(lowlimit,100*GeV);
-  G4Positron::SetEnergyRange(lowlimit,100*GeV);
-   
+  G4ProductionCutsTable::GetProductionCutsTable()->SetEnergyRange(lowlimit,100.*GeV);
+
   // set cut values for gamma at first and for e- second and next for e+,
   // because some processes for e+/e- need cut values for gamma 
   SetCutValue(cutForGamma, "gamma");
   SetCutValue(cutForElectron, "e-");
   SetCutValue(cutForPositron, "e+");
-  
-  //  SetCutValue(cutForProton, "proton");
-  //  SetCutValue(cutForProton, "anti_proton");
-  //  SetCutValue(cutForAlpha,  "alpha");
-  //  SetCutValue(cutForGenericIon,  "GenericIon");
-  
-  //  SetCutValueForOthers(defaultCutValue);
   
   if (verboseLevel>0) DumpCutValuesTable();
 }

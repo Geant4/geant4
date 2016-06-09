@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4StateManager.cc,v 1.9 2003/06/06 16:17:17 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4StateManager.cc,v 1.10 2003/10/31 17:44:47 asaim Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // 
 // ------------------------------------------------------------
@@ -42,7 +42,8 @@ G4StateManager::G4StateManager()
    thePreviousState(G4State_PreInit),
    theBottomDependent(0),
    suppressAbortion(0),
-   msgptr(0)
+   msgptr(0),
+   exceptionHandler(0)
 {
 }
 

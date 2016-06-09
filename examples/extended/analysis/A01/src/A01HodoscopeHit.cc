@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: A01HodoscopeHit.cc,v 1.3 2002/12/13 11:34:34 gunter Exp $
+// $Id: A01HodoscopeHit.cc,v 1.5 2003/10/14 18:58:22 perl Exp $
 // --------------------------------------------------------------
 //
 #include "A01HodoscopeHit.hh"
@@ -43,7 +43,7 @@ A01HodoscopeHit::~A01HodoscopeHit()
 {;}
 
 A01HodoscopeHit::A01HodoscopeHit(const A01HodoscopeHit &right)
-{
+    : G4VHit() {
   id = right.id;
   time = right.time;
   pos = right.pos;
@@ -61,7 +61,7 @@ const A01HodoscopeHit& A01HodoscopeHit::operator=(const A01HodoscopeHit &right)
   return *this;
 }
 
-int A01HodoscopeHit::operator==(const A01HodoscopeHit &right) const
+int A01HodoscopeHit::operator==(const A01HodoscopeHit &/*right*/) const
 {
   return 0;
 }
@@ -77,7 +77,6 @@ void A01HodoscopeHit::Draw()
     if(pVA) attribs = *pVA;
     G4Colour colour(0.,1.,1.);
     attribs.SetColour(colour);
-    attribs.SetForceWireframe(false);
     attribs.SetForceSolid(true);
     pVVisManager->Draw(*pLogV,attribs,trans);
   }

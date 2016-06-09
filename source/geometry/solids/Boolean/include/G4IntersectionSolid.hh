@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4IntersectionSolid.hh,v 1.6 2002/10/28 11:36:28 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4IntersectionSolid.hh,v 1.7 2003/11/03 17:48:45 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 //
 // class G4IntersectionSolid
@@ -36,8 +36,7 @@
 // 12.09.98 V.Grichine: initial design and implementation
 // 28.10.98 V.Grichine: addition of two constructors with G4PlacedSolid
 //
-// ********************************************************************
-
+// --------------------------------------------------------------------
 #ifndef G4INTERSECTIONSOLID_HH
 #define G4INTERSECTIONSOLID_HH
 
@@ -75,9 +74,9 @@ class G4IntersectionSolid : public G4BooleanSolid
   public:  // without description
 
     G4bool CalculateExtent( const EAxis pAxis,
-			    const G4VoxelLimits& pVoxelLimit,
-			    const G4AffineTransform& pTransform,
-				  G4double& pMin, G4double& pMax) const ;
+                            const G4VoxelLimits& pVoxelLimit,
+                            const G4AffineTransform& pTransform,
+                                  G4double& pMin, G4double& pMax) const ;
        
     EInside Inside( const G4ThreeVector& p ) const ;
 
@@ -89,16 +88,16 @@ class G4IntersectionSolid : public G4BooleanSolid
     G4double DistanceToIn( const G4ThreeVector& p) const ;
 
     G4double DistanceToOut( const G4ThreeVector& p,
-			    const G4ThreeVector& v,
-			    const G4bool calcNorm=false,
-			    G4bool *validNorm=0,
-			    G4ThreeVector *n=0      ) const ;
+                            const G4ThreeVector& v,
+                            const G4bool calcNorm=false,
+                                  G4bool *validNorm=0,
+                                  G4ThreeVector *n=0      ) const ;
 
     G4double DistanceToOut( const G4ThreeVector& p ) const ;
 
 
-    void ComputeDimensions( G4VPVParameterisation* p,
-	                    const G4int n,
+    void ComputeDimensions(       G4VPVParameterisation* p,
+                            const G4int n,
                             const G4VPhysicalVolume* pRep ) ;
                                    
     void DescribeYourselfTo ( G4VGraphicsScene& scene ) const ;

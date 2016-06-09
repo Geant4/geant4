@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Exception.cc,v 1.16 2003/06/06 16:17:16 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4Exception.cc,v 1.17 2003/10/31 17:44:47 asaim Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // 
 // ----------------------------------------------------------------------
@@ -59,9 +59,44 @@ void G4Exception(const char* originOfException,
                         G4ExceptionSeverity severity,
                         const char* description)
 {
-  G4bool toBeAborted = 
-    G4StateManager::GetStateManager()->GetExceptionHandler()
+  G4VExceptionHandler* exceptionHandler
+    = G4StateManager::GetStateManager()->GetExceptionHandler();
+  G4bool toBeAborted = true;
+  if(exceptionHandler)
+  {
+    toBeAborted = exceptionHandler
      ->Notify(originOfException,exceptionCode,severity,description);
+  }
+  else
+  {
+    G4cerr << G4endl
+       << "*** ExceptionHandler is not defined ***" << G4endl;
+    G4cerr << G4endl;
+    G4cerr << "*** G4Exception : " << exceptionCode << G4endl;
+    G4cerr << "      issued by : " << originOfException << G4endl;
+    G4cerr << description << G4endl;
+    G4cerr << G4endl << "Severity : ";
+    switch(severity)
+    {
+     case FatalException:
+      G4cerr << "*** Fatal Exception ***";
+      break;
+     case FatalErrorInArgument:
+      G4cerr << "*** Fatal Error In Argument ***";
+      break;
+     case RunMustBeAborted:
+      G4cerr << "*** Run Must Be Aborted ***";
+      break;
+     case EventMustBeAborted:
+      G4cerr << "*** Event Must Be Aborted ***";
+      break;
+     default:
+      G4cerr << "*** This is just a warning message. ***";
+      toBeAborted = false;
+      break;
+    }
+    G4cerr << G4endl;
+  }
   if(toBeAborted)
   {
    if(G4StateManager::GetStateManager()->SetNewState(G4State_Abort)) {

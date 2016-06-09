@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4PenelopeBremsstrahlung.cc,v 1.10 2003/06/16 17:00:16 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4PenelopeBremsstrahlung.cc,v 1.14 2003/11/18 17:29:43 pia Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 // 
 // --------------------------------------------------------------
 //
@@ -35,9 +35,9 @@
 // 24.04.2003 V.Ivanchenko - Cut per region mfpt
 // 20.05.2003 MGP          - Removed compilation warnings
 //                           Restored NotForced in GetMeanFreePath
-// 23.05.2003 L.Pandola    - Bug fixed. G4double cast to elements of
-//                           ebins vector (is it necessary?)
 // 23.05.2003 MGP          - Removed memory leak (fix in destructor)
+// 07.11.2003 L.Pandola    - Bug fixed in LoadAngularData()
+// 11.11.2003 L.Pandola    - Code review: use std::map for angular data
 //
 //----------------------------------------------------------------
 
@@ -57,25 +57,16 @@
 #include "G4ProductionCutsTable.hh"
 
 
-//
-//
-// Il load dei dati continui si puo' mettere nel BuildLossTable
-//
-//
-// Anche la sezione d'urto totale dovrebbe essere convertita
-// le tabelle di G4 mi paiono piu' complete pero' (le lascio!)
-//
-
 G4PenelopeBremsstrahlung::G4PenelopeBremsstrahlung(const G4String& nam)
   : G4eLowEnergyLoss(nam), 
   crossSectionHandler(0),
   theMeanFreePath(0),
   energySpectrum(0)
 {
-  // materialAngularData.clear();
+  angularData = new std::map<G4int,G4PenelopeBremsstrahlungAngular*>;
   cutForPhotons = 0.;
   verboseLevel = 0;
-  LoadAngularData();
+  
 }
 
 
@@ -84,16 +75,10 @@ G4PenelopeBremsstrahlung::~G4PenelopeBremsstrahlung()
   delete crossSectionHandler;
   delete energySpectrum;
   delete theMeanFreePath;
-
-  for (size_t m=0; m<materialAngularData.size(); m++)
-    {
-      G4AngularData materialData = *(materialAngularData[m]);
-      for (size_t i=0; i<materialData.size(); i++)
-      {
-	delete materialData[i];
-      }
-      delete &materialData;
-    }
+  for (G4int Z=1;Z<100;Z++){
+    if (angularData->count(Z)) delete (angularData->find(Z)->second);
+  }
+  delete angularData;
 }
 
 
@@ -105,14 +90,16 @@ void G4PenelopeBremsstrahlung::BuildPhysicsTable(const G4ParticleDefinition& aPa
   }
 
   cutForSecondaryPhotons.clear();
-
+  LoadAngularData();
+  if(verboseLevel > 0) {
+    G4cout << "G4PenelopeBremsstrahlung: Angular data loaded" << G4endl;
+  }
   // Create and fill BremsstrahlungParameters once
   if ( energySpectrum != 0 ) delete energySpectrum;
   //grid of reduced energy bins for photons  
   
   G4DataVector eBins;
 
-  //G4double value;
   eBins.push_back(1.0e-12);
   eBins.push_back(0.05);
   eBins.push_back(0.075);
@@ -170,12 +157,10 @@ void G4PenelopeBremsstrahlung::BuildPhysicsTable(const G4ParticleDefinition& aPa
   crossSectionHandler->Initialise(0,lowKineticEnergy, highKineticEnergy, totBin);
   if (&aParticleType==G4Electron::Electron()) 
     {
-      //G4cout << "Leggo le sezioni d'urto degli elettroni" << G4endl;
       crossSectionHandler->LoadShellData("brem/br-cs-");
     }
   else
     {
-      //G4cout << "Leggo le sezioni d'urto dei positroni" << G4endl;
       crossSectionHandler->LoadShellData("penelope/br-cs-pos-"); //cross section for positrons
     }
 
@@ -283,25 +268,22 @@ void G4PenelopeBremsstrahlung::BuildLossTable(const G4ParticleDefinition& aParti
 
     G4DataVector* ionloss = new G4DataVector();
     for (size_t i = 0; i<totBin; i++) {
-      ionloss->push_back(0.0); //il vettore ha come elementi totBin zeri
+      ionloss->push_back(0.0); 
     }
             
     const G4String partName = aParticleType.GetParticleName();
     // loop for elements in the material
     for (size_t iel=0; iel<NumberOfElements; iel++ ) {
       G4int Z = (G4int)((*theElementVector)[iel]->GetZ());
-      //costruttore del continuo per l'elemento Z
       G4PenelopeBremsstrahlungContinuous* ContLoss = new G4PenelopeBremsstrahlungContinuous(Z,tCut,GetLowerBoundEloss(),
 											    GetUpperBoundEloss(),
 											    partName);
-      //l'inizializzazione va ripetuta per ogni Z!
+      // the initialization must be repeated for each Z
       // now comes the loop for the kinetic energy values
       for (size_t k = 0; k<totBin; k++) {
 	G4double lowEdgeEnergy = aVector->GetLowEdgeEnergy(k);
-	//qui viene chiamato il metodo giusto della perdita continua
+	// method for calcutation of continuous loss
     	(*ionloss)[k] += ContLoss->CalculateStopping(lowEdgeEnergy)  * theAtomicNumDensityVector[iel];
-	//if (Z == 29)
-	//  G4cout << lowEdgeEnergy << " " << ContLoss->CalculateStopping(lowEdgeEnergy)  * theAtomicNumDensityVector[iel] << G4endl;
 	//va chiamato una volta per ogni energia
 	//per ogni energia k, somma su tutti gli elementi del materiale
       }
@@ -334,33 +316,16 @@ G4VParticleChange* G4PenelopeBremsstrahlung::PostStepDoIt(const G4Track& track,
 
   G4int Z = crossSectionHandler->SelectRandomAtom(couple, kineticEnergy);
   G4double tGamma = energySpectrum->SampleEnergy(Z, tCut, kineticEnergy, kineticEnergy);
-  //bisogna recuperare il puntatore
-  G4AngularData* elementData =  materialAngularData[index]; //punta al vettore che contiene i puntatori del materiale
-  //look for the index of the selected atom
-  const G4ElementVector* theElementVector = material->GetElementVector();
-  size_t NumberOfElements = material->GetNumberOfElements();
-  // loop for elements in the material
-  size_t iel=0;
-  G4int Z_try=0,indexEl=0;
-  do {
-    if (iel >= NumberOfElements ) {
-      G4String excep = "Not found the angular data for material " + material->GetName();
-      G4Exception(excep);
-    }
-    Z_try = (G4int)((*theElementVector)[(size_t) iel]->GetZ());
-    indexEl = iel; 
-    iel++;
-  }while(Z_try != Z);
- 
-  G4PenelopeBremsstrahlungAngular* finalAngularData = (*elementData)[indexEl];
-  
+  //Check if the Z has been inserted in the map
+  if (!(angularData->count(Z))) {
+    G4String excep = "Not found the angular data for material " + material->GetName();
+    G4Exception(excep);
+  }
+  G4PenelopeBremsstrahlungAngular* elementAngularData = angularData->find(Z)->second;
+  //Check if the loaded angular data are right
+  //G4cout << "Material Z: " << elementAngularData->GetAtomicNumber() << " !!" << G4endl;
   // Sample gamma angle (Z - axis along the parent particle).
-  G4double dirZ = finalAngularData->ExtractCosTheta(kineticEnergy,tGamma);
-
-  //std::ofstream fff("prova.dat",std::ios::app);
-  //fff << dirZ << G4endl;
-  //fff.close();
-
+  G4double dirZ = elementAngularData->ExtractCosTheta(kineticEnergy,tGamma);
   G4double totalEnergy = kineticEnergy + electron_mass_c2;
   G4double phi   = twopi * G4UniformRand();
   G4double sinTheta  = sqrt(1. - dirZ*dirZ);
@@ -412,8 +377,8 @@ void G4PenelopeBremsstrahlung::PrintInfoDefinition()
   comments += "\n      Gamma energy sampled from a data-driven histogram.";
   comments += "\n      Implementation of the continuous dE/dx part.";  
   comments += "\n      It can be used for electrons and positrons";
-  comments += "in the energy range [250eV,100GeV].";
-  comments += "\n      The process must work with G4LowEnergyIonisation.";
+  comments += " in the energy range [250eV,100GeV].";
+  comments += "\n      The process must work with G4PenelopeIonisation.";
 
   G4cout << G4endl << GetProcessName() << ":  " << comments << G4endl;
 }
@@ -441,23 +406,26 @@ void G4PenelopeBremsstrahlung::SetCutForLowEnSecPhotons(G4double cut)
 }
 
 void G4PenelopeBremsstrahlung::LoadAngularData()
-{
-  const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable();
-  const size_t numOfMaterials = G4Material::GetNumberOfMaterials();
-  materialAngularData.clear();
-  
-  for (size_t j=0; j<numOfMaterials; j++) {
-    // get material parameters needed for the energy loss calculation
-    const G4Material* material= (*theMaterialTable)[j];
+{  
+  const G4ProductionCutsTable* theCoupleTable=
+        G4ProductionCutsTable::GetProductionCutsTable();
+  size_t numOfCouples = theCoupleTable->GetTableSize();
+  angularData->clear();
+  for (size_t j=0; j<numOfCouples; j++) {
+    const G4MaterialCutsCouple* couple = theCoupleTable->GetMaterialCutsCouple(j);
+    const G4Material* material= couple->GetMaterial();
     const G4ElementVector* theElementVector = material->GetElementVector();
     size_t NumberOfElements = material->GetNumberOfElements();
-    // loop for elements in the material
-    G4AngularData* elementAngularData = new G4AngularData;
+    //loop for elements in the material
     for (size_t iel=0; iel<NumberOfElements; iel++ ) {
-     G4int Z = (G4int)((*theElementVector)[iel]->GetZ());
-     G4PenelopeBremsstrahlungAngular* AngPointer = new G4PenelopeBremsstrahlungAngular(Z);
-     elementAngularData->push_back(AngPointer);
+      G4int Z = (G4int)((*theElementVector)[iel]->GetZ());
+      //if the material is not present yet --> insert it in the map
+      if (!(angularData->count(Z))) {
+	G4PenelopeBremsstrahlungAngular* elementAngular = new G4PenelopeBremsstrahlungAngular(Z);
+	angularData->insert(std::make_pair(Z,elementAngular));
+	//G4cout << "Loaded......... Z= " << Z << G4endl;
+      }
     }
-    materialAngularData.push_back(elementAngularData);    
   }
 }
+	  

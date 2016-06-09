@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4LowEnergyRayleigh.hh,v 1.15 2001/10/08 07:45:35 pia Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // 
 //

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProcessPlacer.hh,v 1.6 2002/10/16 16:26:58 dressel Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4ProcessPlacer.hh,v 1.7 2003/11/26 14:51:48 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // ----------------------------------------------------------------------
 // Class G4ProcessPlacer
@@ -30,14 +30,15 @@
 // Class description:
 //
 // Used internally by importance sampling and scoring. 
-// See G4VProcessPlacer.hh.
+// See G4VProcessPlacer.
 
 // Author: Michael Dressel (Michael.Dressel@cern.ch)
 // ----------------------------------------------------------------------
 #ifndef G4ProcessPlacer_hh
 #define G4ProcessPlacer_hh G4ProcessPlacer_hh 
 
-#include "globals.hh"
+#include "G4Types.hh"
+#include "G4String.hh"
 #include "G4VProcessPlacer.hh"
 
 class G4ProcessManager;
@@ -72,13 +73,9 @@ public:  // with description
     eLast = 0
   };
 
-
 private:
 
   G4ProcessManager *GetProcessManager();
-
-
-
   void AddProcessAs(G4VProcess *process, SecondOrLast);
 
   void PrintProcVec(G4ProcessVector* processVec);

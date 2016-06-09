@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ReflectedSolid.hh,v 1.7 2003/06/16 16:53:12 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4ReflectedSolid.hh,v 1.8 2003/11/03 17:48:45 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 //
 // class G4ReflectedSolid
@@ -37,8 +37,7 @@
 // 23.07.01 V.Grichine: created
 // 15.02.02 V.Grichine: get/set methods for fPtr(Direct)Transform3D
 //
-// ********************************************************************
-
+// --------------------------------------------------------------------
 #ifndef G4ReflectedSolid_HH
 #define G4ReflectedSolid_HH
 

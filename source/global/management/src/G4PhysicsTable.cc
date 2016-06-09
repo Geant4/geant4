@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicsTable.cc,v 1.8 2003/06/06 16:17:17 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4PhysicsTable.cc,v 1.10 2003/11/04 12:17:30 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // 
 // ------------------------------------------------------------
@@ -119,12 +119,26 @@ G4bool G4PhysicsTable::StorePhysicsTable(const G4String& fileName,
 }
 
 
+G4bool G4PhysicsTable::ExistPhysicsTable(const G4String& fileName) const
+{
+  std::ifstream fIn;  
+  G4bool value=true;
+  // open input file
+  fIn.open(fileName,std::ios::in);
 
+  // check if the file has been opened successfully 
+  if (!fIn) {
+    value = false;
+  }
+  fIn.close();
+  return value;
+}
+    
 G4bool G4PhysicsTable::RetrievePhysicsTable(const G4String& fileName,
 					    G4bool          ascii)
 {
   std::ifstream fIn;  
-  // open input file //
+  // open input file
   if (ascii)
     fIn.open(fileName,std::ios::in|std::ios::binary);
   else

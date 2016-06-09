@@ -1,4 +1,4 @@
-$Id: History,v 1.29 2003/05/28 09:54:31 gcosmo Exp $
+$Id: History,v 1.33 2003/11/10 14:31:24 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,6 +15,19 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+10-11-03 G.Cosmo (exampleN02-V05-02-03)
+- Removed OPACS driver from vis-manager.
+- Cleared warnings for parameterised detectors.
+
+30-10-03 G.Cosmo (exampleN02-V05-02-02)
+- Cleared compilation warnings due to new class G4Orb.
+
+24-10-03 mma (exampleN02-V05-02-01)
+- PhysicsList: AddProcess(Bremsstrahlung,-1,3,3) ..etc..
+     
+06-10-03 mma (exampleN02-V05-02-00)
+- cosmetic cleanup in material definitions
+
 28-05-03 G.Cosmo (exampleN02-V05-01-00)
 - Get rid of pedantic warnings...
 
@@ -27,17 +40,17 @@ track of all tags.
 27-11-01 mma (exampleN02-V03-02-04)
 - vis.mac: /vis/viewer/set/viewpointThetaPhi
 
-19-11-01 John (exampleN02-V03-02-03)
+19-11-01 J.Allison (exampleN02-V03-02-03)
 - Updated ExN02VisManager.cc for new graphics systems and defaults.
 
-07-11-01 Satoshi (exampleN02-V03-02-02)
+07-11-01 S.Tanaka (exampleN02-V03-02-02)
 - vis.mac: /vis/viewer/refresh + /vis/viewer/update is replaced 
   with their equivalent command /vis/viewer/flush. 
      
 24-10-01 mma (exampleN02-V03-02-01)
 - initInter.mac renamed vis.mac
      
-19-10-01 Steve O'Neale (examples-V03-02-00)
+19-10-01 S.O'Neale (examples-V03-02-00)
 - Update reference output
 
 11-10-01 mma (exampleN02-V03-02-00)
@@ -47,7 +60,7 @@ track of all tags.
 12-07-01 mma
 - DetectorMessenger: setField, help: magnetic field in X dirction      
 
-20-02-01  S.O'Neale (exampleN02-V03-00-03) update reference outputs following
+20-02-01 S.O'Neale (exampleN02-V03-00-03) update reference outputs following
    materials-V03-00-04 (tagset 268)
 
 09-02-01 M.Asai (exampleN02-V03-00-02)

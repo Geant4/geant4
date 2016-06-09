@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4QContent.cc,v 1.22 2003/06/16 17:04:19 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4QContent.cc,v 1.33 2003/12/09 15:38:19 gunter Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 //      ---------------- G4QContent ----------------
 //             by Mikhail Kossov, Sept 1999.
@@ -45,7 +45,7 @@ G4QContent::G4QContent(G4int d, G4int u, G4int s, G4int ad, G4int au, G4int as):
   {
 #ifdef erdebug
     G4cerr<<"***G4QContent:"<<d<<","<<u<<","<<s<<","<<ad<<","<<au<<","<<as<<G4endl;
-    //G4Exception("***G4QContent::Constructor: Negative Quark Content");
+    //throw G4QException("***G4QContent::Constructor: Negative Quark Content");
 #endif
     if(d<0) ad-=d;
     if(u<0) au-=u;
@@ -732,7 +732,7 @@ G4QContent G4QContent::IndQ (G4int index)
   else if(index<nD+nU+nS) return G4QContent(0,0,1,0,0,0);
   //#ifdef erdebug
   else G4cerr<<"***G4QC::IndQ:index="<<index<<" for the QuarkContent="<<GetThis()<<G4endl;
-  //G4Exception("***G4QC::IndQ: Index exceeds the total number of quarks");
+  //throw G4QException("***G4QC::IndQ: Index exceeds the total number of quarks");
   //#endif
   return G4QContent(0,0,0,0,0,0);
 }
@@ -741,14 +741,14 @@ G4QContent G4QContent::IndQ (G4int index)
 G4QContent G4QContent::IndAQ (G4int index)
 {//        ==============================
 #ifdef debug
-  cout << "G4QC::IndAQ is called"<<endl;
+  G4cout << "G4QC::IndAQ is called"<<G4endl;
 #endif
   if(index<nAD) return G4QContent(0,0,0,1,0,0);
   else if(index<nAD+nAU) return G4QContent(0,0,0,0,1,0);
   else if(index<nAD+nAU+nAS) return G4QContent(0,0,0,0,0,1);
   //#ifdef erdebug
   else G4cerr<<"***G4QC::IndAQ:index="<<index<<" for the QuarkContent="<<GetThis()<<G4endl;
-  //G4Exception("***G4QC::IndAQ: Index exceeds the total number of antiquarks");
+  //throw G4QException("***G4QC::IndAQ: Index exceeds the total number of antiquarks");
   //#endif
   return G4QContent(0,0,0,0,0,0);
 }
@@ -1175,10 +1175,7 @@ G4int G4QContent::GetSPDGCode() const
       else return 10;
 	}
     // Normal One Baryon States: Heavy quark should come first
-    if(n>5)
-    {
-      return GetZNSPDGCode();                    //B+M+M Tripolino etc
-    }
+    if(n>5) return GetZNSPDGCode();              //B+M+M Tripolino etc
     if(n==5) return 10;                          //B+M Chipolino
     if(mS>0)                                     // Strange Baryons
 	{
@@ -1193,7 +1190,7 @@ G4int G4QContent::GetSPDGCode() const
 #ifdef debug
           G4cout<<"***G4QC::SPDG: Exotic BaryonSS, U="<<mU<<",D="<<mD<<",S="<<mS<<GetThis()<<G4endl;
 #endif
-          return 0;
+          return GetZNSPDGCode();
         }
 	  }
       else if (mS==1)
@@ -1206,7 +1203,7 @@ G4int G4QContent::GetSPDGCode() const
 #ifdef debug
           G4cout<<"***G4QC::SPDG:Exotic BaryonS, U="<<mU<<",D="<<mD<<",S="<<mS<<GetThis()<<G4endl;
 #endif
-          return 0;
+          return GetZNSPDGCode();
         }
 	  }
       else                                       // Superstrange case
@@ -1214,7 +1211,7 @@ G4int G4QContent::GetSPDGCode() const
 #ifdef debug
         G4cout<<"***G4QContent::GetSPDG:ExoBaryonS, U="<<mU<<",D="<<mD<<",S="<<mS<<GetThis()<<G4endl;
 #endif
-        return 0;
+        return GetZNSPDGCode();
       }
 	}
     else if (mU>0)                               // Not Strange Baryons
@@ -1228,7 +1225,7 @@ G4int G4QContent::GetSPDGCode() const
 #ifdef debug
         G4cout<<"***G4QC::SPDG: Exotic BaryonU, U="<<mU<<",D="<<mD<<",S="<<mS<<GetThis()<<G4endl;
 #endif
-        return 0;
+        return GetZNSPDGCode();
       }
 	}
     else if (mD==3) p=1114;                      // Decuplet
@@ -1237,7 +1234,7 @@ G4int G4QContent::GetSPDGCode() const
 #ifdef debug
       G4cout<<"***G4QC::SPDG: Exotic BaryonD, U="<<mU<<",D="<<mD<<",S="<<mS<<GetThis()<<G4endl; 
 #endif
-      return 0;
+      return GetZNSPDGCode();
 	}
     if (b<0) p=-p;
   }
@@ -1284,7 +1281,8 @@ G4int G4QContent::GetSPDGCode() const
     else if (mU>0)                               // Isotopic Mesons
 	{
       p=201;
-      if      (mU==2 && mD==0) p=221;
+      //if      (mU==2 && mD==0) p=221; // Performance problems
+      if      (mU==2 && mD==0) p=111;
       else if (mU==1 && mD==1) p+=10;
       else
 	  {
@@ -1397,14 +1395,3 @@ G4int G4QContent::NOfCombinations(const G4QContent& rhs) const
   
   return c;
 } 
-
-
-
-
-
-
-
-
-
-
-

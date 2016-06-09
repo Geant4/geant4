@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: A01EmCalorimeter.cc,v 1.3 2002/12/13 11:34:33 gunter Exp $
+// $Id: A01EmCalorimeter.cc,v 1.5 2003/08/20 16:32:50 duns Exp $
 // --------------------------------------------------------------
 //
 #include "A01EmCalorimeter.hh"
@@ -58,7 +58,7 @@ void A01EmCalorimeter::Initialize(G4HCofThisEvent*HCE)
   }
 }
 
-G4bool A01EmCalorimeter::ProcessHits(G4Step*aStep,G4TouchableHistory*ROhist)
+G4bool A01EmCalorimeter::ProcessHits(G4Step*aStep,G4TouchableHistory* /*ROhist*/)
 {
   G4double edep = aStep->GetTotalEnergyDeposit();
   if(edep==0.) return true;
@@ -86,6 +86,6 @@ G4bool A01EmCalorimeter::ProcessHits(G4Step*aStep,G4TouchableHistory*ROhist)
   return true;
 }
 
-void A01EmCalorimeter::EndOfEvent(G4HCofThisEvent*HCE)
+void A01EmCalorimeter::EndOfEvent(G4HCofThisEvent* /*HCE*/)
 {;}
 

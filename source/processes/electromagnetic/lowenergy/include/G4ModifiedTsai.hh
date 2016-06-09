@@ -64,10 +64,8 @@ public:
   ~G4ModifiedTsai();
 
   G4double PolarAngle(const G4double initial_energy,
-			      const G4double initial_momentum,
-			      const G4double final_energy,
-			      const G4double final_momentum,
-			      const G4int Z) const;
+		      const G4double final_energy,
+		      const G4int Z);
 
   void PrintGeneratorInformation() const;
 

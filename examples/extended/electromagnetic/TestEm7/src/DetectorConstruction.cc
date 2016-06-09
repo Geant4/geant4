@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: DetectorConstruction.cc,v 1.2 2003/05/15 11:39:58 vnivanch Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: DetectorConstruction.cc,v 1.4 2003/11/25 15:19:05 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -34,19 +34,13 @@
 #include "G4LogicalVolume.hh"
 #include "G4PVPlacement.hh"
 #include "G4UniformMagField.hh"
-#include "G4FieldManager.hh"
-#include "G4TransportationManager.hh"
-#include "G4RunManager.hh"
 
+#include "G4GeometryManager.hh"
 #include "G4PhysicalVolumeStore.hh"
 #include "G4LogicalVolumeStore.hh"
 #include "G4SolidStore.hh"
 
-#include "G4VisAttributes.hh"
-#include "G4Colour.hh"
-
 #include "G4UnitsTable.hh"
-#include "G4ios.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -66,10 +60,13 @@ DetectorConstruction::DetectorConstruction()
   tallyNumber   = 0;
   tallyPosition = new G4ThreeVector[MaxTally];
   lTally        = 0;
+  
+  DefineMaterials();
+  SetMaterial("Water");
+  SetTallyMaterial("Water");
 
   // create commands for interactive definition of the detector  
   detectorMessenger = new DetectorMessenger(this);
-  DefineMaterials();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -93,17 +90,9 @@ void DetectorConstruction::DefineMaterials()
 //
 G4double z, a;
 
-z = 1;
-a = 1.008*g/mole;
-G4Element* H  = new G4Element("Hydrogen", "H", z, a);
-
-z = 7;
-a = 14.01*g/mole;
-G4Element* N  = new G4Element("Nitrogen", "N", z, a);
-
-z = 8;
-a = 16.00*g/mole;
-G4Element* O  = new G4Element("Oxygen"  , "O", z, a);
+G4Element* H = new G4Element("Hydrogen", "H", z= 1, a= 1.008*g/mole);
+G4Element* N = new G4Element("Nitrogen", "N", z= 7, a= 14.01*g/mole);
+G4Element* O = new G4Element("Oxygen"  , "O", z= 8, a= 16.00*g/mole);
 
 //
 // define Materials.
@@ -112,35 +101,35 @@ G4double density, temperature, pressure;
 G4int    ncomponents, natoms;
 G4double fractionmass;
  
-density = 1.000*g/cm3;
-G4Material* H2O = new G4Material("Water", density, ncomponents=2);
+G4Material* H2O = 
+new G4Material("Water", density= 1.000*g/cm3, ncomponents=2);
 H2O->AddElement(H, natoms=2);
 H2O->AddElement(O, natoms=1);
 H2O->GetIonisation()->SetMeanExcitationEnergy(75.0*eV);
 
-density = 1.290*mg/cm3;
-G4Material* Air = new G4Material("Air"  , density, ncomponents=2);
+G4Material* Air = 
+new G4Material("Air"  , density= 1.290*mg/cm3, ncomponents=2);
 Air->AddElement(N, fractionmass=0.7);
 Air->AddElement(O, fractionmass=0.3);
 
 density     = universe_mean_density;    //from PhysicalConstants.h
 pressure    = 3.e-18*pascal;
 temperature = 2.73*kelvin;
-G4Material* vacuum = new G4Material("Galactic",z=1,a=1.008*g/mole,density,
-                                        kStateGas,temperature,pressure);
+G4Material* vacuum = 
+new G4Material("Galactic",z= 1,a= 1.008*g/mole,density,
+                          kStateGas,temperature,pressure);
 
  G4cout << *(G4Material::GetMaterialTable()) << G4endl;
 
  //default materials
  worldMaterial = vacuum;
- absorMaterial = H2O;
- tallyMaterial = H2O;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
   
 G4VPhysicalVolume* DetectorConstruction::ConstructVolumes()
 {
+  G4GeometryManager::GetInstance()->OpenGeometry();
   G4PhysicalVolumeStore::GetInstance()->Clean();
   G4LogicalVolumeStore::GetInstance()->Clean();
   G4SolidStore::GetInstance()->Clean();
@@ -205,16 +194,12 @@ G4VPhysicalVolume* DetectorConstruction::ConstructVolumes()
     tallyMass = tallySize.x()*tallySize.y()*tallySize.z()
                *(tallyMaterial->GetDensity());
   } 
-  //                                        
-  // Visualization attributes
-  //
-  G4VisAttributes* visAtt= new G4VisAttributes(G4Colour(1.0,1.0,1.0));
-  visAtt->SetVisibility(true);
-  
+
+  PrintParameters();
+    
   //
   //always return the World volume
   //  
-  PrintParameters();
   return pWorld;
 }
 
@@ -260,14 +245,13 @@ void DetectorConstruction::SetMaterial(G4String materialChoice)
 {
   // search the material by its name   
   G4Material* pttoMaterial = G4Material::GetMaterial(materialChoice);     
-  if (pttoMaterial) 
-    { 
-      absorMaterial = pttoMaterial;
-      if ( lAbsor ) lAbsor->SetMaterial(absorMaterial); 
-    }             
+  if (pttoMaterial) absorMaterial = pttoMaterial;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+#include "G4FieldManager.hh"
+#include "G4TransportationManager.hh"
 
 void DetectorConstruction::SetMagField(G4double fieldValue)
 {
@@ -302,10 +286,7 @@ void DetectorConstruction::SetTallyMaterial(G4String materialChoice)
 {
   // search the material by its name   
   G4Material* pttoMaterial = G4Material::GetMaterial(materialChoice);     
-  if (pttoMaterial)
-    { tallyMaterial = pttoMaterial;
-      if(lTally) lTally->SetMaterial(tallyMaterial); 
-    }             
+  if (pttoMaterial) tallyMaterial = pttoMaterial;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -319,7 +300,9 @@ void DetectorConstruction::SetTallyPosition(G4ThreeVector value)
 }  
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-  
+
+#include "G4RunManager.hh" 
+ 
 void DetectorConstruction::UpdateGeometry()
 {
 G4RunManager::GetRunManager()->DefineWorldVolume(ConstructVolumes());

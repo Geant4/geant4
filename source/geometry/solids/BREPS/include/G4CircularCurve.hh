@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4CircularCurve.hh,v 1.7 2001/07/11 09:59:32 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // ----------------------------------------------------------------------
 // Class G4CircularCurve

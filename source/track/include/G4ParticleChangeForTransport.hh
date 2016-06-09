@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleChangeForTransport.hh,v 1.11 2003/06/16 17:12:56 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4ParticleChangeForTransport.hh,v 1.12 2003/09/19 19:08:14 kurasige Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // 
 // ------------------------------------------------------------
@@ -46,7 +46,8 @@
 #include "G4ios.hh"
 #include "G4TouchableHandle.hh"
 #include "G4ParticleChange.hh"
-#include "G4MaterialCutsCouple.hh"
+
+class G4MaterialCutsCouple;
 
 
 class G4ParticleChangeForTransport: public G4ParticleChange

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisManager.hh,v 1.30 2003/06/16 17:14:14 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4VisManager.hh,v 1.31 2003/11/27 09:55:45 johna Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // 
 
@@ -316,8 +316,6 @@ protected:
 
   virtual void RegisterGraphicsSystems () = 0;
   void RegisterMessengers              ();   // Command messengers.
-  void PrintAllGraphicsSystems         () const;
-  void PrintInstalledGraphicsSystems   () const;
   void PrintAvailableGraphicsSystems   () const;
   void PrintInvalidPointers            () const;
   G4bool IsValidView ();

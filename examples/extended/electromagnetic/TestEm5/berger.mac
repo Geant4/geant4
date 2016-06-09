@@ -1,0 +1,34 @@
+# $Id: berger.mac,v 1.1 2003/08/11 10:03:08 maire Exp $
+#
+# macro file for TestEm5.cc    
+#
+# energy deposit by 1 MeV electrons in silicon counters.
+# M.J.Berger et al. NIM 69 (1969) page 181.
+#     		    
+/control/verbose 2
+/run/verbose 2
+#
+/testem/det/setAbsMat Silicon      
+/testem/det/setAbsThick 61 mum
+###/testem/det/setAbsThick 105 mum
+###/testem/det/setAbsThick 191 mum
+###/testem/det/setAbsThick 530 mum
+###/testem/det/setAbsThick   1 mm
+###/testem/det/setAbsThick   3 mm
+/testem/det/setAbsYZ      1 cm
+#
+/testem/phys/setGCut 2.13 mm   
+/testem/phys/setECut 7 mum
+/testem/phys/setPCut 7 mum
+#
+/run/initialize
+#
+/testem/gun/setDefault
+/gun/particle e- 
+/gun/energy 1 MeV
+#
+/testem/histo/setFileName berger.paw
+/testem/histo/setHisto 1  55 0.0 1.1 MeV	#energy deposit  
+#
+/testem/event/printModulo 100000 
+/run/beamOn 1000000

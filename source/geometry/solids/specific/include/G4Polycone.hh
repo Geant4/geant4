@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Polycone.hh,v 1.7.4.1 2003/06/16 17:18:39 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4Polycone.hh,v 1.12 2003/11/05 17:41:24 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // 
 // --------------------------------------------------------------------
@@ -61,10 +61,24 @@
 #include "G4VCSGfaceted.hh"
 #include "G4PolyconeSide.hh"
 
-
 class G4EnclosingCylinder;
 class G4ReduciblePolygon;
 class G4VCSGface;
+class G4PolyconeHistorical
+{
+  public:
+    G4PolyconeHistorical();
+    ~G4PolyconeHistorical();
+    G4PolyconeHistorical( const G4PolyconeHistorical& source );
+    G4PolyconeHistorical& operator=( const G4PolyconeHistorical& right );
+
+    G4double Start_angle;
+    G4double Opening_angle;
+    G4int   Num_z_planes;
+    G4double *Z_values;
+    G4double *Rmin;
+    G4double *Rmax;
+};
 
 class G4Polycone : public G4VCSGfaceted 
 {
@@ -107,6 +121,8 @@ class G4Polycone : public G4VCSGfaceted
   G4Polyhedron* CreatePolyhedron() const;
   G4NURBS*      CreateNURBS() const;
 
+  G4bool Reset();
+
   // Accessors
 
   inline G4double GetStartPhi()  const;
@@ -114,7 +130,9 @@ class G4Polycone : public G4VCSGfaceted
   inline G4bool IsOpen()         const;
   inline G4int  GetNumRZCorner() const;
   inline G4PolyconeSideRZ GetCorner(G4int index) const;
-  
+  inline G4PolyconeHistorical* GetOriginalParameters() const;
+  inline void SetOriginalParameters(G4PolyconeHistorical* pars);
+
   protected:  // without description
 
   // Here are our parameters
@@ -124,25 +142,7 @@ class G4Polycone : public G4VCSGfaceted
   G4bool   phiIsOpen;   // true if there is a phi segment
   G4int   numCorner;    // number RZ points
   G4PolyconeSideRZ *corners;  // corner r,z points
-  
-  // The following is temporary until graphics_reps is brought up
-  // to this design
-
-  class G4PolyconeHistorical
-  {
-    public:
-    G4PolyconeHistorical();
-    ~G4PolyconeHistorical();
-    G4PolyconeHistorical( const G4PolyconeHistorical &source );
-    G4double Start_angle;
-    G4double Opening_angle;
-    G4int   Num_z_planes;
-    G4double *Z_values;
-    G4double *Rmin;
-    G4double *Rmax;
-  };
-  
-  G4PolyconeHistorical  *original_parameters;
+  G4PolyconeHistorical  *original_parameters;  // original input parameters
 
   // Our quick test
 

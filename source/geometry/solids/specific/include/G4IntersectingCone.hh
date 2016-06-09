@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4IntersectingCone.hh,v 1.5 2002/10/28 11:47:50 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4IntersectingCone.hh,v 1.6 2003/11/03 18:39:54 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // 
 // --------------------------------------------------------------------
@@ -39,11 +39,10 @@
 // Author: 
 //   David C. Williams (davidw@scipp.ucsc.edu)
 // --------------------------------------------------------------------
-
 #ifndef G4IntersectingCone_hh
 #define G4IntersectingCone_hh
 
-#include "globals.hh"
+#include "G4Types.hh"
 #include "geomdefs.hh"
 #include "G4ThreeVector.hh"
 

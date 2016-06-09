@@ -60,9 +60,9 @@
       theV.clear();
     }
     private:
-    vector<G4String> theS;
-    vector<G4double> theD;
-    vector<G4LorentzVector> theV;
+    std::vector<G4String> theS;
+    std::vector<G4double> theD;
+    std::vector<G4LorentzVector> theV;
     
     G4String theName;
   };

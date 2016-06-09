@@ -22,7 +22,7 @@
 //
 //
 // $Id: ExN06SteppingVerbose.hh,v 1.1 2003/01/23 15:34:24 maire Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

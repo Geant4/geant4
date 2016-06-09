@@ -1,7 +1,12 @@
-$Id: History,v 1.52 2003/06/04 16:41:51 gcosmo Exp $
+$Id: History,v 1.53 2003/10/03 14:31:40 gcosmo Exp $
 
 G3toG4 Modification History (reverse chronological order, please !)
 --------------------------------------------------------------------
+
+g3tog4-V05-02-00 03-Oct-2003 G.Cosmo
+- GNUmakefile:
+  o replaced "digits+hits" with "digits_hits".
+- Coworks with "geometry-V05-02-00" and "digits_hits-V05-02-00".
 
 g3tog4-V05-01-00 04-Jun-2003 G.Cosmo
 - Fixes for inclusion of <strstream> in G3EleTable.cc, G3PartTable.cc

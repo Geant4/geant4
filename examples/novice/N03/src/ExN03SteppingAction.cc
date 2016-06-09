@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: ExN03SteppingAction.cc,v 1.7 2003/01/30 14:14:19 maire Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: ExN03SteppingAction.cc,v 1.8 2003/09/15 15:38:18 maire Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // 
 
@@ -31,11 +31,18 @@
 
 #include "ExN03SteppingAction.hh"
 
-#include "G4RunManager.hh"
+#include "ExN03DetectorConstruction.hh"
+#include "ExN03EventAction.hh"
+
+#include "G4Track.hh"
+
+////#include "G4RunManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-ExN03SteppingAction::ExN03SteppingAction()
+ExN03SteppingAction::ExN03SteppingAction(ExN03DetectorConstruction* det,
+                                         ExN03EventAction* evt)
+:detector(det), eventaction(evt)					 
 { }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -45,8 +52,23 @@ ExN03SteppingAction::~ExN03SteppingAction()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void ExN03SteppingAction::UserSteppingAction(const G4Step*)
+void ExN03SteppingAction::UserSteppingAction(const G4Step* aStep)
 {
+  const G4Track* track = aStep->GetTrack();
+  G4VPhysicalVolume* volume = track->GetVolume();
+  
+  // collect energy and track length step by step
+  G4double edep = aStep->GetTotalEnergyDeposit();
+  
+  G4double stepl = 0.;
+  if (track->GetDefinition()->GetPDGCharge() != 0.)
+    stepl = aStep->GetStepLength();
+      
+  if ((edep!=0.)) {
+    if (volume == detector->GetAbsorber()) eventaction->AddAbs(edep,stepl);
+    if (volume == detector->GetGap())      eventaction->AddGap(edep,stepl);
+  }
+       
  // save the random number seed of this event, under condition
  //// if(condition) G4RunManager::GetRunManager()->rndmSaveThisEvent();
 }

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4SteppingManager2.cc,v 1.12 2003/04/11 11:43:30 asaim Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4SteppingManager2.cc,v 1.13 2003/09/19 10:17:30 vnivanch Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 //
 //---------------------------------------------------------------
@@ -47,6 +47,7 @@
 #include "G4TransportationManager.hh"
 #include "G4UserLimits.hh"
 #include "G4SteppingManager.hh"
+#include "G4LossTableManager.hh"
 
 /////////////////////////////////////////////////
 void G4SteppingManager::GetProcessNumber()
@@ -523,7 +524,7 @@ void G4SteppingManager::ApplyProductionCut(G4Track* aSecondary)
     if(aSecondary->GetDynamicParticle()->GetCharge() !=0.0)
     {
       G4double currentRange
-        = G4EnergyLossTables::GetRange(aSecondary->GetDefinition(),
+        = G4LossTableManager::Instance()->GetRange(aSecondary->GetDefinition(),
                  aSecondary->GetKineticEnergy(),
                  fPreStepPoint->GetMaterialCutsCouple());
       tBelowCutEnergyAndSafety = (currentRange < CalculateSafety() );

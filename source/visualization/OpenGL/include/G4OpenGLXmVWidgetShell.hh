@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4OpenGLXmVWidgetShell.hh,v 1.5 2001/07/11 10:08:52 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // 
 //Base class for all Motif window widgets (shells)

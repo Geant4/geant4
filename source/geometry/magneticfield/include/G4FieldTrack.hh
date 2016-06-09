@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4FieldTrack.hh,v 1.9 2003/06/16 16:51:08 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4FieldTrack.hh,v 1.10 2003/10/31 14:35:51 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 //
 // class G4FieldTrack
@@ -40,6 +40,7 @@
 // - Modified:      Oct 24, 1996  JA: Added dist_on_curve, deleted constructor
 //                  Nov  5, 1998  JA: Added energy, momentum, TOF, spin &
 //                                    several constructor, access, set methods
+// -------------------------------------------------------------------
 
 #ifndef G4FieldTrack_HH
 #define G4FieldTrack_HH
@@ -51,14 +52,14 @@ class  G4FieldTrack
    public:  // with description
 
      G4FieldTrack( const G4ThreeVector& pPosition, 
-		   const G4ThreeVector& pMomentumDirection,
-		         G4double       curve_length,
-		         G4double       kineticEnergy,
-     		   const G4double       restMass_c2,
-		         G4double       velocity,
-		         G4double       LaboratoryTimeOfFlight=0.0,
-		         G4double       ProperTimeOfFlight=0.0, 
-		   const G4ThreeVector* pSpin=0);
+                   const G4ThreeVector& pMomentumDirection,
+                         G4double       curve_length,
+                         G4double       kineticEnergy,
+                   const G4double       restMass_c2,
+                         G4double       velocity,
+                         G4double       LaboratoryTimeOfFlight=0.0,
+                         G4double       ProperTimeOfFlight=0.0, 
+                   const G4ThreeVector* pSpin=0);
 
      G4FieldTrack( const G4FieldTrack&   pFieldTrack );
 
@@ -100,8 +101,8 @@ class  G4FieldTrack
    public: // without description
 
      inline G4FieldTrack& SetCurvePnt(const G4ThreeVector& pPosition, 
-				      const G4ThreeVector& pMomentum,
-				            G4double       s_curve );
+                                      const G4ThreeVector& pMomentum,
+                                            G4double       s_curve );
        // Old multi-set method
 
      G4double       GetKineticEnergy() const;  // Check it --> FIXME

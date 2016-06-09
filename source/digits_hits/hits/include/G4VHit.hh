@@ -1,0 +1,76 @@
+//
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
+//
+//
+// $Id: G4VHit.hh,v 1.1 2003/10/03 10:17:22 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-00 $
+//
+
+#ifndef G4VHit_h
+#define G4VHit_h 1
+
+#include "globals.hh"
+#include <vector>
+#include <map>
+
+class G4AttDef;
+class G4AttValue;
+
+// class description:
+//
+//  This is the base class of hit object. The user should derive this
+// base class to make his/her own hit class. Two virtual method Draw()
+// and Print() can be implemented if the user wants these functionarities.
+//  If a concrete hit class is used as a transient class, G4Allocator
+// must be used.
+
+class G4VHit 
+{
+
+  public:
+      G4VHit();
+      virtual ~G4VHit();
+
+      G4int operator==(const G4VHit &right) const;
+
+      virtual void Draw();
+      virtual void Print();
+
+      virtual const std::map<G4String,G4AttDef>* GetAttDefs() const
+      { return 0; }
+      // If implemented by a derived class, returns a pointer to a map
+      // of attribute definitions for the attribute values below.  The
+      // user must test the validity of this pointer.  See
+      // G4Trajectory for an example of a concrete implementation of
+      // this method.
+      virtual const std::vector<G4AttValue>* CreateAttValues() const
+      { return 0; }
+      // If implemented by a derived class, returns a pointer to a
+      // list of attribute values suitable, e.g., for picking.  Each
+      // must refer to an attribute definition in the above map; its
+      // name is the key.  The user must test the validity of this
+      // pointer and delete the list after use.  See G4Trajectory for
+      // an example of a concrete implementation of this method.
+
+};
+
+#endif

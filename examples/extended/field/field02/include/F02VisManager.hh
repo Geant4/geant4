@@ -22,7 +22,7 @@
 //
 //
 // $Id: F02VisManager.hh,v 1.2 2001/07/11 09:58:03 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // 
 

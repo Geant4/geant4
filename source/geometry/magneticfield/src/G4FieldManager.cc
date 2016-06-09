@@ -21,19 +21,15 @@
 // ********************************************************************
 //
 //
-// $Id: G4FieldManager.cc,v 1.8 2003/06/20 23:02:45 japost Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4FieldManager.cc,v 1.13 2003/11/08 04:08:13 japost Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
-#include "G4FieldManager.hh"
+// -------------------------------------------------------------------
 
-G4FieldManager::G4FieldManager()
-   : fDetectorField(0), fChordFinder(0), fAllocatedChordFinder(false),
-     fFieldChangesEnergy(false), fDefault_Delta_One_Step_Value(0.25*mm),
-     fDefault_Delta_Intersection_Val(0.1*mm)
-{ 
-   fDelta_One_Step_Value= fDefault_Delta_One_Step_Value;
-   fDelta_Intersection_Val= fDefault_Delta_Intersection_Val;
-}
+#include "G4FieldManager.hh"
+#include "G4Field.hh"
+#include "G4MagneticField.hh"
+#include "G4ChordFinder.hh"
 
 G4FieldManager::G4FieldManager(G4Field       *detectorField, 
 			       G4ChordFinder *pChordFinder, 
@@ -42,18 +38,30 @@ G4FieldManager::G4FieldManager(G4Field       *detectorField,
    : fDetectorField(detectorField), 
      fChordFinder(pChordFinder), 
      fAllocatedChordFinder(false),
-     fFieldChangesEnergy(fieldChangesEnergy), 
-     fDefault_Delta_One_Step_Value(0.25*mm),
-     fDefault_Delta_Intersection_Val(0.1*mm)
+     fDefault_Delta_One_Step_Value(0.01*mm), 
+     fDefault_Delta_Intersection_Val(0.001*mm),
+     fEpsilonMinDefault(5.0e-5), 
+     fEpsilonMaxDefault(0.001),
+     fEpsilonMin( fEpsilonMinDefault ),
+     fEpsilonMax( fEpsilonMaxDefault)
 { 
    fDelta_One_Step_Value= fDefault_Delta_One_Step_Value;
    fDelta_Intersection_Val= fDefault_Delta_Intersection_Val;
+   if ( detectorField )
+     fFieldChangesEnergy= detectorField->DoesFieldChangeEnergy();
+   else
+     fFieldChangesEnergy= fieldChangesEnergy;
 }
 
 G4FieldManager::G4FieldManager(G4MagneticField *detectorField)
    : fDetectorField(detectorField), fAllocatedChordFinder(true),
-     fFieldChangesEnergy(false), fDefault_Delta_One_Step_Value(0.25*mm),
-     fDefault_Delta_Intersection_Val(0.1*mm)
+     fFieldChangesEnergy(false), 
+     fDefault_Delta_One_Step_Value(0.01*mm),
+     fDefault_Delta_Intersection_Val(0.001*mm),
+     fEpsilonMinDefault(5.0e-5), 
+     fEpsilonMaxDefault(0.001),
+     fEpsilonMin( fEpsilonMinDefault ),
+     fEpsilonMax( fEpsilonMaxDefault)
 {
    fChordFinder= new G4ChordFinder( detectorField );
    fDelta_One_Step_Value= fDefault_Delta_One_Step_Value;
@@ -80,5 +88,17 @@ G4FieldManager::CreateChordFinder(G4MagneticField *detectorMagField)
       delete fChordFinder;
    fChordFinder= new G4ChordFinder( detectorMagField );
    fAllocatedChordFinder= true;
+}
+
+G4bool G4FieldManager::SetDetectorField(G4Field *pDetectorField)
+{
+   fDetectorField= pDetectorField;
+
+   if ( pDetectorField )
+     fFieldChangesEnergy= pDetectorField->DoesFieldChangeEnergy();
+   else
+     fFieldChangesEnergy= false;   //  No field 
+
+   return false;
 }
 

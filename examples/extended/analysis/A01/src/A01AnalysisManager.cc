@@ -40,7 +40,7 @@
 //
 // Nov 4 2002 -- Upgrade to AIDA 3.0
 // **********************************************************************
-
+#ifdef G4ANALYSIS_USE
 
 #include <fstream>
 
@@ -53,7 +53,6 @@
 #include "G4Trajectory.hh"
 
 #include <AIDA/AIDA.h>
-
 
 #include "A01AnalysisManager.hh"
 
@@ -119,13 +118,5 @@ void A01AnalysisManager::dispose()
   }
 }
 
-
-
-
-
-
-
-
-
-
+#endif // G4ANALYSIS_USE
 

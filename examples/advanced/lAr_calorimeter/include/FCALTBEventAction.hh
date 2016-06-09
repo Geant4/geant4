@@ -19,19 +19,14 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
-// By copying, distributing or modifying the Program (or any work
-// based on the Program) you indicate your acceptance of this statement,
-// and all its terms.
 //
-// $Id: FCALTBEventAction.hh,v 1.7 2003/02/14 15:54:43 pmendez Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: FCALTBEventAction.hh,v 1.9 2003/12/09 15:30:18 gunter Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-#ifdef G4ANALYSIS_USE
 
 #ifndef FCALTBEventAction_h
 #define FCALTBEventAction_h 1
@@ -71,7 +66,5 @@ class FCALTBEventAction : public G4UserEventAction
   private:
   G4double NTracksOutOfWorld, NSecondaries, Init1, Init2, Init3;
   };
-
-#endif
 
 #endif    

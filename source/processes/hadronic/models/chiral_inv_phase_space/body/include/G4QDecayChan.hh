@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4QDecayChan.hh,v 1.11 2003/06/16 17:04:04 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4QDecayChan.hh,v 1.19 2003/12/09 15:38:01 gunter Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 //      ---------------- G4QDecayChan ----------------
 //             by Mikhail Kossov, Sept 1999.
@@ -41,26 +41,26 @@ class G4QDecayChan
 public:
   // Constructors
   G4QDecayChan();                                                    // Default Constructor
-  G4QDecayChan(G4QPDGCodeVector secHadr, G4double probLimit = 1.);   // General Constructor
-  G4QDecayChan(G4double pLev, G4int PDG1, G4int PDG2, G4int PDG3=0); // Detailed Constructor
-  G4QDecayChan(const G4QDecayChan& right);                           // Copy Constructor by value
-  G4QDecayChan(G4QDecayChan* right);                                 // Copy Constructor by pointer
+  //G4QDecayChan(G4QPDGCodeVector secHadr, G4double probLimit = 1.); // General Constructor
+  G4QDecayChan(G4double pLev, G4int PDG1, G4int PDG2, G4int PDG3=0); // DetailedConstructor
+  G4QDecayChan(const G4QDecayChan& right);                       // Copy ByValueConstructor
+  G4QDecayChan(G4QDecayChan* right);                           // Copy ByPointerConstructor
 
-  ~G4QDecayChan();                                                   // Destructor
+  ~G4QDecayChan();                                                   // Public Destructor
 
   // Operators
   const G4QDecayChan& operator=(const G4QDecayChan& right);
-  G4int               operator==(const G4QDecayChan& rhs) const;
-  G4int               operator!=(const G4QDecayChan& rhs) const;
+  G4bool               operator==(const G4QDecayChan& rhs) const;
+  G4bool               operator!=(const G4QDecayChan& rhs) const;
 
   // Selectors
-  G4double         GetDecayChanLimit() const;    // Get a Decay Channel Probability Limit
-  G4double         GetMinMass() const;           // Get a Minimum Mass for the Decay Channel
-  G4QPDGCodeVector GetVecOfSecHadrons();         // Get a Vector of secondary PDG-particles
+  G4double         GetDecayChanLimit() const;   // Get a Decay Channel Probability Limit
+  G4double         GetMinMass() const;          // Get a Minimum Mass for the Decay Channel
+  G4QPDGCodeVector GetVecOfSecHadrons();        // Get a Vector of secondary PDG-particles
 
   // Modifiers
   void SetDecayChanLimit(G4double newDecChanLim);// Set a Decay Channel Probability Limit
-  void SetMinMass(G4double newMinMass);          // Set a Minimum Mass for the Decay Channel
+  void SetMinMass(G4double newMinMass);          // Set a Minimum Mass for the DecayChannel
   void SetVecOfSecHadrons(G4QPDGCodeVector hadV);// Set a Vector of secondary PDG-particles
 
   //private:
@@ -77,8 +77,8 @@ private:
 std::ostream&   operator<<(std::ostream& lhs, G4QDecayChan& rhs);
 //----------------------------------------------------------------------------------------
 
-inline G4int G4QDecayChan::operator==(const G4QDecayChan& rhs) const {return this==&rhs;}
-inline G4int G4QDecayChan::operator!=(const G4QDecayChan& rhs) const {return this!=&rhs;}
+inline G4bool G4QDecayChan::operator==(const G4QDecayChan& rhs) const {return this==&rhs;}
+inline G4bool G4QDecayChan::operator!=(const G4QDecayChan& rhs) const {return this!=&rhs;}
  
 inline G4double G4QDecayChan::GetDecayChanLimit() const    {return aDecayChanLimit;}
 inline G4double G4QDecayChan::GetMinMass() const           {return theMinMass;}

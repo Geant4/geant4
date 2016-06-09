@@ -69,9 +69,9 @@ G4VParticleChange* DMXSpecialCuts::PostStepDoIt(
 }
 
 G4double DMXSpecialCuts::PostStepGetPhysicalInteractionLength(
-                             const G4Track& track,
-                             G4double   previousStepSize,
-                             G4ForceCondition* condition
+                             const G4Track&,
+                             G4double,
+                             G4ForceCondition*
                             )
 {
   return DBL_MAX;

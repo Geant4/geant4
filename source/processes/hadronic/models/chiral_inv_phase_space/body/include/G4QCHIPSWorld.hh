@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4QCHIPSWorld.hh,v 1.12 2003/06/16 17:03:59 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4QCHIPSWorld.hh,v 1.20 2003/12/09 15:37:56 gunter Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 //      ---------------- G4QCHIPSWorld ----------------
 //             by Mikhail Kossov, Sept 1999.
@@ -38,45 +38,55 @@
 
 class G4QCHIPSWorld
 {
+  // Constructor/Destructor
+protected:
+  G4QCHIPSWorld();             // the Default Construction is protected - Singelton
 public:
-  // Constructors
-  G4QCHIPSWorld(G4int nOfParts = 0);                // Construction with N particles
-  G4QCHIPSWorld(const G4QCHIPSWorld& right);        // Copy Constructor by value
-  G4QCHIPSWorld(G4QCHIPSWorld* right);              // Copy Constructor by pointer
+  ~G4QCHIPSWorld();            // Destructor is public because of Windows compilation error
 
-  ~G4QCHIPSWorld();                                 // Destructor
-
-  // Overloaded Operators
-  const G4QCHIPSWorld& operator=(const G4QCHIPSWorld& right);
-
-  // Selectors
-  G4QParticle* GetQParticle(G4int PDG)       const; // Get pointer to particle in CHIPS World
-  G4QParticle* GetQParticle(G4QPDGCode QPDG) const; // Get pointer to particle in CHIPS World
-  G4QParticle* GetQParticle(G4QPDGCode* pQP) const; // Get pointer to particle in CHIPS World
-  G4int        GetQPEntries()                const; // Get a#of particles in CHIPS World
-
+  // Member Functions
 private:
-  G4QParticleVector* InitCHIPSWorld(G4int nOfParts);// nOfParts<0 kills the CHIPS World @@??
+  G4QCHIPSWorld(const G4QCHIPSWorld& right);       // copy QCHIPSWorld by value
+  G4QCHIPSWorld(G4QCHIPSWorld* right);             // copy QCHIPSWorld by pointer
+  const G4QCHIPSWorld& operator=(const G4QCHIPSWorld& right);//copy QCHIPSWorld by Operator
+  G4bool operator==(const G4QCHIPSWorld &right) const;
+  G4bool operator!=(const G4QCHIPSWorld &right) const;
+
+public:
+  // Pointers to Particles of the Singeltone of the CHIPS World
+  static G4QCHIPSWorld* Get();
+  G4QParticleVector* GetParticles(G4int nOfParts=0);
+  // Selectors
+  G4QParticle* GetQParticle(G4int PDG)       const;// Get pointer to particle in CHIPSWorld
+  G4QParticle* GetQParticle(G4QPDGCode QPDG) const;// Get pointer to particle in CHIPSWorld
+  G4QParticle* GetQParticle(G4QPDGCode* pQP) const;// Get pointer to particle in CHIPSWorld
+  G4int        GetQPEntries()                const;// Get a#of particles in CHIPS World
 
 // Body
 private:
-  G4QParticleVector* qWorld;                        // Pointer to the CHIPS World (C++ Hip)
+  //static G4QCHIPSWorld* aWorld;             // Pointer to the CHIPS World
+  static G4QParticleVector & GetQWorld();
 };
 
  
 inline G4QParticle* G4QCHIPSWorld::GetQParticle(G4int       PDG) const
 {
-  return (*qWorld)[G4QPDGCode(PDG).GetQCode()];
+  G4int qCode=G4QPDGCode(PDG).GetQCode();
+  //G4cout<<"G4QCHIPSWorld::GetQPart:Q="<<qCode<<",Max="<<qWorld.size()<<G4endl;
+  return GetQWorld()[qCode];
 }
+
 inline G4QParticle* G4QCHIPSWorld::GetQParticle(G4QPDGCode QPDG) const
 {
-  return (*qWorld)[QPDG.GetQCode()];
+  return GetQWorld()[QPDG.GetQCode()];
 }
+
 inline G4QParticle* G4QCHIPSWorld::GetQParticle(G4QPDGCode* pQP) const
 {
-  return (*qWorld)[pQP->GetQCode()];
+  return GetQWorld()[pQP->GetQCode()];
 }
-inline G4int        G4QCHIPSWorld::GetQPEntries() const {return (*qWorld).size();}
+
+inline G4int        G4QCHIPSWorld::GetQPEntries() const {return GetQWorld().size();}
 
 #endif
 

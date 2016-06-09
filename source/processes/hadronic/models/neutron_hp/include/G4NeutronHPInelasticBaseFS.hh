@@ -21,15 +21,15 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPInelasticBaseFS.hh,v 1.8 2003/06/16 17:10:46 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4NeutronHPInelasticBaseFS.hh,v 1.9 2003/07/01 15:58:36 hpw Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 #ifndef G4NeutronHPInelasticBaseFS_h
 #define G4NeutronHPInelasticBaseFS_h 1
 
 #include "globals.hh"
-#include "G4Track.hh"
-#include "G4ParticleChange.hh"
+#include "G4HadProjectile.hh"
+#include "G4HadFinalState.hh"
 #include "G4NeutronHPFinalState.hh"
 #include "G4NeutronHPAngular.hh"
 #include "G4NeutronHPEnergyDistribution.hh"
@@ -61,9 +61,9 @@ class G4NeutronHPInelasticBaseFS : public G4NeutronHPFinalState
   }
   
   void Init (G4double A, G4double Z, G4String & dirName, G4String & bit);
-  void BaseApply(const G4Track & theTrack, G4ParticleDefinition ** theDefs, G4int nDef);
+  void BaseApply(const G4HadProjectile & theTrack, G4ParticleDefinition ** theDefs, G4int nDef);
   void InitGammas(G4double AR, G4double ZR);
-  virtual G4ParticleChange * ApplyYourself(const G4Track & theTrack) = 0;
+  virtual G4HadFinalState * ApplyYourself(const G4HadProjectile & theTrack) = 0;
   virtual G4NeutronHPFinalState * New() = 0;
   
   virtual G4double GetXsec(G4double anEnergy)

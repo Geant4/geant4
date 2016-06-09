@@ -20,6 +20,9 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
+// $Id: G4BohrFluctuations.cc,v 1.7 2003/10/24 14:00:25 vnivanch Exp $
+// GEANT4 tag $Name: geant4-06-00 $
+//
 // -------------------------------------------------------------------
 //
 // GEANT4 Class file
@@ -34,6 +37,7 @@
 // Modifications:
 //
 // 23-05-03  Add control on parthalogical cases (V.Ivanchenko)
+// 16-10-03 Changed interface to Initialisation (V.Ivanchenko)
 //
 // Class Description: Sampling of Gaussion fluctuations
 //
@@ -66,7 +70,7 @@ G4BohrFluctuations::~G4BohrFluctuations()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4BohrFluctuations::Initialise(const G4ParticleDefinition* part)
+void G4BohrFluctuations::InitialiseMe(const G4ParticleDefinition* part)
 {
   particle       = part;
   particleMass   = part->GetPDGMass();
@@ -77,10 +81,10 @@ void G4BohrFluctuations::Initialise(const G4ParticleDefinition* part)
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4double G4BohrFluctuations::SampleFluctuations(const G4Material* material,
-                                               const G4DynamicParticle* dp,
-                                                     G4double& tmax,
-                                                     G4double& length,
-                                                     G4double& meanLoss)
+                                                const G4DynamicParticle* dp,
+                                                      G4double& tmax,
+                                                      G4double& length,
+                                                      G4double& meanLoss)
 {
   if(meanLoss <= minLoss) return meanLoss;
   G4double siga = Dispersion(material,dp,tmax,length);

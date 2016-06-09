@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4Visible.cc,v 1.5 2003/06/16 16:55:29 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // 
 // John Allison  30th October 1996

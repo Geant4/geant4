@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4LFission.cc,v 1.9 2002/12/12 19:18:08 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4LFission.cc,v 1.10 2003/07/01 15:49:05 hpw Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 //
 // G4 Model: Low Energy Fission
@@ -46,9 +46,7 @@
 G4LFission::G4LFission() : 
    G4HadronicInteraction()
 {
-   init();
-   theParticleChange.SetNumberOfSecondaries(1000);
-   
+   init();   
    SetMinEnergy( 0.0*GeV );
    SetMaxEnergy( DBL_MAX );
    
@@ -80,22 +78,21 @@ G4LFission::init()
 }
 
 
-G4VParticleChange*
-G4LFission::ApplyYourself(const G4Track & aTrack,G4Nucleus & targetNucleus)
+G4HadFinalState*
+G4LFission::ApplyYourself(const G4HadProjectile & aTrack,G4Nucleus & targetNucleus)
 {
-   theParticleChange.Initialize(aTrack);
-
-   const G4DynamicParticle* aParticle = aTrack.GetDynamicParticle();
+   theParticleChange.Clear();
+   const G4HadProjectile* aParticle = &aTrack;
 
    G4double N = targetNucleus.GetN();
    G4double Z = targetNucleus.GetZ();
    //   theParticleChange.SetKillSignal(1);
-   theParticleChange.SetStatusChange(fStopAndKill);
+   theParticleChange.SetStatusChange(stopAndKill);
 
    G4double P = aParticle->GetTotalMomentum()/MeV;
-   G4double Px = P*(aParticle->GetMomentumDirection().x());
-   G4double Py = P*(aParticle->GetMomentumDirection().y());
-   G4double Pz = P*(aParticle->GetMomentumDirection().z());
+   G4double Px = aParticle->Get4Momentum().vect().x();
+   G4double Py = aParticle->Get4Momentum().vect().y();
+   G4double Pz = aParticle->Get4Momentum().vect().z();
    G4double E = aParticle->GetTotalEnergy()/MeV;
    G4double E0 = aParticle->GetDefinition()->GetPDGMass()/MeV;
    G4double Q = aParticle->GetDefinition()->GetPDGCharge();
@@ -189,7 +186,7 @@ G4LFission::ApplyYourself(const G4Track & aTrack,G4Nucleus & targetNucleus)
 
 // Distribute momentum vectors and do Lorentz transformation
 
-   G4Track* theSecondary;
+   G4HadSecondary* theSecondary;
 
    for (i = 1; i <= nn + ng; i++) {
       G4double ran1 = G4UniformRand();
@@ -200,14 +197,14 @@ G4LFission::ApplyYourself(const G4Track & aTrack,G4Nucleus & targetNucleus)
       //      G4cout << ran1 << " " << ran2 << G4endl;
       //      G4cout << cost << " " << sint << " " << phi << G4endl;
       theSecondary = theParticleChange.GetSecondary(i - 1);
-      G4double pp = theSecondary->GetDynamicParticle()->GetTotalMomentum()/MeV;
+      G4double pp = theSecondary->GetParticle()->GetTotalMomentum()/MeV;
       G4double px = pp*sint*sin(phi);
       G4double py = pp*sint*cos(phi);
       G4double pz = pp*cost;
       //      G4cout << pp << G4endl;
       //      G4cout << px << " " << py << " " << pz << G4endl;
-      G4double e = theSecondary->GetTotalEnergy()/MeV;
-      G4double e0 = theSecondary->GetDefinition()->GetPDGMass()/MeV;
+      G4double e = theSecondary->GetParticle()->GetTotalEnergy()/MeV;
+      G4double e0 = theSecondary->GetParticle()->GetDefinition()->GetPDGMass()/MeV;
 
       G4double a = px*Px + py*Py + pz*Pz;
       a = (a/(E + E0) - e)/E0;
@@ -218,11 +215,11 @@ G4LFission::ApplyYourself(const G4Track & aTrack,G4Nucleus & targetNucleus)
       G4double p2 = px*px + py*py + pz*pz;
       pp = sqrt(p2);
       e = sqrt(e0*e0 + p2);
-      G4double ekin = e - theSecondary->GetDefinition()->GetPDGMass()/MeV;
-      theSecondary->SetMomentumDirection(G4ParticleMomentum(px/pp,
+      G4double ekin = e - theSecondary->GetParticle()->GetDefinition()->GetPDGMass()/MeV;
+      theSecondary->GetParticle()->SetMomentumDirection(G4ParticleMomentum(px/pp,
                                                             py/pp,
                                                             pz/pp));
-      theSecondary->SetKineticEnergy(ekin*MeV);
+      theSecondary->GetParticle()->SetKineticEnergy(ekin*MeV);
    }
    
    return &theParticleChange;

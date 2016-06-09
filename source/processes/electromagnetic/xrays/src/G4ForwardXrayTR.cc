@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4ForwardXrayTR.cc,v 1.10 2003/06/03 08:11:01 vnivanch Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // G4ForwardXrayTR class -- implementation file
 

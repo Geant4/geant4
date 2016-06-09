@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.4 2002/10/28 10:06:00 dressel Exp $
+# $Id: GNUmakefile,v 1.5 2003/10/03 14:12:14 gcosmo Exp $
 # ------------------------------------------------------------
 # GNUmakefile for events library.  Makoto Asai, 5/9/95.
 # ------------------------------------------------------------
@@ -30,10 +30,11 @@ CPPFLAGS += \
             -I$(G4BASE)/materials/include \
             -I$(G4BASE)/geometry/management/include \
             -I$(G4BASE)/geometry/volumes/include \
+            -I$(G4BASE)/geometry/navigation/include \
 	    -I$(G4BASE)/geometry/biasing/include \
-	    -I$(G4BASE)/digits+hits/detector/include \
-	    -I$(G4BASE)/digits+hits/hits/include \
-	    -I$(G4BASE)/digits+hits/digits/include \
+	    -I$(G4BASE)/digits_hits/detector/include \
+	    -I$(G4BASE)/digits_hits/hits/include \
+	    -I$(G4BASE)/digits_hits/digits/include \
 	    -I$(G4BASE)/intercoms/include
 
 ifdef G4_STORE_TRAJECTORY

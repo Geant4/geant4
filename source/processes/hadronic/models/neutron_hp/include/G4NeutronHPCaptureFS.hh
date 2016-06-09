@@ -21,15 +21,15 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPCaptureFS.hh,v 1.8 2002/12/12 19:18:10 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4NeutronHPCaptureFS.hh,v 1.9 2003/07/01 15:58:35 hpw Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 #ifndef G4NeutronHPCaptureFS_h
 #define G4NeutronHPCaptureFS_h 1
 
 #include "globals.hh"
-#include "G4Track.hh"
-#include "G4ParticleChange.hh"
+#include "G4HadProjectile.hh"
+#include "G4HadFinalState.hh"
 #include "G4NeutronHPFinalState.hh"
 #include "G4ReactionProductVector.hh"
 #include "G4NeutronHPNames.hh"
@@ -50,7 +50,7 @@ class G4NeutronHPCaptureFS : public G4NeutronHPFinalState
   }
   
   void Init (G4double A, G4double Z, G4String & dirName, G4String & aFSType);
-  G4ParticleChange * ApplyYourself(const G4Track & theTrack);
+  G4HadFinalState * ApplyYourself(const G4HadProjectile & theTrack);
   G4NeutronHPFinalState * New() 
   {
    G4NeutronHPCaptureFS * theNew = new G4NeutronHPCaptureFS;

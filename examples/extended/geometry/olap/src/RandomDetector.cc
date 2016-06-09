@@ -22,7 +22,7 @@
 //
 //
 // $Id: RandomDetector.cc,v 1.2 2003/02/19 07:59:09 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // 
 // --------------------------------------------------------------

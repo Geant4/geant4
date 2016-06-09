@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: TiaraIsotropicDirections.cc,v 1.3 2003/06/25 09:13:06 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: TiaraIsotropicDirections.cc,v 1.4 2003/12/04 11:08:48 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 
 #include "TiaraIsotropicDirections.hh"
@@ -40,9 +40,11 @@ TiaraIsotropicDirections::~TiaraIsotropicDirections()
 {}
 
 TiaraIsotropicDirections::
-TiaraIsotropicDirections(const TiaraIsotropicDirections& rhs){
+TiaraIsotropicDirections(const TiaraIsotropicDirections& rhs)
+  : TiaraVDirectionGenerator()
+{
   *this = rhs;
-};
+}
 
 G4double TiaraIsotropicDirections::
 MinimumCosine(G4double colWidth,

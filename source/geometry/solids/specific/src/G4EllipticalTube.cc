@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4EllipticalTube.cc,v 1.14 2003/06/16 16:53:57 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4EllipticalTube.cc,v 1.15 2003/10/28 17:15:56 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // 
 // --------------------------------------------------------------------
@@ -570,7 +570,8 @@ G4double G4EllipticalTube::DistanceToOut( const G4ThreeVector& p,
       G4cout << "v.z() = "   << v.z() << G4endl << G4endl;
       G4cout << "Proposed distance :" << G4endl << G4endl;
       G4cout << "snxt = "    << sBest/mm << " mm" << G4endl << G4endl;
-      G4Exception( "G4EllipticalTube::DistanceToOut() - Point p is outside" );
+      G4Exception( "G4EllipticalTube::DistanceToOut(p,v,...)",
+                   "Notification", JustWarning, "Point p is outside !?" );
     }
     if (calcNorm) *norm = *nBest;
     return sBest;

@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4NeutronHPNBodyPhaseSpace.hh,v 1.9 2003/06/16 17:10:56 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 #ifndef G4NeutronHPNBodyPhaseSpace_h
 #define G4NeutronHPNBodyPhaseSpace_h 1

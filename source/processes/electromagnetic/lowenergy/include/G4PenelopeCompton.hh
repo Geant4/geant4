@@ -19,9 +19,9 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
-
-// $Id: G4PenelopeCompton.hh,v 1.7 2003/06/16 16:59:46 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+//
+// $Id: G4PenelopeCompton.hh,v 1.8 2003/12/09 15:36:38 gunter Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // Author: Luciano Pandola
 //

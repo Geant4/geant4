@@ -21,8 +21,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4PiMinusAbsorptionAtRest.cc,v 1.12 2003/05/30 10:50:53 hpw Exp $
-// GEANT4 tag $Name: geant4-05-02 $
 //
 // -------------------------------------------------------------------
 //      GEANT 4 class file --- Copyright CERN 1998
@@ -134,7 +132,11 @@ G4VParticleChange* G4PiMinusAbsorptionAtRest::AtRestDoIt(const G4Track& track, c
 
   G4double pionEnergy = stoppedHadron->GetTotalEnergy();
   G4double excitation = pionEnergy - stopAbsorption.Energy();
-  if (excitation < 0.) G4Exception("G4PiMinusAbsorptionAtRest::AtRestDoIt -- excitation energy < 0");
+  if (excitation < 0.) 
+  {
+    G4Exception("G4PiMinusAbsorptionAtRest", "007", FatalException,
+                "AtRestDoIt -- excitation energy < 0");
+  }
   if (verboseLevel>0) { G4cout << " excitation " << excitation << G4endl; }
 
   G4StopDeexcitationAlgorithm* nucleusAlgorithm = LoadNucleusAlgorithm();

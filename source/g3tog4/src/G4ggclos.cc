@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4ggclos.cc,v 1.7 2001/07/11 09:59:00 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// GEANT4 tag $Name: geant4-06-00 $
 
 #include "G3toG4.hh"
 #include "G3VolTable.hh"

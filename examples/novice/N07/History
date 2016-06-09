@@ -1,4 +1,4 @@
-$Id: History,v 1.5 2003/05/28 11:28:19 gcosmo Exp $
+$Id: History,v 1.8 2003/12/03 14:51:56 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,13 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+
+13-11-03 John Allison (exampleN07-V05-02-01)
+- Removed OPACS from Vis Manager.
+
+24-10-03 mma (exampleN07-V05-02-00)
+- PhysicsList: AddProcess(Bremsstrahlung,-1,3,3) ..etc..
 
 May 28, 2003  G.Cosmo (exampleN07-V05-01-01)
 - Get rid of more pedantic warnings ...

@@ -22,8 +22,8 @@
 //
 // 
 // -------------------------------------------------------------------
-// $Id: G4PenelopeBremsstrahlung.hh,v 1.6 2003/06/16 16:59:45 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4PenelopeBremsstrahlung.hh,v 1.7 2003/11/11 17:18:30 pandola Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // Author: L.Pandola
 //
@@ -33,6 +33,7 @@
 // 18 Mar 2003  L. Pandola       positrons added
 // 23 May 2003  L. Pandola       ebins added as private member
 // 25 May 2003  MGP              ebins removed from data members
+// 11 Nov 2003  L. Pandola       Code review: use std::map for angular data
 // Class description:
 // Penelope electromagnetic process, electron and positron Bremsstrahlung
 // --------------------------------------------------------------
@@ -55,9 +56,6 @@ class G4VEnergySpectrum;
 class G4VCrossSectionHandler;
 class G4PenelopeBremsstrahlung : public G4eLowEnergyLoss
 { 
-  typedef std::vector<G4PenelopeBremsstrahlungAngular*> G4AngularData;
-  //vector of pointers to the angular factors of the elements in each material
-
 public:
  
   G4PenelopeBremsstrahlung(const G4String& processName = "PenelopeBrem");
@@ -101,9 +99,9 @@ private:
   G4VEMDataSet* theMeanFreePath;
   G4VEnergySpectrum* energySpectrum;
 
-  // Vector of pointers to the vectors containing tha angular data 
-  // one element = one material
-  std::vector<G4AngularData*> materialAngularData;
+  // Map to the objects containing tha angular data 
+  std::map<G4int,G4PenelopeBremsstrahlungAngular*> *angularData;
+
  
   // Lower limit for generation of gamma in this model
   G4DataVector cutForSecondaryPhotons;

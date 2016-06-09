@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: TiaraTally.cc,v 1.3 2003/06/25 09:13:14 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: TiaraTally.cc,v 1.4 2003/11/07 12:39:11 vnivanch Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 
 #include "TiaraTally.hh"
@@ -77,7 +77,7 @@ void TiaraTally::EndOfEventAction() {
 
 TiaraMeasure TiaraTally::measure(G4int i){
   TiaraMeasure m;
-  if (i<0 || i>(fMapHighEdgeToMeasure.size()-1)) {
+  if (i<0 || i>(G4int)(fMapHighEdgeToMeasure.size()-1)) {
     G4cout << "ERROR in TiaraTally::measure: argument: " << i 
 	   << ", out of range!" <<  G4endl;
   } 

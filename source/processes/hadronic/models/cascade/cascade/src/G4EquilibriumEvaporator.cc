@@ -19,6 +19,7 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
+//
 #define RUN
 
 #include "G4EquilibriumEvaporator.hh"
@@ -33,7 +34,7 @@ G4EquilibriumEvaporator::G4EquilibriumEvaporator()
   }
 }
 
-G4CollisionOutput G4EquilibriumEvaporator::collide(G4InuclParticle* bullet,
+G4CollisionOutput G4EquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
 						   G4InuclParticle* target) {
 
   if (verboseLevel > 3) {
@@ -267,7 +268,7 @@ G4CollisionOutput G4EquilibriumEvaporator::collide(G4InuclParticle* bullet,
 		  FMAX = pow(EEXS, 4);
 		}; 
 
-		G4double S;
+		G4double S(0);
 
 		while (itry < itry_max) {
 		  itry++;
@@ -594,8 +595,8 @@ G4bool G4EquilibriumEvaporator::goodRemnant(G4double a,
 G4double G4EquilibriumEvaporator::getQF(G4double x, 
 					G4double x2, 
 					G4double a,
-					G4double z, 
-					G4double e) const {
+					G4double , 
+					G4double ) const {
   if (verboseLevel > 3) {
     G4cout << " >>> G4EquilibriumEvaporator::getQF" << G4endl;
   }
@@ -682,9 +683,9 @@ G4double G4EquilibriumEvaporator::getQF(G4double x,
   return QFF; 
 }
 
-G4double G4EquilibriumEvaporator::getAF(G4double x, 
-					G4double a, 
-					G4double z, 
+G4double G4EquilibriumEvaporator::getAF(G4double , 
+					G4double , 
+					G4double , 
 					G4double e) const {
 
   if (verboseLevel > 3) {
@@ -700,8 +701,8 @@ G4double G4EquilibriumEvaporator::getAF(G4double x,
   return AF;
 }	
 
-G4double G4EquilibriumEvaporator::getPARLEVDEN(G4double A, 
-					       G4double Z) const {
+G4double G4EquilibriumEvaporator::getPARLEVDEN(G4double , 
+					       G4double ) const {
 
   if (verboseLevel > 3) {
     G4cout << " >>> G4EquilibriumEvaporator::getPARLEVDEN" << G4endl;
@@ -712,7 +713,7 @@ G4double G4EquilibriumEvaporator::getPARLEVDEN(G4double A,
   return par;
 }
 
-G4double G4EquilibriumEvaporator::getE0(G4double A) const {
+G4double G4EquilibriumEvaporator::getE0(G4double ) const {
 
   if (verboseLevel > 3) {
     G4cout << " >>> G4EquilibriumEvaporator::getE0" << G4endl;

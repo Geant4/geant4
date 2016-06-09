@@ -19,11 +19,11 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
-
+//
 // ====================================================================
 //
 //   HepMCG4PythiaMessenger.cc
-//   $Id: HepMCG4PythiaMessenger.cc,v 1.2 2003/06/16 16:48:17 gunter Exp $
+//   $Id: HepMCG4PythiaMessenger.cc,v 1.3 2003/12/09 15:30:54 gunter Exp $
 //
 // ====================================================================
 #include "HepMCG4PythiaMessenger.hh"

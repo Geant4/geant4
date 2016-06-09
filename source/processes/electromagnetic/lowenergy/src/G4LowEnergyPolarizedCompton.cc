@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4LowEnergyPolarizedCompton.cc,v 1.16 2003/05/20 20:16:13 pia Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4LowEnergyPolarizedCompton.cc,v 1.17 2003/11/18 16:39:21 pia Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file
@@ -535,10 +535,10 @@ G4ThreeVector G4LowEnergyPolarizedCompton::SetNewPolarization(G4double epsilon,
 }
 
 
-void G4LowEnergyPolarizedCompton::SystemOfRefChange
-(G4ThreeVector& direction0,G4ThreeVector& direction1,
- G4ThreeVector& polarization0,G4ThreeVector& polarization1)
-  
+void G4LowEnergyPolarizedCompton::SystemOfRefChange(G4ThreeVector& direction0,
+						    G4ThreeVector& direction1,
+						    G4ThreeVector& polarization0,
+						    G4ThreeVector& polarization1)
 {
   // direction0 is the original photon direction ---> z
   // polarization0 is the original photon polarization ---> x
@@ -551,13 +551,12 @@ void G4LowEnergyPolarizedCompton::SystemOfRefChange
   G4double direction_y = direction1.getY();
   G4double direction_z = direction1.getZ();
   
-  direction1 = (direction_x*Axis_X0 + direction_y*Axis_Y0 +  direction_z*Axis_Z0).unit();
-  
+  direction1 = (direction_x*Axis_X0 + direction_y*Axis_Y0 + direction_z*Axis_Z0).unit();
   G4double polarization_x = polarization1.getX();
   G4double polarization_y = polarization1.getY();
   G4double polarization_z = polarization1.getZ();
 
-  polarization1 =(polarization_x*Axis_X0+polarization_y*Axis_Y0+polarization_z*Axis_Z0).unit();
+  polarization1 = (polarization_x*Axis_X0 + polarization_y*Axis_Y0 + polarization_z*Axis_Z0).unit();
 
 }
 

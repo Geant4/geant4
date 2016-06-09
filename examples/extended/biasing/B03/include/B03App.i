@@ -1,7 +1,7 @@
 %module B03App
 %{
 #include "globals.hh"
-#include "B03App.hh"
+#include "B03AppBase.hh"
 #include "G4RunManager.hh"
 #include "G4IStore.hh"
 #include "G4VCellScorerStore.hh"
@@ -143,7 +143,7 @@ public:
     const char *Write(const G4MapGeometryCellCellScorer &cs){
       std::ostrstream tmpout;
       self->Print(cs, &tmpout);
-      string *value = new string(tmpout.str());
+      std::string *value = new std::string(tmpout.str());
       return value->c_str();
     };
   }

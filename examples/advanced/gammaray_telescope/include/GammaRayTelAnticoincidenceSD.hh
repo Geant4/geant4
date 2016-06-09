@@ -22,7 +22,7 @@
 //
 //
 // $Id: GammaRayTelAnticoincidenceSD.hh,v 1.4 2003/05/30 15:08:47 flongo Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// GEANT4 tag $Name: geant4-06-00 $
 // ------------------------------------------------------------
 //      GEANT 4 class header file
 //      CERN Geneva Switzerland

@@ -1,0 +1,80 @@
+//
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
+//
+//
+// Hadronic Process: Nuclear De-excitations
+// By V. Lara
+
+
+inline G4FermiConfiguration::G4FermiConfiguration()
+{
+}
+
+inline G4FermiConfiguration::~G4FermiConfiguration()
+{
+}
+
+
+inline G4FermiConfiguration::G4FermiConfiguration(const G4FermiConfiguration &right)
+  : Configuration(right.Configuration)
+{
+}
+
+
+inline G4FermiConfiguration::G4FermiConfiguration(const std::vector<const G4VFermiFragment*>& conf)
+  : Configuration(conf)
+{ 
+}
+
+inline const G4FermiConfiguration & G4FermiConfiguration::
+operator=(const G4FermiConfiguration & right)
+{
+  Configuration.clear();
+  Configuration.reserve(right.Configuration.size());
+  Configuration.insert(Configuration.begin(),right.Configuration.begin(),right.Configuration.end());
+  return *this;
+}
+
+
+inline G4bool G4FermiConfiguration::operator==(const G4FermiConfiguration &right) const
+{
+  return (Configuration == right.Configuration);
+}
+
+inline G4bool G4FermiConfiguration::operator!=(const G4FermiConfiguration &right) const
+{
+  return (Configuration != right.Configuration);
+}
+
+inline void G4FermiConfiguration::
+SetConfiguration(const std::vector<const G4VFermiFragment*>& conf)
+{
+  Configuration.clear();
+  Configuration = conf;
+  return;
+}
+
+inline G4int G4FermiConfiguration::
+GetNumberOfFragments() const
+{
+  return Configuration.size();
+}

@@ -19,19 +19,14 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
-// By copying, distributing or modifying the Program (or any work
-// based on the Program) you indicate your acceptance of this statement,
-// and all its terms.
 //
-// $Id: FCALTBEventAction.cc,v 1.7 2003/06/16 16:46:35 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: FCALTBEventAction.cc,v 1.8 2003/12/02 14:39:04 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-#ifdef G4ANALYSIS_USE
 
 #include "FCALTBEventAction.hh"
 
@@ -63,8 +58,9 @@
 #include "iostream.h"
 #include "fstream.h"
 
-#include <AIDA/AIDA.h>
-
+#ifdef G4ANALYSIS_USE
+  #include <AIDA/AIDA.h>
+#endif
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -104,9 +100,9 @@ void FCALTBEventAction::BeginOfEventAction(const G4Event* evt)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void FCALTBEventAction::EndOfEventAction(const G4Event* evt)
+void FCALTBEventAction::EndOfEventAction(const G4Event*)
 {
-
+  G4int i,j;
   NTracksOutOfWorld = StepAction->GetOutOfWorldTracks(0, 0); 
   G4cout << "N Tracks out of world " << NTracksOutOfWorld << G4endl;
 
@@ -125,15 +121,15 @@ void FCALTBEventAction::EndOfEventAction(const G4Event* evt)
   G4double OutOfWorld;
 
   OutTracks << NTracksOutOfWorld << G4endl;
-  for(G4int i=1; i<= NTracksOutOfWorld ; i++){
-    for(G4int j=1; j<11 ; j++) {
+  for(i=1; i<= NTracksOutOfWorld ; i++){
+    for(j=1; j<11 ; j++) {
       //      G4double OutOfWorld = StepAction->GetOutOfWorldTracks(i,j);
       OutOfWorld = StepAction->GetOutOfWorldTracks(i,j);
       OutTracks << OutOfWorld << " " ; 
     }
     OutTracks << G4endl;
 
-    G4double OutOfWorld2 = StepAction->GetOutOfWorldTracks(i,j);
+    // G4double OutOfWorld2 = StepAction->GetOutOfWorldTracks(i,j);
 
 
 
@@ -168,11 +164,11 @@ void FCALTBEventAction::EndOfEventAction(const G4Event* evt)
   
   SecndTracks << NSecondaries << G4endl;
   for(i=1; i<= NSecondaries ; i++){
-    for(G4int j=1; j<11 ; j++) {
+    for(j=1; j<11 ; j++) {
       Secondary = StepAction->GetSecondaries(i,j);
       SecndTracks << Secondary  << " " ; }
     SecndTracks << G4endl;
-    G4double Secondary2 = StepAction->GetSecondaries(i,j);
+    // G4double Secondary2 = StepAction->GetSecondaries(i,j);
 
 #ifdef G4ANALYSIS_USE
     FCALAnalysisManager* analysis = FCALAnalysisManager::getInstance();
@@ -205,19 +201,17 @@ void FCALTBEventAction::EndOfEventAction(const G4Event* evt)
   EdepFCAL.close();
 
 
+#ifdef G4ANALYSIS_USE
   FCALAnalysisManager* analysis = FCALAnalysisManager::getInstance();
   analysis->getfhisto_3()->fill(EmEdep);
   analysis->getfhisto_4()->fill(HadEdep);
+#endif
 
   G4cout<<"EmEdep is="<<EmEdep<<G4endl;
   G4cout<<"HadEdep is="<<HadEdep<<G4endl;
 
-
-
   G4cout << "Edep in FCAL1 FCAl2 : " << StepAction->GetEdepFCAL("FCALEm") << " ";
   G4cout << StepAction->GetEdepFCAL("FCALHad") << G4endl;
 }
-
-#endif
   
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

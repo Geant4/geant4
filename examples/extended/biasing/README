@@ -3,20 +3,21 @@
                         --------------------------
 
 This directory includes example applications to demonstrate the usage of
-different biasing techniques supported in Geant4, or possible from the 
-user applications.
+different variance reduction techniques supported in Geant4, or possible 
+from the user applications.
 
 
-General remark to biasing
--------------------------
+General remark to variance reduction
+------------------------------------
 The tools provided for importance sampling (or geometrical splitting and
-Russian roulette) require the user to have a good understanding of the 
-physics in the problem. This is because the user has to decide which 
-particle types have to be biased, define the regions (physical volumes, 
-replicas) and assign importances to that regions. If this is not done 
-properly it can not be expected that the results describe a real 
-experiment. The examples given here only demonstrate how to use the tools
-technically. They don't intend to produce physical correct results.
+Russian roulette) and for the weight window technique require the user to 
+have a good understanding of the physics in the problem. This is because 
+the user has to decide which particle types have to be biased, define the 
+cells (physical volumes, replicas) and assign importances or weight 
+windows to that cells. If this is not done properly it can not be 
+expected that the results describe a real experiment. The examples given 
+here only demonstrate how to use the tools technically. They don't intend 
+to produce physical correct results.
 
 General remark to scoring
 -------------------------
@@ -26,24 +27,27 @@ therefore should inherit from the interface G4VScorer.
 An example of an implementation of a scorer is G4Scorer
 which may be found in source/event. 
 The scoring in these examples is done with a G4Scorer.
-Importance sampling and scoring does not support all options of the 
-Geant4 geometry. It only supports physical volumes and simple replicas.
+The variance reduction techniques and scoring do not support all options
+of the Geant4 geometry. It only supports physical volumes and simple 
+replicas.
 To identify a physical volume (or replica) objects of the class
 G4GeometryCell are used. Scoring is done according to these
-cells and importance values may be assigned to them.
-When scoring is done in a "scoring" or in a "importance" geometry
-special action has to be taken to prevent counting of
-"collisions" with boundaries of the tracking geometry as interactions.
-This is differently handled when scoring is done in the tracking geometry.
+cells and importance values or the weight windows  may be assigned to 
+them.
+When scoring is done in a parallel geometry special action has to be taken
+to prevent counting of "collisions" with boundaries of the mass geometry 
+as interactions. This is differently handled when scoring is done in the 
+mass geometry.
 
---> G4GeometryCell must not share boundaries with the world volume! <--
+--> G4GeometryCell of the parallel geometry must not share boundaries with
+the world volume! <--
 
 Known problems
 --------------
 In the following scenario it can happen that a particle is not
 biased and it's weight is therefore not changed even if it crosses
 a boundary where biasing should happen.
-The importance sampling creates particles on boundaries 
+Importance and weight window sampling create particles on boundaries 
 between volumes. If the GPIL method of a physical process returns 
 0 as step length for a particle on a boundary and if the PostStepDoIt of
 that process changes the direction of the particle to go back in the 
@@ -59,9 +63,21 @@ http://dressel.home.cern.ch/dressel/biasscore/Sampling.html
 Example B01
 ===========
 
-The example uses importance sampling and scoring. Importance values are
-defined according to the mass geometry. Scoring is also done in according
-to the mass geometry.
+The example uses importance sampling or the weight window technique 
+according to an input parameter. It uses scoring in both cases. 
+Importance values or weight windows are defined according to the mass 
+geometry. In this example the weight window technique is configured such 
+that it behaves equivalent to importance sampling: The window is actually 
+not a window but simply the inverse of the importance value and only
+one energy region is used that covers all energies in the problem.
+The user may change the weight window configuration by changing the
+initialization of the weight window algorithm in example,cc. 
+Different energy bounds for the weight window technique may be specified 
+in B01DetectorConstruction.
+
+The executable takes one optional argument: 0 or 1. Without argument or
+with argument: 0, the importance sampling is applied with argument: 1,
+the weight window technique is applied.
 
 
 Example B02
@@ -77,26 +93,28 @@ To compile this example you need AIDA 3.0 installed. To link
 and run it you need a AIDA compliant analysis package. The
 GNUmakefile of this example shows how to use Anaphe as analysis
 package.
-The following list shows what to do if you are at CERN using rehat61
-and gcc-2.95.2:
-use the shell /bin/sh
+The following list shows what to do if you are at CERN using rehat73
+and gcc-3.2 and the tcsh:
 1) set the following variables (for example):
-ANAPHETOP=/afs/cern.ch/sw/lhcxx
-  (or if installed in opt: /opt/Anaphe/5.0.1)
-AIDA_DIR=/afs/cern.ch/sw/contrib/AIDA/3.0/src/cpp
+setenv ANAPHETOP /afs/cern.ch/sw/lhcxx
+  (or if installed in opt: /opt/Anaphe/5.0.5)
+setenv AIDA_DIR /afs/cern.ch/sw/contrib/AIDA/3.0/src/cpp
   (or if installed in opt: /opt/AIDA/3.0.0/3.0.0/AIDA/3.0/src/cpp)
-export ANAPHETOP AIDA_DIR
 
 2) Source the script:
-. $ANAPHETOP/share/LHCXX/5.0.1/scripts/setupAnaphe
+source $ANAPHETOP/share/LHCXX/5.0.5/scripts/setupAnaphe.csh
+
+This should set the LD_LIBRARY_PATH and the PATH environment to find the
+lizrd executable and Anaphe libraries and header files. 
+It also sets the environment variable PLATF.
 
 3) and add to lirary path the following directories:
-LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:${G4WORKDIR}/lib/${G4SYSTEM}:${G4WORKDIR}/tmp/${G4SYSTEM}/exampleB02
+setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:${G4WORKDIR}/lib/${G4SYSTEM}:${G4WORKDIR}/tmp/${G4SYSTEM}/exampleB02
 
 Now you should be able to run gmake and to run exampleB02.
 
 The example stores the plot in the file b02.hbook.
-To look at the histogram using lizard you also may use Anaphe 5.0.1
+To look at the histogram using lizard you also may use Anaphe 5.0.5
 http://anaphe.web.cern.ch/anaphe/index2.html.
 
 Files in B02:
@@ -108,42 +126,53 @@ Example B03
 ===========
 
 This example uses Geant4 and in particular importance sampling and
-scoring through python. It also creates a histogram.
+scoring through python. It creates a simple histogram. It's ment
+to demonstrate how to use a customized scorer and importance sampling 
+in combination with a scripting language, python.
+Geant4 code is executed from a python session. Therefore, swig is used 
+to create python shadow classes and to generate the code necessary to 
+use the Geant4 libraries from a python session.
+For simplicity it is recommended to use Anaphe. Anaphe comes with 
+python and swig installations. 
+  See http://anaphe.web.cern.ch/
 
-Compiling and running
----------------------
-  To compile and run this example you need a python2.2 installation
-see http://www.python.org.
-  Please set the environment variable "PYTHON_DIR" to your python2.2 
-installation e.g:
-using afs:
-to /afs/cern.ch/sw/lhcxx/specific/redhat61/gcc-2.95.2/PublicDomainPackages/2.0.0
-or if Anaphe is installed in opt /opt/Anaphe/5.0.1/specific/redhat72/gcc-2.95.2/PublicDomainPackages/2.0.0.
 
-  Please add to your environment variables
+
+
+Building, compiling and running
+-------------------------------
+
+  Follow similar steps as for example B02. If you already have
+the environment set up for example B02 jump to point 3 below:
+
+1) set the following variables (for example):
+setenv ANAPHETOP /afs/cern.ch/sw/lhcxx
+  (or if installed in opt: /opt/Anaphe/5.0.5)
+setenv AIDA_DIR /afs/cern.ch/sw/contrib/AIDA/3.0/src/cpp
+  (or if installed in opt: /opt/AIDA/3.0.0/3.0.0/AIDA/3.0/src/cpp)
+
+2) Source the script:
+source $ANAPHETOP/share/LHCXX/5.0.5/scripts/setupAnaphe.csh
+
+3) and add to lirary path the following directories:
 setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:${G4WORKDIR}/lib/${G4SYSTEM}:${G4WORKDIR}/tmp/${G4SYSTEM}/exampleB03
-  and setenv PYTHONPATH $LD_LIBRARY_PATH.
+                               ====
+ setenv PYTHONPATH $LD_LIBRARY_PATH
+
+4) setenv PYTHON_VERSION 2.2
 
  You may run gmake now.
  You should be able to execute the file B03RunApplication.py from your 
-shell now.
-
-  If you have Anaphe 5.0.1 installed you may also execute the file
-B03RunApplication.py from a lizard session. This will create a 
-histogram. Therefore you may follow the steps 1 and two
-in the above exampleB02.
-  See http://anaphe.web.cern.ch/anaphe/index2.html.
+shell or from a lizard session now.
+ The histogram is displayed only if the script is beeing ran
+from lizard.
+  
 
 Files in B03;
-env.csh: Is an example script to set the environment. It should work 
-   if you are at CERN and if you are on a redhat6.1 system.
-buildit.sh: You don't need to use this file. Only if you want to
-   make changes to the python interface defined in B03App.i you may need 
-   to use it. 
 B03Application.py: Is a example class utilizing importance sampling
    and scoring using python.
 B03RunApplication.py: Is a python script running the example. 
    It may be executed from the shell or in a python or lizard
    session. In case it is executed from lizard it creates a plot
    with a histogram.
-B03App.py: Is created by swig using the buildit.sh script.
+B03App.py: Is created by swig using swig.

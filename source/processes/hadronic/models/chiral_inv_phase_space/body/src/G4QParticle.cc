@@ -21,13 +21,15 @@
 // ********************************************************************
 //
 //
-// $Id: G4QParticle.cc,v 1.20 2003/06/25 10:19:02 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4QParticle.cc,v 1.26 2003/12/09 15:38:27 gunter Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 //      ---------------- G4QParticle ----------------
 //             by Mikhail Kossov, Sept 1999.
 //      class for Particles in the CHIPS Model
 // -------------------------------------------------------------------
+//       1         2         3         4         5         6         7         8         9
+//34567890123456789012345678901234567890123456789012345678901234567890123456789012345678901
  
 //#define debug
 //#define pdebug
@@ -73,7 +75,11 @@ G4QParticle::G4QParticle(G4QParticle* right)
 
 G4QParticle::~G4QParticle() 
 {
-  std::for_each(aDecay.begin(), aDecay.end(), DeleteQDecayChan());
+  G4int nDC=aDecay.size();
+  //G4cout<<"G4QParticle::Destructor: Before nDC="<<nDC<<G4endl; // TMP
+  if(nDC) std::for_each(aDecay.begin(), aDecay.end(), DeleteQDecayChan());
+  //G4cout<<"G4QParticle::Destructor: After"<<G4endl; // TMP
+  aDecay.clear();
 }
 
 // Assignment operator
@@ -100,7 +106,7 @@ std::ostream& operator<<(std::ostream& lhs, G4QParticle& rhs)
   G4QPDGCode rhsQPDG = rhs.GetQPDG();
   lhs << G4endl << "Particle with PDG=" << rhsQPDG << ", Spin=" << rhs.GetSpin()
       << ", mass=" << rhs.GetMass() << ", width=" << rhs.GetWidth() << G4endl;
-  lhs << " Quark Content of the Particle=" << rhs.GetQContent() << ", Decay Channels:" << G4endl;
+  lhs<<" Quark Content of the Particle="<<rhs.GetQContent()<<", Decay Channels:"<<G4endl;
   G4QDecayChanVector DCV = rhs.GetDecayVector();
   G4int n = DCV.size();
   for (int i=0; i<n; i++)
@@ -123,15 +129,15 @@ G4QDecayChanVector G4QParticle::InitDecayVector(G4int nQ)
 //    ===================================================
 {
   //static G4int nP = 486;                  // Up to A=80
-  static const G4int nP = 494;                  // Up to A=80 "Isonuclear revision"
+  static const G4int nP = 494;              // Up to A=80 "Isonuclear revision"
   //static G4QDecayChanVector* DecayDB = new G4QDecayChanVector[nP];
   static G4QDecayChanVector DecayDB[nP];
   static int limit= 0;
   if(nQ>=limit && nQ<nP)
   {
-    // *** Secondary PDG-particles should be ordered in a Channel by increasing width ***!!!***
-    // *** Channels should be ordered by increasing minimum mass of the secondary particles ***
-    //if(limit<=  0 && nQ>=  0)DecayDB[  0] = NULL;    // gamma
+    //*** Secondary PDG-particles should be ordered in a Channel by increasing width***!***
+    //** Channels should be ordered by increasing minimum mass of the secondary particles**
+    //if(limit<=  0 && nQ>=  0)DecayDB[  0] = 0;    // gamma
     if(limit<=  1 && nQ>=  1)    // Low sigma=pi,pi S-wave : f_0 (800)
 	{
       DecayDB[  1].push_back(new G4QDecayChan(.333,211,-211));
@@ -151,8 +157,9 @@ G4QDecayChanVector G4QParticle::InitDecayVector(G4int nQ)
       DecayDB[  3].push_back(new G4QDecayChan(.800,211,-211));
       DecayDB[  3].push_back(new G4QDecayChan(1.00,111, 111));
 	}
-    //if(limit<=  4 && nQ>=  4)DecayDB[  4].push_back(new G4QDecayChan(1.00, 22,  22));//Pi 0
-    //if(limit<=  5 && nQ>=  5)DecayDB[  5] = NULL;    // Pi +
+    if(limit<=  4 && nQ>=  4)DecayDB[  4].push_back(new G4QDecayChan(1.00,22,22));//Pi0
+    //if(limit<=  4 && nQ>=  4)DecayDB[  4].push_back(new G4QDecayChan(1.00,22,22));//Pi0
+    //if(limit<=  5 && nQ>=  5)DecayDB[  5] = 0;    // Pi +
     if(limit<=  6 && nQ>=  6)    // eta
 	{
       DecayDB[  6].push_back(new G4QDecayChan(.231,211,-211,111));
@@ -165,7 +172,7 @@ G4QDecayChanVector G4QParticle::InitDecayVector(G4int nQ)
     //  DecayDB[  7].push_back(new G4QDecayChan(.6861,211,-211));
     //  DecayDB[  7].push_back(new G4QDecayChan(1.00, 111, 111));
 	//}
-    //if(limit<=  8 && nQ>=  8)DecayDB[  8] = NULL;    // K +
+    //if(limit<=  8 && nQ>=  8)DecayDB[  8] = 0;    // K +
     if(limit<=  9 && nQ>=  9)    // eta'
 	{
       DecayDB[  9].push_back(new G4QDecayChan(.438,211,-211,221));
@@ -175,24 +182,24 @@ G4QDecayChanVector G4QParticle::InitDecayVector(G4int nQ)
       DecayDB[  9].push_back(new G4QDecayChan(.979, 22, 113));
       DecayDB[  9].push_back(new G4QDecayChan(1.00, 22,  22));
 	}
-    //if(limit<= 10 && nQ>= 10)DecayDB[ 10] = NULL;    // n
-    //if(limit<= 11 && nQ>= 11)DecayDB[ 11] = NULL;    // p
+    //if(limit<= 10 && nQ>= 10)DecayDB[ 10] = 0;    // n
+    //if(limit<= 11 && nQ>= 11)DecayDB[ 11] = 0;    // p
     //if(limit<= 12 && nQ>= 12)    // Lambda ===>>> all week decays are closed at this time
 	//{
     //  DecayDB[ 12].push_back(new G4QDecayChan(.640,2212,-211));
     //  DecayDB[ 12].push_back(new G4QDecayChan(1.00,2112, 111));
 	//}
-    //if(limit<= 13 && nQ>= 13)DecayDB[ 13].push_back(new G4QDecayChan(1.00,2112,-211)); // Sigma -
-    if(limit<= 14 && nQ>= 14)DecayDB[ 14].push_back(new G4QDecayChan(1.00,3122,  22));//Sigma 0(EM)
+    //if(limit<= 13 &&nQ>=13)DecayDB[13].push_back(new G4QDecayChan(1.,2112,-211));//Sigma-
+    if(limit<= 14 &&nQ>=14)DecayDB[14].push_back(new G4QDecayChan(1.,3122,22));//Sigma0(EM)
     //if(limit<= 15 && nQ>= 15)    // Sigma +
 	//{
     //  DecayDB[ 15].push_back(new G4QDecayChan(.484,2112, 211));
     //  DecayDB[ 15].push_back(new G4QDecayChan(1.00,2212, 111));
 	//}
-    //if(limit<= 16 && nQ>= 16)DecayDB[ 16].push_back(new G4QDecayChan(1.00,3122,-211));   // Ksi -
-    //if(limit<= 17 && nQ>= 17)DecayDB[ 17].push_back(new G4QDecayChan(1.00,3122, 111));   // Ksi 0
-    if(limit<= 18 && nQ>= 18)DecayDB[ 18].push_back(new G4QDecayChan(1.00, 211,-211));   // rho 0
-    if(limit<= 19 && nQ>= 19)DecayDB[ 19].push_back(new G4QDecayChan(1.00, 211, 111));   // rho +
+    //if(limit<= 16 && nQ>=16)DecayDB[16].push_back(new G4QDecayChan(1.,3122,-211));// Ksi-
+    //if(limit<= 17 && nQ>=17)DecayDB[17].push_back(new G4QDecayChan(1.,3122, 111));// Ksi0
+    if(limit<= 18 && nQ>= 18)DecayDB[ 18].push_back(new G4QDecayChan(1., 211,-211));// rho0
+    if(limit<= 19 && nQ>= 19)DecayDB[ 19].push_back(new G4QDecayChan(1., 211, 111));// rho+
     if(limit<= 20 && nQ>= 20)    // omega
 	{
       DecayDB[ 20].push_back(new G4QDecayChan(.892, 211,-211,111));
@@ -218,7 +225,7 @@ G4QDecayChanVector G4QParticle::InitDecayVector(G4int nQ)
       DecayDB[ 23].push_back(new G4QDecayChan(.950,-211, 213));
       DecayDB[ 23].push_back(new G4QDecayChan(1.00, 111, 113));
 	}
-    if(limit<= 24 && nQ>= 24)DecayDB[ 24].push_back(new G4QDecayChan(1.00,2112,-211)); // Delta -
+    if(limit<= 24 && nQ>= 24)DecayDB[24].push_back(new G4QDecayChan(1.,2112,-211));//Delta-
     if(limit<= 25 && nQ>= 25)    // Delta 0
 	{
       DecayDB[ 25].push_back(new G4QDecayChan(.333,2212,-211));
@@ -229,7 +236,7 @@ G4QDecayChanVector G4QParticle::InitDecayVector(G4int nQ)
       DecayDB[ 26].push_back(new G4QDecayChan(.333,2112, 211));
       DecayDB[ 26].push_back(new G4QDecayChan(1.00,2212, 111));
 	}
-    if(limit<= 27 && nQ>= 27)DecayDB[ 27].push_back(new G4QDecayChan(1.00,2212, 211)); // Delta ++
+    if(limit<= 27 && nQ>= 27)DecayDB[27].push_back(new G4QDecayChan(1.,2212,211));//Delta++
     if(limit<= 28 && nQ>= 28)    // Lambda* (1520)
 	{
       DecayDB[ 28].push_back(new G4QDecayChan(.230,3112,-311));
@@ -649,23 +656,23 @@ G4QDecayChanVector G4QParticle::InitDecayVector(G4int nQ)
       DecayDB[ 70].push_back(new G4QDecayChan(.900, 311, 211));
       DecayDB[ 70].push_back(new G4QDecayChan(1.00, 321, 111));
 	}
-    if(limit<= 71 && nQ>= 71)DecayDB[ 71].push_back(new G4QDecayChan(1.00, 333, 333));//phi_4(2300)
-    if(limit<= 72 && nQ>= 72)DecayDB[ 72].push_back(new G4QDecayChan(1.00, 2212, 2224)); //pDelta++
-    if(limit<= 73 && nQ>= 73)DecayDB[ 73].push_back(new G4QDecayChan(1.00, 2112, 1114)); //nDelta-
-    if(limit<= 74 && nQ>= 74)DecayDB[ 74].push_back(new G4QDecayChan(1.00, 2224, 2224)); //D++D++
-    if(limit<= 75 && nQ>= 75)DecayDB[ 75].push_back(new G4QDecayChan(1.00, 1114, 1114)); //Del-Del-
-    if(limit<= 76 && nQ>= 76)DecayDB[ 76].push_back(new G4QDecayChan(1.,2212,2212,2224));//ppDelta++
-    if(limit<= 77 && nQ>= 77)DecayDB[ 77].push_back(new G4QDecayChan(1.,2112,2112,1114));//nnDelta-
-    if(limit<= 78 && nQ>= 78)DecayDB[ 78].push_back(new G4QDecayChan(1.,2212,2224,2224));//pD++D++
-    if(limit<= 79 && nQ>= 79)DecayDB[ 79].push_back(new G4QDecayChan(1.,2112,1114,1114));//nDel-Del-
-    if(limit<= 83 && nQ>= 83)DecayDB[ 83].push_back(new G4QDecayChan(1.00, 2112, 2112)); //nn
-    if(limit<= 84 && nQ>= 84)DecayDB[ 84].push_back(new G4QDecayChan(1.00, 2212, 2112)); //pn
-    if(limit<= 85 && nQ>= 85)DecayDB[ 85].push_back(new G4QDecayChan(1.00, 2212, 2212)); //pp
+    if(limit<=71&&nQ>=71)DecayDB[71].push_back(new G4QDecayChan(1., 333,333));//phi_4(2300)
+    if(limit<=72&&nQ>=72)DecayDB[72].push_back(new G4QDecayChan(1.,2212, 2224));//pDelta++
+    if(limit<=73&&nQ>=73)DecayDB[73].push_back(new G4QDecayChan(1.,2112, 1114));//nDelta-
+    if(limit<=74&&nQ>=74)DecayDB[74].push_back(new G4QDecayChan(1.,2224, 2224));//D++D++
+    if(limit<=75&&nQ>=75)DecayDB[75].push_back(new G4QDecayChan(1.,1114, 1114));//Del-Del-
+    if(limit<=76&&nQ>=76)DecayDB[76].push_back(new G4QDecayChan(1.,2212,2212,2224));//ppD++
+    if(limit<=77&&nQ>=77)DecayDB[77].push_back(new G4QDecayChan(1.,2112,2112,1114));//nnD-
+    if(limit<=78&&nQ>=78)DecayDB[78].push_back(new G4QDecayChan(1.,2212,2224,2224));//p2D++
+    if(limit<=79&&nQ>=79)DecayDB[79].push_back(new G4QDecayChan(1.,2112,1114,1114));//nD-D-
+    if(limit<=83&&nQ>=83)DecayDB[83].push_back(new G4QDecayChan(1.,2112, 2112));//nn
+    if(limit<=84&&nQ>=84)DecayDB[84].push_back(new G4QDecayChan(1.,2212, 2112));//pn
+    if(limit<=85&&nQ>=85)DecayDB[85].push_back(new G4QDecayChan(1.,2212, 2212));//pp
     // ------- Nuclear fragments
     //if(limit<= 80 && nQ>=80)
 	//{
     //  if(limit<80) limit=80;
-    //  for (int i=limit; i<nQ; i++) DecayDB[i] = NULL;
+    //  for (int i=limit; i<nQ; i++) DecayDB[i] = 0;
     //}
 
 	//Update the limit
@@ -674,6 +681,7 @@ G4QDecayChanVector G4QParticle::InitDecayVector(G4int nQ)
 	G4cout<<"G4QParticle::InitDecayVector: limit is set to "<<limit<<G4endl;
 #endif
   }
+  //if(!nQ)G4cout<<"G4QParticle::InitDecayVector:Q=0,nD="<<DecayDB[abs(nQ)].size()<<G4endl;
   return DecayDB[abs(nQ)];
 }
 
@@ -683,7 +691,8 @@ void G4QParticle::InitQParticle(G4int theQCode)
 {
   aQPDG.InitByQCode(theQCode);
   aQuarkCont = aQPDG.GetQuarkContent();
-  aDecay     = InitDecayVector(aQPDG.GetQCode());
+  aDecay     = InitDecayVector(theQCode);
+  //if(!theQCode)G4cout<<"G4QPar::InitQP:PDG="<<GetPDGCode()<<",n="<<aDecay.size()<<G4endl;
 }
 
 // Initialize the Particle by a PDG Code

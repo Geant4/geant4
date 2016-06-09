@@ -1,0 +1,106 @@
+$Id: README,v 1.5 2003/10/31 12:08:50 vnivanch Exp $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                            TestEm9
+                            -------
+     This test is intended to test cut-per-region approach and to demonstrate
+     electromagnetic physics in crystal calorimeter
+
+ 1- GEOMETRY DEFINITION
+
+     The geometry consists of the vertex detector (VD), the electromagnetic
+     calorimeter (EM), and the muon identifier (MU). Detector layout along
+     the axis Z.
+
+     VD consisted of 3 layers of Si with pads structured along the axis X.
+     Between VD and EM there are 2 active absorbers (scintillators).
+     EM is the matrix 5x5 of heavy crystals. MU consist of 2 active absorbers
+     (scintillators) and the iron plate between.
+
+     2 additional to the World regions are defined: VertexDetector and
+     MuonDetector. For testing purposes first absorber of MU is included in
+     the region of VD.
+
+     Material of calorimiter and absorber can be choosen:
+          Air Water lAr Al Fe BGO PbWO4 Pb.
+     eg: /testem/det/CalMat PbWO4
+         /testem/det/AbsMat Al
+
+     The size of the detector can be changed also.
+
+     eg: /testem/det/EcalLength   20  cm
+         /testem/det/EcalWidth     5  cm
+         /testem/det/update             ---> rebuild the geometry
+
+ 2- PHYSICS LISTS
+
+    Physics Lists are subdivided on 4 following modules:
+    1. "particles" - particle definitions
+    2. "general" - decays and transportation
+    3. "standard" (alternative) - standard EM physics
+    4. "g4v52"    (alternative) - standard EM physics Geant4 5.2
+    5. "binary"   (optional) - binary cascade for protons and neutrons with
+                  energy below 3 GeV
+    6. "elastic"  (optional) - elastic scattering of hadrons
+
+ 3- AN EVENT : THE PRIMARY GENERATOR
+
+     The primary kinematic consists of a single particle which hits the
+     cylinder perpendicular to the input face. The type of the particle
+     and its energy are set in the PrimaryGeneratorAction class, and can
+     changed via the G4 build-in commands of ParticleGun class.
+
+ 4- OUTPUT
+
+     The batch regime of simulation can be started 
+       $G4WORKDIR/bin/$G4SYSTEM/TestEm9 TestEm9.in
+     where TestEm9.in is the example of macro file for batch job.
+
+     As a result of simulation the number of secondaries produced
+     in different regions are averaged. The average energy depositions
+     in active absorbers and EM as well as RMS of these values are shown.
+     The number of hits in pads of VD is printed out.
+
+ 5- VISUALISATION
+
+     To use visualisation the environment variable G4_VIS_USE should be 
+     defined. An interactive session starts if no macro file is specified 
+     in the command line:
+       $G4WORKDIR/bin/$G4SYSTEM/TestEm9
+
+     To start visualisation one can issur 
+     >/control/execute vis.mac
+     >/run/beamOn 1
+
+ 6- ANALYSIS
+
+     To create histograms/ntuple for further analysis one should define
+     environment variable G4ANALYSIS_USE and setup local AIDA implementation.
+     The example should be recompiled:
+
+     gmake analclean
+     gmake
+      
+     The macro file csi.mac can be used as exmple of macro for analysis. It
+     can be executed in the following way:
+     $G4WORKDIR/bin/$G4SYSTEM/TestEm9 csi.mac
+
+ 7- Using the Anaphe implementation of the AIDA 3.0 histograms:
+ 
+
+     In order to use the Anaphe implementation of the AIDA 3.0 interfaces,
+     the 'aida-config' command (which is used in the GNUmakefile) is
+     available at:
+     /afs/cern.ch/sw/lhcxx/share/LHCXX/latest/scripts/aida-config
+
+     In order to run the executable, you need to source the following
+     script (once):
+     $HOME/bin/setupAnaphe.csh  (or $HOME/bin/setupAnaphe)
+
+     At cern 'setupAnaphe' is available at:
+     /afs/cern.ch/sw/lhcxx/share/LHCXX/latest/scripts/setupAnaphe.csh
+     (or /afs/cern.ch/sw/lhcxx/share/LHCXX/latest/scripts/setupAnaphe)

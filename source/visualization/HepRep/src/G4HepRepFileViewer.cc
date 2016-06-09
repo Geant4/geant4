@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4HepRepFileViewer.cc,v 1.10 2003/06/25 10:20:01 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4HepRepFileViewer.cc,v 1.11 2003/07/12 19:48:15 duns Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 
 #include "G4HepRepFileViewer.hh"
 
@@ -33,7 +33,7 @@
 #include "G4HepRepFileSceneHandler.hh"
 
 //HepRep
-#include "HepRepXMLWriter.hh"
+#include "G4HepRepFileXMLWriter.hh"
 
 G4HepRepFileViewer::G4HepRepFileViewer
 (G4VSceneHandler& sceneHandler, const G4String& name):

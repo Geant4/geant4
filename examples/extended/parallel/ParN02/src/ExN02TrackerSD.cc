@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: ExN02TrackerSD.cc,v 1.1 2002/03/05 15:22:02 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: ExN02TrackerSD.cc,v 1.2 2003/07/04 15:36:51 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -61,7 +61,7 @@ void ExN02TrackerSD::Initialize(G4HCofThisEvent* HCE)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4bool ExN02TrackerSD::ProcessHits(G4Step* aStep,G4TouchableHistory* ROhist)
+G4bool ExN02TrackerSD::ProcessHits(G4Step* aStep,G4TouchableHistory*)
 {
   G4double edep = aStep->GetTotalEnergyDeposit();
 
@@ -83,7 +83,7 @@ G4bool ExN02TrackerSD::ProcessHits(G4Step* aStep,G4TouchableHistory* ROhist)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void ExN02TrackerSD::EndOfEvent(G4HCofThisEvent* HCE)
+void ExN02TrackerSD::EndOfEvent(G4HCofThisEvent*)
 {
   if (verboseLevel>0) { 
      G4int NbHits = trackerCollection->entries();

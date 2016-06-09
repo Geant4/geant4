@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: ExN04PhysicsList.cc,v 1.13 2003/06/16 16:49:57 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: ExN04PhysicsList.cc,v 1.15 2003/11/19 09:26:02 vnivanch Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // 
 
@@ -30,7 +30,6 @@
 
 #include "globals.hh"
 #include "G4ParticleDefinition.hh"
-#include "G4ParticleWithCuts.hh"
 #include "G4ProcessManager.hh"
 #include "G4ProcessVector.hh"
 #include "G4ParticleTypes.hh"
@@ -51,7 +50,7 @@ ExN04PhysicsList::ExN04PhysicsList():  G4VModularPhysicsList()
 {
   // default cut value  (1.0mm) 
   defaultCutValue = 1.0*mm;
-  SetVerboseLevel(1);
+  // SetVerboseLevel(1);
 
   // General Physics
   RegisterPhysics( new ExN04GeneralPhysics("general") );

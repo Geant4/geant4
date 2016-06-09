@@ -1,4 +1,4 @@
-# $Id: TestEm1.in,v 1.12 2003/06/03 09:59:55 vnivanch Exp $
+# $Id: TestEm1.in,v 1.13 2003/10/06 10:02:20 maire Exp $
 #
 # Macro file for "TestEm1.cc"
 # (can be run in batch, without graphic)
@@ -15,7 +15,6 @@
 /run/initialize
 #
 /process/eLoss/StepFunction 0.183 1.70 micrometer
-#/process/eLoss/integral  false
 #
 /run/verbose 2
 #

@@ -19,7 +19,7 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
-// ********************************************************************
+//
 // Code developed by:
 //  S.Guatelli
 //
@@ -29,8 +29,8 @@
 //    *                             *
 //    *******************************
 //
-// $Id: BrachyAnalysisManager.cc,v 1.11 2003/06/16 16:45:02 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: BrachyAnalysisManager.cc,v 1.12 2003/12/09 15:29:54 gunter Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 #ifdef  G4ANALYSIS_USE
 #include <stdlib.h>

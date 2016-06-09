@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParallelImportanceProcess.hh,v 1.9 2003/06/13 09:27:04 dressel Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4ParallelImportanceProcess.hh,v 1.11 2003/11/26 14:51:48 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // ----------------------------------------------------------------------
 // Class G4ParallelImportanceProcess
@@ -41,34 +41,33 @@
 #include "G4ParallelTransport.hh"
 #include "G4VTrackTerminator.hh"
 
-class G4ImportancePostStepDoIt;
+class G4SamplingPostStepAction;
 class G4VImportanceSplitExaminer;
 class G4Nsplit_Weight;
 
-
-class G4ParallelImportanceProcess : public G4ParallelTransport, public G4VTrackTerminator
+class G4ParallelImportanceProcess : public G4ParallelTransport,
+                                    public G4VTrackTerminator
 {
 
 public:  // with description
 
   G4ParallelImportanceProcess(const G4VImportanceSplitExaminer &aImportanceSplitExaminer,
-			      G4VPGeoDriver &pgeodriver, 
-			      G4VParallelStepper &aStepper,
-			      const G4VTrackTerminator *TrackTerminator,
-			      const G4String &aName = "ParallelImportanceProcess");  
+                              G4VPGeoDriver &pgeodriver, 
+                              G4VParallelStepper &aStepper,
+                              const G4VTrackTerminator *TrackTerminator,
+                              const G4String &aName = "ParallelImportanceProcess");  
     // initialise G4ParallelTransport and members
 
   virtual ~G4ParallelImportanceProcess();
 
   virtual G4VParticleChange *PostStepDoIt(const G4Track&,
-					  const G4Step&);
+                                          const G4Step&);
     // do the "parallel transport" and importance sampling.
 
   virtual void KillTrack() const;
     // used in case no scoring process follows that does the killing
 
   virtual const G4String &GetName() const;
-
 
 private:
 
@@ -81,11 +80,7 @@ private:
 
   G4ParticleChange *fParticleChange;
   const G4VImportanceSplitExaminer &fImportanceSplitExaminer;  
-  G4ImportancePostStepDoIt *fImportancePostStepDoIt;
+  G4SamplingPostStepAction *fPostStepAction;
 };
 
 #endif
-
-
-
-

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4QCandidate.cc,v 1.20 2003/06/16 17:04:17 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4QCandidate.cc,v 1.29 2003/12/09 15:38:17 gunter Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 //      ---------------- G4QCandidate ----------------
 //             by Mikhail Kossov, Sept 1999.
@@ -34,12 +34,18 @@
 #include "G4QCandidate.hh"
 #include <algorithm>
 
-G4QCandidate::G4QCandidate() : relativeProbability(0.),integralProbability(0.)
+G4QCandidate::G4QCandidate() : 
+  G4QHadron(),possible(false),parPossible(false),kMin(0),denseProbability(0.),
+  preProbability(0.),relativeProbability(0.),integralProbability(0.),
+  secondRelProbability(0.),secondIntProbability(0.),EBMass(0.),NBMass(0.)
+                            
 {
 }
 
 G4QCandidate::G4QCandidate(G4int PDGcode) :
-  relativeProbability(0.),integralProbability(0.)
+  G4QHadron(PDGcode),possible(false),parPossible(false),kMin(0),denseProbability(0.),
+  preProbability(0.),relativeProbability(0.),integralProbability(0.),
+  secondRelProbability(0.),secondIntProbability(0.),EBMass(0.),NBMass(0.)
 {
   G4LorentzVector cur4Mom(0.,0.,0.,0.);
   G4QPDGCode QPDG(PDGcode);
@@ -50,7 +56,8 @@ G4QCandidate::G4QCandidate(G4int PDGcode) :
   SetQC(QPDG.GetQuarkContent());
 }
 
-G4QCandidate::G4QCandidate(const G4QCandidate& right)
+G4QCandidate::G4QCandidate(const G4QCandidate& right) : 
+  G4QHadron(&right)
 {
   Set4Momentum         (right.Get4Momentum());
   SetQPDG              (right.GetQPDG());
@@ -65,6 +72,8 @@ G4QCandidate::G4QCandidate(const G4QCandidate& right)
   integralProbability = right.integralProbability;
   secondRelProbability= right.secondRelProbability;
   secondIntProbability= right.secondIntProbability;
+  EBMass = right.EBMass;
+  NBMass = right.NBMass;
   // thePClusters
   G4int nParCl        = right.thePClusters.size();
   if(nParCl) for(G4int ip=0; ip<nParCl; ip++)
@@ -89,6 +98,8 @@ G4QCandidate::G4QCandidate(G4QCandidate* right)
   integralProbability = right->integralProbability;
   secondRelProbability= right->secondRelProbability;
   secondIntProbability= right->secondIntProbability;
+  EBMass = right->EBMass;
+  NBMass = right->NBMass;
   // thePClusters
   G4int nParCl        = right->thePClusters.size();
   if(nParCl) for(G4int ip=0; ip<nParCl; ip++)
@@ -125,6 +136,8 @@ const G4QCandidate& G4QCandidate::operator=(const G4QCandidate &right)
   integralProbability = right.integralProbability;
   secondRelProbability= right.secondRelProbability;
   secondIntProbability= right.secondIntProbability;
+  EBMass = right.EBMass;
+  NBMass = right.NBMass;
   // thePClusters (Vector)
   G4int nParCl        = right.thePClusters.size();
   if(nParCl) for(G4int ip=0; ip<nParCl; ip++)
@@ -135,7 +148,3 @@ const G4QCandidate& G4QCandidate::operator=(const G4QCandidate &right)
 
   return *this;
 }
-
-
-
-

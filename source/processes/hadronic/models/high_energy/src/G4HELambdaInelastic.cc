@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4HELambdaInelastic.cc,v 1.9 2003/06/16 17:09:56 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4HELambdaInelastic.cc,v 1.10 2003/07/01 15:42:24 hpw Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 //
 
@@ -41,12 +41,11 @@
  
 #include "G4HELambdaInelastic.hh"
 
-G4VParticleChange *  G4HELambdaInelastic::
-ApplyYourself( const G4Track &aTrack, G4Nucleus &targetNucleus )
+G4HadFinalState *  G4HELambdaInelastic::
+ApplyYourself( const G4HadProjectile &aTrack, G4Nucleus &targetNucleus )
   {
     G4HEVector * pv = new G4HEVector[MAXPART];
-    theParticleChange.Initialize( aTrack );
-    const G4DynamicParticle *aParticle = aTrack.GetDynamicParticle();
+    const G4HadProjectile *aParticle = &aTrack;
 //    G4DynamicParticle *originalTarget = targetNucleus.ReturnTargetParticle();
     const G4double A = targetNucleus.GetN();
     const G4double Z = targetNucleus.GetZ();
@@ -185,7 +184,7 @@ ApplyYourself( const G4Track &aTrack, G4Nucleus &targetNucleus )
       }
       FillParticleChange(pv,  vecLength);
       delete [] pv;
-      theParticleChange.SetStatusChange(fStopAndKill);
+      theParticleChange.SetStatusChange(stopAndKill);
       return & theParticleChange;
   }
 

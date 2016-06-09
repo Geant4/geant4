@@ -22,7 +22,7 @@
 //
 //
 // $Id: Em8PrimaryGeneratorAction.hh,v 1.3 2001/07/11 09:57:54 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // 
 

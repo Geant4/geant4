@@ -19,12 +19,9 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
-// By copying, distributing or modifying the Program (or any work
-// based on the Program) you indicate your acceptance of this statement,
-// and all its terms.
 //
-// $Id: FCALPhysicsList.cc,v 1.4 2003/06/11 16:29:16 pmendez Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: FCALPhysicsList.cc,v 1.6 2003/12/09 15:30:30 gunter Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // 
 
@@ -49,7 +46,6 @@ FCALPhysicsList::FCALPhysicsList():  G4VUserPhysicsList()
   currentDefaultCut = defaultCutValue = 1.*mm;
   cutForGamma       = defaultCutValue;
   cutForElectron    = defaultCutValue;
-  cutForProton      = defaultCutValue;
 
  SetVerboseLevel(1);
 }
@@ -227,9 +223,9 @@ void FCALPhysicsList::ConstructEM()
                particleName == "mu-"    ) {
     //muon  
       G4VProcess* aMultipleScattering = new G4MultipleScattering();
+      G4VProcess* anIonisation        = new G4MuIonisation();
       G4VProcess* aBremsstrahlung     = new G4MuBremsstrahlung();
       G4VProcess* aPairProduction     = new G4MuPairProduction();
-      G4VProcess* anIonisation        = new G4MuIonisation();
       //
       // add processes
       pmanager->AddProcess(anIonisation);
@@ -299,7 +295,6 @@ void FCALPhysicsList::SetCuts()
     {
      if(cutForGamma    == currentDefaultCut) cutForGamma    = defaultCutValue;
      if(cutForElectron == currentDefaultCut) cutForElectron = defaultCutValue;
-     if(cutForProton   == currentDefaultCut) cutForProton   = defaultCutValue;
      currentDefaultCut = defaultCutValue;
     }
     
@@ -314,13 +309,6 @@ void FCALPhysicsList::SetCuts()
   SetCutValue(cutForElectron, "e-");
   SetCutValue(cutForElectron, "e+");
  
-  // set cut values for proton and anti_proton before all other hadrons
-  // because some processes for hadrons need cut values for proton/anti_proton 
-  SetCutValue(cutForProton, "proton");
-  SetCutValue(cutForProton, "anti_proton");
-  
-  //  SetCutValueForOthers(defaultCutValue);
-
   if (verboseLevel>0) DumpCutValuesTable();
 }
 
@@ -339,12 +327,6 @@ void FCALPhysicsList::SetCutForElectron(G4double cut)
   cutForElectron = cut;
 }
 
-void FCALPhysicsList::SetCutForProton(G4double cut)
-{
-  ResetCuts();
-  cutForProton = cut;
-}
-
 G4double FCALPhysicsList::GetCutForGamma() const
 {
   return cutForGamma;
@@ -353,11 +335,6 @@ G4double FCALPhysicsList::GetCutForGamma() const
 G4double FCALPhysicsList::GetCutForElectron() const
 {
   return cutForElectron;
-}
-
-G4double FCALPhysicsList::GetCutForProton() const
-{
-  return cutForGamma;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

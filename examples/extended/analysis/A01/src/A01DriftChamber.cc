@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: A01DriftChamber.cc,v 1.3 2002/12/13 11:34:33 gunter Exp $
+// $Id: A01DriftChamber.cc,v 1.5 2003/08/20 16:32:50 duns Exp $
 // --------------------------------------------------------------
 //
 #include "A01DriftChamber.hh"
@@ -52,7 +52,7 @@ void A01DriftChamber::Initialize(G4HCofThisEvent*HCE)
   HCE->AddHitsCollection(HCID,hitsCollection);
 }
 
-G4bool A01DriftChamber::ProcessHits(G4Step*aStep,G4TouchableHistory*ROhist)
+G4bool A01DriftChamber::ProcessHits(G4Step*aStep,G4TouchableHistory* /*ROhist*/)
 {
   G4double charge = aStep->GetTrack()->GetDefinition()->GetPDGCharge();
   if(charge==0.) return true;
@@ -76,6 +76,6 @@ G4bool A01DriftChamber::ProcessHits(G4Step*aStep,G4TouchableHistory*ROhist)
   return true;
 }
 
-void A01DriftChamber::EndOfEvent(G4HCofThisEvent*HCE)
+void A01DriftChamber::EndOfEvent(G4HCofThisEvent* /*HCE*/)
 {;}
 

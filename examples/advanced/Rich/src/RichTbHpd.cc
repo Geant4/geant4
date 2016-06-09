@@ -184,7 +184,7 @@ RichTbHpd::RichTbHpd(RichTbMaterial* RMaterial,
                        HpdEnvelopeCone,
 		       HpdEnvelopeConeTransform);
      
-    G4LogicalVolume*  HpdEnvelopeTubeLCLog=
+//    G4LogicalVolume*  HpdEnvelopeTubeLCLog=
       new G4LogicalVolume(HpdEnvelopeTubeLC,RMaterial->getHpdTubeMaterial(),
 			  "HpdEnvelopeTubeLC",0,0,0);
 
@@ -193,7 +193,7 @@ RichTbHpd::RichTbHpd(RichTbMaterial* RMaterial,
                        HpdEnvelopeSmallTube,
 		       HpdEnvelopeSmallTubeTransform);
      
-    G4LogicalVolume*  HpdEnvelopeTubeLCSLog=
+//    G4LogicalVolume*  HpdEnvelopeTubeLCSLog=
       new G4LogicalVolume(HpdEnvelopeTubeLCS,RMaterial->getHpdTubeMaterial(),
 			  "HpdEnvelopeTubeLCS",0,0,0);
 
@@ -233,17 +233,17 @@ RichTbHpd::RichTbHpd(RichTbMaterial* RMaterial,
                 HpdPhCathodeLog,HpdMasterPhys,false,HpdNumber);
 
 
-   G4LogicalBorderSurface* HpdQuartzWSurface =
+//   G4LogicalBorderSurface* HpdQuartzWSurface =
      new G4LogicalBorderSurface("HpdQuartzWSurface",HpdMasterPhys,
                                  HpdQuartzWindowPhys,
 			  RMaterial->getOpticalHpdTQuartzWSurface());
 
-   G4LogicalBorderSurface* HpdQPhCathodeSurface =
+//   G4LogicalBorderSurface* HpdQPhCathodeSurface =
      new G4LogicalBorderSurface("HpdQPhCathodeSurface",HpdQuartzWindowPhys,
                                  HpdPhCathodePhys,
 		 RMaterial->getOpticalHpdQuartzWPhCathodeSurface());
 
-   G4LogicalBorderSurface* HpdPhCathodeQSurface =
+//   G4LogicalBorderSurface* HpdPhCathodeQSurface =
      new G4LogicalBorderSurface("HpdQPhCathodeSurface", HpdPhCathodePhys,
                                 HpdQuartzWindowPhys,
 		 RMaterial->getOpticalHpdQuartzWPhCathodeSurface());
@@ -254,17 +254,17 @@ RichTbHpd::RichTbHpd(RichTbMaterial* RMaterial,
    //			       HpdPhCathodeLog,
    //		 RMaterial->getOpticalPhCathodeSkinSurface());
 
-    G4LogicalBorderSurface* HpdPhCathodeMasterSurface =
+//    G4LogicalBorderSurface* HpdPhCathodeMasterSurface =
       new G4LogicalBorderSurface("HpdPhCathodeMasterSurface",
 				 HpdPhCathodePhys,HpdMasterPhys,   
 		 RMaterial->getOpticalPhCathodeBorderSurface());
 
-    G4LogicalBorderSurface* HpdMasterPhCathodeSurface =
+//    G4LogicalBorderSurface* HpdMasterPhCathodeSurface =
       new G4LogicalBorderSurface("HpdMasterPhCathodeSurface",
 			HpdMasterPhys,HpdPhCathodePhys,   
 		 RMaterial->getOpticalPhCathodeBorderSurface());
 
-   G4LogicalBorderSurface* HpdEnvelopeSurface =
+//   G4LogicalBorderSurface* HpdEnvelopeSurface =
      new G4LogicalBorderSurface("HpdEnvelopeSurface",HpdMasterPhys,
                           HpdEnvelopeTubeGrandPhys,
 				RMaterial->getOpticalHpdMetalSurface());

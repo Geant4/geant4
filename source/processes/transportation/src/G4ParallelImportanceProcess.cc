@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParallelImportanceProcess.cc,v 1.14 2003/06/16 17:12:43 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4ParallelImportanceProcess.cc,v 1.16 2003/11/26 14:51:50 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -36,63 +36,64 @@
 #include "G4ParallelImportanceProcess.hh"
 #include "G4VImportanceSplitExaminer.hh"
 #include "G4VTrackTerminator.hh"
-#include "G4ImportancePostStepDoIt.hh"
+#include "G4SamplingPostStepAction.hh"
 
-G4ParallelImportanceProcess::
-G4ParallelImportanceProcess(const G4VImportanceSplitExaminer &aImportanceSplitExaminer,
-			    G4VPGeoDriver &pgeodriver,
-			    G4VParallelStepper &aStepper, 
-			    const G4VTrackTerminator *TrackTerminator,
-			    const G4String &aName)
- : 
-  G4ParallelTransport(pgeodriver, aStepper, aName),
-  fParticleChange(G4ParallelTransport::fParticleChange),
-  fImportanceSplitExaminer(aImportanceSplitExaminer),
-  fImportancePostStepDoIt(0)
+G4ParallelImportanceProcess::G4ParallelImportanceProcess(
+                 const G4VImportanceSplitExaminer &aImportanceSplitExaminer,
+                       G4VPGeoDriver &pgeodriver,
+                       G4VParallelStepper &aStepper, 
+                 const G4VTrackTerminator *TrackTerminator,
+                 const G4String &aName)
+ : G4ParallelTransport(pgeodriver, aStepper, aName),
+   fParticleChange(G4ParallelTransport::fParticleChange),
+   fImportanceSplitExaminer(aImportanceSplitExaminer),
+   fPostStepAction(0)
 {
-  if (TrackTerminator) {
-    fImportancePostStepDoIt = new G4ImportancePostStepDoIt(*TrackTerminator);
+  if (TrackTerminator)
+  {
+    fPostStepAction = new G4SamplingPostStepAction(*TrackTerminator);
   }
-  else {
-    fImportancePostStepDoIt = new G4ImportancePostStepDoIt(*this);
+  else
+  {
+    fPostStepAction = new G4SamplingPostStepAction(*this);
   }
 
 }
 
 G4ParallelImportanceProcess::~G4ParallelImportanceProcess()
 {
-  delete fImportancePostStepDoIt;
+  delete fPostStepAction;
 }
-
 
 G4VParticleChange *G4ParallelImportanceProcess::
 PostStepDoIt(const G4Track& aTrack, const G4Step &aStep)
 {
-  if (aTrack.GetTrackStatus()==fStopAndKill) {
-    G4cout << "G4ParallelImportanceProcess::PostStepDoIt StopAndKill" << G4endl;
+  if (aTrack.GetTrackStatus()==fStopAndKill)
+  {
+    G4cout << "WARNING - G4ParallelImportanceProcess::PostStepDoIt()"
+           << "          StopAndKill track !" << G4endl;
   }
   G4ParallelTransport::PostStepDoIt(aTrack, aStep);
 
   // get new weight and number of clones
   G4Nsplit_Weight nw(fImportanceSplitExaminer.Examine(aTrack.GetWeight()));
 
-  fImportancePostStepDoIt->DoIt(aTrack, fParticleChange, nw);
+  fPostStepAction->DoIt(aTrack, fParticleChange, nw);
   return fParticleChange;
 }
   
 void G4ParallelImportanceProcess::Error(const G4String &m)
 {
-  G4cout << "ERROR - G4ImportanceProcess::" << m << G4endl;
-  G4Exception("Program aborted.");
+  G4Exception("G4ParallelImportanceProcess::Error()",
+              "ProgramError", FatalException, m);
 }
 
-
-
-void G4ParallelImportanceProcess::KillTrack() const{
+void G4ParallelImportanceProcess::KillTrack() const
+{
   fParticleChange->SetStatusChange(fStopAndKill);
 }
 
-
-const G4String &G4ParallelImportanceProcess::GetName() const {
+const G4String &G4ParallelImportanceProcess::GetName() const
+{
   return G4ParallelTransport::GetProcessName();
 }

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: RunAction.hh,v 1.4 2002/12/12 12:48:16 maire Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: RunAction.hh,v 1.5 2003/10/10 10:42:39 maire Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // 
 
@@ -39,7 +39,7 @@
 
 class G4Run;
 
-#ifndef G4NOHIST
+#ifdef G4ANALYSIS_USE
 namespace AIDA {
  class ITree;
  class IHistogram1D;
@@ -56,16 +56,15 @@ class RunAction : public G4UserRunAction
     void BeginOfRunAction(const G4Run*);
     void   EndOfRunAction(const G4Run*);
     
-
-#ifndef G4NOHIST   
+#ifdef G4ANALYSIS_USE
     AIDA::IHistogram1D* GetHisto(G4int id) {return histo[id];}
 #endif
            
   private:  
     void bookHisto();
     void cleanHisto();
-
-#ifndef G4NOHIST 
+    
+#ifdef G4ANALYSIS_USE
   private:      
     AIDA::ITree* tree;
     AIDA::IHistogram1D* histo[6];

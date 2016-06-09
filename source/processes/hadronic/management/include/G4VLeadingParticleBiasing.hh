@@ -20,20 +20,20 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VLeadingParticleBiasing.hh,v 1.3 2002/12/13 09:06:26 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4VLeadingParticleBiasing.hh,v 1.4 2003/07/01 15:05:32 hpw Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // --------------------------------------------------------------------
 #ifndef G4VLeadingParticleBiasing_h
 #define G4VLeadingParticleBiasing_h
 
-class G4VParticleChange;
+class G4HadFinalState;
 
 class G4VLeadingParticleBiasing 
 {
   public:
   
-  virtual G4VParticleChange * Bias(G4VParticleChange * result) = 0;
+  virtual G4HadFinalState * Bias(G4HadFinalState * result) = 0;
 };
 
 #endif

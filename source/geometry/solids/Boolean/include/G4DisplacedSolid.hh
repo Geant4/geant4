@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4DisplacedSolid.hh,v 1.14 2003/06/16 16:53:11 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4DisplacedSolid.hh,v 1.15 2003/11/03 17:48:45 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 //
 // class G4DisplacedSolid
@@ -38,8 +38,7 @@
 // 28.10.98 V.Grichine: created
 // 22.11.00 V.Grichine: new set methods for matrix/vectors
 //
-// ********************************************************************
-
+// --------------------------------------------------------------------
 #ifndef G4DisplacedSolid_HH
 #define G4DisplacedSolid_HH
 
@@ -64,7 +63,7 @@ class G4DisplacedSolid : public G4VSolid
 
     G4DisplacedSolid( const G4String& pName,
                             G4VSolid* pSolid ,
-		      const G4AffineTransform directTransform );
+                      const G4AffineTransform directTransform );
       // For use in instantiating a transient instance from a persistent one.
 
     virtual ~G4DisplacedSolid() ;
@@ -76,9 +75,9 @@ class G4DisplacedSolid : public G4VSolid
     EInside Inside( const G4ThreeVector& p ) const ; 
 
     G4bool CalculateExtent(const EAxis pAxis,
-			   const G4VoxelLimits& pVoxelLimit,
-			   const G4AffineTransform& pTransform,
-				 G4double& pMin, G4double& pMax) const ;
+                           const G4VoxelLimits& pVoxelLimit,
+                           const G4AffineTransform& pTransform,
+                                 G4double& pMin, G4double& pMax) const ;
 
     G4ThreeVector SurfaceNormal( const G4ThreeVector& p ) const ;
 
@@ -88,16 +87,16 @@ class G4DisplacedSolid : public G4VSolid
     G4double DistanceToIn( const G4ThreeVector& p) const ;
 
     G4double DistanceToOut( const G4ThreeVector& p,
-			    const G4ThreeVector& v,
-			    const G4bool calcNorm=false,
-			    G4bool *validNorm=0,
-			    G4ThreeVector *n=0      ) const ;
+                            const G4ThreeVector& v,
+                            const G4bool calcNorm=false,
+                                  G4bool *validNorm=0,
+                                  G4ThreeVector *n=0      ) const ;
 
     G4double DistanceToOut( const G4ThreeVector& p ) const ;
 
 
-    void ComputeDimensions( G4VPVParameterisation* p,
-	                    const G4int n,
+    void ComputeDimensions(       G4VPVParameterisation* p,
+                            const G4int n,
                             const G4VPhysicalVolume* pRep ) ;
 
     void CleanTransformations();

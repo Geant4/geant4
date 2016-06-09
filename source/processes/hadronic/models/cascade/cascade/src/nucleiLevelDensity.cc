@@ -19,7 +19,7 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
-
+//
 #include "G4InuclSpecialFunctions.hh"
 
 G4double G4InuclSpecialFunctions::nucleiLevelDensity(G4double a) {

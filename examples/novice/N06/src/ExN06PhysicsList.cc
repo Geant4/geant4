@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: ExN06PhysicsList.cc,v 1.9 2003/06/16 16:50:05 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: ExN06PhysicsList.cc,v 1.11 2003/10/24 12:38:17 maire Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -36,7 +36,6 @@
 
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleTypes.hh"
-#include "G4ParticleWithCuts.hh"
 #include "G4ParticleTable.hh"
 
 #include "G4Material.hh"
@@ -204,14 +203,14 @@ void ExN06PhysicsList::ConstructEM()
       // Construct processes for electron
       pmanager->AddProcess(new G4MultipleScattering(),-1, 1, 1);
       pmanager->AddProcess(new G4eIonisation(),       -1, 2, 2);
-      pmanager->AddProcess(new G4eBremsstrahlung(),   -1,-1, 3);
+      pmanager->AddProcess(new G4eBremsstrahlung(),   -1, 3, 3);
 
     } else if (particleName == "e+") {
     //positron
       // Construct processes for positron
       pmanager->AddProcess(new G4MultipleScattering(),-1, 1, 1);
       pmanager->AddProcess(new G4eIonisation(),       -1, 2, 2);
-      pmanager->AddProcess(new G4eBremsstrahlung(),   -1,-1, 3);
+      pmanager->AddProcess(new G4eBremsstrahlung(),   -1, 3, 3);
       pmanager->AddProcess(new G4eplusAnnihilation(),  0,-1, 4);
 
     } else if( particleName == "mu+" ||
@@ -220,8 +219,8 @@ void ExN06PhysicsList::ConstructEM()
      // Construct processes for muon
      pmanager->AddProcess(new G4MultipleScattering(),-1, 1, 1);
      pmanager->AddProcess(new G4MuIonisation(),      -1, 2, 2);
-     pmanager->AddProcess(new G4MuBremsstrahlung(),  -1,-1, 3);
-     pmanager->AddProcess(new G4MuPairProduction(),  -1,-1, 4);
+     pmanager->AddProcess(new G4MuBremsstrahlung(),  -1, 3, 3);
+     pmanager->AddProcess(new G4MuPairProduction(),  -1, 4, 4);
 
     } else {
       if ((particle->GetPDGCharge() != 0.0) &&

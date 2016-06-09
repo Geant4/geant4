@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ReflectionFactory.hh,v 1.5 2003/06/16 16:53:13 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4ReflectionFactory.hh,v 1.6 2003/11/03 17:48:45 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // 
 // class G4Reflection
@@ -54,17 +54,17 @@
 // x(inV) = TD * x(inD);
 // x(inM) = TGV * x(inV) 
 //        = TV * R * x(inV) 
-//	  = TV * R * TD * x(inD)
-//	  = TV * R*TD*R-1 * R*x(inD)
-//	  = TV * ReflTD * x(inReflD)
+//        = TV * R * TD * x(inD)
+//        = TV * R*TD*R-1 * R*x(inD)
+//        = TV * ReflTD * x(inReflD)
 
 // Author: Ivana Hrivnacova, 16.10.2001  (Ivana.Hrivnacova@cern.ch)
-
+// --------------------------------------------------------------------
 #ifndef G4_REFLECTION_FACTORY_HH
 #define G4_REFLECTION_FACTORY_HH
 
+#include "G4Types.hh"
 #include "G4Transform3D.hh"
-#include "globals.hh"
 #include "geomdefs.hh"
 
 #include <map>
@@ -74,9 +74,9 @@ class G4LogicalVolume;
 class G4VSolid;
 
 typedef std::pair<G4VPhysicalVolume*,
-                    G4VPhysicalVolume*> G4PhysicalVolumesPair;  
+                  G4VPhysicalVolume*> G4PhysicalVolumesPair;  
 typedef std::map<G4LogicalVolume*, G4LogicalVolume*,  
-                   std::less<G4LogicalVolume*> > G4ReflectedVolumesMap;
+                 std::less<G4LogicalVolume*> > G4ReflectedVolumesMap;
 
 class G4ReflectionFactory 
 {
@@ -92,10 +92,10 @@ class G4ReflectionFactory
 
     G4PhysicalVolumesPair Place(const G4Transform3D& transform3D,
                                 const G4String&  name,
-	     	                G4LogicalVolume* LV,
-			        G4LogicalVolume* motherLV,
-			        G4bool isMany, 
-			        G4int  copyNo);
+                                      G4LogicalVolume* LV,
+                                      G4LogicalVolume* motherLV,
+                                      G4bool isMany, 
+                                      G4int  copyNo);
       // Evaluates the passed transformation; if it contains reflection
       // it performs its decomposition, creates new reflected solid and
       // logical volume (or retrieves them from a map if the reflected
@@ -106,23 +106,23 @@ class G4ReflectionFactory
       // or 0 if mother LV was not reflected.
 
     G4PhysicalVolumesPair Replicate(const G4String& name, 
-	     	                G4LogicalVolume* LV,
-			        G4LogicalVolume* motherLV,
-                                EAxis axis, 
-				G4int nofReplicas, 
-		                G4double width,
-                                G4double offset=0);
+                                          G4LogicalVolume* LV,
+                                          G4LogicalVolume* motherLV,
+                                          EAxis axis, 
+                                          G4int nofReplicas, 
+                                          G4double width,
+                                          G4double offset=0);
       // Creates replica in the given mother.
       // The result is a pair of physical volumes;
       // the second physical volume is a replica in a reflected mother
       // or 0 if mother LV was not reflected.
 
-    void  SetVerboseLevel(G4int verboseLevel);				  
-    G4int GetVerboseLevel() const;				  
+    void  SetVerboseLevel(G4int verboseLevel);
+    G4int GetVerboseLevel() const;
       // Sets/gets verbosity level.
 
-    void     SetVolumesNameExtension(const G4String& nameExtension);	
-    G4String GetVolumesNameExtension() const;				  
+    void     SetVolumesNameExtension(const G4String& nameExtension);
+    G4String GetVolumesNameExtension() const;
       // Returns the name extension for the reflected solids
       // and logical volumes.
 
@@ -151,7 +151,7 @@ class G4ReflectionFactory
       // Returns a handle to the internal map of volumes which have
       // been reflected, after that placement or replication is performed.
 
-  protected:	  
+  protected:  
 
     G4ReflectionFactory();
       // Protected singleton constructor.
@@ -160,7 +160,7 @@ class G4ReflectionFactory
     G4ReflectionFactory& operator=(const G4ReflectionFactory&);
       // Disabled copy constructor and assignment operator.
  
-  private:	  
+  private:  
 
     G4LogicalVolume*   ReflectLV(G4LogicalVolume* LV);
       // Gets/creates the reflected solid and logical volume
@@ -192,9 +192,9 @@ class G4ReflectionFactory
     void CheckScale(const G4Scale3D& scale) const;
       // Checks if scale correspond to fScale, if not gives exception.
 
-    void PrintConstituentLVMap();				  
+    void PrintConstituentLVMap();  
       // Temporary - for debugging purpose.
-	  
+  
   private:
 
     static G4ReflectionFactory* fInstance;

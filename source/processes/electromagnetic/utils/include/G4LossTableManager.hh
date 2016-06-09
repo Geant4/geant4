@@ -20,6 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
+// $Id: G4LossTableManager.hh,v 1.19 2003/11/12 16:18:09 vnivanch Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 //
 // -------------------------------------------------------------------
@@ -42,6 +44,10 @@
 // 25-03-03 Add deregistration (V.Ivanchenko)
 // 26-03-03 Add GetDEDXDispersion (V.Ivanchenko)
 // 02-04-03 Change messenger (V.Ivanchenko)
+// 23-07-03 Add exchange with G4EnergyLossTables (V.Ivanchenko)
+// 05-10-03 Add G4VEmProcesses registration (V.Ivanchenko)
+// 17-10-03 Add SetParameters method (V.Ivanchenko)
+// 12-11-03 G4EnergyLossSTD -> G4EnergyLossProcess (V.Ivanchenko)
 //
 // Class Description:
 //
@@ -63,13 +69,15 @@
 #include <vector>
 #include "globals.hh"
 #include "G4LossTableBuilder.hh"
-#include "G4VEnergyLossSTD.hh"
+#include "G4VEnergyLossProcess.hh"
+#include "G4EnergyLossTables.hh"
 
 class G4PhysicsTable;
 class G4MaterialCutsCouple;
 class G4EnergyLossMessenger;
 class G4ParticleDefinition;
 class G4VMultipleScattering;
+class G4VEmProcess;
 
 class G4LossTableManager
 {
@@ -104,19 +112,23 @@ public:
           G4double& length);
 
   // to be called only by energy loss processes
-  void Register(G4VEnergyLossSTD* p);
+  void Register(G4VEnergyLossProcess* p);
 
-  void DeRegister(G4VEnergyLossSTD* p);
+  void DeRegister(G4VEnergyLossProcess* p);
 
   void Register(G4VMultipleScattering* p);
 
   void DeRegister(G4VMultipleScattering* p);
+  
+  void Register(G4VEmProcess* p);
 
-  void RegisterIon(const G4ParticleDefinition* aParticle, G4VEnergyLossSTD* p);
+  void DeRegister(G4VEmProcess* p);
+
+  void RegisterIon(const G4ParticleDefinition* aParticle, G4VEnergyLossProcess* p);
 
   void BuildPhysicsTable(const G4ParticleDefinition* aParticle);
 
-  void RetrievePhysicsTables(const G4ParticleDefinition* aParticle, G4VEnergyLossSTD* em);
+  void RetrievePhysicsTables(const G4ParticleDefinition* aParticle, G4VEnergyLossProcess* em);
 
   void SetLossFluctuations(G4bool val);
 
@@ -135,27 +147,33 @@ public:
   void SetStepLimits(G4double v1, G4double v2);
 
   void SetBuildPreciseRange(G4bool val);
+ 
+  void SetVerbose(G4int val);
 
   G4EnergyLossMessenger* GetMessenger();
+
+  G4bool IsRecalcNeeded(const G4ParticleDefinition* aParticle);
 
 private:
 
   G4LossTableManager();
 
-  void Initialise(const G4ParticleDefinition*);
+  void Initialise();
 
-  G4VEnergyLossSTD* BuildTables(const G4ParticleDefinition* aParticle);
+  G4VEnergyLossProcess* BuildTables(const G4ParticleDefinition* aParticle);
 
   void ParticleHaveNoLoss(const G4ParticleDefinition* aParticle);
+
+  void SetParameters(G4VEnergyLossProcess*);
 
 private:
 
   static G4LossTableManager* theInstance;
 
   typedef const G4ParticleDefinition* PD;
-  std::map<PD,G4VEnergyLossSTD*,std::less<PD> > loss_map;
+  std::map<PD,G4VEnergyLossProcess*,std::less<PD> > loss_map;
 
-  std::vector<G4VEnergyLossSTD*> loss_vector;
+  std::vector<G4VEnergyLossProcess*> loss_vector;
   std::vector<PD> part_vector;
   std::vector<PD> base_part_vector;
   std::vector<G4bool> tables_are_built;
@@ -163,9 +181,10 @@ private:
   std::vector<G4PhysicsTable*> range_vector;
   std::vector<G4PhysicsTable*> inv_range_vector;
   std::vector<G4VMultipleScattering*> msc_vector;
+  std::vector<G4VEmProcess*> emp_vector;
 
   // cash
-  G4VEnergyLossSTD*    currentLoss;
+  G4VEnergyLossProcess*    currentLoss;
   PD                   currentParticle;
   PD                   theElectron;
 
@@ -183,6 +202,7 @@ private:
   G4bool buildPreciseRange;
   G4bool minEnergyActive;
   G4bool maxEnergyActive;
+  G4bool stepFunctionActive;
 
   G4double minSubRange;
   G4double maxRangeVariation;
@@ -190,7 +210,7 @@ private:
   G4double minKinEnergy;
   G4double maxKinEnergy;
 
-  G4VEnergyLossSTD*         eIonisation;
+  G4VEnergyLossProcess*         eIonisation;
   G4LossTableBuilder*       tableBuilder;
   G4EnergyLossMessenger*    theMessenger;
   const G4ParticleDefinition* firstParticle;
@@ -207,15 +227,20 @@ inline G4double G4LossTableManager::GetDEDX(
           const G4MaterialCutsCouple *couple)
 {
   if(aParticle != currentParticle) {
-    std::map<PD, G4VEnergyLossSTD*,std::less<PD> >::const_iterator pos;
+    currentParticle = aParticle;
+    std::map<PD, G4VEnergyLossProcess*,std::less<PD> >::const_iterator pos;
     if ((pos = loss_map.find(aParticle)) != loss_map.end()) {
-      currentParticle = aParticle;
       currentLoss = (*pos).second;
     } else {
-      ParticleHaveNoLoss(aParticle);
+      currentLoss = 0;
+    //  ParticleHaveNoLoss(aParticle);
     }
   }
-  return currentLoss->GetDEDX(kineticEnergy, couple);
+  G4double x;
+  if(currentLoss) x = currentLoss->GetDEDX(kineticEnergy, couple);
+  else            x = G4EnergyLossTables::GetDEDX(currentParticle,kineticEnergy,couple,false);
+  return x;
+//  return currentLoss->GetDEDX(kineticEnergy, couple);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
@@ -226,15 +251,20 @@ inline G4double G4LossTableManager::GetRange(
           const G4MaterialCutsCouple *couple)
 {
   if(aParticle != currentParticle) {
-    std::map<PD, G4VEnergyLossSTD*, std::less<PD> >::const_iterator pos;
-    if ((pos = loss_map.find(aParticle)) != loss_map.end()) {
-      currentParticle = aParticle;
+    currentParticle = aParticle;
+    std::map<PD, G4VEnergyLossProcess*, std::less<PD> >::const_iterator pos;
+    if ((pos = loss_map.find(currentParticle)) != loss_map.end()) {
       currentLoss = (*pos).second;
     } else {
-      ParticleHaveNoLoss(aParticle);
+      currentLoss = 0;
+//      ParticleHaveNoLoss(aParticle);
     }
   }
-  return currentLoss->GetRange(kineticEnergy, couple);
+  G4double x;
+  if(currentLoss) x = currentLoss->GetRange(kineticEnergy, couple);
+  else            x = G4EnergyLossTables::GetRange(currentParticle,kineticEnergy,couple,false);
+  return x;
+//  return currentLoss->GetRange(kineticEnergy, couple);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -245,15 +275,20 @@ inline G4double G4LossTableManager::GetEnergy(
           const G4MaterialCutsCouple *couple)
 {
   if(aParticle != currentParticle) {
-    std::map<PD,G4VEnergyLossSTD*,std::less<PD> >::const_iterator pos;
+    currentParticle = aParticle;
+    std::map<PD,G4VEnergyLossProcess*,std::less<PD> >::const_iterator pos;
     if ((pos = loss_map.find(aParticle)) != loss_map.end()) {
-      currentParticle = aParticle;
       currentLoss = (*pos).second;
     } else {
-      ParticleHaveNoLoss(aParticle);
+      currentLoss = 0;
+     // ParticleHaveNoLoss(aParticle);
     }
   }
-  return currentLoss->GetKineticEnergy(range, couple);
+  G4double x;
+  if(currentLoss) x = currentLoss->GetKineticEnergy(range, couple);
+  else            x = G4EnergyLossTables::GetPreciseEnergyFromRange(currentParticle,range,couple,false);
+  return x;
+//  return currentLoss->GetKineticEnergy(range, couple);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -265,7 +300,7 @@ inline  G4double G4LossTableManager::GetDEDXDispersion(
 {
   const G4ParticleDefinition* aParticle = dp->GetDefinition();
   if(aParticle != currentParticle) {
-    std::map<PD,G4VEnergyLossSTD*,std::less<PD> >::const_iterator pos;
+    std::map<PD,G4VEnergyLossProcess*,std::less<PD> >::const_iterator pos;
     if ((pos = loss_map.find(aParticle)) != loss_map.end()) {
       currentParticle = aParticle;
       currentLoss = (*pos).second;

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: F01DetectorConstruction.cc,v 1.11 2003/06/25 17:40:46 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: F01DetectorConstruction.cc,v 1.13 2003/11/25 18:06:26 japost Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // 
 
@@ -30,7 +30,7 @@
 #include "F01DetectorMessenger.hh"
 
 #include "F01CalorimeterSD.hh"
-#include "F01ElectroMagneticField.hh"
+#include "F01FieldSetup.hh"
 
 #include "G4VClusterModel.hh"
 #include "G4PAIclusterModel.hh"
@@ -45,6 +45,7 @@
 #include "G4SDManager.hh"
 #include "G4RunManager.hh"
 
+#include "G4GeometryManager.hh"
 #include "G4PhysicalVolumeStore.hh"
 #include "G4LogicalVolumeStore.hh"
 #include "G4SolidStore.hh"
@@ -58,7 +59,7 @@
 F01DetectorConstruction::F01DetectorConstruction()
  : solidWorld(0), logicWorld(0), physiWorld(0),
    solidAbsorber(0),logicAbsorber(0), physiAbsorber(0),
-   magField(0), fEmField(0), calorimeterSD(0),
+   fEmFieldSetup(0), calorimeterSD(0),
    AbsorberMaterial(0), worldchanged(false), WorldMaterial(0)
 {
   // default parameter values of the calorimeter
@@ -79,6 +80,7 @@ F01DetectorConstruction::F01DetectorConstruction()
   // create materials
 
   DefineMaterials();
+
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -88,7 +90,7 @@ F01DetectorConstruction::F01DetectorConstruction()
 F01DetectorConstruction::~F01DetectorConstruction()
 { 
   delete detectorMessenger;
-  if (fEmField) delete fEmField ;
+  if (fEmFieldSetup) delete fEmFieldSetup;
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -97,7 +99,12 @@ F01DetectorConstruction::~F01DetectorConstruction()
 
 G4VPhysicalVolume* F01DetectorConstruction::Construct()
 {
-  return ConstructCalorimeter();
+   G4VPhysicalVolume* calorWorld= ConstructCalorimeter();
+
+   // Construct the field creator - this will register the field it creates
+   fEmFieldSetup= new F01FieldSetup(         // G4ThreeVector(0.0, 0.0, 1.0*tesla) );  
+				    G4ThreeVector( 3.3*tesla, 0.0, 0.0 ) ) ; 
+   return calorWorld; 
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -235,6 +242,7 @@ G4VPhysicalVolume* F01DetectorConstruction::ConstructCalorimeter()
 
   if (physiWorld)
   {
+    G4GeometryManager::GetInstance()->OpenGeometry();
     G4PhysicalVolumeStore::GetInstance()->Clean();
     G4LogicalVolumeStore::GetInstance()->Clean();
     G4SolidStore::GetInstance()->Clean();

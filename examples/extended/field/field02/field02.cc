@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: field02.cc,v 1.4 2001/11/07 16:36:32 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: field02.cc,v 1.5 2003/11/12 16:33:13 japost Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // 
 // --------------------------------------------------------------
@@ -44,7 +44,7 @@
 #endif
 
 #include "F02DetectorConstruction.hh"
-#include "F02ElectroMagneticField.hh"
+#include "F02ElectricFieldSetup.hh"
 #include "F02PhysicsList.hh"
 #include "F02PrimaryGeneratorAction.hh"
 #include "F02RunAction.hh"
@@ -67,9 +67,10 @@ int main(int argc,char** argv)
 
   G4RunManager * runManager = new G4RunManager;
 
-  // Construct the electro magnetic field
+  // Construct the helper class to manage the electric field & 
+  //  the parameters for the propagation of particles in it.
 
-  F02ElectroMagneticField* field = new F02ElectroMagneticField() ;
+  F02ElectricFieldSetup* field = new F02ElectricFieldSetup() ;
     
   // Set mandatory initialization classes
 

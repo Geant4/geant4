@@ -21,8 +21,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4AntiProtonInelasticProcess.hh,v 1.6 2002/12/12 19:18:33 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
 //
  // Hadronic Process: AntiProton Inelastic Process
  // J.L. Chuma, TRIUMF, 18-Feb-1997

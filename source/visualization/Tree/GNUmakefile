@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.1 2001/04/10 15:08:02 johna Exp $
+# $Id: GNUmakefile,v 1.2 2003/10/03 15:19:27 gcosmo Exp $
 
 name := G4Tree
 
@@ -18,7 +18,6 @@ CPPFLAGS += -I$(G4BASE)/graphics_reps/include
 CPPFLAGS += -I$(G4BASE)/intercoms/include
 CPPFLAGS += -I$(G4BASE)/geometry/management/include
 CPPFLAGS += -I$(G4BASE)/geometry/solids/CSG/include
-CPPFLAGS += -I$(G4BASE)/geometry/volumes/include
 CPPFLAGS += -I$(G4BASE)/geometry/solids/specific/include
 
 include $(G4INSTALL)/config/common.gmk

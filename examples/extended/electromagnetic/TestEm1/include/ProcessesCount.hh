@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: ProcessesCount.hh,v 1.8 2003/06/16 16:47:30 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: ProcessesCount.hh,v 1.9 2003/10/06 10:02:25 maire Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

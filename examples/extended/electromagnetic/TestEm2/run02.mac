@@ -1,4 +1,4 @@
-# $Id: run02.mac,v 1.8 2003/02/14 14:21:28 vnivanch Exp $
+# $Id: run02.mac,v 1.9 2003/10/08 17:28:29 maire Exp $
 #
 # Macro file for "TestEm2.cc" 
 # (can be run in batch, without graphic)
@@ -9,23 +9,24 @@
 #                        J&H Crannel - Phys. Rev. 184-2 - August69
 #
 /control/verbose 2
+/run/verbose 2
 #
-/testem/phys/addPhysics  model
-#/testem/phys/addPhysics  standard
+/testem/det/setMat Aluminium
+/testem/det/setLbin 12 1.1245
+/testem/det/setRbin 12 0.11245
+#
+/testem/phys/addPhysics  standard
+###/testem/phys/addPhysics  g4v52
 #
 /testem/phys/setCuts 2.0 mm
 #
-/testem/det/setMat Al
-/testem/det/setLbin 12 1.1245
-/testem/det/setRbin 12 0.11245
 /run/initialize
-#/testem/det/update
-#
-/run/verbose 2
-/testem/event/printModulo 10
 #
 /gun/particle e-
 /gun/energy 1 GeV
+#
+/testem/event/printModulo 10
+#
 /run/beamOn 500
 
 

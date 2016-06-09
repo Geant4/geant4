@@ -1,4 +1,4 @@
-$Id: README,v 1.10 2003/01/30 14:14:17 maire Exp $
+$Id: README,v 1.15 2003/12/02 14:22:31 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -46,37 +46,38 @@ $Id: README,v 1.10 2003/01/30 14:14:17 maire Exp $
  	
  	In addition one can choose randomly the impact point of the incident
  	particle. The corresponding interactive command is built in
- 	PrimaryGeneratorMessenger class.
+ 	PrimaryGeneratorMessenger class (see run2.mac).
  	
  	A RUN is a set of events.
  	
- 3- DETECTOR RESPONSE
- 
- 	A HIT is a record, event per event and volume per volume, of all the 
- 	informations needed to simulate and analyse the detector response.
- 	
- 	In this example a CalorHit is defined as a set of 4 informations per
-	layer :
- 	- the total energy deposit in the absorber plate,
- 	- the total tracklength of all charged particles in the absorber plate,
- 	- the total energy deposit in the detection gap,
- 	- the total tracklength of all charged particles in the detection gap.
- 	
- 	Therefore both the absorber and the detection gap are declared
- 	'sensitive detector' (SD), which means they can contribute to the hit.
- 	
- 	At the end of a run, from the CalorHitsCollection, one can study the
-	calorimeter performances such as :
-				- shower profile,
- 				- calorimeter resolution,
- 				- pi/e ratio ...
  				
- 4- VISUALIZATION
+ 3- VISUALIZATION
  
  	The Visualization Manager is set in the main().
  	The initialisation of the drawing is done via a set of /vis/ commands
         in the macro vis.mac. This macro is automatically read from 
  	the main in case of interactive running mode.
+
+        By default, vis.mac opens a DAWNFILE, suitable for viewing in DAWN,
+	and an OGLX for OpenGl.
+        You can switch to other graphics systems by commenting out this line
+        and instead uncommenting one of the other /vis/open statements, such as
+        HepRepFile or HepRepXML.
+	
+	The DAWNFILE, HepRepFile and HepRepXML drivers are always available 
+	(since they require no external libraries), but the OGLIX driver 
+	requires:
+	    1- the visualisation & interfaces categories have been compiled
+	       with the environment variable G4VIS_BUILD_OPENGLX_DRIVER.
+	    2- exampleN03.cc has been compiled with G4VIS_USE_OPENGLX.
+
+	The HepRepXML driver outputs a zip file that can be unzipped into 
+	several individual HepRep files, each viewable in WIRED.
+
+	For more information on visualization, including information on how to
+	install and run DAWN, OpenGL and WIRED, see the visualization tutorials
+	on the Geant4 Workshop Tutorial CD available at:
+	http://geant4.slac.stanford.edu/g4cd/Welcome.html
  	
  	The detector has a default view which is a longitudinal view of the 
  	calorimeter.
@@ -84,26 +85,16 @@ $Id: README,v 1.10 2003/01/30 14:14:17 maire Exp $
  	The tracks are drawn at the end of event, and erased at the end of run.
  	Optionaly one can choose to draw all particles, only the charged,
  	or neutral or none. This command is build in EventActionMessenger class.
-	
-	NB 1: the visualization (with OpenGL driver) assumes two things:
-	    1- the visualisation & interfaces categories have been compiled
-	       with the environment variable G4VIS_BUILD_OPENGLX_DRIVER.
-	    2- exampleN03.cc has been compiled with G4VIS_USE_OPENGLX.   
-
-	NB 2: the visualization (with DAWNFILE driver) assumes two things:
-	    1- the visualisation & interfaces categories have been compiled
-	       with the environment variable G4VIS_BUILD_DAWNFILE_DRIVER.
-	    2- exampleN03.cc has been compiled with G4VIS_USE_DAWNFILE.   
  	
-	NN 3: The macros "visTutor/exN03VisX.mac" are tutorial macros for 
-              visualization.  They can be tried as:
+	Additional visualization tutorial macros are available in the visTutor
+	subdirectory.  They can be tried as:
                % $G4BINDIR/exampleN03
 	       idle > /control/execute visTutor/exN03VisX.mac
-              For details, see comment lines  described in the macro files.
-              These macros are designed to help your understanding the 
-              User's Guide.    
+        For details, see comment lines  described in the macro files.
+        These macros are designed to help your understanding the User's Guide.
 
- 5- PHYSICS DEMO
+
+ 4- PHYSICS DEMO
  
  	The particle's type and the physic processes which will be available
  	in this example are set in PhysicsList class.
@@ -113,11 +104,12 @@ $Id: README,v 1.10 2003/01/30 14:14:17 maire Exp $
  	allows to activate/inactivate the processes one by one.
  	Then one can well visualize the processes one by one, especially 
  	in the bubble chamber setup with a transverse magnetic field.
+	(see run2.mac and newgeom.mac)
  
  	As a homework try to visualize a gamma conversion alone, 
  	or the effect of the multiple scattering.
 	
- 6- RANDOM NUMBERS HANDLING
+ 5- RANDOM NUMBERS HANDLING
  
  	CLHEP provides several random number engines. In this example the Ranecu
 	engine is choosen at beginning of the main (exampleN03.cc).
@@ -142,9 +134,9 @@ $Id: README,v 1.10 2003/01/30 14:14:17 maire Exp $
 	/random/resetEngineFrom  fileName 
 	
 	The macro rndmSeed.mac shows how to save and reset the random number
-	seed between runs, with UI commands.	
+	seed between runs, from UI commands.	
 	
- 7- USER INTERFACES
+ 6- USER INTERFACES
   
         The default command interface, called G4UIterminal, is done via
 	standart cin/G4cout.
@@ -156,7 +148,7 @@ $Id: README,v 1.10 2003/01/30 14:14:17 maire Exp $
 	  2- exampleN03.cc has been compiled with G4UI_USE_XM. 
  
       	
- 8- HOW TO START ?
+ 7- HOW TO START ?
  
  	- compile and link to generate an executable
  		% cd N03
@@ -168,7 +160,11 @@ $Id: README,v 1.10 2003/01/30 14:14:17 maire Exp $
  	- execute N03 in 'interactive mode' with visualization
  		% exampleN03
  		....
- 		Idle> type your commands. For instance:
+ 		Idle>      ---> type your commands. For instance:
+		Idle> /run/beamOn 
+		....
+		Idle> /run/beamOn 10
+		....				
  		Idle> /control/execute newgeom.mac
  		....
  		Idle> exit

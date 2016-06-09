@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ClippablePolygon.hh,v 1.8 2003/06/16 16:53:50 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4ClippablePolygon.hh,v 1.9 2003/11/03 18:39:54 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 //
 // --------------------------------------------------------------------
@@ -38,18 +38,14 @@
 // Author:
 //   David C. Williams (davidw@scipp.ucsc.edu)
 // --------------------------------------------------------------------
-
 #ifndef G4ClippablePolygon_hh
 #define G4ClippablePolygon_hh
 
 #include <vector>
 
-#include "globals.hh"
+#include "G4Types.hh"
 #include "geomdefs.hh"
 #include "G4ThreeVector.hh"
-
-class G4VoxelLimits;
-class G4AffineTransform;
 
 class G4AffineTransform;
 class G4VoxelLimits;

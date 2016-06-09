@@ -1,4 +1,4 @@
-cvs log $Id: History,v 1.46 2003/04/03 15:31:22 gcosmo Exp $
+cvs log $Id: History,v 1.47 2003/09/18 11:03:10 johna Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+18th September 2003  John Alison  (greps-V05-02-00)
+- Introduced G4Colour<->G4ThreeVector conversion operators.
 
 3rd April 2003  G.Cosmo  (greps-V05-00-00)
 - Cleared trivial pedantic warnings.

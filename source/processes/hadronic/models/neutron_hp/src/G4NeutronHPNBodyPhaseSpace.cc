@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPNBodyPhaseSpace.cc,v 1.9 2003/05/30 11:32:34 hpw Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4NeutronHPNBodyPhaseSpace.cc,v 1.10 2003/11/03 17:54:38 hpw Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 #include "G4NeutronHPNBodyPhaseSpace.hh"
 #include "G4Gamma.hh"
@@ -69,11 +69,11 @@ G4ReactionProduct * G4NeutronHPNBodyPhaseSpace::Sample(G4double anEnergy, G4doub
    else if(A==4)
    {
      result->SetDefinition(G4Alpha::Alpha());
-     if(Z!=2) G4Exception("Unknown ion case 1");    
+     if(Z!=2) throw G4HadronicException(__FILE__, __LINE__, "Unknown ion case 1");    
    }
    else
    {
-     G4Exception("G4NeutronHPNBodyPhaseSpace: Unknown ion case 2");
+     throw G4HadronicException(__FILE__, __LINE__, "G4NeutronHPNBodyPhaseSpace: Unknown ion case 2");
    }
 
 // Get the energy from phase-space distribution
@@ -96,7 +96,7 @@ G4ReactionProduct * G4NeutronHPNBodyPhaseSpace::Sample(G4double anEnergy, G4doub
    }
    else
    {
-     G4Exception("NeutronHP Phase-space distribution cannot cope with this number of particles");
+     throw G4HadronicException(__FILE__, __LINE__, "NeutronHP Phase-space distribution cannot cope with this number of particles");
    }
    G4double testit;
    G4double rand0 = Prob(max, maxE, theTotalCount);

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: ExN02PhysicsList.cc,v 1.15 2003/06/16 16:49:47 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: ExN02PhysicsList.cc,v 1.17 2003/10/24 12:27:53 maire Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -31,7 +31,6 @@
 #include "ExN02PhysicsList.hh"
 
 #include "G4ParticleDefinition.hh"
-#include "G4ParticleWithCuts.hh"
 #include "G4ProcessManager.hh"
 #include "G4ProcessVector.hh"
 #include "G4ParticleTypes.hh"
@@ -180,13 +179,13 @@ void ExN02PhysicsList::ConstructEM()
       //electron
       pmanager->AddProcess(new G4MultipleScattering,-1, 1,1);
       pmanager->AddProcess(new G4eIonisation,       -1, 2,2);
-      pmanager->AddProcess(new G4eBremsstrahlung,   -1,-1,3);      
+      pmanager->AddProcess(new G4eBremsstrahlung,   -1, 3,3);      
 
     } else if (particleName == "e+") {
       //positron
       pmanager->AddProcess(new G4MultipleScattering,-1, 1,1);
       pmanager->AddProcess(new G4eIonisation,       -1, 2,2);
-      pmanager->AddProcess(new G4eBremsstrahlung,   -1,-1,3);
+      pmanager->AddProcess(new G4eBremsstrahlung,   -1, 3,3);
       pmanager->AddProcess(new G4eplusAnnihilation,  0,-1,4);
 
     } else if( particleName == "mu+" || 
@@ -194,8 +193,8 @@ void ExN02PhysicsList::ConstructEM()
       //muon  
       pmanager->AddProcess(new G4MultipleScattering,-1, 1,1);
       pmanager->AddProcess(new G4MuIonisation,      -1, 2,2);
-      pmanager->AddProcess(new G4MuBremsstrahlung,  -1,-1,3);
-      pmanager->AddProcess(new G4MuPairProduction,  -1,-1,4);       
+      pmanager->AddProcess(new G4MuBremsstrahlung,  -1, 3,3);
+      pmanager->AddProcess(new G4MuPairProduction,  -1, 4,4);       
      
     } else if ((!particle->IsShortLived()) &&
 	       (particle->GetPDGCharge() != 0.0) && 

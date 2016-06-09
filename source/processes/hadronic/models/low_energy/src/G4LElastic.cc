@@ -41,22 +41,22 @@
 #include "G4IonTable.hh"
 
 
-G4VParticleChange*
-G4LElastic::ApplyYourself(const G4Track& aTrack, G4Nucleus& targetNucleus)
+G4HadFinalState*
+G4LElastic::ApplyYourself(const G4HadProjectile& aTrack, G4Nucleus& targetNucleus)
 {
-   // G4cout << "entering elastic scattering"<<G4endl; 
    if(getenv("debug_LElastic")) verboseLevel = 5;
-   theParticleChange.Initialize(aTrack);
-
-   const G4DynamicParticle* aParticle = aTrack.GetDynamicParticle();
+   theParticleChange.Clear();
+   const G4HadProjectile* aParticle = &aTrack;
    G4double atno2 = targetNucleus.GetN();
    G4double zTarget = targetNucleus.GetZ();
+   theParticleChange.SetEnergyChange(aTrack.GetKineticEnergy());
+   theParticleChange.SetMomentumChange(aTrack.Get4Momentum().vect().unit());
 
 // Elastic scattering off Hydrogen
 
    G4DynamicParticle* aSecondary = 0;
    if (atno2 < 1.5) {
-      G4ParticleDefinition* aParticleType = aParticle->GetDefinition();
+      const G4ParticleDefinition* aParticleType = aParticle->GetDefinition();
       if (aParticleType == G4PionPlus::PionPlus())
          aSecondary = LightMedia.PionPlusExchange(aParticle, targetNucleus);
       else if (aParticleType == G4PionMinus::PionMinus())
@@ -107,10 +107,11 @@ G4LElastic::ApplyYourself(const G4Track& aTrack, G4Nucleus& targetNucleus)
 
 // Has a charge or strangeness exchange occurred?
    if (aSecondary) {
-      aSecondary->SetMomentum(aParticle->GetMomentum());
-      theParticleChange.SetStatusChange(fStopAndKill);
+      aSecondary->SetMomentum(aParticle->Get4Momentum().vect());
+      theParticleChange.SetStatusChange(stopAndKill);
       theParticleChange.AddSecondary(aSecondary);
    }
+   // G4cout << "Entering elastic scattering 1"<<G4endl;
 
    G4double p = aParticle->GetTotalMomentum()/GeV;
    if (verboseLevel > 1)
@@ -118,6 +119,7 @@ G4LElastic::ApplyYourself(const G4Track& aTrack, G4Nucleus& targetNucleus)
 
    if (p < 0.01) return &theParticleChange;
 
+   // G4cout << "Entering elastic scattering 2"<<G4endl;
 // Compute the direction of elastic scattering.
 // It is planned to replace this code with a method based on
 // parameterized functions and a Monte Carlo method to invert the CDF.
@@ -176,8 +178,8 @@ G4LElastic::ApplyYourself(const G4Track& aTrack, G4Nucleus& targetNucleus)
    G4double cost = 1. - rr;
    G4double sint = sqrt(std::max(rr*(2. - rr), 0.));
    if (sint == 0.) return &theParticleChange;
-    if (verboseLevel > 1)
-      G4cout << "cos(t)=" << cost << "  sin(t)=" << sint << G4endl;
+   // G4cout << "Entering elastic scattering 3"<<G4endl;
+   if (verboseLevel > 1) G4cout << "cos(t)=" << cost << "  sin(t)=" << sint << G4endl;
 // Scattered particle referred to axis of incident particle
    G4double m1=aParticle->GetDefinition()->GetPDGMass();
    G4int Z=static_cast<G4int>(zTarget+.5);
@@ -203,7 +205,7 @@ G4LElastic::ApplyYourself(const G4Track& aTrack, G4Nucleus& targetNucleus)
    G4double de = (-b-sqrt(std::max(0.0,b*b-4.*a*c)))/(2.*a);
    G4double e1 = sqrt(p*p+m1*m1)-de;
    G4double p12=e1*e1-m1*m1;
-   p1 = sqrt(std::max(0.0,p12));
+   p1 = sqrt(std::max(1.*eV*eV,p12));
    px = p1*sint*sin(phi);
    py = p1*sint*cos(phi);
    pz = p1*cost;
@@ -216,9 +218,9 @@ G4LElastic::ApplyYourself(const G4Track& aTrack, G4Nucleus& targetNucleus)
      G4cout << "make p1 = "<< p12<<" "<<e1*e1<<" "<<m1*m1<<" "<<G4endl;
    }
 // Incident particle
-   G4double pxinc = p*(aParticle->GetMomentumDirection().x());
-   G4double pyinc = p*(aParticle->GetMomentumDirection().y());
-   G4double pzinc = p*(aParticle->GetMomentumDirection().z());
+   G4double pxinc = p*aParticle->Get4Momentum().vect().unit().x();
+   G4double pyinc = p*aParticle->Get4Momentum().vect().unit().y();
+   G4double pzinc = p*aParticle->Get4Momentum().vect().unit().z();
    if (verboseLevel > 1) {
       G4cout << "NOM SCAT " << px << " " << py << " " << pz << G4endl;
       G4cout << "INCIDENT " << pxinc << " " << pyinc << " " << pzinc << G4endl;
@@ -248,7 +250,8 @@ G4LElastic::ApplyYourself(const G4Track& aTrack, G4Nucleus& targetNucleus)
    }
    if (verboseLevel > 1) {
       G4cout << "DoIt: returning new momentum vector" << G4endl;
-      G4cout << pxnew << " " << pynew << " " << pznew << G4endl;
+      G4cout << "DoIt: "<<pxinc << " " << pyinc << " " << pzinc <<" "<<p<< G4endl;
+      G4cout << "DoIt: "<<pxnew << " " << pynew << " " << pznew <<" "<<p<< G4endl;
    }
 
    if (aSecondary)
@@ -257,7 +260,6 @@ G4LElastic::ApplyYourself(const G4Track& aTrack, G4Nucleus& targetNucleus)
    }
    else
    {
-      theParticleChange.SetNumberOfSecondaries(1);
       theParticleChange.SetMomentumChange(pxnew, pynew, pznew);
       theParticleChange.SetEnergyChange(sqrt(m1*m1+it0.mag2())-m1);
       G4ParticleDefinition * theDef = G4ParticleTable::GetParticleTable()->FindIon(Z,A,0,Z);
@@ -267,7 +269,6 @@ G4LElastic::ApplyYourself(const G4Track& aTrack, G4Nucleus& targetNucleus)
       theParticleChange.AddSecondary(aSec);
      // G4cout << "Final check ###### "<<p<<" "<<it.mag()<<" "<<p1<<G4endl;
    }
-
    return &theParticleChange;
 }
 

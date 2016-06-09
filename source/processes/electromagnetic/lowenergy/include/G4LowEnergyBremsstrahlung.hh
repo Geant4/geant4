@@ -22,8 +22,8 @@
 //
 // 
 // -------------------------------------------------------------------
-// $Id: G4LowEnergyBremsstrahlung.hh,v 1.33 2003/05/20 23:33:25 pia Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4LowEnergyBremsstrahlung.hh,v 1.35 2003/11/06 12:25:05 pia Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // Author: A. Forti
 //
@@ -36,6 +36,7 @@
 // 29 Nov 2001  V.Ivanchenko    New parametrisation of EEDL data
 // 21 Feb 2003  V.Ivanchenko    Energy bins for spectrum are defined here
 // 24 Mar 2003  P.Rodrigues     Changes to accommodate new angular generators
+// 06 Nov 2003  MGP             Overloaded SetAngularGenerator
 //
 // -------------------------------------------------------------------
 
@@ -68,11 +69,11 @@ class G4LowEnergyBremsstrahlung : public G4eLowEnergyLoss
 public:
  
   G4LowEnergyBremsstrahlung(const G4String& processName = "LowEnBrem");
-
-  // Commented out for release 5.2 (June 2003), allowing no interface change
-  // G4LowEnergyBremsstrahlung(const G4String& processName = "LowEnBrem",
-  //			       G4VBremAngularDistribution* distribution = 0);
-
+  
+  
+  //  G4LowEnergyBremsstrahlung(const G4String& processName = "LowEnBrem",
+  //			    G4VBremAngularDistribution* distribution = 0);
+  
   ~G4LowEnergyBremsstrahlung();
   
   G4bool IsApplicable(const G4ParticleDefinition&);
@@ -81,14 +82,16 @@ public:
   
   G4VParticleChange* PostStepDoIt(const G4Track& track,         
 				  const G4Step& step);
- 
+  
   void SetCutForLowEnSecPhotons(G4double cut);
-
-  // Temporary for release 5.2 (June 2003), allowing no interface change
+  
   void SetAngularGenerator(G4VBremAngularDistribution* distribution);
+
+  void SetAngularGenerator(const G4String& name);
   
   void PrintInfoDefinition();
         
+
 protected:
 
   G4double GetMeanFreePath(const G4Track& track,

@@ -71,7 +71,7 @@ MeanEnergyOfThisInteraction()
    G4double result(0);
    if(currentMeanEnergy<-1)
    {
-     G4Exception("G4NeutronHPContEnergyAngular: Logical error in Product class");
+     throw G4HadronicException(__FILE__, __LINE__, "G4NeutronHPContEnergyAngular: Logical error in Product class");
    }
    else
    {

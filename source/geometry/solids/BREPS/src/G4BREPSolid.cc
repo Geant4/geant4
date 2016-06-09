@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4BREPSolid.cc,v 1.24 2003/06/16 16:52:43 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4BREPSolid.cc,v 1.25 2003/10/28 13:42:29 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -726,7 +726,8 @@ G4BREPSolid::CreateRotatedVertices(const G4AffineTransform& pTransform) const
     }
   else
     {
-      G4Exception("G4BREPSolid::CreateRotatedVertices Out of memory - Cannot alloc vertices");
+      G4Exception("G4BREPSolid::CreateRotatedVertices()", "FatalError",
+                  FatalException, "Out of memory - Cannot allocate vertices!");
     }
   return vertices;
 }

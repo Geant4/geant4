@@ -1,4 +1,4 @@
-$Id: History,v 1.224 2003/06/02 10:42:59 johna Exp $
+$Id: History,v 1.238 2003/11/27 11:51:56 johna Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +23,71 @@ committal in the CVS repository !
 
 History file for visualization category
 ---------------------------------------
+
+27th November 2003  John Allison  (vis-V05-02-06)
+- Added /vis/scene/endOfRunAction.
+- Includes vis-HepRep-V05-02-08.
+- G4VisManager: Removed PrintAllGraphicsSystems and
+  PrintInstalledGraphicsSystems.  They are difficult to maintain and
+  are anyway not used.  (There remains PrintAvailableGraphicsSystems,
+  which is much used, and iterates over instantiated graphics systems
+  and needs no maintenance.)
+
+20th November 2003  John Allison  (vis-V05-02-05)
+- Re-submitted.  Includes vis-HepRep-05-02-07: fixes compiler issues and
+  other minor fixes.
+
+14th November 2003  John Allison  (vis-V05-02-04)
+- Includes vis-HepRep-05-02-03: new HepRep XML driver for HepRep Version 2.
+- Bug fix in G4VisManager::EndOfEvent.
+
+12th November 2003  John Allison
+- Bug in /vis/scene/add/volume: requestedDepthOfDescent now correctly
+  propagated to "world" volume.
+- modeling-V05-02-02: G4PhysicalVolumeModel: CalculateExtent always
+  searches complete hierarchy.
+- Change initialisation of G4VSceneHandler so that there is always a
+  clear on first drawing  - fMarkForClearingTransientStore(true).
+- Removed redundant code from G4VisManager::::EndOfRun.
+
+6th November 2003  John Allison  (vis-V05-02-03)
+- management:
+  o G4VisManager: improved handling of auto refresh at end of event and run.
+  o G4VisCommandsScene: improved endOfEventAction and improved guidance.
+  o GNUmakefile: rationalised.
+- GNUmakefile: removed G4LIBDIR and G4TMPDIR.
+- RayTracer/GNUmakefile: rationalised (raytracer-V05-02-04).
+- Tree: improved printing.
+- G4VRML2SceneHandlerFunc: changed const char* pv_name to G4String pv_name.
+- G4XXXViewer: improved comments.
+- modeling: GNUmakefile: rationalised (modeling-V05-02-01).
+- test: changed MyPhysicsList to follow kernel changes.
+
+4th November 2003  Gabriele Cosmo  (vis-V05-02-02)
+- Includes removal of OPACS module.
+- Includes "modeling-V05-02-00".
+
+17th October 2003  Guy Barrand
+- OPACS being (for long) deprecated, remove OPACS related things
+  in Geant4 repository.
+
+4th October 2003  Gabriele Cosmo  (vis-V05-02-01)
+- Modified GNUmakefiles:
+  o added dependency to new module "geometry/navigation".
+  o replaced "digits+hits" with "digits_hits".
+- Coworks with "geometry-V05-02-00" and "digits_hits-V05-02-00".
+
+22nd September 2003  John Allison  (vis-V05-02-00, greps-V05-02-00)
+- Incorporates raytracer-V05-02-01 (needs greps-V05-02-00) - see
+  RayTracer/History:
+  o Introduced G4VRTScanner.
+  o Added /vis/rayTracer/backgroundColour.
+- Introduced Doxygen documentation for management, OpenGL and test.
+- Improved guidance for /vis/scene/notifyHandlers.
+- OpenGL: Cosmetic change to regularise names.
+
+2nd September 2003  John Allison
+- Fixed pedantic warnings etc. in test suite - see test/History.
 
 2nd June 2003  John Allison  (vis-V05-01-01)
 - Small fix for pedantic warnings in RayTracer.

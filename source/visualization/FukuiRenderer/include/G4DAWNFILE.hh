@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4DAWNFILE.hh,v 1.8 2001/07/27 22:32:55 johna Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // Satoshi TANAKA
 // DAWNFILE driver factory.

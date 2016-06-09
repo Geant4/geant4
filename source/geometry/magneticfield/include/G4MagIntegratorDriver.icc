@@ -21,9 +21,10 @@
 // ********************************************************************
 //
 //
-// $Id: G4MagIntegratorDriver.icc,v 1.8 2003/06/05 16:13:26 japost Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4MagIntegratorDriver.icc,v 1.9 2003/10/31 14:35:52 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
+// --------------------------------------------------------------------
 
 inline
 G4double G4MagInt_Driver::GetHmin() const
@@ -112,8 +113,8 @@ void G4MagInt_Driver::RenewStepperAndAdjust(G4MagIntegratorStepper *pItsStepper)
 
 inline
 void G4MagInt_Driver::SetChargeMomentumMass(G4double particleCharge, // e+
-		                            G4double MomentumXc,
-		                            G4double Mass )
+                                            G4double MomentumXc,
+                                            G4double Mass )
 { 
       pIntStepper->GetEquationOfMotion()
                  ->SetChargeMomentumMass(particleCharge, MomentumXc, Mass); 
@@ -139,13 +140,12 @@ void G4MagInt_Driver::SetMaxNoSteps(G4int val)
 
 inline
 void G4MagInt_Driver::GetDerivatives(const G4FieldTrack y_curr,  // const, INput
-				           G4double     dydx[])  // OUTput
+                                           G4double     dydx[])  // OUTput
 { 
   G4double  tmpValArr[G4FieldTrack::ncompSVEC];
   y_curr.DumpToArray( tmpValArr  );
   pIntStepper -> RightHandSide( tmpValArr , dydx );
 }
-
 
 inline
 G4double G4MagInt_Driver::GetVerboseLevel() const
@@ -154,7 +154,7 @@ G4double G4MagInt_Driver::GetVerboseLevel() const
 } 
 
 inline 
-void G4MagInt_Driver::SetVerboseLevel( int newLevel)
+void G4MagInt_Driver::SetVerboseLevel(G4int newLevel)
 {
       fVerboseLevel= newLevel;
 }

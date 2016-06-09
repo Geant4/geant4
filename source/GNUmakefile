@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.38 2002/11/25 11:58:25 gcosmo Exp $
+# $Id: GNUmakefile,v 1.41 2003/12/05 07:44:10 gcosmo Exp $
 # -----------------------------------------------------------------
 # "gmake" makes default libraries for each subdomain.
 # "gmake global" makes global libraries for each subdomain.
@@ -12,7 +12,7 @@
 #
 # (The .o files(s) are made by implicit rules.)
 
-SUBDIR1 =  global particles processes geometry digits+hits
+SUBDIR1 =  global particles processes geometry digits_hits
 SUBDIR2 =  event tracking track materials run graphics_reps intercoms
 SUBDIR2 += parameterisations persistency readout
 SUBDIR3 =  interfaces visualization
@@ -28,7 +28,7 @@ G4LIBDIR := $(G4LIB)/$(G4SYSTEM)
 G4TMPDIR := $(G4TMP)/$(G4SYSTEM)
 unique := $(shell echo $$$$)
 
-.PHONY: all glob global libmap includes clean_libs clean clean_all
+.PHONY: all glob global libmap includes clean_libs clean clean_lists clean_all
 
 all:
 	@for dir in $(SUBDIR1); do (cd $$dir && $(MAKE)); done;:
@@ -116,8 +116,26 @@ clean:
 	@rm -rf $(G4LIBDIR)
 	@rm -rf $(G4BINDIR)
 	@rm -rf $(G4INSTALL)/.config/bin/$(G4SYSTEM)
+	@echo Removing physics-lists installation ...
+ifndef G4LISTS_BASE
+	@rm -rf $(G4LIB)/.lists_build/$(G4SYSTEM)
+	@rm -rf $(G4TMP)/.lists_build/$(G4SYSTEM)
+else
+	@rm -rf $(G4LISTS_BASE)/lists/.lists_build/lib/$(G4SYSTEM)
+	@rm -rf $(G4LISTS_BASE)/lists/.lists_build/tmp/$(G4SYSTEM)
+endif
 ifdef CFRONT
 	@rm -rf $(G4TREP)
+endif
+
+clean_lists:
+	@echo Removing physics-lists installation ...
+ifndef G4LISTS_BASE
+	@rm -rf $(G4LIB)/.lists_build/$(G4SYSTEM)
+	@rm -rf $(G4TMP)/.lists_build/$(G4SYSTEM)
+else
+	@rm -rf $(G4LISTS_BASE)/lists/.lists_build/lib/$(G4SYSTEM)
+	@rm -rf $(G4LISTS_BASE)/lists/.lists_build/tmp/$(G4SYSTEM)
 endif
 
 # Pay _extremely_ attention before executing the following target !!
@@ -132,5 +150,9 @@ clean_all:
 	@rm -rf $(G4BIN)
 	@echo Removing $(G4INCLUDE) ...
 	@rm -rf $(G4INCLUDE)
+ifdef G4LISTS_BASE
+	@echo Removing physics-lists installation ...
+	@rm -rf $(G4LISTS_BASE)/lists/.lists_build
+endif
 	@echo Removing installation configurations ...
 	@rm -rf $(G4INSTALL)/.config

@@ -20,10 +20,10 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: A01MuonPhysics.cc,v 1.4 2003/06/16 16:47:05 gunter Exp $
+// $Id: A01MuonPhysics.cc,v 1.5 2003/10/11 03:00:00 tkoi Exp $
 // --------------------------------------------------------------
 //
-
+// 09-Oct-2003 mu+- tau+- processes are changed by T. Koi 
 
 #include "A01MuonPhysics.hh"
 
@@ -74,53 +74,83 @@ void A01MuonPhysics::ConstructParticle()
 
 void A01MuonPhysics::ConstructProcess()
 {
-  G4ProcessManager * pManager = 0;
+   G4ProcessManager * pManager = 0;
 
-  // Muon Plus Physics
-  pManager = G4MuonPlus::MuonPlus()->GetProcessManager();
+   //Muon+
+   pManager = G4MuonPlus::MuonPlus()->GetProcessManager();
+   G4VProcess* thempMultipleScattering = new G4MultipleScattering();
+   G4VProcess* thempBremsstrahlung     = new G4MuBremsstrahlung();
+   G4VProcess* thempPairProduction     = new G4MuPairProduction();
+   G4VProcess* thempIonisation        = new G4MuIonisation();
+   //
    // add processes
-  pManager->AddProcess(&fMuPlusIonisation, ordInActive,2, 2);
+   pManager->AddProcess(thempIonisation);
+   pManager->AddProcess(thempMultipleScattering);
+   pManager->AddProcess(thempBremsstrahlung);
+   pManager->AddProcess(thempPairProduction);
+   //
+   // set ordering for AlongStepDoIt
+   pManager->SetProcessOrdering(thempMultipleScattering, idxAlongStep,1);
+   pManager->SetProcessOrdering(thempIonisation,        idxAlongStep,2);
+   // set ordering for PostStepDoIt
+   pManager->SetProcessOrdering(thempMultipleScattering, idxPostStep,1);
+   pManager->SetProcessOrdering(thempIonisation,        idxPostStep,2);
+   pManager->SetProcessOrdering(thempBremsstrahlung,     idxPostStep,3);
+   pManager->SetProcessOrdering(thempPairProduction,     idxPostStep,4);
 
-  pManager->AddDiscreteProcess(&fMuPlusBremsstrahlung);
-
-  pManager->AddDiscreteProcess(&fMuPlusPairProduction);
-
-  pManager->AddProcess(&fMuPlusMultipleScattering);
-  pManager->SetProcessOrdering(&fMuPlusMultipleScattering, idxAlongStep,  1);
-  pManager->SetProcessOrdering(&fMuPlusMultipleScattering, idxPostStep,  1);
-
-  // Muon Minus Physics
-  pManager = G4MuonMinus::MuonMinus()->GetProcessManager();
+   //Muon-
+   G4VProcess* themmMultipleScattering = new G4MultipleScattering();
+   G4VProcess* themmBremsstrahlung     = new G4MuBremsstrahlung();
+   G4VProcess* themmPairProduction     = new G4MuPairProduction();
+   G4VProcess* themmIonisation        = new G4MuIonisation();
+   //
    // add processes
-  pManager->AddProcess(&fMuMinusIonisation, ordInActive,2, 2);
-
-  pManager->AddDiscreteProcess(&fMuMinusBremsstrahlung);
-
-  pManager->AddDiscreteProcess(&fMuMinusPairProduction);
-
-  pManager->AddProcess(&fMuMinusMultipleScattering);
-  pManager->SetProcessOrdering(&fMuMinusMultipleScattering, idxAlongStep,  1);
-  pManager->SetProcessOrdering(&fMuMinusMultipleScattering, idxPostStep,  1);
-
-  // Tau Plus Physics
-  pManager = G4TauPlus::TauPlus()->GetProcessManager();
+   pManager->AddProcess(themmIonisation);
+   pManager->AddProcess(themmMultipleScattering);
+   pManager->AddProcess(themmBremsstrahlung);
+   pManager->AddProcess(themmPairProduction);
+   //
+   // set ordering for AlongStepDoIt
+   pManager->SetProcessOrdering(themmMultipleScattering, idxAlongStep,1);
+   pManager->SetProcessOrdering(themmIonisation,        idxAlongStep,2);
+   // set ordering for PostStepDoIt
+   pManager->SetProcessOrdering(themmMultipleScattering, idxPostStep,1);
+   pManager->SetProcessOrdering(themmIonisation,        idxPostStep,2);
+   pManager->SetProcessOrdering(themmBremsstrahlung,     idxPostStep,3);
+   pManager->SetProcessOrdering(themmPairProduction,     idxPostStep,4);
+ 
+   // Tau+ Physics
+   pManager = G4TauPlus::TauPlus()->GetProcessManager();
+   G4VProcess* thetpMultipleScattering = new G4MultipleScattering();
+   G4VProcess* thetpIonisation        = new G4hIonisation();
+   //
    // add processes
-  pManager->AddProcess(&fTauPlusIonisation, ordInActive,2, 2);
+   pManager->AddProcess(thetpIonisation);
+   pManager->AddProcess(thetpMultipleScattering);
+   //
+   // set ordering for AlongStepDoIt
+   pManager->SetProcessOrdering(thetpMultipleScattering, idxAlongStep,1);
+   pManager->SetProcessOrdering(thetpIonisation,        idxAlongStep,2);
+   //
+   // set ordering for PostStepDoIt
+   pManager->SetProcessOrdering(thetpMultipleScattering, idxPostStep,1);
+   pManager->SetProcessOrdering(thetpIonisation,        idxPostStep,2);
 
-  pManager->AddProcess(&fTauPlusMultipleScattering);
-  pManager->SetProcessOrdering(&fTauPlusMultipleScattering, idxAlongStep,  1);
-  pManager->SetProcessOrdering(&fTauPlusMultipleScattering, idxPostStep,  1);
-
-  // Tau Minus Physics
-  pManager = G4TauMinus::TauMinus()->GetProcessManager();
+   // Tau- Physics
+   pManager = G4TauMinus::TauMinus()->GetProcessManager();
+   G4VProcess* thetmMultipleScattering = new G4MultipleScattering();
+   G4VProcess* thetmIonisation        = new G4hIonisation();
+   //
    // add processes
-  pManager->AddProcess(&fTauMinusIonisation, ordInActive,2, 2);
-
-  pManager->AddProcess(&fTauMinusMultipleScattering);
-  pManager->SetProcessOrdering(&fTauMinusMultipleScattering, idxAlongStep,  1);
-  pManager->SetProcessOrdering(&fTauMinusMultipleScattering, idxPostStep,  1);
+   pManager->AddProcess(thetmIonisation);
+   pManager->AddProcess(thetmMultipleScattering);
+   //
+   // set ordering for AlongStepDoIt
+   pManager->SetProcessOrdering(thetmMultipleScattering, idxAlongStep,1);
+   pManager->SetProcessOrdering(thetmIonisation,        idxAlongStep,2);
+   //
+   // set ordering for PostStepDoIt
+   pManager->SetProcessOrdering(thetmMultipleScattering, idxPostStep,1);
+   pManager->SetProcessOrdering(thetmIonisation,        idxPostStep,2);
 
 }
-
-
-

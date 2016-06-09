@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: ReferenceTypeProcess.hh,v 1.2 2002/06/03 12:09:31 radoone Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: ReferenceTypeProcess.hh,v 1.3 2003/07/04 14:55:36 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // 
 // --------------------------------------------------------------
@@ -62,7 +62,7 @@ public:
   }
 
   // Analogical to SAX startElement callback
-  virtual void StartElement( const std::string& name, const ASCIIAttributeList& attrs ) {    
+  virtual void StartElement( const std::string&, const ASCIIAttributeList& attrs ) {    
     //std::cout << "ReferenceTypeProcess PROCESS::START OF TAG  : " << name << std::endl;
     
     std::string ref  = attrs.getValue( "ref" );
@@ -91,13 +91,13 @@ public:
   }
   
   // Analogical to SAX characters callback, it's called for ignorableWhitespace too!
-  virtual void Characters( const std::string& name )
+  virtual void Characters( const std::string& )
   {
   }
   
   // Invoked whenever one of the daughter state processes has been popped-out of the state stack
   // The name passed-in as the argument is the name of the XML element for which that's been done
-  virtual void StackPopNotify( const std::string& name )
+  virtual void StackPopNotify( const std::string& )
   {
   }
   

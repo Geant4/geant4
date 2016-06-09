@@ -27,6 +27,7 @@
 #include "G4NeutronHPChannel.hh"
 #include "G4NeutronHPFinalState.hh"
 #include "globals.hh"
+#include "G4HadTmpUtil.hh"
 
   G4double G4NeutronHPChannel::GetXsec(G4double energy)
   {
@@ -59,12 +60,12 @@
   G4bool G4NeutronHPChannel::Register(G4NeutronHPFinalState *theFS)
   {
     registerCount++;
-    G4int Z = static_cast<G4int>(theElement->GetZ()+0.0001);
+    G4int Z = G4lrint(theElement->GetZ());
     if(registerCount<5)
     {
       Z = Z-registerCount;
     }
-    if(Z==theElement->GetZ()-5) G4Exception("Channel: Do not know what to do with this material");
+    if(Z==theElement->GetZ()-5) throw G4HadronicException(__FILE__, __LINE__, "Channel: Do not know what to do with this material");
     G4int count = 0;
     if(registerCount==0) count = theElement->GetNumberOfIsotopes();
     if(count == 0||registerCount!=0) count +=
@@ -88,13 +89,17 @@
     {
       for (G4int i1=0; i1<nIsos; i1++)
       {
-//        G4cout <<" Init: normal case"<<G4endl;
+        // G4cout <<" Init: normal case"<<G4endl;
         G4int A = theElement->GetIsotope(i1)->GetN();
         G4double frac = theElement->GetRelativeAbundanceVector()[i1]/perCent;
         theFinalStates[i1]->SetA_Z(A, Z);
 	UpdateData(A, Z, count++, frac);
       }
     } else {
+      //G4cout <<" Init: mean case: "
+      //       <<theStableOnes.GetNumberOfIsotopes(Z)<<" "
+	//     <<Z<<" "<<theElement
+	//     << G4endl;
       G4int first = theStableOnes.GetFirstIsotope(Z);
       for(G4int i1=0; 
         i1<theStableOnes.GetNumberOfIsotopes(Z);
@@ -176,8 +181,8 @@
 
 #include "G4NeutronHPThermalBoost.hh"
 
-  G4ParticleChange * G4NeutronHPChannel::
-  ApplyYourself(const G4Track & theTrack, G4int anIsotope)
+  G4HadFinalState * G4NeutronHPChannel::
+  ApplyYourself(const G4HadProjectile & theTrack, G4int anIsotope)
   {
 //    G4cout << "G4NeutronHPChannel::ApplyYourself+"<<niso<<G4endl;
     if(anIsotope != -1) return theFinalStates[anIsotope]->ApplyYourself(theTrack);
@@ -189,7 +194,7 @@
     {
       if(theFinalStates[i]->HasAnyData())
       {
-        xsec[i] = theIsotopeWiseData[i].GetXsec(aThermalE.GetThermalEnergy(theTrack.GetDynamicParticle(),
+        xsec[i] = theIsotopeWiseData[i].GetXsec(aThermalE.GetThermalEnergy(theTrack,
 		                                                           theFinalStates[i]->GetN(),
 									   theFinalStates[i]->GetZ(),
 						  		           theTrack.GetMaterial()->GetTemperature()));
@@ -226,7 +231,7 @@
       if(it==niso) it--;
     }
     delete [] xsec;
-    G4ParticleChange * theFinalState=NULL;
+    G4HadFinalState * theFinalState=NULL;
     while(theFinalState==NULL)
     {
 //    G4cout << "TESTHP 24 it="<<it<<G4endl;

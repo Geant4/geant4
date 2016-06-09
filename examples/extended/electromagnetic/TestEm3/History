@@ -1,4 +1,4 @@
-$Id: History,v 1.31 2003/06/18 09:37:04 gcosmo Exp $
+$Id: History,v 1.41 2003/11/28 12:29:59 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,43 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+28-11-03 V.Ivanchenko (testem3-V05-02-08)
+
+27-11-03 V.Ivanchenko (testem3-V05-02-07)
+- Fix memory corruption in the test
+
+25-11-03 V.Ivanchenko (testem3-V05-02-06)
+- Fix geometry (G.Cosmo)
+     
+13-11-03 John Allison
+- Removed OPACS from Vis Manager.
+
+03-11-03 mma (testem3-V05-02-05)
+- add an estimation of the mean energy leaving each absorber
+
+24-10-03 mma (testem3-V05-02-04)
+- PhysListEmStandard: AddProcess(Bremsstrahlung,-1,3,3) ..etc..
+     
+06-10-03 mma (testem3-V05-02-03)
+- Complete migration to model EM physics
+- Class EmModel renamed G4v52.
+
+25-09-03 mma (testem3-V05-02-02)
+- forgotten to update GNUmakefile for G4ANALYSIS_USE
+
+23-09-03 mma (testem3-V03-02-01)
+- update exoNN.mac
+- comment dawnfile in vis.mac
+
+22-09-03 mma (testem3-V05-02-00)
+- suppression of Em3 in all class names.
+- materials: Silicium->Silicon.
+- command setHisto : unit must be given.
+- suppression of hits collection.
+- replace G4NOHIST by G4ANALYSIS_USE
+- most macro updated and renamed according the authors of experimental results.
+- adapt geant3
 
 18-06-03 G.Cosmo (testem3-V05-01-03)
 - Em3RunAction.cc: removed usage of G4USE_STD_NAMESPACE after

@@ -1,4 +1,4 @@
-# $Id: run07.mac,v 1.8 2003/03/06 18:16:16 maire Exp $
+# $Id: run07.mac,v 1.10 2003/10/06 10:09:20 maire Exp $
 #
 # Macro file for "TestEm3.cc" 
 # (can be run in batch, without graphic)
@@ -6,29 +6,27 @@
 # LiquidArgon-Lead 2 layers; proton 500 MeV
 #
 /control/verbose 2
+/run/verbose 2
 #
-#  select EM PhysicsList
-#
-#/testem/phys/addPhysics  model
+###/testem/phys/addPhysics  g4v52
 /testem/phys/addPhysics  standard
-#
-/testem/phys/setCuts 1.5 mm
-/run/initialize
 #
 /testem/det/setNbOfLayers 2
 /testem/det/setNbOfAbsor 2
 /testem/det/setAbsor 0 liquidArgon 4 mm
 /testem/det/setAbsor 1 Lead 4 mm
 /testem/det/setSizeYZ 16 mm
-/testem/det/update
+#
+/testem/phys/setCuts 1.5 mm
+#
+/run/initialize
 #
 /process/inactivate msc
 #
 /testem/gun/setDefault
-#
-/run/verbose 2
-/testem/event/printModulo 100
-#
 /gun/particle proton
 /gun/energy 500 MeV
+#
+/testem/event/printModulo 100
+#
 #/run/beamOn 1000

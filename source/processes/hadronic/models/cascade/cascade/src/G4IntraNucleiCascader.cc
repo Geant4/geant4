@@ -19,6 +19,7 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
+//
 #define RUN
 
 #include "G4IntraNucleiCascader.hh"
@@ -113,8 +114,8 @@ G4CollisionOutput G4IntraNucleiCascader::collide(G4InuclParticle* bullet,
 	output_particles.push_back(all_particles.second[ip]);
 
       if (cascad_particles.size() == 0) { // compound nuclei
-	G4int ia = int(ab + 0.5);
-	G4int iz = int(zb + 0.5);
+	G4int ia = G4int(ab + 0.5);
+	G4int iz = G4int(zb + 0.5);
 	G4int i;
 
 	for (i = 0; i < ia; i++) {
@@ -122,8 +123,8 @@ G4CollisionOutput G4IntraNucleiCascader::collide(G4InuclParticle* bullet,
 	  theExitonConfiguration.incrementQP(knd);
 	};
 
-	G4int ihn = int(2.0 * (ab - zb) * inuclRndm() + 0.5);
-	G4int ihz = int(2.0 * zb * inuclRndm() + 0.5);
+	G4int ihn = G4int(2.0 * (ab - zb) * inuclRndm() + 0.5);
+	G4int ihz = G4int(2.0 * zb * inuclRndm() + 0.5);
 
 	for (i = 0; i < ihn; i++) theExitonConfiguration.incrementHoles(2);
 
@@ -214,7 +215,6 @@ G4CollisionOutput G4IntraNucleiCascader::collide(G4InuclParticle* bullet,
     particleIterator ipart;
 
     for (ipart = output_particles.begin(); ipart != output_particles.end(); ipart++) {
-
       std::vector<G4double> mom = ipart->getMomentum();
 
       for (G4int j = 0; j < 4; j++) momentum_out[j] += mom[j];
@@ -230,7 +230,6 @@ G4CollisionOutput G4IntraNucleiCascader::collide(G4InuclParticle* bullet,
     }
 
     if (afin > 1.0) {
-
       G4InuclNuclei outgoing_nuclei(afin, zfin);
       G4double mass = outgoing_nuclei.getMass();
       momentum_out[0] += mass;        
@@ -277,7 +276,6 @@ G4CollisionOutput G4IntraNucleiCascader::collide(G4InuclParticle* bullet,
 	  last_particle.setType(1);
 
 	} else { // neutron
-
 	  last_particle.setType(2);
 	}; 
 

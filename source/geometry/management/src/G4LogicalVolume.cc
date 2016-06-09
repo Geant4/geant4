@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4LogicalVolume.cc,v 1.16 2003/05/22 00:50:13 asaim Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4LogicalVolume.cc,v 1.18 2003/11/02 14:01:23 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // 
 // class G4LogicalVolume Implementation
@@ -33,7 +33,7 @@
 // 04.08.97 P.M.DeFreitas: Added methods for parameterised simulation 
 // 19.08.96 P.Kent: Modified for G4VSensitive Detector
 // 11.07.95 P.Kent: Initial version
-// ********************************************************************
+// --------------------------------------------------------------------
 
 #include "G4LogicalVolume.hh"
 #include "G4LogicalVolumeStore.hh"
@@ -126,32 +126,23 @@ G4LogicalVolume::ClearEnvelopeForFastSimulation( G4LogicalVolume* motherLogVol )
     {
       motherLogVol = this->FindMotherLogicalVolumeForEnvelope();
     }
-    else
-    {
-      // Check that "motherLogVol" is this mother.
-      // If not, raise exception and set it to 0.
-      //
-      if ( false )
-      {
-        G4cerr << "ERROR - Wrong mother LogicalVolume !" << G4endl;
-        G4Exception("ERROR - G4LogicalVolume::ClearEnvelopeForFastSimulation");
-        motherLogVol = 0;
-      }
-    }
+
     // Reset its ParameterisedSimulation values and those of all daughters
     // (after ensuring the mother was given correctly or was found)
     //
     if( motherLogVol != 0 )
     {
       NewFastSimulationVal = motherLogVol->GetFastSimulationManager();
-      this->SetFastSimulationManager(NewFastSimulationVal, false);
+      SetFastSimulationManager(NewFastSimulationVal, false);
     }
   }
   else
   {
-    G4cerr << "ERROR - Called ClearEnvelope() for non-envelope Logical Volume !"
+    G4cerr << "ERROR - Called ClearEnvelope() for non-envelope logical volume!"
            << G4endl;
-    G4Exception("ERROR - G4LogicalVolume::ClearEnvelope");
+    G4Exception("G4LogicalVolume::ClearEnvelopeForFastSimulation()",
+                "NotApplicable", FatalException,
+		"Cannot be called for non-envelope logical volumes.");
   }
 }
 

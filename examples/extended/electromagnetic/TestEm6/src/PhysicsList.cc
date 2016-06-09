@@ -21,9 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: PhysicsList.cc,v 1.4 2003/02/20 11:24:14 vnivanch Exp $
-// GEANT4 tag $Name: geant4-05-02 $
-//
+// $Id: PhysicsList.cc,v 1.6 2003/10/24 12:20:58 maire Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 // 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -33,11 +32,9 @@
 #include "PhysicsListMessenger.hh"
 
 #include "G4ParticleDefinition.hh"
-#include "G4ParticleWithCuts.hh"
 #include "G4ProcessManager.hh"
 #include "G4ParticleTypes.hh"
 #include "G4ParticleTable.hh"
-#include "G4ios.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -140,7 +137,7 @@ void PhysicsList::ConstructEM()
       //electron
       pmanager->AddProcess(new G4MultipleScattering,-1, 1,1);
       pmanager->AddProcess(new G4eIonisation,       -1, 2,2);
-      pmanager->AddProcess(new G4eBremsstrahlung,   -1,-1,3);      
+      pmanager->AddProcess(new G4eBremsstrahlung,   -1, 3,3);      
 
     } else if (particleName == "e+") {
       //positron
@@ -148,7 +145,7 @@ void PhysicsList::ConstructEM()
       // do not enable the other standard processes:
       // pmanager->AddProcess(new G4MultipleScattering,-1, 1,1);
       // pmanager->AddProcess(new G4eIonisation,       -1, 2,2);
-      // pmanager->AddProcess(new G4eBremsstrahlung,   -1,-1,3);
+      // pmanager->AddProcess(new G4eBremsstrahlung,   -1, 3,3);
       // pmanager->AddProcess(new G4eplusAnnihilation,  0,-1,4);
       theAnnihiToMuPairProcess=new G4AnnihiToMuPair;
       pmanager->AddDiscreteProcess(theAnnihiToMuPairProcess);
@@ -158,8 +155,8 @@ void PhysicsList::ConstructEM()
       //muon  
       pmanager->AddProcess(new G4MultipleScattering,-1, 1,1);
       pmanager->AddProcess(new G4MuIonisation,      -1, 2,2);
-      pmanager->AddProcess(new G4MuBremsstrahlung,  -1,-1,3);
-      pmanager->AddProcess(new G4MuPairProduction,  -1,-1,4);       
+      pmanager->AddProcess(new G4MuBremsstrahlung,  -1, 3,3);
+      pmanager->AddProcess(new G4MuPairProduction,  -1, 4,4);       
      
     } 
   }

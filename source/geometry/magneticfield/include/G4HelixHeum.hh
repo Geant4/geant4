@@ -21,21 +21,23 @@
 // ********************************************************************
 //
 //
-// $Id: G4HelixHeum.hh,v 1.6 2001/07/11 09:59:08 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4HelixHeum.hh,v 1.7 2003/10/31 14:35:51 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 //
 // class G4HelixHeum
 //
 // Class description:
 //
-// Simple Heum:
+// Simple Heum stepper for magnetic field:
 //     x_1 = x_0 +
 //           h * 1/4 * dx(t0,x0)  +
 //               3/4 * dx(t0+2/3*h, x0+2/3*h*(dx(t0+h/3,x0+h/3*dx(t0,x0)))) 
+// Third order solver.
 
 // History:
 // - Created. W.Wander <wwc@mit.edu>, 03/11/98
+// -------------------------------------------------------------------
 
 #ifndef G4HELIXHEUM_HH
 #define G4HELIXHEUM_HH
@@ -48,14 +50,14 @@ class G4HelixHeum : public G4MagHelicalStepper
   public:  // with description
 
     G4HelixHeum(G4Mag_EqRhs *EqRhs)
-      : G4MagHelicalStepper(EqRhs) {;}
+      : G4MagHelicalStepper(EqRhs) {}
 
-    ~G4HelixHeum() {;}
+    ~G4HelixHeum() {}
   
     void DumbStepper( const G4double y[],
-		      G4ThreeVector  Bfld,
-		      G4double       h,
-		      G4double       yout[]);
+                            G4ThreeVector  Bfld,
+                            G4double       h,
+                            G4double       yout[]);
 
   public: // without description
   

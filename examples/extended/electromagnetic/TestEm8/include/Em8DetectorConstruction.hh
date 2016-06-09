@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: Em8DetectorConstruction.hh,v 1.4 2001/07/11 09:57:53 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: Em8DetectorConstruction.hh,v 1.5 2003/11/24 16:34:08 grichine Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // 
 
@@ -63,7 +63,7 @@ class Em8DetectorConstruction : public G4VUserDetectorConstruction
      void SetWorldSizeZ(G4double);
      void SetWorldSizeR(G4double);
 
-     void SetMagField(G4double);
+  //  void SetMagField(G4double);
      
      G4VPhysicalVolume* Construct();
 
@@ -92,7 +92,6 @@ class Em8DetectorConstruction : public G4VUserDetectorConstruction
   private:
      
      G4bool             worldchanged;
-     G4Material*        AbsorberMaterial;
      G4double           AbsorberThickness;
      G4double           AbsorberRadius;
 
@@ -127,7 +126,6 @@ class Em8DetectorConstruction : public G4VUserDetectorConstruction
      G4LogicalVolume*   fLogicRadRing;    // pointer to the logical R-slide
      G4VPhysicalVolume* fPhysicRadRing;   // pointer to the physical R-slide
 
-     G4Material* fRadiatorMat;        //pointer to the TR radiator material
 
      G4double fRadThickness ;
      G4double fGasGap       ;
@@ -143,9 +141,12 @@ class Em8DetectorConstruction : public G4VUserDetectorConstruction
 
      G4int fModuleNumber ;   // the number of Rad-Det modules
 
+     G4Material*        AbsorberMaterial;
      G4Tubs*             solidAbsorber; //pointer to the solid Absorber
      G4LogicalVolume*   logicAbsorber; //pointer to the logical Absorber
      G4VPhysicalVolume* physiAbsorber; //pointer to the physical Absorber
+
+     G4Material* fRadiatorMat;        //pointer to the TR radiator material
      
      G4UniformMagField* magField;      //pointer to the magnetic field
      

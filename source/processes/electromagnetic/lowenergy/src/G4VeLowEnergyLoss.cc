@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4VeLowEnergyLoss.cc,v 1.23 2003/06/16 17:00:29 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 //
 // --------------------------------------------------------------

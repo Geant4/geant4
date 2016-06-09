@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4PenelopePhotoElectric.cc,v 1.7 2003/06/16 17:00:22 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // Author: L. Pandola
 //

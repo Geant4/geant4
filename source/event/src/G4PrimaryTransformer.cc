@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PrimaryTransformer.cc,v 1.15 2002/08/19 20:20:18 asaim Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4PrimaryTransformer.cc,v 1.18 2003/10/01 13:17:34 asaim Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 
 #include "G4PrimaryTransformer.hh"
@@ -135,6 +135,8 @@ void G4PrimaryTransformer::GenerateSingleTrack
     } 
     // Set decay products to the DynamicParticle
     SetDecayProducts( primaryParticle, DP );
+    // Set primary particle
+    DP->SetPrimaryParticle(primaryParticle);
     // Create G4Track object
     G4Track* track = new G4Track(DP,t0,G4ThreeVector(x0,y0,z0));
     // Set trackID and let primary particle know it
@@ -187,6 +189,10 @@ void G4PrimaryTransformer::SetDecayProducts
 #endif
       G4DynamicParticle*DP 
         = new G4DynamicParticle(partDef,daughter->GetMomentum());
+      DP->SetPrimaryParticle(daughter);
+      // Decay proper time for daughter
+      if(daughter->GetProperTime()>0.0)
+      { DP->SetPreAssignedDecayProperTime(daughter->GetProperTime()); }
       decayProducts->PushProducts(DP);
       SetDecayProducts(daughter,DP);
     }

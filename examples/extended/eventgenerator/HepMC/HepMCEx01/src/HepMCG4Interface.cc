@@ -19,11 +19,11 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
-
+//
 // ====================================================================
 //
 //   HepMCG4Interface.cc
-//   $Id: HepMCG4Interface.cc,v 1.1 2002/05/28 14:00:40 murakami Exp $
+//   $Id: HepMCG4Interface.cc,v 1.2 2003/12/09 15:30:52 gunter Exp $
 //
 // ====================================================================
 #include "HepMCG4Interface.hh"

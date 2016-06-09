@@ -1,0 +1,32 @@
+# $Id: shen2.mac,v 1.1 2003/08/11 10:09:12 maire Exp $
+#
+# macro file for TestEm5.cc
+#
+# proton 175 GeV/c, transmitted through 8.004 mm Al
+# G. Shen et al. Phys.Rev. D20 (1979) page 1584.
+#
+# data theta0 = (1.93+-0.39)*e-5 rad ???
+# proj. distr. exp(-0.5*(th/th0)**2)
+#
+/control/verbose 2
+/run/verbose 2
+#
+/testem/det/setAbsMat   Aluminium
+/testem/det/setAbsThick 8.004 mm  
+/testem/det/setAbsYZ    1 cm
+#
+/testem/phys/setCuts 1 mm
+#
+/run/initialize
+#
+/testem/gun/setDefault
+/gun/particle proton
+/gun/energy 174.664 GeV		#momentum 175 GeV/c
+#
+/testem/histo/setFileName shen2.paw
+/testem/histo/setHisto 5  100  0.00   0.004 deg		#space angle  
+/testem/histo/setHisto 6  100 -0.004 +0.004 deg		#projected angle 
+#
+/testem/stack/killSecondaries
+#
+/run/beamOn 100000

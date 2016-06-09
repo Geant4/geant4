@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4QParentCluster.hh,v 1.12 2003/06/16 17:04:10 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4QParentCluster.hh,v 1.19 2003/12/09 15:38:10 gunter Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 //      ---------------- G4QParentCluster ----------------
 //             by Mikhail Kossov, Sept 1999.
@@ -45,12 +45,12 @@ public:
   G4QParentCluster(const G4QParentCluster& rhs);     // Copy Constructor by value
   G4QParentCluster(G4QParentCluster* rhs);           // Copy Constructor by pointer
 
-  ~G4QParentCluster();                               // Destructor
+  ~G4QParentCluster();                               // Public Destructor
 
   // Operators
   const G4QParentCluster& operator=(const G4QParentCluster& rhs);
-  G4int                   operator==(const G4QParentCluster& rhs) const;
-  G4int                   operator!=(const G4QParentCluster& rhs) const;
+  G4bool                   operator==(const G4QParentCluster& rhs) const;
+  G4bool                   operator!=(const G4QParentCluster& rhs) const;
 
   // Selectors
   G4int      GetPDGCode()      const;   // Get PDG code of the Parent Cluster
@@ -100,8 +100,8 @@ private:
 std::ostream&   operator<<(std::ostream& lhs, G4QParentCluster& rhs);
 std::ostream&   operator<<(std::ostream& lhs, const G4QParentCluster& rhs);
 
-inline G4int G4QParentCluster::operator==(const G4QParentCluster& rhs) const {return this==&rhs;}
-inline G4int G4QParentCluster::operator!=(const G4QParentCluster& rhs) const {return this!=&rhs;}
+inline G4bool G4QParentCluster::operator==(const G4QParentCluster& rhs) const {return this==&rhs;}
+inline G4bool G4QParentCluster::operator!=(const G4QParentCluster& rhs) const {return this!=&rhs;}
  
 inline G4int      G4QParentCluster::GetPDGCode()     const {return thePDGCode;}
 inline G4double   G4QParentCluster::GetProbability() const {return theProbability;}

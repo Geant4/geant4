@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Polyhedra.hh,v 1.6.4.1 2003/06/16 17:18:40 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4Polyhedra.hh,v 1.11 2003/11/05 17:41:24 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // 
 // --------------------------------------------------------------------
@@ -65,6 +65,23 @@
 
 class G4EnclosingCylinder;
 class G4ReduciblePolygon;
+class G4PolyhedraHistorical
+{
+  public:
+
+    G4PolyhedraHistorical();
+    ~G4PolyhedraHistorical();
+    G4PolyhedraHistorical( const G4PolyhedraHistorical &source );
+    G4PolyhedraHistorical& operator=( const G4PolyhedraHistorical& right );
+
+    G4double Start_angle;
+    G4double Opening_angle;
+    G4int   numSide;
+    G4int   Num_z_planes;
+    G4double *Z_values;
+    G4double *Rmin;
+    G4double *Rmax;
+};
 
 class G4Polyhedra : public G4VCSGfaceted
 {
@@ -110,6 +127,8 @@ class G4Polyhedra : public G4VCSGfaceted
   G4Polyhedron* CreatePolyhedron() const;
   G4NURBS*      CreateNURBS() const;
 
+  G4bool Reset();
+
   // Accessors
 
   inline G4int GetNumSide()     const;
@@ -118,7 +137,9 @@ class G4Polyhedra : public G4VCSGfaceted
   inline G4bool IsOpen()        const;
   inline G4int GetNumRZCorner() const;
   inline G4PolyhedraSideRZ GetCorner( const G4int index ) const;
-  
+  inline G4PolyhedraHistorical* GetOriginalParameters() const;
+  inline void SetOriginalParameters(G4PolyhedraHistorical* pars);
+
   protected:  // without description
 
   // Here are our parameters
@@ -129,26 +150,7 @@ class G4Polyhedra : public G4VCSGfaceted
   G4bool   phiIsOpen;   // true if there is a phi segment
   G4int   numCorner;    // number RZ points
   G4PolyhedraSideRZ *corners;  // our corners
-
-  // The following is temporary until graphics_reps is brought up
-  // to this design
-
-  struct G4PolyhedraHistorical
-  {
-    G4PolyhedraHistorical();
-    ~G4PolyhedraHistorical();
-    G4PolyhedraHistorical( const G4PolyhedraHistorical &source );
-  
-    G4double Start_angle;
-    G4double Opening_angle;
-    G4int   numSide;
-    G4int   Num_z_planes;
-    G4double *Z_values;
-    G4double *Rmin;
-    G4double *Rmax;
-  };
-  
-  G4PolyhedraHistorical  *original_parameters;
+  G4PolyhedraHistorical  *original_parameters;  // original input parameters
 
   // Our quick test
 

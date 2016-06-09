@@ -1,4 +1,4 @@
-$Id: History,v 1.27 2003/06/25 09:01:32 gcosmo Exp $
+$Id: History,v 1.29 2003/10/03 15:06:56 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,16 @@ committal in the CVS repository !
 
 History file for visualization/OpenGL
 -------------------------------------
+
+4th October 2003  Gabriele Cosmo  (vis-V05-02-01)
+- GNUmakefile:
+  o replaced "digits+hits" with "digits_hits".
+- Coworks with "geometry-V05-02-00" and "digits_hits-V05-02-00".
+
+22nd September 2003  John Allison  (vis-V05-02-00, greps-V05-02-00)
+- Cosmetic change to regularise names:
+  o changed _Feedback3Dcolo to G4OpenGLXViewerFeedback3Dcolor.
+  o changed _DepthIndex to G4OpenGLXViewerDepthIndex.
 
 23rd June 2003  Guy Barrand  (opengl-V05-01-02)
 - Commit a first implementation of G4OpenGLWin32Viewer.

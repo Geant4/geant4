@@ -21,20 +21,22 @@
 // ********************************************************************
 //
 //
-// $Id: G4ExplicitEuler.hh,v 1.6 2002/11/29 13:47:49 japost Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4ExplicitEuler.hh,v 1.8 2003/11/05 16:30:55 japost Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 //
 // class G4ExplicitEuler
 //
 // Class description:
 //
-// Explicit Euler: x_1 = x_0 + h * dx_0.
+// Explicit Euler stepper for magnetic field: x_1 = x_0 + h * dx_0.
 // The most simple approach for solving linear differential equations.
 // Take the current derivative and add it to the current position.
 
 // History:
 // - Created. W.Wander <wwc@mit.edu>, 12/09/97
+// - Adjusted for new Equation classes, J.Apostolakis 5/11/03
+// -------------------------------------------------------------------
 
 #ifndef G4EXPLICITEULER_HH
 #define G4EXPLICITEULER_HH
@@ -46,13 +48,13 @@ class G4ExplicitEuler : public G4MagErrorStepper
 
   public:  // with description
 
-    G4ExplicitEuler(G4Mag_EqRhs *EqRhs, G4int numberOfVariables = 6) ;
+    G4ExplicitEuler(G4EquationOfMotion* EqRhs, G4int numberOfVariables = 6) ;
    ~G4ExplicitEuler();
 
     void  DumbStepper(  const G4double y[],
-		        const G4double dydx[],
-		              G4double h,
-			      G4double yout[]);
+                        const G4double dydx[],
+                              G4double h,
+                              G4double yout[]);
 
   public:  // without description
 

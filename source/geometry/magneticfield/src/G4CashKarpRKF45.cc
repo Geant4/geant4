@@ -21,18 +21,19 @@
 // ********************************************************************
 //
 //
-// $Id: G4CashKarpRKF45.cc,v 1.11 2003/04/02 08:52:17 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4CashKarpRKF45.cc,v 1.13 2003/10/31 14:35:53 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // The Cash-Karp Runge-Kutta-Fehlberg 4/5 method is an embedded fourth
-//  order method (giving fifth-order accuracy) for the solution
-//  of an ODE. Two different fourth order estimates are calculated;
-//  their difference gives an error estimate.
-// (We use it to integrate the equations of the motion of a particle 
-//  in a magnetic field. )
+// order method (giving fifth-order accuracy) for the solution of an ODE.
+// Two different fourth order estimates are calculated; their difference
+// gives an error estimate. [ref. Numerical Recipes in C, 2nd Edition]
+// It is used to integrate the equations of the motion of a particle 
+// in a magnetic field.
 //
-//  Similar to Numerical Recipes, .... put REFerence here!
+//  [ref. Numerical Recipes in C, 2nd Edition]
 //
+// -------------------------------------------------------------------
 
 #include "G4CashKarpRKF45.hh"
 #include "G4LineSection.hh"
@@ -207,7 +208,8 @@ G4CashKarpRKF45::StepWithEst( const G4double*,
                               const G4double*,
                                     G4double*  )    
 {
-  G4Exception("ERROR - G4CashKarpRKF45::StepWithEst(): Method no longer used.");
+  G4Exception("G4CashKarpRKF45::StepWithEst()", "ObsoleteMethod",
+              FatalException, "Method no longer used.");
   return ;
 }
 

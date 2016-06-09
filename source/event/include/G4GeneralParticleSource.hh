@@ -31,8 +31,8 @@
 // Customer:      ESA/ESTEC
 //
 ///////////////////////////////////////////////////////////////////////////////
-// $Id: G4GeneralParticleSource.hh,v 1.7 2001/10/19 16:48:28 flei Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4GeneralParticleSource.hh,v 1.8 2003/10/13 09:21:27 flei Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 ///////////////////////////////////////////////////////////////////////////////
 //
 // Class Description:
@@ -607,9 +607,9 @@ private:
   G4double CDGhist[3]; // cumulative histo for cdg
   G4double BBHist[10001], Bbody_x[10001];
   G4String IntType; // Interpolation type
-  G4double Arb_grad[256], Arb_cept[256]; // grad and cept for 256 segments
-  G4double Arb_alpha[256], Arb_Const[256]; // alpha and constants
-  G4double Arb_ezero[256]; // ezero
+  G4double Arb_grad[1024], Arb_cept[1024]; // grad and cept for 1024 segments
+  G4double Arb_alpha[1024], Arb_Const[1024]; // alpha and constants
+  G4double Arb_ezero[1024]; // ezero
   G4double ArbEmin, ArbEmax; // Emin and Emax for the whole arb distribution
   //use primarily for debug.
 

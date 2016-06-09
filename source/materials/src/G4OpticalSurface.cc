@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpticalSurface.cc,v 1.7 2001/10/17 07:59:54 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4OpticalSurface.cc,v 1.9 2003/12/01 15:13:41 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // 
 ////////////////////////////////////////////////////////////////////////
@@ -36,10 +36,10 @@
 // Author:      Peter Gumplinger
 // mail:        gum@triumf.ca
 //
-// Cvs version: 
 ////////////////////////////////////////////////////////////////////////
 
 #include "G4ios.hh"
+#include "globals.hh"
 #include "G4OpticalSurface.hh"
 
 /////////////////////////
@@ -55,10 +55,10 @@ const G4OpticalSurface&
 {
   if (this != &right)
     {
-      theName                    = right.theName;
+      theName                    = right.GetName();
       theModel                   = right.theModel;
       theFinish                  = right.theFinish;
-      theType                    = right.theType;
+      theType                    = right.GetType();
       sigma_alpha                = right.sigma_alpha;
       polish                     = right.polish;
       theMaterialPropertiesTable = right.theMaterialPropertiesTable;
@@ -73,13 +73,12 @@ const G4OpticalSurface&
 G4OpticalSurface::G4OpticalSurface(const G4String& name,
 				   G4OpticalSurfaceModel model,
 				   G4OpticalSurfaceFinish finish,
-				   G4OpticalSurfaceType type,
+				   G4SurfaceType type,
 				   G4double value)
-					: theName(name),
-		  			  theModel(model),
-		  			  theFinish(finish),
-		  			  theType(type),
-		  			  theMaterialPropertiesTable(0)
+                                   : G4SurfaceProperty(name,type),
+				     theModel(model),
+				     theFinish(finish),
+				     theMaterialPropertiesTable(0)
 {
 	if (model == glisur ){
 		polish = value;
@@ -96,6 +95,7 @@ G4OpticalSurface::G4OpticalSurface(const G4String& name,
 }
 
 G4OpticalSurface::G4OpticalSurface(const G4OpticalSurface &right)
+  : G4SurfaceProperty(right.GetName())
 {
 	*this = right;
 }

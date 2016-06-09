@@ -19,12 +19,9 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
-// By copying, distributing or modifying the Program (or any work
-// based on the Program) you indicate your acceptance of this statement,
-// and all its terms.
 //
-// $Id: FCALSteppingAction.cc,v 1.3 2002/12/17 15:53:30 pmendez Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: FCALSteppingAction.cc,v 1.4 2003/12/09 15:30:33 gunter Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // 
 

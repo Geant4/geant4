@@ -1,4 +1,4 @@
-$Id: History,v 1.95 2003/06/25 13:40:58 gcosmo Exp $
+$Id: History,v 1.104 2003/11/12 16:28:53 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,36 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+11 Nov 03: V.Ivant (stand-V05-02-07)
+- Substitute G4VEnergyLossSTD by G4VEnergyLossProcess
+- For ions update ionisation
+
+03 Nov 03: V.Ivant (stand-V05-02-06)
+- Remove STD processes
+
+24 Oct 03: V.Ivant (stand-V05-02-05)
+-Update defults for processes
+-Add PAI model (V.Grichine)
+
+4 Oct 03: G.Cosmo (stand-V05-02-04)
+- Modified GNUmakefiles:
+  o added dependency to new module "geometry/navigation".
+- Coworks with "geometry-V05-02-00" and "digits_hits-V05-02-00".
+
+20 Sept 03: V.Ivant (stand-V05-02-03)
+-Update energy intervals for ionisation models
+-Update GNUmakefile
+
+08 August 03: V.Ivant (stand-V05-02-02)
+-Substitute standerd by STD, freezing old standard as 52
+
+07 August 03: V.Ivant (stand-V05-02-01)
+- Change defaults for STD processes
+- Introduce Effective charge to G4ionIonisation
+
+24 July 03: V.Ivant (stand-V05-02-00)
+-Update model interface according utils-V05-02-00
 
 25 June 03: G.Cosmo (stand-V05-01-05)
 - G4PAIxSection.cc: trivial fixes on arguments to pow() for

@@ -1,0 +1,36 @@
+# $Id: csi.mac,v 1.2 2003/11/07 11:52:58 vnivanch Exp $
+# GEANT4 tag $Name: geant4-06-00 $
+#
+# Macro file for TestEm9 - Crystal Calorimeter
+# V.Ivanchenko
+#
+#
+/control/verbose 2
+/run/verbose 1
+#/tracking/verbose 1
+#
+#  select EM PhysicsList
+
+#/testem/phys/addPhysics  g4v52
+/testem/phys/addPhysics  standard
+#
+/testem/det/CalMat      CsI
+/testem/phys/setCuts    5.   mm
+/testem/phys/VertexCuts 0.01 mm
+/testem/phys/MuonCuts   10.0 mm
+/testem/stepMax         100  mm
+#
+/process/eLoss/preciseRange  true
+/process/eLoss/integral      true
+/run/initialize
+#
+/testem/histo/fileName  csi_ma2.paw
+#/testem/histo/fileName  csi_st2.paw
+#/testem/histo/fileName  csi.xml
+#/testem/histo/fileType  XML
+#
+/gun/particle e-
+/gun/energy   1 GeV
+/run/beamOn   10000
+#
+

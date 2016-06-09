@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4UIxvt.cc,v 1.5 2002/12/04 22:03:09 asaim Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 #ifdef G4UI_BUILD_XVT_SESSION
 

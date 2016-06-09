@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Transportation.icc,v 1.4 2001/11/06 01:38:19 radoone Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4Transportation.icc,v 1.7 2003/11/26 14:51:48 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 
 // 
@@ -34,7 +34,8 @@
 // =======================================================================
 //
 
-inline void G4Transportation::SetPropagatorInField( G4PropagatorInField* pFieldPropagator)
+inline void
+G4Transportation::SetPropagatorInField( G4PropagatorInField* pFieldPropagator)
 {
    fFieldPropagator= pFieldPropagator;
 }
@@ -54,3 +55,12 @@ inline G4bool G4Transportation::DoesGlobalFieldExist()
   return transportMgr->GetFieldManager()->DoesFieldExist();
 }
 
+inline void G4Transportation::SetVerboseLevel( G4int verboseLev )
+{
+  fVerboseLevel= verboseLev;
+}
+
+inline G4int G4Transportation::GetVerboseLevel( ) const
+{
+  return fVerboseLevel;
+}

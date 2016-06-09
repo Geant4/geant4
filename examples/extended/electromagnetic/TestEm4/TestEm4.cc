@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: TestEm4.cc,v 1.7 2001/10/25 14:04:22 maire Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: TestEm4.cc,v 1.8 2003/06/23 16:16:22 maire Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo..... 
@@ -34,16 +34,16 @@
 #include "Randomize.hh"
 
 #ifdef G4VIS_USE
-#include "Em4VisManager.hh"
+#include "VisManager.hh"
 #endif
 
-#include "Em4DetectorConstruction.hh"
-#include "Em4PhysicsList.hh"
-#include "Em4PrimaryGeneratorAction.hh"
-#include "Em4RunAction.hh"
-#include "Em4EventAction.hh"
-#include "Em4SteppingAction.hh"
-#include "Em4SteppingVerbose.hh"
+#include "DetectorConstruction.hh"
+#include "PhysicsList.hh"
+#include "PrimaryGeneratorAction.hh"
+#include "RunAction.hh"
+#include "EventAction.hh"
+#include "SteppingAction.hh"
+#include "SteppingVerbose.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
@@ -53,28 +53,28 @@ int main(int argc,char** argv) {
   HepRandom::setTheEngine(new RanecuEngine);
 
   //my Verbose output class
-  G4VSteppingVerbose::SetInstance(new Em4SteppingVerbose);
+  G4VSteppingVerbose::SetInstance(new SteppingVerbose);
   
   // Construct the default run manager
   G4RunManager * runManager = new G4RunManager;
 
   // set mandatory initialization classes
-  runManager->SetUserInitialization(new Em4DetectorConstruction);
-  runManager->SetUserInitialization(new Em4PhysicsList);
+  runManager->SetUserInitialization(new DetectorConstruction);
+  runManager->SetUserInitialization(new PhysicsList);
   
 #ifdef G4VIS_USE
   // visualization manager
-  G4VisManager* visManager = new Em4VisManager;
+  G4VisManager* visManager = new VisManager;
   visManager->Initialize();
 #endif
     
   // set user action classes
-  runManager->SetUserAction(new Em4PrimaryGeneratorAction);
-  Em4RunAction* RunAct     = new Em4RunAction;
+  runManager->SetUserAction(new PrimaryGeneratorAction);
+  RunAction* RunAct     = new RunAction;
   runManager->SetUserAction(RunAct);
-  Em4EventAction* EvAct    = new Em4EventAction(RunAct);  
+  EventAction* EvAct    = new EventAction(RunAct);  
   runManager->SetUserAction(EvAct);
-  runManager->SetUserAction(new Em4SteppingAction(EvAct));
+  runManager->SetUserAction(new SteppingAction(EvAct));
   
   //Initialize G4 kernel
   runManager->Initialize();

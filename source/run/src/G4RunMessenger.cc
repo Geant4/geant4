@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunMessenger.cc,v 1.18 2003/06/16 17:12:52 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4RunMessenger.cc,v 1.20 2003/11/04 01:58:29 asaim Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 
 #include "G4RunMessenger.hh"
@@ -135,12 +135,16 @@ G4RunMessenger::G4RunMessenger(G4RunManager * runMgr)
   geomCmd->SetGuidance(" first initialization (or BeamOn).");
   geomCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
+  physCmd = new G4UIcmdWithoutParameter("/run/physicsModified",this);
+  physCmd->SetGuidance("Force all physics tables recalculated again.");
+  physCmd->SetGuidance("This command must be applied");
+  physCmd->SetGuidance(" if physics process has been modified after the");
+  physCmd->SetGuidance(" first initialization (or BeamOn).");
+  physCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+
   cutCmd = new G4UIcmdWithoutParameter("/run/cutoffModified",this);
-  cutCmd->SetGuidance("Force closssection tables to be calculated again.");
-  cutCmd->SetGuidance("This command must be applied");
-  cutCmd->SetGuidance(" if cutoff value(s) have been modified after the");
-  cutCmd->SetGuidance(" first initialization (or BeamOn).");
-  cutCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  cutCmd->SetGuidance("/run/cutoffModified becomes obsolete.");
+  cutCmd->SetGuidance("It is safe to remove invoking this command.");
   
   randomDirectory = new G4UIdirectory("/random/");
   randomDirectory->SetGuidance("Random number status control commands.");
@@ -218,6 +222,7 @@ G4RunMessenger::~G4RunMessenger()
   delete abortEventCmd;
   delete initCmd;
   delete geomCmd;
+  delete physCmd;
   delete cutCmd;
   delete randDirOld; delete storeRandOld; delete restoreRandOld; 
   delete runDirectory;
@@ -248,7 +253,6 @@ void G4RunMessenger::SetNewValue(G4UIcommand * command,G4String newValue)
   { runManager->SetVerboseLevel(verboseCmd->GetNewIntValue(newValue)); }
   else if( command==dumpRegCmd )
   { 
-    runManager->UpdateRegion();
     if(newValue=="**ALL**")
     { runManager->DumpRegion(); }
     else
@@ -272,6 +276,8 @@ void G4RunMessenger::SetNewValue(G4UIcommand * command,G4String newValue)
   { runManager->Initialize(); }
   else if( command==geomCmd )
   { runManager->GeometryHasBeenModified(); }
+  else if( command==physCmd )
+  { runManager->PhysicsHasBeenModified(); }
   else if( command==cutCmd )
   { runManager->CutOffHasBeenModified(); }
   

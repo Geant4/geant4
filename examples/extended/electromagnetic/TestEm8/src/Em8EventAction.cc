@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: Em8EventAction.cc,v 1.6 2003/06/16 16:48:00 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: Em8EventAction.cc,v 1.7 2003/11/24 17:52:47 vnivanch Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // 
 
@@ -52,8 +52,9 @@
 
 Em8EventAction::Em8EventAction(Em8RunAction* Em8RA)
 :calorimeterCollID(-1),eventMessenger(NULL),
- verboselevel(0),runaction(Em8RA),drawFlag("all"),printModulo(10000)
+ runaction(Em8RA),drawFlag("all"),printModulo(10000)
 {
+  verboselevel = 0;
   eventMessenger = new Em8EventActionMessenger(this);
 }
 

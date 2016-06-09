@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPInterpolator.hh,v 1.13 2003/06/03 14:17:45 jwellisc Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4NeutronHPInterpolator.hh,v 1.15 2003/11/03 17:54:36 hpw Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 #ifndef G4NeutronHPInterpolator_h
 #define G4NeutronHPInterpolator_h 1
@@ -31,6 +31,7 @@
 #include "G4InterpolationScheme.hh"
 #include "Randomize.hh"
 #include "G4ios.hh"
+#include "G4HadronicException.hh"
 
 
 class G4NeutronHPInterpolator
@@ -105,7 +106,7 @@ Interpolate(G4InterpolationScheme aScheme,
       break;
     default:
       G4cout << "theScheme = "<<theScheme<<G4endl;
-      G4Exception("G4NeutronHPInterpolator::Carthesian Invalid InterpolationScheme");
+      throw G4HadronicException(__FILE__, __LINE__, "G4NeutronHPInterpolator::Carthesian Invalid InterpolationScheme");
       break;
   }
   return result;
@@ -134,7 +135,10 @@ inline G4double G4NeutronHPInterpolator::
 LinearLogarithmic(G4double x, G4double x1, G4double x2, G4double y1, G4double y2) const
 {
   G4double result;
-  result = LinearLinear(log(x), log(x1), log(x2), y1, y2);
+  if(x==0) result = y1+y2/2.;
+  else if(x1==0) result = y1;
+  else if(x2==0) result = y2;
+  else result = LinearLinear(log(x), log(x1), log(x2), y1, y2);
   return result;
 }
   
@@ -142,8 +146,12 @@ inline G4double G4NeutronHPInterpolator::
 LogarithmicLinear(G4double x, G4double x1, G4double x2, G4double y1, G4double y2) const
 {
   G4double result;
-  result = LinearLinear(x, x1, x2, log(y1), log(y2));
-  result = exp(result);
+  if(y1==0||y2==0) result = 0;
+  else 
+  {
+    result = LinearLinear(x, x1, x2, log(y1), log(y2));
+    result = exp(result);
+  }
   return result;
 }
   
@@ -151,8 +159,15 @@ inline G4double G4NeutronHPInterpolator::
 LogarithmicLogarithmic(G4double x, G4double x1, G4double x2, G4double y1, G4double y2) const
 {
   G4double result;
-  result = LinearLinear(log(x), log(x1), log(x2), log(y1), log(y2));
-  result = exp(result);
+  if(x==0) result = y1+y2/2.;
+  else if(x1==0) result = y1;
+  else if(x2==0) result = y2;
+  if(y1==0||y2==0) result = 0;
+  else 
+  {
+    result = LinearLinear(log(x), log(x1), log(x2), log(y1), log(y2));
+    result = exp(result);
+  }
   return result;
 }
 

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4HEVector.hh,v 1.8 2002/12/12 19:17:59 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4HEVector.hh,v 1.9 2003/07/01 15:42:22 hpw Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 //
 // G4 Gheisha friend class G4KinematicParticle  -- header file
@@ -34,7 +34,7 @@
 
 #include "G4ParticleMomentum.hh"
 #include "Randomize.hh"
-#include "G4DynamicParticle.hh"
+#include "G4HadProjectile.hh"
 
 class G4HEVector
  {
@@ -60,7 +60,7 @@ class G4HEVector
 
   public:
 
-  G4HEVector(const G4DynamicParticle * aParticle);
+  G4HEVector(const G4HadProjectile * aParticle);
   
   G4HEVector()
    {

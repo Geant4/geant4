@@ -19,11 +19,11 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
-
+//
 // ====================================================================
 //
 //   G4HepMCAsciiReader.cc
-//   $Id: G4HepMCAsciiReader.cc,v 1.3 2003/06/16 16:50:34 gunter Exp $
+//   $Id: G4HepMCAsciiReader.cc,v 1.4 2003/12/09 15:35:04 gunter Exp $
 //
 // ====================================================================
 

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: ExN03EventAction.cc,v 1.20 2003/06/16 16:49:49 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: ExN03EventAction.cc,v 1.23 2003/11/12 16:15:48 johna Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // 
 
@@ -30,27 +30,21 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "ExN03EventAction.hh"
-
-#include "ExN03CalorHit.hh"
 #include "ExN03EventActionMessenger.hh"
 
 #include "G4Event.hh"
-#include "G4EventManager.hh"
-#include "G4HCofThisEvent.hh"
-#include "G4VHitsCollection.hh"
 #include "G4TrajectoryContainer.hh"
-#include "G4Trajectory.hh"
+#include "G4VTrajectory.hh"
 #include "G4VVisManager.hh"
-#include "G4SDManager.hh"
-#include "G4UImanager.hh"
-#include "G4ios.hh"
 #include "G4UnitsTable.hh"
+
+#include "Randomize.hh"
+#include <iomanip>
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 ExN03EventAction::ExN03EventAction()
-:calorimeterCollID(-1),drawFlag("all"),printModulo(1),
- eventMessenger(0)
+:drawFlag("all"),printModulo(1),eventMessenger(0)
 {
   eventMessenger = new ExN03EventActionMessenger(this);
 }
@@ -65,20 +59,16 @@ ExN03EventAction::~ExN03EventAction()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void ExN03EventAction::BeginOfEventAction(const G4Event* evt)
-{
-  
+{  
  G4int evtNb = evt->GetEventID();
- if (evtNb%printModulo == 0)
-   { 
-    G4cout << "\n---> Begin of event: " << evtNb << G4endl;
-    HepRandom::showEngineStatus();
-   }
-    
- if (calorimeterCollID==-1)
-   {
-    G4SDManager * SDman = G4SDManager::GetSDMpointer();
-    calorimeterCollID = SDman->GetCollectionID("CalCollection");
-   } 
+ if (evtNb%printModulo == 0) { 
+   G4cout << "\n---> Begin of event: " << evtNb << G4endl;
+   HepRandom::showEngineStatus();
+ }
+ 
+ // initialisation per event
+ EnergyAbs = EnergyGap = 0.;
+ TrackLAbs = TrackLGap = 0.;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -86,66 +76,47 @@ void ExN03EventAction::BeginOfEventAction(const G4Event* evt)
 void ExN03EventAction::EndOfEventAction(const G4Event* evt)
 {
   G4int evtNb = evt->GetEventID();
-  
-  // extracted from hits, compute the total energy deposit (and total charged
-  // track length) in all absorbers and in all gaps
 
-  G4HCofThisEvent* HCE = evt->GetHCofThisEvent();
-  ExN03CalorHitsCollection* CHC = 0;
-  G4int n_hit = 0;
-  G4double totEAbs=0, totLAbs=0, totEGap=0, totLGap=0;
-    
-  if (HCE) CHC = (ExN03CalorHitsCollection*)(HCE->GetHC(calorimeterCollID));
-
-  if (CHC)
-    {
-     n_hit = CHC->entries();
-     for (G4int i=0;i<n_hit;i++)
-	{
-	  totEAbs += (*CHC)[i]->GetEdepAbs(); 
-	  totLAbs += (*CHC)[i]->GetTrakAbs();
-	  totEGap += (*CHC)[i]->GetEdepGap(); 
-	  totLGap += (*CHC)[i]->GetTrakGap();
-	}
-     }
-   
-   // print this information event by event (modulo n)  	
-	  
   if (evtNb%printModulo == 0) {
     G4cout << "---> End of event: " << evtNb << G4endl;	
 
     G4cout
        << "   Absorber: total energy: " << std::setw(7)
-                                        << G4BestUnit(totEAbs,"Energy")
+                                        << G4BestUnit(EnergyAbs,"Energy")
        << "       total track length: " << std::setw(7)
-                                        << G4BestUnit(totLAbs,"Length")
+                                        << G4BestUnit(TrackLAbs,"Length")
        << G4endl
        << "        Gap: total energy: " << std::setw(7)
-                                        << G4BestUnit(totEGap,"Energy")
+                                        << G4BestUnit(EnergyGap,"Energy")
        << "       total track length: " << std::setw(7)
-                                        << G4BestUnit(totLGap,"Length")
+                                        << G4BestUnit(TrackLGap,"Length")
        << G4endl;
 	  
-    G4cout << "\n     " << n_hit
-	   << " hits are stored in ExN03CalorHitsCollection." << G4endl;
   }
   
   // extract the trajectories and draw them
+
+  // You can get a default drawing without this code by using, e.g.,
+  // /vis/scene/add/trajectories 1000
+  // The code here adds sophistication under control of drawFlag.
+
+  // See comments in G4VTrajectory::DrawTrajectory for the
+  // interpretation of the argument, 1000.
   
-  if (G4VVisManager::GetConcreteInstance())
+  G4VVisManager* pVisManager = G4VVisManager::GetConcreteInstance();
+  if (pVisManager)
     {
      G4TrajectoryContainer* trajectoryContainer = evt->GetTrajectoryContainer();
      G4int n_trajectories = 0;
      if (trajectoryContainer) n_trajectories = trajectoryContainer->entries();
 
      for (G4int i=0; i<n_trajectories; i++) 
-        { G4Trajectory* trj = (G4Trajectory*)
-	                                ((*(evt->GetTrajectoryContainer()))[i]);
-          if (drawFlag == "all") trj->DrawTrajectory(50);
+        { G4VTrajectory* trj = ((*(evt->GetTrajectoryContainer()))[i]);
+          if (drawFlag == "all") pVisManager->Draw(*trj,1000);
           else if ((drawFlag == "charged")&&(trj->GetCharge() != 0.))
-                                  trj->DrawTrajectory(50);
+                                  pVisManager->Draw(*trj,1000);
           else if ((drawFlag == "neutral")&&(trj->GetCharge() == 0.))
-                                  trj->DrawTrajectory(50);
+                                  pVisManager->Draw(*trj,1000);
         }
   }
 }  

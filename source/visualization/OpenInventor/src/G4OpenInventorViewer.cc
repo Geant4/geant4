@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenInventorViewer.cc,v 1.9 2002/11/27 12:46:07 johna Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4OpenInventorViewer.cc,v 1.10 2003/08/28 11:44:22 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 /*
  * jck 05 Feb 1997 - Initial Implementation
@@ -57,7 +57,7 @@
 //static void SecondaryLoopPostAction ();
 
 void G4OpenInventorViewer::FinishView () {
-  if(fViewer==NULL) return;
+  if(fViewer==0) return;
 #ifdef WIN32
   ((SoXtViewer*)fViewer)->viewAll();
   ((SoXtViewer*)fViewer)->saveHomePosition();
@@ -81,7 +81,7 @@ int quitCB(void* interactorManager) {
 //  Display *display = fViewer->getDisplay();
 //  XSync(display, False);
 //  if(interactorManager -> GetExitSecondaryLoopCode ()==OIV_EXIT_CODE) {
-//    if (fShell!=NULL) XtRealizeWidget(fShell);
+//    if (fShell!=0) XtRealizeWidget(fShell);
 //  }
 //}
 
@@ -104,7 +104,7 @@ void G4OpenInventorViewer::KernelVisitDecision () {
 }
  
 G4bool G4OpenInventorViewer::CompareForKernelVisit
-(G4ViewParameters& lastVP) {
+(G4ViewParameters&) {
 
   if (
       (fLastVP.GetDrawingStyle ()    != fVP.GetDrawingStyle ())    ||
@@ -140,11 +140,11 @@ G4OpenInventorViewer::G4OpenInventorViewer
  const G4String& name)
 :G4VViewer (sceneHandler, sceneHandler.IncrementViewCount(), name)
 ,fG4OpenInventorSceneHandler(sceneHandler)
-,fShell(NULL)
-,fWindow(NULL)
-,fViewer(NULL)
-,fSelection(NULL)
-,fInteractorManager(NULL)
+,fShell(0)
+,fWindow(0)
+,fViewer(0)
+,fSelection(0)
+,fInteractorManager(0)
 {
   fNeedKernelVisit = true;  //?? Temporary, until KernelVisitDecision fixed.
 
@@ -171,7 +171,7 @@ G4OpenInventorViewer::G4OpenInventorViewer
   const char* wname = wName.data();
 
 #define SIZE 400
-  if(parent==NULL) {  //Create a shell window :
+  if(parent==0) {  //Create a shell window :
     fWindow = new G4SoWindow(wname);
     fWindow->setTitle(wname);
     fWindow->setSize(SbVec2s(SIZE,SIZE));
@@ -179,7 +179,7 @@ G4OpenInventorViewer::G4OpenInventorViewer
     fInteractorManager->AddShell(fShell);
   } else {
     char* str = fInteractorManager->GetCreationString ();
-    if(str!=NULL) wname = str;
+    if(str!=0) wname = str;
   }
   //
   // Create and Customize the Viewer
@@ -202,7 +202,7 @@ G4OpenInventorViewer::G4OpenInventorViewer
   fViewer->setTitle(fName);
   fViewer->show();
  
-  if(fWindow!=NULL) {
+  if(fWindow!=0) {
     fWindow->show();
     fInteractorManager->FlushAndWaitExecution ();
   }
@@ -211,16 +211,16 @@ G4OpenInventorViewer::G4OpenInventorViewer
 }
 
 G4OpenInventorViewer::~G4OpenInventorViewer () {
-  if(fShell!=NULL) fInteractorManager -> RemoveShell (fShell);
-  if(fViewer!=NULL) {
+  if(fShell!=0) fInteractorManager -> RemoveShell (fShell);
+  if(fViewer!=0) {
 #ifdef WIN32
     delete ((SoXtExaminerViewer*)fViewer);
 #else
     delete ((SoXtHepViewer*)fViewer);
 #endif
   }
-  if(fWindow!=NULL) delete fWindow;
-  if(fSelection!=NULL) fSelection->unref();
+  if(fWindow!=0) delete fWindow;
+  if(fSelection!=0) fSelection->unref();
 }
 
 void G4OpenInventorViewer::ClearView () {
@@ -241,11 +241,3 @@ void G4OpenInventorViewer::ShowView () {
 }
 
 #endif
-
-
-
-
-
-
-
-

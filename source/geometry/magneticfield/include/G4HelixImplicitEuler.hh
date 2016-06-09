@@ -21,20 +21,25 @@
 // ********************************************************************
 //
 //
-// $Id: G4HelixImplicitEuler.hh,v 1.6 2001/07/11 09:59:08 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4HelixImplicitEuler.hh,v 1.7 2003/10/31 14:35:51 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 //
 // class G4HelixImplicitEuler
 //
 // Class description:
 //
-//  Helix Implicit Euler:
+//  Helix Implicit Euler stepper for magnetic field:
 //        x_1 = x_0 + 1/2 * ( helix(h,t_0,x_0)
 //                          + helix(h,t_0+h,x_0+helix(h,t0,x0) ) )
+//  Second order solver.
+//  Take the current derivative and add it to the current position.
+//  Take the output and its derivative. Add the mean of both derivatives
+//  to form the final output.
 
 // History:
 // - Created. W.Wander <wwc@mit.edu>, 03/11/98
+// -------------------------------------------------------------------
 
 #ifndef G4HELIXIMPLICITEULER_HH
 #define G4HELIXIMPLICITEULER_HH
@@ -47,14 +52,14 @@ class G4HelixImplicitEuler : public G4MagHelicalStepper
   public:  // with description
 
     G4HelixImplicitEuler(G4Mag_EqRhs *EqRhs)
-      : G4MagHelicalStepper(EqRhs) {;}
+      : G4MagHelicalStepper(EqRhs) {}
 
-    ~G4HelixImplicitEuler() {;}
+    ~G4HelixImplicitEuler() {}
   
     void DumbStepper( const G4double y[],
-		      G4ThreeVector  Bfld,
-		      G4double       h,
-		      G4double       yout[]);
+                            G4ThreeVector  Bfld,
+                            G4double       h,
+                            G4double       yout[]);
   
   public:  // without description
 

@@ -65,8 +65,7 @@ XrayFluoDetectorConstruction::XrayFluoDetectorConstruction()
     OhmicPosMaterial(0), OhmicNegMaterial(0),
     pixelMaterial(0),sampleMaterial(0),
     Dia1Material(0),Dia3Material(0),
-    defaultMaterial(0)
-  ,HPGeSD(0)
+    defaultMaterial(0),matOx(0),U(0),HPGeSD(0)
   
 { 
   NbOfPixelRows     =  1;
@@ -113,6 +112,8 @@ XrayFluoDetectorConstruction::XrayFluoDetectorConstruction()
 
 XrayFluoDetectorConstruction::~XrayFluoDetectorConstruction()
 { 
+  delete U;
+  delete matOx;
   delete detectorMessenger;
   G4cout << "XrayFluoDetectorConstruction deleted" << G4endl;
 }
@@ -442,7 +443,7 @@ void XrayFluoDetectorConstruction::DefineMaterials()
   //define Oxigen
   density = 1*g/cm3;
   a=16*g/mole;
-  G4Material* matOx = new G4Material(name="Oxigen", z=8., a, density);
+              matOx = new G4Material(name="Oxigen", z=8., a, density);
   
   //define aluminium
   
@@ -459,7 +460,7 @@ void XrayFluoDetectorConstruction::DefineMaterials()
   //define Uranium 
   density = 19050*kg/m3;
   a =  238.02891*g/mole;
-  G4Material* U  = new G4Material(name="Uranium",z=92.,a,density);
+              U  = new G4Material(name="Uranium",z=92.,a,density);
 
   //define Tin
   density = 7310*kg/m3;

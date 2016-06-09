@@ -19,11 +19,11 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
-
+//
 // ====================================================================
 //
 //   H02PrimaryGeneratorMessenger.hh
-//   $Id: H02PrimaryGeneratorMessenger.hh,v 1.1 2002/05/28 14:10:53 murakami Exp $
+//   $Id: H02PrimaryGeneratorMessenger.hh,v 1.2 2003/12/09 15:31:11 gunter Exp $
 //
 // ====================================================================
 #ifndef H02_PRIMARY_GENERATOR_MESSENGER_H

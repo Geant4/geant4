@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4DynamicParticle.cc,v 1.15 2003/06/18 16:55:12 vnivanch Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4DynamicParticle.cc,v 1.17 2003/08/22 00:03:15 kurasige Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // 
 // --------------------------------------------------------------
@@ -76,7 +76,8 @@ G4DynamicParticle::G4DynamicParticle():
  		   theProperTime(0.0),
                    thePreAssignedDecayProducts(0),
                    thePreAssignedDecayTime(-1.0),
-		   verboseLevel(1)
+		   verboseLevel(1),
+		   primaryParticle(0)
 {  
    theDynamicalMass = 0.0; 
    theDynamicalCharge= 0.0;
@@ -95,7 +96,8 @@ G4DynamicParticle::G4DynamicParticle(G4ParticleDefinition * aParticleDefinition,
  		   theProperTime(0.0),
                    thePreAssignedDecayProducts(0),
                    thePreAssignedDecayTime(-1.0),
-		   verboseLevel(1)
+		   verboseLevel(1),
+		   primaryParticle(0)
 {
   // set dynamic charge/mass
   theDynamicalMass = aParticleDefinition->GetPDGMass();
@@ -110,7 +112,8 @@ G4DynamicParticle::G4DynamicParticle(G4ParticleDefinition * aParticleDefinition,
        		   theProperTime(0.0),
                    thePreAssignedDecayProducts(0),
                    thePreAssignedDecayTime(-1.0),
-		   verboseLevel(1)
+		   verboseLevel(1),
+		   primaryParticle(0)
 {
   // set dynamic charge/mass
   theDynamicalMass = aParticleDefinition->GetPDGMass();
@@ -139,7 +142,8 @@ G4DynamicParticle::G4DynamicParticle(G4ParticleDefinition * aParticleDefinition,
  		   theProperTime(0.0),
                    thePreAssignedDecayProducts(0),
                    thePreAssignedDecayTime(-1.0),
-		   verboseLevel(1)
+		   verboseLevel(1),
+		   primaryParticle(0)
 {
    // set dynamic charge/mass
   theDynamicalMass = aParticleDefinition->GetPDGMass();
@@ -178,7 +182,8 @@ G4DynamicParticle::G4DynamicParticle(G4ParticleDefinition * aParticleDefinition,
                    theProperTime(0.0),
                    thePreAssignedDecayProducts(0),
                    thePreAssignedDecayTime(-1.0),
-		   verboseLevel(1)
+		   verboseLevel(1),
+		   primaryParticle(0)
 {
    // set dynamic charge/mass
   theDynamicalMass = aParticleDefinition->GetPDGMass();
@@ -232,6 +237,7 @@ G4DynamicParticle::G4DynamicParticle(const G4DynamicParticle &right)
   thePreAssignedDecayProducts = 0;
   thePreAssignedDecayTime = -1.0;
 
+  primaryParticle = right.primaryParticle;
 }
 
 ////////////////////
@@ -256,6 +262,7 @@ G4DynamicParticle & G4DynamicParticle::operator=(const G4DynamicParticle &right)
   if (this != &right) {
     theDynamicalMass = right.theDynamicalMass;
     theDynamicalCharge = right.theDynamicalCharge;
+    if (theElectronOccupancy != 0) delete theElectronOccupancy;
     if (right.theElectronOccupancy != 0){
       theElectronOccupancy =
              new G4ElectronOccupancy(*right.theElectronOccupancy);

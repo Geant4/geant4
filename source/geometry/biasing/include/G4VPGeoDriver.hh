@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4VPGeoDriver.hh,v 1.6 2002/10/14 12:36:01 dressel Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // ----------------------------------------------------------------------
 // Class G4VPGeoDriver

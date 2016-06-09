@@ -21,9 +21,11 @@
 // ********************************************************************
 //
 //
-// $Id: G4MagIntegratorStepper.cc,v 1.9 2003/06/16 16:51:19 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4MagIntegratorStepper.cc,v 1.10 2003/10/31 14:35:55 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
+// --------------------------------------------------------------------
+
 #include "G4MagIntegratorStepper.hh"
 
 // Constructor for stepper abstract base class. 
@@ -42,4 +44,3 @@ G4MagIntegratorStepper::G4MagIntegratorStepper(G4EquationOfMotion* Equation,
 G4MagIntegratorStepper::~G4MagIntegratorStepper()
 {
 }
-

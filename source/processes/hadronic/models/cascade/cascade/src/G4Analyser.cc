@@ -19,6 +19,7 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
+//
 #include "G4Analyser.hh"
 #include <math.h>
 
@@ -108,7 +109,8 @@ void G4Analyser::analyse(const G4CollisionOutput& output) {
   if (withNuclei) {
     std::vector<G4InuclNuclei> nucleus = output.getNucleiFragments();
 
-    if (nucleus.size() >= 0) {
+    //    if (nucleus.size() >= 0) {
+    if (nucleus.size() > 0) {
       G4int nbig = 0;
       averageNucleiFragments += nucleus.size();
 
@@ -207,7 +209,7 @@ void G4Analyser::printResultsSimple() {
     G4cout << " >>> G4Analyser::printResultsSimple" << G4endl;
   }
 
-  G4cout << " Number of events " << int(eventNumber + 0.1) << G4endl
+  G4cout << " Number of events " << G4int(eventNumber + 0.1) << G4endl
 	 << " average multiplicity " << averageMultiplicity / eventNumber << G4endl
 	 << " average proton number " << averageProtonNumber / eventNumber << G4endl
 	 << " average neutron number " << averageNeutronNumber / eventNumber << G4endl
@@ -236,7 +238,7 @@ void G4Analyser::printResults() {
     G4cout << " >>> G4Analyser::printResults" << G4endl;
   }
 
-  G4cout << " Number of events " << int(eventNumber + 0.1) << G4endl
+  G4cout << " Number of events " << G4int(eventNumber + 0.1) << G4endl
 	 << " average multiplicity " << averageMultiplicity / eventNumber << G4endl
 	 << " average proton number " << averageProtonNumber / eventNumber << G4endl
 	 << " average neutron number " << averageNeutronNumber / eventNumber << G4endl
@@ -254,7 +256,6 @@ void G4Analyser::printResults() {
 	 << " average pi0 " << averagePion0 / eventNumber << G4endl;
      		   
   if (withNuclei) {
-
     G4cout
       << " average A " << averageA / eventNumber << G4endl 		   
       << " average Z " << averageZ / eventNumber << G4endl 		   
@@ -290,7 +291,7 @@ void G4Analyser::handleWatcherStatistics() {
   G4double checked = 0.0;
 
   for (G4int iw = 0; iw < G4int(ana_watchers.size()); iw++) {
-    ana_watchers[iw].setInuclCs(inel_csec, eventNumber);
+    ana_watchers[iw].setInuclCs(inel_csec, G4int(eventNumber));
     ana_watchers[iw].print();
 
     if (ana_watchers[iw].to_check()) {

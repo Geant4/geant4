@@ -21,11 +21,13 @@
 // ********************************************************************
 //
 //
-// $Id: B01DetectorConstruction.cc,v 1.10 2003/06/16 16:47:09 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: B01DetectorConstruction.cc,v 1.12 2003/08/25 12:32:29 dressel Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 
+#include "G4Types.hh"
 #include <strstream>
+#include <set>
 #include "globals.hh"
 
 #include "B01DetectorConstruction.hh"
@@ -42,18 +44,15 @@
 // for importance biasing
 #include "G4IStore.hh"
 
-B01DetectorConstruction::B01DetectorConstruction()
- : fIStore(0)
+// for weight window technique
+#include "G4WeightWindowStore.hh"
+
+B01DetectorConstruction::B01DetectorConstruction() :
+  fPhysicalVolumeVector()
 {;}
 
 B01DetectorConstruction::~B01DetectorConstruction()
 {;}
-
-G4IStore* B01DetectorConstruction::GetIStore()
-{
-  if (!fIStore) G4Exception("B01DetectorConstruction::fIStore empty!");
-  return fIStore;
-}
 
 G4VPhysicalVolume* B01DetectorConstruction::Construct()
 {
@@ -140,9 +139,8 @@ G4VPhysicalVolume* B01DetectorConstruction::Construct()
   // world solid
 
   G4double innerRadiusCylinder = 0*cm;
-  G4double outerRadiusCylinder = 101*cm; // dont't have scoring
-                   // cells coinside eith world volume boundary
-  G4double hightCylinder       = 105*cm;
+  G4double outerRadiusCylinder = 100*cm; 
+  G4double hightCylinder       = 100*cm;
   G4double startAngleCylinder  = 0*deg;
   G4double spanningAngleCylinder    = 360*deg;
 
@@ -164,12 +162,11 @@ G4VPhysicalVolume* B01DetectorConstruction::Construct()
 		  name, 0, false, 0);
 
 
-  std::vector< G4VPhysicalVolume * > physvolumes;
-  physvolumes.push_back(pWorldVolume);
+  fPhysicalVolumeVector.push_back(pWorldVolume);
 
 
 
-  // creating 18 slobs of 10 cm thick concrete
+  // creating 18 slabs of 10 cm thick concrete
 
   G4double innerRadiusShield = 0*cm;
   G4double outerRadiusShield = 100*cm;
@@ -212,15 +209,15 @@ G4VPhysicalVolume* B01DetectorConstruction::Construct()
 			worldCylinder_log, 
 			false, 
 			0);
-    physvolumes.push_back(pvol);
+    fPhysicalVolumeVector.push_back(pvol);
   }
 
   // filling the rest of the world volumr behind the concrete with
-  // another slob which should get the same importance value as the 
-  // last slob
+  // another slab which should get the same importance value 
+  // or lower weight bound as the last slab
   innerRadiusShield = 0*cm;
   outerRadiusShield = 100*cm;
-  hightShield       = 7.5*cm;
+  hightShield       = 5*cm;
   startAngleShield  = 0*deg;
   spanningAngleShield    = 360*deg;
 
@@ -237,7 +234,7 @@ G4VPhysicalVolume* B01DetectorConstruction::Construct()
     
   pos_x = 0*cm;
   pos_y = 0*cm;
-  pos_z = 97.5*cm;
+  pos_z = 95*cm;
   G4VPhysicalVolume *pvol_rest = 
     new G4PVPlacement(0, 
 		      G4ThreeVector(pos_x, pos_y, pos_z),
@@ -247,34 +244,104 @@ G4VPhysicalVolume* B01DetectorConstruction::Construct()
 		      false, 
 		      0);
 
+  fPhysicalVolumeVector.push_back(pvol_rest);
+  return pWorldVolume;
+
+}
+
+
+G4VIStore *B01DetectorConstruction::CreateImportanceStore() {
+
+  if (!fPhysicalVolumeVector.size()) {
+    G4Exception("B01DetectorConstruction::CreateImportanceStore: no physical volumes created yet!");
+  }
+
+  G4VPhysicalVolume *pWorldVolume = fPhysicalVolumeVector[0];
 
   // creating and filling the importance store
+  
+  G4IStore *istore = new G4IStore(*pWorldVolume);
 
-  fIStore = new G4IStore(*pWorldVolume);
 
-  // for the world volume repnum is 0 !
   G4int n = 0;
   G4double imp =1;
-  fIStore->AddImportanceGeometryCell(1, *pWorldVolume);
+  istore->AddImportanceGeometryCell(1,  *pWorldVolume);
   for (std::vector<G4VPhysicalVolume *>::iterator it =
-	 physvolumes.begin();
-       it != physvolumes.end(); it++)
+	 fPhysicalVolumeVector.begin();
+       it != fPhysicalVolumeVector.end() - 1; it++)
   {
     if (*it != pWorldVolume)
     {
       imp = pow(2., n++);
       G4cout << "Going to assign importance: " << imp << ", to volume: " 
 	     << (*it)->GetName() << G4endl;
-      fIStore->AddImportanceGeometryCell(imp, **it); 
+      istore->AddImportanceGeometryCell(imp, *(*it)); 
     }
   }
 
   // the remaining part pf the geometry (rest) gets the same
   // importance as the last conrete cell
-  fIStore->AddImportanceGeometryCell(imp, *pvol_rest);
+  istore->
+    AddImportanceGeometryCell(imp, 
+			      *(fPhysicalVolumeVector[fPhysicalVolumeVector
+						     .size()-1]));
+  
+  return istore;
+}
 
 
-  return pWorldVolume;
+
+G4VWeightWindowStore *B01DetectorConstruction::CreateWeightWindowStore() {
+
+  if (!fPhysicalVolumeVector.size()) {
+    G4Exception("B01DetectorConstruction::CreateWeightWindowStore: no physical volumes created yet!");
+  }
+
+  G4VPhysicalVolume *pWorldVolume = fPhysicalVolumeVector[0];
+
+  // creating and filling the weight window store
+  
+  G4WeightWindowStore *wwstore = new G4WeightWindowStore(*pWorldVolume);
+  
+  // create one energy region covering the energies of the problem
+  std::set<G4double, std::less<G4double> > enBounds;
+  enBounds.insert(1 * GeV);
+  wwstore->SetGeneralUpperEnergyBounds(enBounds);
+
+
+  G4int n = 0;
+  G4double lowerWeight =1;
+  std::vector<G4double> lowerWeights;
+
+  lowerWeights.push_back(1);
+  G4GeometryCell gWorldCell(*pWorldVolume,0);
+  wwstore->AddLowerWeights(gWorldCell, lowerWeights);
+
+  for (std::vector<G4VPhysicalVolume *>::iterator it =
+	 fPhysicalVolumeVector.begin();
+       it != fPhysicalVolumeVector.end() - 1; it++)
+  {
+    if (*it != pWorldVolume)
+    {
+      lowerWeight = 1./pow(2., n++);
+      G4cout << "Going to assign lower weight: " << lowerWeight 
+	     << ", to volume: " 
+	     << (*it)->GetName() << G4endl;
+      G4GeometryCell gCell(*(*it),0);
+      lowerWeights.clear();
+      lowerWeights.push_back(lowerWeight);
+      wwstore->AddLowerWeights(gCell, lowerWeights);
+    }
+  }
+
+  // the remaining part pf the geometry (rest) gets the same
+  // lower weight bound  as the last conrete cell
+  G4GeometryCell gRestCell(*(fPhysicalVolumeVector[fPhysicalVolumeVector
+					      .size()-1]), 0);
+  wwstore->AddLowerWeights(gRestCell,  lowerWeights);
+  
+  
+  return wwstore;
 }
 
 

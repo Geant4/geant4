@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VProcessPlacer.hh,v 1.7 2002/10/16 16:26:58 dressel Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4VProcessPlacer.hh,v 1.8 2003/11/26 14:51:49 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // ----------------------------------------------------------------------
 // Class G4VProcessPlacer
@@ -30,14 +30,14 @@
 // Class description:
 //
 // Used internally by importance sampling and scoring to place
-// processes as second or last PostStepDoit processes.
+// processes as second or last PostStepDoIt processes.
 
 // Author: Michael Dressel (Michael.Dressel@cern.ch)
 // ----------------------------------------------------------------------
 #ifndef G4VProcessPlacer_hh
 #define G4VProcessPlacer_hh G4VProcessPlacer_hh
 
-#include "globals.hh"
+#include "G4Types.hh"
 
 class G4VProcess;
  
@@ -61,7 +61,6 @@ public:  // with description
 
   virtual void RemoveProcess(G4VProcess *process) = 0;
     // removes a given process 
-
 
 };
 

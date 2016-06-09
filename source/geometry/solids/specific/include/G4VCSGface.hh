@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VCSGface.hh,v 1.5 2002/10/28 11:47:51 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4VCSGface.hh,v 1.6 2003/11/03 18:39:55 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // 
 // --------------------------------------------------------------------
@@ -256,15 +256,13 @@
 // Author:
 //   David C. Williams (davidw@scipp.ucsc.edu)
 // --------------------------------------------------------------------
-
 #ifndef G4VCSGface_hh
 #define G4VCSGface_hh
 
-#include "G4VSolid.hh"
-
-#include "globals.hh"
+#include "G4Types.hh"
 #include "G4ThreeVector.hh"
 #include "geomdefs.hh"
+#include "G4VSolid.hh"
 
 class G4VoxelLimits;
 class G4AffineTransform;

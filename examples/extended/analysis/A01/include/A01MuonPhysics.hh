@@ -20,9 +20,11 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: A01MuonPhysics.hh,v 1.3 2002/12/13 11:34:29 gunter Exp $
+// $Id: A01MuonPhysics.hh,v 1.4 2003/10/11 02:59:59 tkoi Exp $
 // --------------------------------------------------------------
 //
+// 09-Oct-2003 mu+- tau+- processes are changed by T. Koi
+
 
 #ifndef A01MuonPhysics_h
 #define A01MuonPhysics_h 1
@@ -54,23 +56,6 @@ class A01MuonPhysics : public G4VPhysicsConstructor
     virtual void ConstructProcess();
 
   protected:
-   // Muon physics
-   G4MultipleScattering   fMuPlusMultipleScattering;
-   G4MuBremsstrahlung     fMuPlusBremsstrahlung ;
-   G4MuPairProduction     fMuPlusPairProduction;
-   G4MuIonisation         fMuPlusIonisation;
-
-   G4MultipleScattering   fMuMinusMultipleScattering;
-   G4MuBremsstrahlung     fMuMinusBremsstrahlung ;
-   G4MuPairProduction     fMuMinusPairProduction;
-   G4MuIonisation         fMuMinusIonisation;
-
-   // Tau physics
-   G4MultipleScattering   fTauPlusMultipleScattering;
-   G4hIonisation          fTauPlusIonisation;
-
-   G4MultipleScattering   fTauMinusMultipleScattering;
-   G4hIonisation          fTauMinusIonisation;
 
 };
 

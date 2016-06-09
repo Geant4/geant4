@@ -1,0 +1,35 @@
+$Id: History,v 1.5 2003/11/08 06:10:48 kurasige Exp $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                      Category History file
+                      ---------------------
+This file should be used by G4 developers and category coordinators
+to briefly summarize all major modifications introduced in the code
+and keep track of all category-tags.
+It DOES NOT substitute the  CVS log-message one should put at every
+committal in the CVS repository !
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+November 8th, 2003 - H.Kurashige (procuts-V05-02-03)
+- Fixed bugs in G4VRangeToEnergyConverter (and related class)
+
+- Revised error messages in retreiving ProductionCutsTable
+November 7th, 2003 - H.Kurashige (procuts-V05-02-02)
+- Revised error messages in retreiving ProductionCutsTable
+
+November 3th, 2003 - H.Kurashige (procuts-V05-02-01)
+- Modified error messages in retreiving ProductionCutsTable
+- Add verboseLevel in G4ProductionCutsTable
+
+September 19th, 2003 - G.Cosmo  (procuts-V05-02-00)
+--------------------
+- Created new sub-category 'cuts'.
+  Moved classes from particles/management.
+

@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4NeutronHPPolynomExpansion.hh,v 1.8 2003/06/16 17:11:02 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 #ifndef G4NeutronHPPolynomExpansion_h
 #define G4NeutronHPPolynomExpansion_h 1

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ShortLivedConstructor.cc,v 1.10 2002/11/19 11:49:24 jwellisc Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4ShortLivedConstructor.cc,v 1.11 2003/09/21 19:27:55 kurasige Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // 
 // --------------------------------------------------------------
@@ -82,6 +82,7 @@ void G4ShortLivedConstructor::ConstructQuarks()
                     0,               0,             0,             
              "gluons",               0,             0,          21,
 		 true,            -1.0,          NULL);
+  particle->SetAntiPDGEncoding(21);
   // u-quark
   particle = new G4Quarks(            
 	    "u_quark",         8.0*MeV,       0.0*MeV,   2./3.*eplus, 

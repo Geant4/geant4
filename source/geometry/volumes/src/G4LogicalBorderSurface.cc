@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4LogicalBorderSurface.cc,v 1.9 2003/06/16 16:54:53 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4LogicalBorderSurface.cc,v 1.12 2003/12/01 14:53:26 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // --------------------------------------------------------------------
 // G4LogicalBorderSurface Implementation
@@ -34,9 +34,10 @@
 // Created:     1997-06-26
 // Author:      John Apostolakis (John.Apostolakis@cern.ch)
 //
-// ********************************************************************
+// ----------------------------------------------------------------------
 
 #include "G4LogicalBorderSurface.hh"
+#include "G4VPhysicalVolume.hh"
 
 G4LogicalBorderSurfaceTable G4LogicalBorderSurface::theBorderSurfaceTable;
 
@@ -47,8 +48,8 @@ G4LogicalBorderSurfaceTable G4LogicalBorderSurface::theBorderSurfaceTable;
 G4LogicalBorderSurface::G4LogicalBorderSurface(const G4String& name,
                                                G4VPhysicalVolume* vol1, 
                                                G4VPhysicalVolume* vol2,
-                                               G4OpticalSurface* opticsSurface)
-  : G4LogicalSurface(name, opticsSurface),
+                                               G4SurfaceProperty* surfaceProperty)
+  : G4LogicalSurface(name, surfaceProperty),
     Volume1(vol1), Volume2(vol2)
 {
   // Store in the table of Surfaces
@@ -58,7 +59,7 @@ G4LogicalBorderSurface::G4LogicalBorderSurface(const G4String& name,
 
 G4LogicalBorderSurface::
 G4LogicalBorderSurface(const G4LogicalBorderSurface& right)
-  : G4LogicalSurface(right.GetName(), right.GetOpticalSurface())
+  : G4LogicalSurface(right.GetName(), right.GetSurfaceProperty())
 {
   SetTransitionRadiationSurface(right.GetTransitionRadiationSurface());
   Volume1 = right.Volume1;
@@ -80,7 +81,7 @@ G4LogicalBorderSurface::operator=(const G4LogicalBorderSurface &right)
   if (&right == this) return *this;
   if (&right)
   {
-    SetOpticalSurface(right.GetOpticalSurface());
+    SetSurfaceProperty(right.GetSurfaceProperty());
     SetName(right.GetName());
     SetTransitionRadiationSurface(right.GetTransitionRadiationSurface());
     Volume1 = right.Volume1;

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ImportanceSplitExaminer.hh,v 1.5 2002/10/14 12:36:00 dressel Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4ImportanceSplitExaminer.hh,v 1.7 2003/08/19 16:38:45 dressel Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // ----------------------------------------------------------------------
 // Class G4ImportanceSplitExaminer
@@ -41,7 +41,6 @@
 #define G4ImportanceSplitExaminer_hh G4ImportanceSplitExaminer_hh
 
 #include "G4VImportanceSplitExaminer.hh"
-#include "G4ImportanceFinder.hh"
 
 class G4VImportanceAlgorithm;
 class G4VParallelStepper;
@@ -55,10 +54,8 @@ public:  // with description
   G4ImportanceSplitExaminer(const G4VImportanceAlgorithm &aIalg,
 		      const G4VParallelStepper &astepper,
 		      const G4VIStore &istore);
-    // initialisation and construct G4ImportanceFinder
 
   virtual ~G4ImportanceSplitExaminer();
-    // delete G4ImportanceFinder
 
   virtual G4Nsplit_Weight Examine(G4double w) const; 
     // Get  G4Nsplit_Weight for a given mother track weight.
@@ -73,7 +70,7 @@ private:
 
   const G4VImportanceAlgorithm &fIalgorithm;
   const G4VParallelStepper &fPStepper;
-  G4ImportanceFinder fIfinder;
+  const G4VIStore &fIStore;
 };
 
 

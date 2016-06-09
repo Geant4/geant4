@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPLegendreStore.hh,v 1.8 2003/06/16 17:10:51 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4NeutronHPLegendreStore.hh,v 1.9 2003/11/03 17:54:36 hpw Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 #ifndef G4NeutronHPLegendreStore_h
 #define G4NeutronHPLegendreStore_h 1
@@ -57,7 +57,7 @@ class G4NeutronHPLegendreStore
   inline void SetCoeff(G4int i, G4int l, G4double coeff) {theCoeff[i].SetCoeff(l, coeff); }
   inline void SetCoeff(G4int i, G4NeutronHPLegendreTable * theTable)
   {
-    if(i>nEnergy) G4Exception("LegendreTableIndex out of range");
+    if(i>nEnergy) throw G4HadronicException(__FILE__, __LINE__, "LegendreTableIndex out of range");
     theCoeff[i] = *theTable;
 // not here -- see G4NeutronHPPhotonDist.cc line 275
 //    delete theTable;

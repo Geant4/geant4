@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4ParticleTable.hh,v 1.16 2003/06/16 16:58:05 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // 
 // ------------------------------------------------------------

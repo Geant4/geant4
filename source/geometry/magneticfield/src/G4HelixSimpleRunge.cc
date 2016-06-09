@@ -21,24 +21,22 @@
 // ********************************************************************
 //
 //
-// $Id: G4HelixSimpleRunge.cc,v 1.5 2001/07/11 09:59:12 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4HelixSimpleRunge.cc,v 1.6 2003/10/31 14:35:54 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
-#include "G4HelixSimpleRunge.hh"
-#include "G4ThreeVector.hh"
-
 //
 //  Simple Runge:
 //        x_1 = x_0 + h * ( dx( t_0+h/2, x_0 + h/2 * dx( t_0, x_0) ) )
-//  W.Wander <wwc@mit.edu> 12/09/97 
 //
-
+//  Second order solver.
+//  Take the derivative at a position to be assumed at the middle of the
+//  Step and add it to the current position.
+//
+//  W.Wander <wwc@mit.edu> 12/09/97 
 // -------------------------------------------------------------------------
 
-// second order solver
-// take the derivative at a position to be assumed at the middle of the
-// Step and add it to the current position.
-//
+#include "G4HelixSimpleRunge.hh"
+#include "G4ThreeVector.hh"
 
 void
 G4HelixSimpleRunge::DumbStepper( const G4double  yIn[],
@@ -58,6 +56,4 @@ G4HelixSimpleRunge::DumbStepper( const G4double  yIn[],
   AdvanceHelix( yIn, Bfld_midpoint, h, yOut);
   
   // NormaliseTangentVector( yOut );           
-  
-  return ;
 }  

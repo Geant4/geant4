@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4LESigmaMinusInelastic.hh,v 1.6 2002/12/12 19:18:05 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4LESigmaMinusInelastic.hh,v 1.8 2003/10/31 18:04:16 hpw Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
  // Hadronic Process: Low Energy SigmaMinus Inelastic Process
  // original by J.L. Chuma, TRIUMF, 03-Feb-1997
@@ -53,15 +53,15 @@
     ~G4LESigmaMinusInelastic()
     { }
 
-    G4VParticleChange *ApplyYourself( const G4Track &aTrack,
+    G4HadFinalState * ApplyYourself(const G4HadProjectile &aTrack,
                                       G4Nucleus &targetNucleus );
     
  private:
     
     void Cascade(                               // derived from CASSM
-      G4FastVector<G4ReactionProduct,128> &vec,
+      G4FastVector<G4ReactionProduct,GHADLISTSIZE> &vec,
       G4int &vecLen,
-      const G4DynamicParticle *originalIncident,
+      const G4HadProjectile *originalIncident,
       G4ReactionProduct &currentParticle,
       G4ReactionProduct &targetParticle,
       G4bool &incidentHasChanged, 

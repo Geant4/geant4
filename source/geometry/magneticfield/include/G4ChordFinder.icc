@@ -21,27 +21,12 @@
 // ********************************************************************
 //
 //
-// $Id: G4ChordFinder.icc,v 1.5 2003/06/12 13:06:01 japost Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4ChordFinder.icc,v 1.11 2003/11/13 18:04:48 japost Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // G4ChordFinder inline implementations
 //
 // --------------------------------------------------------------------
-
-inline
-G4ChordFinder::G4ChordFinder(G4MagInt_Driver* pIntegrationDriver)
-  : fDeltaChord( fDefaultDeltaChord ),
-    fAllocatedStepper(false),
-    fEquation(0), 
-    fDriversStepper(0), 
-    fNoTrials(0), fNoCalls(0)
-{
-  // Simple constructor which does not create equation, ..
-
-  fIntgrDriver= pIntegrationDriver;
-  fAllocatedStepper= false;
-  fLastStepEstimate_Unconstrained = DBL_MAX;          // Should move q, p to
-}
 
 inline 
 void G4ChordFinder::SetIntegrationDriver(G4MagInt_Driver* IntegrationDriver)
@@ -63,8 +48,8 @@ G4bool G4ChordFinder::AcceptableMissDist(G4double dChordStep) const
 
 inline
 void G4ChordFinder::SetChargeMomentumMass(G4double pCharge, // in e+ units
-				          G4double pMomentum,
-				          G4double pMass)
+                                          G4double pMomentum,
+                                          G4double pMass)
 {
   fIntgrDriver-> SetChargeMomentumMass(pCharge, pMomentum, pMass);
 }
@@ -82,8 +67,55 @@ void G4ChordFinder::SetDeltaChord(G4double newval)
 }
 
 // ......................................................................
+inline 
+G4double G4ChordFinder::GetLastStepEstimateUnc()
+{
+  return fLastStepEstimate_Unconstrained;   
+} 
+inline 
+void G4ChordFinder::SetLastStepEstimateUnc( G4double stepEst )
+{
+  fLastStepEstimate_Unconstrained = stepEst;    
+}
 inline
 void G4ChordFinder::ResetStepEstimate()
 {
   fLastStepEstimate_Unconstrained = DBL_MAX;    
+}
+
+// ......................................................................
+inline G4int G4ChordFinder::GetNoCalls()     { return fNoCalls_FNC; }
+inline G4int G4ChordFinder::GetNoTrials()    { return fTotalNoTrials_FNC; }
+inline G4int G4ChordFinder::GetNoMaxTrials() { return fmaxTrials_FNC; } 
+
+inline G4double G4ChordFinder::GetFirstFraction() { return fFirstFraction; } 
+inline G4double G4ChordFinder::GetFractionLast()  { return fFractionLast; } 
+inline G4double G4ChordFinder::GetFractionNextEstimate() 
+{ return fFractionNextEstimate; } 
+inline G4double G4ChordFinder::GetMultipleRadius()
+{ return fMultipleRadius; } 
+
+inline void G4ChordFinder::SetFirstFraction(G4double val){ fFirstFraction=val; }
+
+inline G4int G4ChordFinder::SetVerbose( G4int newvalue )
+{ 
+  G4int oldval= fStatsVerbose; 
+  fStatsVerbose = newvalue;
+  return oldval; 
+}
+
+inline  
+void    G4ChordFinder::AccumulateStatistics( G4int noTrials ) 
+{
+  // Statistics 
+  fTotalNoTrials_FNC += noTrials; 
+  fNoCalls_FNC++; 
+  // if( noTrials >= fmaxTrials_FNC ){
+    if (noTrials > fmaxTrials_FNC ) { 
+      fmaxTrials_FNC=noTrials; 
+      // fnoTimesMaxTrFNC=0; 
+    } else { 
+      // fnoTimesMaxTrFNC++; 
+    } 
+  // } 
 }

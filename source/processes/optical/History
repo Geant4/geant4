@@ -16,6 +16,18 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+1st December 2003 Peter Gumplinger (op-V05-02-02)
+                G4OpBoundaryProcess.cc: modified to adopt G4SurfaceProperty.
+                Requires tag "materials-V05-02-00".
+		Replaced usage of NULL with 0.
+
+4th October 2003 Gabriele Cosmo (op-V05-02-01)
+                Modified GNUmakefile: added dependency to new module
+                "geometry/navigation".
+                Coworks with "geometry-V05-02-00" and "digits_hits-V05-02-00".
+
+23rd September 2003 Peter Gumplinger (op-V05-02-00)
+                Add WLS (wavelength shifting) process
 15th March 2003 Peter Gumplinger (op-V05-00-01)
                 Change logic for assigning of Rindex2; bug report #444
 4th February 2003 Peter Gumplinger (op-V05-00-00)

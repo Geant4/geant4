@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4CellScorerStore.cc,v 1.2 2002/11/04 10:52:39 dressel Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file

@@ -21,24 +21,27 @@
 // ********************************************************************
 //
 //
-// $Id: G4VPVParameterisation.cc,v 1.3 2001/07/11 09:59:21 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4VPVParameterisation.cc,v 1.4 2003/11/02 14:01:23 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // Default implementations for Parameterisations that do not
-//    parameterise solid and/or material
+// parameterise solid and/or material.
+// --------------------------------------------------------------------
+
 #include "G4VPVParameterisation.hh"
 #include "G4VPhysicalVolume.hh"
 #include "G4LogicalVolume.hh"
-// #include "G4Material.hh"
 
-G4VSolid* G4VPVParameterisation::ComputeSolid(const G4int,
-                                       G4VPhysicalVolume *pPhysicalVol) 
+G4VSolid*
+G4VPVParameterisation::ComputeSolid(const G4int,
+                                    G4VPhysicalVolume *pPhysicalVol) 
 {
-    return pPhysicalVol->GetLogicalVolume()->GetSolid();
+  return pPhysicalVol->GetLogicalVolume()->GetSolid();
 }
-				       
-G4Material* G4VPVParameterisation::ComputeMaterial(const G4int,
+       
+G4Material*
+G4VPVParameterisation::ComputeMaterial(const G4int,
                                        G4VPhysicalVolume *pPhysicalVol) 
 {
-    return pPhysicalVol->GetLogicalVolume()->GetMaterial();
-}				       
+  return pPhysicalVol->GetLogicalVolume()->GetMaterial();
+}

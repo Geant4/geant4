@@ -19,11 +19,11 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
-
+//
 // ====================================================================
 //
 //   H02MuonHit.hh
-//   $Id: H02MuonHit.hh,v 1.1 2002/05/28 14:10:52 murakami Exp $
+//   $Id: H02MuonHit.hh,v 1.3 2003/12/09 15:31:08 gunter Exp $
 //
 // ====================================================================
 #ifndef H02_MUON_HIT_H
@@ -50,7 +50,7 @@ public:
 
   H02MuonHit(const H02MuonHit& right);
   const H02MuonHit& operator=(const H02MuonHit& right);
-  int operator==(const H02MuonHit& right) const;
+  G4int operator==(const H02MuonHit& right) const;
   
   void* operator new(size_t);
   void operator delete(void* aHit);

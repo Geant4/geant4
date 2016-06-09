@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Types.hh,v 1.6 2003/06/06 16:17:14 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4Types.hh,v 1.7 2003/06/17 08:14:50 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 //
 // GEANT4 native types
@@ -48,11 +48,6 @@
 
 #include <CLHEP/config/CLHEP.h>
 #include <complex>
-
-// Define G4std namespace for standard std.
-// Now obsolete. Will be removed from release 6.0.
-//
-#define G4std std
 
 // Typedefs to decouple from library classes
 // Typedefs for numeric types

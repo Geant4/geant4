@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Mag_EqRhs.cc,v 1.8 2003/04/02 08:53:21 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4Mag_EqRhs.cc,v 1.10 2003/11/05 16:33:55 japost Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 //  This is the standard right-hand side for equation of motion  
 //    in a pure Magnetic Field .
@@ -33,9 +33,11 @@
 //
 //            J. Apostolakis, January 13th, 1997
 //
+// --------------------------------------------------------------------
+
 #include "G4MagneticField.hh"
 #include "G4Mag_EqRhs.hh"
-#include "G4EquationOfMotion.hh"
+#include "globals.hh"
 
 const G4double G4Mag_EqRhs::fUnitConstant = 0.299792458 * (GeV/(tesla*m)); 
 

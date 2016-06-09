@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4StackManager.cc,v 1.8 2002/12/03 17:04:22 asaim Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4StackManager.cc,v 1.9 2003/08/13 23:44:39 asaim Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 //
 //  Last Modification : 09/Dec/96 M.Asai
@@ -248,7 +248,7 @@ G4int G4StackManager::PrepareNewEvent()
       }
       else
       {
-        aTrack->SetTrackID(++n_passedFromPrevious);
+        aTrack->SetTrackID(-(++n_passedFromPrevious));
         switch (classification)
         {
           case fUrgent:

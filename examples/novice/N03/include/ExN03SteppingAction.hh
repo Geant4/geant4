@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: ExN03SteppingAction.hh,v 1.7 2002/01/09 17:24:12 ranjard Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: ExN03SteppingAction.hh,v 1.8 2003/09/15 15:38:14 maire Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // 
 
@@ -34,15 +34,22 @@
 
 #include "G4UserSteppingAction.hh"
 
+class ExN03DetectorConstruction;
+class ExN03EventAction;
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class ExN03SteppingAction : public G4UserSteppingAction
 {
   public:
-    ExN03SteppingAction();
+    ExN03SteppingAction(ExN03DetectorConstruction*, ExN03EventAction*);
    ~ExN03SteppingAction();
 
     void UserSteppingAction(const G4Step*);
+    
+  private:
+    ExN03DetectorConstruction* detector;
+    ExN03EventAction*          eventaction;  
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

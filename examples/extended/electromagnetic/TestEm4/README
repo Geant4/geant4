@@ -1,4 +1,4 @@
-$Id: README,v 1.7 2002/12/10 17:20:29 maire Exp $
+$Id: README,v 1.8 2003/10/06 14:51:15 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -64,8 +64,9 @@ $Id: README,v 1.7 2002/12/10 17:20:29 maire Exp $
  		paw> option logy
  		paw> h/pl 1 	
 
- Note that, histograms are disabled via the flag G4NOHIST in the GNUmakefile.
- 
+ Note that, by default, histograms are disabled. To activate them, uncomment
+ the flag G4ANALYSIS_USE in GNUmakefile.
+  
 
  7- Using the Anaphe implementation of the AIDA 3.0 histograms:
  --------------------------------------------------------------

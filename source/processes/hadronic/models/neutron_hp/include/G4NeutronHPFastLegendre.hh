@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4NeutronHPFastLegendre.hh,v 1.9 2002/12/12 19:18:12 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 #ifndef G4NeutronHPFastLegendre_h
 #define G4NeutronHPFastLegendre_h 1

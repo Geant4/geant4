@@ -19,11 +19,11 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
-
+//
 // ====================================================================
 //
 //   H02PrimaryGeneratorAction.hh
-//   $Id: H02PrimaryGeneratorAction.hh,v 1.2 2003/06/16 16:48:31 gunter Exp $
+//   $Id: H02PrimaryGeneratorAction.hh,v 1.4 2003/12/09 15:31:10 gunter Exp $
 //
 // ====================================================================
 #ifndef H02_PRIMARY_GENERATOR_ACTION_H
@@ -73,7 +73,7 @@ inline void H02PrimaryGeneratorAction::SetGenerator(G4VPrimaryGenerator* gen)
 
 inline void H02PrimaryGeneratorAction::SetGenerator(G4String genname) 
 {
-  map<G4String, G4VPrimaryGenerator*>::iterator pos= gentypeMap.find(genname);
+  std::map<G4String, G4VPrimaryGenerator*>::iterator pos= gentypeMap.find(genname);
   if(pos != gentypeMap.end()) {
     currentGenerator= pos->second;
     currentGeneratorName= genname;

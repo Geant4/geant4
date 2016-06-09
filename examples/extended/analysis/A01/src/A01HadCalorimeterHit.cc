@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: A01HadCalorimeterHit.cc,v 1.3 2002/12/13 11:34:34 gunter Exp $
+// $Id: A01HadCalorimeterHit.cc,v 1.5 2003/10/14 18:58:20 perl Exp $
 // --------------------------------------------------------------
 //
 
@@ -55,7 +55,7 @@ A01HadCalorimeterHit::~A01HadCalorimeterHit()
 {;}
 
 A01HadCalorimeterHit::A01HadCalorimeterHit(const A01HadCalorimeterHit &right)
-{
+    : G4VHit() {
   columnID = right.columnID;
   rowID = right.rowID;
   edep = right.edep;
@@ -88,7 +88,6 @@ void A01HadCalorimeterHit::Draw()
     G4VisAttributes attribs;
     G4Colour colour(1.,0.,0.);
     attribs.SetColour(colour);
-    attribs.SetForceWireframe(false);
     attribs.SetForceSolid(true);
     G4Box box("dummy",15.*cm,15.*cm,1.*m*edep/(0.1*GeV));
     pVVisManager->Draw(box,attribs,trans);

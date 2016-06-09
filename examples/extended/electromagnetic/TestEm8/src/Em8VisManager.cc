@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: Em8VisManager.cc,v 1.7 2003/04/17 13:04:35 grichine Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: Em8VisManager.cc,v 1.8 2003/11/13 15:10:32 johna Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 //
 // John Allison 24th January 1998.
@@ -41,7 +41,7 @@
 #include "G4DAWNFILE.hh"
 #include "G4GAGTree.hh"
 #include "G4HepRepFile.hh"
-
+#include "G4HepRep.hh"
 #include "G4RayTracer.hh"
 #include "G4VRML1File.hh"
 #include "G4VRML2File.hh"
@@ -50,11 +50,6 @@
 
 #ifdef G4VIS_USE_DAWN
 #include "G4FukuiRenderer.hh"
-#endif
-
-#ifdef G4VIS_USE_OPACS
-#include "G4Wo.hh"
-#include "G4Xo.hh"
 #endif
 
 #ifdef G4VIS_USE_OPENGLX
@@ -98,7 +93,7 @@ void Em8VisManager::RegisterGraphicsSystems () {
   RegisterGraphicsSystem (new G4DAWNFILE);
   RegisterGraphicsSystem (new G4GAGTree);
   RegisterGraphicsSystem (new G4HepRepFile);
-
+  RegisterGraphicsSystem (new G4HepRep);
   RegisterGraphicsSystem (new G4RayTracer);
   RegisterGraphicsSystem (new G4VRML1File);
   RegisterGraphicsSystem (new G4VRML2File);
@@ -107,11 +102,6 @@ void Em8VisManager::RegisterGraphicsSystems () {
 
 #ifdef G4VIS_USE_DAWN
   RegisterGraphicsSystem (new G4FukuiRenderer);
-#endif
-
-#ifdef G4VIS_USE_OPACS
-  RegisterGraphicsSystem (new G4Wo);
-  RegisterGraphicsSystem (new G4Xo);
 #endif
 
 #ifdef G4VIS_USE_OPENGLX

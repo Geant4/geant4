@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParallelNavigator.cc,v 1.17 2003/06/16 16:51:07 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4ParallelNavigator.cc,v 1.18 2003/10/22 13:52:10 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -259,10 +259,11 @@ void G4ParallelNavigator::Error(const G4String &m,
                                 const G4ThreeVector &pos,
                                 const G4ThreeVector &dir)
 {
-  G4cout << "ERROR - G4ParallelNavigator::" << m << G4endl;
-  G4cout << "aPosition: " << pos << G4endl;
-  G4cout << "dir: " << dir << G4endl;
-  G4Exception("Program aborted.");
+  G4cerr << "ERROR - G4ParallelNavigator: " << m << G4endl
+         << "        aPosition: " << pos << G4endl
+         << "        dir: " << dir << G4endl;
+  G4Exception("G4ParallelNavigator::Error()",
+              "FatalException", FatalException, m);
 }
 
 G4double G4ParallelNavigator::Shift(G4double d)

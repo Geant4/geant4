@@ -51,7 +51,7 @@
 
 void  G4HEInelastic::FillParticleChange(G4HEVector pv[], G4int aVecLength)
 {
-  theParticleChange.SetNumberOfSecondaries( aVecLength );
+  theParticleChange.Clear();
   for (G4int i=0; i<aVecLength; i++)
   {
     G4int pdgCode = pv[i].getCode();

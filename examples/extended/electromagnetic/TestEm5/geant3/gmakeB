@@ -26,7 +26,7 @@ chmod +x $name.xb
 #
 # cleanup
 #
-rm *.o
+rm -f *.o
 echo 'done'  
 exit
  

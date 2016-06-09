@@ -30,8 +30,8 @@
 //    *                                *
 //    **********************************
 //
-// $Id: BrachyPhysicsList.cc,v 1.8 2003/05/26 09:20:14 guatelli Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: BrachyPhysicsList.cc,v 1.9 2003/10/20 18:09:18 vnivanch Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 #include "BrachyPhysicsList.hh"
 
@@ -158,24 +158,12 @@ void BrachyPhysicsList::SetCuts()
 
 void BrachyPhysicsList::SetGammaLowLimit(G4double lowcut)
 {
-  if (verboseLevel >0){
-    G4cout << "BrachyPhysicsList::SetCuts:";
-    G4cout << "Gamma cut in energy: " << lowcut*MeV << " (MeV)" << G4endl;
-  }  
-  
-  G4Gamma::SetEnergyRange(lowcut,1e5);  
+  SetGELowLimit(lowcut);
 }
 
 void BrachyPhysicsList::SetElectronLowLimit(G4double lowcut)
 {
-  if (verboseLevel >0){
-
-    G4cout << "BrachyPhysicsList::SetCuts:";
-    G4cout << "Electron cut in energy: " << lowcut*MeV << " (MeV)" << G4endl;
-
-  }  
-
-  G4Electron::SetEnergyRange(lowcut,1e5);
+  SetGELowLimit(lowcut);
 }
 
 void BrachyPhysicsList::SetGELowLimit(G4double lowcut)
@@ -184,11 +172,7 @@ void BrachyPhysicsList::SetGELowLimit(G4double lowcut)
     G4cout << "BrachyPhysicsList::SetCuts:";
     G4cout << "Gamma and Electron cut in energy: " << lowcut*MeV << " (MeV)" << G4endl;
   }  
-
-  G4Gamma::SetEnergyRange(lowcut,1e5);
-  G4Electron::SetEnergyRange(lowcut,1e5);
-  G4Positron::SetEnergyRange(lowcut,1e5);
-
+  G4ProductionCutsTable::GetProductionCutsTable()->SetEnergyRange(lowcut,1e5);
 }
 
 void BrachyPhysicsList::SetGammaCut(G4double val)

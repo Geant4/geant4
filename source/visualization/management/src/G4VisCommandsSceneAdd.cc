@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsSceneAdd.cc,v 1.38 2003/06/16 17:14:23 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4VisCommandsSceneAdd.cc,v 1.39 2003/11/12 13:14:27 johna Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 // /vis/scene commands - John Allison  9th August 1998
 
 #include "G4VisCommandsSceneAdd.hh"
@@ -838,7 +838,8 @@ void G4VisCommandSceneAddVolume::SetNewValue (G4UIcommand*,
 
   if (name == "world") {
     if (world) {
-      model = new G4PhysicalVolumeModel (world);
+      model = new G4PhysicalVolumeModel (world,
+					 requestedDepthOfDescent);
       foundVolume = world;
     }
     else {

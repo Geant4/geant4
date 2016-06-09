@@ -1,4 +1,4 @@
-# $Id: run01.mac,v 1.5 2002/12/11 14:19:18 maire Exp $
+# $Id: run01.mac,v 1.6 2003/10/06 10:02:20 maire Exp $
 #
 # Macro file for "TestEm1.cc"
 # (can be run in batch, without graphic)
@@ -6,6 +6,9 @@
 # Eloss only; no fluctuation; e- 1 GeV
 #
 /control/verbose 2
+#
+###/testem/phys/addPhysics  g4v52
+/testem/phys/addPhysics  standard
 #
 /testem/phys/setGCut  95 cm
 /testem/phys/setECut  95 cm

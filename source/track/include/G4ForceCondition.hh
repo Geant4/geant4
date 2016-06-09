@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4ForceCondition.hh,v 1.4 2002/10/31 23:41:52 tsasaki Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 //
 //---------------------------------------------------------------

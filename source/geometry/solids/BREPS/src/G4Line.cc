@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4Line.cc,v 1.8 2003/03/28 13:12:00 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file

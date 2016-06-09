@@ -20,9 +20,11 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: A01EMPhysics.hh,v 1.3 2002/12/13 11:34:28 gunter Exp $
+// $Id: A01EMPhysics.hh,v 1.4 2003/10/11 02:59:59 tkoi Exp $
 // --------------------------------------------------------------
 //
+// 09-Oct-2003 Chhange gamma, electron, positorn process T. Koi
+
 
 #ifndef A01EMPhysics_h
 #define A01EMPhysics_h 1
@@ -57,27 +59,8 @@ class A01EMPhysics : public G4VPhysicsConstructor
     virtual void ConstructProcess();
 
   protected:
-   // Gamma physics
-    G4PhotoElectricEffect thePhotoEffect;
-    G4ComptonScattering theComptonEffect;
-    G4GammaConversion thePairProduction;
 
-    // Electron physics
-    G4MultipleScattering theElectronMultipleScattering;
-    G4eIonisation theElectronIonisation;
-    G4eBremsstrahlung theElectronBremsStrahlung;
-
-    //Positron physics
-    G4MultipleScattering thePositronMultipleScattering;
-    G4eIonisation thePositronIonisation;
-    G4eBremsstrahlung thePositronBremsStrahlung;
-    G4eplusAnnihilation theAnnihilation;
 };
 
 
 #endif
-
-
-
-
-

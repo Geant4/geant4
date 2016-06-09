@@ -1,4 +1,4 @@
-$Id: History,v 1.28 2003/06/06 15:55:44 maire Exp $
+$Id: History,v 1.37 2003/11/25 18:34:16 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,7 +14,45 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+25-11-03 V.Ivanchenko (testem5-V05-02-06)
+- Fix geometry (G.Cosmo)
      
+13-11-03 John Allison
+- Removed OPACS from Vis Manager.
+
+27-10-03 mma (testem5-V05-02-05)
+- TestEm5.in : units mum instead of um
+
+24-10-03 mma (testem5-V05-02-04)
+- PhysListEmStandard: AddProcess(Bremsstrahlung,-1,3,3) ..etc..
+     
+07-10-03 mma (testem5-V05-02-03)
+- migration em STD -> em standard
+ 
+12-09-03 V.Ivant (testem5-V05-02-02)
+- No AIDA histograms by default 
+
+27-08-03 V.Ivant (testem5-V05-02-01)
+- Replace obsolete interface to GetRange
+
+11-08-03 mma (testem5-V05-02-00)
+
+12-07-03 mma
+- suppresion of Em5 in the class names.
+- suppresion of sensitive detector and hits.
+- EmPhysicsList : SetFacRange in multiple scattering
+- new classes HistoManager, TrackingAction, StackingAction in order 
+  to book and fill histograms.
+- new UI command setHisto to control the binning of histograms.
+- more histos and new numbering scheme : see README
+- StackingAction and its messenger : possibility to kill secondaries.
+- DetectorConstruction::DefineMaterials() invoked in constructor. 
+  The UI commands /testem/det work in preInit state as well in Idle.
+- all macros updated and renamed according to authors of experimental results.
+- replace G4NOHIST by G4ANALYSIS_USE
+- adapt geant3   
+       
 06-06-03 mma (testem5-V05-01-01)
 - new histogram (ID=11) for the projeted angle at exit.
   In geant3 as well. Bug corrected in gustep.

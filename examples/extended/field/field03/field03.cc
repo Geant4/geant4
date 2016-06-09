@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: field03.cc,v 1.4 2001/11/07 16:36:33 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: field03.cc,v 1.5 2003/12/01 17:31:13 japost Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // 
 // --------------------------------------------------------------
@@ -44,7 +44,7 @@
 #endif
 
 #include "F03DetectorConstruction.hh"
-#include "F03ElectroMagneticField.hh"
+// #include "F03FieldSetup.hh"
 #include "F03PhysicsList.hh"
 #include "F03PrimaryGeneratorAction.hh"
 #include "F03RunAction.hh"
@@ -67,10 +67,6 @@ int main(int argc,char** argv)
 
   G4RunManager * runManager = new G4RunManager;
 
-  // Construct the electromagnetic field
-
-  F03ElectroMagneticField* field = new F03ElectroMagneticField() ;
-    
   // Set mandatory initialization classes
 
   F03DetectorConstruction* detector;
@@ -128,7 +124,6 @@ int main(int argc,char** argv)
 #ifdef G4VIS_USE
   delete visManager;
 #endif
-  delete field;
   delete runManager;
 
   return 0;

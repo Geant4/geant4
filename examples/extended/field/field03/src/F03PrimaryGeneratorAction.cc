@@ -22,7 +22,7 @@
 //
 //
 // $Id: F03PrimaryGeneratorAction.cc,v 1.4 2001/11/07 14:34:43 grichine Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // 
 

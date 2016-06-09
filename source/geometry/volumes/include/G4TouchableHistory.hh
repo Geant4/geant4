@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4TouchableHistory.hh,v 1.6 2002/07/23 08:50:36 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4TouchableHistory.hh,v 1.7 2003/11/02 16:06:05 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // 
 // class G4TouchableHistory
@@ -34,8 +34,7 @@
 
 // History:
 // - Created. Paul Kent, August 1996
-// ********************************************************************
-
+// ----------------------------------------------------------------------
 #ifndef G4TOUCHABLEHISTORY_HH
 #define G4TOUCHABLEHISTORY_HH
 
@@ -43,6 +42,7 @@
 
 #include "G4NavigationHistory.hh"
 #include "G4LogicalVolume.hh"
+#include "G4ThreeVector.hh"
 #include "G4RotationMatrix.hh"
 
 class G4TouchableHistory : public G4VTouchable

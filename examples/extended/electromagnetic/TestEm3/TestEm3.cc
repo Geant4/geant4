@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: TestEm3.cc,v 1.7 2001/10/22 10:58:40 maire Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: TestEm3.cc,v 1.10 2003/11/28 12:30:00 vnivanch Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
@@ -34,16 +34,16 @@
 #include "Randomize.hh"
 
 #ifdef G4VIS_USE
-#include "Em3VisManager.hh"
+#include "VisManager.hh"
 #endif
 
-#include "Em3DetectorConstruction.hh"
-#include "Em3PhysicsList.hh"
-#include "Em3PrimaryGeneratorAction.hh"
-#include "Em3RunAction.hh"
-#include "Em3EventAction.hh"
-#include "Em3SteppingAction.hh"
-#include "Em3SteppingVerbose.hh"
+#include "DetectorConstruction.hh"
+#include "PhysicsList.hh"
+#include "PrimaryGeneratorAction.hh"
+#include "RunAction.hh"
+#include "EventAction.hh"
+#include "SteppingAction.hh"
+#include "SteppingVerbose.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -51,32 +51,34 @@ int main(int argc,char** argv) {
 
   //choose the Random engine
   HepRandom::setTheEngine(new RanecuEngine);
-  
+
   //my Verbose output class
-  G4VSteppingVerbose::SetInstance(new Em3SteppingVerbose);
-  
+  G4VSteppingVerbose::SetInstance(new SteppingVerbose);
+    
   // Construct the default run manager
   G4RunManager * runManager = new G4RunManager;
 
   // set mandatory initialization classes
-  Em3DetectorConstruction* detector = new Em3DetectorConstruction;
+  DetectorConstruction* detector = new DetectorConstruction;
   runManager->SetUserInitialization(detector);
-  runManager->SetUserInitialization(new Em3PhysicsList);
+  runManager->SetUserInitialization(new PhysicsList);
   //
-  Em3PrimaryGeneratorAction* KinAct = new Em3PrimaryGeneratorAction(detector);
-  runManager->SetUserAction(KinAct);
+  runManager->SetUserAction(new PrimaryGeneratorAction(detector));
     
 #ifdef G4VIS_USE
   // visualization manager
-  G4VisManager* visManager = new Em3VisManager;
+  G4VisManager* visManager = new VisManager;
   visManager->Initialize();
 #endif
     
   // set user action classes
-  Em3RunAction* RunAct = new Em3RunAction(detector);
-  runManager->SetUserAction(RunAct);
-  runManager->SetUserAction(new Em3EventAction(RunAct,KinAct,detector));
-  runManager->SetUserAction(new Em3SteppingAction);
+  RunAction*      runAct = new RunAction(detector);
+  EventAction*    evtAct = new EventAction(detector,runAct);
+  SteppingAction* stpAct = new SteppingAction(detector,evtAct);
+  
+  runManager->SetUserAction(runAct);
+  runManager->SetUserAction(evtAct);
+  runManager->SetUserAction(stpAct);
 
   // get the pointer to the User Interface manager 
   G4UImanager* UI = G4UImanager::GetUIpointer();  

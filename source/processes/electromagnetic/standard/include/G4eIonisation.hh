@@ -20,156 +20,182 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
+// $Id: G4eIonisation.hh,v 1.20 2003/11/12 16:23:42 vnivanch Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
-// $Id: G4eIonisation.hh,v 1.18 2003/06/16 17:02:02 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// -------------------------------------------------------------------
 //
-//--------------- G4eIonisation physics process --------------------------------
-//                by Laszlo Urban, 20 March 1997 
+// GEANT4 Class header file
+//
+//
+// File name:     G4eIonisation
+//
+// Author:        Laszlo Urban
+//
+// Creation date: 20.03.1997
+//
+// Modifications:
 //
 // 10-02-00 modifications , new e.m. structure, L.Urban
 // 03-08-01 new methods Store/Retrieve PhysicsTable (mma)
 // 13-08-01 new function ComputeRestrictedMeandEdx() (mma)
 // 19-09-01 come back to previous ProcessName "eIoni"
 // 29-10-01 all static functions no more inlined (mma)
-// 15-01-03 Migrade to cut per region (V.Ivanchenko)
+// 07-01-02 new design of em processes (V.Ivanchenko)
+// 26-12-02 Secondary production moved to derived classes (VI)
+// 24-01-03 Make models region aware (V.Ivanchenko)
+// 05-02-03 Fix compilation warnings (V.Ivanchenko)
+// 13-02-03 SubCutoff regime is assigned to a region (V.Ivanchenko)
+// 23-05-03 Add fluctuation model as a member function (V.Ivanchenko)
+// 03-06-03 Fix initialisation problem for STD ionisation (V.Ivanchenko)
+// 08-08-03 STD substitute standard  (V.Ivanchenko)
+// 12-11-03 G4EnergyLossSTD -> G4EnergyLossProcess (V.Ivanchenko)
 //
-//------------------------------------------------------------------------------
-
-// Class description
+//
+// Class Description:
 //
 // This class manages the ionisation process for e-/e+
-// it inherites from G4VContinuousDiscreteProcess via G4VeEnergyLoss.
+// it inherites from G4VContinuousDiscreteProcess via G4VEnergyLossProcess.
 //
-// Class description - end
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+// -------------------------------------------------------------------
+//
 
 #ifndef G4eIonisation_h
 #define G4eIonisation_h 1
 
-#include "G4VeEnergyLoss.hh"
-#include "G4MaterialCutsCouple.hh"
+#include "G4VEnergyLossProcess.hh"
+#include "G4Electron.hh"
+#include "G4Positron.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+class G4Material;
+class G4ParticleDefinition;
+class G4VEmFluctuationModel;
 
-class G4eIonisation : public G4VeEnergyLoss
-
+class G4eIonisation : public G4VEnergyLossProcess
 {
-  public:   // with description
 
-    G4eIonisation(const G4String& processName = "eIoni");
+public:
 
-   ~G4eIonisation();
+  G4eIonisation(const G4String& name = "eIoni");
 
-    G4bool IsApplicable(const G4ParticleDefinition&);
-      // return true for e+/e-, false otherwise
+  ~G4eIonisation();
 
-    void BuildPhysicsTable(const G4ParticleDefinition& aParticleType);
-      // this function overloads a virtual function of the base class.
-      // It is invoked by the G4ParticleWithCuts::SetCut() method.
-      // It invokes BuildLambdaTable(), BuildLossTable(), BuildDEDXTable()
+  G4bool IsApplicable(const G4ParticleDefinition& p);
 
-    void BuildLossTable(const G4ParticleDefinition& aParticleType);
-      // build the dE/dx tables due to the ionisation, for every materials.
-      // (restricted stopping power, Berger-Seltzer formula)
+  virtual G4double MinPrimaryEnergy(const G4ParticleDefinition*,
+                                    const G4Material*, G4double cut);
 
-    void BuildLambdaTable(const G4ParticleDefinition& aParticleType);
-      // build mean free path tables for the delta rays production.
-      // the tables are built for every materials.
+  virtual std::vector<G4Track*>* SecondariesAlongStep(
+                             const G4Step&,
+			           G4double&,
+			           G4double&,
+                                   G4double&);
 
-    G4bool StorePhysicsTable(G4ParticleDefinition* ,
-		             const G4String& directory, G4bool);
-      // store eLoss and MeanFreePath tables into an external file
-      // specified by 'directory' (must exist before invokation)
+  virtual void SecondariesPostStep(
+                                   G4VEmModel*,
+                             const G4MaterialCutsCouple*,
+                             const G4DynamicParticle*,
+                                   G4double&,
+                                   G4double&);
 
-    G4bool RetrievePhysicsTable(G4ParticleDefinition* ,
-			        const G4String& directory, G4bool);
-      // retrieve eLoss and MeanFreePath tables from an external file
-      // specified by 'directory'
+  void SetSubCutoff(G4bool val);
 
-    void PrintInfoDefinition();
-      // Print few lines of informations about the process: validity range,
-      // origine ..etc..
-      // Invoked by BuildPhysicsTable().
+  void PrintInfoDefinition();
+  // Print out of the class parameters
 
-    G4double GetMeanFreePath(const G4Track& track,
-                             G4double previousStepSize,
-                             G4ForceCondition* condition );
-      // It returns the MeanFreePath of the process for the current track :
-      // (energy, material)
-      // The previousStepSize and G4ForceCondition* are not used.
-      // This function overloads a virtual function of the base class.
-      // It is invoked by the ProcessManager of the Particle.
+protected:
 
-    G4VParticleChange *PostStepDoIt(const G4Track& track,
-                                    const G4Step& Step );
-      // It computes the final state of the process (at end of step),
-      // returned as a ParticleChange object.
-      // This function overloads a virtual function of the base class.
-      // It is invoked by the ProcessManager of the Particle.
+  const G4ParticleDefinition* DefineBaseParticle(const G4ParticleDefinition* p);
 
-    G4double GetLambda(G4double KineticEnergy, const G4MaterialCutsCouple* couple);
-      // It returns the MeanFreePath of the process for a (energy, material)
+  virtual G4double MaxSecondaryEnergy(const G4DynamicParticle* dp);
 
-  protected:   // with description
+private:
 
-    virtual G4double ComputeRestrictedMeandEdx(
-                            const G4ParticleDefinition& aParticleType,
-                            G4double KineticEnergy,
-                            const G4Material* material,
-                            G4double DeltaThreshold);
-      // computes restricted mean dE/dx in Geant4 internal units.
+  void InitialiseProcess();
 
-    virtual G4double ComputeCrossSectionPerAtom(
-                            const G4ParticleDefinition& aParticleType,
-                            G4double KineticEnergy,
-                            G4double AtomicNumber,
-                            G4double DeltaThreshold);
-      // computes total cross section per atom in Geant4 internal units.
+  // hide assignment operator
+  G4eIonisation & operator=(const G4eIonisation &right);
+  G4eIonisation(const G4eIonisation&);
 
-  protected:
+  const G4ParticleDefinition* theElectron;
+  G4VEmFluctuationModel* flucModel;
 
-    virtual G4double SecondaryEnergyThreshold(size_t index);
-
-    G4PhysicsTable* theMeanFreePathTable;
-
-  private:
-
-    // hide assignment operator
-    G4eIonisation & operator=(const G4eIonisation &right);
-    G4eIonisation(const G4eIonisation&);
-
-  private:
-
-    static G4double LowerBoundLambda;    // binning for mean free path table
-    static G4double UpperBoundLambda;
-    static G4int    NbinLambda;
-
-    G4double LowestKineticEnergy;        // binning for dE/dx table
-    G4double HighestKineticEnergy;
-    G4int    TotBin;
-
-    const std::vector<G4double>* secondaryEnergyCuts;
-
-  public:  // with description
-
-    static void SetLowerBoundLambda(G4double val);
-    static void SetUpperBoundLambda(G4double val);
-    static void SetNbinLambda(G4int n);
-        // set the parameters of the mean free path table.
-
-    static G4double GetLowerBoundLambda();
-    static G4double GetUpperBoundLambda();
-    static G4int GetNbinLambda();
-        // get the parameters of the mean free path table.
-
+  G4bool subCutoff;
+  G4bool isElectron;
+  G4bool isInitialised;
 };
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline G4double G4eIonisation::MinPrimaryEnergy(const G4ParticleDefinition*,
+                                                   const G4Material*,
+                                                         G4double cut)
+{
+  G4double x = cut;
+  if(isElectron) x += cut;
+  return x;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline G4bool G4eIonisation::IsApplicable(const G4ParticleDefinition& p)
+{
+  return (&p == G4Electron::Electron() || &p == G4Positron::Positron());
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline G4double G4eIonisation::MaxSecondaryEnergy(const G4DynamicParticle* dp)
+{
+  G4double tmax = dp->GetKineticEnergy();
+  if(isElectron) tmax *= 0.5;
+  return tmax;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+#include "G4VSubCutoffProcessor.hh"
+
+inline std::vector<G4Track*>*  G4eIonisation::SecondariesAlongStep(
+                           const G4Step&   step,
+	             	         G4double& tmax,
+			         G4double& eloss,
+                                 G4double& kinEnergy)
+{
+  std::vector<G4Track*>* newp = 0;
+  if(subCutoff) {
+    G4VSubCutoffProcessor* sp = SubCutoffProcessor(CurrentMaterialCutsCoupleIndex());
+    if (sp) {
+      G4VEmModel* model = SelectModel(kinEnergy);
+      newp = sp->SampleSecondaries(step,tmax,eloss,model);
+    }
+  }
+  return newp;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+#include "G4VEmModel.hh"
+
+inline void G4eIonisation::SecondariesPostStep(
+                                                  G4VEmModel* model,
+                                            const G4MaterialCutsCouple* couple,
+                                            const G4DynamicParticle* dp,
+                                                  G4double& tcut,
+                                                  G4double& kinEnergy)
+{
+  G4DynamicParticle* delta = model->SampleSecondary(couple, dp, tcut, kinEnergy);
+  aParticleChange.SetNumberOfSecondaries(1);
+  aParticleChange.AddSecondary(delta);
+  G4ThreeVector finalP = dp->GetMomentum();
+  kinEnergy -= delta->GetKineticEnergy();
+  finalP -= delta->GetMomentum();
+  finalP = finalP.unit();
+  aParticleChange.SetMomentumDirectionChange(finalP);
+}
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "G4eIonisation.icc"
-
 #endif
-

@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4Polyhedron.hh,v 1.10 2001/07/11 10:01:02 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// GEANT4 tag $Name: geant4-06-00 $
 
 #ifndef G4POLYHEDRON_HH
 #define G4POLYHEDRON_HH

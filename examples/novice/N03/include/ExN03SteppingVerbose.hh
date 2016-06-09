@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: ExN03SteppingVerbose.hh,v 1.7 2002/01/09 17:24:12 ranjard Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: ExN03SteppingVerbose.hh,v 1.8 2003/09/15 15:38:15 maire Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -1,4 +1,4 @@
-$Id: History,v 1.5 2003/06/12 12:24:46 gcosmo Exp $
+$Id: History,v 1.7 2003/12/03 13:50:09 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,10 +17,13 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-June, 12th, 2003  G.Cosmo - olapex-V05-01-00
+November 13th, 2003  J.Allison - olapex-V05-02-00
+- Reconstructed Vis Manager.
+
+June 12th, 2003  G.Cosmo - olapex-V05-01-00
 - Fixed pedantic warnings on Linux-g++.
 
-February, 19th, 2003  G.Cosmo - olapex-V05-00-00
+February 19th, 2003  G.Cosmo - olapex-V05-00-00
 - Removed redundant inclusion of SystemOfUnits.h.
   Now using CLHEP headers.
 

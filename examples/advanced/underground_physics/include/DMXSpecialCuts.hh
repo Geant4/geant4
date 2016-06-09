@@ -93,7 +93,7 @@ class DMXSpecialCuts : public G4VProcess
   private:
   
   // hide assignment operator as private 
-     DMXSpecialCuts& operator=(const DMXSpecialCuts& right){return *this;};
+     DMXSpecialCuts& operator=(const DMXSpecialCuts&){return *this;};
 
 };
 

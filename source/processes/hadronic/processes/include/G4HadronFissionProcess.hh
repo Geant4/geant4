@@ -74,58 +74,22 @@ public:
 
    ~G4HadronFissionProcess();
  
-   inline
-   G4double GetMeanFreePath(const G4Track& aTrack, G4double ,
-                            G4ForceCondition* )
-   {
-      return GetMeanFreePathBasic(aTrack.GetDynamicParticle(),
-                                  aTrack.GetMaterial());
-   }
-
-   G4double GetMeanFreePathBasic(const G4DynamicParticle* aParticle,
-                                 const G4Material* aMaterial);
-
    G4VParticleChange* PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
    {
       SetDispatch(this);
       return G4HadronicProcess::GeneralPostStepDoIt(aTrack, aStep);
    }
 
-   G4bool IsApplicable(const G4ParticleDefinition&)
+   G4bool IsApplicable(const G4ParticleDefinition& )
    {
       return true;
    }
 
    void BuildThePhysicsTable(G4ParticleDefinition& aParticleType);
 
-   void SetCrossSectionDataStore(G4CrossSectionDataStore* aDataStore)
-   {
-      theCrossSectionDataStore = aDataStore;
-   }
-
-   G4CrossSectionDataStore* GetCrossSectionDataStore()
-   {
-      return theCrossSectionDataStore;
-   }
-
-   void AddDataSet(G4VCrossSectionDataSet * aDataSet)
-   {
-      theCrossSectionDataStore->AddDataSet(aDataSet);
-   }
-
-  //   void setCrossSectionDataVerboseLevel(G4int value)
-  //   {
-  //      theCrossSectionData.SetVerboseLevel(value);
-  //   }
-
    void DumpPhysicsTable(const G4ParticleDefinition& aParticleType);
 
 private:
-
-// Note: DEC compiler won't accept "const G4ParticleDefinition" here
-// because it instantiates the ClearAndDestroy method that deletes the 
-// pointers in the dictionary.
-   G4CrossSectionDataStore* theCrossSectionDataStore;
 
    G4double GetMicroscopicCrossSection(const G4DynamicParticle* aParticle,
                                        const G4Element* anElement, 

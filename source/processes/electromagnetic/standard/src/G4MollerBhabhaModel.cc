@@ -20,6 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
+// $Id: G4MollerBhabhaModel.cc,v 1.11 2003/07/21 12:52:23 vnivanch Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // -------------------------------------------------------------------
 //
@@ -123,14 +125,14 @@ void G4MollerBhabhaModel::Initialise(const G4ParticleDefinition* p,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4MollerBhabhaModel::ComputeDEDX(const G4Material* material,
+G4double G4MollerBhabhaModel::ComputeDEDX(const G4MaterialCutsCouple* couple,
                                           const G4ParticleDefinition* p,
                                                 G4double kineticEnergy,
                                                 G4double cutEnergy)
 {
   if(!particle) SetParticle(p);
   // calculate the dE/dx due to the ionization by Seltzer-Berger formula
-
+  const G4Material* material = couple->GetMaterial();
   G4double electronDensity = material->GetElectronDensity();
   G4double Zeff  = electronDensity/material->GetTotNbOfAtomsPerVolume();
   G4double th    = 0.25*sqrt(Zeff)*keV;
@@ -202,19 +204,20 @@ G4double G4MollerBhabhaModel::ComputeDEDX(const G4Material* material,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4MollerBhabhaModel::CrossSection(const G4Material* material,
+G4double G4MollerBhabhaModel::CrossSection(const G4MaterialCutsCouple* couple,
                                            const G4ParticleDefinition* p,
                                                  G4double kineticEnergy,
                                                  G4double cutEnergy,
-                                                 G4double maxEnergy) 
+                                                 G4double maxEnergy)
 {
   if(!particle) SetParticle(p);
+
   G4double cross = 0.0;
   G4double tmax = MaxSecondaryEnergy(p, kineticEnergy);
   tmax = std::min(maxEnergy, tmax);
 
   if(cutEnergy < tmax) {
-    
+
     G4double xmin  = cutEnergy/kineticEnergy;
     G4double xmax  = tmax/kineticEnergy;
     G4double gam   = kineticEnergy/electron_mass_c2 + 1.0;
@@ -225,8 +228,8 @@ G4double G4MollerBhabhaModel::CrossSection(const G4Material* material,
     if (isElectron) {
 
       G4double g     = (2.0*gam - 1.0)/gamma2;
-      cross = ((xmax - xmin)*(1.0 - g + 1.0/(xmin*xmax) 
-			      + 1.0/((1.0-xmin)*(1.0 - xmax))) 
+      cross = ((xmax - xmin)*(1.0 - g + 1.0/(xmin*xmax)
+			      + 1.0/((1.0-xmin)*(1.0 - xmax)))
             - g*log( xmax*(1.0 - xmin)/(xmin*(1.0 - xmax)) ) ) / beta2;
 
     //Bhabha (e+e-) scattering
@@ -238,16 +241,16 @@ G4double G4MollerBhabhaModel::CrossSection(const G4Material* material,
       G4double b1  = 2.0 - y2;
       G4double b2  = y12*(3.0 + y2);
       G4double y122= y12*y12;
-      G4double b4  = y122*y12; 
+      G4double b4  = y122*y12;
       G4double b3  = b4 + y122;
 
-      cross = (xmax - xmin)*(1.0/(beta2*xmin*xmax) + b2 
-            - 0.5*b3*(xmin + xmax) 
+      cross = (xmax - xmin)*(1.0/(beta2*xmin*xmax) + b2
+            - 0.5*b3*(xmin + xmax)
 	    + b4*(xmin*xmin + xmin*xmax + xmax*xmax)/3.0)
             - b1*log(xmax/xmin);
     }
-    
-    cross *= twopi_mc2_rcl2*(material->GetElectronDensity())/kineticEnergy;
+
+    cross *= twopi_mc2_rcl2*(couple->GetMaterial()->GetElectronDensity())/kineticEnergy;
   }
   return cross;
 }

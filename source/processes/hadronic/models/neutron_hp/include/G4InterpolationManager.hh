@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4InterpolationManager.hh,v 1.9 2003/06/16 17:10:29 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4InterpolationManager.hh,v 1.10 2003/11/03 17:54:36 hpw Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 #ifndef G4InterpolationManager_h
 #define G4InterpolationManager_h 1
@@ -31,6 +31,7 @@
 #include "G4InterpolationScheme.hh"
 #include "G4ios.hh"
 #include <fstream>
+#include "G4HadronicException.hh"
 
 class G4InterpolationManager
 {

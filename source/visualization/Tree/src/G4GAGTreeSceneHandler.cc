@@ -92,7 +92,7 @@ void G4GAGTreeSceneHandler::BeginModeling ()
   // Beginning of the tree output
   G4cout << "\nG4GAGTreeSceneHandler::BeginModeling:"
     "\n  set verbosity with \"/vis/GAGTree/verbose <verbosity>\":"
-    "\n  <  10: - does not print daughters of repeated logical volumes."
+    "\n  <  10: - does not print daughters of repeated placements."
     "\n         - does not repeat replicas."
     "\n  >= 10: prints all physical volumes."
     "\n          FORMAT: PV_name.copy_no.index"
@@ -260,9 +260,9 @@ void G4GAGTreeSceneHandler::RequestPrimitives (const G4VSolid&)
   else {
     if (fLVSet.find(fpCurrentLV) != fLVSet.end()) {
       if (verbosity <  10) {
-	// Add printing for repeated logical volume...
+	// Add printing for repeated placement...
 #if defined DEBUG_GAG_TREE
-	G4cout << " (repeated logical volume)";
+	G4cout << " (repeated placement)";
 #endif
 	// Ignore if an already treated logical volume.
 	if (fpCurrentPV) {

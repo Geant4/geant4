@@ -183,20 +183,6 @@ export G4UI_USE_WIN32
 echo "On this machine the G4UI_USE_WIN32=\$G4UI_USE_WIN32"
 fi 
 
-#+
-if [ X$g4ui_build_wo_session = Xy ] ; then
-G4UI_BUILD_WO_SESSION=1
-export G4UI_BUILD_WO_SESSION
-echo "On this machine the G4UI_BUILD_WO_SESSION=\$G4UI_BUILD_WO_SESSION"
-fi 
-
-#+
-if [ X$g4ui_use_wo = Xy ] ; then
-G4UI_USE_WO=1
-export G4UI_USE_WO
-echo "On this machine the G4UI_USE_WO=\$G4UI_USE_WO"
-fi 
-
 #
 # g4vis
 #
@@ -205,13 +191,6 @@ if [ X$g4vis_build_dawn_driver = Xy ] ; then
 G4VIS_BUILD_DAWN_DRIVER=1
 export G4VIS_BUILD_DAWN_DRIVER
 echo "On this machine the G4VIS_BUILD_DAWN_DRIVER=\$G4VIS_BUILD_DAWN_DRIVER"
-fi 
-
-#+
-if [ X$g4vis_build_opacs_driver = Xy ] ; then
-G4VIS_BUILD_OPACS_DRIVER=1
-export G4VIS_BUILD_OPACS_DRIVER
-echo "On this machine the G4VIS_BUILD_OPACS_DRIVER=\$G4VIS_BUILD_OPACS_DRIVER"
 fi 
 
 #+
@@ -261,13 +240,6 @@ if [ X$g4vis_use_dawn = Xy ] ; then
 G4VIS_USE_DAWN=1
 export G4VIS_USE_DAWN
 echo "On this machine the G4VIS_USE_DAWN=\$G4VIS_USE_DAWN"
-fi 
-
-#+
-if [ X$g4vis_use_opacs = Xy ] ; then
-G4VIS_USE_OPACS=1
-export G4VIS_USE_OPACS
-echo "On this machine the G4VIS_USE_OPACS=\$G4VIS_USE_OPACS"
 fi 
 
 #+
@@ -351,18 +323,6 @@ export G4LIB_BUILD_STATIC
 echo "On this machine the G4LIB_BUILD_STATIC=\$G4LIB_BUILD_STATIC"
 fi 
 
-if [ X$g4lib_use_shared = Xy ] ; then
-G4LIB_USE_SHARED=1
-export G4LIB_USE_SHARED
-echo "On this machine the G4LIB_USE_SHARED=\$G4LIB_USE_SHARED"
-fi 
-
-if [ X$g4lib_use_static = Xy ] ; then
-G4LIB_USE_STATIC=1
-export G4LIB_USE_STATIC
-echo "On this machine the G4LIB_USE_STATIC=\$G4LIB_USE_STATIC"
-fi 
-
 #+
 #
 # g4granular
@@ -375,6 +335,9 @@ fi
 
 #####################################################################
 
+echo g4conf=$g4conf
+
+#####################################################################
 # Create GNUmakefile.db to keep ALL GNUmakefile DB :)
 
 if test -f \$G4INSTALL/config/scripts/GNUmakefile.db ; then
@@ -391,19 +354,46 @@ echo ""
 echo "Starting installation..."
 echo ""
 cd $g4install/source
-echo `pwd`
+#echo `pwd`
 
 # There is no env!
 if [ X$g4global = Xy ] ; then
-$g4make global
+echo ""
+rm -rf $g4conf/g4make.log
+$g4make global 2>&1 | tee $g4conf/g4make.log
 fi
 
 # There is env for binaries - for User: should be set in env.[c]sh!
 if [ X$g4granular = Xy ] ; then
 G4LIB_USE_GRANULAR=1
 export G4LIB_USE_GRANULAR
-$g4make
+rm -rf $g4conf/g4make.log
+$g4make 2>&1 | tee $g4conf/g4make.log
 fi
+
+# Check for errors in log file
+export err=\$[ \`grep Error $g4conf/g4make.log | wc -w\` ]
+export int=\$[ \`grep Stop\. $g4conf/g4make.log | wc -w\` ]
+# echo err=\$err
+
+if [ X\$err = X0 -a X\$int = X0 ] ; then
+echo ""
+echo "####################################################"
+echo "# Your Geant4 installation seems to be successful! #"
+echo "# To be sure please have a look into the log file: #"
+echo "# $g4conf/g4make.log				 #"
+echo "####################################################"
+echo ""
+else
+echo ""
+echo "############################################################"
+echo "# It looks like you had errors during Geant4 installation  #"
+echo "# (or interrupted installation)!				 #"
+echo "# Please check log file:				      	 #"
+echo "# $g4conf/g4make.log					 #"
+echo "############################################################"
+echo ""
+fi 
 
 # There is no env!
 if [ X$g4includes_flag = Xy ] ; then

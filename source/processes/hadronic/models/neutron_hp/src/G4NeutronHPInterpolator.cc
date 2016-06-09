@@ -41,25 +41,40 @@
     }
     else if(aScheme==LINLOG||aScheme==CLINLOG||aScheme==ULINLOG)
     {
-      G4double b = (y2-y1)/(log(x2)-log(x1));
-      G4double a = y1 - b*log(x1);
-      result = (a-b)*(x2-x1) + b*(x2*log(x2)-x1*log(x1));
+      if(x1==0) result = y1;
+      else if(x2==0) result = y2;
+      else
+      {
+        G4double b = (y2-y1)/(log(x2)-log(x1));
+        G4double a = y1 - b*log(x1);
+        result = (a-b)*(x2-x1) + b*(x2*log(x2)-x1*log(x1));
+      }
     }
     else if(aScheme==LOGLIN||aScheme==CLOGLIN||aScheme==ULOGLIN)
     {
-      G4double b = (log(y2)-log(y1))/(x2-x1);
-      G4double a = log(y1) - b*x1;
-      result = (exp(a)/b)*(exp(b*x2)-exp(b*x1));
+      if(y1==0||y2==0) result =0;
+      else
+      {
+        G4double b = (log(y2)-log(y1))/(x2-x1);
+        G4double a = log(y1) - b*x1;
+        result = (exp(a)/b)*(exp(b*x2)-exp(b*x1));
+      }
     }
     else if(aScheme==LOGLOG||aScheme==CLOGLOG||aScheme==ULOGLOG)
     {
-      G4double b = (log(y2)-log(y1))/(log(x2)-log(x1));
-      G4double a = log(y1) - b*log(x1);;
-      result = (exp(a)/(b+1))*(pow(x2,b+1)-pow(x1,b+1));
+      if(x1==0) result = y1;
+      else if(x2==0) result = y2;
+      else if(y1==0||y2==0) result =0;
+      else
+      {      
+        G4double b = (log(y2)-log(y1))/(log(x2)-log(x1));
+        G4double a = log(y1) - b*log(x1);;
+        result = (exp(a)/(b+1))*(pow(x2,b+1)-pow(x1,b+1));
+      }
     }
     else
     {
-      G4Exception("Unknown interpolation scheme in G4NeutronHPVector::Integrate");
+      throw G4HadronicException(__FILE__, __LINE__, "Unknown interpolation scheme in G4NeutronHPVector::Integrate");
     }
     return result;
   }
@@ -80,26 +95,41 @@
     }
     else if(aScheme==LINLOG||aScheme==CLINLOG||aScheme==ULINLOG)
     {
-      G4double b = (y2-y1)/(log(x2)-log(x1));
-      G4double a = y1 - b*log(x1);
-      result = ( x2*x2/2. * (a-b/2.+b*log(x2)) )
-              -( x1*x1/2. * (a-b/2.+b*log(x1)) );
+      if(x1==0) result = y1;
+      else if(x2==0) result = y2;
+      else
+      {
+        G4double b = (y2-y1)/(log(x2)-log(x1));
+        G4double a = y1 - b*log(x1);
+        result = ( x2*x2/2. * (a-b/2.+b*log(x2)) )
+                -( x1*x1/2. * (a-b/2.+b*log(x1)) );
+      }
     }
     else if(aScheme==LOGLIN||aScheme==CLOGLIN||aScheme==ULOGLIN)
     {
-      G4double b = (log(y2)-log(y1))/(x2-x1);
-      G4double a = log(y1) - b*x1;
-      result = exp(a)/(b*b)*( exp(b*x2)*(b*x2-1.) - exp(b*x1)*(b*x1-1.) );
+      if(y1==0||y2==0) result = 0;
+      else
+      {
+        G4double b = (log(y2)-log(y1))/(x2-x1);
+        G4double a = log(y1) - b*x1;
+        result = exp(a)/(b*b)*( exp(b*x2)*(b*x2-1.) - exp(b*x1)*(b*x1-1.) );
+      }
     }
     else if(aScheme==LOGLOG||aScheme==CLOGLOG||aScheme==ULOGLOG)
     {
-      G4double b = (log(y2)-log(y1))/(log(x2)-log(x1));
-      G4double a = log(y1) - b*log(x1);;
-      result = exp(a)/(b+2.)*( pow(x2, b+2.) - pow(x1, b+2) );
+      if(x1==0) result = y1;
+      else if(x2==0) result = y2;
+      if(y1==0||y2==0) result = 0;
+      else
+      {
+        G4double b = (log(y2)-log(y1))/(log(x2)-log(x1));
+        G4double a = log(y1) - b*log(x1);;
+        result = exp(a)/(b+2.)*( pow(x2, b+2.) - pow(x1, b+2) );
+      }
     }
     else
     {
-      G4Exception("Unknown interpolation scheme in G4NeutronHPVector::Integrate");
+      throw G4HadronicException(__FILE__, __LINE__, "Unknown interpolation scheme in G4NeutronHPVector::Integrate");
     }
     return result;
   }

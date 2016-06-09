@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4SimpleRunge.hh,v 1.5 2001/07/11 09:59:09 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4SimpleRunge.hh,v 1.7 2003/11/05 16:30:55 japost Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 //
 // class G4SimpleRunge
@@ -33,12 +33,13 @@
 //
 //        x_1 = x_0 + h * ( dx( t_0+h/2, x_0 + h/2 * dx( t_0, x_0) ) )
 //
-// second order solver.
-// Take the derivative at a position to be assumed at the middle of the
-// Step and add it to the current position.
+// Second order solver.
+// Takes the derivative at a position to be assumed at the middle of the
+// Step and adds it to the current position.
 
 // History:
 // - Created. W.Wander <wwc@mit.edu>, 12/09/97
+// -------------------------------------------------------------------
 
 #ifndef G4SIMPLERUNGE_HH
 #define G4SIMPLERUNGE_HH
@@ -50,14 +51,14 @@ class G4SimpleRunge : public G4MagErrorStepper
 
   public:  // with description
 
-    G4SimpleRunge(G4Mag_EqRhs *EqRhs, G4int numberOfVariables = 6) ;
+    G4SimpleRunge(G4EquationOfMotion *EquationRhs, G4int numberOfVariables = 6) ;
    ~G4SimpleRunge();
       // Constructor and destructor.
 
     void DumbStepper( const G4double y[],
-		      const G4double dydx[],
-		            G4double h,
-			    G4double yout[]);
+                      const G4double dydx[],
+                            G4double h,
+                            G4double yout[]);
 
   public:  // without description
   

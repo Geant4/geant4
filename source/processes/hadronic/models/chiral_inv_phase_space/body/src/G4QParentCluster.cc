@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4QParentCluster.cc,v 1.15 2003/06/16 17:04:27 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4QParentCluster.cc,v 1.20 2003/12/09 15:38:26 gunter Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 //      ---------------- G4QParentCluster ----------------
 //             by Mikhail Kossov, Sept 1999.

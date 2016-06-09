@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParallelGeometrySampler.cc,v 1.7 2003/04/02 16:59:17 dressel Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4ParallelGeometrySampler.cc,v 1.10 2003/11/26 14:51:50 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -31,10 +31,10 @@
 //
 // ----------------------------------------------------------------------
 
-
 #include "G4ParallelGeometrySampler.hh"
 
 #include "G4VIStore.hh"
+#include "G4WeightWindowStore.hh"
 #include "G4VScorer.hh"
 
 #include "G4ParallelTransportConfigurator.hh"
@@ -42,56 +42,76 @@
 #include "G4PImportanceConfigurator.hh"
 #include "G4WeightCutOffConfigurator.hh"
 #include "G4ParallelGCellFinder.hh"
+#include "G4PWeightWindowConfigurator.hh"
 
 G4ParallelGeometrySampler::
 G4ParallelGeometrySampler(G4VPhysicalVolume &worldvolume,
-			  const G4String &particlename)
-  :
-  fParticleName(particlename),
-  fParallelWorld(worldvolume),
-  fParallelTransportConfigurator(0),
-  fPImportanceConfigurator(0),
-  fPScoreConfigurator(0),
-  fGCellFinder(0),
-  fWeightCutOffConfigurator(0),
-  fIStore(0),
-  fIsConfigured(false)
-{}
+                          const G4String &particlename)
+  : fParticleName(particlename),
+    fParallelWorld(worldvolume),
+    fParallelTransportConfigurator(0),
+    fPImportanceConfigurator(0),
+    fPScoreConfigurator(0),
+    fGCellFinder(0),
+    fWeightCutOffConfigurator(0),
+    fIStore(0),
+    fPWeightWindowConfigurator(0),
+    fWWStore(0),
+    fIsConfigured(false)
+{
+}
 
-G4ParallelGeometrySampler::~G4ParallelGeometrySampler(){
+G4ParallelGeometrySampler::~G4ParallelGeometrySampler()
+{
   ClearSampling();
-};
+}
 
-void G4ParallelGeometrySampler::ClearSampling() {
-  if (fParallelTransportConfigurator) {
+void G4ParallelGeometrySampler::ClearSampling()
+{
+  if (fParallelTransportConfigurator)
+  {
     delete fParallelTransportConfigurator;
     fParallelTransportConfigurator = 0;
   }
-  if (fPImportanceConfigurator) {
+  if (fPWeightWindowConfigurator)
+  {
+    delete fPWeightWindowConfigurator;
+    fPWeightWindowConfigurator = 0;
+  }
+  if (fPImportanceConfigurator)
+  {
     delete fPImportanceConfigurator;
     fPImportanceConfigurator = 0;
   }
-  if (fPScoreConfigurator) {
+  if (fPScoreConfigurator)
+  {
     delete fPScoreConfigurator;
     fPScoreConfigurator = 0;
   }
-  if (fWeightCutOffConfigurator) {
+  if (fWeightCutOffConfigurator)
+  {
     delete fWeightCutOffConfigurator;
     fWeightCutOffConfigurator = 0;
   }
-  if (fGCellFinder) {
+  if (fGCellFinder)
+  {
     delete fGCellFinder;
     fGCellFinder = 0;
   }
   fIStore = 0;
   fConfigurators.clear();
   fIsConfigured = false;
-};
+}
 
-G4bool G4ParallelGeometrySampler::IsConfigured() const{
+G4bool G4ParallelGeometrySampler::IsConfigured() const
+{
   G4bool isconf = false;
-  if (fIsConfigured) {
-    G4cout << "G4ParallelGeometrySampler::CheckIfInit some initalization exists, use  ClearSampling() before a new initialization" << G4endl;
+  if (fIsConfigured)
+  {
+    G4cout << "WARNING - G4ParallelGeometrySampler::IsConfigured()"
+           << "          Some initalization exists already."
+           << "          Use ClearSampling() before a new initialization !"
+           << G4endl;
     isconf =  true;
   }
   return isconf;
@@ -99,88 +119,133 @@ G4bool G4ParallelGeometrySampler::IsConfigured() const{
 
 void G4ParallelGeometrySampler::
 PrepareImportanceSampling(G4VIStore *istore,
-			  const G4VImportanceAlgorithm 
-			  *ialg) {
+                          const G4VImportanceAlgorithm *ialg)
+{
   fIStore = istore;
-  fPImportanceConfigurator = 
-    new G4PImportanceConfigurator(fParticleName,
-				  fParallelWorld,
-				  *istore,
-				  ialg);
-  if (!fPImportanceConfigurator) {
-    G4Exception("ERROR:G4ParallelGeometrySampler::PrepareImportanceSampling: new failed to create G4PImportanceConfigurator!");
+  fPImportanceConfigurator = new G4PImportanceConfigurator(fParticleName,
+                                                           fParallelWorld,
+                                                           *istore, ialg);
+  if (!fPImportanceConfigurator)
+  {
+    G4Exception("G4ParallelGeometrySampler::PrepareImportanceSampling()",
+                "FatalError", FatalException,
+                "Failed to create G4PImportanceConfigurator !");
   }
 }
 
-void G4ParallelGeometrySampler::PrepareScoring(G4VScorer *scorer){
+void G4ParallelGeometrySampler::PrepareScoring(G4VScorer *scorer)
+{
   fPScoreConfigurator = 
     new G4PScoreConfigurator(fParticleName,
-			     fParallelWorld.
-			     GetParallelStepper(), 
-			     *scorer);
-  if (!fPScoreConfigurator) {
-    G4Exception("ERROR:G4ParallelGeometrySampler::PrepareScoring: new failed to create G4PScoreConfigurator!");
+                             fParallelWorld.
+                             GetParallelStepper(), 
+                             *scorer);
+  if (!fPScoreConfigurator)
+  {
+    G4Exception("G4ParallelGeometrySampler::PrepareScoring()",
+                "FatalError", FatalException,
+                "Failed to create G4PScoreConfigurator !");
   }
-  
 }
 
-void G4ParallelGeometrySampler::
-PrepareWeightRoulett(G4double wsuvive, G4double wlimit, G4double isource){
+void
+G4ParallelGeometrySampler::PrepareWeightRoulett(G4double wsuvive,
+                                                G4double wlimit,
+                                                G4double isource)
+{
   fGCellFinder = new G4ParallelGCellFinder(fParallelWorld.
-					   GetParallelStepper());
-  if (!fGCellFinder) {
-    G4Exception("ERROR:G4ParallelGeometrySampler::PrepareWeightRoulett: new failed to create G4ParallelGCellFinder!");
+                                           GetParallelStepper());
+  if (!fGCellFinder)
+  {
+    G4Exception("G4ParallelGeometrySampler::PrepareWeightRoulett()",
+                "FatalError", FatalException,
+                "Failed to allocate G4ParallelGCellFinder !");
   }
 
   fWeightCutOffConfigurator = 
     new G4WeightCutOffConfigurator(fParticleName,
-				   wsuvive,
-				   wlimit,
-				   isource,
-				   fIStore,
-				   *fGCellFinder);
-  if (!fWeightCutOffConfigurator) {
-    G4Exception("ERROR:G4ParallelGeometrySampler::PrepareWeightRoulett: new failed to create G4WeightCutOffConfigurator!");
+                                   wsuvive,
+                                   wlimit,
+                                   isource,
+                                   fIStore,
+                                   *fGCellFinder);
+  if (!fWeightCutOffConfigurator)
+  {
+    G4Exception("G4ParallelGeometrySampler::PrepareWeightRoulett()",
+                "FatalError", FatalException,
+                "Failed to allocate G4WeightCutOffConfigurator !");
   }
-  
 }
 
-void G4ParallelGeometrySampler::Configure(){
+void
+G4ParallelGeometrySampler::PrepareWeightWindow(G4VWeightWindowStore *wwstore,
+                                               G4VWeightWindowAlgorithm *wwAlg,
+                                               G4PlaceOfAction placeOfAction)
+{
+  if (placeOfAction != onBoundary)
+  {
+    // an additional paralel transport is needed
+    // to cause a step on parallel boundaries
+    fParallelTransportConfigurator = 
+      new G4ParallelTransportConfigurator(fParticleName, fParallelWorld);    
+  }
+  
+  fWWStore = wwstore;
+  fPWeightWindowConfigurator = 
+    new G4PWeightWindowConfigurator(fParticleName,
+                                    fParallelWorld,
+                                    *wwstore,
+                                    wwAlg,
+                                    placeOfAction);
+}
 
-  if (!IsConfigured()) {
+void G4ParallelGeometrySampler::Configure()
+{
+  if (!IsConfigured())
+  {
     fIsConfigured = true;
 
-    if (fPScoreConfigurator) {
+    if (fPScoreConfigurator)
+    {
       fConfigurators.push_back(fPScoreConfigurator);
     }
-    if (fPImportanceConfigurator) {
+    if (fPImportanceConfigurator)
+    {
       fConfigurators.push_back(fPImportanceConfigurator);
     }
-    else {
+    else if (fPWeightWindowConfigurator)
+    {
+      fConfigurators.push_back(fPWeightWindowConfigurator);
+      if (fParallelTransportConfigurator)
+      {
+        fConfigurators.push_back(fParallelTransportConfigurator);
+      }
+    }
+    else
+    {
       fParallelTransportConfigurator = 
-	new G4ParallelTransportConfigurator(fParticleName,
-					    fParallelWorld);
-      if (!fParallelTransportConfigurator) {
-	G4Exception("ERROR:G4ParallelGeometrySampler::Configure: new failed to create G4ParallelTransportConfigurator!");
+        new G4ParallelTransportConfigurator(fParticleName, fParallelWorld);
+      if (!fParallelTransportConfigurator)
+      {
+        G4Exception("G4ParallelGeometrySampler::Configure()",
+                    "FatalError", FatalException,
+                    "Failed to allocate G4ParallelTransportConfigurator !");
       }
       fConfigurators.push_back(fParallelTransportConfigurator);
     }
     G4VSamplerConfigurator *preConf = 0;
     for (G4Configurators::iterator it = fConfigurators.begin();
-	 it != fConfigurators.end(); it++) {
+         it != fConfigurators.end(); it++)
+    {
       G4VSamplerConfigurator *currConf =*it;
       currConf->Configure(preConf);
       preConf = *it;
     }
     
-    if (fWeightCutOffConfigurator) {
+    if (fWeightCutOffConfigurator)
+    {
       fWeightCutOffConfigurator->Configure(0);
     }
   }
   return;
 }
-
-
-
-
-

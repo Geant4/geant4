@@ -1,0 +1,24 @@
+-------------------------------------------------------------------
+$Id: History,v 1.5 2003/12/02 14:58:26 gcosmo Exp $
+-------------------------------------------------------------------
+
+     =========================================================
+                  Geant4 - ATLAS lAr calorimeter
+     =========================================================
+
+                      Category History file
+                      ---------------------
+
+02.12.2003 - G.Cosmo (lAr_calorimeter-V05-02-01)
+             Fixed compilation errors if histograms disabled.
+             Fixed compilation warnings ...
+
+12.11.2003 - J.Allison
+             Updated Vis Manager.
+
+26.05.2003 - P.M.Lorenzo
+             Updated for release 5.1.
+
+30.09.2002 - A.Howard
+             Created. First version.
+

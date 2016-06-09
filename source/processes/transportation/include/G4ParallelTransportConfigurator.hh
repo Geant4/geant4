@@ -21,14 +21,14 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParallelTransportConfigurator.hh,v 1.3 2002/10/22 13:25:56 dressel Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4ParallelTransportConfigurator.hh,v 1.4 2003/11/26 14:51:48 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // ----------------------------------------------------------------------
 // Class G4ParallelTransportConfigurator
 //
 // Class description:
-// This class builds and places  the G4ParallelTransport
+// This class builds and places the G4ParallelTransport.
 // If the object is deleted the process is removed from the 
 // process list.
 
@@ -38,32 +38,32 @@
 #ifndef G4ParallelTransportConfigurator_hh
 #define G4ParallelTransportConfigurator_hh G4ParallelTransportConfigurator_hh
 
+#include "G4Types.hh"
 #include "G4VSamplerConfigurator.hh"
-
-#include "globals.hh"
 #include "G4ParallelTransport.hh"
 #include "G4ProcessPlacer.hh"
 
-
 class G4ParallelWorld;
 
-class G4ParallelTransportConfigurator : public G4VSamplerConfigurator{
-public:
+class G4ParallelTransportConfigurator : public G4VSamplerConfigurator
+{
+
+public:  // with description
+
   G4ParallelTransportConfigurator(const G4String &particlename,
-			     G4ParallelWorld &pworld);
+                                        G4ParallelWorld &pworld);
   virtual ~G4ParallelTransportConfigurator();
   virtual void Configure(G4VSamplerConfigurator *preConf);
   virtual const G4VTrackTerminator *GetTrackTerminator() const;
   
 private:
-  G4ParallelTransportConfigurator(const 
-				  G4ParallelTransportConfigurator &);
+
+  G4ParallelTransportConfigurator(const G4ParallelTransportConfigurator &);
   G4ParallelTransportConfigurator &
   operator=(const G4ParallelTransportConfigurator &);
   G4ProcessPlacer fPlacer;
   G4ParallelWorld &fPWorld;
   G4ParallelTransport *fParallelTransport;
 };
-
 
 #endif

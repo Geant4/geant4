@@ -33,16 +33,15 @@
 #include "G4ParticleTable.hh" 
 #include "G4NeutronHPDataUsed.hh"
 
-  G4ParticleChange * G4NeutronHPCaptureFS::ApplyYourself(const G4Track & theTrack)
+  G4HadFinalState * G4NeutronHPCaptureFS::ApplyYourself(const G4HadProjectile & theTrack)
   {
     G4int i;
-    theResult.Initialize(theTrack);   
-        
+    theResult.Clear();
 // prepare neutron
     G4double eKinetic = theTrack.GetKineticEnergy();
-    const G4DynamicParticle *incidentParticle = theTrack.GetDynamicParticle();
-    G4ReactionProduct theNeutron( incidentParticle->GetDefinition() );
-    theNeutron.SetMomentum( incidentParticle->GetMomentum() );
+    const G4HadProjectile *incidentParticle = &theTrack;
+    G4ReactionProduct theNeutron( const_cast<G4ParticleDefinition *>(incidentParticle->GetDefinition()) );
+    theNeutron.SetMomentum( incidentParticle->Get4Momentum().vect() );
     theNeutron.SetKineticEnergy( eKinetic );
 
 // prepare target
@@ -99,7 +98,6 @@
     if(thePhotons!=NULL) nPhotons=thePhotons->size();
     G4int nParticles = nPhotons;
     if(1==nPhotons) nParticles = 2;
-    theResult.SetNumberOfSecondaries(nParticles);
 
     // back to lab system
     for(i=0; i<nPhotons; i++)
@@ -116,7 +114,7 @@
        theOne->SetDefinition(aRecoil);
        // Now energy; 
        // Can be done slightly better @
-       G4ThreeVector aMomentum =  theTrack.GetMomentum()
+       G4ThreeVector aMomentum =  theTrack.Get4Momentum().vect()
                                  +theTarget.GetMomentum()
 				 -thePhotons->operator[](0)->GetMomentum();
 
@@ -143,7 +141,7 @@
     }
     delete thePhotons; 
 // clean up the primary neutron
-    theResult.SetStatusChange(fStopAndKill);
+    theResult.SetStatusChange(stopAndKill);
     return &theResult;
   }
 

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: GammaRayTelTrackerSD.cc,v 1.7 2003/05/30 15:09:00 flongo Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: GammaRayTelTrackerSD.cc,v 1.8 2003/11/14 15:00:00 flongo Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file
 //      CERN Geneva Switzerland
@@ -105,8 +105,9 @@ G4bool GammaRayTelTrackerSD::ProcessHits(G4Step* aStep,G4TouchableHistory* ROhis
   G4TouchableHistory* theTouchable
     = (G4TouchableHistory*)(aStep->GetPreStepPoint()->GetTouchable());
   
-  G4VPhysicalVolume* phys_tile = theTouchable->GetVolume();  
-  G4VPhysicalVolume* plane = phys_tile->GetMother();  
+  //G4VPhysicalVolume* phys_tile = theTouchable->GetVolume();  
+  
+  G4VPhysicalVolume* plane = theTouchable->GetVolume(1);  
   
   G4int PlaneNumber = 0;
   PlaneNumber=plane->GetCopyNo();

@@ -1,0 +1,92 @@
+//
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
+//
+
+#include "globals.hh"
+#include "G4ParticleDefinition.hh"
+#include "G4ParticleWithCuts.hh"
+#include "G4ProcessManager.hh"
+#include "G4ProcessVector.hh"
+#include "G4ParticleTypes.hh"
+#include "G4ParticleTable.hh"
+
+#include "G4Material.hh"
+#include "G4MaterialTable.hh"
+#include "G4ios.hh"
+#include <iomanip>   
+
+#include "GeneralPhysics.hh"
+#include "EMPhysics.hh"
+#include "MuonPhysics.hh"
+#include "IonPhysics.hh"
+#include "G4DataQuestionaire.hh"
+#include "HadronPhysicsQGSC_LEAD_HP.hh"
+
+template<class T> TQGSC_LEAD_HP<T>::TQGSC_LEAD_HP():  T()
+{
+  // default cut value  (1.0mm) 
+  // defaultCutValue = 1.0*mm;
+  G4DataQuestionaire it(photon, neutron);
+  G4cout << "You are using the simulation engine: QGSC_LEAD_HP 1.6"<<G4endl;
+  G4cout <<G4endl<<G4endl;
+  defaultCutValue = 0.7*mm;  
+  SetVerboseLevel(1);
+
+  // General Physics
+  RegisterPhysics( new GeneralPhysics("general") );
+
+  // EM Physics
+  RegisterPhysics( new EMPhysics("standard EM"));
+
+  // Muon Physics
+  RegisterPhysics(  new MuonPhysics("muon"));
+
+   // Hadron Physics
+  RegisterPhysics(  new HadronPhysicsQGSC_LEAD_HP("hadron"));
+
+  // Ion Physics
+  RegisterPhysics( new IonPhysics("ion"));
+
+
+}
+
+template<class T> TQGSC_LEAD_HP<T>::~TQGSC_LEAD_HP()
+{
+}
+
+template<class T> void TQGSC_LEAD_HP<T>::SetCuts()
+{
+  if (verboseLevel >1){
+    G4cout << "QGSC_LEAD_HP::SetCuts:";
+  }  
+  //  " G4VUserPhysicsList::SetCutsWithDefault" method sets 
+  //   the default cut value for all particle types 
+
+  SetCutsWithDefault();   
+  
+  G4VUserPhysicsList::DumpCutValuesTable();  
+  
+}
+
+
+
+// 2002 by J.P. Wellisch

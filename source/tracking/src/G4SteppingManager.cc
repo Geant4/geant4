@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4SteppingManager.cc,v 1.31 2003/06/16 17:13:19 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4SteppingManager.cc,v 1.32 2003/11/10 08:52:33 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 //
 //---------------------------------------------------------------
@@ -280,7 +280,8 @@ void G4SteppingManager::SetInitialStep(G4Track* valueTrack)
 
   if ( ! fTrack->GetTouchableHandle() ) {
      G4ThreeVector direction= fTrack->GetMomentumDirection();
-     fNavigator->LocateGlobalPointAndSetup( fTrack->GetPosition(), &direction, true, false);
+     fNavigator->LocateGlobalPointAndSetup( fTrack->GetPosition(),
+                                            &direction, true, false );
      fTouchableHandle = fNavigator->CreateTouchableHistory();
 
      fTrack->SetTouchableHandle( fTouchableHandle );
@@ -289,8 +290,9 @@ void G4SteppingManager::SetInitialStep(G4Track* valueTrack)
      fTrack->SetNextTouchableHandle( fTrack->GetTouchableHandle() );
      G4VPhysicalVolume* oldTopVolume= fTrack->GetTouchableHandle()->GetVolume();
      G4VPhysicalVolume* newTopVolume=
-     fNavigator->LocateGlobalPointAndSetup( fTrack->GetPosition(), 
-         fTrack->GetMomentumDirection(),*((G4TouchableHistory*)fTrack->GetTouchableHandle()()) );
+     fNavigator->ResetHierarchyAndLocate( fTrack->GetPosition(), 
+        fTrack->GetMomentumDirection(),
+	*((G4TouchableHistory*)fTrack->GetTouchableHandle()()) );
      if(newTopVolume != oldTopVolume ){
         fTouchableHandle = fNavigator->CreateTouchableHistory();
         fTrack->SetTouchableHandle( fTouchableHandle );

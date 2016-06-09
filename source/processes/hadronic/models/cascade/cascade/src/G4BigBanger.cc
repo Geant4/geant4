@@ -19,7 +19,7 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
-
+//
 #include "G4BigBanger.hh"
 #include "G4InuclNuclei.hh"
 #include "G4ParticleLargerEkin.hh"
@@ -35,7 +35,7 @@ G4BigBanger::G4BigBanger()
   }
 }
 
-G4CollisionOutput G4BigBanger::collide(G4InuclParticle* bullet,
+G4CollisionOutput G4BigBanger::collide(G4InuclParticle* /*bullet*/,
 				       G4InuclParticle* target) {
 
   if (verboseLevel > 3) {
@@ -313,10 +313,10 @@ G4double G4BigBanger::xProbability(G4double x,
     ekpr = x * x;
 
     if(2 * ihalf == ia) { // even A
-      ekpr *= sqrt(1.0 - x) * pow((1.0 - x), int((3 * ia - 6) / 2)); 
+      ekpr *= sqrt(1.0 - x) * pow((1.0 - x), G4int(G4double(3 * ia - 6) / 2.0)); 
     }
     else {
-      ekpr *= pow((1.0 - x), int((3 * ia - 5) / 2));
+      ekpr *= pow((1.0 - x), G4int(G4double(3 * ia - 5) / 2.0));
     };
   }; 
   
@@ -329,7 +329,7 @@ G4double G4BigBanger::maxProbability(G4double a) const {
     G4cout << " >>> G4BigBanger::maxProbability" << G4endl;
   }
 
-  return xProbability(1.0 / (a - 1.0) / 1.5, int(a + 0.1));
+  return xProbability(1.0 / (a - 1.0) / 1.5, G4int(a + 0.1));
 }
 
 G4double G4BigBanger::generateX(G4int ia, 

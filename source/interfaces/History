@@ -1,4 +1,4 @@
-$Id: History,v 1.63 2003/06/11 07:05:59 gcosmo Exp $
+$Id: History,v 1.66 2003/11/04 08:26:01 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,12 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+22 October 2003, Guy Barrand (interfaces-V05-02-00)
+- OPACS : archived obsolete OPACS module and cleared build setup.
+
+17 October 2003, Guy Barrand
+- G4Xt.cc : removed unused and commented code.
 
 11 June 2003, Gabriele Cosmo (interfaces-V05-01-02)
 - G4UIWin32.cc: cleared warning on redefinition of 'pascal' reported on

@@ -21,15 +21,22 @@
 // ********************************************************************
 //
 //
+// $Id: G4EqMagElectricField.cc,v 1.11 2003/11/05 17:31:59 japost Exp $
+// GEANT4 tag $Name: geant4-06-00 $
+//
+//
 //  This is the standard right-hand side for equation of motion.
 //
-//    The only case another is required is when using a moving reference
-//     frame ... or extending the class to include additional Forces,
-//     eg an electric field
+//  The only case another is required is when using a moving reference
+//  frame ... or extending the class to include additional Forces,
+//  eg an electric field
 //
-//           10.11.98   V.Grichine
+//  10.11.98   V.Grichine
 //
+// -------------------------------------------------------------------
+
 #include "G4EqMagElectricField.hh"
+#include "globals.hh"
 
 void  
 G4EqMagElectricField::SetChargeMomentumMass(G4double particleCharge, // e+ units
@@ -81,6 +88,3 @@ G4EqMagElectricField::EvaluateRhsGivenB(const G4double y[],
    dydx[7] = inverse_velocity;
    return ;
 }
-
-
-

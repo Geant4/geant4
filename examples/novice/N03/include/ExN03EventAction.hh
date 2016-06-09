@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: ExN03EventAction.hh,v 1.7 2002/01/09 17:24:11 ranjard Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: ExN03EventAction.hh,v 1.8 2003/09/15 15:38:14 maire Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // 
 
@@ -41,22 +41,28 @@ class ExN03EventActionMessenger;
 
 class ExN03EventAction : public G4UserEventAction
 {
-  public:
-    ExN03EventAction();
-    virtual ~ExN03EventAction();
+ public:
+   ExN03EventAction();
+  ~ExN03EventAction();
 
-  public:
-    virtual void   BeginOfEventAction(const G4Event*);
-    virtual void   EndOfEventAction(const G4Event*);
+ public:
+   void  BeginOfEventAction(const G4Event*);
+   void    EndOfEventAction(const G4Event*);
     
-    void SetDrawFlag   (G4String val)  {drawFlag = val;};
-    void SetPrintModulo(G4int    val)  {printModulo = val;};
+   void AddAbs(G4double de, G4double dl) {EnergyAbs += de; TrackLAbs += dl;};
+   void AddGap(G4double de, G4double dl) {EnergyGap += de; TrackLGap += dl;};
+                     
+   void SetDrawFlag   (G4String val)  {drawFlag = val;};
+   void SetPrintModulo(G4int    val)  {printModulo = val;};
     
-  private:
-    G4int                       calorimeterCollID;                
-    G4String                    drawFlag;
-    G4int                       printModulo;                         
-    ExN03EventActionMessenger*  eventMessenger;
+ private:
+   G4double  EnergyAbs, EnergyGap;
+   G4double  TrackLAbs, TrackLGap;
+                     
+   G4String  drawFlag;
+   G4int     printModulo;
+                             
+   ExN03EventActionMessenger*  eventMessenger;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

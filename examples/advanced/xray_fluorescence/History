@@ -1,0 +1,9 @@
+4-12-2003 Susanna Guatelli:XrayFluo-V05-02-08 
+Removed the compilation warnings, introduction of VRML viewer.
+This tag referes to the tag  examples-V05-02-07 prepared for Geant4 6.0
+release.
+
+4-12-2003 Susanna Guatelli: XrayFluo-V05-02-07
+Correspond the head found in CVS. It does not compile.
+
+

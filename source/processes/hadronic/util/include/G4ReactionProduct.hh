@@ -21,8 +21,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4ReactionProduct.hh,v 1.7 2002/12/12 19:18:39 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
 //
  // J.L. Chuma, TRIUMF, 31-Oct-1996
  // last modified: 19-Dec-1996
@@ -36,6 +34,8 @@
 
 #include "globals.hh"
 #include "G4DynamicParticle.hh"
+#include "G4HadProjectile.hh"
+#include "G4HadronicException.hh"
  
  class G4ReactionProduct
  {
@@ -69,6 +69,8 @@
     
     G4ReactionProduct &operator= ( const G4DynamicParticle &right );
     
+    G4ReactionProduct &operator= ( const G4HadProjectile &right );
+
     inline G4bool operator== ( const G4ReactionProduct &right ) const
     { return ( this == (G4ReactionProduct*) &right ); }
     

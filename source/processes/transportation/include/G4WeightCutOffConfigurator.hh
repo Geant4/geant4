@@ -21,47 +21,48 @@
 // ********************************************************************
 //
 //
-// $Id: G4WeightCutOffConfigurator.hh,v 1.3 2002/10/22 13:25:57 dressel Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4WeightCutOffConfigurator.hh,v 1.4 2003/11/26 14:51:49 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // ----------------------------------------------------------------------
 // Class G4WeightCutOffConfigurator
 //
 // Class description:
-// This class builds and places  the G4WeightCutOffProcess
+// This class builds and places the G4WeightCutOffProcess.
 // If the object is deleted the process is removed from the 
 // process list.
 
 // Author: Michael Dressel (Michael.Dressel@cern.ch)
 // ----------------------------------------------------------------------
-
 #ifndef G4WeightCutOffConfigurator_hh
 #define G4WeightCutOffConfigurator_hh G4WeightCutOffConfigurator_hh
 
+#include "G4Types.hh"
 #include "G4VSamplerConfigurator.hh"
-
-#include "globals.hh"
 #include "G4ProcessPlacer.hh"
 
 class G4WeightCutOffProcess;
 class G4VGCellFinder;
 class G4VIStore;
 
+class G4WeightCutOffConfigurator : public G4VSamplerConfigurator
+{
 
-class G4WeightCutOffConfigurator : public G4VSamplerConfigurator {
-public:
+public:  // with description
+
   G4WeightCutOffConfigurator(const G4String &particlename,
-			     G4double wsurvival,
-			     G4double wlimit,
-			     G4double isource,
-			     G4VIStore *istore,
-			     const G4VGCellFinder &aGCellFinder);
+                             G4double wsurvival,
+                             G4double wlimit,
+                             G4double isource,
+                             G4VIStore *istore,
+                             const G4VGCellFinder &aGCellFinder);
 
   virtual ~G4WeightCutOffConfigurator();
   virtual void Configure(G4VSamplerConfigurator *preConf);
   virtual const G4VTrackTerminator *GetTrackTerminator() const ;
   
 private:
+
   G4WeightCutOffConfigurator(const G4WeightCutOffConfigurator&);
   G4WeightCutOffConfigurator &
   operator=(const G4WeightCutOffConfigurator&);
@@ -69,6 +70,5 @@ private:
   G4WeightCutOffProcess *fWeightCutOffProcess;
   G4bool fPlaced;
 };
-
 
 #endif

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: A01IonPhysics.hh,v 1.3 2002/12/13 11:34:29 gunter Exp $
+// $Id: A01IonPhysics.hh,v 1.4 2003/10/11 02:59:59 tkoi Exp $
 // --------------------------------------------------------------
 //
 
@@ -64,36 +64,6 @@ class A01IonPhysics : public G4VPhysicsConstructor
     virtual void ConstructProcess();
 
   protected:
-   // Elastic Process
-   G4HadronElasticProcess theElasticProcess;
-   G4LElastic*            theElasticModel;
-
-   // Generic Ion physics
-   G4MultipleScattering   fIonMultipleScattering;
-   G4hIonisation          fIonIonisation;
-
-   // Deuteron physics
-   G4MultipleScattering        fDeuteronMultipleScattering;
-   G4hIonisation               fDeuteronIonisation;
-   G4DeuteronInelasticProcess  fDeuteronProcess;
-   G4LEDeuteronInelastic*      fDeuteronModel;
-
-   // Triton physics
-   G4MultipleScattering        fTritonMultipleScattering;
-   G4hIonisation               fTritonIonisation;
-   G4TritonInelasticProcess    fTritonProcess;
-   G4LETritonInelastic*        fTritonModel;
-
-   // Alpha physics
-   G4MultipleScattering        fAlphaMultipleScattering;
-   G4hIonisation               fAlphaIonisation;
-   G4AlphaInelasticProcess     fAlphaProcess;
-   G4LEAlphaInelastic*         fAlphaModel;
-
-   // He3 physics
-   G4MultipleScattering        fHe3MultipleScattering;
-   G4hIonisation               fHe3Ionisation;
-
 };
 
 

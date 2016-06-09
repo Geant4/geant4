@@ -1,4 +1,4 @@
-# $Id: G4VIS_BUILD.gmk,v 1.12 2003/06/11 13:18:56 gunter Exp $
+# $Id: G4VIS_BUILD.gmk,v 1.16 2003/11/13 09:54:41 gcosmo Exp $
 # -------------------------------------------------------------
 # Visualization-specific CPPFLAGS for BUILD phase.
 #   John Allison, 24th January 1998.
@@ -20,12 +20,6 @@ ifndef G4VIS_NONE
 
 ifdef G4VIS_BUILD_DAWN_DRIVER
   CPPFLAGS += -DG4VIS_BUILD_DAWN_DRIVER
-endif
-
-ifdef G4VIS_BUILD_OPACS_DRIVER
-  G4INTY_BUILD_XT = 1
-  CPPFLAGS += -DG4VIS_BUILD_OPACS_DRIVER
-  INC_OPACS = 1
 endif
 
 ifdef G4VIS_BUILD_OPENGLX_DRIVER
@@ -72,10 +66,6 @@ ifdef G4LIB_BUILD_SHARED
 # build shared libs MUST resolve external libs at library build time
   ifdef G4VIS_BUILD_DAWN_DRIVER
     G4VIS_USE_DAWN = 1
-  endif
-
-  ifdef G4VIS_BUILD_OPACS_DRIVER
-    G4VIS_USE_OPACS = 1
   endif
 
   ifdef G4VIS_BUILD_OPENGLX_DRIVER

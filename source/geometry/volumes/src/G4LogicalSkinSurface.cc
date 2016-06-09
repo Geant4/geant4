@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4LogicalSkinSurface.cc,v 1.8 2002/08/06 08:23:38 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4LogicalSkinSurface.cc,v 1.11 2003/12/01 14:53:26 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // --------------------------------------------------------------------
 // G4LogicalSkinSurface Implementation
@@ -33,12 +33,12 @@
 //
 // Created:     1997-06-26
 // Author:      John Apostolakis (John.Apostolakis@cern.ch)
-// Modified:    1997-06-26  John Apostolakis
 //
-// ********************************************************************
+// ----------------------------------------------------------------------
 
 #include "G4LogicalSkinSurface.hh"
 #include "G4ios.hh"
+#include "G4LogicalVolume.hh"
 
 G4LogicalSkinSurfaceTable G4LogicalSkinSurface::theSurfaceTable;
 
@@ -48,8 +48,8 @@ G4LogicalSkinSurfaceTable G4LogicalSkinSurface::theSurfaceTable;
 
 G4LogicalSkinSurface::G4LogicalSkinSurface(const G4String&   name,
                                            G4LogicalVolume*  logicalVolume,
-                                           G4OpticalSurface* opticalSurface)
-  : G4LogicalSurface(name, opticalSurface),
+                                           G4SurfaceProperty* surfaceProperty)
+  : G4LogicalSurface(name, surfaceProperty),
     LogVolume(logicalVolume)
 {
   // Store in the table of Surfaces
@@ -58,7 +58,7 @@ G4LogicalSkinSurface::G4LogicalSkinSurface(const G4String&   name,
 }
 
 G4LogicalSkinSurface::G4LogicalSkinSurface(const G4LogicalSkinSurface& right)
-  : G4LogicalSurface(right.GetName(), right.GetOpticalSurface())
+  : G4LogicalSurface(right.GetName(), right.GetSurfaceProperty())
 {
   SetTransitionRadiationSurface(right.GetTransitionRadiationSurface());
   LogVolume = right.LogVolume;
@@ -79,7 +79,7 @@ G4LogicalSkinSurface::operator=(const G4LogicalSkinSurface& right)
   if (&right == this) return *this;
   if (&right)
   {
-    SetOpticalSurface(right.GetOpticalSurface());
+    SetSurfaceProperty(right.GetSurfaceProperty());
     SetName(right.GetName());
     SetTransitionRadiationSurface(right.GetTransitionRadiationSurface());
     LogVolume = right.LogVolume;

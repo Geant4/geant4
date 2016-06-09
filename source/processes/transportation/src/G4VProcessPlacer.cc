@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4VProcessPlacer.cc,v 1.2 2003/04/02 16:59:20 dressel Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file

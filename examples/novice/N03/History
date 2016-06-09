@@ -1,4 +1,4 @@
-$Id: History,v 1.62 2003/06/10 12:51:47 maire Exp $
+$Id: History,v 1.72 2003/12/01 21:09:20 perl Exp $
 --------------------------------------------------
 
      =========================================================
@@ -14,7 +14,43 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-     
+
+01-12-03 J.Perl (exampleN03-V05-02-08)
+- Removed extraneous flushes from visTutor/heprep.mac to match new
+  endOfRunAction behavior.
+- Cleaned up vis.mac.
+- Cleaned up vis part of README.
+
+27-11-03 G.Cosmo (exampleN03-V05-02-07)
+- Removed OPACS script from visTutor. renamed scripts 6/7/8/9 to
+  5/6/7/8 respectively. Added scripts to gui.mac.
+
+25-11-03 G.Cosmo (exampleN03-V05-02-06)
+- Open the geometry before cleaning stores in ConstructCalorimeter().
+
+12-11-03 J.Allison (exampleN03-V05-02-05)
+- ExN03EventAction: changed drawing mode from 2000 to 1000.
+
+06-11-03 J.Allison (exampleN03-V05-02-04)
+- ExN03RunAction: removed ApplyCommand("/vis/...") statements.
+
+06-11-03 J.Allison (exampleN03-V05-02-03)
+- ExN03EventAction:
+  o changed to use G4VVisManager::Draw(const G4VTrajectory&, G4int draw_mode).
+  o increased drawing mode from 50 to 2000.
+
+06-11-03 J.Allison (exampleN03-V05-02-02)
+- Removed OPACS from ExN03VisManager.
+
+24-10-03 mma (exampleN03-V05-02-01)
+- PhysicsList: AddProcess(Bremsstrahlung,-1,3,3) ..etc..
+
+15-09-03 mma (exampleN03-V05-02-00) 
+- suppresion of sensitive detector and hits.
+- DetectorConstruction::DefineMaterials() invoked in constructor. 
+  The UI commands /N03/det work in preInit state as well in Idle.
+- suppression of specific code for curvated trajectories.
+       
 10-06-03 mma (exampleN03-V05-01-02)
 - mv heprep.mac in visTutor
 - back to eventAction.cc 1.17

@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4GammaXTRadiator.cc,v 1.2 2003/06/16 17:02:55 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 
 #include <complex>

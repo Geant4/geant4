@@ -1,4 +1,4 @@
-$Id: History,v 1.28 2002/12/04 19:14:18 asaim Exp $
+$Id: History,v 1.30 2003/11/04 09:47:57 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,22 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Nov 04, 2003   Gabriele Cosmo               geometry-V05-02-01
+-----------------------------
+- Includes headers review. Tags included:
+  field-V05-02-01, geommng-V05-02-03, geomnav-V05-02-03, geom-bool-V05-02-03,
+  geom-csg-V05-02-04, geom-specific-V05-02-04, geomvol-V05-02-03.
+
+Sep 30, 2003   Gabriele Cosmo               geometry-V05-02-00
+-----------------------------
+- Logical reorganisation and restructure of modules:
+  o Added new module "navigation" for navigation-releated classes.
+  o Removed module "verification" and merged classes in "navigation".
+  o Archived solids/STEP and solids/STEPinterface modules.
+  o Modified GNUmakefiles in the various modules to cope with these changes.
+- Includes tags: geomvol-V05-02-01, geommng-V05-02-00, geomdiv-V05-02-02,
+                 geombias-V05-02-02, geomnav-V05-02-00, geomsolids-V05-02-00.
 
 Dec 04, 2002   Makoto Asai                  geometry-V04-01-00
 --------------------------

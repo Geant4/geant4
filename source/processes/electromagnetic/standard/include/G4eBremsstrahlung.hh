@@ -20,175 +20,122 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
+// $Id: G4eBremsstrahlung.hh,v 1.20 2003/11/12 16:23:42 vnivanch Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
-// $Id: G4eBremsstrahlung.hh,v 1.16 2003/06/16 17:01:59 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// -------------------------------------------------------------------
 //
-// 
-//      ------------ G4eBremsstrahlung physics process ------
-//                     by Laszlo Urban, 24 July 1996
-// 
+// GEANT4 Class header file
+//
+//
+// File name:     G4eBremsstrahlung
+//
+// Author:        Laszlo Urban
+//
+// Creation date: 24.06.1996
+//
+// Modifications:
+//
 // 01-10-96 new type G4OrderedTable;  ComputePartialSumSigma()
 // 20-03-97 new energy loss+ionisation+brems scheme, L.Urban
-// 01-09-98 new method  PrintInfo() 
+// 01-09-98 new method  PrintInfo()
 // 10-02-00 modifications , new e.m. structure, L.Urban
 // 07-08-00 new cross section/en.loss parametrisation, LPM flag , L.Urban
 // 09-08-01 new methods Store/Retrieve PhysicsTable (mma)
 // 19-09-01 come back to previous process name "eBrem"
-// 29-10-01 all static functions no more inlined (mma)  
-// 16-01-03 Migrade to cut per region (V.Ivanchenko)
+// 29-10-01 all static functions no more inlined (mma)
+// 07-01-02 new design of em processes (V.Ivanchenko)
+// 26-12-02 secondary production moved to derived classes (VI)
+// 24-01-03 Make models region aware (V.Ivanchenko)
+// 05-02-03 Fix compilation warnings (V.Ivanchenko)
+// 08-08-03 STD substitute standard  (V.Ivanchenko)
+// 17-10-03 PrintInfoDefinition - virtual (V.Ivanchenko)
+// 12-11-03 G4EnergyLossSTD -> G4EnergyLossProcess (V.Ivanchenko)
 //
-// ------------------------------------------------------------
-
-// Class description
+//
+// Class Description:
 //
 // This class manages the bremsstrahlung for e-/e+
-// it inherites from G4VContinuousDiscreteProcess via G4VeEnergyLoss.
+// it inherites from G4VContinuousDiscreteProcess via G4VEnergyLoss.
 //
-// Class description - end
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+// -------------------------------------------------------------------
+//
 
 #ifndef G4eBremsstrahlung_h
 #define G4eBremsstrahlung_h 1
 
-#include "G4ios.hh"
-#include "globals.hh"
-#include "Randomize.hh"
-#include "G4VeEnergyLoss.hh"
-#include "G4Track.hh"
-#include "G4Step.hh"
-#include "G4Gamma.hh"
+#include "G4VEnergyLossProcess.hh"
 #include "G4Electron.hh"
 #include "G4Positron.hh"
-#include "G4OrderedTable.hh"
-#include "G4PhysicsTable.hh"
-#include "G4PhysicsLogVector.hh"
-#include "G4MaterialCutsCouple.hh"
+
+class G4Material;
+
+class G4eBremsstrahlung : public G4VEnergyLossProcess
+{
+
+public:
+
+  G4eBremsstrahlung(const G4String& name = "eBrem");
+
+  ~G4eBremsstrahlung();
+
+  G4bool IsApplicable(const G4ParticleDefinition& p) 
+    {return (&p == G4Electron::Electron() || &p == G4Positron::Positron());};
+
+  virtual G4double MinPrimaryEnergy(const G4ParticleDefinition*,
+                                    const G4Material*, G4double cut)
+  {return cut;};
+
+  virtual std::vector<G4Track*>* SecondariesAlongStep(
+                             const G4Step&, 
+			           G4double&,
+			           G4double&,
+                                   G4double&) {return 0;};
+
+  virtual void SecondariesPostStep(
+                                   G4VEmModel*,
+                             const G4MaterialCutsCouple*,
+                             const G4DynamicParticle*,
+                                   G4double&,
+                                   G4double&);
+
+  virtual void PrintInfoDefinition();
+  // Print out of the class parameters
+
+protected:
+
+  virtual G4double MaxSecondaryEnergy(const G4DynamicParticle* dynParticle)
+  {return dynParticle->GetKineticEnergy();};
+
+private:
+
+  void InitialiseProcess();
+
+  // hide assignment operator
+  G4eBremsstrahlung & operator=(const G4eBremsstrahlung &right);
+  G4eBremsstrahlung(const G4eBremsstrahlung&);
+
+};
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-class G4eBremsstrahlung : public G4VeEnergyLoss
+#include "G4VEmModel.hh"
 
+inline void G4eBremsstrahlung::SecondariesPostStep(
+                                                      G4VEmModel* model,
+                                                const G4MaterialCutsCouple* couple,
+                                                const G4DynamicParticle* dp,
+                                                      G4double& tcut,
+                                                      G4double& kinEnergy)
 {
-  public:
+  G4DynamicParticle* gamma = model->SampleSecondary(couple, dp, tcut, kinEnergy);
+  aParticleChange.SetNumberOfSecondaries(1);
+  aParticleChange.AddSecondary(gamma);
+  kinEnergy -= gamma->GetKineticEnergy();
+}
 
-     G4eBremsstrahlung(const G4String& processName = "eBrem");
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-    ~G4eBremsstrahlung();
-
-     G4bool IsApplicable(const G4ParticleDefinition&);
-
-     void PrintInfoDefinition();
-
-     void BuildPhysicsTable(const G4ParticleDefinition& ParticleType);
-
-     void BuildLossTable(const G4ParticleDefinition& ParticleType);
-
-     void BuildLambdaTable(const G4ParticleDefinition& ParticleType);
-
-     G4double GetMeanFreePath(const G4Track& track,
-                              G4double previousStepSize,
-                              G4ForceCondition* condition );
-
-     G4VParticleChange *PostStepDoIt(const G4Track& track,
-                                     const G4Step&  step);
-
-     G4double GetLambda(G4double KineticEnergy, const G4MaterialCutsCouple* couple);
-
-     G4bool StorePhysicsTable(G4ParticleDefinition* ,
-  		              const G4String& directory, G4bool);
-      // store eLoss and MeanFreePath tables into an external file
-      // specified by 'directory' (must exist before invokation)
-
-     G4bool RetrievePhysicsTable(G4ParticleDefinition* ,
-			         const G4String& directory, G4bool);
-      // retrieve eLoss and MeanFreePath tables from an external file
-      // specified by 'directory'
-
-  protected:
-
-     G4double ComputeMeanFreePath( const G4ParticleDefinition* ParticleType,
-                                         G4double KineticEnergy,
-                                   const G4MaterialCutsCouple* couple);
-
-     void ComputePartialSumSigma( const G4ParticleDefinition* ParticleType,
-                                        G4double KineticEnergy,
-                                  const G4MaterialCutsCouple* couple);
-
-     virtual G4double ComputeCrossSectionPerAtom(
-                                  const G4ParticleDefinition* ParticleType,
-                                        G4double KineticEnergy,
-                                        G4double AtomicNumber,
-                                        G4double GammaEnergyCut);
-
-  private:
-
-     G4double ComputeBremLoss(G4double Z,G4double natom,G4double T,
-                              G4double Cut,G4double x);
-
-     G4double ComputePositronCorrFactorLoss(G4double AtomicNumber,
-                                            G4double KineticEnergy,
-                                            G4double GammaEnergyCut);
-
-     G4double ComputePositronCorrFactorSigma(G4double AtomicNumber,
-                                             G4double KineticEnergy,
-                                             G4double GammaEnergyCut);
-
-     G4Element* SelectRandomAtom(const G4MaterialCutsCouple* couple) const;
-
-     G4double ScreenFunction1(G4double ScreenVariable);
-
-     G4double ScreenFunction2(G4double ScreenVariable);
-
-     G4double SupressionFunction(const G4Material* aMaterial,
-                                  G4double KineticEnergy,
-                                  G4double GammaEnergy) ;
-
-     G4eBremsstrahlung & operator=(const G4eBremsstrahlung &right);
-
-     G4eBremsstrahlung(const G4eBremsstrahlung&);
-
-  protected:
-
-     virtual G4double SecondaryEnergyThreshold(size_t index);
-
-  private:
-
-     G4PhysicsTable* theMeanFreePathTable;
-
-     G4OrderedTable PartialSumSigma;       // partial sum of total crosssection
-
-     static G4double LowerBoundLambda;     // low  energy limit of crossection table
-     static G4double UpperBoundLambda;     // high energy limit of crossection table
-     static G4int    NbinLambda;           // number of bins in the tables
-
-     G4double MinThreshold;                // minimun value for the production threshold
-
-     G4double LowestKineticEnergy,HighestKineticEnergy; // bining of the Eloss table
-     G4int    TotBin;                                   // (from G4VeEnergyLoss)
-
-     static G4double probsup;
-     static G4bool LPMflag;
-
-     const std::vector<G4double>* secondaryEnergyCuts;
-
-  public:
-
-     static void SetLowerBoundLambda(G4double val);
-     static void SetUpperBoundLambda(G4double val);
-     static void SetNbinLambda(G4int n);
-     static G4double GetLowerBoundLambda();
-     static G4double GetUpperBoundLambda();
-     static G4int GetNbinLambda();
-
-     static void   SetLPMflag(G4bool val);
-     static G4bool GetLPMflag();
-};
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-#include "G4eBremsstrahlung.icc"
-  
 #endif
+

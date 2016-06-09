@@ -19,6 +19,7 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
+//
 #ifndef G4BertiniHydrogenCollision_h
 #define G4BertiniHydrogenCollision_h 1
 
@@ -29,6 +30,7 @@ class G4BertiniHydrogenCollision : public G4BertiniModel {
 public:
   G4BertiniHydrogenCollision();
   ~G4BertiniHydrogenCollision();
+
 private:
 };
 

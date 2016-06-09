@@ -31,7 +31,8 @@
 class G4PionMinusNuclearReaction : public G4HadronicInteraction
 {
   public: 
-    G4VParticleChange * ApplyYourself(const G4Track& aTrack, G4Nucleus& aTargetNucleus);
+    virtual G4HadFinalState* ApplyYourself(const G4HadProjectile& aTrack, 
+    G4Nucleus& aTargetNucleus);
 
   private:
     G4ChiralInvariantPhaseSpace theModel;
@@ -43,7 +44,7 @@ ApplyYourself(const G4Track& aTrack, G4Nucleus& aTargetNucleus)
 {
 //  if(aTrack.GetDynamicParticle()->GetDefinition() != G4PionMinus::PionMinusDefinition())
 //  {
-//    G4Exception("Called G4PionMinusNuclearReaction for particle other than PionMinus");
+//    throw G4HadronicException(__FILE__, __LINE__, "Called G4PionMinusNuclearReaction for particle other than PionMinus");
 //  }
   return theModel.ApplyYourself(aTrack, aTargetNucleus);
 }

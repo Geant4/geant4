@@ -1,4 +1,4 @@
-$Id: History,v 1.3 2003/01/14 10:18:22 johna Exp $
+$Id: History,v 1.5 2003/10/29 10:02:24 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,20 @@ committal in the CVS repository !
 
 History file for visualization/OpenInventor
 -------------------------------------------
+
+29th October 2003  Cosmo Gabriele (openinventor-V05-02-00)
+- Patch in G4OpenInventorSceneHandler in PreAddThis() to cope with changes
+  introduced in G4VPhysicalVolume in "geant4-05-02-ref-04", where pointer to
+  mother physical-volume was removed.
+  Separators map now refers to logical-volumes and is no longer built
+  iteratively for each call to the method as it was done in an attempt
+  implemented previously.
+  NOTE: requires more investigation and eventually a revision of the
+        adopted algorithm.
+- Cleared usage of 'NULL' in favour of '0'.
+
+4th October 2003  Cosmo Gabriele (vis-V05-02-01)
+- Simplified GNUmakefile.
 
 14th January 2003  John Allison  (openinventor-V05-00-00)
 - Removed vertex.transform (*fpObjectTransformation) from

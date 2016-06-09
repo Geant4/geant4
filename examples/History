@@ -1,4 +1,4 @@
-$Id: History,v 1.70 2003/06/26 13:47:18 gcosmo Exp $
+$Id: History,v 1.77 2003/12/08 18:17:04 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,35 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+8th December 2003  Sergei Sadilov (examples-V05-02-08)
+- Updated reference outputs according to candidate tag geant4-06-00-cand-03.
+
+28th November 2003  Gabriele Cosmo (examples-V05-02-07)
+- Updated reference outputs for development tag geant4-05-02-ref-06.
+
+Nov 13th, 2003  John Allison (examples-V05-02-06)
+- Removed OPACS from Vis Managers.
+
+31st October 2003  Gabriele Cosmo (examples-V05-02-05)
+- Updated reference outputs for development tag geant4-05-02-ref-05.
+
+10th October 2003  Gabriele Cosmo (examples-V05-02-03)
+- Updated reference outputs for development tag geant4-05-02-ref-04.
+
+26th September 2003  Gabriele Cosmo (examples-V05-02-02)
+- Updated reference outputs for development tag geant4-05-02-ref-03.
+
+29th August 2003  Gabriele Cosmo (examples-V05-02-01)
+- Updated reference outputs for development tag geant4-05-02-ref-02.
+
+25th August 2003  Gabriele Cosmo (examples-V05-02-00)
+- Updated reference outputs.
+- Includes on top of previous tag:
+   examples/extended/eventgenerator/HepMC         exHepMC-V05-02-00
+   examples/extended/g3tog4                       g3tog4Tests-V05-02-00
+   examples/extended/gdml                         exgdml-V05-02-00
+   examples/extended/parallel                     exparallel-V05-02-00
 
 27th June 2003  Gabriele Cosmo (examples-V05-01-01)
 - Updated reference outputs.

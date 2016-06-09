@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4UIcontrolMessenger.hh,v 1.10 2002/05/15 06:51:31 asaim Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 
 #ifndef G4UIcontrolMessenger_h

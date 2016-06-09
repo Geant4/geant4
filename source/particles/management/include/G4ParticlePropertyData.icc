@@ -1,0 +1,181 @@
+//
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
+//
+//
+// $Id: G4ParticlePropertyData.icc,v 1.1 2003/06/11 07:20:06 kurasige Exp $
+//
+
+inline 
+ void G4ParticlePropertyData::SetVerboseLevel(G4int value)
+{
+   verboseLevel = value;
+}
+
+inline 
+ G4int G4ParticlePropertyData::GetVerboseLevel() const
+{
+   return verboseLevel;
+}
+
+inline
+ G4int G4ParticlePropertyData::GetQuarkContent(G4int flavor) const 
+{ 
+  if ((flavor>0) && (flavor<=NumberOfQuarkFlavor)){
+    return theQuarkContent[flavor-1];
+  }else {
+    return 0;
+  }  
+}
+
+inline
+ G4int G4ParticlePropertyData::GetAntiQuarkContent(G4int flavor) const 
+{ 
+  if ((flavor>0) && (flavor<NumberOfQuarkFlavor)){
+    return theAntiQuarkContent[flavor-1];
+  }else {
+    return 0;
+  }  
+}
+
+ 
+inline 
+ void  G4ParticlePropertyData::SetPDGEncoding(G4int aEncoding)
+{ 
+  thePDGEncoding = aEncoding; 
+  fPDGEncodingModified = true;  
+  theAntiPDGEncoding = -1*aEncoding; 
+  fAntiPDGEncodingModified = true;  
+}
+
+inline 
+ void  G4ParticlePropertyData::SetAntiPDGEncoding(G4int aEncoding)
+{ 
+  theAntiPDGEncoding = aEncoding; 
+  fAntiPDGEncodingModified = true;  
+}
+
+inline 
+ void  G4ParticlePropertyData::SetPDGMass(G4double newMass)
+{
+  thePDGMass = newMass;
+  fPDGMassModified = true;
+}
+
+inline 
+ void  G4ParticlePropertyData::SetPDGWidth(G4double newWidth)
+{
+  thePDGWidth = newWidth;
+  fPDGWidthModified = true;
+}
+
+inline 
+ void  G4ParticlePropertyData::SetPDGCharge(G4double newCharge)
+{
+  thePDGCharge = newCharge;
+  fPDGChargeModified = true;		
+}
+  
+inline 
+ void  G4ParticlePropertyData::SetPDGiSpin(G4int newSpin)
+{
+  thePDGiSpin = newSpin; 
+  fPDGiSpinModified = true;
+}
+
+inline 
+ void  G4ParticlePropertyData::SetPDGiParity(G4int newParity)
+{
+  thePDGiParity = newParity;
+  fPDGiParityModified = true;
+}
+
+inline 
+ void  G4ParticlePropertyData::SetPDGiConjugation(G4int newConjugation)
+{ 
+  thePDGiConjugation = newConjugation;
+  fPDGiConjugationModified = true;
+}
+
+inline 
+ void  G4ParticlePropertyData::SetPDGiIsospin(G4int newIsospin)
+{
+  thePDGiIsospin = newIsospin;
+  fPDGiIsospinModified = true;
+}
+
+inline 
+ void  G4ParticlePropertyData::SetPDGiIsospin3(G4int newIsospin3)
+{
+  thePDGiIsospin3 = newIsospin3;
+  fPDGiIsospin3Modified = true;
+}
+
+inline 
+ void  G4ParticlePropertyData::SetPDGiGParity(G4int newGParity)
+{
+ thePDGiGParity = newGParity;
+ fPDGiGParityModified = true;
+}
+  
+inline 
+ void  G4ParticlePropertyData::SetLeptonNumber(G4int newLeptonNumber)
+{
+  theLeptonNumber = newLeptonNumber;
+  fLeptonNumberModified = true;
+}
+
+inline 
+ void  G4ParticlePropertyData::SetBaryonNumber(G4int newBaryonNumber)
+{
+  theBaryonNumber = newBaryonNumber;
+  fBaryonNumberModified = true;
+}
+  
+inline 
+ void  G4ParticlePropertyData::SetQuarkContent(G4int flavor, G4int newContent)
+{
+  if ((flavor>0) && (flavor<=NumberOfQuarkFlavor)){
+    theQuarkContent[flavor-1] = newContent;
+    fQuarkContentModified = true;
+  }
+}
+
+inline 
+ void  G4ParticlePropertyData::SetAntiQuarkContent(G4int flavor, G4int newContent)
+{
+  if ((flavor>0) && (flavor<=NumberOfQuarkFlavor)){
+    theAntiQuarkContent[flavor-1] = newContent;
+    fAntiQuarkContentModified = true;
+  }
+}  
+
+inline 
+ void  G4ParticlePropertyData::SetPDGLifeTime(G4double newLifeTime)
+{
+  thePDGLifeTime = newLifeTime;
+  fPDGLifeTimeModified = true;
+}
+
+
+
+
+

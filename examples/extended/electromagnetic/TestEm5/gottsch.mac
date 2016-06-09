@@ -1,0 +1,31 @@
+# $Id: gottsch.mac,v 1.1 2003/08/11 10:03:21 maire Exp $
+#
+# macro file for TestEm5.cc
+#
+# 158.6  MeV protons, transmitted through 0.2160 g/cm2 Al
+# B.Gottschalk et al. NIM B74 (1993) page 467.
+#
+# proj. angle distr. exp(-0.5*(th/th0)**2)  th0 = 3.534 +- 0.491 mrad
+#
+/control/verbose 2
+/run/verbose 2
+#
+/testem/det/setAbsMat   Aluminium
+/testem/det/setAbsThick 0.8 mm
+/testem/det/setAbsYZ    1 cm
+#
+/testem/phys/setCuts 1 mm
+#
+/run/initialize
+#
+/testem/gun/setDefault
+/gun/particle proton
+/gun/energy 158.6 MeV
+#
+/testem/histo/setFileName gottsch.paw
+/testem/histo/setHisto 5  100  0.0  0.6 deg	#space angle  
+/testem/histo/setHisto 6  100 -0.6 +0.6 deg	#projected angle  
+#
+/testem/stack/killSecondaries
+#
+/run/beamOn 100000

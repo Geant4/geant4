@@ -20,6 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
+// $Id: G4MollerBhabhaModel.hh,v 1.7 2003/07/21 12:52:22 vnivanch Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // -------------------------------------------------------------------
 //
@@ -76,12 +78,12 @@ public:
 
   G4bool IsInCharge(const G4ParticleDefinition*);
 
-  G4double ComputeDEDX(const G4Material*,
+  G4double ComputeDEDX(const G4MaterialCutsCouple*,
                        const G4ParticleDefinition*,
                              G4double kineticEnergy,
                              G4double cutEnergy);
 
-  G4double CrossSection(const G4Material*,
+  G4double CrossSection(const G4MaterialCutsCouple*,
                         const G4ParticleDefinition*,
                               G4double kineticEnergy,
                               G4double cutEnergy,

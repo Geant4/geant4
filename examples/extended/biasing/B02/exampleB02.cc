@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: exampleB02.cc,v 1.15 2003/06/16 16:47:11 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: exampleB02.cc,v 1.16 2003/07/31 08:28:16 dressel Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // 
 // --------------------------------------------------------------
@@ -86,7 +86,7 @@
 
 
 
-int main(int argc, char **argv)
+int main(int , char **)
 {  
   std::ostream *myout = &G4cout;
   G4int numberOfEvent = 100;

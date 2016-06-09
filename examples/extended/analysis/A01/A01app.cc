@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: A01app.cc,v 1.3 2002/12/13 11:34:27 gunter Exp $
+// $Id: A01app.cc,v 1.5 2003/10/13 01:55:51 asaim Exp $
 // --------------------------------------------------------------
 //
 // --------------------------------------------------------------
@@ -39,8 +39,10 @@
 #include "A01DetectorConstruction.hh"
 #include "A01PhysicsList.hh"
 #include "A01PrimaryGeneratorAction.hh"
-#include "A01EventAction.hh"
+
 #include "A01TrackingAction.hh"
+
+#include "A01EventAction.hh"
 
 #ifdef G4VIS_USE
 #include "A01VisManager.hh"
@@ -69,7 +71,7 @@ int main(int argc,char** argv)
 
   // optional user action classes
   runManager->SetUserAction(new A01EventAction);
-  runManager->SetUserAction(new A01TrackingAction);
+  //runManager->SetUserAction(new A01TrackingAction);
 
   if(argc>1)
   // execute an argument macro file if exist

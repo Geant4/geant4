@@ -39,8 +39,8 @@ G4StringChipsInterface::G4StringChipsInterface()
   // theEnergyLossPerFermi = 1.*GeV;
 }
 
-G4VParticleChange* G4StringChipsInterface::
-ApplyYourself(const G4Track& aTrack, G4Nucleus& theNucleus)
+G4HadFinalState* G4StringChipsInterface::
+ApplyYourself(const G4HadProjectile& aTrack, G4Nucleus& theNucleus)
 {
   return theModel.ApplyYourself(aTrack, theNucleus);
 }
@@ -51,7 +51,7 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
   // Protection for non physical conditions
   
   if(theSecondaries->size() == 1) 
-    G4Exception("G4StringChipsInterface: Only one particle from String models!");
+    throw G4HadronicException(__FILE__, __LINE__, "G4StringChipsInterface: Only one particle from String models!");
   
   // Calculate the mean energy lost
   G4Pair<G4double, G4double> theImpact = theNucleus->RefetchImpactXandY();
@@ -260,7 +260,8 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
 
   
   // Chips expects all in target rest frame, along z.
-  G4QCHIPSWorld aWorld(nop);              // Create CHIPS World of nop particles
+  // G4QCHIPSWorld aWorld(nop);              // Create CHIPS World of nop particles
+  G4QCHIPSWorld::Get()->GetParticles(nop);
   G4QHadronVector projHV;
   // target rest frame
   proj4Mom.boost(-1.*targ4Mom.boostVector());
@@ -283,7 +284,22 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
   if (particleCount!=0)
   {
     G4QEnvironment* pan= new G4QEnvironment(projHV, targetPDGCode);
-    output = pan->Fragment();
+    try
+    {
+      output = pan->Fragment();
+    }
+    catch(G4HadronicException & aR)
+    {
+      G4cerr << "Exception thrown passing through G4ChiralInvariantPhaseSpace "<<G4endl;
+      G4cerr << " targetPDGCode = "<< targetPDGCode <<G4endl;
+      G4cerr << " Dumping the information in the pojectile list"<<G4endl;
+      for(size_t i=0; i< projHV.size(); i++)
+      {
+	G4cerr <<"  Incoming 4-momentum and PDG code of "<<i<<"'th hadron: "
+               <<" "<< projHV[i]->Get4Momentum()<<" "<<projHV[i]->GetPDGCode()<<G4endl;
+      }
+      throw;
+    }
     std::for_each(projHV.begin(), projHV.end(), DeleteQHadron());
     projHV.clear();
     delete pan;

@@ -19,7 +19,7 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
-
+//
 #include "G4Fissioner.hh"
 #include "G4InuclNuclei.hh"
 #include "G4FissionStore.hh"
@@ -33,7 +33,7 @@ G4Fissioner::G4Fissioner()
   }
 }
 
-G4CollisionOutput G4Fissioner::collide(G4InuclParticle* bullet,
+G4CollisionOutput G4Fissioner::collide(G4InuclParticle* /*bullet*/,
 				       G4InuclParticle* target) {
 
   if (verboseLevel > 3) {
@@ -280,7 +280,7 @@ void G4Fissioner::potentialMinimization(G4double& VP,
     itry++;
     G4double S = 0.0;
 
-    for (G4int i = 0; i < 2; i++) {
+    for (i = 0; i < 2; i++) {
       S += R[i] * (1.0 + AL1[i] + BET1[i] - 0.257 * AL1[i] * BET1[i]);
     };
     R12 = 0.0;
@@ -385,9 +385,12 @@ void G4Fissioner::potentialMinimization(G4double& VP,
     if (DSOL < DSOL1) break;
   };
 
+  if (verboseLevel > 3) {
   if (itry == itry_max) 
     G4cout << " maximal number of iterations in potentialMinimization " << G4endl
 	   << " A1 " << AF << " Z1 " << ZF << G4endl; 
+
+  };
 
   for (i = 0; i < 2; i++) ED[i] = F[i] * BET1[i] * BET1[i] + C[i] * AL1[i] * AL1[i]; 
 

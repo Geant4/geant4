@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: A01Trajectory.hh,v 1.4 2003/06/16 16:46:59 gunter Exp $
+// $Id: A01Trajectory.hh,v 1.5 2003/07/11 21:32:02 duns Exp $
 // --------------------------------------------------------------
 //
 
@@ -34,6 +34,7 @@ class A01Trajectory;
 #include <stdlib.h>                 // Include from 'system'
 #include "G4ios.hh"                 // Include from 'system'
 #include <vector>             //
+#include <iostream>             //
 #include "globals.hh"               // Include from 'global'
 #include "G4ParticleDefinition.hh"  // Include from 'particle+matter'
 #include "G4TrajectoryPoint.hh"     // Include from 'tracking'
@@ -83,6 +84,7 @@ class A01Trajectory : public G4VTrajectory
 
 // Other member functions
    virtual void ShowTrajectory() const;
+   virtual void ShowTrajectory(std::ostream& o) const;
    virtual void DrawTrajectory(G4int i_mode=0) const;
    virtual void AppendStep(const G4Step* aStep);
    virtual void MergeTrajectory(G4VTrajectory* secondTrajectory);

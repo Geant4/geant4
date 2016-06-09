@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Polyhedra.cc,v 1.6.2.1 2003/06/16 17:18:44 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4Polyhedra.cc,v 1.17 2003/11/22 10:11:41 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // 
 // --------------------------------------------------------------------
@@ -60,6 +60,7 @@
 #include "G4Polyhedron.hh"
 #include "G4EnclosingCylinder.hh"
 #include "G4ReduciblePolygon.hh"
+#include "G4VPVParameterisation.hh"
 
 //
 // Constructor (GEANT3 style parameters)
@@ -78,13 +79,11 @@ G4Polyhedra::G4Polyhedra( const G4String& name,
 {
   if (theNumSide <= 0)
   {
-    G4cout << "ERROR - G4Polyhedra::G4Polyhedra(): " << GetName() << G4endl
-           << "        No sides specified !"
-           << G4endl;
     G4cerr << "ERROR - G4Polyhedra::G4Polyhedra(): " << GetName() << G4endl
            << "        No sides specified !"
            << G4endl;
-    G4Exception("G4Polyhedra::G4Polyhedra() - must have at least one side");
+    G4Exception("G4Polyhedra::G4Polyhedra()", "InvalidSetup",
+                FatalException, "Solid must have at least one side.");
   }
 
   //
@@ -111,6 +110,23 @@ G4Polyhedra::G4Polyhedra( const G4String& name,
   G4int i;
   for (i=0; i<numZPlanes; i++)
   {
+    if (( i < numZPlanes-1) && ( zPlane[i] == zPlane[i+1] ))
+    {
+      if( (rInner[i]   > rOuter[i+1])
+        ||(rInner[i+1] > rOuter[i])   )
+      {
+        DumpInfo();
+        G4cerr << "ERROR - G4Polyhedra::G4Polyhedra()"
+               << G4endl
+               << "        Segments are not contiguous !" << G4endl
+               << "        rMin[" << i << "] = " << rInner[i]
+               << " -- rMax[" << i+1 << "] = " << rOuter[i+1] << G4endl
+               << "        rMin[" << i+1 << "] = " << rInner[i+1]
+               << " -- rMax[" << i << "] = " << rOuter[i] << G4endl;
+        G4Exception("G4Polyhedra::G4Polyhedra()","InvalidSetup",FatalException, 
+                    "Cannot create a Polyhedra with no contiguous segments.");
+      }
+    }
     original_parameters->Z_values[i] = zPlane[i];
     original_parameters->Rmin[i] = rInner[i]/convertRad;
     original_parameters->Rmax[i] = rOuter[i]/convertRad;
@@ -171,13 +187,11 @@ void G4Polyhedra::Create( G4double phiStart,
   //
   if (rz->Amin() < 0.0)
   {
-    G4cout << "ERROR - G4Polyhedra::Create() " << GetName() << G4endl
-           << "        All R values must be >= 0 !"
-           << G4endl;
     G4cerr << "ERROR - G4Polyhedra::Create() " << GetName() << G4endl
            << "        All R values must be >= 0 !"
            << G4endl;
-    G4Exception("G4Polyhedra::Create() - Illegal input parameters");
+    G4Exception("G4Polyhedra::Create()", "InvalidSetup",
+                FatalException, "Illegal input parameters.");
   }
 
   G4double rzArea = rz->Area();
@@ -186,36 +200,30 @@ void G4Polyhedra::Create( G4double phiStart,
 
   else if (rzArea < -kCarTolerance)
   {
-    G4cout << "ERROR - G4Polyhedra::Create() " << GetName() << G4endl
-           << "        R/Z cross section is zero or near zero: "
-           << rzArea << G4endl;
     G4cerr << "ERROR - G4Polyhedra::Create() " << GetName() << G4endl
            << "        R/Z cross section is zero or near zero: "
            << rzArea << G4endl;
-    G4Exception("G4Polyhedra::Create() - Illegal input parameters");
+    G4Exception("G4Polyhedra::Create()", "InvalidSetup",
+                FatalException, "Illegal input parameters.");
   }
     
   if ( (!rz->RemoveDuplicateVertices( kCarTolerance ))
     || (!rz->RemoveRedundantVertices( kCarTolerance )) ) 
   {
-    G4cout << "ERROR - G4Polyhedra::Create() " << GetName() << G4endl
-           << "        Too few unique R/Z values !"
-           << G4endl;
     G4cerr << "ERROR - G4Polyhedra::Create() " << GetName() << G4endl
            << "        Too few unique R/Z values !"
            << G4endl;
-    G4Exception("G4Polyhedra::Create() - Illegal input parameters");
+    G4Exception("G4Polyhedra::Create()", "InvalidSetup",
+                FatalException, "Illegal input parameters.");
   }
 
   if (rz->CrossesItself( 1/kInfinity )) 
   {
-    G4cout << "ERROR - G4Polyhedra::Create() " << GetName() << G4endl
-           << "        R/Z segments cross !"
-           << G4endl;
     G4cerr << "ERROR - G4Polyhedra::Create() " << GetName() << G4endl
            << "        R/Z segments cross !"
            << G4endl;
-    G4Exception("G4Polyhedra::Create() - Illegal input parameters");
+    G4Exception("G4Polyhedra::Create()", "InvalidSetup",
+                FatalException, "Illegal input parameters.");
   }
 
   numCorner = rz->NumVertices();
@@ -426,6 +434,55 @@ void G4Polyhedra::CopyStuff( const G4Polyhedra &source )
 
 
 //
+// Reset
+//
+// Recalculates and reshapes the solid, given pre-assigned
+// original_parameters.
+//
+G4bool G4Polyhedra::Reset()
+{
+  if (!original_parameters)
+  {
+    G4Exception("G4Polyhedra::Reset()", "NotApplicableConstruct",
+                JustWarning, "Parameters NOT resetted.");
+    G4cerr << "Solid " << GetName() << " built using generic construct."
+           << G4endl << "Specify original parameters first !" << G4endl;
+    return 1;
+  }
+
+  //
+  // Clear old setup
+  //
+  G4VCSGfaceted::DeleteStuff();
+  delete [] corners;
+  delete enclosingCylinder;
+
+  //
+  // Rebuild polyhedra
+  //
+  G4ReduciblePolygon *rz =
+    new G4ReduciblePolygon( original_parameters->Rmin,
+                            original_parameters->Rmax,
+                            original_parameters->Z_values,
+                            original_parameters->Num_z_planes );
+  //
+  // Calculate conversion factor
+  //
+  G4double phiTotal = original_parameters->Opening_angle;
+  if ( (phiTotal <=0) || (phiTotal >= 2*M_PI*(1-DBL_EPSILON)) )
+    phiTotal = 2*M_PI;
+  G4double convertRad = cos(0.5*phiTotal/original_parameters->numSide);
+  rz->ScaleA( 1/convertRad );
+
+  Create( original_parameters->Start_angle, phiTotal,
+          original_parameters->numSide, rz );
+  delete rz;
+
+  return 0;
+}
+
+
+//
 // Inside
 //
 // This is an override of G4VCSGfaceted::Inside, created in order
@@ -479,10 +536,11 @@ G4double G4Polyhedra::DistanceToIn( const G4ThreeVector &p ) const
 //
 // ComputeDimensions
 //
-void G4Polyhedra::ComputeDimensions(       G4VPVParameterisation*,
-                                     const G4int,
-                                     const G4VPhysicalVolume* )
+void G4Polyhedra::ComputeDimensions(       G4VPVParameterisation* p,
+                                     const G4int n,
+                                     const G4VPhysicalVolume* pRep )
 {
+  p->ComputeDimensions(*this,n,pRep);
 }
 
 
@@ -518,13 +576,13 @@ std::ostream& G4Polyhedra::StreamInfo( std::ostream& os ) const
       os << "              Z plane " << i << ": "
          << original_parameters->Z_values[i] << "\n";
     }
-    os << "              Tangent distances to inner surface: \n";
+    os << "              Tangent distances to inner surface (Rmin): \n";
     for (i=0; i<numPlanes; i++)
     {
       os << "              Z plane " << i << ": "
          << original_parameters->Rmin[i] << "\n";
     }
-    os << "              Tangent distances to outer surface: \n";
+    os << "              Tangent distances to outer surface (Rmax): \n";
     for (i=0; i<numPlanes; i++)
     {
       os << "              Z plane " << i << ": "
@@ -532,7 +590,7 @@ std::ostream& G4Polyhedra::StreamInfo( std::ostream& os ) const
     }
   }
   os << "    number of RZ points: " << numCorner << "\n"
-     << "              RZ values: \n";
+     << "              RZ values (corners): \n";
      for (i=0; i<numCorner; i++)
      {
        os << "                         "
@@ -582,14 +640,12 @@ G4NURBS *G4Polyhedra::CreateNURBS() const
 
 
 //
-// G4Polyhedra::G4PolyhedraHistorical stuff
+// G4PolyhedraHistorical stuff
 //
-G4Polyhedra::
 G4PolyhedraHistorical::G4PolyhedraHistorical()
 {
 }
 
-G4Polyhedra::
 G4PolyhedraHistorical::~G4PolyhedraHistorical()
 {
   delete [] Z_values;
@@ -597,9 +653,8 @@ G4PolyhedraHistorical::~G4PolyhedraHistorical()
   delete [] Rmax;
 }
 
-G4Polyhedra::
 G4PolyhedraHistorical::
-G4PolyhedraHistorical( const G4PolyhedraHistorical &source )
+G4PolyhedraHistorical( const G4PolyhedraHistorical& source )
 {
   Start_angle   = source.Start_angle;
   Opening_angle = source.Opening_angle;
@@ -610,11 +665,39 @@ G4PolyhedraHistorical( const G4PolyhedraHistorical &source )
   Rmin     = new G4double[Num_z_planes];
   Rmax     = new G4double[Num_z_planes];
   
-  G4int i;
-  for( i = 0; i < Num_z_planes; i++)
+  for( G4int i = 0; i < Num_z_planes; i++)
   {
-    Z_values[i]  = source.Z_values[i];
-    Rmin[i]      = source.Rmin[i];
-    Rmax[i]      = source.Rmax[i];
+    Z_values[i] = source.Z_values[i];
+    Rmin[i]     = source.Rmin[i];
+    Rmax[i]     = source.Rmax[i];
   }
+}
+
+G4PolyhedraHistorical&
+G4PolyhedraHistorical::operator=( const G4PolyhedraHistorical& right )
+{
+  if ( &right == this ) return *this;
+
+  if (&right)
+  {
+    Start_angle   = right.Start_angle;
+    Opening_angle = right.Opening_angle;
+    numSide       = right.numSide;
+    Num_z_planes  = right.Num_z_planes;
+  
+    delete [] Z_values;
+    delete [] Rmin;
+    delete [] Rmax;
+    Z_values = new G4double[Num_z_planes];
+    Rmin     = new G4double[Num_z_planes];
+    Rmax     = new G4double[Num_z_planes];
+  
+    for( G4int i = 0; i < Num_z_planes; i++)
+    {
+      Z_values[i] = right.Z_values[i];
+      Rmin[i]     = right.Rmin[i];
+      Rmax[i]     = right.Rmax[i];
+    }
+  }
+  return *this;
 }

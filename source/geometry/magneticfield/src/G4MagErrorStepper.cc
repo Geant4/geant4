@@ -21,11 +21,12 @@
 // ********************************************************************
 //
 //
-// $Id: G4MagErrorStepper.cc,v 1.11 2002/11/20 18:14:00 japost Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4MagErrorStepper.cc,v 1.12 2003/10/31 14:35:54 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
+// --------------------------------------------------------------------
+
 #include "G4MagErrorStepper.hh"
-#include "G4ThreeVector.hh"
 #include "G4LineSection.hh"
 
 G4MagErrorStepper::~G4MagErrorStepper()

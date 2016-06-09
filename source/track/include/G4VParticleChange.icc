@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VParticleChange.icc,v 1.9 2001/12/24 05:14:39 kurasige Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4VParticleChange.icc,v 1.10 2003/06/11 07:16:28 kurasige Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 //----------------------------------------------------------------
 // Virtual methods for updating G4Step 
@@ -223,29 +223,6 @@ inline void G4VParticleChange::InitializeSecondaries(const G4Track&)
 //----------------------------------------------------------------
 // methods for handling secondaries 
 //
-
-inline void G4VParticleChange::AddSecondary(G4Track *aTrack)
-{
-  if (!fSetSecondaryWeightByProcess){
-    // pass the weight of parent track 
-    aTrack->SetWeight(theParentWeight);
-  }
-
-  // add a secondary after size check
-  if (theSizeOftheListOfSecondaries > theNumberOfSecondaries) {
-    theListOfSecondaries->SetElement(theNumberOfSecondaries, aTrack);
-    theNumberOfSecondaries++;
-  } else {
-#ifdef G4VERBOSE
-    if (verboseLevel>0) {
-      G4cerr << "G4VParticleChange::AddSecondary() Warning  ";
-      G4cerr << "theListOfSecondaries is full !! " << G4endl;
-      G4cerr << " The object will not be added in theListOfSecondaries" << G4endl;
-    }
-#endif
-  }
-}
-
 
 inline void G4VParticleChange::SetNumberOfSecondaries(G4int totSecondaries)
 {

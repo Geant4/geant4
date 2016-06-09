@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: Em8RunAction.hh,v 1.5 2003/06/16 16:47:59 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: Em8RunAction.hh,v 1.7 2003/11/26 13:55:49 vnivanch Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // 
 
@@ -40,11 +40,6 @@
 
 class Em8RunMessenger;
 class G4Run;
-
-#ifndef G4NOHIST
-  class HepTupleManager;
-  class HepHistogram;
-#endif
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -126,17 +121,8 @@ class Em8RunAction : public G4UserRunAction
     
   private:
 
-    void bookHisto();
-
-  private:
-
     G4String histName ;
 
-#ifndef G4NOHIST
-    HepTupleManager* hbookManager;
-    HepHistogram *histo1, *histo2, *histo3, *histo4, *histo5 ;
-    HepHistogram *histo6, *histo7, *histo8, *histo9, *histo10;
-#endif
 
     G4double EnergySumAbs,EnergySquareSumAbs;
     G4double tlSumAbs,tlsquareSumAbs;

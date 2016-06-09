@@ -132,20 +132,17 @@ public:
   AIDA::ITree* tree;
   AIDA::IHistogramFactory* histogramFactory;  
 
-#endif
-
   AIDA::IHistogram1D* getfhistoNPhotG() {return fhistoNrPhotG;}  
   AIDA::IHistogram1D* getfhistoNBeforeMirror() {return fhistoNBeforeMirror;}  
   AIDA::IHistogram1D* getfhistoWBeforeMirror() {return fhistoWBeforeMirror;}  
   AIDA::IHistogram1D* getfhistoWAfterMirror() {return fhistoWAfterMirror;}
- 
-   
-   
- 
+
   AIDA::IHistogram1D* getfhistoCkvProdSmall() {return fhistoCkvProdSmall;}  
   AIDA::IHistogram1D* getfhistoEmisZ() {return fhistoEmisZ;}  
  
   AIDA::IHistogram1D* getfhistoCkvRadius() {return fhistoCkvRadius; }
+
+#endif
  
  public:
 
@@ -185,15 +182,6 @@ public:
   G4double NumHXCoord;
   G4double NumHYCoord;
 
-
-
 };
 
-
 #endif
-
-
-
-
-
-

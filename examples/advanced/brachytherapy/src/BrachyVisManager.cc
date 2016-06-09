@@ -28,8 +28,8 @@
 //    *                             *
 //    *******************************
 //
-// $Id: BrachyVisManager.cc,v 1.6 2003/05/22 17:20:44 guatelli Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: BrachyVisManager.cc,v 1.7 2003/11/12 16:44:13 johna Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 
 #ifdef G4VIS_USE
@@ -46,17 +46,11 @@
 #include "G4DAWNFILE.hh"
 #endif
 
-/*#ifdef G4VIS_USE_OPACS
-#include "G4Wo.hh"
-#include "G4Xo.hh"
-#endif
-*/
 #ifdef G4VIS_USE_OPENGLX
 #include "G4OpenGLImmediateX.hh"
 #include "G4OpenGLStoredX.hh"
 #endif
 
-/*
 #ifdef G4VIS_USE_OPENGLWIN32
 #include "G4OpenGLImmediateWin32.hh"
 #include "G4OpenGLStoredWin32.hh"
@@ -88,7 +82,6 @@
 #ifdef G4VIS_USE_RAYTRACER
 #include "G4RayTracer.hh"
 #endif
-*/
 
 BrachyVisManager::BrachyVisManager () 
 {}
@@ -102,17 +95,12 @@ void BrachyVisManager::RegisterGraphicsSystems ()
 #ifdef G4VIS_USE_DAWNFILE
   RegisterGraphicsSystem (new G4DAWNFILE);
 #endif
-  /*  
-#ifdef G4VIS_USE_OPACS
-  RegisterGraphicsSystem (new G4Wo);
-  RegisterGraphicsSystem (new G4Xo);
-#endif
-  */  
+
 #ifdef G4VIS_USE_OPENGLX
   RegisterGraphicsSystem (new G4OpenGLImmediateX);
   RegisterGraphicsSystem (new G4OpenGLStoredX);
 #endif
-  /*
+
 #ifdef G4VIS_USE_OPENGLWIN32
   RegisterGraphicsSystem (new G4OpenGLImmediateWin32);
   RegisterGraphicsSystem (new G4OpenGLStoredWin32);
@@ -151,7 +139,7 @@ void BrachyVisManager::RegisterGraphicsSystems ()
 	 << G4endl;
     PrintAvailableGraphicsSystems ();
   }
-  */
+
 }
 #endif
 

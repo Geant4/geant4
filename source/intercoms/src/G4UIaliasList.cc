@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4UIaliasList.cc,v 1.5 2002/04/26 22:03:35 asaim Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 
 #include "G4UIaliasList.hh"

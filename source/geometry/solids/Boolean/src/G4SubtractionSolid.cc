@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4SubtractionSolid.cc,v 1.18 2003/06/16 16:53:18 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4SubtractionSolid.cc,v 1.20 2003/11/03 17:48:46 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // Implementation of methods for the class G4IntersectionSolid
 //
@@ -34,14 +34,9 @@
 //                      while -> do-while & surfaceA limitations
 // 13.09.00 V.Grichine: bug fixed in SurfaceNormal(p), p can be inside
 //
-// ********************************************************************
+// --------------------------------------------------------------------
 
 #include "G4SubtractionSolid.hh"
-
-#include "G4RotationMatrix.hh"
-#include "G4ThreeVector.hh"
-#include "G4Transform3D.hh"
-#include "G4AffineTransform.hh"
 
 #include "G4VoxelLimits.hh"
 #include "G4VPVParameterisation.hh"
@@ -49,7 +44,7 @@
 #include "G4VGraphicsScene.hh"
 #include "G4Polyhedron.hh"
 #include "G4NURBS.hh"
-#include "G4NURBSbox.hh"
+// #include "G4NURBSbox.hh"
 
 ///////////////////////////////////////////////////////////////////
 //
@@ -294,7 +289,7 @@ G4SubtractionSolid::DistanceToIn(  const G4ThreeVector& p,
 G4double 
 G4SubtractionSolid::DistanceToIn( const G4ThreeVector& p ) const 
 {
-  G4double dist;
+  G4double dist=0.0;
 
 #ifdef G4BOOLDEBUG
   if( Inside(p) == kInside )
@@ -384,7 +379,7 @@ G4SubtractionSolid::DistanceToOut( const G4ThreeVector& p,
 G4double 
 G4SubtractionSolid::DistanceToOut( const G4ThreeVector& p ) const 
 {
-  G4double dist=kInfinity;
+  G4double dist=0.0;
 
   if( Inside(p) == kOutside )
   { 

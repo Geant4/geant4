@@ -21,14 +21,15 @@
 // ********************************************************************
 //
 //
-// $Id: G4UserSpecialCuts.cc,v 1.9 2003/04/07 14:14:36 vnivanch Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4UserSpecialCuts.cc,v 1.11 2003/11/26 14:51:50 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // --------------------------------------------------------------
 // History
 //
 // 15-04-98 first implementation, mma
 // 07-04-03 migrade to cut per region (V.Ivanchenko)
+// 18-09-03 substitute manager for the loss tables (V.Ivanchenko)
 // --------------------------------------------------------------
 
 #include "G4UserSpecialCuts.hh"
@@ -36,7 +37,7 @@
 #include "G4Step.hh"
 #include "G4UserLimits.hh"
 #include "G4VParticleChange.hh"
-#include "G4EnergyLossTables.hh"
+#include "G4LossTableManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -47,18 +48,21 @@ G4UserSpecialCuts::G4UserSpecialCuts(const G4String& aName)
    {
      G4cout << GetProcessName() << " is created "<< G4endl;
    }
+   theLossTableManager = G4LossTableManager::Instance();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4UserSpecialCuts::~G4UserSpecialCuts()
-{}
+{
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4UserSpecialCuts::G4UserSpecialCuts(G4UserSpecialCuts& right)
   : G4VProcess(right)
-{}
+{
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
  
@@ -98,8 +102,7 @@ PostStepGetPhysicalInteractionLength( const G4Track& aTrack,
      {
        G4double              Ekine    = aTrack.GetKineticEnergy();
        const G4MaterialCutsCouple* couple = aTrack.GetMaterialCutsCouple();
-       G4double RangeNow =
-                G4EnergyLossTables::GetRange(Particle,Ekine,couple);
+       G4double RangeNow = theLossTableManager->GetRange(Particle,Ekine,couple);
        temp = (RangeNow - pUserLimits->GetUserMinRange(aTrack));
        if (temp < 0.) return 0.;
        if (ProposedStep > temp) ProposedStep = temp;
@@ -107,7 +110,7 @@ PostStepGetPhysicalInteractionLength( const G4Track& aTrack,
        // min kinetic energy (only for charged particle)
        //
        G4double Emin = pUserLimits->GetUserMinEkine(aTrack);
-       G4double Rmin = G4EnergyLossTables::GetRange(Particle,Emin,couple);
+       G4double Rmin = theLossTableManager->GetRange(Particle,Emin,couple);
        temp = RangeNow - Rmin;
        if (temp < 0.) return 0.;
        if (ProposedStep > temp) ProposedStep = temp;

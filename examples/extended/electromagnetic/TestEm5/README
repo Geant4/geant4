@@ -1,5 +1,5 @@
-$Id: README,v 1.8 2003/05/30 10:43:38 urban Exp $
--------------------------------------------------------------------
+$Id: README,v 1.9 2003/08/11 10:02:42 maire Exp $
+-----------------------------------------------------
 
      =========================================================
      Geant4 - an Object-Oriented Toolkit for Simulation in HEP
@@ -7,150 +7,139 @@ $Id: README,v 1.8 2003/05/30 10:43:38 urban Exp $
 
                             TestEm5   
                             -------
-
+ The purpose of this example is to study the transmission, absorption and
+ reflexion of particles through a single, thin or thick, layer of material.
+ In perticular, the effects of the multiple scattering can be easily ploted.  
 	
  1- GEOMETRY DEFINITION
  
- 	The "absorber" is a box made of a given material.                
+ The "absorber" is a box made of a given material.                
  	
- 	Three parameters define the absorber :
- 	- the material of the absorber,
-	- the thickness of an absorber,
- 	- the transverse size of the absorber (the input face is a square). 
+ Three parameters define the absorber :
+ - the material of the absorber,
+ - the thickness of an absorber,
+ - the transverse size of the absorber (the input face is a square). 
     
-        The volume "World" contains the "absorber". 
-        In this test the parameters of the "World" can be changed, too.
+ A volume "World" contains the "absorber". 
 
- 	In addition a transverse uniform magnetic field can be applied.
+ In addition a transverse uniform magnetic field can be applied.
  	
- 	The default geometry is constructed in DetectorConstruction class,
- 	but all the parameters can be changed via
- 	the commands defined in the DetectorMessenger class.
+ The default geometry is constructed in DetectorConstruction class, but all the
+ parameters can be changed via commands defined in the DetectorMessenger class.
+ The parameters of the "World" can be changed, too.
  	
  2- AN EVENT : THE PRIMARY GENERATOR
  
- 	The primary kinematic consists of a single particle which hits the
- 	absorber perpendicular to the input face. The type of the particle
- 	and its energy are set in the PrimaryGeneratorAction class, and can
- 	be changed via the G4 build-in commands of ParticleGun class (see
- 	the macros provided with this example).
+ The primary kinematic consists of a single particle which hits the absorber 
+ perpendicular to the input face. The type of the particle and its energy are 
+ set in the PrimaryGeneratorAction class, and can be changed via the G4 build-in
+ commands of ParticleGun class (see the macros provided with this example).
 	
- 	In addition one can choose randomly the impact point of the incident
- 	particle. The corresponding interactive command is built in
- 	PrimaryGeneratorMessenger class.
- 	
- 	A RUN is a set of events.
- 	
- 3- DETECTOR RESPONSE
+ In addition one can choose randomly the impact point of the incident particle.
+ The interactive command is built in PrimaryGeneratorMessenger class.
  
- 	A HIT is a record, event per event , of all the 
- 	informations needed to simulate and analyse the detector response.
- 	
- 	In this example a CalorHit is defined as a set of 2 informations:
- 	- the total energy deposit in the absorber,
- 	- the total tracklength of all charged particles in the absorber,  
- 	
- 	Therefore  the absorber is declared
- 	'sensitive detector' (SD), which means they can contribute to the hit.
- 	
- 	At the end of a run, from the histogram(s), one can study 
-	different physics quantities such as :
-                                - angle distribution,
-				- energy deposit,
- 				- transmission/backscattering,
- 				-  ...
-        
-        The test contains 10 built-in histograms, which can be activated by
-        interactive commands (see the macros runxx.mac for details).
-        The histograms/plots are in printed form in the corresponding 
-        resultxx (for GEANT4) and outxx (for GEANT3) files, and they are
-        saved as geant4.plotxx and geant3.plotxx histogram files, too.
-
-        The histogram files can be viewed using PAW e.g with the commands 
-
-                paw> h/file 1 geant4.plot01 
-                paw> option stat
-                paw> h/pl 1
- 				
- 4- VISUALIZATION
+ 3- VISUALIZATION
  
- 	The Visualization Manager is set in the main().
- 	The initialisation of the drawing is done via the commands
- 	/vis/... in the macro vis.mac. In interactive session:
-	PreInit or Idle > /control/execute vis.mac
+ The Visualization Manager is set in the main().
+ The initialisation of the drawing is done via the commands in vis.mac
+ In interactive session:
+ PreInit or Idle > /control/execute vis.mac
  	
- 	The detector has a default view which is a longitudinal view of the 
- 	calorimeter.
+ The example has a default view which is a longitudinal view of the detector.
  	
- 	The tracks are drawn at the end of event, and erased at the end of run.
- 	Optionaly one can choose to draw all particles, only the charged one,
- 	or none. This command is defined in EventActionMessenger class.
- 				
- 5- PHYSICS DEMO
+ The tracks are drawn at the end of event, and erased at the end of run.
+ Optionaly one can choose to draw all particles, only the charged, or none.
+ This command is defined in EventActionMessenger class.
  
- 	The particle's type and the physic processes which will be available
- 	in this example are set in PhysicsList class.
- 	
- 	The  messenger classes introduce interactive commands . Using these
-        commands the geometry of the detector, the data of the primary
-        particle, the limits of the histograms , etc. can be changed.
- 	
- 6- HOW TO START ?
+ 4- TRACKING
  
- 	- compile and link to generate an executable
- 		% cd TestEm5
- 		% gmake
- 		
- 	- execute TestEm5 in 'batch' mode from macro files e.g.
- 		% $(G4INSTALL)/bin/$(G4SYSTEM)/TestEm5   run01.mac
-		
- 	- execute TestEm5 in 'interactive' mode with visualization e.g.
- 		% $(G4INSTALL)/bin/$(G4SYSTEM)/TestEm5
-		....
-		Idle> type your commands
-		....
-		
- 7- GEANT4/GEANT3/exp.data comparison
-
-        A GEANT4/GEANT3/exp. data comparison is given here for a few cases.
-        
-        The GEANT4 results can be found in the results/ directory, the resultxx
-        output was obtained with the runxx.mac macro.
-
-        The relevant part of the GEANT3 code is in the geant3/ directory
-        together with the runxx.dat input files. The outputs of the GEANT3 runs
-        geant3/results subdirectory.
-	
-        In order to make an executable of GEANT3 the gmakeB command should be
-        used in the geant3/ subdirectory.To run this executable with a given
-        input file the input file name should be given when it is being asked
-        by the program.(see geant3/README)
- 		
- 	The expdata/  directory contains some information
-        on the experimental data. 
- 	  
- 	
+ During the tracking, one can keep or not the secondaries : see StackingAction
+ class and its Messenger.
+ One can also limit 'by hand' the step lenght of the particle. As an example,
+ this limitation is implemented as a 'full' process : see StepMax class and its
+ Messenger. The 'StepMax process' is registered in the Physics List. 
+  	
+ 5- DETECTOR RESPONSE
+  	
+ At the end of a run, from the histogram(s), one can study different
+ physics quantities such as :
+ - energy deposit in the absorber,
+ - energy spectrum of secondaries at creation, 
+ - energy spectrum and angle distribution of particles at exit,
+ - transmission and backscattering coefficients,
+ -  ...
+ 
  List of the built-in histograms
  -------------------------------
+        
+ The test contains 16 built-in 1D histograms, which are managed by the
+ HistoManager class and its Messenger. The histos can be individually activated
+ with the command :
+ /testem/histo/setHisto id nbBins  valMin valMax unit 
+ where unit is the desired unit for the histo (MeV or keV, deg or mrad, etc..)
+ (see the macros xxxx.mac).
+ 
+	1	"energy deposit in absorber"
+	2	"energy of charged secondaries at creation"
+	3	"energy of gammas at creation (log10(Ekin/MeV))"
+	4	"(transmit, charged) : kinetic energy at exit"
+	5	"(transmit, charged) : space angle at exit"
+	6	"(transmit, charged) : projected angle at exit"
+	7	"(transmit, charged) : radial dispersion at exit"
+	8	"(transmit, neutral) : kinetic energy at exit"
+	9	"(transmit, neutral) : space angle at exit"
+	10	"(transmit, neutral) : projected angle at exit"
+	11	"(reflect , charged) : kinetic energy at exit"
+	12	"(reflect , charged) : space angle at exit"
+	13	"(reflect , charged) : projected angle at exit"
+	14	"(reflect , neutral) : kinetic energy at exit"
+	15	"(reflect , neutral) : space angle at exit"
+	16	"(reflect , neutral) : projected angle at exit"
 
-        1.   number of (tracking) steps/event
-        2.   energy deposit distribution in the absorber (in MeV)
-        3.   angle distribution of the primary particle at the exit
-             of the absorber (deg)
-        4.   distribution of the lateral displacement at exit(mm)
-        5.   kinetic energy of the transmitted primaries (MeV)
-        6.   angle distribution of the backscattered primaries (deg)
-        7.   kinetic energy of the backscattered primary particles (MeV)
-        8.   kinetic energy of the charged secondary particles (MeV)
-        9.   z distribution of the secondary charged vertices (mm)
-       10.   kinetic energy of the photons escaping the absorber (MeV)
-       11.   projected angle distribution of the primary particle
-             at exit of the absorber (deg) 
+ The histograms can be viewed using PAW. See below the note on ANAPHE+AIDA.
+ 	
+ Note that, by default, histograms are disabled. To activate them, uncomment 
+ the flag G4ANALYSIS_USE in GNUmakefile. 	
+ 				
+ 6- GEANT4/GEANT3/DATA COMPARISON
 
-     Note that histograms are disabled via the flag G4NOHIST in GNUmakefile.
-     
- 8- Using the Anaphe implementation of the AIDA 3.0 histograms:
- --------------------------------------------------------------
+ A Geant4/Geant3/exp. data comparison is given here for a few cases.
+ These cases can be classified as follow:
+ - e-/e+ incident particles versus protons and others. 
+ - 3 energy regimes : low: < 1 MeV; medium: 1MeV -> few 10 MeV; high: > 100 MeV
+ 
+ We indicate here the corresponding macros.
+ 
+ 	      |	low energy   |	medium energy	|  high energy
+	--------------------------------------------------------
+	e-+   |	berger.mac   |	hanson.mac      |
+	      |		     |	kulchi.mac      |
+	--------------------------------------------------------
+	others|	bichsel.mac  | 	vincour.mac	|  shen1.mac shen2.mac
+	      | 	     |	gottsch.mac	|  tramu.mac
+	--------------------------------------------------------
+
+ The relevant part of the GEANT3 code is in the subdirectory geant3 together 
+ with the xxxx.dat input files.
+	
+ 7- HOW TO START ?
+ 
+ - compile and link to generate an executable
+ 	% cd TestEm5
+ 	% gmake
+ 		
+ - execute TestEm5 in 'batch' mode from macro files e.g.
+ 	% $(G4INSTALL)/bin/$(G4SYSTEM)/TestEm5   myMacro.mac
+		
+ - execute TestEm5 in 'interactive' mode with visualization e.g.
+ 	% $(G4INSTALL)/bin/$(G4SYSTEM)/TestEm5
+	Then type your commands, for instance :
+	Idle> control/execute vis.mac
+	Idle> run/beamOn 5
+	....
+		    
+ Note - Using the Anaphe implementation of the AIDA 3.0 histograms:
+ ------------------------------------------------------------------
 
  In order to use the Anaphe implementation of the AIDA 3.0 interfaces, 
  the 'aida-config' command (which is used in the GNUmakefile) is 

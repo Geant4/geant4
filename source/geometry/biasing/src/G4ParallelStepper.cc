@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParallelStepper.cc,v 1.10 2003/04/03 08:01:36 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4ParallelStepper.cc,v 1.11 2003/10/22 13:52:10 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -107,6 +107,7 @@ void G4ParallelStepper::UnSetCrossBoundary()
 
 void G4ParallelStepper::Error(const G4String &m)
 {
-  G4cout << "ERROR: in G4ParallelStepper::" << m << G4endl;
-  G4Exception("Program aborted.");
+  G4cout << "ERROR: in G4ParallelStepper: " << m << G4endl;
+  G4Exception("G4ParallelStepper::Error()",
+              "FatalException", FatalException, m);
 }

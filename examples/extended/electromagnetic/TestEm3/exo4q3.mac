@@ -1,4 +1,4 @@
-# $Id: exo4q3.mac,v 1.4 2003/03/06 18:15:00 maire Exp $
+# $Id: exo4q3.mac,v 1.5 2003/09/23 17:27:32 maire Exp $
 #
 # Macro file for "TestEm3.cc" 
 #
@@ -6,21 +6,14 @@
 #
 /control/verbose 2
 #
-#  select EM PhysicsList
-#
-#/testem/phys/addPhysics  model
-/testem/phys/addPhysics  standard
-#
-/testem/phys/setCuts 10 mum
-/run/initialize
-#
 /testem/det/setNbOfLayers 1
 /testem/det/setNbOfAbsor 1
 /testem/det/setAbsor 0 Aluminium 1 cm
 /testem/det/setSizeYZ 1 cm
-/testem/det/update
 #
-/testem/gun/setDefault
+/testem/phys/setCuts 10 mum
+#
+/run/initialize
 #
 /control/execute vis.mac
 #
@@ -28,6 +21,7 @@
 /process/inactivate msc
 /process/inactivate eBrem
 #
+/testem/gun/setDefault
 /gun/particle e-
 /gun/energy 200 MeV
 /gun/position -6. +2.5 0. mm 

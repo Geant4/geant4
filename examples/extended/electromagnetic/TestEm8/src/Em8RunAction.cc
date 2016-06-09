@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: Em8RunAction.cc,v 1.8 2003/06/16 16:48:02 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: Em8RunAction.cc,v 1.11 2003/11/26 13:55:51 vnivanch Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // 
 
@@ -37,10 +37,7 @@
 #include <iomanip>
 
 #include "Randomize.hh"
-#ifndef G4NOHIST
-  #include "CLHEP/Hist/HBookFile.h"
-#endif
-#include <assert.h>
+
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -51,10 +48,6 @@ Em8RunAction::Em8RunAction()
 {
   runMessenger = new Em8RunMessenger(this);
   saveRndm = 1;  
-#ifndef G4NOHIST
-  histo1=0; histo2=0; histo3=0; histo4=0; histo5=0;
-  histo6=0; histo7=0; histo8=0; histo9=0; histo10=0;
-#endif
 }
 
 ////////////////////////////////////////////////////////////////////////////
@@ -62,96 +55,8 @@ Em8RunAction::Em8RunAction()
 Em8RunAction::~Em8RunAction()
 {
   delete runMessenger;
-#ifndef G4NOHIST
-  if(histo1) delete histo1 ;
-  if(histo2) delete histo2 ;
-  if(histo3) delete histo3 ;
-  if(histo4) delete histo4 ;
-  if(histo5) delete histo5 ;
-  if(histo6) delete histo6 ;
-  if(histo7) delete histo7 ;
-  if(histo8) delete histo8 ;
-  if(histo9) delete histo9 ;
-  if(histo10) delete histo10 ;
-  delete hbookManager;
-#endif
 }
 
-////////////////////////////////////////////////////////////////////////////////
-
-void Em8RunAction::bookHisto()
-{
-#ifndef G4NOHIST
-  // init hbook
-
-  hbookManager = new HBookFile(histName, 68);
-  assert (hbookManager != 0);
-
-  // book histograms
-
-  if(nbinStep>0)
-  {
-    histo1 = hbookManager->histogram("number of steps/event"
-                                   ,nbinStep,Steplow,Stephigh) ;
-    assert (histo1 != 0);
-  }
-  if(nbinEn>0)
-  {
-    histo2 = hbookManager->histogram("Energy Loss (keV)"
-                                     ,nbinEn,Enlow/keV,Enhigh/keV) ;
-    assert (histo2 != 0);
-  }
-  if(nbinTh>0)
-  {
-    histo3 = hbookManager->histogram("angle distribution at exit(deg)"
-                                     ,nbinTh,Thlow/deg,Thhigh/deg) ;
-    assert (histo3 != 0);
-  }
-  if(nbinR>0)
-  {
-    histo4 = hbookManager->histogram("lateral distribution at exit(mm)"
-                                     ,nbinR ,Rlow,Rhigh)  ;
-    assert (histo4 != 0);
-  }
-  if(nbinTt>0)
-  {
-    histo5 = hbookManager->histogram("kinetic energy of the primary at exit(MeV)"
-                                     ,nbinTt,Ttlow,Tthigh)  ;
-    assert (histo5 != 0);
-  }
-  if(nbinThback>0)
-  {
-    histo6 = hbookManager->histogram("angle distribution of backscattered primaries(deg)"
-                                     ,nbinThback,Thlowback/deg,Thhighback/deg) ;
-    assert (histo6 != 0);
-  }
-  if(nbinTb>0)
-  {
-    histo7 = hbookManager->histogram("kinetic energy of the backscattered primaries (MeV)"
-                                     ,nbinTb,Tblow,Tbhigh)  ;
-    assert (histo7 != 0);
-  }
-  if(nbinTsec>0)
-  {
-    histo8 = hbookManager->histogram("kinetic energy of the charged secondaries (MeV)"
-                                     ,nbinTsec,Tseclow,Tsechigh)  ;
-    assert (histo8 != 0);
-  }
-  if(nbinvertexz>0)
-  {
-    histo9 = hbookManager->histogram("z of secondary charged vertices(mm)"
-                                     ,nbinvertexz ,zlow,zhigh)  ;
-    assert (histo9 != 0);
-  }
-  if(nbinGamma>0)
-  {
-    histo10= hbookManager->histogram("kinetic energy of gammas escaping the absorber (MeV)"
-                                //     ,nbinGamma,ElowGamma,EhighGamma)  ;
-                                ,nbinGamma,log10(ElowGamma),log10(EhighGamma))  ;
-    assert (histo10 != 0);
-  }
-#endif
-}
 
 /////////////////////////////////////////////////////////////////////////////
 
@@ -310,8 +215,6 @@ void Em8RunAction::BeginOfRunAction(const G4Run* aRun)
       distvertexz[iz]=0.;
     }
   }
-
-  bookHisto();
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -432,7 +335,7 @@ void Em8RunAction::EndOfRunAction(const G4Run* aRun)
     std::ofstream normOut("normDist.out", std::ios::out ) ;
     normOut.setf( std::ios::scientific, std::ios::floatfield );
 
-    G4double E , dnorm, norm,fmax,Emp,width ;
+    G4double E , dnorm, norm,fmax,Emp; // width ;
     Emp=-999.999 ;
     G4cout << " energy deposit distribution " << G4endl ;
     G4cout << "#entries=" << entryEn << "    #underflows=" << underEn <<
@@ -749,11 +652,6 @@ void Em8RunAction::EndOfRunAction(const G4Run* aRun)
   {
     G4UImanager::GetUIpointer()->ApplyCommand("/vis/viewer/update");
   }
-  // Write histogram file
-
-#ifndef G4NOHIST
-  hbookManager->write();
-#endif
 
   // save Rndm status
 
@@ -813,42 +711,17 @@ void Em8RunAction::AddTrRef(G4double tr,G4double ref)
 
 /////////////////////////////////////////////////////////////////////////////
 
-void Em8RunAction::FillNbOfSteps(G4double ns)
-{
-#ifndef G4NOHIST
-  const G4double eps = 1.e-10 ;
-  G4double n,bin ;
-  G4int ibin;
-
-  if(histo1)
-  {
-    entryStep += 1. ;
- 
-    if(ns<Steplow)
-      underStep += 1. ;
-    else if(ns>=Stephigh)
-      overStep  += 1. ;
-    else
-    {
-      n = ns+eps ;
-      bin = (n-Steplow)/dStep ;
-      ibin= (G4int)bin ;
-      distStep[ibin] += 1. ;
-    }
-   histo1->accumulate(ns) ;
-  }
-#endif
-}
+void Em8RunAction::FillNbOfSteps(G4double)
+{}
 
 //////////////////////////////////////////////////////////////////////////////
 
 void Em8RunAction::FillEn(G4double En)
 {
-  // #ifndef G4NOHIST
+
   G4double bin ;
   G4int ibin;
 
-  //  if(histo2)
   {
     entryEn += 1. ;
  
@@ -860,260 +733,55 @@ void Em8RunAction::FillEn(G4double En)
       ibin= (G4int)bin ;
       distEn[ibin] += 1. ;
     }
-    // histo2->accumulate(En/keV) ; // was /MeV
   }
-  // #endif
 }
 
 ////////////////////////////////////////////////////////////////////////////
 
-void Em8RunAction::FillTt(G4double En)
+void Em8RunAction::FillTt(G4double)
 {
-#ifndef G4NOHIST
-  G4double bin ;
-  G4int ibin;
-
-  if(histo5)
-  {
-    entryTt += 1. ;
-    Ttmean += En ;
-    Tt2mean += En*En ;
-
-    if(En<Ttlow)
-      underTt += 1. ;
-    else if(En>=Tthigh)
-      overTt  += 1. ;
-    else
-    {
-      bin = (En-Ttlow)/dTt ;
-      ibin= (G4int)bin ;
-      distTt[ibin] += 1. ;
-    }
-  histo5->accumulate(En/MeV) ;
-  }
-#endif
 }
 
 //////////////////////////////////////////////////////////////////////////////
 
-void Em8RunAction::FillTb(G4double En)
+void Em8RunAction::FillTb(G4double)
 {
-#ifndef G4NOHIST
-  G4double bin ;
-  G4int ibin;
-  
-  if(histo7)
-  {
-    entryTb += 1. ;
-    Tbmean += En ;
-    Tb2mean += En*En ;
-
-    if(En<Tblow)
-      underTb += 1. ;
-    else if(En>=Tbhigh)
-      overTb  += 1. ;
-    else
-    {
-      bin = (En-Tblow)/dTb ;
-      ibin= (G4int)bin ;
-      distTb[ibin] += 1. ;
-    }
-  histo7->accumulate(En/MeV) ;
-  }
-#endif
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 
-void Em8RunAction::FillTsec(G4double En)
+void Em8RunAction::FillTsec(G4double)
 {
-#ifndef G4NOHIST
-  G4double bin ;
-  G4int ibin;
-
-  if(histo8)
-  {
-    entryTsec += 1. ;
-
-    if(En<Tseclow)
-      underTsec += 1. ;
-    else if(En>=Tsechigh)
-      overTsec  += 1. ;
-    else
-    {
-      bin = (En-Tseclow)/dTsec ;
-      ibin= (G4int)bin ;
-      distTsec[ibin] += 1. ;
-    }
-  histo8->accumulate(En/MeV) ;
-  }
-#endif
 }
 
 /////////////////////////////////////////////////////////////////////////////
 
-void Em8RunAction::FillGammaSpectrum(G4double En)
+void Em8RunAction::FillGammaSpectrum(G4double)
 {
-#ifndef G4NOHIST
-  G4double bin ;
-  G4int ibin;
-
-  if(histo10)
-  {
-    entryGamma += 1. ;
-
-    if(En<ElowGamma)
-      underGamma += 1. ;
-    else if(En>=EhighGamma)
-      overGamma  += 1. ;
-    else
-    {
-      bin = log(En/ElowGamma)/dEGamma;
-      ibin= (G4int)bin ;
-      distGamma[ibin] += 1. ;
-    }
-  histo10->accumulate(log10(En/MeV)) ;
-  }
-#endif
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 
-void Em8RunAction::FillTh(G4double Th)
+void Em8RunAction::FillTh(G4double)
 {
-#ifndef G4NOHIST
-  static const G4double cn=pi/(64800.*dTh) ;
-  static const G4double cs=pi/
-        (64800.*(cos(Thlow)-cos(Thlow+dTh)));      
-  G4double bin,Thbin ,wg;
-  G4int ibin;
-
-  if(histo3)
-  {
-    entryTh += 1. ;
-
-    wg = 0.;
-
-    if(Th<Thlow)
-      underTh += 1. ;
-    else if(Th>=Thhigh)
-      overTh  += 1. ;
-    else
-    {
-      bin = (Th-Thlow)/dTh ;
-      ibin= (G4int)bin ;
-      Thbin = Thlow+ibin*dTh ;
-      if(Th > 0.001*dTh)
-        wg=cn/sin(Th) ;
-      else
-      {  
-        G4double thdeg=Th*180./pi;
-        G4cout << "theta < 0.001*dth (from plot excluded) theta="
-               << std::setw(12) << std::setprecision(4) << thdeg << G4endl;
-        wg=0. ; 
-      }
-      distTh[ibin] += wg  ;
-    }
-
-  histo3->accumulate(Th/deg, wg) ;
-  }
-#endif
 }
 
 //////////////////////////////////////////////////////////////////////////
 
-void Em8RunAction::FillThBack(G4double Th)
+void Em8RunAction::FillThBack(G4double)
 {
-#ifndef G4NOHIST
-  static const G4double cn=pi/(64800.*dThback) ;
-  static const G4double cs=pi/
-        (64800.*(cos(Thlowback)-cos(Thlowback+dThback)));      
-  G4double bin,Thbin,wg ;
-  G4int ibin;
-
-  if(histo6)
-  {
-    entryThback += 1. ;
-
-    if(Th<Thlowback)
-      underThback += 1. ;
-    else if(Th>=Thhighback)
-      overThback  += 1. ;
-    else
-    {
-      bin = (Th-Thlowback)/dThback ;
-      ibin= (G4int)bin ;
-      Thbin = Thlowback+ibin*dThback ;
-      if(Th > 0.001*dThback)
-        wg=cn/sin(Th) ;
-      else
-      {  
-        G4double thdeg=Th*180./pi;
-        G4cout << "theta < 0.001*dth (from plot excluded) theta="
-               << std::setw(12) << std::setprecision(4) << thdeg << G4endl;
-        wg=0. ; 
-      }
-      distThback[ibin] += wg  ;
-    }
-  histo6->accumulate(Th/deg, wg) ;
-  }
-#endif
 }
 
 //////////////////////////////////////////////////////////////////////////
 
-void Em8RunAction::FillR(G4double R )
+void Em8RunAction::FillR(G4double)
 {
-#ifndef G4NOHIST
-  G4double bin ;
-  G4int ibin;
-
-  if(histo4)
-  {
-    entryR  += 1. ;
-    Rmean += R ;
-    R2mean += R*R ;
-
-    if(R <Rlow)
-      underR  += 1. ;
-    else if(R >=Rhigh)
-      overR   += 1. ;
-    else
-    {
-      bin = (R -Rlow)/dR  ;
-      ibin= (G4int)bin ;
-      distR[ibin] += 1. ;
-    }
-  histo4->accumulate(R/mm) ;
-  }
-#endif
 }
 
 /////////////////////////////////////////////////////////////////////////////
 
-void Em8RunAction::Fillvertexz(G4double z )
+void Em8RunAction::Fillvertexz(G4double)
 {
-#ifndef G4NOHIST
-  G4double bin ;
-  G4int ibin;
-  
-  if(histo9)
-  {
-    entryvertexz  += 1. ;
-
-    if(z <zlow)
-      undervertexz  += 1. ;
-    else if(z >=zhigh)
-      oververtexz   += 1. ;
-    else
-    {
-      bin = (z -zlow)/dz  ;
-      ibin = (G4int)bin ;
-      distvertexz[ibin] += 1. ;
-    }
-  histo9->accumulate(z/mm) ;
-  }
-#endif
 }
 
 //////////////////////////////////////////////////////////////////////////////

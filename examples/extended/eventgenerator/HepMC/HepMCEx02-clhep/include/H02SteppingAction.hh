@@ -19,11 +19,11 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
-
+//
 // ====================================================================
 //
 //   H02SteppingAction.hh
-//   $Id: H02SteppingAction.hh,v 1.1 2002/11/19 10:35:49 murakami Exp $
+//   $Id: H02SteppingAction.hh,v 1.2 2003/12/09 15:31:47 gunter Exp $
 //
 // ====================================================================
 #ifndef H02_STEPPING_ACTION_H

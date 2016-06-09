@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4UserStackingAction.hh,v 1.5 2001/07/11 09:58:50 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 
 #ifndef G4UserStackingAction_h

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleChangeForDecay.cc,v 1.7.12.1 2003/06/16 17:19:31 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4ParticleChangeForDecay.cc,v 1.9 2003/06/19 14:45:07 gunter Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // 
 // --------------------------------------------------------------
@@ -40,6 +40,7 @@
 #include "G4Step.hh"
 #include "G4TrackFastVector.hh"
 #include "G4DynamicParticle.hh"
+#include "G4ExceptionSeverity.hh"
 
 G4ParticleChangeForDecay::G4ParticleChangeForDecay():G4VParticleChange()
 {
@@ -160,21 +161,30 @@ G4bool G4ParticleChangeForDecay::CheckIt(const G4Track& aTrack)
   G4bool itsOK =true;
   accuracy = -1.0*(theTimeChange - aTrack.GetGlobalTime())/ns;
   if (accuracy > accuracyForWarning) {
+#ifdef G4VERBOSE
     G4cout << "  G4ParticleChangeForDecay::CheckIt    : ";
     G4cout << "the global time goes back  !!" << G4endl;
     G4cout << "  Difference:  " << accuracy  << "[ns] " <<G4endl;
+#endif
     itsOK = false;
     if (accuracy > accuracyForException) exitWithError = true;
   }
 
   // dump out information of this particle change
+#ifdef G4VERBOSE
   if (!itsOK) { 
     G4cout << " G4ParticleChangeForDecay::CheckIt " <<G4endl;
     DumpInfo();
   }
+#endif
 
   // Exit with error
-  if (exitWithError) G4Exception("G4ParticleChangeForDecay::CheckIt");
+  if (exitWithError) {
+    G4Exception("G4ParticleChangeForDecay::CheckIt",
+		"500",
+		EventMustBeAborted,
+		"time was  illegal");
+  } 
 
   // correction
   if (!itsOK) {

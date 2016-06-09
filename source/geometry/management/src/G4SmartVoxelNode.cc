@@ -21,13 +21,14 @@
 // ********************************************************************
 //
 //
-// $Id: G4SmartVoxelNode.cc,v 1.4 2002/04/19 08:20:22 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4SmartVoxelNode.cc,v 1.5 2003/11/02 14:01:23 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // Class G4SmartVoxelNode
 //
 // Implementation
 //
+// --------------------------------------------------------------------
 
 #include "G4SmartVoxelNode.hh"
 
@@ -44,17 +45,17 @@ G4SmartVoxelNode::~G4SmartVoxelNode()
 // Node contents were entered in the same order
 G4bool G4SmartVoxelNode::operator == (const G4SmartVoxelNode& v) const
 {
-    G4int maxNode=GetNoContained();
-    if (maxNode==v.GetNoContained())
-	{
-	    for (G4int node=0;node<maxNode;node++)
-		{
-		    if (GetVolume(node)!=v.GetVolume(node))
-			{
-			    return false;
-			}
-		}
-	    return true;
-	}
-    return false;
+  G4int maxNode=GetNoContained();
+  if (maxNode==v.GetNoContained())
+  {
+    for (G4int node=0;node<maxNode;node++)
+    {
+      if (GetVolume(node)!=v.GetVolume(node))
+      {
+        return false;
+      }
+    }
+    return true;
+  }
+  return false;
 }

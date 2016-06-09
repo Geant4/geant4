@@ -21,8 +21,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4LightMedia.hh,v 1.6 2003/06/03 09:20:33 hpw Exp $
-// GEANT4 tag $Name: geant4-05-02 $
 //
  // Hadronic Process: Light Media Charge and/or Strangeness Exchange
  // J.L. Chuma, TRIUMF, 21-Feb-1997
@@ -57,91 +55,91 @@
     { return ( this != (G4LightMedia *) &right ); }
     
     G4DynamicParticle * PionPlusExchange(
-     const G4DynamicParticle *incidentParticle,
+     const G4HadProjectile *incidentParticle,
      const  G4Nucleus &aNucleus );
     
     G4DynamicParticle * PionMinusExchange(
-     const G4DynamicParticle *incidentParticle,
+     const G4HadProjectile *incidentParticle,
      const  G4Nucleus &aNucleus );
     
     G4DynamicParticle * KaonPlusExchange(
-     const G4DynamicParticle *incidentParticle,
+     const G4HadProjectile *incidentParticle,
      const  G4Nucleus &aNucleus );
     
     G4DynamicParticle * KaonZeroShortExchange(
-     const G4DynamicParticle *incidentParticle,
+     const G4HadProjectile *incidentParticle,
      const  G4Nucleus &aNucleus );
     
     G4DynamicParticle * KaonZeroLongExchange(
-     const G4DynamicParticle *incidentParticle,
+     const G4HadProjectile *incidentParticle,
      const  G4Nucleus &aNucleus );
     
     G4DynamicParticle * KaonMinusExchange(
-     const G4DynamicParticle *incidentParticle,
+     const G4HadProjectile *incidentParticle,
      const  G4Nucleus &aNucleus );
     
     G4DynamicParticle * ProtonExchange(
-     const G4DynamicParticle *incidentParticle,
+     const G4HadProjectile *incidentParticle,
      const  G4Nucleus &aNucleus );
     
     G4DynamicParticle * AntiProtonExchange(
-     const G4DynamicParticle *incidentParticle,
+     const G4HadProjectile *incidentParticle,
      const  G4Nucleus &aNucleus );
     
     G4DynamicParticle * NeutronExchange(
-     const G4DynamicParticle *incidentParticle,
+     const G4HadProjectile *incidentParticle,
      const  G4Nucleus &aNucleus );
     
     G4DynamicParticle * AntiNeutronExchange(
-     const G4DynamicParticle *incidentParticle,
+     const G4HadProjectile *incidentParticle,
      const  G4Nucleus &aNucleus );
     
     G4DynamicParticle * LambdaExchange(
-     const G4DynamicParticle *incidentParticle,
+     const G4HadProjectile *incidentParticle,
      const  G4Nucleus &aNucleus );
     
     G4DynamicParticle * AntiLambdaExchange(
-     const G4DynamicParticle *incidentParticle,
+     const G4HadProjectile *incidentParticle,
      const  G4Nucleus &aNucleus );
     
     G4DynamicParticle * SigmaPlusExchange(
-     const G4DynamicParticle *incidentParticle,
+     const G4HadProjectile *incidentParticle,
      const  G4Nucleus &aNucleus );
     
     G4DynamicParticle * SigmaMinusExchange(
-     const G4DynamicParticle *incidentParticle,
+     const G4HadProjectile *incidentParticle,
      const  G4Nucleus &aNucleus );
     
     G4DynamicParticle * AntiSigmaPlusExchange(
-     const G4DynamicParticle *incidentParticle,
+     const G4HadProjectile *incidentParticle,
      const  G4Nucleus &aNucleus );
     
     G4DynamicParticle * AntiSigmaMinusExchange(
-     const G4DynamicParticle *incidentParticle,
+     const G4HadProjectile *incidentParticle,
      const  G4Nucleus &aNucleus );
     
     G4DynamicParticle * XiZeroExchange(
-     const G4DynamicParticle *incidentParticle,
+     const G4HadProjectile *incidentParticle,
      const  G4Nucleus &aNucleus );
     
     G4DynamicParticle * XiMinusExchange(
-     const G4DynamicParticle *incidentParticle,
+     const G4HadProjectile *incidentParticle,
      const  G4Nucleus &aNucleus );
     
     G4DynamicParticle * AntiXiZeroExchange(
-     const G4DynamicParticle *incidentParticle,
+     const G4HadProjectile *incidentParticle,
      const  G4Nucleus &aNucleus );
     
     G4DynamicParticle * AntiXiMinusExchange(
-     const G4DynamicParticle *incidentParticle,
+     const G4HadProjectile *incidentParticle,
      const  G4Nucleus &aNucleus );
     
     G4DynamicParticle * OmegaMinusExchange(
-     const G4DynamicParticle *incidentParticle,
+     const G4HadProjectile *incidentParticle,
      const  G4Nucleus &aNucleus );
     
     G4DynamicParticle * AntiOmegaMinusExchange(
-     const G4DynamicParticle *incidentParticle,
+     const G4HadProjectile *incidentParticle,
      const  G4Nucleus &aNucleus );
     
  private:

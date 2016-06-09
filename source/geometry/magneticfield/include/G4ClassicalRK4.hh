@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ClassicalRK4.hh,v 1.7 2003/04/02 08:52:54 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4ClassicalRK4.hh,v 1.9 2003/11/05 16:30:55 japost Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 //
 // class G4ClassicalRK4
@@ -35,15 +35,15 @@
 // History:
 // - Created: J.Apostolakis, V.Grichine - 30.1.97
 // - Moved into G4MagErrorStepper: W.Wander <wwc@mit.edu> - 12/09/97
+// -------------------------------------------------------------------
 
 #include "G4MagErrorStepper.hh"
-#include "G4ThreeVector.hh"
 
 class G4ClassicalRK4 : public G4MagErrorStepper 
 {
   public:  // with description
 
-    G4ClassicalRK4(G4Mag_EqRhs *EqRhs, G4int numberOfVariables = 6) ;
+    G4ClassicalRK4(G4EquationOfMotion *EquationMotion, G4int numberOfVariables = 6) ;
 
     ~G4ClassicalRK4() ;
 

@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4VhEnergyLoss.hh,v 1.17 2003/01/22 14:03:53 vnivanch Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // ------------- G4VhEnergyLoss physics process --------------------------------
 //                by Laszlo Urban, 30 May 1997 

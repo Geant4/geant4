@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PAIxSection.cc,v 1.16 2003/06/25 13:40:42 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4PAIxSection.cc,v 1.17 2003/10/19 15:21:22 grichine Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // 
 // G4PAIxSection.cc -- class implementation file
@@ -925,23 +925,27 @@ G4double G4PAIxSection::PAIdNdxPlasmon( G4int    i ,
 
 void G4PAIxSection::IntegralPAIxSection()
 {
-   fIntegralPAIxSection[fSplineNumber] = 0 ;
-   fIntegralPAIxSection[0] = 0 ;
-   G4int k = fIntervalNumber -1 ;
-   for(G4int i=fSplineNumber-1;i>=1;i--)
-   {
-      if(fSplineEnergy[i] >= fEnergyInterval[k])
-      {
-        fIntegralPAIxSection[i] = fIntegralPAIxSection[i+1] + SumOverInterval(i) ;
-      }
-      else
-      {
-        fIntegralPAIxSection[i] = fIntegralPAIxSection[i+1] + 
-	                           SumOverBorder(i+1,fEnergyInterval[k]) ;
-	k-- ;
-      }
-   }
+  fIntegralPAIxSection[fSplineNumber] = 0 ;
+  fIntegralPAIdEdx[fSplineNumber]     = 0 ;
+  fIntegralPAIxSection[0]             = 0 ;
+  G4int k = fIntervalNumber -1 ;
 
+  for(G4int i = fSplineNumber-1 ; i >= 1 ; i--)
+  {
+    if(fSplineEnergy[i] >= fEnergyInterval[k])
+    {
+      fIntegralPAIxSection[i] = fIntegralPAIxSection[i+1] + SumOverInterval(i) ;
+      fIntegralPAIdEdx[i] = fIntegralPAIdEdx[i+1] + SumOverIntervaldEdx(i) ;
+    }
+    else
+    {
+      fIntegralPAIxSection[i] = fIntegralPAIxSection[i+1] + 
+	                           SumOverBorder(i+1,fEnergyInterval[k]) ;
+      fIntegralPAIdEdx[i] = fIntegralPAIdEdx[i+1] + 
+	                           SumOverBorderdEdx(i+1,fEnergyInterval[k]) ;
+      k-- ;
+    }
+  }
 }   // end of IntegralPAIxSection 
 
 ////////////////////////////////////////////////////////////////////////
@@ -1037,6 +1041,33 @@ G4double G4PAIxSection::SumOverInterval( G4int i )
    else
    {
       fIntegralPAIxSection[0] += y0*(x1*x1*pow(c,a-2) - x0*x0)/a ;
+   }
+   return result ;
+
+} //  end of SumOverInterval
+
+/////////////////////////////////
+
+G4double G4PAIxSection::SumOverIntervaldEdx( G4int i )
+{         
+   G4double x0,x1,y0,yy1,a,b,c,result ;
+
+   x0 = fSplineEnergy[i] ;
+   x1 = fSplineEnergy[i+1] ;
+   y0 = fDifPAIxSection[i] ;
+   yy1 = fDifPAIxSection[i+1];
+   c = x1/x0;
+   a = log10(yy1/y0)/log10(c) ;
+   // b = log10(y0) - a*log10(x0) ;
+   b = y0/pow(x0,a) ;
+   a += 2 ;
+   if(a == 0) 
+   {
+     result = b*log(x1/x0) ;
+   }
+   else
+   {
+     result = y0*(x1*x1*pow(c,a-2) - x0*x0)/a ;
    }
    return result ;
 
@@ -1173,6 +1204,57 @@ G4double G4PAIxSection::SumOverBorder( G4int      i ,
    else
    {
       fIntegralPAIxSection[0] += y0*(e0*e0*pow(d,a-2) - x0*x0)/a ;
+   }
+   return result ;
+
+} 
+
+///////////////////////////////////////////////////////////////////////
+
+G4double G4PAIxSection::SumOverBorderdEdx( G4int      i , 
+                                       G4double en0    )
+{               
+   G4double x0,x1,y0,yy1,a,b,c,d,e0,result ;
+
+   e0 = en0 ;
+   x0 = fSplineEnergy[i] ;
+   x1 = fSplineEnergy[i+1] ;
+   y0 = fDifPAIxSection[i] ;
+   yy1 = fDifPAIxSection[i+1] ;
+
+   c = x1/x0;
+   d = e0/x0;   
+   a = log10(yy1/y0)/log10(x1/x0) ;
+   // b0 = log10(y0) - a*log10(x0) ;
+   b = y0/pow(x0,a);  // pow(10.,b) ;
+   
+   a += 2 ;
+   if(a == 0)
+   {
+      result = b*log(x0/e0) ;
+   }
+   else 
+   {
+      result = y0*(x0*x0 - e0*e0*pow(d,a-2))/a ;
+   }
+   x0 = fSplineEnergy[i - 1] ;
+   x1 = fSplineEnergy[i - 2] ;
+   y0 = fDifPAIxSection[i - 1] ;
+   yy1 = fDifPAIxSection[i - 2] ;
+
+   c = x1/x0;
+   d = e0/x0;   
+   a = log10(yy1/y0)/log10(x1/x0) ;
+   //  b0 = log10(y0) - a*log10(x0) ;
+   b = y0/pow(x0,a) ;
+   a += 2 ;
+   if(a == 0) 
+   {
+      result += b*log(e0/x0) ;
+   }
+   else
+   {
+      result += y0*(e0*e0*pow(d,a-2) - x0*x0)/a ;
    }
    return result ;
 

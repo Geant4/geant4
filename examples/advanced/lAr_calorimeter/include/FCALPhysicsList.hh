@@ -19,18 +19,10 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
-// By copying, distributing or modifying the Program (or any work
-// based on the Program) you indicate your acceptance of this statement,
-// and all its terms.
 //
-// $Id: FCALPhysicsList.hh,v 1.5 2002/12/12 19:16:32 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: FCALPhysicsList.hh,v 1.7 2003/12/09 15:30:12 gunter Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
-// 
-// $Id: FCALPhysicsList.hh,v 1.5 2002/12/12 19:16:32 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
-//
-// 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -60,10 +52,8 @@ class FCALPhysicsList: public G4VUserPhysicsList
     // Set/Get cut values 
     void      SetCutForGamma(G4double);
     void      SetCutForElectron(G4double);
-    void      SetCutForProton(G4double);           
     G4double  GetCutForGamma() const;
     G4double  GetCutForElectron() const;
-    G4double  GetCutForProton() const;
     
   protected:
     // these methods Construct particles 
@@ -80,7 +70,6 @@ class FCALPhysicsList: public G4VUserPhysicsList
   private:
     G4double cutForGamma;
     G4double cutForElectron; 
-    G4double cutForProton;
     G4double currentDefaultCut;
 };
 

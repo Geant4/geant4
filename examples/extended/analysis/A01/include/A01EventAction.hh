@@ -20,17 +20,20 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: A01EventAction.hh,v 1.3 2002/12/13 11:34:28 gunter Exp $
+// $Id: A01EventAction.hh,v 1.5 2003/10/13 01:55:53 asaim Exp $
 // --------------------------------------------------------------
 //
 #ifndef A01EventAction_h
 #define A01EventAction_h 1
 
-#include "AIDA/AIDA.h"
+
 #include "G4UserEventAction.hh"
 #include "globals.hh"
 
+#ifdef G4ANALYSIS_USE
+#include "AIDA/AIDA.h"
 using namespace AIDA;
+#endif // G4ANALYSIS_USE
 
 class A01EventActionMessenger;
 
@@ -50,13 +53,12 @@ class A01EventAction : public G4UserEventAction
     G4int DHC1ID;
     G4int DHC2ID;
     G4int ECHCID;
-//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
     G4int HCHCID;
-//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
     A01EventActionMessenger* messenger;
     G4int verboseLevel;
 
+#ifdef G4ANALYSIS_USE
     IHistogram1D* dc1Hits;
 	IHistogram1D* dc2Hits;
 	ICloud2D* dc1XY;
@@ -64,6 +66,7 @@ class A01EventAction : public G4UserEventAction
 	ICloud2D* evstof;
 	ITuple* tuple;
 	IPlotter* plotter;
+#endif // G4ANALYSIS_USE
 
   public:
     inline void SetVerbose(G4int val) { verboseLevel = val; }

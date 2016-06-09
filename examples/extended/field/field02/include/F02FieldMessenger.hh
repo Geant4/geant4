@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: F02FieldMessenger.hh,v 1.2 2001/07/11 09:58:02 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: F02FieldMessenger.hh,v 1.3 2003/11/12 16:35:03 japost Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // 
 
@@ -35,7 +35,7 @@
 #include "globals.hh"
 #include "G4UImessenger.hh"
 
-class F02ElectroMagneticField;
+class F02ElectricFieldSetup;
 class G4UIdirectory;
 class G4UIcmdWithAString;
 class G4UIcmdWithAnInteger;
@@ -46,7 +46,7 @@ class G4UIcmdWithoutParameter;
 class F02FieldMessenger: public G4UImessenger
 {
   public:
-    F02FieldMessenger(F02ElectroMagneticField* );
+    F02FieldMessenger(F02ElectricFieldSetup* );
    ~F02FieldMessenger();
     
     void SetNewValue(G4UIcommand*, G4String);
@@ -54,7 +54,7 @@ class F02FieldMessenger: public G4UImessenger
     
   private:
 
-    F02ElectroMagneticField*   fEMfield;
+    F02ElectricFieldSetup*     fEFieldSetup;
     
     G4UIdirectory*             F02detDir;
 

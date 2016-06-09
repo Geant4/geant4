@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4MagneticField.hh,v 1.11 2003/04/02 08:49:20 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4MagneticField.hh,v 1.13 2003/11/05 10:35:55 japost Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 //
 // class G4MagneticField
@@ -33,16 +33,15 @@
 
 // History:
 // - Created. JA, January 13th, 1996.
-// - Added default & copy constructors, virtual destructor and
-//   assignment operator. G.Cosmo, November 5th, 1997.
+// --------------------------------------------------------------------
 
 #ifndef G4MAGNETIC_FIELD_DEF
 #define G4MAGNETIC_FIELD_DEF
 
 #include "G4Types.hh"
-#include "G4Field.hh"
+#include "G4ElectroMagneticField.hh"
 
-class G4MagneticField : public G4Field
+class G4MagneticField : public G4ElectroMagneticField
 {
   public:  // with description
 
@@ -54,8 +53,11 @@ class G4MagneticField : public G4Field
      G4MagneticField& operator = (const G4MagneticField &p);
        // Copy constructor & assignment operator.
 
+     G4bool   DoesFieldChangeEnergy() const { return false; }
+       //  Since a pure magnetic field does not change track energy
+
      virtual void  GetFieldValue( const G4double Point[4],
-					G4double *Bfield ) const = 0;
+                                        G4double *Bfield ) const = 0;
 };
 
 #endif /* G4MAGNETIC_FIELD_DEF */

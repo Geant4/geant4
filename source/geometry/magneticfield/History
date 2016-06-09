@@ -1,4 +1,4 @@
-$Id: History,v 1.80 2003/06/25 09:06:10 japost Exp $
+$Id: History,v 1.92 2003/11/13 19:48:39 japost Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,83 +17,161 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Nov 13th, 2003  J.Apostolakis - field-V05-02-08
+-----------------------------
+- G4ChordFinder:  
+  o extended the arguments of AdvanceChordLimited  and  FindNextChord
+    adding the current safety sphere (origin, radius), for use in optimising.
+  o fixed set functions which had side effect (on first fraction.)
+- Added new class G4ChordFinderSaf (using above)
+  o which uses safety to create longer chords, so enabling 
+      propagation in fewer steps --> performance optimisation
+- G4FieldManager: 
+    Changed default accuracy parameters to much better values:
+        Epsilon Min Default  to 5.0e-5  from 5.0e-7  (too small)
+        Epsilon Max Default  to 0.001   from 0.05    (far too big)
+
+Nov  7th, 2003  J.Apostolakis - field-V05-02-07
+-----------------------------
+- G4ChordFinder 
+  o Made this a base class
+    * to enable specialised implementations
+    * virtual methods: FindNextChord, PrintStatistics)
+    * new method AccumulateStatistics to aid in this
+
+  o New default value of                                      Accuracy!!
+      Delta Chord        to  0.25 mm    (from 3.00 mm)     <-----
+                                                                 
+- G4FieldManager
+  o Changed default values of
+      Delta One Step     to  0.010 mm   (from 0.25 mm)     <-----
+      Delta Intersection to  0.001 mm   (from 0.10 mm)     <-----
+    for increased default accuracy
+  o Use field's DoesFieldChangesEnergy method to set relevant member variable
+
+Nov 7th, 2003  J.Apostolakis - field-V05-02-06
+----------------------------
+- G4ChordFinder
+   Created new class members for parameters used in heuristics:
+       fFirstFraction            for first step
+       fFractionLast             fraction of last step, if redoing
+       fFractionNextEstimate     confidence in step est from chord
+       fMultipleRadius           for small radii of curve
+   New method to Print Statistics.
+   Verbosity to enable optional printing of stats in destructor.
+
+Nov 7th, 2003  J.Apostolakis - field-V05-02-05
+----------------------------
+- G4ChordFinder
+  o Added simple statistics (with access methods)
+- test/NTST
+  o Added new test, taken from D. Williams' exampleNTST
+     modified and maintained by J. Apostolakis 
+
+Nov 5th, 2003  J.Apostolakis - field-V05-02-04
+----------------------------
+- G4FieldManager
+  o Added Get/Set Min/Max imumEpsilonStep
+  o Added fEpsilonMin fEpsilonMax & default to member variables. 
+   >> Now these can be tailored for different parts of a detector or setup
+
+- G4Field G4ElectroMagneticField G4MagneticField
+  o Adding the virtual method   DoesFieldChangeEnergy()  [to be used later]
+  o So that G4ElectroMagneticField derives from G4Field
+    and G4MagneticField derives from G4ElectroMagneticField
+
+- G4MagErrorStepper and derived classes
+    (G4ClassicalRK4 G4SimpleRunge G4ExplicitEuler G4ImplicitEuler G4SimpleHeum)
+  o the constructors take G4EquationOfMotion in place of a G4Mag_EqRhs
+    as it these applicable to all types of equations 
+     (not just ones for Magnetic field)
+
+- G4EqMagElectricField
+  o derives from G4EquationOfMotion
+
+- G4ChordFinder
+  o Moved simple constructor to .cc file (together with 'complex' one)
+  o Changed fDefaultDeltaChord to a constant member variable (from class var.)
+
+Nov 4th, 2003  G.Cosmo - field-V05-02-03
+----------------------
+Undocumented.
+
+Nov 4th, 2003  G.Cosmo - field-V05-02-02
+----------------------
+- G4ChordFinder.cc:
+  o Fixed compilation problem occuring when G4DEBUG_FIELD was set.
+
+Oct 31st, 2003  G.Cosmo - field-V05-02-01
+-----------------------
+- Code cleanup and removal of redundant header includes, replaced
+  where necessary by forward declarations.
+
+Oct 24th, 2003  G.Cosmo - field-V05-02-00
+-----------------------
+- Migrated to use new G4Exception scheme.
+- Updated outputs of unit tests.
+
 Jun 25th, 2003  J.Apostolakis - field-V05-01-06
 -----------------------------
-Suppressed printing of statistics (by default) in MagIntegrationDriver.
-Fix for unused variables warning in ChordFinder.
+- Suppressed printing of statistics (by default) in MagIntegrationDriver.
+- Fix for unused variables warning in ChordFinder.
 
 Jun 24th, 2003  J.Apostolakis - field-V05-01-05
 -----------------------------
-Fix for problems introduced in field-V05-01-03:
-
-G4ChordFinder
- - Fixed unitialised variable for next step (now used for optimisation).
- - Protected assignment of fLastStepEstimate_Unconstrained in case of
-     unitialised value.
+- Fix for problems introduced in field-V05-01-03:
+  o G4ChordFinder:
+    - Fixed unitialised variable for next step (now used for optimisation).
+    - Protected assignment of 'fLastStepEstimate_Unconstrained' in case of
+      unitialised value.
 
 Jun 21st, 2003  J.Apostolakis - field-V05-01-04
 -----------------------------
-G4FieldManager:
-  - Revised into 'slightly' abstract class with one (new) virtual method:
-       ConfigureForTrack( const G4Track *)
+- G4FieldManager:
+  o Revised into 'slightly' abstract class with one (new) virtual method:
+      ConfigureForTrack( const G4Track *)
     to enable the user to configure it with different accuracy parameters
     depending on energy, particle id, volume, or other track state.
-
-  Currently by default, no such configuration action is undertaken.
-
-Note:
-  Requestor for such functionality: CMS (P Arce, M Stavrianakou, May/June 2003)
-
- Its use requires tag transport-V05-01-0? 
+    Currently by default, no such configuration action is undertaken.
 
 Jun 21st, 2003  J.Apostolakis - field-V05-01-03
 -----------------------------
-G4ChordFinder:
-  Revised:
+- Revised G4ChordFinder:
   * FindNextChord now provides next Step estimate (for accuracy in Integr.)
   * AdvanceChordLimited to use
     - above extra argument to FindNextChord
     - the next Step argument as initial-step suggested to Accurate Advance
-
-G4MagIntegratorDriver
+- G4MagIntegratorDriver:
   * Added extra argument to Accurate Advance:
-      hinitial: suggested initial step size
-
-Note:
- * Purpose:  performance boost with small/limited changes, 
-     including minor revisions of interfaces.
+    hinitial: suggested initial step size
+- Note:
+  * Purpose:  performance boost with small/limited changes, 
+    including minor revisions of interfaces.
 
 Jun 20th, 2003  J.Apostolakis - field-V05-01-02
 -----------------------------
-G4MagIntegratorDriver Quick Advance:
-- Took out two unneccessary square roots and two divisions.
-
-Notes:
- 1) Pure magnetic, electric, spin field test are completed.
- 2) Purpose:  performance boost with small changes.
+- G4MagIntegratorDriver Quick Advance:
+  o Took out two unneccessary square roots and two divisions.
+- Notes:
+  1) Pure magnetic, electric, spin field test are completed.
+  2) Purpose:  performance boost with small changes.
 
 Jun 20th, 2003  J.Apostolakis - field-V05-01-01
 -----------------------------
-G4MagIntegratorDriver
-- Corrected neglected conversion to <std> from "G4std"
-
-tests
-- Migrated to <std>
-
-Note: Although tests / field01,2,3 are migrated to <std>, but not yet checked.
+- G4MagIntegratorDriver:
+  o Corrected neglected conversion to <std> from "G4std".
+- Migrated unit tests to <std>.
 
 Jun 19th, 2003  J.Apostolakis - field-V05-01-00
 ----------------------------- 
-G4ChordFinder
-- Correct simple constructor to initialise several member variables
+- G4ChordFinder:
+  o Corrected simple constructor to initialise several member variables
     including LastStepEstimate_Unconstrained.
-
-G4MagIntegratorDriver
-- Keep simple statistics on number of steps, total error and step size.
-- Took out an unneccessary square root (in loop)
-
-NOTE:    tests field0X are to be migrated.
-Purpose: fixes, small performance boost, simple statistics
+- G4MagIntegratorDriver:
+  o Keep simple statistics on number of steps, total error and step size.
+  o Took out an unneccessary square root (in loop).
+- NOTE:    tests field0X are to be migrated.
+  Purpose: fixes, small performance boost, simple statistics.
 
 Apr 2nd, 2003      G. Cosmo - field-V05-00-01
 ---------------------------

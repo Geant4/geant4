@@ -70,7 +70,7 @@ public:
   
   void SetPrimaryID(int i) {PrimaryID = i;
 #ifdef debug
-  cout<<"CCaloSD SetPrimaryID primID ="<<i<<endl;
+  G4cout << "CCaloSD SetPrimaryID primID =" << i << G4endl;
 #endif
   }
   int  GetPrimaryID( )     {return PrimaryID;}
@@ -117,6 +117,7 @@ private:
   void StoreHit(CCalG4Hit* ahit);
   void ResetForNewPrimary();
   void summarize();
+  G4double curve_LY(G4StepPoint* stepPoint);
       
 private:
   CCalVOrganization* theDescription;

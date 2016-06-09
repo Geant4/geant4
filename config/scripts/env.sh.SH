@@ -216,24 +216,6 @@ echo "On this machine the G4UI_USE_WIN32=\$G4UI_USE_WIN32"
 fi
 fi 
 
-#+
-if [ X$g4ui_build_wo_session = Xy ] ; then
-G4UI_BUILD_WO_SESSION=1
-export G4UI_BUILD_WO_SESSION
-if [ X\$g4non_display = X ] ; then
-echo "On this machine the G4UI_BUILD_WO_SESSION=\$G4UI_BUILD_WO_SESSION"
-fi
-fi 
-
-#+
-if [ X$g4ui_use_wo = Xy ] ; then
-G4UI_USE_WO=1
-export G4UI_USE_WO
-if [ X\$g4non_display = X ] ; then
-echo "On this machine the G4UI_USE_WO=\$G4UI_USE_WO"
-fi
-fi 
-
 #
 # g4vis
 #
@@ -243,15 +225,6 @@ G4VIS_BUILD_DAWN_DRIVER=1
 export G4VIS_BUILD_DAWN_DRIVER
 if [ X\$g4non_display = X ] ; then
 echo "On this machine the G4VIS_BUILD_DAWN_DRIVER=\$G4VIS_BUILD_DAWN_DRIVER"
-fi
-fi 
-
-#+
-if [ X$g4vis_build_opacs_driver = Xy ] ; then
-G4VIS_BUILD_OPACS_DRIVER=1
-export G4VIS_BUILD_OPACS_DRIVER
-if [ X\$g4non_display = X ] ; then
-echo "On this machine the G4VIS_BUILD_OPACS_DRIVER=\$G4VIS_BUILD_OPACS_DRIVER"
 fi
 fi 
 
@@ -315,15 +288,6 @@ G4VIS_USE_DAWN=1
 export G4VIS_USE_DAWN
 if [ X\$g4non_display = X ] ; then
 echo "On this machine the G4VIS_USE_DAWN=\$G4VIS_USE_DAWN"
-fi
-fi 
-
-#+
-if [ X$g4vis_use_opacs = Xy ] ; then
-G4VIS_USE_OPACS=1
-export G4VIS_USE_OPACS
-if [ X\$g4non_display = X ] ; then
-echo "On this machine the G4VIS_USE_OPACS=\$G4VIS_USE_OPACS"
 fi
 fi 
 
@@ -430,22 +394,6 @@ echo "On this machine the G4LIB_BUILD_STATIC=\$G4LIB_BUILD_STATIC"
 fi
 fi 
 
-if [ X$g4lib_use_shared = Xy ] ; then
-G4LIB_USE_SHARED=1
-export G4LIB_USE_SHARED
-if [ X\$g4non_display = X ] ; then
-echo "On this machine the G4LIB_USE_SHARED=\$G4LIB_USE_SHARED"
-fi
-fi 
-
-if [ X$g4lib_use_static = Xy ] ; then
-G4LIB_USE_STATIC=1
-export G4LIB_USE_STATIC
-if [ X\$g4non_display = X ] ; then
-echo "On this machine the G4LIB_USE_STATIC=\$G4LIB_USE_STATIC"
-fi
-fi 
-
 #+
 #
 # g4granular
@@ -470,14 +418,48 @@ $spitshell >>env.sh <<'!NO!SUBS!'
 # G4WORKDIR
 #
 if [ $G4WORKDIR ] ; then
+
 if [ X$g4non_display = X ] ; then
 echo "In your environment you have the G4WORKDIR=$G4WORKDIR"
-fi
+fi # if non_display
+
 else
+
 if [ X$g4non_display = X ] ; then
-echo "G4WORKDIR will be set to HOME=$HOME."
+
+# Check for Windows!
+if test "X$G4SYSTEM" = "XWIN32-VC" -o "X$G4SYSTEM" = "XWIN32-VC7"; then
+
+checkdrive=`echo $HOME|cut -d"/" -f2`
+
+if test "X$checkdrive" = "Xcygdrive"; then
+
+windrive=`echo $HOME|cut -d"/" -f3`
+winpath=`echo $HOME|cut -d"/" -f4-`
+
+fullwinpath="$windrive:/$winpath"
+G4WORKDIR=$fullwinpath
+
+fi # if cygwin syntax is used
+
+if test "X$winpath" = "X"; then
+echo "G4WORKDIR will be set to ${G4WORKDIR}geant4 (in "native" Windows syntax)"
+export G4WORKDIR=${G4WORKDIR}geant4
+else
+echo "G4WORKDIR will be set to $G4WORKDIR/geant4 (in "native" Windows syntax)"
+export G4WORKDIR=${G4WORKDIR}/geant4
 fi
-export G4WORKDIR=$HOME
+
+
+else # if Unix
+
+echo "G4WORKDIR will be set to HOME/geant4=$HOME/geant4"
+export G4WORKDIR=$HOME/geant4
+
+fi # if platforms
+
+fi
+
 fi
 
 !NO!SUBS!

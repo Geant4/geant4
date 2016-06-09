@@ -1,4 +1,4 @@
-# $Id: INSTALL,v 1.3 2002/06/10 11:57:38 radoone Exp $
+# $Id: INSTALL,v 1.4 2003/10/27 10:57:12 radoone Exp $
 GDML Processor for Geant4 setup and build instructions
 ======================================================
 
@@ -7,9 +7,9 @@ Xerces-C XML Parser
 
 Set the environment variable XERCESCROOT:
 
-For example AFS users can do:
+For example AFS/CERN LCG users can do:
 
-export XERCESCROOT=/afs/cern.ch/sw/geant4/dev/XercesC/$G4SYSTEM
+export XERCESCROOT=/afs/cern.ch/sw/lcg/external/XercesC/2.3.0/rh73_gcc32
 
 Build GDML Processor
 --------------------

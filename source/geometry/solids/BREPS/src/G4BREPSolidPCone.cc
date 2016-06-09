@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4BREPSolidPCone.cc,v 1.32 2003/06/16 16:52:48 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4BREPSolidPCone.cc,v 1.33 2003/10/28 13:42:30 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -80,8 +80,11 @@ G4BREPSolidPCone::G4BREPSolidPCone(const G4String& name,
   // At the moment (11/03/2002) the phi section is not implemented
   // so we take a G4 application down if there is a request for such
   // a configuration
-  if( opening_angle < 2*pi-perMillion ) {
-    G4Exception( "G4BREPSolidPCone::G4BREPSolidPCone() - phi section not supported yet, try to use G4Polycone instead!\a\n" );
+  if( opening_angle < 2*pi-perMillion )
+  {
+    G4Exception("G4BREPSolidPCone::G4BREPSolidPCone()",
+       "NotImplemented", FatalException,
+       "Sorry, phi-section not supported yet, try to use G4Polycone instead!");
   }
 
   ///////////////////////////////////////////////////
@@ -91,21 +94,29 @@ G4BREPSolidPCone::G4BREPSolidPCone(const G4String& name,
   // when RMIN[0] or RMIN[num_z_planes-1] are = 0
   if(  ((RMIN[0] == 0)              && (RMAX[0] == 0))             || 
        ((RMIN[num_z_planes-1] == 0) && (RMAX[num_z_planes-1] == 0))   )
-      G4Exception("G4BREPSolidPCone::G4BREPSolidPCone() - RMIN at the extremities cannot be 0 when RMAX = 0 !");  
+      G4Exception("G4BREPSolidPCone::G4BREPSolidPCone()",
+                  "InvalidSetup", FatalException,
+                  "RMIN at the extremities cannot be 0 when RMAX=0 !");  
   
   // only RMAX[0] and RMAX[num_z_planes-1] can be = 0
   for(a = 1; a < num_z_planes-1; a++)
     if (RMAX[a] == 0)
-      G4Exception("G4BREPSolidPCone::G4BREPSolidPCone() - RMAX inside the solid cannot be 0 !");
+      G4Exception("G4BREPSolidPCone::G4BREPSolidPCone()",
+                  "InvalidSetup", FatalException,
+                  "RMAX inside the solid cannot be 0 !");
   
   // RMAX[a] must be greater than RMIN[a] 
   for(a = 1; a < num_z_planes-1; a++)
     if (RMIN[a] >= RMAX[a])
-      G4Exception("G4BREPSolidPCone::G4BREPSolidPCone() - RMAX must be greater than RMIN in the middle Z planes !");
+      G4Exception("G4BREPSolidPCone::G4BREPSolidPCone()",
+                  "InvalidSetup", FatalException,
+                  "RMAX must be greater than RMIN in the middle Z planes !");
   
   if( (RMIN[num_z_planes-1] > RMAX[num_z_planes-1] )
       || (RMIN[0] > RMAX[0]) ) 
-      G4Exception("G4BREPSolidPCone::G4BREPSolidPCone() - RMAX must be greater or equal than RMIN at the ends !");
+      G4Exception("G4BREPSolidPCone::G4BREPSolidPCone()",
+                  "InvalidSetup", FatalException,
+                  "RMAX must be greater or equal than RMIN at the ends !");
 
   // Create surfaces
   for( a = 0; a < sections; a++)
@@ -154,10 +165,13 @@ G4BREPSolidPCone::G4BREPSolidPCone(const G4String& name,
         if( RMIN[a] > RMAX[a+1] || RMAX[a] < RMIN[a+1] ) {
           char msgbuf[512];
           std::ostrstream os(msgbuf,512);
-          os << G4endl << "G4BREPSolidPCone::G4BREPSolidPCone() - The values "
-                       << "of RMIN[" << a << "] & RMAX[" << a+1 << "] or RMAX[" << a << "] & RMIN[" << a+1 << "] "
-                       << "make an invalid configuration of G4BREPSolidPCone " << name.c_str() << "!" << G4endl;
-          G4Exception( msgbuf );
+          os << "The values of RMIN[" << a
+             << "] & RMAX[" << a+1 << "] or RMAX[" << a
+             << "] & RMIN[" << a+1 << "] "
+             << "generate an invalid configuration for solid: "
+             << name.c_str() << "!" << G4endl;
+          G4Exception("G4BREPSolidPCone::G4BREPSolidPCone()",
+                      "InvalidSetup", FatalException, msgbuf );
         }
         
         ESurfaceSense UpSurfSense, LowSurfSense;

@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4UIGAG.hh,v 1.6 2003/06/16 16:55:49 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // G4UIGAG.hh
 // GAG(Geant4 adaptive GUI) interface class

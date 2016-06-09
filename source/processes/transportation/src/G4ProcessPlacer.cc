@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProcessPlacer.cc,v 1.13 2003/04/23 09:44:34 dressel Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4ProcessPlacer.cc,v 1.14 2003/11/26 14:51:50 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -37,17 +37,20 @@
 #include "G4ParticleTable.hh"
 
 G4ProcessPlacer::G4ProcessPlacer(const G4String &particlename)
- : fParticleName(particlename)
-{}
+  : fParticleName(particlename)
+{
+}
 
 G4ProcessPlacer::~G4ProcessPlacer()
-{}
+{
+}
 
-void G4ProcessPlacer::RemoveProcess(G4VProcess *process){
+void G4ProcessPlacer::RemoveProcess(G4VProcess *process)
+{
   G4cout << "=== G4ProcessPlacer::RemoveProcess: for: " <<  fParticleName 
-	 << G4endl;
+         << G4endl;
   G4cout << "  ProcessName: " << process->GetProcessName() 
-	 << ", will be removed!" << G4endl;
+         << ", will be removed!" << G4endl;
 
   G4cout << "  The initial Vectors: " << G4endl;
   PrintPostStepGPILVec();
@@ -66,27 +69,26 @@ void G4ProcessPlacer::RemoveProcess(G4VProcess *process){
 void G4ProcessPlacer::AddProcessAs(G4VProcess *process, SecondOrLast sol)
 {
   G4cout << "  ProcessName: " << process->GetProcessName() << G4endl;
-
   G4cout << "The initial Vectors: " << G4endl;
   PrintPostStepGPILVec();
   PrintPostStepDoItVec();
 
-
-  if (sol == eLast) {  
-    GetProcessManager()->AddProcess(process,
-				   ordInActive,
-				   ordInActive,
-				   ordLast);
+  if (sol == eLast)
+  {  
+    GetProcessManager()->AddProcess(process, ordInActive, ordInActive, ordLast);
   } 
-  else if (sol == eSecond) {
+  else if (sol == eSecond)
+  {
     // get transportation process
     G4VProcess *transportation = 
      (* (GetProcessManager()->GetProcessList()))[0];
 
-    if (!transportation) {
+    if (!transportation)
+    {
       G4Exception(" G4ProcessPlacer:: could not get process id=0");
     }
-    if (transportation->GetProcessName() != "Transportation") {
+    if (transportation->GetProcessName() != "Transportation")
+    {
       G4cout << transportation->GetProcessName() << G4endl;
       G4Exception(" G4ProcessPlacer:: process id=0 is not Transportation");
     }
@@ -94,10 +96,10 @@ void G4ProcessPlacer::AddProcessAs(G4VProcess *process, SecondOrLast sol)
     // place the given proces as first for the moment
     GetProcessManager()->AddProcess(process);
     GetProcessManager()->SetProcessOrderingToFirst(process, 
-						  idxPostStep);
+                                                  idxPostStep);
     // place transportation first again
     GetProcessManager()->SetProcessOrderingToFirst(transportation, 
-						  idxPostStep);
+                                                  idxPostStep);
   }
   
   // for verification inly
@@ -106,20 +108,19 @@ void G4ProcessPlacer::AddProcessAs(G4VProcess *process, SecondOrLast sol)
   PrintPostStepDoItVec();
   
   G4cout << "================================================" << G4endl;
-  
 }
 
 void G4ProcessPlacer::AddProcessAsSecondDoIt(G4VProcess *process)
 {
   G4cout << "=== G4ProcessPlacer::AddProcessAsSecondDoIt: for: " 
-	 << fParticleName << G4endl;
+         << fParticleName << G4endl;
   AddProcessAs(process, eSecond);
 }
 
 void G4ProcessPlacer::AddProcessAsLastDoIt(G4VProcess *process)
 {
   G4cout << "=== G4ProcessPlacer::AddProcessAsLastDoIt: for: " 
-	 << fParticleName << G4endl;
+         << fParticleName << G4endl;
   AddProcessAs(process, eLast);
 }
 
@@ -134,29 +135,34 @@ G4ProcessManager *G4ProcessPlacer::GetProcessManager()
   G4ProcessManager *processmanager = 0;
   // find process manager ---------------------------
   theParticleIterator->reset();
-  while( (*theParticleIterator)() ){
+  while( (*theParticleIterator)() )
+  {
     G4ParticleDefinition* particle = theParticleIterator->value();
-    if (particle->GetParticleName() == fParticleName) {
+    if (particle->GetParticleName() == fParticleName)
+    {
       processmanager =  particle->GetProcessManager();
       break;
     }
   }
   // ---------------------------------------------------------
-  if (!processmanager) {
-    G4Exception(" G4ProcessPlacer::GetProcessManager: no ProcessSampler");
+  if (!processmanager)
+  {
+    G4Exception("G4ProcessPlacer::GetProcessManager()", "InvalidSetup",
+                FatalException, "NULL pointer to Process Manager !");
   }
   return processmanager;
 }
 
-
-void G4ProcessPlacer::PrintPostStepGPILVec(){
+void G4ProcessPlacer::PrintPostStepGPILVec()
+{
   G4cout << "GPIL Vector: " << G4endl;
   G4ProcessVector* processGPILVec = 
     GetProcessManager()->GetPostStepProcessVector(typeGPIL);
   PrintProcVec(processGPILVec);
 } 
 
-void G4ProcessPlacer::PrintPostStepDoItVec(){
+void G4ProcessPlacer::PrintPostStepDoItVec()
+{
   G4cout << "DoIt Vector: " << G4endl;
   G4ProcessVector* processDoItVec = 
     GetProcessManager()->GetPostStepProcessVector(typeDoIt); 
@@ -166,23 +172,28 @@ void G4ProcessPlacer::PrintPostStepDoItVec(){
 
 void G4ProcessPlacer::PrintProcVec(G4ProcessVector* processVec)
 {
-  if (!processVec) {
-    G4Exception("G4ProcessPlacer::G4ProcessPlacer: no processVec");
+  if (!processVec)
+  {
+    G4Exception("G4ProcessPlacer::G4ProcessPlacer()", "InvalidArgument",
+                FatalException, "NULL pointer to process-vector !");
   }
   G4int len = processVec->length();
-  if (len==0) {
-    G4Exception("G4ProcessPlacer::G4ProcessPlacer:processVec len = 0");
+  if (len==0)
+  {
+    G4Exception("G4ProcessPlacer::G4ProcessPlacer()", "InvalidSetup",
+                FatalException, "Length of process-vector is zero !");
   }
-  for (int pi=0; pi<len; pi++) {
+  for (int pi=0; pi<len; pi++)
+  {
     G4VProcess *p = (*processVec)[pi];
-    if (p) {
+    if (p)
+    {
       G4cout << "   " << p->GetProcessName() << G4endl;
     } 
-    else {
+    else
+    {
       G4cout << "   " << "no process found for position: " << pi 
-	     << ", in vector of length: " << len << G4endl;
+             << ", in vector of length: " << len << G4endl;
     }
   }
 }
-
-

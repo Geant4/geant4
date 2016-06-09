@@ -44,17 +44,10 @@
 #ifndef G4HadronCaptureProcess_h
 #define G4HadronCaptureProcess_h 1
  
-//#include <rw/tphdict.h>
 #include "globals.hh"
-//#include "Randomize.hh"
 #include "G4Element.hh"
 #include "G4ElementVector.hh"
-//#include "G4ElementTable.hh"
 #include "G4VDiscreteProcess.hh"
-//#include "G4PhysicsTable.hh"
-//#include "G4PhysicsVector.hh"
-//#include "G4LPhysicsFreeVector.hh"
-//#include "G4HadronicCrossSections.hh"
 #include "G4HadronFissionProcess.hh"
 #include "G4Gamma.hh"
 #include "G4Step.hh"
@@ -72,55 +65,17 @@ public:
 
    ~G4HadronCaptureProcess();
  
-   inline
-   G4double GetMeanFreePath(const G4Track& aTrack, G4double ,
-                            G4ForceCondition* )
-   {
-      return GetMeanFreePathBasic(aTrack.GetDynamicParticle(),
-                                  aTrack.GetMaterial());
-   }
-
-   G4double GetMeanFreePathBasic(const G4DynamicParticle* aParticle,
-                                 const G4Material* aMaterial);
-
    G4VParticleChange* PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
    {
       SetDispatch(this);
       return G4HadronicProcess::GeneralPostStepDoIt(aTrack, aStep);
    }
 
-   void BuildThePhysicsTable(G4ParticleDefinition& aParticleType);
-
-   void SetCrossSectionDataStore(G4CrossSectionDataStore* aDataStore)
-   {
-      theCrossSectionDataStore = aDataStore;
-   }
-
-   G4CrossSectionDataStore* GetCrossSectionDataStore()
-   {
-      return theCrossSectionDataStore;
-   }
-
-   void AddDataSet(G4VCrossSectionDataSet * aDataSet)
-   {
-      theCrossSectionDataStore->AddDataSet(aDataSet);
-   }
-
-  //   void setCrossSectionDataVerboseLevel(G4int value)
-  //   {
-  //      theCrossSectionData.SetVerboseLevel(value);
-  //   }
-
    G4bool IsApplicable(const G4ParticleDefinition& aParticleType);
 
    void DumpPhysicsTable(const G4ParticleDefinition& aParticleType);
 
 private:
-
-// Note: DEC compiler won't accept "const G4ParticleDefinition" here
-// because it instantiates the ClearAndDestroy method that deletes the 
-// pointers in the dictionary.
-   G4CrossSectionDataStore* theCrossSectionDataStore;
 
    G4double GetMicroscopicCrossSection(const G4DynamicParticle* aParticle,
                                        const G4Element* anElement,

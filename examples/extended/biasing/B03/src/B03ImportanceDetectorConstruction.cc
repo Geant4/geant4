@@ -21,11 +21,12 @@
 // ********************************************************************
 //
 //
-// $Id: B03ImportanceDetectorConstruction.cc,v 1.5 2003/06/16 16:47:27 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: B03ImportanceDetectorConstruction.cc,v 1.6 2003/07/31 11:59:41 dressel Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 
 #include "globals.hh"
+#include "G4Types.hh"
 #include <strstream>
 
 #include "B03ImportanceDetectorConstruction.hh"

@@ -21,12 +21,25 @@
 // ********************************************************************
 //
 //
-// $Id: G4RKG3_Stepper.cc,v 1.7 2003/04/02 08:52:21 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4RKG3_Stepper.cc,v 1.9 2003/10/31 14:35:55 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
+// -------------------------------------------------------------------
+
 #include "G4RKG3_Stepper.hh"
-#include "G4ThreeVector.hh"
 #include "G4LineSection.hh"
+#include "G4Mag_EqRhs.hh"
+
+G4RKG3_Stepper::G4RKG3_Stepper(G4Mag_EqRhs *EqRhs)
+  : G4MagIntegratorStepper(EqRhs,6)
+{
+  G4Exception("G4RKG3_Stepper::G4RKG3_Stepper()", "NotImplemented",
+              FatalException, "Stepper not yet available.");
+}
+
+G4RKG3_Stepper::~G4RKG3_Stepper()
+{
+}
 
 void G4RKG3_Stepper::Stepper(  const G4double  yInput[7],
                                const G4double dydx[7],
@@ -87,7 +100,6 @@ void G4RKG3_Stepper::Stepper(  const G4double  yInput[7],
    //   beta2 += beTemp2 ;
    //   beta2 *= 0.5 ;   
    // NormaliseTangentVector( yOut );  // Deleted
-   return ;
 }
 
 // ---------------------------------------------------------------------------
@@ -107,8 +119,8 @@ void G4RKG3_Stepper::StepWithEst( const G4double*,
                                         G4double* )
    
 {
-  G4Exception(" ERROR - G4RKG3_Stepper::StepWithEst(): method no longer used.");
-  return ;
+  G4Exception("G4RKG3_Stepper::StepWithEst()", "ObsoleteMethod",
+              FatalException, "Method no longer used.");
 }
 
 // -----------------------------------------------------------------
@@ -171,8 +183,6 @@ void G4RKG3_Stepper::StepNoErr(const G4double tIn[7],
    }
    // NormaliseTangentVector( tOut );
 #endif
-   
-   return ;
 }
 
 // ---------------------------------------------------------------------------

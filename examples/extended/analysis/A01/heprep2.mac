@@ -1,11 +1,12 @@
 #
 # Macro file for A01app
 #
-#  For initialization of graphics.
+/run/verbose 2
+#
 #
 # Create empty scene ("world" is default)
 #
-/vis/scene/create G4Output
+/vis/scene/create A01Output.heprep
 #
 # Create a scene handler for a specific graphics system
 # Edit the next line(s) to choose another graphic system
@@ -27,23 +28,10 @@
 /vis/scene/add/hits
 #
 # Do runs
-#/tracking/storeTrajectory 1
-# Run 1 events and store event displays
+#
+/tracking/storeTrajectory 1
 /mydet/armAngle 60. deg
 /mydet/fieldValue 4. tesla
 /mydet/momentum 2. GeV
 /gun/particle e+
-/run/beamOn 1
-#
-#/run/beamOn 10
-#
-#/mydet/armAngle 30. deg
-#
-#/mydet/sigmaMomentum 0.
-#/mydet/sigmaAngle 0.
-#/run/beamOn 10
-#
-#/mydet/sigmaAngle 2. deg
-#/run/beamOn 10
-/vis/viewer/flush
-#
+/run/beamOn 10

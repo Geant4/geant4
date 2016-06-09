@@ -19,9 +19,9 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
-// 
-// $Id: G4eIonisationSpectrum.hh,v 1.5 2003/05/20 20:03:34 pia Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+//
+// $Id: G4eIonisationSpectrum.hh,v 1.6 2003/12/09 15:36:40 gunter Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // -------------------------------------------------------------------
 //

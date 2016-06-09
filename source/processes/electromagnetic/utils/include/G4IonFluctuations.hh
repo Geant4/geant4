@@ -20,6 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
+// $Id: G4IonFluctuations.hh,v 1.6 2003/10/16 13:06:40 vnivanch Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // -------------------------------------------------------------------
 //
@@ -29,10 +31,12 @@
 // File name:     G4IonFluctuations
 //
 // Author:        Vladimir Ivanchenko
-// 
+//
 // Creation date: 02.04.2003
 //
-// Modifications:
+// Modifications: 
+//
+// 16-10-03 Changed interface to Initialisation (V.Ivanchenko)
 //
 // Class Description:
 //
@@ -67,12 +71,13 @@ public:
  				G4double&,
                                 G4double&);
 
-  void Initialise(const G4ParticleDefinition*);
+  void InitialiseMe(const G4ParticleDefinition*);
 
 private:
 
   G4double CoeffitientA(G4double&);
   G4double CoeffitientB(const G4Material*, G4double&);
+  G4double RelativisticFactor(const G4Material*, G4double&);
 
   // hide assignment operator
   G4IonFluctuations & operator=(const  G4IonFluctuations &right);
@@ -83,6 +88,7 @@ private:
   G4double particleMass;
   G4double charge;
   G4double chargeSquare;
+  G4double chargeSqRatio;
 
   // data members to speed up the fluctuation calculation
   G4double minNumberInteractionsBohr;

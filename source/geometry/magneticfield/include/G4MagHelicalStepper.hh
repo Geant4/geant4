@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4MagHelicalStepper.hh,v 1.7 2001/07/11 09:59:08 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4MagHelicalStepper.hh,v 1.8 2003/10/31 14:35:52 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 //
 // class G4MagHelicalStepper
@@ -34,11 +34,12 @@
 
 // History:
 // - 05.11.98  J.Apostolakis   Creation of new ABC 
+// --------------------------------------------------------------------
 
 #ifndef G4MagHelicalStepper_hh
 #define G4MagHelicalStepper_hh
 
-#include "globals.hh"
+#include "G4Types.hh"
 #include "G4MagIntegratorStepper.hh"
 #include "G4Mag_EqRhs.hh"
 #include "G4ThreeVector.hh"
@@ -51,19 +52,19 @@ class G4MagHelicalStepper : public G4MagIntegratorStepper
     virtual ~G4MagHelicalStepper();
   
     void Stepper( const G4double y[],
-		  const G4double dydx[],
-		        G4double h,
-		        G4double yout[],
-		        G4double yerr[]  );
+                  const G4double dydx[],
+                        G4double h,
+                        G4double yout[],
+                        G4double yerr[]  );
       // The stepper for the Runge Kutta integration.
       // The stepsize is fixed, equal to h.
       // Integrates ODE starting values y[0 to 6]
       // Outputs yout[] and its estimated error yerr[].
   
     virtual  void DumbStepper( const G4double y[],
-			       G4ThreeVector   Bfld,
-			       G4double  h,
-			       G4double yout[] ) = 0;
+                               G4ThreeVector   Bfld,
+                               G4double  h,
+                               G4double yout[] ) = 0;
       // Performs a 'dump' Step without error calculation.
   
     G4double DistChord() const;
@@ -72,14 +73,14 @@ class G4MagHelicalStepper : public G4MagIntegratorStepper
   protected:  // with description
 
     inline void LinearStep( const G4double  yIn[],
-	                          G4double  h,
-			          G4double  yHelix[]);
+                                  G4double  h,
+                                  G4double  yHelix[]);
       // A linear Step in regions without magnetic field.
 
     void AdvanceHelix( const G4double  yIn[],
-		       G4ThreeVector   Bfld,
-		       G4double  h,
-		       G4double  yHelix[]);    // output 
+                             G4ThreeVector   Bfld,
+                             G4double  h,
+                             G4double  yHelix[]);    // output 
       // A first order Step along a helix inside the field.
 
     inline void MagFieldEvaluate( const G4double y[], G4ThreeVector& Bfield );

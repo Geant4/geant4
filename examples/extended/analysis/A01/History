@@ -1,4 +1,4 @@
-$Id: History,v 1.5 2003/04/04 17:29:39 duns Exp $
+$Id: History,v 1.21 2003/12/01 19:12:36 perl Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -9,7 +9,77 @@ $Id: History,v 1.5 2003/04/04 17:29:39 duns Exp $
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
----------------------------------------------------------------------------
+---------------------------------------------------------------------------  
+
+ 1st December 2003 Joseph Perl
+- Removed endOfEventAction.mac since new vis policy provides such a flush
+  automatically.
+- Updated README to include more information about HepRep2 macros.
+
+17th November 2003 Makoto Asai (exampleA01-V05-02-00)
+- Introducing test.in macro for batch mode testing and its reference output.
+
+13th November 2003 John Allison
+- Removed OPACS from Vis Manager.
+
+15th October 2003 Mark Donszelmann
+- Updated README.JAIDA to refer to the proper versions of JAIDA and AIDAJNI.
+  Also changed compilation instructions to use aida-config.
+- Made sure G4HadronPhysics is compiled without optmization on Darwin-g++,
+  Darwin-g++2 and Darwin-g++3 (MacOS X).
+
+14th October 2003 Mark Donszelmann
+- Added clear statement to GNUmakefile that G4HadronPhysics is compiled
+  without optimization.
+- Made sure G4HadronPhysics is compiled without optimization on Linux-g++,
+  Linux-g++2 and Linux-g++3.
+
+14th October 2003 Joseph Perl
+- Remove SetForceWireFrame(false) from three hit classes since these
+  are redundant to the SetForceSolid(true) statements already there.
+
+14th October 2003 Joseph Perl
+- Remove SetForceWireFrame(true) statements from A01DetectorConstruction.cc.
+  The user can instead control this at runtime using /vis/viewer/set/style
+
+13th October 2003 Mark Donszelmann
+- Re-included A01EventActionMessenger in general (non G4ANALYSIS_USE) compilation
+  for use with A01EventACtion, see comment below.
+- Removed all include/AIDA include files and changed the GNUmakefile. 
+  To compile/link with G4ANALYSIS_USE you will need an AIDA 3.0 compliant 
+  implementation, such as AIDAJNI. The makefile will execute aida-config
+  to find the include files and the libraries to link with.
+- setup-analysis.csh/sh/win32 now only sets up G4 specific flags to compile
+  in the AIDA analysis framework.
+  
+13th October 2003 Joseph Perl
+- Minor changes to README's sections on vis and analysis.
+
+12th October 2003 Makoto Asai
+- Move G4ANALYSIS_USE ifdef blocks so that event summary is printed out
+  regardless of this flag. Only the AIDA part in A01EventAction is 
+  blocked.
+
+12th October 2003 Joseph Perl
+- Modify G4TrackingAction to use G4Trajectory rather than A01Trajectory.
+  This allows trajectories to pick up physics attributes.
+  Left A01Trajectory in place as alternative to get color coding by
+  particle type, but no physics attributes.
+  Will later come up with a good scheme to make choice of one or the other
+  or both of these choices at run time.
+- Renamed visualization macro heprep.mac to vis.mac
+
+20th August 2003 Mark Donszelmann
+- Updated code to run with AIDAJNI 3.0.3 release, which adds compilation
+  under g++ 3.2.
+- Added aida.mac example file.
+
+14th August 2003 Mark Donszelmann
+- Code will only compile AIDA parts if G4ANALYSIS_USE is set.
+
+11th July 2003 Mark Donszelmann
+- Fixed all warnings under g++ 2.95.3.
+
 3rd April 2003 Mark Donszelmann (examples-analysis-A01-V05-00-00)
 - Added 2 more histograms to the example
 - Fixed NullPointerException by letting SDManager delete the detectors created in

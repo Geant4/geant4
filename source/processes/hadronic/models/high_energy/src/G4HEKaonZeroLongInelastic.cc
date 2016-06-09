@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4HEKaonZeroLongInelastic.cc,v 1.7 2002/12/12 19:18:02 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4HEKaonZeroLongInelastic.cc,v 1.8 2003/07/01 15:42:24 hpw Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 //
 
@@ -41,8 +41,8 @@
  
 #include "G4HEKaonZeroLongInelastic.hh"
 
-G4VParticleChange *  G4HEKaonZeroLongInelastic::
-ApplyYourself( const G4Track &aTrack, G4Nucleus &targetNucleus )
+G4HadFinalState *  G4HEKaonZeroLongInelastic::
+ApplyYourself( const G4HadProjectile &aTrack, G4Nucleus &targetNucleus )
   {     
     G4HEKaonZeroInelastic theKaonZeroInelastic;
     G4HEAntiKaonZeroInelastic theAntiKaonZeroInelastic;

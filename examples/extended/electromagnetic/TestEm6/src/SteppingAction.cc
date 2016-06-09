@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: SteppingAction.cc,v 1.2 2002/06/05 14:21:00 maire Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: SteppingAction.cc,v 1.3 2003/10/10 10:42:40 maire Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // 
 
@@ -35,7 +35,7 @@
 #include "G4VProcess.hh"
 #include "G4ParticleTypes.hh"
 
-#ifndef G4NOHIST
+#ifdef G4ANALYSIS_USE
  #include "AIDA/IHistogram1D.h"
 #endif
 
@@ -78,7 +78,7 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
  G4double xPlus = Eplus/EGamma, xMinus = Eminus/EGamma;
  G4double thetaPlus = PGamma.angle(Pplus), thetaMinus = PGamma.angle(Pminus);
 	   
- #ifndef G4NOHIST
+#ifdef G4ANALYSIS_USE
  static const G4double muonMass=G4MuonPlus::MuonPlus()->GetPDGMass();
   
  G4double GammaPlus=EGamma*xPlus/muonMass;
@@ -92,7 +92,7 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
  
  runAction->GetHisto(4)->fill(xPlus);
  runAction->GetHisto(5)->fill(xMinus); 
- #endif
+#endif
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

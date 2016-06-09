@@ -21,21 +21,22 @@
 // ********************************************************************
 //
 //
-// $Id: G4SmartVoxelStat.cc,v 1.1 2001/10/22 16:08:05 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4SmartVoxelStat.cc,v 1.2 2003/11/02 14:01:23 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // --------------------------------------------------------------------
 // GEANT 4 class source file
 //
 // class G4SmartVoxelStat
 //
-// Store information on the performance of the smart voxel algorithm
-// for an individual logical volume
+// Stores information on the performance of the smart voxel algorithm
+// for an individual logical volume.
 //
 // Author: D.C.Williams, UCSC (davidw@scipp.ucsc.edu)
 //
-#include "G4SmartVoxelStat.hh"
+// --------------------------------------------------------------------
 
+#include "G4SmartVoxelStat.hh"
 #include "G4SmartVoxelHeader.hh"
 #include "G4SmartVoxelNode.hh"
 #include "G4SmartVoxelProxy.hh"

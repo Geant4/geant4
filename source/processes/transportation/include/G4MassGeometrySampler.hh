@@ -21,46 +21,53 @@
 // ********************************************************************
 //
 //
-// $Id: G4MassGeometrySampler.hh,v 1.4 2003/06/13 09:55:15 dressel Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4MassGeometrySampler.hh,v 1.6 2003/11/26 14:51:48 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // ----------------------------------------------------------------------
 // Class G4MassGeometrySampler
 //
 // Class description:
 // This class inherits from G4VSampler. It is used for scoring and 
-// importance smpling in the tracking (mass) geometry.
+// importance sampling in the tracking (mass) geometry.
 // See also the description in G4VSampler.hh.
-//
+
 // Author: Michael Dressel (Michael.Dressel@cern.ch)
 // ----------------------------------------------------------------------
 #ifndef G4MassGeometrySampler_hh
 #define G4MassGeometrySampler_hh G4MassGeometrySampler_hh
 
+#include "G4Types.hh"
+#include "G4String.hh"
 #include "G4VSampler.hh"
-#include "globals.hh"
 #include "G4VSamplerConfigurator.hh"
 
 class G4MImportanceConfigurator;
+class G4MWeightWindowConfigurator;
 class G4MScoreConfigurator;
 class G4WeightCutOffConfigurator;
 class G4VGCellFinder;
 
-class G4MassGeometrySampler : public G4VSampler{
+class G4MassGeometrySampler : public G4VSampler
+{
 
-public:  
+public:  // with description
  
   explicit G4MassGeometrySampler(const G4String &particlename);
   virtual ~G4MassGeometrySampler();
 
   virtual void PrepareScoring(G4VScorer *Scorer);
   virtual void PrepareImportanceSampling(G4VIStore *istore,
-					 const G4VImportanceAlgorithm 
-					 *ialg);
+                                         const G4VImportanceAlgorithm 
+                                         *ialg);
   virtual void PrepareWeightRoulett(G4double wsurvive, 
-				    G4double wlimit,
-				    G4double isource);
+                                    G4double wlimit,
+                                    G4double isource);
   
+  virtual void PrepareWeightWindow(G4VWeightWindowStore *wwstore,
+                                   G4VWeightWindowAlgorithm *wwAlg,
+                                   G4PlaceOfAction placeOfAction);
+
   virtual void Configure();
 
   virtual void ClearSampling();
@@ -73,12 +80,15 @@ private:
   operator=(const G4MassGeometrySampler &);
 
 private:
+
   G4String fParticleName;
   G4MImportanceConfigurator *fMImportanceConfigurator;
   G4MScoreConfigurator *fMScoreConfigurator;
   G4VGCellFinder *fGCellFinder;
   G4WeightCutOffConfigurator *fWeightCutOffConfigurator;
   G4VIStore *fIStore;
+  G4MWeightWindowConfigurator *fMWeightWindowConfigurator;
+  G4VWeightWindowStore *fWWStore;
   G4bool fIsConfigured;
   G4Configurators fConfigurators;
 };

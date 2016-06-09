@@ -1,0 +1,32 @@
+# $Id: hanson.mac,v 1.1 2003/08/11 10:03:55 maire Exp $
+#
+# macro file for TestEm5.cc    
+#
+# angle distribution of  15.7 MeV electrons
+# transmitted through thin gold foils.
+# A.O.Hanson et al. Phys.Rev.84 (1951) page 634.
+#     		    
+/control/verbose 2
+/run/verbose 2
+#
+/testem/det/setAbsMat   Gold      
+/testem/det/setAbsThick 9.658 mum
+###/testem/det/setAbsThick 19.296 mum  
+/testem/det/setAbsYZ    1 cm
+#
+/testem/phys/setGCut 13.0 mum   
+/testem/phys/setECut 1.12 mum
+/testem/phys/setPCut 1.12 mum
+#
+/run/initialize
+#
+/testem/gun/setDefault
+/gun/particle e- 
+/gun/energy 15.7 MeV
+#
+/testem/histo/setFileName hanson.paw
+/testem/histo/setHisto 5  100 0 10 deg		#space angle
+###/testem/histo/setHisto 5  60 0 30 deg		#space angle    
+#
+/testem/event/printModulo 100000 
+/run/beamOn 1000000

@@ -21,31 +21,29 @@
 // ********************************************************************
 //
 //
-// $Id: G4ReflectedSolid.cc,v 1.11 2003/06/16 16:53:17 gunter Exp $
+// $Id: G4ReflectedSolid.cc,v 1.14 2003/12/01 09:32:05 gcosmo Exp $
 //
-// GEANT4 tag $Name: geant4-05-02 $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // Implementation for G4ReflectedSolid class for boolean 
 // operations between other solids
 //
 // Author: Vladimir Grichine, 23.07.01  (Vladimir.Grichine@cern.ch)
 //
-// ********************************************************************
+// --------------------------------------------------------------------
 
 #include "G4ReflectedSolid.hh"
 #include "G4Point3D.hh"
 #include "G4Normal3D.hh"
-#include "G4VSolid.hh"
 
 #include "G4VoxelLimits.hh"
-#include "G4AffineTransform.hh"
 
 #include "G4VPVParameterisation.hh"
 
 #include "G4VGraphicsScene.hh"
 #include "G4Polyhedron.hh"
 #include "G4NURBS.hh"
-#include "G4NURBSbox.hh"
+// #include "G4NURBSbox.hh"
 
 
 /////////////////////////////////////////////////////////////////
@@ -77,8 +75,13 @@ G4ReflectedSolid::~G4ReflectedSolid()
 {
   if(fPtrTransform)
   {
-   delete fPtrTransform ;
-   delete fDirectTransform;
+    delete fPtrTransform; fPtrTransform=0;
+    delete fDirectTransform; fDirectTransform=0;
+  }
+  if(fPtrTransform3D)
+  {
+    delete fPtrTransform3D; fPtrTransform3D=0;
+    delete fDirectTransform3D; fDirectTransform3D=0;
   }
 }
 
@@ -292,7 +295,9 @@ G4ReflectedSolid::CalculateExtent( const EAxis pAxis,
   else
   {
     DumpInfo();
-    G4Exception("G4ReflectedSolid::CalculateExtent() - Out of memory !");
+    G4Exception("G4ReflectedSolid::CalculateExtent()",
+                "FatalError", FatalException,
+                "Error in allocation of vertices. Out of memory !");
   }
   
   ClipCrossSection(vertices,0,pVoxelLimit,pAxis,pMin,pMax) ;
@@ -477,7 +482,9 @@ G4ReflectedSolid::ComputeDimensions(       G4VPVParameterisation*,
                                      const G4VPhysicalVolume* ) 
 {
   DumpInfo();
-  G4Exception("G4ReflectedSolid::ComputeDimensions() - has no meaning!");
+  G4Exception("G4BooleanSolid::ComputeDimensions()",
+               "NotApplicable", FatalException,
+               "Method not applicable in this context!");
 }
 
 //////////////////////////////////////////////////////////////////////////

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: ExN04IonPhysics.cc,v 1.2 2003/06/16 16:48:24 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: ExN04IonPhysics.cc,v 1.3 2003/12/03 11:19:10 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // 
 
@@ -72,11 +72,8 @@ void ExN04IonPhysics::ConstructProcess()
   // add process
   pManager->AddDiscreteProcess(&theElasticProcess);
 
-  pManager->AddProcess(&fIonIonisation, ordInActive, 2, 2);
-
-  pManager->AddProcess(&fIonMultipleScattering);
-  pManager->SetProcessOrdering(&fIonMultipleScattering, idxAlongStep,  1);
-  pManager->SetProcessOrdering(&fIonMultipleScattering, idxPostStep,  1);
+  pManager->AddProcess(&fIonMultipleScattering, -1, 1, 1);
+  pManager->AddProcess(&fIonIonisation,         -1, 2, 2);
 
   // Deuteron 
   pManager = G4Deuteron::Deuteron()->GetProcessManager();
@@ -87,12 +84,9 @@ void ExN04IonPhysics::ConstructProcess()
   fDeuteronProcess.RegisterMe(fDeuteronModel);
   pManager->AddDiscreteProcess(&fDeuteronProcess);
 
-  pManager->AddProcess(&fDeuteronIonisation, ordInActive, 2, 2);
+  pManager->AddProcess(&fDeuteronMultipleScattering, -1, 1, 1);
+  pManager->AddProcess(&fDeuteronIonisation,        -1, 2, 2);
 
-  pManager->AddProcess(&fDeuteronMultipleScattering);
-  pManager->SetProcessOrdering(&fDeuteronMultipleScattering, idxAlongStep,  1);
-  pManager->SetProcessOrdering(&fDeuteronMultipleScattering, idxPostStep,  1);
- 
   // Triton 
   pManager = G4Triton::Triton()->GetProcessManager();
   // add process
@@ -102,11 +96,8 @@ void ExN04IonPhysics::ConstructProcess()
   fTritonProcess.RegisterMe(fTritonModel);
   pManager->AddDiscreteProcess(&fTritonProcess);
 
-  pManager->AddProcess(&fTritonIonisation, ordInActive, 2, 2);
-
-  pManager->AddProcess(&fTritonMultipleScattering);
-  pManager->SetProcessOrdering(&fTritonMultipleScattering, idxAlongStep,  1);
-  pManager->SetProcessOrdering(&fTritonMultipleScattering, idxPostStep,  1);
+  pManager->AddProcess(&fTritonMultipleScattering, -1, 1, 1);
+  pManager->AddProcess(&fTritonIonisation,        -1, 2, 2);
  
   // Alpha 
   pManager = G4Alpha::Alpha()->GetProcessManager();
@@ -117,22 +108,17 @@ void ExN04IonPhysics::ConstructProcess()
   fAlphaProcess.RegisterMe(fAlphaModel);
   pManager->AddDiscreteProcess(&fAlphaProcess);
 
-  pManager->AddProcess(&fAlphaIonisation, ordInActive, 2, 2);
+  pManager->AddProcess(&fAlphaMultipleScattering, -1, 1, 1);
+  pManager->AddProcess(&fAlphaIonisation,        -1, 2, 2);
 
-  pManager->AddProcess(&fAlphaMultipleScattering);
-  pManager->SetProcessOrdering(&fAlphaMultipleScattering, idxAlongStep,  1);
-  pManager->SetProcessOrdering(&fAlphaMultipleScattering, idxPostStep,  1);
- 
   // He3
   pManager = G4He3::He3()->GetProcessManager();
   // add process
   pManager->AddDiscreteProcess(&theElasticProcess);
 
-  pManager->AddProcess(&fHe3Ionisation, ordInActive, 2, 2);
+  pManager->AddProcess(&fHe3MultipleScattering, -1, 1, 1);
+  pManager->AddProcess(&fHe3Ionisation,        -1, 2, 2);
 
-  pManager->AddProcess(&fHe3MultipleScattering);
-  pManager->SetProcessOrdering(&fHe3MultipleScattering, idxAlongStep,  1);
-  pManager->SetProcessOrdering(&fHe3MultipleScattering, idxPostStep,  1);
    
 }
 

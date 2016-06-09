@@ -1,4 +1,4 @@
-$Id: History,v 1.21 2002/11/20 17:25:46 gcosmo Exp $
+$Id: History,v 1.26 2003/11/12 13:05:48 johna Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,25 @@ committal in the CVS repository !
 
 History file for visualization/modeling
 ---------------------------------------
+
+12th November 2003  John Allison  (modeling-V05-02-02)
+- CalculateExtent always searches complete hierarchy.
+
+6th November 2003  John Allison  (modeling-V05-02-01, vis-V05-02-03)
+- GNUmakefile: rationalised.
+
+3rd November 2003  Gabriele Cosmo  (modeling-V05-02-00, vis-V05-02-02)
+- Added inclusion of G4VSolid.hh in G4LogicalVolumeModel.cc to make it self
+  consistent after header review in geometry category.
+
+4th October 2003  Gabriele Cosmo  (vis-V05-02-01)
+- GNUmakefile:
+  o added dependency to new module "geometry/navigation".
+  o replaced "digits+hits" with "digits_hits".
+- Coworks with "geometry-V05-02-00" and "digits_hits-V05-02-00".
+
+22nd September 2003  John Allison  (vis-V05-02-00, greps-V05-02-00)
+- Removed a redundant comment.
 
 20th November 2002  Gabriele Cosmo  (modeling-V04-01-00)
 - Fixed access to static data (requires "greps-V04-01-04") in

@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4ReferenceCountedHandle.hh,v 1.14 2001/11/07 09:35:24 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // 
 // Class G4ReferenceCountedHandle

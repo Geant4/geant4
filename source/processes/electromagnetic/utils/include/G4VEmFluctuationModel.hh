@@ -20,6 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
+// $Id: G4VEmFluctuationModel.hh,v 1.7 2003/10/16 13:06:40 vnivanch Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // -------------------------------------------------------------------
 //
@@ -29,14 +31,15 @@
 // File name:     G4VEmFluctuationModel
 //
 // Author:        Vladimir Ivanchenko
-// 
+//
 // Creation date: 03.01.2002
 //
-// Modifications: 
+// Modifications:
 //
 // 28-12-02 add method Dispersion (V.Ivanchenko)
 // 07-02-03 change signature (V.Ivanchenko)
 // 13-02-03 Add name (V.Ivanchenko)
+// 16-10-03 Changed interface to Initialisation (V.Ivanchenko)
 //
 //
 // Class Description: 
@@ -76,8 +79,8 @@ public:
 				        G4double& tmax,
                                         G4double& length) = 0;
 
-  virtual void Initialise(const G4ParticleDefinition*) = 0;
-  
+  virtual void InitialiseMe(const G4ParticleDefinition*) = 0;
+
   G4String GetName() const {return name;};
 
 protected:

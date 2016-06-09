@@ -67,7 +67,7 @@
   {
     G4String dirName;
     if(!getenv("NeutronHPCrossSections")) 
-       G4Exception("Please setenv NeutronHPCrossSections to point to the neutron cross-section files.");
+       throw G4HadronicException(__FILE__, __LINE__, "Please setenv NeutronHPCrossSections to point to the neutron cross-section files.");
     G4String baseName = getenv("NeutronHPCrossSections");
     dirName = baseName+"/Fission";
     if(Z>89) 

@@ -21,15 +21,20 @@
 // ********************************************************************
 //
 //
-// $Id: G4TouchableHistory.cc,v 1.6 2002/08/06 10:35:57 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4TouchableHistory.cc,v 1.8 2003/12/05 17:10:53 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // 
 // class G4TouchableHistory Implementation
 //
-// ********************************************************************
+// ----------------------------------------------------------------------
 
 #include "G4TouchableHistory.hh"
+
+// Ensures correct order of construction and destruption of static objects.
+//
+G4Allocator<G4NavigationLevel>     aNavigationLevelAllocator;
+G4Allocator<G4NavigationLevelRep>  aNavigLevelRepAllocator;
 
 G4TouchableHistory::~G4TouchableHistory()
 {

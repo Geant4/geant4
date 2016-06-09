@@ -21,18 +21,27 @@
 // ********************************************************************
 //
 //
+// $Id: G4Mag_SpinEqRhs.cc,v 1.9 2003/10/31 14:35:55 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
-//  This is the standard right-hand side for equation of motion.
-//        This version of the right-hand side includes
-//        the three components of the particle's spin.
+// This is the standard right-hand side for equation of motion.
+// This version of the right-hand side includes the three components
+// of the particle's spin.
 //
 //            J. Apostolakis, February 8th, 1999
 //            P. Gumplinger,  February 8th, 1999
 //            D. Cote-Ahern, P. Gumplinger,  April 11th, 2001
 //
+// --------------------------------------------------------------------
+
 #include "G4Mag_SpinEqRhs.hh"
+#include "G4MagneticField.hh"
 #include "G4ThreeVector.hh"
-#include "globals.hh"
+
+G4Mag_SpinEqRhs::G4Mag_SpinEqRhs( G4MagneticField* MagField )
+  : G4Mag_EqRhs( MagField ) {}
+
+G4Mag_SpinEqRhs::~G4Mag_SpinEqRhs() {}
 
 void
 G4Mag_SpinEqRhs::SetChargeMomentumMass(G4double particleCharge, // in e+ units

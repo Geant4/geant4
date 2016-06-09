@@ -81,7 +81,7 @@
         buff = current;
 	current+=abs(current-last)/2.;
 	last = buff;
-        if(current>190*MeV) G4Exception("Madland-Nix Spectrum has not converged in sampling");
+        if(current>190*MeV) throw G4HadronicException(__FILE__, __LINE__, "Madland-Nix Spectrum has not converged in sampling");
       }
       else
       {

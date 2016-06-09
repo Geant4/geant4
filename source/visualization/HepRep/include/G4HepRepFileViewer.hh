@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4HepRepFileViewer.hh,v 1.7 2003/06/25 10:19:52 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4HepRepFileViewer.hh,v 1.8 2003/07/12 19:48:15 duns Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // 
 // John Allison  5th April 2001
@@ -35,7 +35,7 @@
 
 #include "G4VViewer.hh"
 
-#include "HepRepXMLWriter.hh"
+#include "G4HepRepFileXMLWriter.hh"
 #include "G4HepRepFileSceneHandler.hh"
 
 class G4HepRepFileViewer: public G4VViewer {
@@ -48,7 +48,7 @@ public:
   void ShowView();
 
 private:
-  HepRepXMLWriter *hepRepXMLWriter;
+  G4HepRepFileXMLWriter *hepRepXMLWriter;
 };
 
 #endif

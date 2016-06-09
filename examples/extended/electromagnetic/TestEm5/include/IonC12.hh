@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: IonC12.hh,v 1.1 2003/04/30 14:12:35 maire Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: IonC12.hh,v 1.3 2003/08/11 10:26:24 maire Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // Each class inheriting from G4VIon
 // corresponds to a particle type; one and only one
@@ -35,7 +35,6 @@
 #define IonC12_h 1
 
 #include "globals.hh"
-#include "G4ios.hh"
 #include "G4VIon.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.......

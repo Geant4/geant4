@@ -22,7 +22,7 @@
 //
 //
 // $Id: BrachyPrimaryGeneratorAction.hh,v 1.10 2003/05/22 17:20:42 guatelli Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 //    ********************************************
 //    *                                          *

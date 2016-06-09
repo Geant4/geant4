@@ -28,6 +28,7 @@
 #include "G4VPhysicalVolume.hh"
 #include "G4Step.hh"
 #include "G4StepPoint.hh"
+#include "G4TouchableHistory.hh"
 
 CCalEcalOrganization::~CCalEcalOrganization(){
   G4cout << " Deleting CCalEcalOrganization" << G4endl;
@@ -36,19 +37,20 @@ CCalEcalOrganization::~CCalEcalOrganization(){
 
 unsigned int CCalEcalOrganization::GetUnitID(const G4Step* aStep) const {
 
-  G4VPhysicalVolume* pv = aStep->GetPreStepPoint()->GetPhysicalVolume();
-  int idx=0, idl=0, idn=0;
-  if (pv > 0) {
-    idx = pv->GetCopyNo() - 1;
-    pv  = pv->GetMother();
-    if (pv > 0) {
-      idl = pv->GetCopyNo() - 1;
-      pv  = pv->GetMother();
-      if (pv > 0) 
-	idn = pv->GetCopyNo();
+  G4TouchableHistory* theTouchable = 
+    (G4TouchableHistory*)( aStep->GetPreStepPoint()->GetTouchable() );
+
+  int idl=0, idn=0;
+  int level = theTouchable->GetHistoryDepth();  
+  int idx = theTouchable->GetReplicaNumber( 0 ) - 1;
+  if ( level > 0 ) {
+    idl = theTouchable->GetReplicaNumber( 1 ) - 1;
+    if ( level > 1 ) {
+      idn = theTouchable->GetReplicaNumber( 2 );
     }
   }
+
   unsigned int idunit = idn*4096 + idl*64 + idx;
-  
+
   return idunit;
 }

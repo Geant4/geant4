@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4HEVector.cc,v 1.13 2002/12/12 19:18:03 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4HEVector.cc,v 1.14 2003/07/01 15:42:25 hpw Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 //
 
@@ -36,16 +36,17 @@
 // Fesefeldt, bug fixed in Defs1, 14 August 2000
 
 #include "G4HEVector.hh"
+#include "G4ParticleDefinition.hh"
 
-G4HEVector::G4HEVector(const G4DynamicParticle * aParticle)
+G4HEVector::G4HEVector(const G4HadProjectile * aParticle)
   {
-     G4ThreeVector aMom = 1./GeV*aParticle->GetMomentum();
+     G4ThreeVector aMom = 1./GeV*aParticle->Get4Momentum().vect();
      px               = aMom.x();
      py               = aMom.y();
      pz               = aMom.z();
      energy           = aParticle->GetTotalEnergy()/GeV;
      kineticEnergy    = aParticle->GetKineticEnergy()/GeV;
-     mass             = aParticle->GetMass()/GeV;
+     mass             = aParticle->GetDefinition()->GetPDGMass()/GeV;
      charge           = aParticle->GetDefinition()->GetPDGCharge()/eplus;
      timeOfFlight     = 0.0;
      side             = 0;

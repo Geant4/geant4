@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: PhysListParticles.hh,v 1.1 2003/04/22 16:25:05 maire Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: PhysListParticles.hh,v 1.2 2003/10/10 16:21:27 maire Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -40,15 +40,15 @@ class PhysListParticles : public G4VPhysicsConstructor
 {
   public: 
     PhysListParticles(const G4String& name = "particles");
-    virtual ~PhysListParticles();
+   ~PhysListParticles();
 
   public: 
     // This method will be invoked in the Construct() method. 
     // each particle type will be instantiated
-    virtual void ConstructParticle();
+    void ConstructParticle();
  
     // This method is dummy.
-    virtual void ConstructProcess() {};
+    void ConstructProcess() {};
 
 };
 

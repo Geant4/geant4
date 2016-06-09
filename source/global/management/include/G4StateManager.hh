@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4StateManager.hh,v 1.8 2003/06/06 16:17:14 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // 
 // ------------------------------------------------------------

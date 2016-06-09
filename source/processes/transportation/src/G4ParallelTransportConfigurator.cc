@@ -21,13 +21,12 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParallelTransportConfigurator.cc,v 1.4 2003/04/02 16:59:19 dressel Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4ParallelTransportConfigurator.cc,v 1.5 2003/11/26 14:51:50 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // ----------------------------------------------------------------------
 // Class G4ParallelTransportConfigurator
 //
-
 // Author: Michael Dressel (Michael.Dressel@cern.ch)
 // ----------------------------------------------------------------------
 
@@ -36,33 +35,37 @@
 
 G4ParallelTransportConfigurator::
 G4ParallelTransportConfigurator(const G4String &particlename,
-			   G4ParallelWorld &pworld)
-  :
-  fPlacer(particlename),
-  fPWorld(pworld),
-  fParallelTransport(0)
-{}
+                                      G4ParallelWorld &pworld)
+  : fPlacer(particlename),
+    fPWorld(pworld),
+    fParallelTransport(0)
+{
+}
 
-G4ParallelTransportConfigurator::
-~G4ParallelTransportConfigurator(){
-  if (fParallelTransport) {
+G4ParallelTransportConfigurator::~G4ParallelTransportConfigurator()
+{
+  if (fParallelTransport)
+  {
     fPlacer.RemoveProcess(fParallelTransport);
     delete fParallelTransport;
   }
 }
 
-void G4ParallelTransportConfigurator::
-Configure(G4VSamplerConfigurator *){
-  fParallelTransport = new 
-    G4ParallelTransport(fPWorld.GetGeoDriver(), 
-			fPWorld.GetParallelStepper());
-  if (!fParallelTransport) {
-    G4Exception("ERROR:G4ParallelTransportConfigurator::Configure new failed to create G4ParallelTransport!");
+void G4ParallelTransportConfigurator::Configure(G4VSamplerConfigurator *)
+{
+  fParallelTransport = new G4ParallelTransport(fPWorld.GetGeoDriver(), 
+                                         fPWorld.GetParallelStepper());
+  if (!fParallelTransport)
+  {
+    G4Exception("G4ParallelTransportConfigurator::Configure()",
+                "FatalError", FatalException,
+                "Failed to allocate G4ParallelTransport !");
   }
   fPlacer.AddProcessAsSecondDoIt(fParallelTransport);
 }
 
-const G4VTrackTerminator *G4ParallelTransportConfigurator::
-GetTrackTerminator() const {
+const G4VTrackTerminator *
+G4ParallelTransportConfigurator::GetTrackTerminator() const
+{
   return 0;
 }

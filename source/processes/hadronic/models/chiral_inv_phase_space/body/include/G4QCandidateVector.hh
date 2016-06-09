@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4QCandidateVector.hh,v 1.13 2003/06/16 17:04:01 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4QCandidateVector.hh,v 1.17 2003/12/09 15:37:58 gunter Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 //      ---------------- G4QCandidateVector ----------------
 //             by Mikhail Kossov, Sept 1999.

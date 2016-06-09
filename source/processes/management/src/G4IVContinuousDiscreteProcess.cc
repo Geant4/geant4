@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4IVContinuousDiscreteProcess.cc,v 1.7 2003/04/01 16:43:51 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4IVContinuousDiscreteProcess.cc,v 1.8 2003/11/03 03:27:27 kurasige Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // $Id: 
 // --------------------------------------------------------------
@@ -38,7 +38,8 @@
 G4IVContinuousDiscreteProcess::G4IVContinuousDiscreteProcess()
                    :G4VProcess("No Name Discrete Process"), BIGSTEP(1.e10)
 {
-  G4Exception("G4IVContinuousDiscreteProcess:: default constructor is called");
+  G4Exception("G4IVContinuousDiscreteProcess::G4IVContinuousDiscreteProcess","Illegal operation",
+	      JustWarning,"default constructor is called");
 }
 
 G4IVContinuousDiscreteProcess::G4IVContinuousDiscreteProcess(const G4String& aName , G4ProcessType aType)

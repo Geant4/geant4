@@ -22,7 +22,7 @@
 //
 //
 // $Id: B02ScoringDetectorConstruction.hh,v 1.2 2002/04/19 10:54:26 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 
 #ifndef B02ScoringDetectorConstruction_hh 

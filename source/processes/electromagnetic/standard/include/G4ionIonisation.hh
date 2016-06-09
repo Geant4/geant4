@@ -20,6 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
+// $Id: G4ionIonisation.hh,v 1.22 2003/11/12 16:23:42 vnivanch Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // -------------------------------------------------------------------
 //
@@ -40,6 +42,9 @@
 // 13-02-03 SubCutoff regime is assigned to a region (V.Ivanchenko)
 // 15-02-03 Add control on delta pointer (V.Ivanchenko)
 // 23-05-03 Add fluctuation model as a member function (V.Ivanchenko)
+// 03-08-03 Add effective charge and saturation of tmax (V.Ivanchenko)
+// 12-11-03 Fix problem of negative effective charge (V.Ivanchenko)
+// 12-11-03 G4EnergyLossSTD -> G4EnergyLossProcess (V.Ivanchenko)
 //
 // Class Description:
 //
@@ -53,12 +58,12 @@
 #ifndef G4ionIonisation_h
 #define G4ionIonisation_h 1
 
-#include "G4VEnergyLossSTD.hh"
+#include "G4VEnergyLossProcess.hh"
 
 class G4Material;
 class G4VEmFluctuationModel;
 
-class G4ionIonisation : public G4VEnergyLossSTD
+class G4ionIonisation : public G4VEnergyLossProcess
 {
 
 public:
@@ -90,6 +95,12 @@ public:
   void PrintInfoDefinition();
   // Print out of the class parameters
 
+  G4double EffectiveChargeSquare(const G4Track& track);
+
+  G4double EffectiveCharge(const G4ParticleDefinition* p,
+                           const G4Material* material,
+			         G4double kineticEnergy);
+
 protected:
 
   const G4ParticleDefinition* DefineBaseParticle(const G4ParticleDefinition* p);
@@ -108,9 +119,17 @@ private:
   G4ionIonisation & operator=(const G4ionIonisation &right);
   G4ionIonisation(const G4ionIonisation&);
 
+  // cash
+  const G4Material*           theMaterial;
+  const G4ParticleDefinition* currentParticle;
   const G4ParticleDefinition* theParticle;
   const G4ParticleDefinition* theBaseParticle;
   G4VEmFluctuationModel*      flucModel;
+
+  G4double                    chargeCorrection;
+  G4double                    chargeLowLimit;
+  G4double                    energyLowLimit;
+
   G4bool                      subCutoff;
 };
 
@@ -119,20 +138,18 @@ private:
 
 inline G4bool G4ionIonisation::IsApplicable(const G4ParticleDefinition& p)
 {
-  return (p.GetPDGCharge() != 0.0 && p.GetParticleType() == "nucleus");
+  return (p.GetPDGCharge() != 0.0 && !p.IsShortLived() &&
+          (p.GetParticleType() == "nucleus" || p.GetParticleType() == "static_nucleus"));
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 inline G4double G4ionIonisation::MinPrimaryEnergy(
-          const G4ParticleDefinition* p, const G4Material*, G4double cut)
+          const G4ParticleDefinition*, const G4Material*, G4double cut)
 {
-  G4double mass = p->GetPDGMass();
   G4double x = 0.5*cut/electron_mass_c2;
-  //  G4double y = electron_mass_c2/mass;
-  //  G4double g = x*y + sqrt((1. + x)*(1. + x*y*y));
   G4double g = sqrt(1. + x);
-  return mass*(g - 1.0);
+  return proton_mass_c2*(g - 1.0);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -141,9 +158,8 @@ inline G4double G4ionIonisation::MaxSecondaryEnergy(const G4DynamicParticle* dyn
 {
   G4double mass  = dynParticle->GetMass();
   G4double gamma = dynParticle->GetKineticEnergy()/mass + 1.0;
-  G4double ratio = electron_mass_c2/mass;
-  G4double tmax = 2.0*electron_mass_c2*(gamma*gamma - 1.) /
-                  (1. + 2.0*gamma*ratio + ratio*ratio);
+  G4double tmax  = electron_mass_c2*std::min(2.0*(gamma*gamma - 1.),
+                                             51200.*pow(proton_mass_c2/mass,0.66667));
   return tmax;
 }
 
@@ -154,16 +170,14 @@ inline G4double G4ionIonisation::GetMeanFreePath(const G4Track& track,
                                                        G4double step,
                                                        G4ForceCondition* cond)
 {
-  const G4DynamicParticle* dp = track.GetDynamicParticle();
-  G4double mRatio    = proton_mass_c2/dp->GetMass();
-  G4double q         = dp->GetCharge()/eplus;
-  G4double q_2       = q*q;
+  G4double mRatio    = proton_mass_c2/track.GetDynamicParticle()->GetMass();
+  G4double q_2       = EffectiveChargeSquare(track);
   SetMassRatio(mRatio);
   SetReduceFactor(1.0/(q_2*mRatio));
   SetChargeSquare(q_2);
   SetChargeSquareRatio(q_2);
 
-  return G4VEnergyLossSTD::GetMeanFreePath(track, step, cond);
+  return G4VEnergyLossProcess::GetMeanFreePath(track, step, cond);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -174,16 +188,18 @@ inline std::vector<G4Track*>*  G4ionIonisation::SecondariesAlongStep(
                            const G4Step&   step,
 	             	         G4double& tmax,
 			         G4double& eloss,
-                                 G4double& kinEnergy)
+                                 G4double& scaledEnergy)
 {
   std::vector<G4Track*>* newp = 0;
   if(subCutoff) {
     G4VSubCutoffProcessor* sp = SubCutoffProcessor(CurrentMaterialCutsCoupleIndex());
     if (sp) {
-      G4VEmModel* model = SelectModel(kinEnergy);
+      G4VEmModel* model = SelectModel(scaledEnergy);
       newp = sp->SampleSecondaries(step,tmax,eloss,model);
     }
   }
+  G4double e = step.GetTrack()->GetKineticEnergy() - eloss;
+  aParticleChange.SetChargeChange(EffectiveCharge(currentParticle,theMaterial,e));
   return newp;
 }
 
@@ -204,10 +220,24 @@ inline void G4ionIonisation::SecondariesPostStep(
     aParticleChange.AddSecondary(delta);
     G4ThreeVector finalP = dp->GetMomentum();
     kinEnergy -= delta->GetKineticEnergy();
+    aParticleChange.SetChargeChange(EffectiveCharge(currentParticle,theMaterial,kinEnergy));
     finalP -= delta->GetMomentum();
     finalP = finalP.unit();
     aParticleChange.SetMomentumDirectionChange(finalP);
   }
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline G4double G4ionIonisation::EffectiveChargeSquare(const G4Track& track)
+{
+  currentParticle    = track.GetDefinition();
+  theMaterial        = track.GetMaterial();
+  G4double kinEnergy = track.GetKineticEnergy();
+  G4double charge    = EffectiveCharge(currentParticle,theMaterial,kinEnergy)
+                     *chargeCorrection/eplus;
+
+  return charge*charge;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4UserRunAction.hh,v 1.7 2003/04/04 16:45:30 asaim Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 
 #ifndef G4UserRunAction_h

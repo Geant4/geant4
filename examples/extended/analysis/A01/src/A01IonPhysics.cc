@@ -20,9 +20,10 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: A01IonPhysics.cc,v 1.4 2003/06/16 16:47:04 gunter Exp $
+// $Id: A01IonPhysics.cc,v 1.6 2003/10/14 00:15:48 tkoi Exp $
 // --------------------------------------------------------------
 //
+// 13-Oct-2003 Add Comment for Ionization of Generic Ion by T. Koi 
 
 #include "A01IonPhysics.hh"
 
@@ -59,78 +60,150 @@ void A01IonPhysics::ConstructParticle()
 
 void A01IonPhysics::ConstructProcess()
 {
-  G4ProcessManager * pManager = 0;
+   G4ProcessManager * pManager = 0;
 
-  // Elastic Process
-  theElasticModel = new G4LElastic();
-  theElasticProcess.RegisterMe(theElasticModel);
 
-  // Generic Ion
-  pManager = G4GenericIon::GenericIon()->GetProcessManager();
-  // add process
-  pManager->AddDiscreteProcess(&theElasticProcess);
+   // Generic Ion
+   pManager = G4GenericIon::GenericIon()->GetProcessManager();
 
-  pManager->AddProcess(&fIonIonisation, ordInActive, 2, 2);
+   // add process
+   G4VProcess* thegionMultipleScattering = new G4MultipleScattering();
+   //
+   // G4hIonization may be not able to use for Geanric Ion in future 
+   // Please take care using this physics list after v5.2.p02 
+   G4VProcess* thegionIonisation        = new G4hIonisation();
+   //
+   pManager->AddProcess(thegionIonisation);
+   pManager->AddProcess(thegionMultipleScattering);
+   //
+   // set ordering for AlongStepDoIt
+   pManager->SetProcessOrdering(thegionMultipleScattering, idxAlongStep,1);
+   pManager->SetProcessOrdering(thegionIonisation,        idxAlongStep,2);
+   //
+   // set ordering for PostStepDoIt
+   pManager->SetProcessOrdering(thegionMultipleScattering, idxPostStep,1);
+   pManager->SetProcessOrdering(thegionIonisation,        idxPostStep,2);
 
-  pManager->AddProcess(&fIonMultipleScattering);
-  pManager->SetProcessOrdering(&fIonMultipleScattering, idxAlongStep,  1);
-  pManager->SetProcessOrdering(&fIonMultipleScattering, idxPostStep,  1);
 
-  // Deuteron
-  pManager = G4Deuteron::Deuteron()->GetProcessManager();
-  // add process
-  pManager->AddDiscreteProcess(&theElasticProcess);
+   // Deuteron
+   pManager = G4Deuteron::Deuteron()->GetProcessManager();
 
-  fDeuteronModel = new G4LEDeuteronInelastic();
-  fDeuteronProcess.RegisterMe(fDeuteronModel);
-  pManager->AddDiscreteProcess(&fDeuteronProcess);
+   // add process
+   G4HadronElasticProcess* thedueElasticProcess
+                         = new G4HadronElasticProcess();
+   G4LElastic* thedueElasticModel = new G4LElastic();
+   thedueElasticProcess->RegisterMe(thedueElasticModel);
+   pManager->AddDiscreteProcess(thedueElasticProcess);
 
-  pManager->AddProcess(&fDeuteronIonisation, ordInActive, 2, 2);
+   G4DeuteronInelasticProcess* theDeuteronInelasticProcess
+                         = new G4DeuteronInelasticProcess();
 
-  pManager->AddProcess(&fDeuteronMultipleScattering);
-  pManager->SetProcessOrdering(&fDeuteronMultipleScattering, idxAlongStep,  1);
-  pManager->SetProcessOrdering(&fDeuteronMultipleScattering, idxPostStep,  1);
+   G4LEDeuteronInelastic* theDeuteronLEPModel = new G4LEDeuteronInelastic();
+   theDeuteronInelasticProcess->RegisterMe(theDeuteronLEPModel);
+   pManager->AddDiscreteProcess(theDeuteronInelasticProcess);
 
-  // Triton
-  pManager = G4Triton::Triton()->GetProcessManager();
-  // add process
-  pManager->AddDiscreteProcess(&theElasticProcess);
+   G4VProcess* thedueMultipleScattering = new G4MultipleScattering();
+   G4VProcess* thedueIonisation        = new G4hIonisation();
+   //
+   pManager->AddProcess(thedueIonisation);
+   pManager->AddProcess(thedueMultipleScattering);
+   //
+   // set ordering for AlongStepDoIt
+   pManager->SetProcessOrdering(thedueMultipleScattering, idxAlongStep,1);
+   pManager->SetProcessOrdering(thedueIonisation,        idxAlongStep,2);
+   //
+   // set ordering for PostStepDoIt
+   pManager->SetProcessOrdering(thedueMultipleScattering, idxPostStep,1);
+   pManager->SetProcessOrdering(thedueIonisation,        idxPostStep,2);
 
-  fTritonModel = new G4LETritonInelastic();
-  fTritonProcess.RegisterMe(fTritonModel);
-  pManager->AddDiscreteProcess(&fTritonProcess);
 
-  pManager->AddProcess(&fTritonIonisation, ordInActive, 2, 2);
+   // Triton
+   pManager = G4Triton::Triton()->GetProcessManager();
 
-  pManager->AddProcess(&fTritonMultipleScattering);
-  pManager->SetProcessOrdering(&fTritonMultipleScattering, idxAlongStep,  1);
-  pManager->SetProcessOrdering(&fTritonMultipleScattering, idxPostStep,  1);
+   // add process
+   G4HadronElasticProcess* thetriElasticProcess
+                         = new G4HadronElasticProcess();
+   G4LElastic* thetriElasticModel = new G4LElastic();
+   thetriElasticProcess->RegisterMe(thetriElasticModel);
+   pManager->AddDiscreteProcess(thetriElasticProcess);
 
-  // Alpha
-  pManager = G4Alpha::Alpha()->GetProcessManager();
-  // add process
-  pManager->AddDiscreteProcess(&theElasticProcess);
+   G4TritonInelasticProcess* theTritonInelasticProcess
+                         = new G4TritonInelasticProcess();
 
-  fAlphaModel = new G4LEAlphaInelastic();
-  fAlphaProcess.RegisterMe(fAlphaModel);
-  pManager->AddDiscreteProcess(&fAlphaProcess);
+   G4LETritonInelastic* theTritonLEPModel = new G4LETritonInelastic();
+   theTritonInelasticProcess->RegisterMe(theTritonLEPModel);
+   pManager->AddDiscreteProcess(theTritonInelasticProcess);
 
-  pManager->AddProcess(&fAlphaIonisation, ordInActive, 2, 2);
+   G4VProcess* thetriMultipleScattering = new G4MultipleScattering();
+   G4VProcess* thetriIonisation        = new G4hIonisation();
+   //
+   pManager->AddProcess(thetriIonisation);
+   pManager->AddProcess(thetriMultipleScattering);
+   //
+   // set ordering for AlongStepDoIt
+   pManager->SetProcessOrdering(thetriMultipleScattering, idxAlongStep,1);
+   pManager->SetProcessOrdering(thetriIonisation,        idxAlongStep,2);
+   //
+   // set ordering for PostStepDoIt
+   pManager->SetProcessOrdering(thetriMultipleScattering, idxPostStep,1);
+   pManager->SetProcessOrdering(thetriIonisation,        idxPostStep,2);
 
-  pManager->AddProcess(&fAlphaMultipleScattering);
-  pManager->SetProcessOrdering(&fAlphaMultipleScattering, idxAlongStep,  1);
-  pManager->SetProcessOrdering(&fAlphaMultipleScattering, idxPostStep,  1);
 
-  // He3
-  pManager = G4He3::He3()->GetProcessManager();
-  // add process
-  pManager->AddDiscreteProcess(&theElasticProcess);
+   // Alpha
+   pManager = G4Alpha::Alpha()->GetProcessManager();
 
-  pManager->AddProcess(&fHe3Ionisation, ordInActive, 2, 2);
+   // add processes
+   G4HadronElasticProcess* thealElasticProcess
+                         = new G4HadronElasticProcess();
+   G4LElastic* thealElasticModel = new G4LElastic();
+   thealElasticProcess->RegisterMe(thealElasticModel);
+   pManager->AddDiscreteProcess(thealElasticProcess);
 
-  pManager->AddProcess(&fHe3MultipleScattering);
-  pManager->SetProcessOrdering(&fHe3MultipleScattering, idxAlongStep,  1);
-  pManager->SetProcessOrdering(&fHe3MultipleScattering, idxPostStep,  1);
+   G4AlphaInelasticProcess* theAlphaInelasticProcess
+                         = new G4AlphaInelasticProcess();
+
+   G4LEAlphaInelastic* theAlphaLEPModel = new G4LEAlphaInelastic();
+   theAlphaInelasticProcess->RegisterMe(theAlphaLEPModel);
+   pManager->AddDiscreteProcess(theAlphaInelasticProcess);
+
+   G4VProcess* thealpMultipleScattering = new G4MultipleScattering();
+   G4VProcess* thealpIonisation        = new G4hIonisation();
+   //
+   pManager->AddProcess(thealpIonisation);
+   pManager->AddProcess(thealpMultipleScattering);
+   //
+   // set ordering for AlongStepDoIt
+   pManager->SetProcessOrdering(thealpMultipleScattering, idxAlongStep,1);
+   pManager->SetProcessOrdering(thealpIonisation,        idxAlongStep,2);
+   //
+   // set ordering for PostStepDoIt
+   pManager->SetProcessOrdering(thealpMultipleScattering, idxPostStep,1);
+   pManager->SetProcessOrdering(thealpIonisation,        idxPostStep,2);
+
+
+   // He3
+   pManager = G4He3::He3()->GetProcessManager();
+
+   // add processes
+   G4HadronElasticProcess* thehe3ElasticProcess
+                         = new G4HadronElasticProcess();
+   G4LElastic* thehe3ElasticModel = new G4LElastic();
+   thehe3ElasticProcess->RegisterMe(thehe3ElasticModel);
+   pManager->AddDiscreteProcess(thehe3ElasticProcess);
+
+   G4VProcess* thehe3MultipleScattering = new G4MultipleScattering();
+   G4VProcess* thehe3Ionisation        = new G4hIonisation();
+   //
+   pManager->AddProcess(thehe3Ionisation);
+   pManager->AddProcess(thehe3MultipleScattering);
+   //
+   // set ordering for AlongStepDoIt
+   pManager->SetProcessOrdering(thehe3MultipleScattering, idxAlongStep,1);
+   pManager->SetProcessOrdering(thehe3Ionisation,        idxAlongStep,2);
+   //
+   // set ordering for PostStepDoIt
+   pManager->SetProcessOrdering(thehe3MultipleScattering, idxPostStep,1);
+   pManager->SetProcessOrdering(thehe3Ionisation,        idxPostStep,2);
 
 }
 

@@ -19,6 +19,12 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
+//
+//
+// $Id: ExN04HadronPhysics.cc,v 1.5 2003/12/03 11:19:10 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-00 $
+//
+
 #include "ExN04HadronPhysics.hh"
 
 #include "globals.hh"
@@ -67,7 +73,13 @@ void ExN04HadronPhysics::ConstructParticle()
 void ExN04HadronPhysics::ConstructProcess()
 {
   G4ProcessManager * pManager = 0;
-  
+  G4cout << "" << G4endl;
+  G4cout << "You are using the ExN04HadronPhysics" << G4endl;
+  G4cout << " - Note that this hadronic physics list is not optimized for any particular usage" << G4endl;
+  G4cout << " - If you wish to have a starting point tailored for a particular area of work," << G4endl;
+  G4cout << "   please use one of the available physics lists by use-case." << G4endl;
+  G4cout << "   More information can also be found from the Geant4 HyperNews." << G4endl;
+  G4cout << "" << G4endl;
   // Elastic Process
   theElasticModel = new G4LElastic();
   theElasticProcess.RegisterMe(theElasticModel);
@@ -222,13 +234,13 @@ void ExN04HadronPhysics::ConstructProcess()
   theNeutronInelastic.RegisterMe(&theTheoModel);
   pManager->AddDiscreteProcess(&theNeutronInelastic);
   
-  //theNeutronFissionModel = new G4LFission();
-  //theNeutronFission.RegisterMe(theNeutronFissionModel);
-  //pManager->AddDiscreteProcess(&NeutronFission);
+  theNeutronFissionModel = new G4LFission();
+  theNeutronFission.RegisterMe(theNeutronFissionModel);
+  pManager->AddDiscreteProcess(&theNeutronFission);
 
-  //theNeutronCaptureModel = new G4LCapture();
-  //theNeutronCapture.RegisterMe(theNeutronCaptureModel);
-  //pManager->AddDiscreteProcess(&theNeutronCapture);
+  theNeutronCaptureModel = new G4LCapture();
+  theNeutronCapture.RegisterMe(theNeutronCaptureModel);
+  pManager->AddDiscreteProcess(&theNeutronCapture);
 
   // AntiNeutron
   pManager = G4AntiNeutron::AntiNeutron()->GetProcessManager();
@@ -424,8 +436,3 @@ void ExN04HadronPhysics::ConstructProcess()
   pManager->SetProcessOrdering(&theAntiOmegaMinusMult, idxPostStep, 1);
 
 }
-
-
-
-
-

@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4VisStateDependent.cc,v 1.5 2002/12/05 01:37:37 asaim Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// GEANT4 tag $Name: geant4-06-00 $
 
 #include "G4VisStateDependent.hh"
 

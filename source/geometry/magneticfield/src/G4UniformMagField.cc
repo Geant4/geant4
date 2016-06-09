@@ -21,18 +21,17 @@
 // ********************************************************************
 //
 //
-// $Id: G4UniformMagField.cc,v 1.6 2003/04/02 08:50:39 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4UniformMagField.cc,v 1.8 2003/10/31 14:35:55 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
-// 
 //
 // Class for creation of uniform Magnetic Field
 //
 // 30.1.97 V.Grichine
 //
+// -------------------------------------------------------------------
+
 #include "G4UniformMagField.hh"
-#include "globals.hh"
-#include "geomdefs.hh"
 
 G4UniformMagField::G4UniformMagField(const G4ThreeVector& FieldVector )
 {
@@ -63,13 +62,13 @@ G4UniformMagField::G4UniformMagField(G4double vField,
    }
    else
    {
-      G4Exception("Invalid parameters in G4UniformMagField::G4UniformMagField") ;
+      G4Exception("G4UniformMagField::G4UniformMagField()",
+                  "WrongArgumentValue", FatalException, "Invalid parameters.") ;
    }
 }
 
 G4UniformMagField::~G4UniformMagField()
 {
-   ;
 }
 
 G4UniformMagField::G4UniformMagField (const G4UniformMagField &p)
@@ -89,13 +88,10 @@ G4UniformMagField& G4UniformMagField::operator = (const G4UniformMagField &p)
 
 // ------------------------------------------------------------------------
 
-
 void G4UniformMagField::GetFieldValue (const G4double [4],
                                              G4double *B  ) const 
 {
    B[0]= fFieldComponents[0] ;
    B[1]= fFieldComponents[1] ;
    B[2]= fFieldComponents[2] ;
-   return ;
 }
-

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Para.cc,v 1.14 2003/06/16 16:53:37 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4Para.cc,v 1.18 2003/11/03 18:17:32 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // class G4Para
 //
@@ -33,7 +33,7 @@
 // 31.10.96 V.Grichine: Modifications according G4Box/Tubs before to commit
 // 18.11.99 V.Grichine: kUndef was added to ESide
 // 14.02.02 V.Grichine: bug fixed in Inside according to proposal of D.Wright
-// ********************************************************************
+// --------------------------------------------------------------------
 
 #include "G4Para.hh"
 
@@ -73,13 +73,11 @@ void G4Para::SetAllParameters( G4double pDx, G4double pDy, G4double pDz,
   }
   else
   {
-    G4cout << "ERROR - G4Para()::SetAllParameters(): " << GetName() << G4endl
-           << "        Invalid dimensions ! - "
-           << pDx << ", " << pDy << ", " << pDz << G4endl;
     G4cerr << "ERROR - G4Para()::SetAllParameters(): " << GetName() << G4endl
            << "        Invalid dimensions ! - "
            << pDx << ", " << pDy << ", " << pDz << G4endl;
-    G4Exception("G4Para::SetAllParameters() - Invalid Length Parameters");
+    G4Exception("G4Para::SetAllParameters()", "InvalidSetup",
+                FatalException, "Invalid Length Parameters.");
   }
 }
 
@@ -97,13 +95,11 @@ G4Para::G4Para(const G4String& pName,
   }
   else
   {
-    G4cout << "ERROR - G4Para()::G4Para(): " << GetName() << G4endl
-           << "        Invalid dimensions ! - "
-           << pDx << ", " << pDy << ", " << pDz << G4endl;
     G4cerr << "ERROR - G4Para()::G4Para(): " << GetName() << G4endl
            << "        Invalid dimensions ! - "
            << pDx << ", " << pDy << ", " << pDz << G4endl;
-    G4Exception("G4Para::G4Para() - Invalid Length Parameters");
+    G4Exception("G4Para::G4Para()", "InvalidSetup",
+                FatalException, "Invalid Length Parameters.");
   }
 }
 
@@ -142,11 +138,10 @@ G4Para::G4Para( const G4String& pName,
   }
   else
   {
-    G4cout << "ERROR - G4Para()::G4Para(): " << GetName() << G4endl
-           << "        Invalid dimensions !" << G4endl;
     G4cerr << "ERROR - G4Para()::G4Para(): " << GetName() << G4endl
            << "        Invalid dimensions !" << G4endl;
-    G4Exception("G4Para::G4Para() - Invalid vertice coordinates");
+    G4Exception("G4Para::G4Para()", "InvalidSetup",
+                FatalException, "Invalid vertice coordinates.");
   }    
 }
 
@@ -706,7 +701,7 @@ G4double G4Para::DistanceToIn( const G4ThreeVector& p,
 
 G4double G4Para::DistanceToIn( const G4ThreeVector& p ) const
 {
-  G4double safe;
+  G4double safe=0.0;
   G4double distz1,distz2,disty1,disty2,distx1,distx2;
   G4double trany,cosy,tranx,cosx;
 
@@ -983,7 +978,8 @@ G4double G4Para::DistanceToOut(const G4ThreeVector& p, const G4ThreeVector& v,
         break;
       default:
         DumpInfo();
-        G4Exception("G4Para::DistanceToOut() - Invalid enum");
+        G4Exception("G4Para::DistanceToOut()", "LogicError", FatalException,
+                    "Undefined side for valid surface normal to solid.");
         break;
     }
   }
@@ -997,7 +993,7 @@ G4double G4Para::DistanceToOut(const G4ThreeVector& p, const G4ThreeVector& v,
 
 G4double G4Para::DistanceToOut( const G4ThreeVector& p ) const
 {
-  G4double safe;
+  G4double safe=0.0;
   G4double distz1,distz2,disty1,disty2,distx1,distx2;
   G4double trany,cosy,tranx,cosx;
 
@@ -1011,8 +1007,8 @@ G4double G4Para::DistanceToOut( const G4ThreeVector& p ) const
      G4cout << "p.x() = "   << p.x()/mm << " mm" << G4endl ;
      G4cout << "p.y() = "   << p.y()/mm << " mm" << G4endl ;
      G4cout << "p.z() = "   << p.z()/mm << " mm" << G4endl << G4endl ;
-     G4cout << "G4Para::DistanceToOut(p) - point p is outside ?!" << G4endl ;
-     G4cerr << "G4Para::DistanceToOut(p) - point p is outside ?!" << G4endl ;
+     G4Exception("G4Para::DistanceToOut(p)",
+                 "Notification", JustWarning, "Point p is outside !?" );
   }
 #endif
 
@@ -1098,7 +1094,9 @@ G4Para::CreateRotatedVertices( const G4AffineTransform& pTransform ) const
   else
   {
     DumpInfo();
-    G4Exception("G4Para::CreateRotatedVertices() - Out of memory !");
+    G4Exception("G4Para::CreateRotatedVertices()",
+                "FatalError", FatalException,
+                "Error in allocation of vertices. Out of memory !");
   }
   return vertices;
 }

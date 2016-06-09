@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleChange.cc,v 1.21.10.1 2003/06/16 17:19:28 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4ParticleChange.cc,v 1.24 2003/11/24 10:27:52 vnivanch Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // 
 // --------------------------------------------------------------
@@ -43,6 +43,7 @@
 #include "G4Step.hh"
 #include "G4TrackFastVector.hh"
 #include "G4DynamicParticle.hh"
+#include "G4ExceptionSeverity.hh"
 
 
 G4ParticleChange::G4ParticleChange():G4VParticleChange()
@@ -249,7 +250,7 @@ G4Step* G4ParticleChange::UpdateStepForAlongStep(G4Step* pStep)
     pPostStepPoint->SetKineticEnergy( energy );
   } else {
     // stop case
-    pPostStepPoint->SetMomentumDirection(G4ThreeVector(1., 0., 0.));
+    //pPostStepPoint->SetMomentumDirection(G4ThreeVector(1., 0., 0.));
     pPostStepPoint->SetKineticEnergy(0.0);
   }
 
@@ -429,9 +430,11 @@ G4bool G4ParticleChange::CheckIt(const G4Track& aTrack)
   if ( theEnergyChange >0.) {
     accuracy = abs(theMomentumDirectionChange.mag2()-1.0);
     if (accuracy > accuracyForWarning) {
+#ifdef G4VERBOSE
       G4cout << "  G4ParticleChange::CheckIt  : ";
       G4cout << "the Momentum Change is not unit vector !!" << G4endl;
       G4cout << "  Difference:  " << accuracy << G4endl;
+#endif
       itsOKforMomentum = false;
       if (accuracy > accuracyForException) exitWithError = true;
     }
@@ -441,9 +444,11 @@ G4bool G4ParticleChange::CheckIt(const G4Track& aTrack)
   G4bool itsOKforGlobalTime = true;  
   accuracy = (aTrack.GetGlobalTime()- theTimeChange)/ns;
   if (accuracy > accuracyForWarning) {
+#ifdef G4VERBOSE
     G4cout << "  G4ParticleChange::CheckIt    : ";
     G4cout << "the global time goes back  !!" << G4endl;
     G4cout << "  Difference:  " << accuracy  << "[ns] " <<G4endl;
+#endif
     itsOKforGlobalTime = false;
     if (accuracy > accuracyForException) exitWithError = true;
   }
@@ -451,9 +456,11 @@ G4bool G4ParticleChange::CheckIt(const G4Track& aTrack)
   G4bool itsOKforProperTime = true;
   accuracy = (aTrack.GetProperTime() - theProperTimeChange )/ns;
   if (accuracy > accuracyForWarning) {
+#ifdef G4VERBOSE
     G4cout << "  G4ParticleChange::CheckIt    : ";
     G4cout << "the proper time goes back  !!" << G4endl;
     G4cout << "  Difference:  " << accuracy  << "[ns] " <<G4endl;
+#endif
     itsOKforProperTime = false;
     if (accuracy > accuracyForException) exitWithError = true;
   }
@@ -462,23 +469,31 @@ G4bool G4ParticleChange::CheckIt(const G4Track& aTrack)
   G4bool itsOKforEnergy = true;
   accuracy = -1.0*theEnergyChange/MeV;
   if (accuracy > accuracyForWarning) {
+#ifdef G4VERBOSE
     G4cout << "  G4ParticleChange::CheckIt    : ";
     G4cout << "the kinetic energy is negative  !!" << G4endl;
     G4cout << "  Difference:  " << accuracy  << "[MeV] " <<G4endl;
+#endif
     itsOKforEnergy = false;
     if (accuracy > accuracyForException) exitWithError = true;
   }
 
   G4bool itsOK = itsOKforMomentum && itsOKforEnergy && itsOKforProperTime && itsOKforGlobalTime;
   // dump out information of this particle change
+#ifdef G4VERBOSE
   if (!itsOK) { 
     G4cout << " G4ParticleChange::CheckIt " <<G4endl;
     DumpInfo();
   }
+#endif
 
   // Exit with error
-  if (exitWithError) G4Exception("G4ParticleChange::CheckIt");
-
+  if (exitWithError) {
+    G4Exception("G4ParticleChange::CheckIt",
+		"200",
+		EventMustBeAborted,
+		"momentum, energy, and/or time was illegal");
+  }
   //correction
   if (!itsOKforMomentum) {
     G4double vmag = theMomentumDirectionChange.mag();

@@ -1,8 +1,0 @@
-#ifndef __STD_CSTRING
-#define __STD_CSTRING
-
-#include <string.h>
-int strcasecmp(const char *s1, const char *s2) { return strcmp(s1,s2); }
-
-#endif /*__STD_CSTRING*/
-

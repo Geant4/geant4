@@ -21,15 +21,15 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPNT2AInelasticFS.hh,v 1.6 2002/12/12 19:18:15 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4NeutronHPNT2AInelasticFS.hh,v 1.7 2003/07/01 15:58:37 hpw Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 #ifndef G4NeutronHPNT2AInelasticFS_h
 #define G4NeutronHPNT2AInelasticFS_h 1
 
 #include "globals.hh"
-#include "G4Track.hh"
-#include "G4ParticleChange.hh"
+#include "G4HadProjectile.hh"
+#include "G4HadFinalState.hh"
 #include "G4NeutronHPInelasticBaseFS.hh"
 #include "G4NeutronHPAngular.hh"
 #include "G4NeutronHPEnergyDistribution.hh"
@@ -43,7 +43,7 @@ class G4NeutronHPNT2AInelasticFS : public G4NeutronHPInelasticBaseFS
   G4NeutronHPNT2AInelasticFS(){}
   ~G4NeutronHPNT2AInelasticFS(){}
   void Init (G4double A, G4double Z, G4String & dirName, G4String & aFSType);
-  G4ParticleChange * ApplyYourself(const G4Track & theTrack);
+  G4HadFinalState * ApplyYourself(const G4HadProjectile & theTrack);
   G4NeutronHPFinalState * New() 
   {
    G4NeutronHPNT2AInelasticFS * theNew = new G4NeutronHPNT2AInelasticFS;

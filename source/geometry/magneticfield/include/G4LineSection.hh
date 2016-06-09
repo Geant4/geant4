@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4LineSection.hh,v 1.7 2001/12/05 16:40:18 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4LineSection.hh,v 1.8 2003/10/31 14:35:51 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 //
 // class G4LineSection
@@ -34,12 +34,12 @@
 
 // History:
 // - Created. J. Apostolakis.
-// - Cosmetics against /0. and sqrt(<0.). V. Grichine, 25.02.00.
+// --------------------------------------------------------------------
 
 #ifndef G4LineSection_hh
 #define G4LineSection_hh
 
-#include "globals.hh" 
+#include "G4Types.hh" 
 #include "G4ThreeVector.hh"
 
 class G4LineSection
@@ -53,8 +53,8 @@ class G4LineSection
      G4double GetABdistanceSq() const { return fABdistanceSq ; }
 
      static G4double Distline( const G4ThreeVector& OtherPnt, 
-			       const G4ThreeVector& LinePntA, 
-			       const G4ThreeVector& LinePntB );
+                               const G4ThreeVector& LinePntA, 
+                               const G4ThreeVector& LinePntB );
   private:
 
      G4ThreeVector   EndpointA;

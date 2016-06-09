@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.5 2003/06/20 12:41:06 dressel Exp $
+# $Id: GNUmakefile,v 1.6 2003/12/08 17:53:26 gcosmo Exp $
 # --------------------------------------------------------------
 # GNUmakefile   Michael Dressel
 # --------------------------------------------------------------
@@ -15,7 +15,7 @@ include $(G4INSTALL)/config/architecture.gmk
 
 SWIGFLAGS = -I../G4KernelWrapper \
 	-I$(G4INSTALL)/source/geometry/biasing/include \
-	-I$(G4INSTALL)/source/digits+hits/detector/include \
+	-I$(G4INSTALL)/source/digits_hits/detector/include \
 	-I$(G4INSTALL)/source/event/include \
 	-I$(G4INSTALL)/source/processes/transportation/include \
 	-I$(TIARA_BASE)/source/tiara/include \
@@ -24,7 +24,8 @@ SWIGFLAGS = -I../G4KernelWrapper \
 	-I$(TIARA_BASE)/source/G4KernelWrapper/include \
 	-I${CLHEP_BASE_DIR}/include 
 
-
+#include $(TIARA_BASE)/source/hadronic_lists.gmk
+#SWIGFLAGS += ${LSTFLAGS}
 
 libdirTiara = $(G4WORKDIR)/tmp/$(G4SYSTEM)/tiara
 SWIG_OBJ_DEP = $(wildcard $(libdirTiara)/*.o)

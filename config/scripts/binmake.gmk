@@ -1,4 +1,4 @@
-# $Id: binmake.gmk,v 1.3 2003/05/28 08:03:22 gcosmo Exp $
+# $Id: binmake.gmk,v 1.11 2003/12/12 10:07:56 stesting Exp $
 # ----------------------------------------------------------
 # Script defining rules and paths for making binaries.
 #    First implementation: Gabriele Cosmo, 25/06/1998.
@@ -21,7 +21,7 @@ include $(G4INSTALL)/config/interactivity.gmk
 include $(G4INSTALL)/config/analysis.gmk
 
 ifndef G4LIB_USE_GRANULAR
-    GLOBALLIBS := 1
+    GLOBALLIBS := $(shell test -f $(G4LIB)/$(G4SYSTEM)/libG4global.a && echo yes)
   ifndef GLOBALLIBS
     GLOBALLIBS := $(shell test -f $(G4LIB)/$(G4SYSTEM)/libG4global.$(SHEXT) && echo yes)
     SHAREDLIBS := $(shell test -f $(G4LIB)/$(G4SYSTEM)/libG4global.$(SHEXT) && echo yes)
@@ -52,67 +52,79 @@ ifndef INCFLAGS
               -I$(G4BASE)/particles/hadrons/mesons/include \
               -I$(G4BASE)/particles/shortlived/include \
               -I$(G4BASE)/processes/management/include \
+              -I$(G4BASE)/processes/cuts/include \
               -I$(G4BASE)/processes/decay/include \
               -I$(G4BASE)/processes/optical/include \
               -I$(G4BASE)/processes/transportation/include \
               -I$(G4BASE)/processes/parameterisation/include \
-              -I$(G4BASE)/processes/photolepton_hadron/include \
               -I$(G4BASE)/processes/electromagnetic/standard/include \
               -I$(G4BASE)/processes/electromagnetic/muons/include \
               -I$(G4BASE)/processes/electromagnetic/utils/include \
               -I$(G4BASE)/processes/electromagnetic/xrays/include \
               -I$(G4BASE)/processes/electromagnetic/lowenergy/include \
-              -I$(G4BASE)/processes/hadronic/management/include \
-              -I$(G4BASE)/processes/hadronic/processes/include \
-              -I$(G4BASE)/processes/hadronic/util/include \
               -I$(G4BASE)/processes/hadronic/cross_sections/include \
-              -I$(G4BASE)/processes/hadronic/models/cascade/evaporation/include \
-              -I$(G4BASE)/processes/hadronic/models/cascade/utils/include \
-              -I$(G4BASE)/processes/hadronic/models/cascade/cascade/include \
-              -I$(G4BASE)/processes/hadronic/models/coherent_elastic/include \
+	      -I$(G4BASE)/processes/hadronic/management/include \
+	      -I$(G4BASE)/processes/hadronic/models/cascade/cascade/include \
+	      -I$(G4BASE)/processes/hadronic/models/cascade/evaporation/include \
+	      -I$(G4BASE)/processes/hadronic/models/cascade/utils/include \
               -I$(G4BASE)/processes/hadronic/models/chiral_inv_phase_space/body/include \
               -I$(G4BASE)/processes/hadronic/models/chiral_inv_phase_space/interface/include \
-              -I$(G4BASE)/processes/hadronic/models/generator/de_excitation/include \
-              -I$(G4BASE)/processes/hadronic/models/generator/diffractive_string/include \
-              -I$(G4BASE)/processes/hadronic/models/generator/high_energy/include \
-              -I$(G4BASE)/processes/hadronic/models/generator/kinetic_model/include \
-              -I$(G4BASE)/processes/hadronic/models/generator/management/include \
-              -I$(G4BASE)/processes/hadronic/models/generator/pre_equilibrium/include \
-              -I$(G4BASE)/processes/hadronic/models/generator/quark_gluon_string/include \
-              -I$(G4BASE)/processes/hadronic/models/generator/string_common/include \
-              -I$(G4BASE)/processes/hadronic/models/generator/string_fragmentation/include \
-              -I$(G4BASE)/processes/hadronic/models/generator/scattering/include \
-              -I$(G4BASE)/processes/hadronic/models/generator/util/include \
+              -I$(G4BASE)/processes/hadronic/models/coherent_elastic/include \
               -I$(G4BASE)/processes/hadronic/models/high_energy/include \
+              -I$(G4BASE)/processes/hadronic/models/isotope_production/include \
+              -I$(G4BASE)/processes/hadronic/models/leading_particle/include \
               -I$(G4BASE)/processes/hadronic/models/low_energy/include \
               -I$(G4BASE)/processes/hadronic/models/neutron_hp/include \
-              -I$(G4BASE)/processes/hadronic/models/isotope_production/include \
-              -I$(G4BASE)/processes/hadronic/models/radiative_decay/include \
-              -I$(G4BASE)/processes/hadronic/models/leading_particle/include \
+              -I$(G4BASE)/processes/hadronic/models/binary_cascade/include \
+              -I$(G4BASE)/processes/hadronic/models/de_excitation/evaporation/include \
+              -I$(G4BASE)/processes/hadronic/models/de_excitation/fermi_breakup/include \
+              -I$(G4BASE)/processes/hadronic/models/de_excitation/fission/include \
+              -I$(G4BASE)/processes/hadronic/models/de_excitation/gem_evaporation/include \
+              -I$(G4BASE)/processes/hadronic/models/de_excitation/handler/include \
+              -I$(G4BASE)/processes/hadronic/models/de_excitation/management/include \
+              -I$(G4BASE)/processes/hadronic/models/de_excitation/multifragmentation/include \
+              -I$(G4BASE)/processes/hadronic/models/de_excitation/photon_evaporation/include \
+              -I$(G4BASE)/processes/hadronic/models/de_excitation/util/include \
+              -I$(G4BASE)/processes/hadronic/models/inucl/include \
+              -I$(G4BASE)/processes/hadronic/models/photolepton_hadron/muon_nuclear/include \
+              -I$(G4BASE)/processes/hadronic/models/pre_equilibrium/exciton_model/include \
+              -I$(G4BASE)/processes/hadronic/models/quark_molecular_dynamics/body/include \
+              -I$(G4BASE)/processes/hadronic/models/quark_molecular_dynamics/util/include \
+              -I$(G4BASE)/processes/hadronic/models/relativistic_qmd/include \
+              -I$(G4BASE)/processes/hadronic/models/relativistic_qmd/uplusplus/include \
+              -I$(G4BASE)/processes/hadronic/models/im_r_matrix/include \
+              -I$(G4BASE)/processes/hadronic/models/management/include \
+              -I$(G4BASE)/processes/hadronic/models/parton_string/diffraction/include \
+              -I$(G4BASE)/processes/hadronic/models/parton_string/hadronization/include \
+              -I$(G4BASE)/processes/hadronic/models/parton_string/management/include \
+              -I$(G4BASE)/processes/hadronic/models/parton_string/qgsm/include \
+              -I$(G4BASE)/processes/hadronic/models/theo_high_energy/include \
+              -I$(G4BASE)/processes/hadronic/models/util/include \
+              -I$(G4BASE)/processes/hadronic/models/general_finalstate/include \
+              -I$(G4BASE)/processes/hadronic/models/radioactive_decay/include \
+              -I$(G4BASE)/processes/hadronic/processes/include \
               -I$(G4BASE)/processes/hadronic/stopping/include \
+              -I$(G4BASE)/processes/hadronic/util/include \
               -I$(G4BASE)/geometry/management/include \
               -I$(G4BASE)/geometry/solids/CSG/include \
               -I$(G4BASE)/geometry/solids/specific/include \
               -I$(G4BASE)/geometry/solids/BREPS/include \
               -I$(G4BASE)/geometry/solids/Boolean/include \
+              -I$(G4BASE)/geometry/divisions/include \
               -I$(G4BASE)/geometry/volumes/include \
-              -I$(G4BASE)/geometry/verification/include \
+              -I$(G4BASE)/geometry/navigation/include \
               -I$(G4BASE)/geometry/magneticfield/include \
               -I$(G4BASE)/geometry/biasing/include \
               -I$(G4BASE)/track/include \
               -I$(G4BASE)/tracking/include \
-              -I$(G4BASE)/digits+hits/detector/include \
-              -I$(G4BASE)/digits+hits/hits/include \
-              -I$(G4BASE)/digits+hits/digits/include \
+              -I$(G4BASE)/digits_hits/detector/include \
+              -I$(G4BASE)/digits_hits/hits/include \
+              -I$(G4BASE)/digits_hits/digits/include \
               -I$(G4BASE)/persistency/include \
               -I$(G4BASE)/readout/include \
               -I$(G4BASE)/event/include \
               -I$(G4BASE)/graphics_reps/include \
               -I$(G4BASE)/intercoms/include
-  ifdef G4USE_STEP
-    INCFLAGS += -I$(G4BASE)/geometry/solids/STEP/include \
-                -I$(G4BASE)/geometry/solids/STEPinterface/include
-  endif
   ifdef G4USE_G3TOG4
     INCFLAGS += -I$(G4BASE)/g3tog4/include
   endif
@@ -174,7 +186,7 @@ ifdef GLOBALLIBS
              -lG4tracking \
 	     -lG4parmodels \
              -lG4processes \
-             -lG4digits+hits \
+             -lG4digits_hits \
              -lG4track \
              -lG4particles \
              -lG4geometry \

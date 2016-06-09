@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4TrackingMessenger.cc,v 1.9 2003/06/16 17:13:23 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 //
 //---------------------------------------------------------------

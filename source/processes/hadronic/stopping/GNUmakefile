@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.1 1999/01/07 16:13:37 gunter Exp $
+# $Id: GNUmakefile,v 1.2 2003/10/08 14:53:20 hpw Exp $
 # -----------------------------------------------------------
 # GNUmakefile for hadronic stopping library.  G.Folger 10-Dec-97
 # --------------------------------------------------------------
@@ -25,8 +25,14 @@ CPPFLAGS += -I$(G4BASE)/global/management/include \
             -I$(G4BASE)/particles/hadrons/ions/include \
             -I$(G4BASE)/processes/management/include \
             -I$(G4BASE)/processes/hadronic/models/high_energy/include \
-            -I$(G4BASE)/processes/hadronic/models/generator/de_excitation/include \
-            -I$(G4BASE)/processes/hadronic/models/generator/util/include \
+            -I$(G4BASE)/processes/hadronic/models/de_excitation/util/include \
+            -I$(G4BASE)/processes/hadronic/models/de_excitation/evaporation/include \
+            -I$(G4BASE)/processes/hadronic/models/de_excitation/fermi_breakup/include \
+            -I$(G4BASE)/processes/hadronic/models/de_excitation/photon_evaporation/include \
+            -I$(G4BASE)/processes/hadronic/models/de_excitation/multifragmentation/include \
+            -I$(G4BASE)/processes/hadronic/models/de_excitation/handler/include \
+            -I$(G4BASE)/processes/hadronic/models/de_excitation/management/include \
+            -I$(G4BASE)/processes/hadronic/models/util/include \
             -I$(G4BASE)/processes/hadronic/util/include \
             -I$(G4BASE)/materials/include
 

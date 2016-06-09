@@ -159,7 +159,7 @@ G4FragmentVector * G4BertiniEvaporation::BreakItUp( G4LayeredNucleus & nucleus )
 	}
       pSelectedChannel = ( *iChannel );
       if ( iChannel == channelVector.end() )
-	G4Exception( "G4BertiniEvaporation : Error while sampling evaporation particle" );
+	throw G4HadronicException(__FILE__, __LINE__,  "G4BertiniEvaporation : Error while sampling evaporation particle" );
 
       if ( verboseLevel >= 4 ) 
 	G4cout << "G4BertiniEvaporation : particle " << pSelectedChannel->getName() << " selected " << G4endl;
@@ -336,7 +336,7 @@ void G4BertiniEvaporation::splitBe8( const G4double E,
   G4double w;
   const G4double Be8DecayEnergy = 0.093 * MeV; 
 
-  if ( E <= 0 ) G4Exception( "G4BertiniEvaporation : excitation energy < 0 " );
+  if ( E <= 0 ) throw G4HadronicException(__FILE__, __LINE__,  "G4BertiniEvaporation : excitation energy < 0 " );
   if ( verboseLevel >= 4 ) G4cout << "     Be8 split to 2 x He4" << G4endl;
 
   kineticEnergy = 0.5 * ( E + Be8DecayEnergy ); 

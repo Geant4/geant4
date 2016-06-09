@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunMessenger.hh,v 1.11 2003/03/11 05:00:47 asaim Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4RunMessenger.hh,v 1.12 2003/11/04 01:58:28 asaim Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // 
 //	GEANT 4 class header file 
@@ -43,7 +43,7 @@
 //    abort *               Abort current run processing.
 //    Initialize *          Initialize G4 kernel.
 //    geometryModified *    Force geometry to be closed again.
-//    cutoffModified *      Force closssection tables to be calculated again.
+//    physicsModified *     Force cross-section tables to be calculated again.
 //           (and rebuilding physics table will be invoked)
 //    storeRandomNumberStatus *   Set the flag for storing random number status
 //    restoreRandomNumberStatus * Restore the stored random number status
@@ -90,6 +90,7 @@ class G4RunMessenger: public G4UImessenger
     G4UIcmdWithoutParameter *   abortEventCmd;
     G4UIcmdWithoutParameter *   initCmd;
     G4UIcmdWithoutParameter *   geomCmd;
+    G4UIcmdWithoutParameter *   physCmd;
     G4UIcmdWithoutParameter *   cutCmd;
     
     G4UIdirectory *             randomDirectory;

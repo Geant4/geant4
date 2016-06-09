@@ -63,10 +63,8 @@ public:
   virtual ~G4VBremAngularDistribution();
 
   virtual G4double PolarAngle(const G4double initial_energy,
-			      const G4double initial_momentum,
 			      const G4double final_energy,
-			      const G4double final_momentum,
-			      const G4int Z) const = 0;
+                              const G4int Z) = 0;
 
   virtual void PrintGeneratorInformation() const = 0;
 

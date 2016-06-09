@@ -123,7 +123,7 @@ RichTbSiPixel::RichTbSiPixel(RichTbMaterial* RMaterial,
     //First Get the deadPixel List
     G4bool thisPixelisAlive=true;
     vector<G4int>DeadPxL = getDeadPixelList(IHpdNum,Isector);
-    for(G4int ideadP=0; ideadP<DeadPxL.size(); ideadP++){
+    for(size_t ideadP=0; ideadP<DeadPxL.size(); ideadP++){
       if(ipixel == DeadPxL[ideadP] )thisPixelisAlive=false;
     }
     PixelIsAlive= thisPixelisAlive;

@@ -45,7 +45,7 @@ RichTbIOData::RichTbIOData(RichTbRunConfig* RConfig )
 }
 RichTbIOData::~RichTbIOData() { }
 
-void  RichTbIOData::WriteOutEventHeaderData( const G4Event* evt ) { }
+void  RichTbIOData::WriteOutEventHeaderData( const G4Event* ) { }
 
 void  RichTbIOData::WriteOutHitData( const G4Event* evt ) { 
 

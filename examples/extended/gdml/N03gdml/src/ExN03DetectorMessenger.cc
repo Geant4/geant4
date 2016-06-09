@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: ExN03DetectorMessenger.cc,v 1.2 2002/12/05 01:06:59 asaim Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: ExN03DetectorMessenger.cc,v 1.3 2003/07/04 14:55:34 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // 
 
@@ -138,7 +138,7 @@ ExN03DetectorMessenger::~ExN03DetectorMessenger()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void ExN03DetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
+void ExN03DetectorMessenger::SetNewValue(G4UIcommand*, G4String)
 { 
   /*
   if( command == AbsMaterCmd )

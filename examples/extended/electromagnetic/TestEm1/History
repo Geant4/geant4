@@ -1,4 +1,4 @@
-$Id: History,v 1.32 2003/06/18 09:31:54 gcosmo Exp $
+$Id: History,v 1.41 2003/11/25 18:43:35 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,33 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+25-11-03 V.Ivanchenko (testem1-V05-02-06)
+- Fix geometry (G.Cosmo)
+     
+07-11-03 mma (testem1-V05-02-05)
+- use BestUnit in RunAction
+ 
+28-10-03 V.Ivanchenko (testem1-V05-02-04)
+- Minor cleanup in G4eBremsstrahlungCMS
+- Add printout of total energy deposit
+- Remove compilation warnings
+     
+24-10-03 mma (testem1-V05-02-03)
+- PhysListEmStandard: AddProcess(Bremsstrahlung,-1,3,3) ..etc..
+- BremsstrahlungCMS given as an example, commented out
+
+20-10-03 V.Ivanchenko (testem1-V05-02-02)
+- Add process G4eBremsstrahlungCMS
+     
+06-10-03 mma (testem1-V05-02-01)
+- Class EmModel renamed G4v52. All macros updated
+- G4NOHIST replaced by G4ANALYSIS_USE
+- cosmetics in material definitions
+- suppression of Em1 in all class names
+
+18-09-03 V.Ivanchenko (testem1-V05-02-00)
+- Complete migration to model EM physics
 
 18-06-03 G.Cosmo (testem1-V05-01-03)
 - Em1RunAction.cc: removed usage of G4USE_STD_NAMESPACE after

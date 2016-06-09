@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Sphere.hh,v 1.8 2003/06/16 16:53:24 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4Sphere.hh,v 1.9 2003/10/09 14:27:02 grichine Exp $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 //
 // --------------------------------------------------------------------
@@ -68,6 +68,8 @@
 #define G4Sphere_HH
 
 #include "G4CSGSolid.hh"
+
+class G4VisExtent;
 
 class G4Sphere : public G4CSGSolid
 {
@@ -131,7 +133,7 @@ class G4Sphere : public G4CSGSolid
     std::ostream& StreamInfo(std::ostream& os) const;
 
     // Visualisation functions
-  
+    G4VisExtent   GetExtent          () const;    
     void          DescribeYourselfTo(G4VGraphicsScene& scene) const;
     G4Polyhedron* CreatePolyhedron() const;
     G4NURBS*      CreateNURBS() const;
@@ -146,7 +148,7 @@ class G4Sphere : public G4CSGSolid
     inline G4double  GetDPhi()   const;
     inline G4double  GetSTheta() const;
     inline G4double  GetDTheta() const;
-
+  void DBG() const {return;};
   protected:
  
     G4ThreeVectorList*
@@ -166,8 +168,17 @@ class G4Sphere : public G4CSGSolid
     G4double fRmin,fRmax,
              fSPhi,fDPhi,
              fSTheta,fDTheta;
+  G4double fEpsilon;
 };
 
 #include "G4Sphere.icc"
 
 #endif
+
+
+
+
+
+
+
+

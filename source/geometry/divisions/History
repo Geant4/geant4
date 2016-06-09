@@ -1,0 +1,61 @@
+$Id: History,v 1.10 2003/11/19 18:02:10 gcosmo Exp $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                      Category History file
+                      ---------------------
+This file should be used by G4 developers and category coordinators
+to briefly summarize all major modifications introduced in the code
+and keep track of all category-tags.
+It DOES NOT substitute the  CVS log-message one should put at every
+committal in the CVS repository !
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+Nov 19th, 2003          G.Cosmo  (geomdiv-V05-02-07)
+- Moved verbose output between G4DIVDEBUG compilation flag.
+- Added testing framework for divisions to be used also as base for user's example.
+- General cleanup.
+
+Nov 18th, 2003          P.Arce  (geomdiv-V05-02-06)
+- Added divisions in X and Y for G4Para.
+- Added divisions in Z for G4Polycone and G4Polyhedra.
+- Fixed handling of offsets and added more checks.
+
+Nov 4th, 2003           G.Cosmo  (geomdiv-V05-02-05)
+- Fixes in the logic of resetting parameters in ComputeDimension() for
+  polycones and polyhedra. Requires tag "geom-specific-V05-02-05".
+- Implementation NOT yet complete for division in Z for polycones and
+  for division in Phi and Z for polyhedra.
+
+Oct 31st, 2003          P.Arce  (geomdiv-V05-02-04)
+- First implementation for G4Polyhedra.
+
+Oct 31st, 2003          G.Cosmo  (geomdiv-V05-02-03a)
+- Fixed compilation errors on Windows.
+
+Oct 24th, 2003          G.Cosmo  (geomdiv-V05-02-03)
+- Completed implementation for Para, Trd. (by P.Arce)
+- Corrections for cons and tubs.
+- First trial implementation for polyhedra.
+- Migrated calls to G4Exception to new scheme.
+- Added G4Orb to dummy parameterisations.
+
+Sep 30th, 2003          G.Cosmo  (geomdiv-V05-02-02)
+- Removed concrete implementation of Setup() method, according to
+  changes made to base class G4VPhysicalVolume.
+- Updated GNUmakefile for unit tests, according to new structure
+  introduced in "geometry-V05-02-00".
+
+Jul 4th, 2003           G.Cosmo  (geomdiv-V05-02-01)
+- Removed useless test header...
+
+Jun 16th, 2003		G.Cosmo  (geomdiv-V05-02-00)
+- Code cleanup and restructured.
+- Created.
+  Original implementation by P.Arce Dubois (University of Cantabria, CMS).

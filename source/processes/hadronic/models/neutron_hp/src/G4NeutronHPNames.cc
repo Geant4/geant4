@@ -26,6 +26,7 @@
 //
 #include "G4NeutronHPNames.hh"
 #include "G4SandiaTable.hh"
+#include "G4HadronicException.hh"
 #include <fstream>
 
   const G4String G4NeutronHPNames::theString[99] = {"Hydrogen", "Helium",
@@ -57,7 +58,7 @@ if(getenv("NeutronHPNames")) G4cout << "Names::GetName entered"<<G4endl;
     if(Z>92.5&&!getenv("AllowForHeavyElements") ) 
     {
       G4cerr << "Please contact Hans-Peter.Wellisch@cern.ch"<<G4endl;
-      G4Exception("G4NeutronHPNames::GetName - data with Z>92 are not provided");
+      throw G4HadronicException(__FILE__, __LINE__, "G4NeutronHPNames::GetName - data with Z>92 are not provided");
     }
     G4String * theName = NULL;
     G4String theFileName("");
@@ -144,7 +145,7 @@ if(getenv("NeutronHPNames"))    G4cout <<"HPWD 4 "<<*theName<<G4endl;
             G4cout <<"G4NeutronHPNames: Please make sure NeutronHPCrossSections points to the" << G4endl;
             G4cout <<"                  directory, the neutron scattering data are located in." << G4endl;
             G4cout << "G4NeutronHPNames: The material was: A="<<A<<", Z="<<Z<<G4endl;
-            G4Exception("In case the data sets are at present not available in the neutron data library, please contact Hans-Peter.Wellisch@cern.ch");
+            throw G4HadronicException(__FILE__, __LINE__, "In case the data sets are at present not available in the neutron data library, please contact Hans-Peter.Wellisch@cern.ch");
             delete theName;
             theFileName = "";
             return result;

@@ -182,7 +182,7 @@ G4hLowEnergyIonisation::~G4hLowEnergyIonisation()
   G4int length = zFluoDataVector.size();
   if(length) {
     for(G4int i=0; i<length; i++) {
-      delete &(zFluoDataVector[i]);
+      delete zFluoDataVector[i];
     }
     zFluoDataVector.clear();
   }

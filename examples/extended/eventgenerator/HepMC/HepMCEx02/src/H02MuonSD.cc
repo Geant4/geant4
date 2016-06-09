@@ -19,11 +19,11 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
-
+//
 // ====================================================================
 //
 //   H02MuonSD.cc
-//   $Id: H02MuonSD.cc,v 1.1 2002/05/28 14:15:47 murakami Exp $
+//   $Id: H02MuonSD.cc,v 1.3 2003/12/09 15:31:24 gunter Exp $
 //
 // ====================================================================
 
@@ -63,7 +63,7 @@ void H02MuonSD::Initialize(G4HCofThisEvent* HCE)
 }
 
 ///////////////////////////////////////////////////////////////////////
-G4bool H02MuonSD::ProcessHits(G4Step* astep, G4TouchableHistory* ROhist)
+G4bool H02MuonSD::ProcessHits(G4Step* astep, G4TouchableHistory*)
 ///////////////////////////////////////////////////////////////////////
 {
   G4ParticleDefinition* particle= astep-> GetTrack()-> GetDefinition();
@@ -89,7 +89,7 @@ G4bool H02MuonSD::ProcessHits(G4Step* astep, G4TouchableHistory* ROhist)
 }
 
 ///////////////////////////////////////////////
-void H02MuonSD::EndOfEvent(G4HCofThisEvent* HCE)
+void H02MuonSD::EndOfEvent(G4HCofThisEvent*)
 ///////////////////////////////////////////////
 {
 }

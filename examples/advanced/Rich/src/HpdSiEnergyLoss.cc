@@ -42,8 +42,8 @@ HpdSiEnergyLoss::HpdSiEnergyLoss(const G4String& materialName,
   const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable();
   G4int numberOfMat = G4Material::GetNumberOfMaterials();
   
-  
-  for(G4int iMat=0;iMat<numberOfMat;iMat++) {
+  G4int iMat=0;
+  for(iMat=0;iMat<numberOfMat;iMat++) {
     if ( materialName == (*theMaterialTable)[iMat]->GetName()){
       fMatIndex=(*theMaterialTable)[iMat]->GetIndex();
       break;
@@ -63,28 +63,28 @@ G4bool HpdSiEnergyLoss::IsApplicable(const G4ParticleDefinition&
 }
 
 G4double HpdSiEnergyLoss::GetContinuousStepLimit(const G4Track& track,
-                                 G4double previousStepSize,
-                                 G4double currentMinimumStep,
-                                 G4double& currentSafety){
+                                 G4double,
+                                 G4double,
+                                 G4double& ){
 
   G4double  RangeForStep =  finalRangeforStep;
 
-  if( fMatIndex != track.GetMaterial() -> GetIndex() ) { 
+  if( fMatIndex != G4int(track.GetMaterial() -> GetIndex()) ) { 
     RangeForStep = DBL_MAX;
   }
-    
-   
-  return RangeForStep;
 
+  return RangeForStep;
 }
-G4double  HpdSiEnergyLoss::GetMeanFreePath(const G4Track& track,
-                         G4double previousStepSize,
+
+G4double  HpdSiEnergyLoss::GetMeanFreePath(const G4Track&,
+                         G4double,
                          G4ForceCondition* condition) {
   // return infinity so that it does nothing.
   *condition = NotForced;
   return DBL_MAX;
 
 }
+
 G4VParticleChange*  HpdSiEnergyLoss::PostStepDoIt(const G4Track& aTrack,
                                  const G4Step& aStep) {
   // Do nothing
@@ -92,8 +92,9 @@ G4VParticleChange*  HpdSiEnergyLoss::PostStepDoIt(const G4Track& aTrack,
   return G4VContinuousDiscreteProcess::PostStepDoIt(aTrack,aStep);
    
 }
+
 G4VParticleChange* HpdSiEnergyLoss::AlongStepDoIt(const G4Track& aTrack,
-				 const G4Step& aStep) {
+				 const G4Step&) {
 
 
 #ifdef G4ANALYSIS_USE
@@ -103,7 +104,7 @@ G4VParticleChange* HpdSiEnergyLoss::AlongStepDoIt(const G4Track& aTrack,
 
   aParticleChange.Initialize(aTrack);
   G4int aMaterialIndex = aTrack.GetMaterial()->GetIndex();
-  if(fMatIndex != aTrack.GetMaterial()->GetIndex() ) {
+  if(fMatIndex != aMaterialIndex ) {
     return &aParticleChange;
   }
 
@@ -137,12 +138,9 @@ G4VParticleChange* HpdSiEnergyLoss::AlongStepDoIt(const G4Track& aTrack,
 
 #endif
 
-    G4StepPoint* pPreStepPoint  = aStep.GetPreStepPoint();
-    G4String tpreVol = pPreStepPoint -> GetPhysicalVolume()->GetName();
-    G4int tpreVP =  pPreStepPoint -> GetPhysicalVolume()->GetCopyNo();
-    G4int tpreVPS =  pPreStepPoint -> GetPhysicalVolume()
-            ->GetMother()->GetCopyNo();
-
+    // G4StepPoint* pPreStepPoint  = aStep.GetPreStepPoint();
+    // G4String tpreVol = pPreStepPoint -> GetPhysicalVolume()->GetName();
+    // G4int tpreVP =  pPreStepPoint -> GetPhysicalVolume()->GetCopyNo();
   }
   if (aKinEnergyFinal <= MinKineticEnergy ) {
        aParticleChange.SetStatusChange(fStopAndKill);

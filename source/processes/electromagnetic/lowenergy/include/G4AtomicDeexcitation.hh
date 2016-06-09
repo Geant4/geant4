@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4AtomicTransitionManager.hh,v 1.2 ????
-// GEANT4 tag $Name: geant4-05-02 $
+// GEANT4 tag $Name: geant4-06-00 $
 //
 // Authors: Elena Guardincerri (Elena.Guardincerri@ge.infn.it)
 //          Alfonso Mantero (Alfonso.Mantero@ge.infn.it)

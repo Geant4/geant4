@@ -21,8 +21,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4LightMedia.cc,v 1.8 2003/06/16 17:12:23 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
 //
  // Hadronic Process: Light Media Charge and/or Strangeness Exchange
  // J.L. Chuma, TRIUMF, 21-Feb-1997
@@ -33,7 +31,7 @@
 
   G4DynamicParticle *
    G4LightMedia::PionPlusExchange(
-    const G4DynamicParticle* incidentParticle,
+    const G4HadProjectile *incidentParticle,
     const G4Nucleus & targetNucleus )
   {
     G4ParticleDefinition* aNeutron = G4Neutron::Neutron();
@@ -63,15 +61,15 @@
  
   G4DynamicParticle *
    G4LightMedia::PionMinusExchange(
-    const G4DynamicParticle* ,
-    const G4Nucleus& )
+    const G4HadProjectile *,
+    const G4Nucleus&  )
   {
     return (G4DynamicParticle*)NULL;
   }
  
   G4DynamicParticle *
    G4LightMedia::KaonPlusExchange(
-    const G4DynamicParticle* incidentParticle,
+    const G4HadProjectile *incidentParticle,
     const G4Nucleus& targetNucleus )
   {
     G4ParticleDefinition* aNeutron = G4Neutron::Neutron();
@@ -105,7 +103,7 @@
  
   G4DynamicParticle *
    G4LightMedia::KaonZeroShortExchange(
-    const G4DynamicParticle* incidentParticle,
+    const G4HadProjectile *incidentParticle,
     const G4Nucleus& targetNucleus )
   {
     G4ParticleDefinition* aProton = G4Proton::Proton();
@@ -143,8 +141,8 @@
  
   G4DynamicParticle *
    G4LightMedia::KaonZeroLongExchange(
-    const G4DynamicParticle* ,
-    const G4Nucleus& )
+    const G4HadProjectile *,
+    const G4Nucleus&  )
   {
     G4ParticleDefinition* aKaonZS = G4KaonZeroShort::KaonZeroShort();
     
@@ -158,15 +156,15 @@
  
   G4DynamicParticle *
    G4LightMedia::KaonMinusExchange(
-    const G4DynamicParticle* ,
-    const G4Nucleus& )
+    const G4HadProjectile *,
+    const G4Nucleus&  )
   {
     return (G4DynamicParticle*)NULL;
   }
  
   G4DynamicParticle *
    G4LightMedia::ProtonExchange(
-    const G4DynamicParticle* incidentParticle,
+    const G4HadProjectile *incidentParticle,
     const G4Nucleus& targetNucleus )
   {
     G4ParticleDefinition* aNeutron = G4Neutron::Neutron();
@@ -192,7 +190,7 @@
  
   G4DynamicParticle *
    G4LightMedia::AntiProtonExchange(
-    const G4DynamicParticle* incidentParticle,
+    const G4HadProjectile *incidentParticle,
     const G4Nucleus& targetNucleus )
   {
     G4ParticleDefinition* aProton = G4Proton::Proton();
@@ -204,9 +202,7 @@
     
     if( targetParticle->GetDefinition() == aProton ) {
       const G4double cech[] = {0.50,0.45,0.40,0.35,0.30,0.25,0.06,0.04,0.005,0.};
-      G4int iplab = G4int( incidentParticle->GetTotalMomentum()/GeV*10.0 );
-      if( iplab > 9 )iplab = G4int( incidentParticle->GetTotalMomentum()/GeV ) + 9;
-      if( iplab > 19 )iplab = 19;
+      G4int iplab = G4int( std::min( 9.0, incidentParticle->GetTotalMomentum()/GeV*10.0 ) );
       if( G4UniformRand() <= cech[iplab]/pow(atomicNumber,0.75) ) {
         G4DynamicParticle* resultant = new G4DynamicParticle;
         resultant->SetDefinition( anAntiNeutron );
@@ -221,7 +217,7 @@
  
   G4DynamicParticle *
    G4LightMedia::NeutronExchange(
-    const G4DynamicParticle* incidentParticle,
+    const G4HadProjectile *incidentParticle,
     const G4Nucleus& targetNucleus )
   {
     G4ParticleDefinition* aProton = G4Proton::Proton();
@@ -247,7 +243,7 @@
  
   G4DynamicParticle *
    G4LightMedia::AntiNeutronExchange(
-    const G4DynamicParticle* incidentParticle,
+    const G4HadProjectile *incidentParticle,
     const G4Nucleus& targetNucleus )
   {
     G4ParticleDefinition* aNeutron = G4Neutron::Neutron();
@@ -274,7 +270,7 @@
  
   G4DynamicParticle *
    G4LightMedia::LambdaExchange(
-    const G4DynamicParticle* incidentParticle,
+    const G4HadProjectile *incidentParticle,
     const G4Nucleus& targetNucleus )
   {
     G4ParticleDefinition* aNeutron = G4Neutron::Neutron();
@@ -352,7 +348,7 @@
  
  G4DynamicParticle *
   G4LightMedia::AntiLambdaExchange(
-   const G4DynamicParticle* incidentParticle,
+   const G4HadProjectile *incidentParticle,
    const G4Nucleus& targetNucleus )
   {
     G4ParticleDefinition* aNeutron = G4Neutron::Neutron();
@@ -432,7 +428,7 @@
  
   G4DynamicParticle *
    G4LightMedia::SigmaPlusExchange(
-    const G4DynamicParticle* incidentParticle,
+    const G4HadProjectile *incidentParticle,
     const G4Nucleus& targetNucleus )
   {
     G4ParticleDefinition* aNeutron = G4Neutron::Neutron();
@@ -494,7 +490,7 @@
  
   G4DynamicParticle *
    G4LightMedia::SigmaMinusExchange(
-    const G4DynamicParticle* incidentParticle,
+    const G4HadProjectile *incidentParticle,
     const G4Nucleus& targetNucleus )
   {
     G4ParticleDefinition* aNeutron = G4Neutron::Neutron();
@@ -556,7 +552,7 @@
  
   G4DynamicParticle *
    G4LightMedia::AntiSigmaPlusExchange(
-    const G4DynamicParticle* incidentParticle,
+    const G4HadProjectile *incidentParticle,
     const G4Nucleus& targetNucleus )
   {
     G4ParticleDefinition* aNeutron = G4Neutron::Neutron();
@@ -615,7 +611,7 @@
  
   G4DynamicParticle *
    G4LightMedia::AntiSigmaMinusExchange(
-    const G4DynamicParticle* incidentParticle,
+    const G4HadProjectile *incidentParticle,
     const G4Nucleus& targetNucleus )
   {
     G4ParticleDefinition* aNeutron = G4Neutron::Neutron();
@@ -675,7 +671,7 @@
  
   G4DynamicParticle *
    G4LightMedia::XiZeroExchange(
-    const G4DynamicParticle* incidentParticle,
+    const G4HadProjectile *incidentParticle,
     const G4Nucleus& targetNucleus )
   {
     G4ParticleDefinition* aNeutron = G4Neutron::Neutron();
@@ -760,7 +756,7 @@
  
   G4DynamicParticle *
    G4LightMedia::XiMinusExchange(
-    const G4DynamicParticle* incidentParticle,
+    const G4HadProjectile *incidentParticle,
     const G4Nucleus& targetNucleus )
   {
     G4ParticleDefinition* aNeutron = G4Neutron::Neutron();
@@ -844,7 +840,7 @@
  
   G4DynamicParticle *
    G4LightMedia::AntiXiZeroExchange(
-    const G4DynamicParticle* incidentParticle,
+    const G4HadProjectile *incidentParticle,
     const G4Nucleus& targetNucleus )
   {
     // NOTE:  The FORTRAN version of the cascade, CASAXO, simply called the
@@ -933,7 +929,7 @@
  
   G4DynamicParticle *
    G4LightMedia::AntiXiMinusExchange(
-    const G4DynamicParticle* incidentParticle,
+    const G4HadProjectile *incidentParticle,
     const G4Nucleus& targetNucleus )
   {
     // NOTE:  The FORTRAN version of the cascade, CASAXM, simply called the
@@ -1021,7 +1017,7 @@
  
   G4DynamicParticle *
    G4LightMedia::OmegaMinusExchange(
-    const G4DynamicParticle* incidentParticle,
+    const G4HadProjectile *incidentParticle,
     const G4Nucleus& targetNucleus )
   {
     G4ParticleDefinition* aNeutron = G4Neutron::Neutron();
@@ -1118,7 +1114,7 @@
  
   G4DynamicParticle *
    G4LightMedia::AntiOmegaMinusExchange(
-    const G4DynamicParticle* incidentParticle,
+    const G4HadProjectile *incidentParticle,
     const G4Nucleus& targetNucleus )
   {
     // NOTE:  The FORTRAN version of the cascade, CASAOM, simply called the
