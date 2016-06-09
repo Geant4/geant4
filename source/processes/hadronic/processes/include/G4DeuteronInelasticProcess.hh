@@ -23,8 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
  // Hadronic Process: Deuteron Inelastic Process
  // J.L. Chuma, TRIUMF, 25-Feb-1997
  // Last modified: 03-Apr-1997
@@ -37,17 +35,15 @@
 // to be used in your physics list in case you need this physics.
 // Class Description - End
 
-//#include "G4HadronicInelasticProcess.hh"
 #include "G4HadronInelasticProcess.hh"
  
-// class G4DeuteronInelasticProcess : public G4HadronicInelasticProcess
+
  class G4DeuteronInelasticProcess : public G4HadronInelasticProcess
  {
  public:
     
     G4DeuteronInelasticProcess(
      const G4String& processName = "DeuteronInelastic" ) :
-      //      G4HadronicInelasticProcess( processName, G4Deuteron::Deuteron() )
       G4HadronInelasticProcess( processName, G4Deuteron::Deuteron() )
     { }
     

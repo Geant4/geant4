@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4hIonisation.cc,v 1.65 2006/06/29 19:54:01 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4hIonisation.cc,v 1.67 2007/01/18 12:17:04 vnivanch Exp $
+// GEANT4 tag $Name: geant4-08-02-patch-01 $
 //
 // -------------------------------------------------------------------
 //
@@ -74,7 +74,9 @@
 // 24-03-05 Optimize internal interfaces (V.Ivantchenko)
 // 12-08-05 SetStepLimits(0.2, 0.1*mm) (mma)
 // 10-01-06 SetStepLimits -> SetStepFunction (V.Ivanchenko)
-// 26-05-06 scale negative particles from pi- and pbar, positive from pi+ and p (VI)
+// 26-05-06 scale negative particles from pi- and pbar,
+//          positive from pi+ and p (VI)
+// 14-01-07 use SetEmModel() and SetFluctModel() from G4VEnergyLossProcess (mma)
 //
 // -------------------------------------------------------------------
 //
@@ -157,18 +159,17 @@ void G4hIonisation::InitialiseEnergyLossProcess(
   massratio = 1.0;
   if(theBaseParticle) massratio = theBaseParticle->GetPDGMass()/mass; 
 
-  G4VEmModel* em = new G4BraggModel();
-  em->SetLowEnergyLimit(0.1*keV);
+  if (!EmModel(1)) SetEmModel(new G4BraggModel(),1);
+  EmModel(1)->SetLowEnergyLimit(100*eV);
   eth = 2.0*MeV*mass/proton_mass_c2;
-  em->SetHighEnergyLimit(eth);
+  EmModel(1)->SetHighEnergyLimit(eth);
+  if (!FluctModel()) SetFluctModel(new G4UniversalFluctuation());
+  AddEmModel(1, EmModel(1), FluctModel());
 
-  flucModel = new G4UniversalFluctuation();
-
-  AddEmModel(1, em, flucModel);
-  G4VEmModel* em1 = new G4BetheBlochModel();
-  em1->SetLowEnergyLimit(eth);
-  em1->SetHighEnergyLimit(100.0*TeV);
-  AddEmModel(2, em1, flucModel);
+  if (!EmModel(2)) SetEmModel(new G4BetheBlochModel(),2);  
+  EmModel(2)->SetLowEnergyLimit(eth);
+  EmModel(2)->SetHighEnergyLimit(100*TeV);
+  AddEmModel(2, EmModel(2), FluctModel());  
 
   isInitialised = true;
 }
@@ -177,11 +178,14 @@ void G4hIonisation::InitialiseEnergyLossProcess(
 
 void G4hIonisation::PrintInfo()
 {
-  G4cout << "      Scaling relation is used to proton dE/dx and range"
-         << G4endl
-         << "      Bether-Bloch model for Escaled > " << eth << " MeV, ICRU49 "
-         << "parametrisation for protons below."
-         << G4endl;
+  if(EmModel(1) && EmModel(2))
+    G4cout << "      Scaling relation is used from proton dE/dx and range."
+	   << "\n      Delta cross sections and sampling from " 
+	   << EmModel(2)->GetName() << " model for scaled energy > "
+	   << eth/MeV << " MeV"
+	   << "\n      Parametrisation from "
+	   << EmModel(1)->GetName() << " for protons below."
+	   << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

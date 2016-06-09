@@ -88,7 +88,7 @@ public:
     G4FragmentVector * theFissionResult = theFission.BreakUp(anInitialState);
     
     // deexcite the fission fragments and fill result
-    std::vector<G4DynamicParticle *> theResult;
+
     G4int ll = theFissionResult->size();
     for(G4int i=0; i<ll; i++)
     {
@@ -97,14 +97,18 @@ public:
       if(aFragment->GetExcitationEnergy()>1.*eV)
       {
 	theExcitationResult = theHandler.BreakItUp(*aFragment);
+
 	// add secondaries
 	for(G4int j = 0; j < G4int(theExcitationResult->size()); j++)
 	{
+          G4ReactionProduct* rp0 = (*theExcitationResult)[j];
           G4DynamicParticle* p0 = new G4DynamicParticle;
-          p0->SetDefinition( theExcitationResult->operator[](j)->GetDefinition() );
-          p0->SetMomentum( theExcitationResult->operator[](j)->GetMomentum() );
-          theResult.push_back(p0);
+          p0->SetDefinition(rp0->GetDefinition() );
+          p0->SetMomentum(rp0->GetMomentum() );
+          theParticleChange.AddSecondary(p0);
+          delete rp0;
 	}
+        delete theExcitationResult;
       }
       else
       {
@@ -112,17 +116,13 @@ public:
 	G4DynamicParticle* p0 = new G4DynamicParticle;
 	p0->SetDefinition(aFragment->GetParticleDefinition());
 	p0->SetMomentum(aFragment->GetMomentum().vect());
-        theResult.push_back(p0);
+        theParticleChange.AddSecondary(p0);
       }
+      delete aFragment;
     }
+
+    delete theFissionResult;
     
-    // fill particle change
-    for(G4int k = 0; k < G4int(theResult.size()); k++)
-    {
-      theParticleChange.AddSecondary(theResult[k]);
-    }
-    
-    // return
     return &theParticleChange;
   }
 private:

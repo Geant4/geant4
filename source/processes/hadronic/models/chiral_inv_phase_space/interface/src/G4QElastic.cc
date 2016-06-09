@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QElastic.cc,v 1.16 2006/12/09 14:33:35 mkossov Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4QElastic.cc,v 1.18 2007/01/18 10:10:58 mkossov Exp $
+// GEANT4 tag $Name: geant4-08-02-patch-01 $
 //
 //      ---------------- G4QElastic class -----------------
 //                 by Mikhail Kossov, December 2003.
@@ -450,8 +450,8 @@ G4VParticleChange* G4QElastic::PostStepDoIt(const G4Track& track, const G4Step& 
   G4double cost=1.-mint/CSmanager->GetHMaxT();// cos(theta) in CMS
   // 
 #ifdef ppdebug
-  G4cout<<"G4QElastic::PoStDoI:t="<<mint<<",dpcm2="<<twop2cm<<"="<<CSmanager->GetHMaxT()
-        <<",Ek="<<kinEnergy<<",tM="<<tM<<",pM="<<pM<<",s="<<sM<<",cost="<<cost<<G4endl;
+  G4cout<<"G4QElastic::PoStDoI:t="<<mint<<",dpcm2="<<CSmanager->GetHMaxT()<<",Ek="
+        <<kinEnergy<<",tM="<<tM<<",pM="<<pM<<",cost="<<cost<<G4endl;
 #endif
   if(cost>1. || cost<-1. || !(cost>-1. || cost<1.))
   {
@@ -473,7 +473,7 @@ G4VParticleChange* G4QElastic::PostStepDoIt(const G4Track& track, const G4Step& 
   if(!G4QHadron(tot4M).RelDecayIn2(scat4M, reco4M, dir4M, cost, cost))
   {
     G4cerr<<"G4QElastic::PSD:t4M="<<tot4M<<",pM="<<pM<<",tM="<<tM<<",cost="<<cost<<G4endl;
-    //throw G4QException("G4QElastic::PostStepDoIt: Can't decay Elastic Compound");
+    //G4Exception("G4QElastic::PostStepDoIt:","009",FatalException,"Decay of ElasticComp");
   }
 #ifdef debug
   G4cout<<"G4QElastic::PoStDoIt:s4M="<<scat4M<<"+r4M="<<reco4M<<"="<<scat4M+reco4M<<G4endl;
@@ -482,13 +482,13 @@ G4VParticleChange* G4QElastic::PostStepDoIt(const G4Track& track, const G4Step& 
 #endif
   // Update G4VParticleChange for the scattered muon
   G4double finE=scat4M.e()-pM;             // Final kinetic energy of the scattered proton
-  if(finE>0) aParticleChange.ProposeEnergy(finE);
+  if(finE>=0.0) aParticleChange.ProposeEnergy(finE);
   else
   {
-    if(finE<-1.e-8 || !(finE>-1.||finE<1.))
+    if(finE<-1.e-8 || !(finE>-1.||finE<1.)) // NAN or negative
       G4cerr<<"*Warning*G4QElastic::PostStDoIt: Zero or negative scattered E="<<finE
             <<", s4M="<<scat4M<<", r4M="<<reco4M<<", d4M="<<tot4M-scat4M-reco4M<<G4endl;
-    //throw G4QException("G4QElastic::PostStDoIt: 0, negative, or nan energy");
+    //G4Exception("G4QElastic::PostStDoIt()","009", FatalException," <0 or nan energy");
     aParticleChange.ProposeEnergy(0.) ;
     aParticleChange.ProposeTrackStatus(fStopAndKill);
   }

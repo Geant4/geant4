@@ -23,8 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
  // Hadronic Process: Ion Inelastic Process
  // J.P. Wellisch, CERN, Apr. 14 2000
  // Last modified: 03-Apr-1997

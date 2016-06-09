@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Navigator.hh,v 1.18 2006/11/11 01:17:49 japost Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4Navigator.hh,v 1.19 2006/12/07 15:09:18 japost Exp $
+// GEANT4 tag $Name: geant4-08-02-patch-01 $
 //
 //
 // class G4Navigator
@@ -317,8 +317,6 @@ class G4Navigator
   G4bool fActive;
     // States if the navigator is activated or not.
 
-  G4ThreeVector fLastLocatedPointLocal;
-    // Position of the last located point relative to its containing volume.
   G4bool fEntering,fExiting;
     // Entering/Exiting volumes blocking/setup
     // o If exiting
@@ -331,8 +329,14 @@ class G4Navigator
   G4VPhysicalVolume *fBlockedPhysicalVolume;
   G4int fBlockedReplicaNo;
 
-  G4VPhysicalVolume *fCandidatePhysicalVolume;
-  G4int fCandidateReplicaNo;
+  // G4VPhysicalVolume *fCandidatePhysicalVolume;   // Unused 
+  // G4int fCandidateReplicaNo;   
+
+  G4ThreeVector fLastLocatedPointLocal;
+    // Position of the last located point relative to its containing volume.
+  G4bool fLocatedOutsideWorld;
+    // Whether the last call to Locate methods left the world
+  // G4PhysicalVolume* fLastVolumeLocated; 
 
   G4bool fValidExitNormal;    // Set true if have leaving volume normal
   G4ThreeVector fExitNormal;  // Leaving volume normal, in the

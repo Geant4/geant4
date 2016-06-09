@@ -1,2 +1,7 @@
+24-Jan 2007 GF: 				tag had-hadronization-V08-02-00
+	G4ExcitedStringDecay::EnergyAndMomentumCorrector :
+          Correct bug which did stop correction even if not yet converged;
+          check on convergence must check that scale-1 is close to 0, 
+	  and not less than 0
 26-May 2006 GF: Fix ( finally?) the charge check in G4HadronBuilder.cc
 

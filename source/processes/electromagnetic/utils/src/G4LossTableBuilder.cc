@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LossTableBuilder.cc,v 1.20 2006/06/29 19:55:11 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4LossTableBuilder.cc,v 1.22 2007/01/16 14:30:59 vnivanch Exp $
+// GEANT4 tag $Name: geant4-08-02-patch-01 $
 //
 // -------------------------------------------------------------------
 //
@@ -41,9 +41,10 @@
 //
 // 23-01-03 V.Ivanchenko Cut per region
 // 21-07-04 V.Ivanchenko Fix problem of range for dedx=0
-// 08-11-04 Migration to new interface of Store/Retrieve tables (V.Ivantchenko)
-// 07-12-04 Fix of BuildDEDX table (V.Ivantchenko)
-// 27-03-06 Add bool options isIonisation (V.Ivantchenko)
+// 08-11-04 Migration to new interface of Store/Retrieve tables (V.Ivanchenko)
+// 07-12-04 Fix of BuildDEDX table (V.Ivanchenko)
+// 27-03-06 Add bool options isIonisation (V.Ivanchenko)
+// 16-01-07 Fill new (not old) DEDX table (V.Ivanchenko)
 //
 // Class Description:
 //
@@ -75,16 +76,18 @@ void G4LossTableBuilder::BuildDEDXTable(G4PhysicsTable* dedxTable,
   size_t n_processes = list.size();
   if(1 >= n_processes) return;
 
-  size_t n_vectors = dedxTable->length();
+  size_t n_vectors = (list[0])->length();
   if(0 >= n_vectors) return;
 
   G4bool b;
 
+  G4PhysicsVector* pv = (*(list[0]))[0];
+  size_t nbins = pv->GetVectorLength();
+  G4double elow = pv->GetLowEdgeEnergy(0);
+  G4double ehigh = pv->GetLowEdgeEnergy(nbins);
   for (size_t i=0; i<n_vectors; i++) {
 
-    G4PhysicsVector* pv = (*dedxTable)[i];
-    size_t nbins = pv->GetVectorLength();
-
+    pv = new G4PhysicsLogVector(elow, ehigh, nbins);
     for (size_t j=0; j<nbins; j++) {
       G4double dedx = 0.0;
       G4double energy = pv->GetLowEdgeEnergy(j);
@@ -93,6 +96,7 @@ void G4LossTableBuilder::BuildDEDXTable(G4PhysicsTable* dedxTable,
 	dedx += ((*(list[k]))[i])->GetValue(energy, b);
       }
       pv->PutValue(j, dedx);
+      G4PhysicsTableHelper::SetPhysicsVector(dedxTable, i, pv);
     }
   }
 }
@@ -159,6 +163,7 @@ void G4LossTableBuilder::BuildRangeTable(const G4PhysicsTable* dedxTable,
           else    f = dedx1 + fac*(energy - energy1);
           if(f > DBL_MIN) range  += de/f;
         }
+	//	G4cout << "Range i= " <<i << " j= " << j << G4endl;
         v->PutValue(j,range);
         energy1 = energy2;
         dedx1   = dedx2;

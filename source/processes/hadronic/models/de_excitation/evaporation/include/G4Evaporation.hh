@@ -24,11 +24,14 @@
 // ********************************************************************
 //
 //
-// $Id: G4Evaporation.hh,v 1.3 2006/06/29 20:09:51 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4Evaporation.hh,v 1.4 2007/02/14 13:37:49 ahoward Exp $
+// GEANT4 tag $Name: geant4-08-02-patch-01 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara
+//
+//
+// Alex Howard - added protection for negative probabilities in the sum, 14/2/07
 
 #ifndef G4Evaporation_h
 #define G4Evaporation_h 1
@@ -84,7 +87,9 @@ private:
     SumProbabilities() : total(0.0) {}
     G4double operator() (G4double& /* probSoFar */, G4VEvaporationChannel*& frag)
     { 
-      total += frag->GetEmissionProbability();
+      G4double temp_prob = frag->GetEmissionProbability();
+      if(temp_prob >= 0.0) total += temp_prob;
+      //      total += frag->GetEmissionProbability();
       return total;
     }
     

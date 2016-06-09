@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VPhysicalVolume.cc,v 1.12 2006/09/18 14:03:25 gcosmo Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4VPhysicalVolume.cc,v 1.13 2007/01/31 15:01:01 gcosmo Exp $
+// GEANT4 tag $Name: geant4-08-02-patch-01 $
 //
 // 
 // class G4VPhysicalVolume Implementation
@@ -95,7 +95,7 @@ G4RotationMatrix* G4VPhysicalVolume::GetObjectRotation() const
 // Only implemented for placed and parameterised volumes.
 // Not required for replicas.
 //
-G4bool G4VPhysicalVolume::CheckOverlaps(G4int)
+G4bool G4VPhysicalVolume::CheckOverlaps(G4int, G4bool)
 {
   return false;
 }

@@ -1,25 +1,10 @@
 
 *************************************************************
- Geant4 version Name: global-V08-01-05    (15-December-2006)
+ Geant4 version Name: geant4-08-02-patch-01-ref    (23-February-2007)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
 *************************************************************
-
-
-***** Table : Nb of materials = 3 *****
-
- Material:    Water     density:  1.000 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:  36.084 cm 
-   --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole  ElmMassFraction:  11.19 %  ElmAbundance  66.67 %
-   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:  88.81 %  ElmAbundance  33.33 %
-
- Material:      Air     density:  1.290 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength: 285.161 m  
-   --->  Element: Nitrogen (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole  ElmMassFraction:  70.00 %  ElmAbundance  72.71 %
-   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:  30.00 %  ElmAbundance  27.29 %
-
- Material: Galactic     density:  0.000 mg/cm3  temperature:   2.73 K  pressure:   0.00 atm  RadLength: 204322175.595 pc 
-   --->  Element: Galactic ( )   Z =  1.0   N =   1.0   A =   1.01 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
-
 
 Visualization Manager instantiating...
 Visualization Manager initialising...
@@ -72,6 +57,21 @@ PhysicsList::AddPhysicsList: <standard>
 /run/initialize
 userDetector->Construct() start.
 
+***** Table : Nb of materials = 3 *****
+
+ Material:    Water     density:  1.000 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:  36.084 cm 
+   --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole  ElmMassFraction:  11.19 %  ElmAbundance  66.67 %
+   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:  88.81 %  ElmAbundance  33.33 %
+
+ Material:      Air     density:  1.290 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength: 285.161 m  
+   --->  Element: Nitrogen (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole  ElmMassFraction:  70.00 %  ElmAbundance  72.71 %
+   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:  30.00 %  ElmAbundance  27.29 %
+
+ Material: Galactic     density:  0.000 mg/cm3  temperature:   2.73 K  pressure:   0.00 atm  RadLength: 204322175.595 pc 
+   --->  Element: Galactic ( )   Z =  1.0   N =   1.0   A =   1.01 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
+
+
+
 ---------------------------------------------------------
 ---> The Absorber is 20 cm  of Water
 
@@ -119,25 +119,27 @@ msc:  Model variant of multiple scattering for e-
 eIoni:   tables are built for  e-
       dE/dx and range tables from 100 eV  to 100 TeV in 480 bins.
       Lambda tables from threshold to 100 TeV in 480 bins.
-      Delta cross sections from Moller+Bhabha, good description from 1 KeV to 100 GeV.
+      Delta cross sections and sampling from MollerBhabha model
+      Good description from 1 KeV to 100 GeV.
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
 
 eBrem:   tables are built for  e-
       dE/dx and range tables from 100 eV  to 100 TeV in 480 bins.
       Lambda tables from threshold to 100 TeV in 480 bins.
-      Total cross sections from a parametrisation based on the EEDL data library. 
+      Total cross sections and sampling from StandBrem model (based on the EEDL data library) 
       Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV.
 
 eIoni:   tables are built for  e+
       dE/dx and range tables from 100 eV  to 100 TeV in 480 bins.
       Lambda tables from threshold to 100 TeV in 480 bins.
-      Delta cross sections from Moller+Bhabha, good description from 1 KeV to 100 GeV.
+      Delta cross sections and sampling from MollerBhabha model
+      Good description from 1 KeV to 100 GeV.
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
 
 eBrem:   tables are built for  e+
       dE/dx and range tables from 100 eV  to 100 TeV in 480 bins.
       Lambda tables from threshold to 100 TeV in 480 bins.
-      Total cross sections from a parametrisation based on the EEDL data library. 
+      Total cross sections and sampling from StandBrem model (based on the EEDL data library) 
       Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV.
 
 annihil:       Sampling according eplus2gg model
@@ -151,8 +153,9 @@ msc:  Model variant of multiple scattering for proton
 hIoni:   tables are built for  proton
       dE/dx and range tables from 100 eV  to 100 TeV in 480 bins.
       Lambda tables from threshold to 100 TeV in 480 bins.
-      Scaling relation is used to proton dE/dx and range
-      Bether-Bloch model for Escaled > 2 MeV, ICRU49 parametrisation for protons below.
+      Scaling relation is used from proton dE/dx and range.
+      Delta cross sections and sampling from BetheBloch model for scaled energy > 2 MeV
+      Parametrisation from Bragg for protons below.
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
 
 msc:  Model variant of multiple scattering for GenericIon
@@ -161,16 +164,19 @@ msc:  Model variant of multiple scattering for GenericIon
 ionIoni:   tables are built for  GenericIon
       dE/dx and range tables from 100 eV  to 100 TeV in 480 bins.
       Lambda tables from threshold to 100 TeV in 480 bins.
-      Scaling relation is used to proton dE/dx and range
-      Bether-Bloch model for Escaled > 2 MeV, ICRU49 parametrisation for alpha particles below.
+      Scaling relation is used from proton dE/dx and range.
+      Delta cross sections and sampling from BetheBloch model for scaled energy > 2 MeV
+      Parametrisation from BraggIon for protons below.
+
       Stopping Power data for 8 ion/material pairs are used.
       Step function: finalRange(mm)= 0.1, dRoverRange= 0.1, integral: 1
 
 hIoni:   tables are built for  anti_proton
       dE/dx and range tables from 100 eV  to 100 TeV in 480 bins.
       Lambda tables from threshold to 100 TeV in 480 bins.
-      Scaling relation is used to proton dE/dx and range
-      Bether-Bloch model for Escaled > 2 MeV, ICRU49 parametrisation for protons below.
+      Scaling relation is used from proton dE/dx and range.
+      Delta cross sections and sampling from BetheBloch model for scaled energy > 2 MeV
+      Parametrisation from Bragg for protons below.
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
 
 msc:  Model variant of multiple scattering for mu+
@@ -214,8 +220,9 @@ muPairProd:   tables are built for  mu-
 hIoni:   tables are built for  pi+
       dE/dx and range tables from 100 eV  to 100 TeV in 480 bins.
       Lambda tables from threshold to 100 TeV in 480 bins.
-      Scaling relation is used to proton dE/dx and range
-      Bether-Bloch model for Escaled > 0.297504 MeV, ICRU49 parametrisation for protons below.
+      Scaling relation is used from proton dE/dx and range.
+      Delta cross sections and sampling from BetheBloch model for scaled energy > 0.297504 MeV
+      Parametrisation from Bragg for protons below.
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
 
 msc:  Model variant of multiple scattering for pi-
@@ -225,8 +232,9 @@ msc:  Model variant of multiple scattering for pi-
 hIoni:   tables are built for  pi-
       dE/dx and range tables from 100 eV  to 100 TeV in 480 bins.
       Lambda tables from threshold to 100 TeV in 480 bins.
-      Scaling relation is used to proton dE/dx and range
-      Bether-Bloch model for Escaled > 0.297504 MeV, ICRU49 parametrisation for protons below.
+      Scaling relation is used from proton dE/dx and range.
+      Delta cross sections and sampling from BetheBloch model for scaled energy > 0.297504 MeV
+      Parametrisation from Bragg for protons below.
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
 
 Region <DefaultRegionForTheWorld> -- appears in <World> world volume
@@ -296,25 +304,25 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=185.08s Real=285.56s Sys=25.33s
+  User=359.68s Real=512.81s Sys=54.38s
 
  The run consists of 10000 proton of 160 MeV through 20 cm  of Water (density: 1 g/cm3 )
 
- projected Range= 17.7591 cm    rms= 2.39362 mm 
+ projected Range= 17.7607 cm    rms= 2.32566 mm 
 
 ---------------------------------------------------------
  Cumulated Doses : 	Edep      	Edep/Ebeam 	Dose
- tally 0: 	 	4.63463 GeV	0.289665 % 	9.28188e-05 Gy
- tally 1: 	 	4.94989 GeV	0.309368 % 	9.91325e-05 Gy
- tally 2: 	 	3.37934 GeV	0.211209 % 	6.76787e-05 Gy
- tally 3: 	 	1.99408 GeV	0.12463 % 	3.99359e-05 Gy
+ tally 0: 	 	4.66649 GeV	0.291655 % 	9.34567e-05 Gy
+ tally 1: 	 	4.95774 GeV	0.309859 % 	9.92897e-05 Gy
+ tally 2: 	 	3.32399 GeV	0.20775 % 	6.65703e-05 Gy
+ tally 3: 	 	1.90963 GeV	0.119352 % 	3.82445e-05 Gy
 
 ---------------------------------------------------------
 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 921989408, 1028175994
+ Current couple of seeds = 2090874575, 496387434
 ----------------------------------------
 #
 /gun/particle ion
@@ -349,7 +357,7 @@ Index : 1     used in the geometry : Yes     recalculation needed : No
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 921989408, 1028175994
+ Current couple of seeds = 2090874575, 496387434
 ----------------------------------------
 Start Run processing.
 
@@ -357,25 +365,25 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=63.73s Real=91.39s Sys=6.83s
+  User=130.43s Real=158.52s Sys=18.09s
 
  The run consists of 1000 C12[0.0] of 3.5 GeV through 20 cm  of Water (density: 1 g/cm3 )
 
- projected Range= 16.4657 cm    rms= 464.552 um 
+ projected Range= 16.467 cm    rms= 477.319 um 
 
 ---------------------------------------------------------
  Cumulated Doses : 	Edep      	Edep/Ebeam 	Dose
- tally 0: 	 	11.0529 GeV	0.315798 % 	0.00022136 Gy
- tally 1: 	 	13.0458 GeV	0.372738 % 	0.000261272 Gy
- tally 2: 	 	15.891 GeV	0.454029 % 	0.000318253 Gy
- tally 3: 	 	24.2011 GeV	0.69146 % 	0.000484681 Gy
+ tally 0: 	 	11.1063 GeV	0.317322 % 	0.000222428 Gy
+ tally 1: 	 	12.301 GeV	0.351456 % 	0.000246354 Gy
+ tally 2: 	 	15.1061 GeV	0.431602 % 	0.000302533 Gy
+ tally 3: 	 	23.0556 GeV	0.658732 % 	0.00046174 Gy
 
 ---------------------------------------------------------
 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 30782651, 380120556
+ Current couple of seeds = 2002275872, 2095953353
 ----------------------------------------
 Graphics systems deleted.
 Visualization Manager deleting...

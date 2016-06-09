@@ -1,4 +1,4 @@
-# $Id: run01.mac,v 1.3 2006/05/24 12:58:49 maire Exp $
+# $Id: run01.mac,v 1.4 2007/01/18 09:07:20 hbu Exp $
 #
 # Macro file for "TestEm16.cc"
 # (can be run in batch, without graphic)
@@ -6,20 +6,34 @@
 #
 /control/verbose 2
 /run/verbose 2
-/testem/det/setMat Vacuum  
+#
+/testem/det/setMat Vacuum
 #
 /run/initialize
+#
+# /process/activate SynchrotronRadiation
 #
 # inactivate other processes to make SynchrotronRadiation more visible
 /process/inactivate msc
 /process/inactivate eIoni
 /process/inactivate eBrem
+/process/inactivate annihil
 /process/inactivate phot
 /process/inactivate compt
 /process/inactivate conv
 #
 /testem/det/setField 1 tesla
+#
 /gun/particle e-
 /gun/energy 9.9994890009 GeV
+# set up histos.  A reasonable choice for the upper limits is about 5*Ecr and 10*MeanFreePath
+/testem/histo/setHisto 1 100 0   400 keV	#SynRad Energy
+/testem/histo/setHisto 2 100 0   400 keV	#SynRad Power
+/testem/histo/setHisto 3 100 0   1.6 m		#Path Length
+/testem/histo/setFileName testem16
+/testem/histo/setFileType hbook
+#
+# next would be 30 degree angle  sin 30deg = 0.5  cos 30 deg = 0.866025403
+#/gun/direction 0.5 0 0.866025403
 #
 /run/beamOn 1000

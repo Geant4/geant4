@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: global-V08-01-05    (15-December-2006)
+ Geant4 version Name: geant4-08-02-patch-01-ref    (23-February-2007)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -140,24 +140,26 @@ msc:  Model variant of multiple scattering for e-
 eIoni:   tables are built for  e-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
-      Delta cross sections from Moller+Bhabha, good description from 1 KeV to 100 GeV.
+      Delta cross sections and sampling from MollerBhabha model
+      Good description from 1 KeV to 100 GeV.
 
 eBrem:   tables are built for  e-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
-      Total cross sections from a parametrisation based on the EEDL data library. 
+      Total cross sections and sampling from StandBrem model (based on the EEDL data library) 
       Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV.
       Step function: finalRange(mm)= 1, dRoverRange= 1, integral: 0
 
 eIoni:   tables are built for  e+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
-      Delta cross sections from Moller+Bhabha, good description from 1 KeV to 100 GeV.
+      Delta cross sections and sampling from MollerBhabha model
+      Good description from 1 KeV to 100 GeV.
 
 eBrem:   tables are built for  e+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
-      Total cross sections from a parametrisation based on the EEDL data library. 
+      Total cross sections and sampling from StandBrem model (based on the EEDL data library) 
       Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV.
       Step function: finalRange(mm)= 1, dRoverRange= 1, integral: 0
 
@@ -172,8 +174,9 @@ msc:  Model variant of multiple scattering for proton
 hIoni:   tables are built for  proton
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
-      Scaling relation is used to proton dE/dx and range
-      Bether-Bloch model for Escaled > 2 MeV, ICRU49 parametrisation for protons below.
+      Scaling relation is used from proton dE/dx and range.
+      Delta cross sections and sampling from BetheBloch model for scaled energy > 2 MeV
+      Parametrisation from Bragg for protons below.
       Step function: finalRange(mm)= 1, dRoverRange= 1, integral: 0
 
 msc:  Model variant of multiple scattering for GenericIon
@@ -182,16 +185,19 @@ msc:  Model variant of multiple scattering for GenericIon
 ionIoni:   tables are built for  GenericIon
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
-      Scaling relation is used to proton dE/dx and range
-      Bether-Bloch model for Escaled > 2 MeV, ICRU49 parametrisation for alpha particles below.
+      Scaling relation is used from proton dE/dx and range.
+      Delta cross sections and sampling from BetheBloch model for scaled energy > 2 MeV
+      Parametrisation from BraggIon for protons below.
+
       Stopping Power data for 8 ion/material pairs are used.
       Step function: finalRange(mm)= 1, dRoverRange= 1, integral: 0
 
 hIoni:   tables are built for  anti_proton
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
-      Scaling relation is used to proton dE/dx and range
-      Bether-Bloch model for Escaled > 2 MeV, ICRU49 parametrisation for protons below.
+      Scaling relation is used from proton dE/dx and range.
+      Delta cross sections and sampling from BetheBloch model for scaled energy > 2 MeV
+      Parametrisation from Bragg for protons below.
       Step function: finalRange(mm)= 1, dRoverRange= 1, integral: 0
 
 msc:  Model variant of multiple scattering for mu+
@@ -235,8 +241,9 @@ muPairProd:   tables are built for  mu-
 hIoni:   tables are built for  pi+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
-      Scaling relation is used to proton dE/dx and range
-      Bether-Bloch model for Escaled > 0.297504 MeV, ICRU49 parametrisation for protons below.
+      Scaling relation is used from proton dE/dx and range.
+      Delta cross sections and sampling from BetheBloch model for scaled energy > 0.297504 MeV
+      Parametrisation from Bragg for protons below.
       Step function: finalRange(mm)= 1, dRoverRange= 1, integral: 0
 
 msc:  Model variant of multiple scattering for pi-
@@ -246,8 +253,9 @@ msc:  Model variant of multiple scattering for pi-
 hIoni:   tables are built for  pi-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
-      Scaling relation is used to proton dE/dx and range
-      Bether-Bloch model for Escaled > 0.297504 MeV, ICRU49 parametrisation for protons below.
+      Scaling relation is used from proton dE/dx and range.
+      Delta cross sections and sampling from BetheBloch model for scaled energy > 0.297504 MeV
+      Parametrisation from Bragg for protons below.
       Step function: finalRange(mm)= 1, dRoverRange= 1, integral: 0
 
 Region <DefaultRegionForTheWorld> -- appears in <World> world volume
@@ -289,31 +297,31 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=3.4s Real=3.4s Sys=0s
+  User=7.2s Real=7.2s Sys=0s
 
  The run consists of 10000 e- of 5 MeV through 100 m   of Water (density: 1 g/cm3 )
 
  Process calls frequency --->	msc = 10000
 
- truePathLength :	2.6311 cm  +- 2.4801 mm 
- geomPathLength :	2.0081 cm  +- 1.3007 mm 
- lateralDisplac :	1.1355 cm  +- 1.1044 mm 
- Psi            :	513.82 mrad +- 28.091 mrad  (29.44 deg +- 1.6095 deg)
+ truePathLength :	2.6289 cm  +- 2.4984 mm 
+ geomPathLength :	2.0069 cm  +- 1.3085 mm 
+ lateralDisplac :	1.1338 cm  +- 1.0956 mm 
+ Psi            :	513.45 mrad +- 27.496 mrad  (29.419 deg +- 1.5754 deg)
 
- Theta_plane    :	1678.5 mrad  (96.168 deg)
- phi correlation:	0.28825 +- 0.17735  (std::cos(phi_pos - phi_dir))
+ Theta_plane    :	1683.1 mrad  (96.432 deg)
+ phi correlation:	0.28607 +- 0.17847  (std::cos(phi_pos - phi_dir))
 
  Verification from G4EmCalculator. 
 
  transport mean free path :	8.346 cm 
  range from restrict dE/dx:	2.7521 cm 
- ---> effective facRange  :	0.31526
+ ---> effective facRange  :	0.31499
 
- compute theta0 from Highland :	605.2 mrad  (34.676 deg)
+ compute theta0 from Highland :	604.93 mrad  (34.66 deg)
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 178521571, 539724907
+ Current couple of seeds = 2020779370, 1052086159
 ----------------------------------------
 #
 /gun/energy 100 keV
@@ -345,7 +353,7 @@ Index : 1     used in the geometry : Yes     recalculation needed : No
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 178521571, 539724907
+ Current couple of seeds = 2020779370, 1052086159
 ----------------------------------------
 Start Run processing.
 
@@ -353,31 +361,31 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=3.3s Real=3.3s Sys=0s
+  User=7s Real=7s Sys=0s
 
  The run consists of 10000 e- of 100 keV through 100 m   of Water (density: 1 g/cm3 )
 
  Process calls frequency --->	msc = 10000
 
- truePathLength :	6.3049 um  +- 1.816 um 
- geomPathLength :	6.1688 um  +- 1.7433 um 
- lateralDisplac :	958.03 nm  +- 400.61 nm 
- Psi            :	147.6 mrad +- 22.686 mrad  (8.4567 deg +- 1.2998 deg)
+ truePathLength :	6.2973 um  +- 1.8085 um 
+ geomPathLength :	6.1616 um  +- 1.7358 um 
+ lateralDisplac :	956.05 nm  +- 399.59 nm 
+ Psi            :	147.51 mrad +- 22.563 mrad  (8.452 deg +- 1.2928 deg)
 
- Theta_plane    :	240.59 mrad  (13.785 deg)
- phi correlation:	0.087898 +- 0.13241  (std::cos(phi_pos - phi_dir))
+ Theta_plane    :	238.44 mrad  (13.662 deg)
+ phi correlation:	0.089979 +- 0.13128  (std::cos(phi_pos - phi_dir))
 
  Verification from G4EmCalculator. 
 
  transport mean free path :	157.63 um 
  range from restrict dE/dx:	143.16 um 
- ---> effective facRange  :	0.039999
+ ---> effective facRange  :	0.03995
 
- compute theta0 from Highland :	180.68 mrad  (10.352 deg)
+ compute theta0 from Highland :	180.56 mrad  (10.345 deg)
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 382949488, 373885619
+ Current couple of seeds = 1037881009, 1665763910
 ----------------------------------------
 Graphics systems deleted.
 Visualization Manager deleting...

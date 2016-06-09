@@ -195,7 +195,7 @@ G4VPhysicalVolume* exrdmDetectorConstruction::Construct()
   G4double zpos = -fWorldLength/2.;
   G4String command = "/gps/pos/centre ";
   std::ostringstream os;
-  os << zpos << '\0'; 
+  os << zpos ; 
   G4String xs = os.str();
   UI->ApplyCommand(command+"0. 0. "+xs+" mm");
   UI->ApplyCommand("/gps/pos/type Point");

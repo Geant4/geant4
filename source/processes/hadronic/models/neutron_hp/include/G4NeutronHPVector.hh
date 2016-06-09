@@ -360,12 +360,16 @@ class G4NeutronHPVector
     }
     theIntegral[0] = 0;
     G4double sum = 0;
+    G4double x1 = 0;
+    G4double x0 = 0;
     for(i=1;i<GetVectorLength();i++)
     {
-      if(std::abs((theData[i].GetX()-theData[i-1].GetX())/theData[i].GetX())>0.0000001)
+      x1 = theData[i].GetX();
+      x0 = theData[i-1].GetX();
+      if (std::abs(x1-x0) > std::abs(x1*0.0000001) )
       {
         sum+= 0.5*(theData[i].GetY()+theData[i-1].GetY())*
-                  (theData[i].GetX()-theData[i-1].GetX());
+                  (x1-x0);
       }
       theIntegral[i] = sum;
     }

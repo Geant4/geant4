@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: QGSP_BIC_HP.icc,v 1.1 2006/11/24 16:31:35 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: QGSP_BIC_HP.icc,v 1.2 2006/12/15 16:28:36 gunter Exp $
+// GEANT4 tag $Name: geant4-08-02-patch-01 $
 //
 //---------------------------------------------------------------------------
 //
@@ -87,7 +87,7 @@ template<class T> TQGSP_BIC_HP<T>::TQGSP_BIC_HP(G4int ver):  T()
   this->RegisterPhysics( new G4DecayPhysics("decay",ver) );
 
    // Hadron Elastic scattering
-  this-> RegisterPhysics( new G4HadronElasticPhysics("elastic",ver,false));
+  this-> RegisterPhysics( new G4HadronElasticPhysics("elastic",ver,true));
 
    // Hadron Physics
   this->RegisterPhysics(  new HadronPhysicsQGSP_BIC_HP("hadron"));

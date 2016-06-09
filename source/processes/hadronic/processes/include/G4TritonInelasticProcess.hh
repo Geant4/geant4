@@ -23,8 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
  // Hadronic Process: Triton Inelastic Process
  // J.L. Chuma, TRIUMF, 25-Feb-1997
  // Last modified: 03-Apr-1997
@@ -36,17 +34,15 @@
 #ifndef G4TritonInelasticProcess_h
 #define G4TritonInelasticProcess_h 1
  
-//#include "G4HadronicInelasticProcess.hh"
 #include "G4HadronInelasticProcess.hh"
  
-// class G4TritonInelasticProcess : public G4HadronicInelasticProcess
+
  class G4TritonInelasticProcess : public G4HadronInelasticProcess
  {
  public:
     
     G4TritonInelasticProcess(
      const G4String& processName = "TritonInelastic" ) :
-      //      G4HadronicInelasticProcess( processName, G4Triton::Triton() )
       G4HadronInelasticProcess( processName, G4Triton::Triton() )
     { }
         

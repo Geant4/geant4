@@ -1,0 +1,38 @@
+#
+# Macro file for "TestEm16.cc"
+# (can be run in batch, without graphic)
+#
+#
+/control/verbose 2
+/run/verbose 2
+/run/initialize
+#
+# /process/activate SynchrotronRadiation
+#
+# inactivate other processes to make SynchrotronRadiation more visible
+/process/inactivate msc
+/process/inactivate eIoni
+/process/inactivate eBrem
+/process/inactivate annihil
+/process/inactivate phot
+/process/inactivate compt
+/process/inactivate conv
+#
+/gun/particle e-
+/gun/energy 10 TeV
+#
+# set up histos.  A reasonable choice for the upper limits is about 5*Ecr and 10*MeanFreePath
+/testem/histo/setHisto 1 100 0    20 MeV	#SynRad Energy
+/testem/histo/setHisto 2 100 0    20 MeV	#SynRad Power
+/testem/histo/setHisto 3 100 0    32 km		#Path Length
+/testem/histo/setFileName testem16_run02
+/testem/histo/setFileType hbook
+#
+/testem/det/setSize 200 km
+/testem/det/setMat Vacuum
+/testem/det/update
+# very weak magnetic field, increase step length
+/testem/det/setField 0.5 gauss
+/testem/tracking/setMaxStepLength 100 km
+#
+/run/beamOn 1000

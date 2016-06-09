@@ -23,8 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
  // Hadronic Process: Neutron Inelastic Process
  // original by H.P. Wellisch
  // modified by J.L. Chuma, TRIUMF, 05-Nov-1996
@@ -40,17 +38,15 @@
 // to be used in your physics list in case you need this physics.
 // Class Description - End
 
-//#include "G4HadronicInelasticProcess.hh"
 #include "G4HadronInelasticProcess.hh"
  
-// class G4NeutronInelasticProcess : public G4HadronicInelasticProcess
+
  class G4NeutronInelasticProcess : public G4HadronInelasticProcess
  {
  public:
     
     G4NeutronInelasticProcess(
      const G4String& processName = "NeutronInelastic" ) :
-      //      G4HadronicInelasticProcess( processName, G4Neutron::Neutron() )
       G4HadronInelasticProcess( processName, G4Neutron::Neutron() )
     { }
     

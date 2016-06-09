@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MultipleScattering.cc,v 1.58 2006/11/23 10:07:42 vnivanch Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4MultipleScattering.cc,v 1.59 2007/02/06 15:52:27 vnivanch Exp $
+// GEANT4 tag $Name: geant4-08-02-patch-01 $
 //
 // -----------------------------------------------------------------------------
 //
@@ -191,6 +191,8 @@ void G4MultipleScattering::InitialiseProcess(const G4ParticleDefinition* p)
 {
   if(isInitialized) {
     mscUrban->SetMscStepLimitation(steppingAlgorithm, facrange);
+    if (p->GetParticleType() != "nucleus") 
+      mscUrban->SetLateralDisplasmentFlag(LateralDisplasmentFlag());
     return;
   }
 

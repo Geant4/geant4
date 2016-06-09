@@ -1,26 +1,23 @@
 //
 // ********************************************************************
-// * License and Disclaimer                                           *
+// * DISCLAIMER                                                       *
 // *                                                                  *
-// * The  Geant4 software  is  copyright of the Copyright Holders  of *
-// * the Geant4 Collaboration.  It is provided  under  the terms  and *
-// * conditions of the Geant4 Software License,  included in the file *
-// * LICENSE and available at  http://cern.ch/geant4/license .  These *
-// * include a list of copyright holders.                             *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
 // *                                                                  *
 // * Neither the authors of this software system, nor their employing *
 // * institutes,nor the agencies providing financial support for this *
 // * work  make  any representation or  warranty, express or implied, *
 // * regarding  this  software system or assume any liability for its *
-// * use.  Please see the license in the file  LICENSE  and URL above *
-// * for the full disclaimer and the limitation of liability.         *
+// * use.                                                             *
 // *                                                                  *
-// * This  code  implementation is the result of  the  scientific and *
-// * technical work of the GEANT4 collaboration.                      *
-// * By using,  copying,  modifying or  distributing the software (or *
-// * any work based  on the software)  you  agree  to acknowledge its *
-// * use  in  resulting  scientific  publications,  and indicate your *
-// * acceptance of all terms of the Geant4 Software license.          *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
 // ********************************************************************
 //
 
@@ -42,11 +39,20 @@
 
 class exrdmHistoMessenger;
 
+#ifdef G4ANALYSIS_USE_AIDA
 namespace AIDA {
  class ITree;
  class ITuple;
  class IHistogram1D;
 }
+#endif
+
+#ifdef G4ANALYSIS_USE_ROOT
+class TFile;
+class TH1D;
+class TNtuple;
+#endif
+
 
 class exrdmHisto
 {
@@ -80,8 +86,13 @@ public:
   void fillTuple(G4int, const G4String&, G4double);
   // Fill nTuple parameter with a double
 
+  void fillTuple(G4int, G4int, G4double);
+  // Fill nTuple at a given col with a double
   void fillTuple(G4int, const G4String&, G4String);
   // Fill nTuple parameter with a string
+
+  void fillTuple(G4int, const G4String&, G4bool);
+  // Fill nTuple parameter with a bool
 
   void addRow(G4int);
   // Save tuple event 
@@ -89,6 +100,7 @@ public:
   void setFileName(const G4String&);
 
   void setFileType(const G4String&);
+  const G4String& FileType() const;
 
 private:
 
@@ -100,9 +112,20 @@ private:
   G4int    verbose;
   G4int    defaultAct;
 
+#ifdef G4ANALYSIS_USE_AIDA
   std::vector<AIDA::IHistogram1D*> histo;
   std::vector<AIDA::ITuple*>   ntup;
   AIDA::ITree*    tree;
+#endif
+
+#ifdef G4ANALYSIS_USE_ROOT
+  TFile* hfileROOT; 
+  std::vector<TH1D*> ROOThisto;
+  std::vector<TNtuple*>   ROOTntup;
+  std::vector< std::vector<float> > Rarray;
+  std::vector<G4int> Rcol;
+#endif
+
   exrdmHistoMessenger* messenger;
 
   std::vector<G4int>     active;
@@ -115,7 +138,7 @@ private:
   std::vector<G4String>  tupleName;
   std::vector<G4String>  tupleId;
   std::vector<G4String>  tupleList;
-
+  std::vector<G4String>  tupleListROOT; 
 };
 
 #endif

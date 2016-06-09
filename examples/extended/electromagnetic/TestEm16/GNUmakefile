@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.3 2006/10/24 10:14:46 maire Exp $
+# $Id: GNUmakefile,v 1.5 2007/01/18 10:24:35 vnivanch Exp $
 # --------------------------------------------------------------
 # GNUmakefile for examples module.  Gabriele Cosmo, 06/04/98.
 # --------------------------------------------------------------
@@ -24,17 +24,15 @@ include $(G4INSTALL)/config/architecture.gmk
 
 ifdef G4ANALYSIS_USE
   # add -v to see what is going on. 
-  # add RunAction.o such that the linker finds AIDA_createAnalysisFactory
   # for the aida-config command see the README file
   CPPFLAGS += `aida-config --include`
-  LOADLIBS += $(G4WORKDIR)/tmp/$(G4SYSTEM)/TestEm16/RunAction.o `aida-config --lib`
+  LOADLIBS += `aida-config --lib`
 endif
 
 include $(G4INSTALL)/config/binmake.gmk
 
 histclean:
-	rm -f $(G4WORKDIR)/tmp/$(G4SYSTEM)/$(G4TARGET)/RunAction.o
-	rm -f $(G4WORKDIR)/tmp/$(G4SYSTEM)/$(G4TARGET)/SteppingAction.o
+	rm -f $(G4WORKDIR)/tmp/$(G4SYSTEM)/$(G4TARGET)/HistoManager.o
 
 visclean:
 	rm -f g4*.prim g4*.eps g4*.wrl

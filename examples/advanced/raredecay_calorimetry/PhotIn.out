@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: global-V08-01-05    (15-December-2006)
+ Geant4 version Name: geant4-08-02-patch-01-ref    (23-February-2007)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -531,25 +531,27 @@ msc:  Model variant of multiple scattering for e-
 eIoni:   tables are built for  e-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
-      Delta cross sections from Moller+Bhabha, good description from 1 KeV to 100 GeV.
+      Delta cross sections and sampling from MollerBhabha model
+      Good description from 1 KeV to 100 GeV.
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
 
 eBrem:   tables are built for  e-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
-      Total cross sections from a parametrisation based on the EEDL data library. 
+      Total cross sections and sampling from StandBrem model (based on the EEDL data library) 
       Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV.
 
 eIoni:   tables are built for  e+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
-      Delta cross sections from Moller+Bhabha, good description from 1 KeV to 100 GeV.
+      Delta cross sections and sampling from MollerBhabha model
+      Good description from 1 KeV to 100 GeV.
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
 
 eBrem:   tables are built for  e+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
-      Total cross sections from a parametrisation based on the EEDL data library. 
+      Total cross sections and sampling from StandBrem model (based on the EEDL data library) 
       Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV.
 
 annihil:       Sampling according eplus2gg model
@@ -567,8 +569,9 @@ msc:  Model variant of multiple scattering for proton
 hIoni:   tables are built for  proton
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
-      Scaling relation is used to proton dE/dx and range
-      Bether-Bloch model for Escaled > 2 MeV, ICRU49 parametrisation for protons below.
+      Scaling relation is used from proton dE/dx and range.
+      Delta cross sections and sampling from BetheBloch model for scaled energy > 2 MeV
+      Parametrisation from Bragg for protons below.
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
 
 msc:  Model variant of multiple scattering for GenericIon
@@ -577,8 +580,9 @@ msc:  Model variant of multiple scattering for GenericIon
 hIoni:   tables are built for  anti_proton
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
-      Scaling relation is used to proton dE/dx and range
-      Bether-Bloch model for Escaled > 2 MeV, ICRU49 parametrisation for protons below.
+      Scaling relation is used from proton dE/dx and range.
+      Delta cross sections and sampling from BetheBloch model for scaled energy > 2 MeV
+      Parametrisation from Bragg for protons below.
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
 
 msc:  Model variant of multiple scattering for mu+
@@ -622,8 +626,9 @@ muPairProd:   tables are built for  mu-
 hIoni:   tables are built for  pi+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
-      Scaling relation is used to proton dE/dx and range
-      Bether-Bloch model for Escaled > 0.297504 MeV, ICRU49 parametrisation for protons below.
+      Scaling relation is used from proton dE/dx and range.
+      Delta cross sections and sampling from BetheBloch model for scaled energy > 0.297504 MeV
+      Parametrisation from Bragg for protons below.
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
 
 msc:  Model variant of multiple scattering for pi-
@@ -633,8 +638,9 @@ msc:  Model variant of multiple scattering for pi-
 hIoni:   tables are built for  pi-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
-      Scaling relation is used to proton dE/dx and range
-      Bether-Bloch model for Escaled > 0.297504 MeV, ICRU49 parametrisation for protons below.
+      Scaling relation is used from proton dE/dx and range.
+      Delta cross sections and sampling from BetheBloch model for scaled energy > 0.297504 MeV
+      Parametrisation from Bragg for protons below.
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
 
 ========= Table of registered couples ==============================
@@ -696,7 +702,7 @@ PhotInPrimaryGeneratorAction::GeneratePrimaries: part&E're redefined
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=30.87s Real=31.9s Sys=0.72s
+  User=64.47s Real=67.2s Sys=2.57s
 ##############################################################
  Run Summary - Number of events : 1
 ##############################################################
@@ -705,57 +711,57 @@ Region Region0
  Production thresholds :
  -----------------------
  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy deposition in Absorber 26.944108 MeV, in Gap 0 eV 
+ Energy deposition in Absorber 169.18376 MeV, in Gap 0 eV 
  Number of secondaries in the event :
  ------------------------------------
- gamma in Absorber 1, in Gap      3
- e-    in Absorber 45, in Gap 78
- e+    in Absorber 0, in Gap 1
+ gamma in Absorber 1, in Gap      32
+ e-    in Absorber 97, in Gap 222
+ e+    in Absorber 0, in Gap 4
  Minimum kinetic energy of generated secondaries :
  -------------------------------------------------
- gamma in Absorber = 23.736054 keV, in Gap = 510.99906 keV
- e-    in Absorber = 37.446406 eV , in Gap = 45.624968 eV 
- e+    in Absorber = 2.8802232e+295 J      in Gap = 4.6902783 MeV
- Mean total track length of neutrons in the event : in Absorber = 46.69292 cm , in Gap = 0 fm 
- Mean number of steps of charged particles in the event : in Absorber =14, in Gap = 0
+ gamma in Absorber = 292.22629 keV, in Gap = 9.5987954 keV
+ e-    in Absorber = 53.485492 eV , in Gap = 200.64689 eV 
+ e+    in Absorber = 2.8802232e+295 J      in Gap = 6.8057342 MeV
+ Mean total track length of neutrons in the event : in Absorber = 2.8928295 m  , in Gap = 0 fm 
+ Mean number of steps of charged particles in the event : in Absorber =66, in Gap = 0
 ##############################################################
 Region Region1
 ====================
  Production thresholds :
  -----------------------
  gamma 1 cm     e- 1 cm     e+ 1 cm 
- Energy deposition in Absorber 53.114218 GeV, in Gap 0 eV 
+ Energy deposition in Absorber 56.959914 GeV, in Gap 0 eV 
  Number of secondaries in the event :
  ------------------------------------
- gamma in Absorber 2006, in Gap      8352
- e-    in Absorber 20170, in Gap 44228
- e+    in Absorber 118, in Gap 658
+ gamma in Absorber 1819, in Gap      7726
+ e-    in Absorber 18674, in Gap 41014
+ e+    in Absorber 100, in Gap 635
  Minimum kinetic energy of generated secondaries :
  -------------------------------------------------
- gamma in Absorber = 5.719773 keV, in Gap = 20.504013 keV
- e-    in Absorber = 0.069696335 eV , in Gap = 0.63274259 eV 
- e+    in Absorber = 139.11773 keV    in Gap = 58.330473 keV
- Mean total track length of neutrons in the event : in Absorber = 21.705779 m  , in Gap = 0 fm 
- Mean number of steps of charged particles in the event : in Absorber =504, in Gap = 0
+ gamma in Absorber = 5.7042228 keV, in Gap = 20.506969 keV
+ e-    in Absorber = 0.098287199 eV , in Gap = 0.55892018 eV 
+ e+    in Absorber = 329.00761 keV    in Gap = 76.870563 keV
+ Mean total track length of neutrons in the event : in Absorber = 52.100229 m  , in Gap = 0 fm 
+ Mean number of steps of charged particles in the event : in Absorber =1244, in Gap = 0
 ##############################################################
 Region Region2
 ====================
  Production thresholds :
  -----------------------
  gamma 10 cm     e- 10 cm     e+ 10 cm 
- Energy deposition in Absorber 149.45259 MeV, in Gap 0 eV 
+ Energy deposition in Absorber 296.6669 MeV, in Gap 0 eV 
  Number of secondaries in the event :
  ------------------------------------
- gamma in Absorber 3, in Gap      25
- e-    in Absorber 210, in Gap 307
- e+    in Absorber 0, in Gap 1
+ gamma in Absorber 9, in Gap      28
+ e-    in Absorber 155, in Gap 300
+ e+    in Absorber 0, in Gap 4
  Minimum kinetic energy of generated secondaries :
  -------------------------------------------------
- gamma in Absorber = 27.1658 keV, in Gap = 89.964114 keV
- e-    in Absorber = 13.912189 eV , in Gap = 4.1623966 eV 
- e+    in Absorber = 2.8802232e+295 J      in Gap = 1.0632795 MeV
- Mean total track length of neutrons in the event : in Absorber = 60.72903 cm , in Gap = 0 fm 
- Mean number of steps of charged particles in the event : in Absorber =14, in Gap = 0
+ gamma in Absorber = 39.614403 keV, in Gap = 82.436783 keV
+ e-    in Absorber = 48.022639 eV , in Gap = 169.92313 eV 
+ e+    in Absorber = 2.8802232e+295 J      in Gap = 200.50737 keV
+ Mean total track length of neutrons in the event : in Absorber = 3.3980926 m  , in Gap = 0 fm 
+ Mean number of steps of charged particles in the event : in Absorber =73, in Gap = 0
 ##############################################################
 /run/dumpCouples
 

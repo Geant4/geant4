@@ -1,4 +1,4 @@
-$Id: History,v 1.69 2006/11/23 18:54:27 japost Exp $
+$Id: History,v 1.73 2007/02/13 17:15:58 japost Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,20 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+February 13th, 2007 - J.Apostolakis (geomnav-V08-02-01) - fix created Jan 25th, 2007
+-----------------------------------
+- G4PropagatorInField: implemented ClearPropagatorState()
+       to clear all the track-dependent state (incl. safety, zero-steps, loop flag ..)
+  ** Calling this is mandatory for each new track 
+     because in the case of geometry overlaps, the safety can be 
+     easily inconsistent (and/or incorrect) otherwise **
+
+January 31st, 2007 - G.Cosmo (geomnav-V08-02-00)
+----------------------------
+- G4Navigator: forcing call to CheckOverlaps() on the current volume
+  before event abortion for cases of stuck tracks.
+- Requires tag "geommng-V08-02-00".
 
 November 23rd, 2006 - J.Apostolakis (geomnav-V08-01-08)
 -----------------------------------

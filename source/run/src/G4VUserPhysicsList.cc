@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VUserPhysicsList.cc,v 1.55 2006/12/13 15:49:40 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4VUserPhysicsList.cc,v 1.56 2007/01/18 02:16:31 kurasige Exp $
+// GEANT4 tag $Name: geant4-08-02-patch-01 $
 //
 // 
 // ------------------------------------------------------------
@@ -42,6 +42,7 @@
 //       Removed ConstructAllParticles()  15 Apr 1999 by H.Kurashige
 //       Modified for CUTS per REGION     10 Oct 2002 by H.Kurashige
 //       Check if particle IsShortLived   18 Jun 2003 by V.Ivanchenko
+//       Modify PreparePhysicsList        18 Jan 2006 by H.Kurashige
 // ------------------------------------------------------------
 
 #include "globals.hh"
@@ -480,7 +481,16 @@ void G4VUserPhysicsList::PreparePhysicsTable(G4ParticleDefinition* particle)
   // Prepare the physics tables for every process for this particle type
   // if particle is not ShortLived
   if(!particle->IsShortLived()) {
-    G4ProcessVector* pVector = particle->GetProcessManager()->GetProcessList();
+    G4ProcessManager* pManager =  particle->GetProcessManager();
+    if (!pManager) {
+      G4cerr << "G4VUserPhysicsList::PreparePhysicsTable  : No Process Manager for " 
+             << particle->GetParticleName() <<G4endl;
+      G4cerr << particle->GetParticleName() << " should be created in your PhysicsList" <<G4endl;
+      G4Exception("G4VUserPhysicsList::PreparePhysicsTable","No process manager",
+                    RunMustBeAborted,  particle->GetParticleName() );
+    }
+
+    G4ProcessVector* pVector = pManager->GetProcessList();
     for (G4int j=0; j < pVector->size(); ++j) {
       (*pVector)[j]->PreparePhysicsTable(*particle);
     }

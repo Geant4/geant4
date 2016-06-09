@@ -77,6 +77,7 @@
      theEnergy = -1;
      theStat = isAlive;
      theW = 1.;
+     theEDep = 0.;
      if(!hasStaleSecondaries) 
      {
        for(size_t i=0; i<theSecs.size(); i++) delete theSecs[i];

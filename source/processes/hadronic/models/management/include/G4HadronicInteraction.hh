@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4HadronicInteraction.hh,v 1.7 2006/06/29 20:45:31 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4HadronicInteraction.hh,v 1.8 2007/01/11 05:30:01 dennis Exp $
+// GEANT4 tag $Name: geant4-08-02-patch-01 $
 //
  // Hadronic Interaction  abstract base class
  // This class is the base class for the model classes.
@@ -62,9 +62,9 @@
  {
  public:
     
-    G4HadronicInteraction() :
-      verboseLevel(0), theMinEnergy(0.0*GeV), 
-      theMaxEnergy(25.0*GeV), isBlocked(false)
+    G4HadronicInteraction(const G4String& modelName = "HadronicModel") :
+      verboseLevel(0), theMinEnergy(0.0*GeV), theMaxEnergy(25.0*GeV), 
+      isBlocked(false), theModelName(modelName)
     { 
       G4HadronicInteractionRegistry::RegisterMe(this);
     }
@@ -133,6 +133,9 @@
     inline void SetVerboseLevel( G4int value )
     { verboseLevel = value; }
 
+    inline const G4String& GetModelName() const
+    { return theModelName; }
+
 public: // With description
     // This is the interface to implement for final state production code.
     
@@ -189,6 +192,8 @@ public: // Without description
     G4bool IsBlocked() const { return isBlocked;}
     void Block() { isBlocked = true; }
     G4bool isBlocked;
+
+    G4String theModelName;
     
  private:
         

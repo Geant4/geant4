@@ -27,8 +27,8 @@
 //34567890123456789012345678901234567890123456789012345678901234567890123456789012345678901
 //
 //
-// $Id: G4Quasmon.cc,v 1.90 2006/11/27 10:44:55 mkossov Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4Quasmon.cc,v 1.91 2007/01/23 08:27:20 mkossov Exp $
+// GEANT4 tag $Name: geant4-08-02-patch-01 $
 //
 //      ---------------- G4Quasmon ----------------
 //             by Mikhail Kossov, July 1999.
@@ -912,7 +912,8 @@ G4QHadronVector G4Quasmon::HadronizeQuasmon(G4QNucleus& qEnv, G4int nQuasms)
 #endif
               G4double k = kMom;
               if(cPDG>MINPDG&&cPDG!=NUCPDG) k=kLS; // ===> Nuclear case (Lab System)
-              G4double kMin=(cfM*cfM-cMs*cMs)/(cMs+cMs);
+              G4double kMin=0.;
+              if(cMs)  kMin=(cfM*cfM-cMs*cMs)/(cMs+cMs);
               if(kMin<0.) kMin=0.;
 #ifdef debug
               G4double totr = rtN.GetMZNS();// Mass of the total Residual Nucleus

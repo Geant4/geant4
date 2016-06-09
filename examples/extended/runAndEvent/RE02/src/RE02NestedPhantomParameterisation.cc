@@ -73,6 +73,7 @@ G4Material* RE02NestedPhantomParameterisation::ComputeMaterial(G4VPhysicalVolume
 							 const G4int copyNo, 
 							 const G4VTouchable* parentTouch)
 {
+  if(parentTouch==0) return fmat[0]; // protection for initialization and vis at idle state
   // Copy number of voxels. 
   // Copy number of X and Y are obtained from replication number.
   // Copy nymber of Z is the copy number of current voxel.
@@ -81,13 +82,8 @@ G4Material* RE02NestedPhantomParameterisation::ComputeMaterial(G4VPhysicalVolume
   G4int iz = copyNo;
   // For demonstration purpose,a couple of materials are chosen alternately.
   G4Material* mat=0;
-  if ( ix < 0 && iy < 0 ) return NULL;
   if ( ix%2 == 0 && iy%2 == 0 && iz%2 == 0 ) mat = fmat[0];
   else mat = fmat[1];
-
-  // Set material to the current logical volume.
-  G4LogicalVolume* currentLog = currentVol->GetLogicalVolume();
-  currentLog->SetMaterial(mat);
 
   return mat;
 }

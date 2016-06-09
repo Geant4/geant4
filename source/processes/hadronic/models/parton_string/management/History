@@ -1,0 +1,6 @@
+
+24-Jan 2007 G.Folger			Tag : had-partonstring-mgt-V08-02-00
+   - Debugging method Dump added in G4InteractionContent to print object
+   - Debug output in G4VPartonStringModel checking E-p conservation of string
+     model
+

@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: global-V08-01-05    (15-December-2006)
+ Geant4 version Name: geant4-08-02-patch-01-ref    (23-February-2007)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -157,13 +157,14 @@ LowEnBrem:  Total cross sections from EEDL database.
 eIoni:   tables are built for  e+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
-      Delta cross sections from Moller+Bhabha, good description from 1 KeV to 100 GeV.
+      Delta cross sections and sampling from MollerBhabha model
+      Good description from 1 KeV to 100 GeV.
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
 
 eBrem:   tables are built for  e+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
-      Total cross sections from a parametrisation based on the EEDL data library. 
+      Total cross sections and sampling from StandBrem model (based on the EEDL data library) 
       Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV.
 
 annihil:       Sampling according eplus2gg model
@@ -310,40 +311,44 @@ Index : 12     used in the geometry : Yes     recalculation needed : No
 
 -> Event # 3 generated 
    ===> The incident alpha particle has reached the targeted cell :
-   -----> total absorbed dose within Nucleus   is (Gy) = 0.629625
-   -----> total absorbed dose within Cytoplasm is (Gy) = 0.0207051
+   -----> total absorbed dose within Nucleus   is (Gy) = 0.22583
+   -----> total absorbed dose within Cytoplasm is (Gy) = 0.00860348
 
 -> Event # 4 generated 
    ===> The incident alpha particle has reached the targeted cell :
-   -----> total absorbed dose within Nucleus   is (Gy) = 0.642498
-   -----> total absorbed dose within Cytoplasm is (Gy) = 0.00610788
+   -----> total absorbed dose within Nucleus   is (Gy) = 0.308113
+   -----> total absorbed dose within Cytoplasm is (Gy) = 0.0222568
 
 -> Event # 5 generated 
    ===> The incident alpha particle has reached the targeted cell :
-   -----> total absorbed dose within Nucleus   is (Gy) = 0.628085
-   -----> total absorbed dose within Cytoplasm is (Gy) = 0.00760408
+   -----> total absorbed dose within Nucleus   is (Gy) = 0.244937
+   -----> total absorbed dose within Cytoplasm is (Gy) = 0.049705
 
 -> Event # 6 generated 
-   ===> Sorry, the incident alpha particle has missed the targeted cell !
+   ===> The incident alpha particle has reached the targeted cell :
+   -----> total absorbed dose within Nucleus   is (Gy) = 0.337467
+   -----> total absorbed dose within Cytoplasm is (Gy) = 0.0508935
 
 -> Event # 7 generated 
    ===> The incident alpha particle has reached the targeted cell :
-   -----> total absorbed dose within Nucleus   is (Gy) = 0.321989
-   -----> total absorbed dose within Cytoplasm is (Gy) = 0.0549673
+   -----> total absorbed dose within Nucleus   is (Gy) = 0.378845
+   -----> total absorbed dose within Cytoplasm is (Gy) = 0.0626815
 
 -> Event # 8 generated 
-   ===> Sorry, the incident alpha particle has missed the targeted cell !
+   ===> The incident alpha particle has reached the targeted cell :
+   -----> total absorbed dose within Nucleus   is (Gy) = 0.328282
+   -----> total absorbed dose within Cytoplasm is (Gy) = 0.0553245
 
 -> Event # 9 generated 
-   ===> Sorry, the incident alpha particle has missed the targeted cell !
+   ===> The incident alpha particle has reached the targeted cell :
+   -----> total absorbed dose within Nucleus   is (Gy) = 0.378059
+   -----> total absorbed dose within Cytoplasm is (Gy) = 0.0417293
 
 -> Event # 10 generated 
-   ===> The incident alpha particle has reached the targeted cell :
-   -----> total absorbed dose within Nucleus   is (Gy) = 0.543119
-   -----> total absorbed dose within Cytoplasm is (Gy) = 0.0475622
+   ===> Sorry, the incident alpha particle has missed the targeted cell !
 
 ERROR: G4VisCommandsViewerUpdate::SetNewValue: no current viewer.
--> Total number of particles detected by the gas detector : 6
+-> Total number of particles detected by the gas detector : 8
 
 Graphics systems deleted.
 Visualization Manager deleting...

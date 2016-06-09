@@ -1,26 +1,23 @@
 //
 // ********************************************************************
-// * License and Disclaimer                                           *
+// * DISCLAIMER                                                       *
 // *                                                                  *
-// * The  Geant4 software  is  copyright of the Copyright Holders  of *
-// * the Geant4 Collaboration.  It is provided  under  the terms  and *
-// * conditions of the Geant4 Software License,  included in the file *
-// * LICENSE and available at  http://cern.ch/geant4/license .  These *
-// * include a list of copyright holders.                             *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
 // *                                                                  *
 // * Neither the authors of this software system, nor their employing *
 // * institutes,nor the agencies providing financial support for this *
 // * work  make  any representation or  warranty, express or implied, *
 // * regarding  this  software system or assume any liability for its *
-// * use.  Please see the license in the file  LICENSE  and URL above *
-// * for the full disclaimer and the limitation of liability.         *
+// * use.                                                             *
 // *                                                                  *
-// * This  code  implementation is the result of  the  scientific and *
-// * technical work of the GEANT4 collaboration.                      *
-// * By using,  copying,  modifying or  distributing the software (or *
-// * any work based  on the software)  you  agree  to acknowledge its *
-// * use  in  resulting  scientific  publications,  and indicate your *
-// * acceptance of all terms of the Geant4 Software license.          *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
 // ********************************************************************
 //
 
@@ -57,7 +54,7 @@ exrdmAnalysisManager::exrdmAnalysisManager()
   detectorThresE = 10*keV;
   pulseWidth = 1.*microsecond;
   histo   = new exrdmHisto();
-#ifdef G4ANALYSIS_USE
+#if defined G4ANALYSIS_USE_AIDA || defined G4ANALYSIS_USE_ROOT
    bookHisto();
 #endif
 }
@@ -66,7 +63,7 @@ exrdmAnalysisManager::exrdmAnalysisManager()
 
 exrdmAnalysisManager::~exrdmAnalysisManager()
 {
-  delete histo;
+//  delete histo;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -93,22 +90,17 @@ void exrdmAnalysisManager::bookHisto()
 	       "Decay emission spectrum (MeV)",histNBin,histEMin,histEMax,MeV);
   // in aida these histos are indiced from 0-6
   //
-  histo->addTuple( "100", "Emitted Particles","string Name, float Energy, Time, Weight" );
-  histo->addTuple( "200", "RadioIsotopes","string Name, float Time, Weight" );
+  histo->addTuple( "100", "Emitted Particles","float PID, Energy, Time, Weight" );
+  histo->addTuple( "200", "RadioIsotopes","float PID, Time, Weight" );
   histo->addTuple( "300", "Energy Depositions","float Energy, Time, Weight" );
 
-  // at the moment anaphe can only handle float ntuple
-  //histo->addTuple( "100", "Emitted Particles"," float Name, Energy, Time, Weight" );
-  //histo->addTuple( "200", "RadioIsotopes"," float Name, Energy, Time, Weight" );
-  //histo->addTuple( "300", "Energy Depositions"," float Energy, Time, Weight" );
-  //    the ntuples are indeced from 0-2 in aida
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void exrdmAnalysisManager::BeginOfRun()
 {
-#ifdef G4ANALYSIS_USE
+#if defined G4ANALYSIS_USE_AIDA || G4ANALYSIS_USE_ROOT
   histo->book();
 #endif
   if(verbose > 0) {
@@ -121,7 +113,7 @@ void exrdmAnalysisManager::BeginOfRun()
 
 void exrdmAnalysisManager::EndOfRun()
 {
-#ifdef G4ANALYSIS_USE
+#if defined G4ANALYSIS_USE_AIDA || G4ANALYSIS_USE_ROOT
   histo->save();  
 #endif
 }
@@ -218,9 +210,9 @@ void exrdmAnalysisManager::AddEnergy(G4double edep, G4double weight, G4double ti
 	   << " weight = " << weight << " time (s) = " <<  time/second
            << G4endl;
   }
-  histo->fillTuple(2,"Energy", edep/MeV);
-  histo->fillTuple(2,"Weight",weight);
-  histo->fillTuple(2,"Time",time/second);
+  histo->fillTuple(2, 0, edep/MeV);
+  histo->fillTuple(2,1,weight);
+  histo->fillTuple(2,2,time/second);
   histo->addRow(2);
   // 
   exrdmEnergyDeposition A(edep,time,weight);
@@ -229,31 +221,31 @@ void exrdmAnalysisManager::AddEnergy(G4double edep, G4double weight, G4double ti
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void exrdmAnalysisManager::AddParticle(G4String particleName, G4double energy, G4double weight, G4double time )
+void exrdmAnalysisManager::AddParticle(G4double pid, G4double energy, G4double weight, G4double time )
 {
   if(1 < verbose) {
-    G4cout << "exrdmAnalysisManager::AddParticle: " << particleName
+    G4cout << "exrdmAnalysisManager::AddParticle: " << pid
            << G4endl;
   }
-  histo->fillTuple(0,"Name", particleName);
-  histo->fillTuple(0,"Energy",energy/MeV);
-  histo->fillTuple(0,"Weight",weight);
-  histo->fillTuple(0,"Time",time/second);
+  histo->fillTuple(0,0, pid);
+  histo->fillTuple(0,1,energy/MeV);
+  histo->fillTuple(0,2,weight);
+  histo->fillTuple(0,3,time/second);
   histo->addRow(0);
   // now fill th emission spectrum
-  if (energy) histo->fillHisto(6,energy/MeV,weight);
+  if (energy>0.0) histo->fillHisto(6,energy/MeV,weight);
 }
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void exrdmAnalysisManager::AddIsotope(G4String particleName,G4double weight, G4double time )
+void exrdmAnalysisManager::AddIsotope(G4double pid,G4double weight, G4double time )
 {
   if(1 < verbose) {
-    G4cout << "exrdmAnalysisManager::AddIsotope: " << particleName
+    G4cout << "exrdmAnalysisManager::AddIsotope: " << pid
            << G4endl;
   }
-  histo->fillTuple(1,"Name",particleName);
-  histo->fillTuple(1,"Weight",weight);
-  histo->fillTuple(1,"Time",time/second);
+  histo->fillTuple(1,0,pid);
+  histo->fillTuple(1,1,weight);
+  histo->fillTuple(1,2,time/second);
   histo->addRow(1);
 }
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

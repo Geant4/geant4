@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Material.cc,v 1.34 2006/06/29 19:12:51 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4Material.cc,v 1.35 2007/01/10 12:00:29 vnivanch Exp $
+// GEANT4 tag $Name: geant4-08-02-patch-01 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //
@@ -62,6 +62,7 @@
 // 22-01-04, proper STL handling of theElementVector (Hisaya)
 // 30-03-05, warning in GetMaterial(materialName) 
 // 09-03-06, minor change of printout (V.Ivanchenko) 
+// 10-01-07, compute fAtomVector in the case of mass fraction (V.Ivanchenko) 
 
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -228,15 +229,17 @@ void G4Material::AddElement(G4Element* element, G4int nAtoms)
 void G4Material::AddElement(G4Element* element, G4double fraction)
 {
   // if fAtomsVector is non-NULL, complain. Apples and oranges.  $$$
+  /*
   if (fAtomsVector) {
       G4cerr << "This material is already being defined via elements by"
              << "atoms." << G4endl;
       G4Exception ("You are mixing apples and oranges ...");
   }
-         
+  */     
   // initialization
   if (fNumberOfComponents == 0) {
-      fMassFractionVector = new G4double[100];
+    fMassFractionVector = new G4double[50];
+    fAtomsVector        = new G4int   [50];
   }
 
   // filling ...
@@ -258,14 +261,25 @@ void G4Material::AddElement(G4Element* element, G4double fraction)
     
   // filled.
   if (G4int(fNumberOfComponents) == maxNbComponents) {
+
+     size_t i=0;
+     G4double Zmol(0.), Amol(0.);
      // check sum of weights -- OK?
      G4double wtSum(0.0);
-     for (size_t i=0;i<fNumberOfElements;i++) {wtSum += fMassFractionVector[i];}
+     for (i=0;i<fNumberOfElements;i++) {
+       wtSum += fMassFractionVector[i];
+       Zmol +=  fMassFractionVector[i]*(*theElementVector)[i]->GetZ();
+       Amol +=  fMassFractionVector[i]*(*theElementVector)[i]->GetA();
+     }
      if (std::abs(1.-wtSum) > perThousand) {
        G4cerr << "WARNING !! - Fractional masses do not sum to 1 : "
                  "the Delta is > 0.001"
                  "(the weights are NOT renormalized; the results may be wrong)" 
               << G4endl;
+     }
+     for (i=0;i<fNumberOfElements;i++) {
+       fAtomsVector[i] = 
+	 G4int(fMassFractionVector[i]*Amol/(*theElementVector)[i]->GetA()+0.5);
      }
      
      ComputeDerivedQuantities();
@@ -282,16 +296,18 @@ void G4Material::AddElement(G4Element* element, G4double fraction)
 
 void G4Material::AddMaterial(G4Material* material, G4double fraction)
 {
+  /*
   // if fAtomsVector is non-NULL, complain. Apples and oranges.  $$$
   if (fAtomsVector) {
       G4cerr << "This material is already being defined via elements by"
                 "atoms." << G4endl;
       G4Exception ("You are mixing apples and oranges ...");
   }
-  
+  */
   // initialization
   if (fNumberOfComponents == 0) {
-      fMassFractionVector = new G4double[100];
+    fMassFractionVector = new G4double[50];
+    fAtomsVector        = new G4int   [50];
   }
 
   // filling ...
@@ -319,15 +335,24 @@ void G4Material::AddMaterial(G4Material* material, G4double fraction)
     
   // filled.
   if (G4int(fNumberOfComponents) == maxNbComponents) {
+     size_t i=0;
+     G4double Zmol(0.), Amol(0.);
      // check sum of weights -- OK?
      G4double wtSum(0.0);
-     for (size_t i=0;i<fNumberOfElements;i++)
-      { wtSum +=  fMassFractionVector[i]; }
+     for (i=0;i<fNumberOfElements;i++) {
+       wtSum += fMassFractionVector[i];
+       Zmol +=  fMassFractionVector[i]*(*theElementVector)[i]->GetZ();
+       Amol +=  fMassFractionVector[i]*(*theElementVector)[i]->GetA();
+     }
      if (std::abs(1.-wtSum) > perThousand) {
        G4cerr << "WARNING !! - Fractional masses do not sum to 1 : "
                  "the Delta is > 0.001"
                  "(the weights are NOT renormalized; the results may be wrong)" 
               << G4endl;
+     }
+     for (i=0;i<fNumberOfElements;i++) {
+       fAtomsVector[i] = 
+	 G4int(fMassFractionVector[i]*Amol/(*theElementVector)[i]->GetA()+0.5);
      }
      
      ComputeDerivedQuantities();

@@ -1,4 +1,4 @@
-$Id: History,v 1.10 2005/12/06 15:16:40 gcosmo Exp $
+$Id: History,v 1.13 2007/02/14 10:23:55 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,17 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+February 14th, 2006 V.Ivanchenko (exrdm-V08-02-01)
+-------------------------------
+- Use standard EM builder from physics_list subdirectory
+
+21/12/2006 F.Lei (exrdm-V08-02-00)
+- Added ROOT format option for outputting results. It is the default format now. 
+
+February 16th, 2006 V.Ivanchenko (exrdm-V08-00-00)
+-------------------------------
+- Update Physics Lists
 
 December 6th, 2005 Gabriele Cosmo
 ---------------------------------

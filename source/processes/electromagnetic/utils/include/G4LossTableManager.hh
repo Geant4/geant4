@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LossTableManager.hh,v 1.43 2006/10/23 19:05:47 vnivanch Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4LossTableManager.hh,v 1.44 2007/01/11 15:33:15 vnivanch Exp $
+// GEANT4 tag $Name: geant4-08-02-patch-01 $
 //
 //
 // -------------------------------------------------------------------
@@ -259,9 +259,10 @@ private:
   PD                    theElectron;
 
   G4int n_loss;
+  G4int run;
 
   G4bool all_tables_are_built;
-  G4bool first_entry;
+  //  G4bool first_entry;
   G4bool lossFluctuationFlag;
   G4bool subCutoffFlag;
   G4bool rndmStepFlag;

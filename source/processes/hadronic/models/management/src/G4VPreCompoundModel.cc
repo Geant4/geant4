@@ -24,17 +24,18 @@
 // ********************************************************************
 //
 //
-// $Id: G4VPreCompoundModel.cc,v 1.5 2006/06/29 20:46:11 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4VPreCompoundModel.cc,v 1.6 2007/01/11 05:29:10 dennis Exp $
+// GEANT4 tag $Name: geant4-08-02-patch-01 $
 //
 
 #include "G4VPreCompoundModel.hh"
 #include "G4HadronicException.hh"
 
-G4VPreCompoundModel::G4VPreCompoundModel(G4ExcitationHandler *const value):
+G4VPreCompoundModel::G4VPreCompoundModel(G4ExcitationHandler* const value,
+                                         const G4String& modelName):
+  G4HadronicInteraction(modelName),
   theExcitationHandler(value)
-{
-}
+{}
 
 
 const G4VPreCompoundModel & 

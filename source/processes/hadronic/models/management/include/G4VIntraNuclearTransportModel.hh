@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VIntraNuclearTransportModel.hh,v 1.3 2006/06/29 20:45:43 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4VIntraNuclearTransportModel.hh,v 1.4 2007/01/11 05:29:46 dennis Exp $
+// GEANT4 tag $Name: geant4-08-02-patch-01 $
 //
 // $Id: G4IntraNuclearTransportMode.hh,v 1.0 1998/06/30
 // -----------------------------------------------------------------------------
@@ -62,7 +62,7 @@ class G4VIntraNuclearTransportModel : public G4HadronicInteraction
 {
   public:
 
-      G4VIntraNuclearTransportModel();
+      G4VIntraNuclearTransportModel(const G4String& modelName = "CascadeModel");
 
       G4VIntraNuclearTransportModel(const G4VIntraNuclearTransportModel& right);
 
@@ -83,13 +83,16 @@ class G4VIntraNuclearTransportModel : public G4HadronicInteraction
 
   protected:
 
+      G4String GetModelName() const;
+
       G4V3DNucleus* Get3DNucleus() const;
 
       G4VPreCompoundModel* GetDeExcitation() const;
 
 
-
   protected:
+
+      G4String theTransportModelName;
 
       G4V3DNucleus* the3DNucleus;
 
@@ -100,6 +103,11 @@ class G4VIntraNuclearTransportModel : public G4HadronicInteraction
 
 // Class G4VIntraNuclearTransportModel 
 
+
+inline G4String G4VIntraNuclearTransportModel::GetModelName() const
+{
+  return theTransportModelName;
+}
 
 inline G4V3DNucleus* G4VIntraNuclearTransportModel::Get3DNucleus() const
 {

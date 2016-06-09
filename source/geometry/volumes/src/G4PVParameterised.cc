@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PVParameterised.cc,v 1.7 2006/11/10 09:42:27 gcosmo Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4PVParameterised.cc,v 1.8 2007/01/31 14:58:27 gcosmo Exp $
+// GEANT4 tag $Name: geant4-08-02-patch-01 $
 //
 // 
 // class G4PVParameterised
@@ -148,7 +148,7 @@ void  G4PVParameterised::SetRegularStructureId( G4int Code )
 // ----------------------------------------------------------------------
 // CheckOverlaps
 //
-G4bool G4PVParameterised::CheckOverlaps(G4int res)
+G4bool G4PVParameterised::CheckOverlaps(G4int res, G4bool verbose)
 {
   if (res<=0) { return false; }
 
@@ -157,8 +157,11 @@ G4bool G4PVParameterised::CheckOverlaps(G4int res)
   G4VSolid *motherSolid = motherLog->GetSolid();
   std::vector<G4ThreeVector> points;
 
-  G4cout << "Checking overlaps for parameterised volume "
-         << GetName() << " ... ";
+  if (verbose)
+  {
+    G4cout << "Checking overlaps for parameterised volume "
+           << GetName() << " ... ";
+  }
 
   for (G4int i=0; i<GetMultiplicity(); i++)
   {
@@ -232,7 +235,10 @@ G4bool G4PVParameterised::CheckOverlaps(G4int res)
       }
     }
   }
-  G4cout << "OK! " << G4endl;
+  if (verbose)
+  {
+    G4cout << "OK! " << G4endl;
+  }
 
   return false;
 }

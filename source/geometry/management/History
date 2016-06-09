@@ -1,4 +1,4 @@
-$Id: History,v 1.111 2006/11/30 10:39:40 gcosmo Exp $
+$Id: History,v 1.112 2007/01/31 15:01:18 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+January 31, 2007  G.Cosmo                  geommng-V08-02-00
+- Added flag for controlling verbosity to CheckOverlaps() method.
+  By default, verbosity is ON.
 
 November 30, 2006  G.Cosmo                 geommng-V08-01-08
 - Corrected deregistration and deletion of world default region, now

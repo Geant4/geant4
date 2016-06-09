@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eBremsstrahlungModel.cc,v 1.35 2006/08/29 14:00:25 vnivanch Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4eBremsstrahlungModel.cc,v 1.36 2007/02/01 15:56:07 vnivanch Exp $
+// GEANT4 tag $Name: geant4-08-02-patch-01 $
 //
 // -------------------------------------------------------------------
 //
@@ -792,8 +792,7 @@ std::vector<G4DynamicParticle*>* G4eBremsstrahlungModel::SampleSecondaries(
 		   << " e= " << kineticEnergy
                    << G4endl;
 	}
-	*/
-	
+	*/	
       } while( greject < G4UniformRand()*grejmax );
 
     } else {  
@@ -814,7 +813,18 @@ std::vector<G4DynamicParticle*>* G4eBremsstrahlungModel::SampleSecondaries(
 	*/
       } while( greject < G4UniformRand()*grejmax );
     }
-  
+    /*
+    if(x > 0.999) {
+      G4cout << "### G4eBremsstrahlungModel Warning: e= " << kineticEnergy
+	     << " tlow= " << tlow
+	     << " x= " << x
+	     << " greject= " << greject 
+	     << " grejmax= " << grejmax
+	     << " migdal= " << migdal
+	     << G4endl; 
+      //      if(x >= 1.0) G4Exception("X=1");
+    }
+    */
     gammaEnergy = x*kineticEnergy; 
 
     if (theLPMflag) {

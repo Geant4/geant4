@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VIntraNuclearTransportModel.cc,v 1.4 2006/06/29 20:46:05 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4VIntraNuclearTransportModel.cc,v 1.5 2007/01/11 05:28:56 dennis Exp $
+// GEANT4 tag $Name: geant4-08-02-patch-01 $
 //
 // $Id: G4VIntraNuclearTransportModel.cc,v 1.0 1998/06/30
 // -----------------------------------------------------------------------------
@@ -39,22 +39,22 @@
 #include "G4VIntraNuclearTransportModel.hh"
 
 
-
 // Class G4VIntraNuclearTransportModel 
 
 
+G4VIntraNuclearTransportModel::G4VIntraNuclearTransportModel(const G4String& modelName) :
+  G4HadronicInteraction(modelName),
+  theTransportModelName(modelName), the3DNucleus(NULL), theDeExcitation(NULL)
+{}
 
-G4VIntraNuclearTransportModel::G4VIntraNuclearTransportModel() :
-                              the3DNucleus(NULL),
-                              theDeExcitation(NULL)
-{
-}
 
 G4VIntraNuclearTransportModel::
-G4VIntraNuclearTransportModel(const G4VIntraNuclearTransportModel& right) : G4HadronicInteraction()
+G4VIntraNuclearTransportModel(const G4VIntraNuclearTransportModel& right) : 
+  G4HadronicInteraction(right.GetModelName() )
 {
- the3DNucleus = right.Get3DNucleus();
- theDeExcitation = right.GetDeExcitation();
+  theTransportModelName = right.GetModelName();
+  the3DNucleus = right.Get3DNucleus();
+  theDeExcitation = right.GetDeExcitation();
 }
 
 
@@ -71,10 +71,11 @@ G4VIntraNuclearTransportModel::
 operator=(const G4VIntraNuclearTransportModel& right)
 {
  if (this != &right)
-    {
+   {
+     theTransportModelName = right.GetModelName();
      the3DNucleus = right.Get3DNucleus();
      theDeExcitation = right.GetDeExcitation();
-    }
+   }
  return *this;
 }
 

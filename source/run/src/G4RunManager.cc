@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunManager.cc,v 1.93 2006/12/13 15:49:34 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4RunManager.cc,v 1.94 2007/01/19 20:19:56 asaim Exp $
+// GEANT4 tag $Name: geant4-08-02-patch-01 $
 //
 // 
 
@@ -199,6 +199,10 @@ void G4RunManager::RunInitialization()
     HepRandom::saveEngineStatus(fileN);
   }
   
+  previousEvents->clear();
+  for(G4int i_prev=0;i_prev<n_perviousEventsToBeStored;i_prev++)
+  { previousEvents->push_back((G4Event*)0); }
+
   if(userRunAction) userRunAction->BeginOfRunAction(currentRun);
 
   runAborted = false;

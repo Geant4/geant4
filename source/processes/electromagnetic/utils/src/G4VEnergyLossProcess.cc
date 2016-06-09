@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.cc,v 1.90 2006/06/29 19:55:23 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4VEnergyLossProcess.cc,v 1.95 2007/01/16 18:07:55 vnivanch Exp $
+// GEANT4 tag $Name: geant4-08-02-patch-01 $
 //
 // -------------------------------------------------------------------
 //
@@ -98,6 +98,8 @@
 // 22-03-06 Add control on warning printout AlongStep (VI)
 // 23-03-06 Use isIonisation flag (V.Ivanchenko)
 // 07-06-06 Do not reflect AlongStep in subcutoff regime (V.Ivanchenko)
+// 14-01-07 add SetEmModel(index) and SetFluctModel() (mma)
+// 16-01-07 add IonisationTable and IonisationSubTable (V.Ivanchenko)
 //
 // Class Description:
 //
@@ -144,6 +146,8 @@ G4VEnergyLossProcess::G4VEnergyLossProcess(const G4String& name,
   theDEDXTable(0),
   theDEDXSubTable(0),
   theDEDXunRestrictedTable(0),
+  theIonisationTable(0),
+  theIonisationSubTable(0),
   theRangeTableForLoss(0),
   theCSDARangeTable(0),
   theSecondaryRangeTable(0),
@@ -190,6 +194,8 @@ G4VEnergyLossProcess::G4VEnergyLossProcess(const G4String& name,
 
   modelManager = new G4EmModelManager();
   (G4LossTableManager::Instance())->Register(this);
+  emModel[0]=emModel[1]=emModel[2]=emModel[3]=emModel[4]=0;
+  fluctModel = 0;
   scoffRegions.clear();
   scProcesses.clear();
 
@@ -213,6 +219,8 @@ G4VEnergyLossProcess::~G4VEnergyLossProcess()
       theDEDXTable->clearAndDestroy();
       if(theDEDXSubTable) theDEDXSubTable->clearAndDestroy();
     }
+    if(theIonisationTable) theIonisationTable->clearAndDestroy(); 
+    if(theIonisationSubTable) theIonisationSubTable->clearAndDestroy(); 
     if(theDEDXunRestrictedTable && theCSDARangeTable)
        theDEDXunRestrictedTable->clearAndDestroy();
     if(theCSDARangeTable) theCSDARangeTable->clearAndDestroy();
@@ -402,6 +410,34 @@ void G4VEnergyLossProcess::BuildPhysicsTable(const G4ParticleDefinition& part)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
+void G4VEnergyLossProcess::SetEmModel(G4VEmModel* p, G4int index)
+{
+  emModel[index] = p;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4VEmModel* G4VEnergyLossProcess::EmModel(G4int index)
+{
+  return emModel[index];
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4VEnergyLossProcess::SetFluctModel(G4VEmFluctuationModel* p)
+{
+  fluctModel = p;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4VEmFluctuationModel* G4VEnergyLossProcess::FluctModel()
+{
+  return fluctModel;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 void G4VEnergyLossProcess::AddEmModel(G4int order, G4VEmModel* p, 
 				      G4VEmFluctuationModel* fluc,
                                 const G4Region* region)
@@ -463,8 +499,15 @@ G4PhysicsTable* G4VEnergyLossProcess::BuildDEDXTable(G4EmTableType tType)
     table = theDEDXunRestrictedTable;
   } else if(fRestricted == tType) {
     table = theDEDXTable;
+    if(theIonisationTable) 
+      table = G4PhysicsTableHelper::PreparePhysicsTable(theIonisationTable); 
   } else if(fSubRestricted == tType) {    
     table = theDEDXSubTable;
+    if(theIonisationSubTable) 
+      table = G4PhysicsTableHelper::PreparePhysicsTable(theIonisationSubTable); 
+  } else {
+    G4cout << "G4VEnergyLossProcess::BuildDEDXTable WARNING: wrong type "
+	   << tType << G4endl;
   }
 
   // Access to materials
@@ -484,7 +527,7 @@ G4PhysicsTable* G4VEnergyLossProcess::BuildDEDXTable(G4EmTableType tType)
 
   for(size_t i=0; i<numOfCouples; i++) {
 
-    if(2 < verboseLevel) 
+    if(1 < verboseLevel) 
       G4cout << "G4VEnergyLossProcess::BuildDEDXVector flag=  " 
 	     << table->GetFlag(i) << G4endl;
 
@@ -504,6 +547,7 @@ G4PhysicsTable* G4VEnergyLossProcess::BuildDEDXTable(G4EmTableType tType)
   if(1 < verboseLevel) {
     G4cout << "G4VEnergyLossProcess::BuildDEDXTable(): table is built for "
            << particle->GetParticleName()
+           << " and process " << GetProcessName()
            << G4endl;
     //    if(2 < verboseLevel) G4cout << (*table) << G4endl;
   }
@@ -521,6 +565,9 @@ G4PhysicsTable* G4VEnergyLossProcess::BuildLambdaTable(G4EmTableType tType)
     table = theLambdaTable;
   } else if(fSubRestricted == tType) {    
     table = theSubLambdaTable;
+  } else {
+    G4cout << "G4VEnergyLossProcess::BuildLambdaTable WARNING: wrong type "
+	   << tType << G4endl;
   }
 
   if(1 < verboseLevel) {
@@ -926,60 +973,64 @@ void G4VEnergyLossProcess::PrintInfoDefinition()
       if(theDEDXTable && isIonisation) G4cout << (*theDEDXTable) << G4endl;
       G4cout << "non restricted DEDXTable address= " 
 	     << theDEDXunRestrictedTable << G4endl;
-      if(theDEDXunRestrictedTable && isIonisation) G4cout << (*theDEDXunRestrictedTable) 
-							  << G4endl;
+      if(theDEDXunRestrictedTable && isIonisation) 
+           G4cout << (*theDEDXunRestrictedTable) << G4endl;
       if(theDEDXSubTable && isIonisation) G4cout << (*theDEDXSubTable) 
 						 << G4endl;
       G4cout << "CSDARangeTable address= " << theCSDARangeTable 
 	     << G4endl;
-      if(theCSDARangeTable && isIonisation) G4cout << (*theCSDARangeTable) << G4endl;
+      if(theCSDARangeTable && isIonisation) G4cout << (*theCSDARangeTable) 
+            << G4endl;
       G4cout << "RangeTableForLoss address= " << theRangeTableForLoss 
 	     << G4endl;
-      if(theRangeTableForLoss && isIonisation) G4cout << (*theRangeTableForLoss) << G4endl;
+      if(theRangeTableForLoss && isIonisation) 
+             G4cout << (*theRangeTableForLoss) << G4endl;
       G4cout << "InverseRangeTable address= " << theInverseRangeTable 
 	     << G4endl;
-      if(theInverseRangeTable && isIonisation) G4cout << (*theInverseRangeTable) << G4endl;
+      if(theInverseRangeTable && isIonisation) 
+             G4cout << (*theInverseRangeTable) << G4endl;
       G4cout << "LambdaTable address= " << theLambdaTable << G4endl;
       if(theLambdaTable && isIonisation) G4cout << (*theLambdaTable) << G4endl;
       G4cout << "SubLambdaTable address= " << theSubLambdaTable << G4endl;
-      if(theSubLambdaTable && isIonisation) G4cout << (*theSubLambdaTable) << G4endl;
+      if(theSubLambdaTable && isIonisation) G4cout << (*theSubLambdaTable) 
+             << G4endl;
     }
   }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4VEnergyLossProcess::SetDEDXTable(G4PhysicsTable* p)
+void G4VEnergyLossProcess::SetDEDXTable(G4PhysicsTable* p, G4EmTableType tType)
 {
-  if(theDEDXTable != p) theDEDXTable = p;
-}
+  if(fTotal == tType && theDEDXunRestrictedTable != p) {
+    if(theDEDXunRestrictedTable) theDEDXunRestrictedTable->clearAndDestroy();
+    theDEDXunRestrictedTable = p;
+    if(p) {
+      size_t n = p->length();
+      G4PhysicsVector* pv = (*p)[0];
+      G4double emax = maxKinEnergyCSDA;
+      G4bool b;
+      theDEDXAtMaxEnergy = new G4double [n];
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-void G4VEnergyLossProcess::SetDEDXTableForSubsec(G4PhysicsTable* p)
-{
-  if(theDEDXSubTable != p) theDEDXSubTable = p;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-void G4VEnergyLossProcess::SetDEDXunRestrictedTable(G4PhysicsTable* p)
-{
-  if(theDEDXunRestrictedTable != p) theDEDXunRestrictedTable = p;
-  if(p) {
-    size_t n = p->length();
-    G4PhysicsVector* pv = (*p)[0];
-    G4double emax = maxKinEnergyCSDA;
-    G4bool b;
-    theDEDXAtMaxEnergy = new G4double [n];
-
-    for (size_t i=0; i<n; i++) {
-      pv = (*p)[i];
-      G4double dedx = pv->GetValue(emax, b);
-      theDEDXAtMaxEnergy[i] = dedx;
-      //G4cout << "i= " << i << " emax(MeV)= " << emax/MeV<< " dedx= " 
-      //<< dedx << G4endl;
+      for (size_t i=0; i<n; i++) {
+	pv = (*p)[i];
+	G4double dedx = pv->GetValue(emax, b);
+	theDEDXAtMaxEnergy[i] = dedx;
+	//G4cout << "i= " << i << " emax(MeV)= " << emax/MeV<< " dedx= " 
+	//<< dedx << G4endl;
+      }
     }
+
+  } else if(fRestricted == tType) {
+    theDEDXTable = p;
+  } else if(fSubRestricted == tType) {    
+    theDEDXSubTable = p;
+  } else if(fIonisation == tType && theIonisationTable != p) {    
+    if(theIonisationTable) theIonisationTable->clearAndDestroy();
+    theIonisationTable = p;
+  } else if(fSubIonisation == tType && theIonisationSubTable != p) {    
+    if(theIonisationSubTable) theIonisationSubTable->clearAndDestroy();
+    theIonisationSubTable = p;
   }
 }
 
@@ -1208,6 +1259,18 @@ G4bool G4VEnergyLossProcess::StorePhysicsTable(
     if( !theDEDXSubTable->StorePhysicsTable(name,ascii)) res = false;
   }
 
+  if ( theIonisationTable ) {
+    const G4String name = 
+      GetPhysicsTableFileName(part,directory,"Ionisation",ascii);
+    if( !theIonisationTable->StorePhysicsTable(name,ascii)) res = false;
+  }
+
+  if ( theIonisationSubTable ) {
+    const G4String name = 
+      GetPhysicsTableFileName(part,directory,"SubIonisation",ascii);
+    if( !theIonisationSubTable->StorePhysicsTable(name,ascii)) res = false;
+  }
+
   if ( theCSDARangeTable && isIonisation ) {
     const G4String name = 
       GetPhysicsTableFileName(part,directory,"CSDARange",ascii);
@@ -1343,13 +1406,13 @@ G4bool G4VEnergyLossProcess::RetrievePhysicsTable(
                     theCSDARangeTable,filename,ascii);
       if(yes) {
         if (0 < verboseLevel) {
-          G4cout << "Precise Range table for " << particleName 
+          G4cout << "CSDA Range table for " << particleName 
 		 << " is Retrieved from <"
                  << filename << ">"
                  << G4endl;
         }
       } else {
-	G4cout << "Precise Range table for loss for " << particleName 
+	G4cout << "CSDA Range table for loss for " << particleName 
 	       << " does not exist"
 	       << G4endl;
       }
@@ -1426,7 +1489,7 @@ G4bool G4VEnergyLossProcess::RetrievePhysicsTable(
 		 << " is Retrieved from <"
                  << filename << ">"
                  << G4endl;
-        }
+	}
       } else {
         if(nSCoffRegions) {
           res=false;
@@ -1435,6 +1498,41 @@ G4bool G4VEnergyLossProcess::RetrievePhysicsTable(
                  << G4endl;
 	}
       }
+
+      filename = GetPhysicsTableFileName(part,directory,"Ionisation",ascii);
+      yes = theIonisationTable->ExistPhysicsTable(filename);
+      if(yes) {
+	theIonisationTable = 
+	  G4PhysicsTableHelper::PreparePhysicsTable(theIonisationTable);
+        
+	yes = G4PhysicsTableHelper::RetrievePhysicsTable(
+                    theIonisationTable,filename,ascii);
+      }
+      if(yes) {
+        if (0 < verboseLevel) {
+          G4cout << "Ionisation table for " << particleName 
+		 << " is Retrieved from <"
+                 << filename << ">"
+                 << G4endl;
+        }
+      } 
+
+      filename = GetPhysicsTableFileName(part,directory,"SubIonisation",ascii);
+      yes = theIonisationSubTable->ExistPhysicsTable(filename);
+      if(yes) {
+	theIonisationSubTable = 
+	  G4PhysicsTableHelper::PreparePhysicsTable(theIonisationSubTable);
+        yes = G4PhysicsTableHelper::RetrievePhysicsTable(
+                    theIonisationSubTable,filename,ascii);
+      }
+      if(yes) {
+        if (0 < verboseLevel) {
+          G4cout << "SubIonisation table for " << particleName 
+		 << " is Retrieved from <"
+                 << filename << ">"
+                 << G4endl;
+        }
+      } 
     }
   }
 
@@ -1565,6 +1663,19 @@ void G4VEnergyLossProcess::SetIonisation(G4bool val)
 G4bool G4VEnergyLossProcess::IsIonisationProcess() const
 {
   return isIonisation;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+  
+void G4VEnergyLossProcess::AddCollaborativeProcess(
+            G4VEnergyLossProcess* p)
+{
+  scProcesses.push_back(p);
+  nProcesses++;
+  if (0 < verboseLevel) 
+    G4cout << "### The process " << p->GetProcessName() 
+	   << " is added to the list of collaborative processes of "
+	   << GetProcessName() << G4endl; 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

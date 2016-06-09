@@ -1224,7 +1224,7 @@ G4bool G4BinaryCascade::Capture(G4bool verbose)
 			 << particlesAboveCut << " " << particlesBelowCut << " " << capturedEnergy
 			 << " " << capturedEnergy/particlesBelowCut << " " << 0.2*theCutOnP << G4endl;
 //  if(particlesAboveCut==0 && particlesBelowCut>0 && capturedEnergy/particlesBelowCut<0.2*theCutOnP)
-  if(capturedEnergy/particlesBelowCut<0.2*theCutOnP)
+  if(particlesBelowCut>0 && capturedEnergy/particlesBelowCut<0.2*theCutOnP)
   {
     capture=true;
     for(i = theSecondaryList.begin(); i != theSecondaryList.end(); ++i)

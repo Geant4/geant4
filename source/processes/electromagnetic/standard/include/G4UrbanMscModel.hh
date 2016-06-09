@@ -1,4 +1,4 @@
-//
+//  
 // ********************************************************************
 // * License and Disclaimer                                           *
 // *                                                                  *
@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UrbanMscModel.hh,v 1.15 2006/11/20 06:57:57 urban Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4UrbanMscModel.hh,v 1.18 2007/02/06 14:47:46 vnivanch Exp $
+// GEANT4 tag $Name: geant4-08-02-patch-01 $
 //
 // -------------------------------------------------------------------
 //
@@ -71,6 +71,8 @@
 //          function ComputeTheta0,
 //          single scattering modified allowing not small
 //          angles as well (L.Urban)
+// 31-01-07 code cleaning (L.Urban)
+// 06-02-07 Move SetMscStepLimitation method into the source (VI)
 //
 //
 // Class Description:
@@ -176,7 +178,6 @@ private:
   G4double dtrl;
 
   G4double lambdalimit;
-  G4double llimit;
   G4double facrange;
   G4double frscaling1,frscaling2;
   G4double tlimit;
@@ -184,12 +185,11 @@ private:
   G4double tlimitminfix;
   G4double tnow;
   G4double nstepmax;
-  G4double tgeom;
   G4double geombig;
   G4double geommin;
   G4double geomlimit;
   G4double facgeom;
-  G4double skin,skindepth,skindepth1; 
+  G4double skin,skindepth; 
   G4double presafety;
   G4double facsafety;
 
@@ -197,7 +197,6 @@ private:
   G4double lambdaeff;
   G4double tPathLength;
   G4double zPathLength;
-  G4double geomLength;
   G4double par1,par2,par3 ;
 
   G4double stepmin ;
@@ -216,6 +215,7 @@ private:
   G4bool   isInitialized;
 
   G4bool   inside;
+
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -225,15 +225,6 @@ inline
 void G4UrbanMscModel::SetLateralDisplasmentFlag(G4bool val) 
 { 
   latDisplasment = val;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-inline
-void G4UrbanMscModel::SetMscStepLimitation(G4bool alg, G4double factor)
-{
-  steppingAlgorithm = alg;
-  facrange = factor;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -262,7 +253,6 @@ void G4UrbanMscModel::SetParticle(const G4ParticleDefinition* p)
     particle = p;
     mass = p->GetPDGMass();
     charge = p->GetPDGCharge()/eplus;
-    llimit = lambdalimit;
   }
 }
 

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4QNucleus.cc,v 1.61 2006/11/27 10:44:54 mkossov Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4QNucleus.cc,v 1.65 2007/01/23 17:14:21 mkossov Exp $
+// GEANT4 tag $Name: geant4-08-02-patch-01 $
 //
 //      ---------------- G4QNucleus ----------------
 //             by Mikhail Kossov, Sept 1999.
@@ -2871,24 +2871,28 @@ void G4QNucleus::PrepareCandidates(G4QCandidateVector& theQCandidates, G4bool pi
         G4int nc = ac-zc-sc;                     // "N" of the cluster
         G4double cM=tnM-G4QNucleus(Z-zc,N-nc,S-sc).GetGSMass(); // BoundMass of the cluster
         G4LorentzVector intLV=pLV+G4LorentzVector(0.,0.,0.,cM); // 4-mom of the proj+clust
-        if(ac<=maxClust&&(pLV==zeroLV||intLV.m()>.00001+cM))
+        pos      = probVect[ac];                 // Cluster Probability NormalizationFactor
+        if(ac<=maxClust&&pos>0.&&(pLV==zeroLV||intLV.m()>.00001+cM))
 	       {
-          pos      = probVect[ac];        // Get a cluster probability normalization factor
+
 #ifdef cldebug
           G4cout<<"G4QNucleus::PrepareCand: ac="<<ac<<", pV="<<pos<<G4endl;
 #endif
           G4int dac=ac+ac;
-          if     (piF&&!gaF) pos*=(zc+ac)/ac; // For piF 1st interaction act (#of u-quarks)
-          else if(gaF&&!piF) pos*=(zc+dac)/ac;// For gaF 1st interaction act (sum of Q_q^2)
+          if(ac && (piF || gaF))                 // zc>=0
+										{
+            if     (piF&&!gaF&&zc+ac) pos*=(zc+ac)/ac;  // piF interaction (#of u-quarks)
+            else if(gaF&&!piF&&zc+dac) pos*=(zc+dac)/ac; // gaF interaction (sum of Q_q^2)
+          }
           G4double dense=1.;
-          if     (ac==1)dense=probVect[254]/pos;
-          else if(ac==2)dense=probVect[255]/pos;
+          if     (ac==1&&pos>0.)dense=probVect[254]/pos;
+          else if(ac==2&&pos>0.)dense=probVect[255]/pos;
 #ifdef cldebug
 	         G4cout<<"G4QNucleus::PrepC: cPDG="<<cPDG<<",norm="<<pos<<",zc="<<zc<<",nc="<<nc
                 <<",sc="<<sc<<",ac="<<ac<<",ze1="<<ze1<<",ne1="<<ne1<<",se1="<<se1<<G4endl;
           G4double mp=pos;
 #endif
-          if     (ac==1)
+          if     (ac==1 && ae)                   // ae=0 protection (since here no /pos)
 	         {
             if     (zc) pos*=ze/ae;
             else if(nc) pos*=ne/ae;
@@ -2908,7 +2912,7 @@ void G4QNucleus::PrepareCandidates(G4QCandidateVector& theQCandidates, G4bool pi
           else if(ac==2)
 	         {
             if(ze<zc||ne<nc||se<sc) pos=0.;
-            else
+            else if(aea)                         // Protection against aea=0.
 		          {
               if     (zc==2) pos*=ze*(ze-1)/aea;
               else if(nc==2) pos*=ne*(ne-1)/aea;

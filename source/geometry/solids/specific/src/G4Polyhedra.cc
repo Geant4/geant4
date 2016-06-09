@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Polyhedra.cc,v 1.32 2006/11/08 09:49:51 gcosmo Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4Polyhedra.cc,v 1.33 2007/01/22 12:58:53 gcosmo Exp $
+// GEANT4 tag $Name: geant4-08-02-patch-01 $
 //
 // 
 // --------------------------------------------------------------------
@@ -100,7 +100,7 @@ G4Polyhedra::G4Polyhedra( const G4String& name,
   //
   G4double phiTotal = thePhiTotal;
   if ( (phiTotal <=0) || (phiTotal >= twopi*(1-DBL_EPSILON)) )
-    phiTotal = twopi;
+    { phiTotal = twopi; }
   G4double convertRad = std::cos(0.5*phiTotal/theNumSide);
 
   //
@@ -176,7 +176,7 @@ G4Polyhedra::G4Polyhedra( const G4String& name,
   
   // Set original_parameters struct for consistency
   //
-  SetOriginalParameters();  // In .icc; looks dodgy to me (J.Allison).  Ignore.
+  SetOriginalParameters();
    
   delete rz;
 }
@@ -459,17 +459,17 @@ void G4Polyhedra::CopyStuff( const G4Polyhedra &source )
 //
 // Reset
 //
-// Recalculates and reshapes the solid, given pre-assigned
+// Recalculates and reshapes the solid, given pre-assigned scaled
 // original_parameters.
 //
 G4bool G4Polyhedra::Reset()
 {
   if (genericPgon)
   {
+    G4cerr << "Solid " << GetName() << " built using generic construct."
+           << G4endl << "Not applicable to the generic construct !" << G4endl;
     G4Exception("G4Polyhedra::Reset()", "NotApplicableConstruct",
                 JustWarning, "Parameters NOT resetted.");
-    G4cerr << "Solid " << GetName() << " built using generic construct."
-           << G4endl << "Specify original parameters first !" << G4endl;
     return 1;
   }
 
@@ -488,16 +488,8 @@ G4bool G4Polyhedra::Reset()
                             original_parameters->Rmax,
                             original_parameters->Z_values,
                             original_parameters->Num_z_planes );
-  //
-  // Calculate conversion factor
-  //
-  G4double phiTotal = original_parameters->Opening_angle;
-  if ( (phiTotal <=0) || (phiTotal >= twopi*(1-DBL_EPSILON)) )
-    phiTotal = twopi;
-  G4double convertRad = std::cos(0.5*phiTotal/original_parameters->numSide);
-  rz->ScaleA( 1/convertRad );
-
-  Create( original_parameters->Start_angle, phiTotal,
+  Create( original_parameters->Start_angle,
+          original_parameters->Opening_angle,
           original_parameters->numSide, rz );
   delete rz;
 

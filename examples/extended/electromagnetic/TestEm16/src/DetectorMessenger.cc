@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: DetectorMessenger.cc,v 1.2 2006/06/29 16:47:50 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: DetectorMessenger.cc,v 1.3 2007/01/18 09:07:20 hbu Exp $
+// GEANT4 tag $Name: geant4-08-02-patch-01 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -79,6 +79,16 @@ DetectorMessenger::DetectorMessenger(DetectorConstruction * Det)
   MaxStepCmd->SetRange("Size>0.");
   MaxStepCmd->SetUnitCategory("Length");
   MaxStepCmd->AvailableForStates(G4State_Idle);
+
+  trackdir = new G4UIdirectory("/testem/tracking/");
+  trackdir->SetGuidance("step length");
+  MaxStepLength = new G4UIcmdWithADoubleAndUnit("/testem/tracking/setMaxStepLength",this);
+  MaxStepLength->SetGuidance("Set the maximum length of tracking step");
+  MaxStepLength->SetGuidance("when integrating magnetic field line.");
+  MaxStepLength->SetParameterName("Size",false);
+  MaxStepLength->SetRange("Size>0.");
+  MaxStepLength->SetUnitCategory("Length");
+  MaxStepLength->AvailableForStates(G4State_Idle);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -90,8 +100,10 @@ DetectorMessenger::~DetectorMessenger()
   delete MagFieldCmd;
   delete UpdateCmd;
   delete MaxStepCmd;
+  delete MaxStepLength;
   delete detDir;
   delete testemDir;
+  delete trackdir;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -112,6 +124,9 @@ void DetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
 
   if( command == MaxStepCmd )
    { Detector->SetMaxStepSize(MaxStepCmd->GetNewDoubleValue(newValue));}
+
+  if( command == MaxStepLength )
+   { Detector->SetMaxStepLength(MaxStepLength->GetNewDoubleValue(newValue));}
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -1,3 +1,4 @@
+/control/saveHistory
 #/exrdm/phys/SelectPhysics LHEP_BIC_HP
 /exrdm/phys/SelectPhysics Hadron
 #/geometry/material/add NaI Na-I 3.67
@@ -14,18 +15,11 @@
 /grdm/selectVolume Target
 #
 # first simulate 1GeV proton beam on the NaI target
-/histo/fileName exrdm-proton.aida
+/histo/fileName proton
 /gps/particle proton
 /gps/energy 1 GeV
 /tracking/verbose 0
-/run/beamOn 1000
-#
-# now try to decay 10 F-24 isotopes, floowing the chain down to Mg-24 
-/gps/particle ion
-/gps/ion 9 24
-/gps/position 0 0 0
-/gps/energy 0 keV
-/histo/fileName exrdm-f24.aida
-/run/beamOn 100
+/run/beamOn 10
+
 
 

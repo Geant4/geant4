@@ -35,11 +35,11 @@
 /gps/ion 10 24 0 0
 #
 # Branching ratio biasing on (as default)
-/histo/fileName ne24-br-on.aida
+/histo/fileName ne24-br-on
 /run/beamOn 1000
 #
 # Branching ratio biasing off
-/histo/fileName ne24-br-off.aida
+/histo/fileName ne24-br-off
 /grdm/BRbias 0
 /run/beamOn 1000
 

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VPhysicalVolume.hh,v 1.15 2006/09/18 14:03:25 gcosmo Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4VPhysicalVolume.hh,v 1.16 2007/01/31 15:01:01 gcosmo Exp $
+// GEANT4 tag $Name: geant4-08-02-patch-01 $
 //
 //
 // class G4VPhysicalVolume
@@ -165,7 +165,7 @@ class G4VPhysicalVolume
       //  is regular, voxel-like.  Value is id for structure type.
       //  If non-zero the volume is a candidate for specialised 
       //  navigation such as 'nearest neighbour' directly on volumes.
-    virtual G4bool CheckOverlaps(G4int res=1000);
+    virtual G4bool CheckOverlaps(G4int res=1000, G4bool verbose=true);
       // Verifies if the placed volume is overlapping with existing
       // daughters or with the mother volume. Provides default resolution
       // for the number of points to be generated and verified.

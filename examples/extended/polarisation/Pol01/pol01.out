@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: global-V08-01-05    (15-December-2006)
+ Geant4 version Name: geant4-08-02-patch-01-ref    (23-February-2007)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -67,8 +67,6 @@ pol-eIoni:   tables are built for  e-
 pol-eBrem:   tables are built for  e-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
-      Total cross sections from a parametrisation based on the EEDL data library. 
-      Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV.
 
 pol-eIoni:   tables are built for  e+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -79,8 +77,6 @@ pol-eIoni:   tables are built for  e+
 pol-eBrem:   tables are built for  e+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
-      Total cross sections from a parametrisation based on the EEDL data library. 
-      Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV.
 
 pol-annihil:       Polarized model for annihilation into 2 photons
       tables are built for  e+
@@ -129,39 +125,39 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=6.42s Real=6.53s Sys=0.07s
+  User=13.81s Real=14s Sys=0.15s
 
  The run consists of 10000 gamma of 10 MeV through 1.75 mm  of G4_Fe (density: 7.874 g/cm3 )
 
 --------- Ranlux engine status ---------
  Initial seed = 9876
- float_seed_table[] = 0.549714 0.410043 0.780886 0.64282 0.79192 0.70901 0.00266129 0.35078 0.438628 0.375464 0.131737 0.577583 0.387019 0.128477 0.154341 0.67122 0.634085 0.685582 0.89742 0.59932 0.397649 0.493329 0.724233 0.802348 
- i_lag = 15, j_lag = 1
- carry = 0, count24 = 7
+ float_seed_table[] = 0.0882227 0.188414 0.551392 0.0514817 0.1189 0.521576 0.105935 0.0694836 0.788726 0.829893 0.491317 0.403854 0.62452 0.67214 0.215777 0.8801 0.878136 0.897669 0.370625 0.722121 0.309446 0.670147 0.00798136 0.226157 
+ i_lag = 21, j_lag = 7
+ carry = 0, count24 = 9
  luxury = 3 nskip = 199
 ----------------------------------------
 
  Process calls frequency --->
-	Transportation = 31246
-	pol-compt = 301
-	msc = 4961
-	pol-eBrem = 395
-	pol-conv = 225
-	pol-eIoni = 688
-	pol-annihil = 71
-	phot = 184
+	Transportation = 31232
+	pol-compt = 267
+	msc = 5511
+	pol-eBrem = 425
+	pol-eIoni = 711
+	pol-conv = 232
+	pol-annihil = 73
+	phot = 182
  Gamma: 
-Mean Number per Event :1.0112
-Mean Energy :9.5321 MeV +- 2.0004 MeV
-Mean Polarization :-0.9602 +- 0.19308
+Mean Number per Event :1.0136
+Mean Energy :9.5339 MeV +- 2.005 MeV
+Mean Polarization :-0.95902 +- 0.1957
  Electron: 
-Mean Number per Event :0.0357
-Mean Energy :5.3112 MeV +- 2.5499 MeV
-Mean Polarization :-0.72312 +- 0.29742
+Mean Number per Event :0.0321
+Mean Energy :4.9425 MeV +- 2.5229 MeV
+Mean Polarization :-0.69971 +- 0.2972
  Positron: 
-Mean Number per Event :0.0154
-Mean Energy :4.3802 MeV +- 2.1362 MeV
-Mean Polarization :-0.63213 +- 0.30361
+Mean Number per Event :0.0159
+Mean Energy :4.2614 MeV +- 1.8987 MeV
+Mean Polarization :-0.64095 +- 0.28579
 #
 UserDetectorConstruction deleted.
 UserPhysicsList deleted.

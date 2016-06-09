@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MuonMinusCaptureAtRest.cc,v 1.39 2006/12/01 14:18:26 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4MuonMinusCaptureAtRest.cc,v 1.43 2007/01/30 10:31:02 vnivanch Exp $
+// GEANT4 tag $Name: geant4-08-02-patch-01 $
 //
 // ------------------------------------------------------------
 //      GEANT 4 class file
@@ -42,6 +42,7 @@
 // 12/12/2003  H.P.Wellisch Completly rewrite mu-nuclear part
 // 17/05/2006  V.Ivanchenko Cleanup
 // 15/11/2006  V.Ivanchenko Review and rewrite all kinematics
+// 24/01/2007  V.Ivanchenko Force to work with integer Z and A
 //
 //-----------------------------------------------------------------------------
 
@@ -98,13 +99,13 @@ G4VParticleChange* G4MuonMinusCaptureAtRest::AtRestDoIt(const G4Track& track,
 
   // select element and get Z,A.
   G4Element* aEle = pSelector->GetElement(track.GetMaterial());
-  targetZ = G4lrint(aEle->GetZ())+perCent;     // protect against effective numbers, esp. A.  
-  targetA = G4lrint(aEle->GetN())+perCent;     //  perCent protects for G4int getting targetA-1.
-  
+  targetZ = aEle->GetZ();
+  targetA = G4double(G4int(aEle->GetN()+0.5)); 
+  G4int ni = 0;
 
   G4IsotopeVector* isv = aEle->GetIsotopeVector();
-  G4int ni = 0;
   if(isv) ni = isv->size();
+
   if(ni == 1) {
     targetA = G4double(aEle->GetIsotope(0)->GetN());
   } else if(ni > 1) {
@@ -223,20 +224,23 @@ G4ReactionProductVector* G4MuonMinusCaptureAtRest::DoMuCapture()
   G4ReactionProduct* aNu = new G4ReactionProduct();
   aNu->SetDefinition( G4NeutrinoMu::NeutrinoMu() );
 
-  // proton as a target
-  if(targetZ < 2.5) {
+  G4int iz = G4int(targetZ);
+  G4int ia = G4int(targetA);
 
-    if(targetA > 1.5) {
-      if(targetZ == 1.0 && targetA == 2.0) { 
+  // proton as a target
+  if(iz <= 2) {
+
+    if(ia > 1) {
+      if(iz == 1 && ia == 2) { 
 	availableEnergy -= neutron_mass_c2;
-      } else if(targetZ == 1.0 && targetA == 3.0) {
+      } else if(iz == 1 && ia == 3) {
 	availableEnergy -= 2.0*neutron_mass_c2;
-      } else if(targetZ == 2.0) {
+      } else if(iz == 2) {
         G4ParticleDefinition* pd = 0;
-	if(targetA == 3.0) pd = G4Deuteron::Deuteron();
-	if(targetA == 4.0) pd = G4Triton::Triton();
+	if(ia == 3) pd = G4Deuteron::Deuteron();
+	if(ia == 4) pd = G4Triton::Triton();
         else 
-	  pd = G4ParticleTable::GetParticleTable()->FindIon(1,G4int(targetA)-1,0,1);
+	  pd = G4ParticleTable::GetParticleTable()->FindIon(1,ia-1,0,1);
 
 	//	G4cout << "Extra " << pd->GetParticleName() << G4endl;
 	availableEnergy -= pd->GetPDGMass();
@@ -279,7 +283,7 @@ G4ReactionProductVector* G4MuonMinusCaptureAtRest::DoMuCapture()
     theN.Init(targetA, targetZ); 
     G4LorentzVector thePMom;
     G4Nucleon * aNucleon = 0;
-    G4int theProtonCounter = G4lrint( 0.5 + targetZ * G4UniformRand() );
+    G4int theProtonCounter = G4int( targetZ * G4UniformRand() );
     G4int counter = 0;
     theN.StartLoop();
 
@@ -335,8 +339,8 @@ G4ReactionProductVector* G4MuonMinusCaptureAtRest::DoMuCapture()
   G4ThreeVector fromBreit = momResidual.boostVector();
   G4LorentzVector fscm(0.0,0.0,0.0, eEx);
   G4Fragment anInitialState;
-  anInitialState.SetA(G4lrint(targetA));
-  anInitialState.SetZ(G4lrint(targetZ) - 1);
+  anInitialState.SetA(targetA);
+  anInitialState.SetZ(G4double(iz - 1));
   anInitialState.SetNumberOfParticles(2);
   anInitialState.SetNumberOfCharged(0);
   anInitialState.SetNumberOfHoles(1);
