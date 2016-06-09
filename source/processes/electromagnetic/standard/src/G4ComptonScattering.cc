@@ -20,9 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-//
-// $Id: G4ComptonScattering.cc,v 1.18 2004/03/10 16:48:45 vnivanch Exp $
-// GEANT4 tag $Name: geant4-06-01 $
+// $Id: G4ComptonScattering.cc,v 1.19 2004/06/29 14:36:56 maire Exp $
+// GEANT4 tag $Name: geant4-06-02-patch-01 $
 //
 // 
 //------------ G4ComptonScattering physics process -----------------------------
@@ -48,6 +47,8 @@
 // 20-09-01, DoIt: fminimalEnergy = 1*eV (mma)
 // 01-10-01, come back to BuildPhysicsTable(const G4ParticleDefinition&)
 // 17-04-02, LowestEnergyLimit = 1*keV     
+// 26-05-04, cross section parametrization improved for low energy :
+//           Egamma <~ 15 keV (Laszlo) 
 // -----------------------------------------------------------------------------
 
 #include "G4ComptonScattering.hh"
@@ -167,6 +168,7 @@ G4double G4ComptonScattering::ComputeCrossSectionPerAtom
 // A parametrized formula from L. Urban is used to estimate
 // the total cross section.
 // It gives a good description of the data from 10 keV to 100/Z GeV.
+// lower limit 1 keV now with a correction for low energy 
  
 {
  G4double CrossSection = 0.0 ;
@@ -184,11 +186,26 @@ G4double G4ComptonScattering::ComputeCrossSectionPerAtom
  G4double p1Z = Z*(d1 + e1*Z + f1*Z*Z), p2Z = Z*(d2 + e2*Z + f2*Z*Z),
           p3Z = Z*(d3 + e3*Z + f3*Z*Z), p4Z = Z*(d4 + e4*Z + f4*Z*Z);
 
- G4double X = GammaEnergy / electron_mass_c2 ;
+ G4double T0 = 15*keV; if (Z == 1.) T0 = 40*keV; 
 
- return CrossSection = p1Z*log(1.+2*X)/X
-                       + (p2Z + p3Z*X + p4Z*X*X)/(1. + a*X + b*X*X + c*X*X*X);
-} 
+ G4double X = std::max(GammaEnergy, T0) / electron_mass_c2;
+ CrossSection = p1Z*log(1.+2*X)/X
+                + (p2Z + p3Z*X + p4Z*X*X)/(1. + a*X + b*X*X + c*X*X*X);
+		
+ //  modification for low energy. (special case for Hydrogen) 
+ if (GammaEnergy < T0) {
+   G4double dT0 = 1.*keV;
+   X = (T0+dT0) / electron_mass_c2 ;
+   G4double sigma = p1Z*log(1.+2*X)/X
+                    + (p2Z + p3Z*X + p4Z*X*X)/(1. + a*X + b*X*X + c*X*X*X);
+   G4double c1 = -T0*(sigma-CrossSection)/(CrossSection*dT0);             
+   G4double c2 = 0.150; if (Z > 1.) c2 = 0.375-0.0556*log(Z);
+   G4double  y = log(GammaEnergy/T0);
+   CrossSection *= exp(-y*(c1+c2*y));          
+   }
+
+ return CrossSection;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
  

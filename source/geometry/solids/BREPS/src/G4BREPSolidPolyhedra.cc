@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4BREPSolidPolyhedra.cc,v 1.26 2003/10/28 13:42:30 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: G4BREPSolidPolyhedra.cc,v 1.27 2004/07/02 16:32:25 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-02-patch-01 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -64,21 +64,24 @@
 #include <strstream>
 
 G4BREPSolidPolyhedra::G4BREPSolidPolyhedra(const G4String& name,
-					   G4double start_angle,
-					   G4double opening_angle,
-					   G4int    sides,
-					   G4int    num_z_planes,      
-					   G4double z_start,
-					   G4double z_values[],
-					   G4double RMIN[],
-					   G4double RMAX[] )
+                                                 G4double  start_angle,
+                                                 G4double  opening_angle,
+                                                 G4int     sides,
+                                                 G4int     num_z_planes,      
+                                                 G4double  z_start,
+                                                 G4double  z_values[],
+                                                 G4double  RMIN[],
+                                                 G4double  RMAX[] )
   : G4BREPSolid(name)
 {
   G4int sections           = num_z_planes - 1;
   
-  if( opening_angle >= 2*pi-perMillion ) {
+  if( opening_angle >= 2*pi-perMillion )
+  {
     nb_of_surfaces = 2*(sections * sides) + 2;
-  } else {
+  }
+  else
+  {
     nb_of_surfaces = 2*(sections * sides) + 4;
   }
 
@@ -100,45 +103,58 @@ G4BREPSolidPolyhedra::G4BREPSolidPolyhedra(const G4String& name,
   // Preconditions check
   
   // Detecting minimal required number of sides
-  if( sides < 3 ) {
+  //
+  if( sides < 3 )
+  {
     G4Exception( "G4BREPSolidPolyhedra::G4BREPSolidPolyhedra()",
                  "InvalidSetup", FatalException,
                  "The solid must have at least 3 sides!" );
   }
   
   // Detecting minimal required number of z-sections
-  if( num_z_planes < 2 ) {
+  //
+  if( num_z_planes < 2 )
+  {
     G4Exception( "G4BREPSolidPolyhedra::G4BREPSolidPolyhedra()",
                  "InvalidSetup", FatalException,
                  "The solid must have at least 2 z-sections!" );
   }
 
-  // Detect invalid configurations at the ends of polyhedra which would not lead to
-  // a valid solid creation and likely to a crash
-  if( z_values[0] == z_values[1] || z_values[sections-1] == z_values[sections] ) {
+  // Detect invalid configurations at the ends of polyhedra which
+  // would not lead to a valid solid creation and likely to a crash
+  //
+  if( z_values[0] == z_values[1]
+   || z_values[sections-1] == z_values[sections] )
+  {
     G4Exception( "G4BREPSolidPolyhedra::G4BREPSolidPolyhedra()",
         "InvalidSetup", FatalException,
         "The solid must have the first 2 and the last 2 z-values different!" );
   }
 
   // Find out how the z-values sequence is ordered
+  //
   G4bool increasing;
-  if( z_values[0] < z_values[1] ) {
+  if( z_values[0] < z_values[1] )
+  {
     increasing = true;
-  } else {
+  }
+  else
+  {
     increasing = false;
   }
   
-  // Detecting polyhedra teeth
-  // It's forbidden to specify unordered, e.g. non-increasing or non-decreasing sequence
-  // of z-values. It may be provided by a specific solid in a future.
-  for( G4int idx = 0; idx < sections; idx++ ) {
-    if(
-        ( z_values[idx] > z_values[idx+1] &&  increasing ) ||
-        ( z_values[idx] < z_values[idx+1] && !increasing )
-      )
+  // Detecting polyhedra teeth.
+  // It's forbidden to specify unordered, e.g. non-increasing or
+  // non-decreasing sequence of z-values. It may be provided by a
+  // specific solid in a future.
+  //
+  for( G4int idx = 0; idx < sections; idx++ )
+  {
+    if( ( z_values[idx] > z_values[idx+1] &&  increasing ) ||
+        ( z_values[idx] < z_values[idx+1] && !increasing ) )
     {
       // ERROR! Invalid sequence of z-values
+      //
       std::ostrstream msgstr;
       msgstr << G4endl
              << "ERROR: unordered, non-increasing or non-decreasing sequence"
@@ -151,15 +167,17 @@ G4BREPSolidPolyhedra::G4BREPSolidPolyhedra(const G4String& name,
                    "InvalidSetup", FatalException, msgstr.str() );
     }
   }
-  ///////////////////////////////////////////////////
 
+///////////////////////////////////////////////////
 #ifdef G4_EXPERIMENTAL_CODE
-  // There is one problem when sequence of z values is not increasing in a regular way,
-  // in other words, it's not purely increasing or decreasing
-  // Irregular sequence can be provided in order to define a polyhedra having teeth
-  // as shown on the picture bellow
-  // In this sequence can happen the following z[a-1] > z[a] < z[a+1] && z[a+1] >= z[a-1]
-  // One has to check the RMAX and RMIN values due to the possible intersections.
+  // There is one problem when sequence of z values is not increasing in a
+  // regular way, in other words, it's not purely increasing or decreasing
+  // Irregular sequence can be provided in order to define a polyhedra having
+  // teeth as shown on the picture bellow
+  // In this sequence can happen the following:
+  //   z[a-1] > z[a] < z[a+1] && z[a+1] >= z[a-1]
+  // One has to check the RMAX and RMIN values due to the possible
+  // intersections.
   //
   // 1     2     3  
   // ___   ___   ____
@@ -171,24 +189,31 @@ G4BREPSolidPolyhedra::G4BREPSolidPolyhedra(const G4String& name,
   // ------------------------------------ z-axis
   // 
   //
-  // NOTE: This picture doesn't show all the possible configurations of a polyhedra having
-  //       teeth when looking at its profile
+  // NOTE: This picture doesn't show all the possible configurations of
+  //       a polyhedra having teeth when looking at its profile.
   //       The picture shows only one half of the polyhedra's profile
-  //////////////////////////////////////////////////////////////////////////////////
+  /////////////////////////////////////////////////////////////////////////
 
   // Experimental code! Not recommended for production, it's incomplete!
   // The task is to identify invalid combination of z, RMIN and RMAX values
   // in the case of toothydra :-)
+  //
   G4int toothIdx;
 
-  for( G4int idx = 1; idx < sections+1; idx++ ) {
-    if( z_values[idx-1] > z_values[idx] ) {
+  for( G4int idx = 1; idx < sections+1; idx++ )
+  {
+    if( z_values[idx-1] > z_values[idx] )
+    {
       G4double toothdist = fabs( z_values[idx-1] - z_values[idx] );
       G4double aftertoothdist = fabs( z_values[idx+1] - z_values[idx] );
-      if( toothdist > aftertoothdist ) {
+      if( toothdist > aftertoothdist )
+      {
         // Check for possible intersection
-        if( RMAX[idx-1] < RMAX[idx+1] || RMIN[idx-1] > RMIN[idx+1] ) {
+        //
+        if( RMAX[idx-1] < RMAX[idx+1] || RMIN[idx-1] > RMIN[idx+1] )
+        {
           // ERROR! The surface conflict!
+          //
           std::ostrstream msgstr;
           msgstr << G4endl
                  << "ERROR: unordered sequence of z_values detected with"
@@ -205,45 +230,78 @@ G4BREPSolidPolyhedra::G4BREPSolidPolyhedra(const G4String& name,
     }
   }
 #endif // G4_EXPERIMENTAL_CODE
-   
+///////////////////////////////////////////////////
+
   for(G4int a=0;a<sections;a++)
   {
     Length = z_values[a+1] - z_values[a];
     
-    if( Length != 0.0 ) {
+    if( Length != 0.0 )
+    {
       TmpAxis= XAxis;
       TmpAxis.rotateZ(start_angle);
       
-      // L. Broglia: Be careful in the construction of the planes, see G4FPlane 
-      for( G4int b = 0; b < sides; b++ ) {
-        // Create inner side by calculation of points for the planar surface boundary
-        // The order of the points gives the surface sense -> changed to explicit sense set-up by R. Chytracek, 12/02/2002
-        // We must check if a pair of two consecutive RMINs is not = 0.0, this means no inner plane exists!
-        if( RMIN[a] != 0.0 ) {
-          if( RMIN[a+1] != 0.0 ) {
+      // L. Broglia: Be careful in the construction of the planes,
+      //             see G4FPlane
+      //
+      for( G4int b = 0; b < sides; b++ )
+      {
+        // Create inner side by calculation of points for the planar surface
+        // boundary. The order of the points gives the surface sense -> changed
+        // to explicit sense set-up by R. Chytracek, 12/02/2002
+        // We must check if a pair of two consecutive RMINs is not = 0.0,
+        // this means no inner plane exists!
+        //
+        if( RMIN[a] != 0.0 )
+        {
+          if( RMIN[a+1] != 0.0 )
+          {
             // Standard case
-            MaxSurfaceVec[Count] = CreateTrapezoidalSurface( RMIN[a], RMIN[a+1], LocalOrigin, Length,
-                                                             TmpAxis, PartAngle, EInverse );
-          } else {
-            // The special case of r1 > r2 where we end at the point (0,0,z[a+1])
-            MaxSurfaceVec[Count] = CreateTriangularSurface( RMIN[a], RMIN[a+1], LocalOrigin, Length,
-                                                            TmpAxis, PartAngle, EInverse );
+            //
+            MaxSurfaceVec[Count] =
+               CreateTrapezoidalSurface( RMIN[a], RMIN[a+1],
+                                         LocalOrigin, Length,
+                                         TmpAxis, PartAngle, EInverse );
           }
-        } else if( RMIN[a+1] != 0.0 ) {
-            // The special case of r1 < r2 where we start at the point ( 0,0,z[a])
-            MaxSurfaceVec[Count] = CreateTriangularSurface( RMIN[a], RMIN[a+1], LocalOrigin, Length,
-                                                            TmpAxis, PartAngle, EInverse );
-        } else {
-          // Insert nothing into the vector of sufaces, we'll replicate the vector anyway later
+          else
+          {
+            // The special case of r1 > r2 where we end at the
+            // point (0,0,z[a+1])
+            //
+            MaxSurfaceVec[Count] =
+               CreateTriangularSurface( RMIN[a], RMIN[a+1],
+                                        LocalOrigin, Length,
+                                        TmpAxis, PartAngle, EInverse );
+          }
+        }
+        else if( RMIN[a+1] != 0.0 )
+        {
+           // The special case of r1 < r2 where we start at the
+           // point ( 0,0,z[a])
+           //
+           MaxSurfaceVec[Count] =
+              CreateTriangularSurface( RMIN[a], RMIN[a+1], LocalOrigin, Length,
+                                       TmpAxis, PartAngle, EInverse );
+        }
+        else
+        {
+          // Insert nothing into the vector of sufaces, we'll replicate
+          // the vector anyway later
+          //
           MaxSurfaceVec[Count] = 0;
-          // We need to reduce the number of planes by 1, one we have just skipped
+
+          // We need to reduce the number of planes by 1,
+          // one we have just skipped
+          //
           nb_of_surfaces--;
         }      
 
-        if( MaxSurfaceVec[Count] != 0 ) {
+        if( MaxSurfaceVec[Count] != 0 )
+        {
           // Rotate axis back for the other surface point calculation
-          // only in the case any of the Create* methods above have been called
-          // because they modify the passed in TmpAxis
+          // only in the case any of the Create* methods above have been
+          // called because they modify the passed in TmpAxis
+          //
           TmpAxis.rotateZ(-PartAngle);
         }
         
@@ -251,32 +309,54 @@ G4BREPSolidPolyhedra::G4BREPSolidPolyhedra(const G4String& name,
 
         // Create outer side
 
-        if( RMAX[a] != 0.0 ) {
-          if( RMAX[a+1] != 0.0 ) {
+        if( RMAX[a] != 0.0 )
+        {
+          if( RMAX[a+1] != 0.0 )
+          {
             // Standard case
-            MaxSurfaceVec[Count] = CreateTrapezoidalSurface( RMAX[a], RMAX[a+1], LocalOrigin, Length,
-                                                             TmpAxis, PartAngle, ENormal );
-          } else {
-            // The special case of r1 > r2 where we end at the point (0,0,z[a+1])
-            MaxSurfaceVec[Count] = CreateTriangularSurface( RMAX[a], RMAX[a+1], LocalOrigin, Length,
-                                                            TmpAxis, PartAngle, ENormal );
+            //
+            MaxSurfaceVec[Count] =
+               CreateTrapezoidalSurface( RMAX[a], RMAX[a+1],
+                                         LocalOrigin, Length,
+                                         TmpAxis, PartAngle, ENormal );
           }
-        } else if( RMAX[a+1] != 0.0 ) {
-            // The special case of r1 < r2 where we start at the point ( 0,0,z[a])
-            MaxSurfaceVec[Count] = CreateTriangularSurface( RMAX[a], RMAX[a+1], LocalOrigin, Length,
-                                                            TmpAxis, PartAngle, ENormal );
-        } else {
-            // Two consecutive RMAX values can't be zero as it's against the definition of BREP polyhedra
-            G4Exception( "G4BREPSolidPolyhedra::G4BREPSolidPolyhedra()",
+          else
+          {
+            // The special case of r1 > r2 where we end
+            // at the point (0,0,z[a+1])
+            //
+            MaxSurfaceVec[Count] =
+               CreateTriangularSurface( RMAX[a], RMAX[a+1],
+                                        LocalOrigin, Length,
+                                        TmpAxis, PartAngle, ENormal );
+          }
+        }
+        else if( RMAX[a+1] != 0.0 )
+        {
+           // The special case of r1 < r2 where we start
+           // at the point ( 0,0,z[a])
+           //
+           MaxSurfaceVec[Count] =
+              CreateTriangularSurface( RMAX[a], RMAX[a+1], LocalOrigin, Length,
+                                       TmpAxis, PartAngle, ENormal );
+        }
+        else
+        {
+           // Two consecutive RMAX values can't be zero as
+           // it's against the definition of BREP polyhedra
+           //
+           G4Exception( "G4BREPSolidPolyhedra::G4BREPSolidPolyhedra()",
                          "InvalidSetup", FatalException,
                          "Two consecutive RMAX values cannot be zero!" );
         }
         
         Count++;
       } // End of for loop over sides
-    } else {
+    }
+    else
+    {
       // Create planar surfaces perpendicular to z-axis
-      
+
       ESurfaceSense OuterSurfSense, InnerSurfSense;
       
       if( RMAX[a] != RMAX[a+1] && RMIN[a] != RMIN[a+1] )
@@ -315,7 +395,9 @@ G4BREPSolidPolyhedra::G4BREPSolidPolyhedra(const G4String& name,
         // Eliminate the invalid cases 3 and 4.
         // At this point is guaranteed that each RMIN[i] < RMAX[i]
         // where i in in interval 0 < i < num_z_planes-1. So:
-        if( RMIN[a] > RMAX[a+1] || RMAX[a] < RMIN[a+1] ) {
+        //
+        if( RMIN[a] > RMAX[a+1] || RMAX[a] < RMIN[a+1] )
+        {
           std::strstream s;
           s << G4endl  << "The values of RMIN[" << a << "] & RMAX[" << a+1
                        << "] or RMAX[" << a << "] & RMIN[" << a+1 << "] "
@@ -325,33 +407,49 @@ G4BREPSolidPolyhedra::G4BREPSolidPolyhedra(const G4String& name,
                        "InvalidSetup", FatalException, s.str() );
         }
 
-        // We need to clasify all the cases in order to figure out the planar surface sense
-        if( RMAX[a] > RMAX[a+1] ) {
+        // We need to clasify all the cases in order to figure out
+        // the planar surface sense
+        //
+        if( RMAX[a] > RMAX[a+1] )
+        {
           // Cases 1, 5, 7
-          if( RMIN[a] < RMIN[a+1] ) {
+          //
+          if( RMIN[a] < RMIN[a+1] )
+          {
             // Case 1
             OuterSurfSense  = EInverse;
             InnerSurfSense = EInverse;
-          } else if( RMAX[a+1] != RMIN[a]) {
+          }
+          else if( RMAX[a+1] != RMIN[a])
+          {
             // Case 7
             OuterSurfSense  = EInverse;
             InnerSurfSense = ENormal;
-          } else {
+          }
+          else
+          {
             // Case 5
             OuterSurfSense  = EInverse;
             InnerSurfSense = ENormal;
           }
-        } else {
+        }
+        else
+        {
           // Cases 2, 6, 8
-          if( RMIN[a] > RMIN[a+1] ) {
+          if( RMIN[a] > RMIN[a+1] )
+          {
             // Case 2
             OuterSurfSense  = ENormal;
             InnerSurfSense = ENormal;
-          } else if( RMIN[a+1] != RMAX[a] ) {
+          }
+          else if( RMIN[a+1] != RMAX[a] )
+          {
             // Case 8
             OuterSurfSense  = ENormal;
             InnerSurfSense = EInverse;
-          } else {
+          }
+          else
+          {
             // Case 6
             OuterSurfSense  = ENormal;
             InnerSurfSense = EInverse;
@@ -362,9 +460,14 @@ G4BREPSolidPolyhedra::G4BREPSolidPolyhedra(const G4String& name,
         TmpAxis.rotateZ(start_angle);
         
         // Compute the outer planar surface
-        MaxSurfaceVec[Count]  = ComputePlanarSurface( RMAX[a], RMAX[a+1], LocalOrigin, TmpAxis, sides, PartAngle, OuterSurfSense );
-        if( MaxSurfaceVec[Count] == 0 ) {
+        //
+        MaxSurfaceVec[Count] =
+           ComputePlanarSurface( RMAX[a], RMAX[a+1], LocalOrigin, TmpAxis,
+                                 sides, PartAngle, OuterSurfSense );
+        if( MaxSurfaceVec[Count] == 0 )
+        {
           // No surface was created
+          //
           nb_of_surfaces--;
         }
         Count++;
@@ -373,16 +476,25 @@ G4BREPSolidPolyhedra::G4BREPSolidPolyhedra(const G4String& name,
         TmpAxis.rotateZ(start_angle);
         
         // Compute the inner planar surface
-        MaxSurfaceVec[Count]  = ComputePlanarSurface( RMIN[a], RMIN[a+1], LocalOrigin, TmpAxis, sides, PartAngle, InnerSurfSense );
-        if( MaxSurfaceVec[Count] == 0 ) {
+        //
+        MaxSurfaceVec[Count] =
+           ComputePlanarSurface( RMIN[a], RMIN[a+1], LocalOrigin, TmpAxis,
+                                 sides, PartAngle, InnerSurfSense );
+        if( MaxSurfaceVec[Count] == 0 )
+        {
           // No surface was created
+          //
           nb_of_surfaces--;
         }        
         Count++;
         
-        // Since we can create here at maximum 2 surfaces we need to reflect this in the total
+        // Since we can create here at maximum 2 surfaces
+        // we need to reflect this in the total
+        //
         nb_of_surfaces -= (2*(sides-1));
-      } else {
+      }
+      else
+      {
         // The case where only one of the radius values has changed
         //
         //     RMAX          RMIN
@@ -401,30 +513,48 @@ G4BREPSolidPolyhedra::G4BREPSolidPolyhedra(const G4String& name,
         G4double      R1, R2;
         ESurfaceSense SurfSense;
         
-        // The case by case clasification
-        if( RMAX[a] != RMAX[a+1] ) {
-	        // Cases 1, 2
+        // The case by case classification
+        //
+        if( RMAX[a] != RMAX[a+1] )
+        {
+          // Cases 1, 2
+          //
           R1 = RMAX[a];
           R2 = RMAX[a+1];
-          if( R1 > R2 ) {
+          if( R1 > R2 )
+          {
             // Case 1
+            //
             SurfSense = EInverse;
-          } else {
+          }
+          else
+          {
             // Case 2
+            //
             SurfSense = ENormal;
           }
-        } else if(RMIN[a] != RMIN[a+1]) {
-	        // Cases 3, 4
-	        R1 = RMIN[a];
+        }
+        else if(RMIN[a] != RMIN[a+1])
+        {
+          // Cases 3, 4
+          //
+          R1 = RMIN[a];
           R2 = RMIN[a+1];
-          if( R1 > R2 ) {
+          if( R1 > R2 )
+          {
             // Case 3
+            //
             SurfSense = ENormal;
-          } else {
+          }
+          else
+          {
             // Case 4
+            //
             SurfSense = EInverse;
           }
-        } else   {
+        }
+        else
+        {
           G4cerr << "ERROR - G4BREPSolidPolyhedra::G4BREPSolidPolyhedra()"
                  << G4endl
                  << "        Error in construction."
@@ -437,60 +567,80 @@ G4BREPSolidPolyhedra::G4BREPSolidPolyhedra(const G4String& name,
                        "Notification", JustWarning, "Construction Error!" );
           continue; 
         }
-        
         TmpAxis= XAxis;
         TmpAxis.rotateZ(start_angle);
         
-        MaxSurfaceVec[Count]  = ComputePlanarSurface( R1, R2, LocalOrigin, TmpAxis, sides, PartAngle, SurfSense );
-        if( MaxSurfaceVec[Count] == 0 ) {
+        MaxSurfaceVec[Count] =
+           ComputePlanarSurface( R1, R2, LocalOrigin, TmpAxis,
+                                 sides, PartAngle, SurfSense );
+        if( MaxSurfaceVec[Count] == 0 )
+        {
           // No surface was created
+          //
           nb_of_surfaces--;
         }        
         Count++;
         
-        // Since we can create here at maximum 1 surface we need to reflect this in the total
+        // Since we can create here at maximum 1 surface
+        // we need to reflect this in the total
+        //
         nb_of_surfaces -= ((2*sides) - 1);
       }      
     } // End of if( Length != 0.0 )
     
     LocalOrigin = LocalOrigin + (Length*Axis);
+
   } // End of for loop over z sections
   
-  if(opening_angle >= 2*pi-perMillion) {
+  if(opening_angle >= 2*pi-perMillion)
+  {
     // Create the end planes for the configuration where delta phi >= 2*PI
     
     TmpAxis = XAxis;
-    TmpAxis.rotateZ(start_angle);	
+    TmpAxis.rotateZ(start_angle);
     
-    MaxSurfaceVec[Count] = ComputePlanarSurface( RMIN[0], RMAX[0], Origin, TmpAxis, sides, PartAngle, ENormal );
+    MaxSurfaceVec[Count] =
+       ComputePlanarSurface( RMIN[0], RMAX[0], Origin, TmpAxis,
+                             sides, PartAngle, ENormal );
     
-    if( MaxSurfaceVec[Count] == 0 ) {
+    if( MaxSurfaceVec[Count] == 0 )
+    {
       // No surface was created
+      //
       nb_of_surfaces--;
     }
     Count++;
 
     // Reset plane axis
+    //
     TmpAxis = XAxis;
     TmpAxis.rotateZ(start_angle);
     
-    MaxSurfaceVec[Count] = ComputePlanarSurface( RMIN[sections], RMAX[sections], LocalOrigin, TmpAxis, sides, PartAngle, EInverse );
+    MaxSurfaceVec[Count] =
+       ComputePlanarSurface( RMIN[sections], RMAX[sections],
+                             LocalOrigin, TmpAxis,
+                             sides, PartAngle, EInverse );
     
-    if( MaxSurfaceVec[Count] == 0 ) {
+    if( MaxSurfaceVec[Count] == 0 )
+    {
       // No surface was created
+      //
       nb_of_surfaces--;
     }
     Count++;
-    
-  } else {
-    // If delta phi < 2*PI then create a single boundary (case with RMIN=0 included)
+  }
+  else
+  {
+    // If delta phi < 2*PI then create a single boundary
+    // (case with RMIN=0 included)
     
     // Create the lateral planars
+    //
     TmpAxis             = XAxis;
     G4Vector3D TmpAxis2 = XAxis;
     TmpAxis.rotateZ(start_angle);
     TmpAxis2.rotateZ(start_angle);
-    TmpAxis2.rotateZ(start_angle);	
+    TmpAxis2.rotateZ(start_angle);
     
     LocalOrigin      = Origin;
     G4int points     = sections*2+2;
@@ -498,15 +648,15 @@ G4BREPSolidPolyhedra::G4BREPSolidPolyhedra(const G4String& name,
     
     G4Point3DVector GapPointList(points);
     G4Point3DVector GapPointList2(points);
-    
-    
-    for(G4int d=0;d<sections+1;d++) {
+
+    for(G4int d=0;d<sections+1;d++)
+    {
       GapPointList[PointCount] = LocalOrigin + (RMAX[d]*TmpAxis);
-      GapPointList[points-1-PointCount] = LocalOrigin + (RMIN[d]*TmpAxis);	    
+      GapPointList[points-1-PointCount] = LocalOrigin + (RMIN[d]*TmpAxis);    
       
       GapPointList2[PointCount] = LocalOrigin + (RMAX[d]*TmpAxis2);
-      GapPointList2[points-1-PointCount] = LocalOrigin + (RMIN[d]*TmpAxis2);	 
-   	         
+      GapPointList2[points-1-PointCount] = LocalOrigin + (RMIN[d]*TmpAxis2); 
+         
       PointCount++;
 
       Length = z_values[d+1] - z_values[d];
@@ -514,18 +664,21 @@ G4BREPSolidPolyhedra::G4BREPSolidPolyhedra(const G4String& name,
     }
     
     // Add the lateral planars to the surfaces list and set/reverse sense
+    //
     MaxSurfaceVec[Count++] = new G4FPlane( &GapPointList,  0, ENormal );
     MaxSurfaceVec[Count++] = new G4FPlane( &GapPointList2, 0, EInverse );
     
     TmpAxis = XAxis;
-    TmpAxis.rotateZ(start_angle);	
+    TmpAxis.rotateZ(start_angle);
     TmpAxis.rotateZ(opening_angle);
     
-    // Create end planes 
+    // Create end planes
+    //
     G4Point3DVector EndPointList ((sides+1)*2);
-    G4Point3DVector EndPointList2((sides+1)*2);	      
+    G4Point3DVector EndPointList2((sides+1)*2);      
     
-    for(G4int c=0;c<sides+1;c++) {
+    for(G4int c=0;c<sides+1;c++)
+    {
       // outer polylines for origin end and opposite side
       EndPointList[c]  = Origin + (RMAX[0] * TmpAxis);
       EndPointList[(sides+1)*2-1-c]  = Origin + (RMIN[0] * TmpAxis);
@@ -538,61 +691,75 @@ G4BREPSolidPolyhedra::G4BREPSolidPolyhedra(const G4String& name,
     // Note the surface sense in this case is reversed
     // It's because here we have created the end planes in reversed order
     // than it's done by ComputePlanarSurface() method
-    if(RMAX[0]-RMIN[0] >= perMillion) {
+    //
+    if(RMAX[0]-RMIN[0] >= perMillion)
+    {
       MaxSurfaceVec[Count] = new G4FPlane( &EndPointList, 0, EInverse );
     }
-    else {
+    else
+    {
       MaxSurfaceVec[Count] = 0;
       nb_of_surfaces--;
-    };
+    }
     
     Count++;
     
-    if(RMAX[sections]-RMIN[sections] >= perMillion) {
+    if(RMAX[sections]-RMIN[sections] >= perMillion)
+    {
       MaxSurfaceVec[Count] = new G4FPlane( &EndPointList2, 0, ENormal );
-    } else {
+    }
+    else
+    {
       MaxSurfaceVec[Count] = 0;
       nb_of_surfaces--;
-    };    	    
+    }    
   }
 
-  // Now let's replicate the relevant surfaces into G4BREPSolid's vector of surfaces
+  // Now let's replicate the relevant surfaces into
+  // G4BREPSolid's vector of surfaces
+  //
   SurfaceVec = new G4Surface*[nb_of_surfaces];
   G4int sf = 0; G4int zeroCount = 0;
-  for( G4int srf = 0; srf < MaxNbOfSurfaces; srf++ ) {
-    if( MaxSurfaceVec[srf] != 0 ) {
-      if( sf < nb_of_surfaces ) {
+  for( G4int srf = 0; srf < MaxNbOfSurfaces; srf++ )
+  {
+    if( MaxSurfaceVec[srf] != 0 )
+    {
+      if( sf < nb_of_surfaces )
+      {
         SurfaceVec[sf] = MaxSurfaceVec[srf];
       }
       sf++;
-    } else {
+    }
+    else
+    {
       zeroCount++;
     }
   }
 
-  if( sf != nb_of_surfaces ) {
+  if( sf != nb_of_surfaces )
+  {
     G4cerr << "ERROR - G4BREPSolidPolyhedra::G4BREPSolidPolyhedra()" << G4endl
            << "        Bad number of surfaces!" << G4endl
            << "          sf            : "  << sf
            << "          nb_of_surfaces: "  << nb_of_surfaces
            << "          Count         : "  << Count
            << G4endl;
-    // Should we call G4Exception here ?
-    // Yes, because it usually leads to a crash
     G4Exception( "G4BREPSolidPolyhedra::G4BREPSolidPolyhedra()",
                  "FatalError", FatalException,
                  "INTERNAL ERROR: Going bananas!" );
   }
 
   // Clean up the temporary vector of surfaces
+  //
   delete [] MaxSurfaceVec;
     
   // Store the original parameters, to be used in visualisation
   // Note radii are not scaled because this BREP uses the radius of the
-  // circumscribed circle and also graphics_reps/G4Polyhedron uses the radius of
-  // the circumscribed circle.
+  // circumscribed circle and also graphics_reps/G4Polyhedron uses the
+  // radius of the circumscribed circle.
   
   // Save contructor parameters
+  //
   constructorParams.start_angle    = start_angle;
   constructorParams.opening_angle  = opening_angle;
   constructorParams.sides          = sides;
@@ -602,11 +769,13 @@ G4BREPSolidPolyhedra::G4BREPSolidPolyhedra(const G4String& name,
   constructorParams.RMIN           = 0;
   constructorParams.RMAX           = 0;
   
-  if( num_z_planes > 0 ) {               
+  if( num_z_planes > 0 )
+  {               
     constructorParams.z_values       = new G4double[num_z_planes];
     constructorParams.RMIN           = new G4double[num_z_planes];
     constructorParams.RMAX           = new G4double[num_z_planes];
-    for( G4int idx = 0; idx < num_z_planes; idx++ ) {
+    for( G4int idx = 0; idx < num_z_planes; idx++ )
+    {
       constructorParams.z_values[idx] = z_values[idx];
       constructorParams.RMIN[idx]     = RMIN[idx];
       constructorParams.RMAX[idx]     = RMAX[idx];      
@@ -617,7 +786,7 @@ G4BREPSolidPolyhedra::G4BREPSolidPolyhedra(const G4String& name,
   //   with what the constructor does.
   // Otherwise the z_values that are shifted by (z_values[0] - z_start) , 
   //   because z_values are only used in the form 
-  //      length = z_values[d+1] - z_values[d];         // JA Apr 2, 97
+  //   length = z_values[d+1] - z_values[d];         // JA Apr 2, 97
   
   if( z_values[0] != z_start )
   {
@@ -637,7 +806,8 @@ G4BREPSolidPolyhedra::G4BREPSolidPolyhedra(const G4String& name,
 
 G4BREPSolidPolyhedra::~G4BREPSolidPolyhedra()
 {
-  if( constructorParams.num_z_planes > 0 ) {
+  if( constructorParams.num_z_planes > 0 )
+  {
     delete [] constructorParams.z_values;
     delete [] constructorParams.RMIN;
     delete [] constructorParams.RMIN;
@@ -647,7 +817,8 @@ G4BREPSolidPolyhedra::~G4BREPSolidPolyhedra()
 void G4BREPSolidPolyhedra::Initialize()
 {
   // Calc bounding box for solids and surfaces
-  // Convert concave planes to convex     
+  // Convert concave planes to convex
+  //
   ShortestDistance=1000000;
   CheckSurfaceNormals();
   if(!Box || !AxisBox)
@@ -671,29 +842,36 @@ EInside G4BREPSolidPolyhedra::Inside(register const G4ThreeVector& Pt) const
   // This function find if the point Pt is inside, 
   // outside or on the surface of the solid
 
+  const G4double sqrHalfTolerance = kCarTolerance*kCarTolerance*0.25;    
+
   G4Vector3D v(1, 0, 0.01);
   G4Vector3D Pttmp(Pt);
   G4Vector3D Vtmp(v);
   G4Ray r(Pttmp, Vtmp);
   
   // Check if point is inside the Polyhedra bounding box
+  //
   if( !GetBBox()->Inside(Pttmp) )
   {
     return kOutside;
   }
 
   // Set the surfaces to active again
+  //
   Reset();
   
   // Test if the bounding box of each surface is intersected
-  // by the ray. If not, the surface become deactive.
+  // by the ray. If not, the surface is deactivated.
+  //
   TestSurfaceBBoxes(r);
   
   G4int hits=0, samehit=0;
 
   for(G4int a=0; a < nb_of_surfaces; a++)
   {
-    if(SurfaceVec[a]->IsActive())
+    G4Surface* surface = SurfaceVec[a];
+
+    if(surface->IsActive())
     {
       // count the number of intersections.
       // if this number is odd, the start of the ray is
@@ -701,26 +879,31 @@ EInside G4BREPSolidPolyhedra::Inside(register const G4ThreeVector& Pt) const
       // increment the number of intersection by 1 if the 
       // point is not on the surface and if this intersection 
       // was not found before
-      if( (SurfaceVec[a]->Intersect(r)) & 1 )
+      //
+      if( (surface->Intersect(r)) & 1 )
       {
-	      // test if the point is on the surface
-	      if(SurfaceVec[a]->GetDistance() <= kCarTolerance*kCarTolerance)
+        // test if the point is on the surface
+        //
+        if(surface->GetDistance() < sqrHalfTolerance)
         {
-	        return kSurface;
+          return kSurface;
         }
-  
-	      // test if this intersection was found before
-	      for(G4int i=0; i<a; i++)
-	        if(SurfaceVec[a]->GetDistance() == SurfaceVec[i]->GetDistance())
-	        {
-	          samehit++;
-	          break;
-	        }
-	
-	      // count the number of surfaces intersected by the ray
-	      if(!samehit)
+        // test if this intersection was found before
+        //
+        for(G4int i=0; i<a; i++)
         {
-	        hits++;
+          if(surface->GetDistance() == SurfaceVec[i]->GetDistance())
+          {
+            samehit++;
+            break;
+          }
+        }
+
+        // count the number of surfaces intersected by the ray
+        //
+        if(!samehit)
+        {
+          hits++;
         }
       }
     }
@@ -728,43 +911,58 @@ EInside G4BREPSolidPolyhedra::Inside(register const G4ThreeVector& Pt) const
    
   // if the number of surfaces intersected is odd,
   // the point is inside the solid
-  if(hits&1)
-  {
-    return kInside;
-  }
-  else
-  {
-    return kOutside;
-  }
+  //
+  return ( (hits&1) ? kInside : kOutside );
 }
 
 G4ThreeVector
 G4BREPSolidPolyhedra::SurfaceNormal(const G4ThreeVector& Pt) const
 {
-  // This function calculates the normal of the surface
-  // at a point on the surface
+  // This function calculates the normal of the closest surface
+  // to the given point
   // Note : the sense of the normal depends on the sense of the surface 
 
   G4int        iplane;
-    
-  G4Vector3D norm;
-  G4Ray r( Pt, G4Vector3D(1, 0, 0) );
+  G4bool       normflag = false;
+  const G4double sqrHalfTolerance = kCarTolerance*kCarTolerance*0.25;    
 
-  // Find on which surface the point is
+  // Determine if the point is on the surface
+  //
+  G4double minDist = kInfinity;
+  G4int normPlane = 0;
   for(iplane = 0; iplane < nb_of_surfaces; iplane++)
   {
-    if(SurfaceVec[iplane]->HowNear(Pt) < kCarTolerance)
-      // the point is on this surface
+    G4double dist = fabs(SurfaceVec[iplane]->HowNear(Pt));
+    if( minDist > dist )
+    {
+      minDist = dist;
+      normPlane = iplane;
+    }
+    if( dist < sqrHalfTolerance)
+    {
+      // the point is on this surface, so take this as the
+      // the surface to consider for computing the normal
+      //
+      normflag = true;
       break;
+    }
   }
-  
-  // calcul of the normal at this point
-  norm = SurfaceVec[iplane]->SurfaceNormal(Pt);
 
-  G4ThreeVector n( norm.x(), norm.y(), norm.z() );
-  n = n.unit();
-
-  return n;
+  // Calculate the normal at this point, if the point is on the
+  // surface, otherwise compute the normal to the closest surface
+  //
+  if ( normflag )  // point on surface
+  {
+    G4ThreeVector norm = SurfaceVec[iplane]->SurfaceNormal(Pt);
+    return norm.unit();
+  }
+  else             // point not on surface
+  {
+    G4FPlane* nPlane = (G4FPlane*)(SurfaceVec[normPlane]);
+    G4ThreeVector hitPt = nPlane->GetSrfPoint();
+    G4ThreeVector hitNorm = nPlane->SurfaceNormal(hitPt);
+    return hitNorm.unit();
+  }
 }
 
 G4double G4BREPSolidPolyhedra::DistanceToIn(const G4ThreeVector& Pt) const
@@ -773,15 +971,16 @@ G4double G4BREPSolidPolyhedra::DistanceToIn(const G4ThreeVector& Pt) const
   // outside the solid to any boundary of this solid.
   // Return 0 if the point is already inside.
 
-
   G4double *dists = new G4double[nb_of_surfaces];
   G4int a;
 
   // Set the surfaces to active again
+  //
   Reset();
    
   // compute the shortest distance of the point to each surfaces
   // Be careful : it's a signed value
+  //
   for(a=0; a< nb_of_surfaces; a++)  
     dists[a] = SurfaceVec[a]->HowNear(Pt);
      
@@ -794,106 +993,113 @@ G4double G4BREPSolidPolyhedra::DistanceToIn(const G4ThreeVector& Pt) const
   //   So, to test if the point is inside to return 0, utilize the Inside
   //   function. But I don`t know if it is really needed because dToIn is 
   //   called only if the point is outside )
+  //
   for(a = 0; a < nb_of_surfaces; a++)
     if( fabs(Dist) > fabs(dists[a]) ) 
       //if( dists[a] >= 0)
-	Dist = dists[a];
+      Dist = dists[a];
   
   delete[] dists;
 
   if(Dist == kInfinity)
   {
     // the point is inside the solid or on a surface
+    //
     return 0;
   }
   else 
   {
-    //return Dist;
     return fabs(Dist);
   }
 }
 
 G4double
 G4BREPSolidPolyhedra::DistanceToIn(register const G4ThreeVector& Pt, 
-				   register const G4ThreeVector& V) const
+                                   register const G4ThreeVector& V) const
 {
   // Calculates the distance from a point outside the solid
   // to the solid`s boundary along a specified direction vector.
-  // 	
+  //
   // Note : Intersections with boundaries less than the 
-  //	    tolerance must be ignored if the direction 
-  // 	    is away from the boundary
+  //        tolerance must be ignored if the direction 
+  //        is away from the boundary
   
   G4int a;
   
   // Set the surfaces to active again
+  //
   Reset();
   
-  G4double halfTolerance = kCarTolerance*0.5;    
+  const G4double sqrHalfTolerance = kCarTolerance*kCarTolerance*0.25;    
   G4Vector3D Pttmp(Pt);
   G4Vector3D Vtmp(V);   
   G4Ray r(Pttmp, Vtmp);
 
   // Test if the bounding box of each surface is intersected
   // by the ray. If not, the surface become deactive.
+  //
   TestSurfaceBBoxes(r);
   
   ShortestDistance = kInfinity;
   
   for(a=0; a< nb_of_surfaces; a++)
   {
-    if(SurfaceVec[a]->IsActive())
+    if( SurfaceVec[a]->IsActive() )
     {
-      G4int intersects = SurfaceVec[a]->Intersect(r);
       // test if the ray intersect the surface
-      if( intersects != 0 )
+      //
+      if( SurfaceVec[a]->Intersect(r) )
       {
         G4double surfDistance = SurfaceVec[a]->GetDistance();
         
-	      // if more than 1 surface is intersected,
-	      // take the nearest one
-	      if( surfDistance < ShortestDistance )
+        // if more than 1 surface is intersected,
+        // take the nearest one
+        //
+        if( surfDistance < ShortestDistance )
         {
-	        //if( surfDistance > halfTolerance )
-	        if( surfDistance > halfTolerance*halfTolerance )
-	        {
-	          ShortestDistance = surfDistance;
-	        }
-	        else
-	        {
-	          // the point is within the boundary
-	          // ignored it if the direction is away from the boundary	     
-	          G4Vector3D Norm = SurfaceVec[a]->SurfaceNormal(Pttmp);
+          if( surfDistance > sqrHalfTolerance )
+          {
+            ShortestDistance = surfDistance;
+          }
+          else
+          {
+            // the point is within the boundary
+            // ignore it if the direction is away from the boundary
+            //    
+            G4Vector3D Norm = SurfaceVec[a]->SurfaceNormal(Pttmp);
 
-	          if( (Norm * Vtmp) < 0 )
+            if( (Norm * Vtmp) < 0 )
             {
-	            ShortestDistance = surfDistance;
+              ShortestDistance = surfDistance;
+//              ShortestDistance = surfDistance==0
+//                                 ? sqrHalfTolerance
+//                                 : surfDistance;
             }
-	        }
+          }
         }
       }
     }
   }
-  
-  // Be carreful !
+
+  // Be careful !
   // SurfaceVec->Distance is in fact the squared distance
+  //
   if(ShortestDistance != kInfinity)
   {
     return sqrt(ShortestDistance);
   }
-  else
+  else  // no intersection
   {
-    // no intersection, return kInfinity
-    return kInfinity; 
+    return kInfinity;
   }
 }
 
 G4double
 G4BREPSolidPolyhedra::DistanceToOut(register const G4ThreeVector& Pt, 
-				    register const G4ThreeVector& V, 
-				    const G4bool, 
-				    G4bool *validNorm, 
-				    G4ThreeVector *             ) const
+                                    register const G4ThreeVector& V, 
+                                             const G4bool, 
+                                                   G4bool *validNorm, 
+                                                   G4ThreeVector *   ) const
 {
   // Calculates the distance from a point inside the solid
   // to the solid`s boundary along a specified direction vector.
@@ -901,20 +1107,22 @@ G4BREPSolidPolyhedra::DistanceToOut(register const G4ThreeVector& Pt,
   // intersections greater than the tolerance).
   //
   // Note : If the shortest distance to a boundary is less 
-  // 	    than the tolerance, it is ignored. This allows
-  // 	    for a point within a tolerant boundary to leave
-  //	    immediately
+  //        than the tolerance, it is ignored. This allows
+  //        for a point within a tolerant boundary to leave
+  //        immediately
 
   G4int parity = 0;
 
   // Set the surfaces to active again
+  //
   Reset();
 
-  const G4double halfTolerance = kCarTolerance*0.5;    
+  const G4double sqrHalfTolerance = kCarTolerance*kCarTolerance*0.25;    
   G4Vector3D Ptv = Pt;
   G4int a;
 
   // I don`t understand this line
+  //
   if(validNorm)
     *validNorm=false;
 
@@ -925,35 +1133,39 @@ G4BREPSolidPolyhedra::DistanceToOut(register const G4ThreeVector& Pt,
 
   // Test if the bounding box of each surface is intersected
   // by the ray. If not, the surface become deactive.
+  //
   TestSurfaceBBoxes(r);
   
   ShortestDistance = kInfinity; // this is actually the square of the distance
  
   for(a=0; a< nb_of_surfaces; a++)
   {
-    double surfDistance = SurfaceVec[a]->GetDistance();
+    G4double surfDistance = SurfaceVec[a]->GetDistance();
     
     if(SurfaceVec[a]->IsActive())
     {
       G4int intersects = SurfaceVec[a]->Intersect(r);
+
       // test if the ray intersects the surface
+      //
       if( intersects != 0 )
       {
         parity += 1;
-	
-	      // if more than 1 surface is intersected,
-	      // take the nearest one
-	      if( surfDistance < ShortestDistance )
+
+        // if more than 1 surface is intersected, take the nearest one
+        //
+        if( surfDistance < ShortestDistance )
         {
-          if( surfDistance > halfTolerance*halfTolerance )
-	        {
-	          ShortestDistance = surfDistance;
-	        }
-	        else
-	        {
-	          // the point is within the boundary: ignore it
-	          parity -= 1;
-	        }
+          if( surfDistance > sqrHalfTolerance )
+          {
+            ShortestDistance = surfDistance;
+          }
+          else
+          {
+            // the point is within the boundary: ignore it
+            //
+            parity -= 1;
+          }
         }
       }      
     }
@@ -961,6 +1173,7 @@ G4BREPSolidPolyhedra::DistanceToOut(register const G4ThreeVector& Pt,
 
   // Be careful !
   // SurfaceVec->Distance is in fact the squared distance
+  //
   if((ShortestDistance != kInfinity) && (parity&1))
   {
     return sqrt(ShortestDistance);
@@ -968,7 +1181,7 @@ G4BREPSolidPolyhedra::DistanceToOut(register const G4ThreeVector& Pt,
   else
   {
     // if no intersection is found, the point is outside
-    // so return 0
+    //
     return 0; 
   }
 }
@@ -977,17 +1190,20 @@ G4double G4BREPSolidPolyhedra::DistanceToOut(const G4ThreeVector& Pt) const
 {
   // Calculates the shortest distance ("safety") from a point
   // inside the solid to any boundary of this solid.
-  // Return 0 if the point is already outside.	
+  // Return 0 if the point is already outside.
 
   G4double *dists = new G4double[nb_of_surfaces];
   G4int a;
 
   // Set the surfaces to active again
+  //
   Reset();
   
-  // calcul of the shortest distance of the point to each surfaces
-  // Be carreful : it's a signed value
-  for(a=0; a< nb_of_surfaces; a++) {
+  // calculate the shortest distance of the point to each surfaces
+  // Be careful : it's a signed value
+  //
+  for(a=0; a< nb_of_surfaces; a++)
+  {
     dists[a] = SurfaceVec[a]->HowNear(Pt);
   }
 
@@ -1001,27 +1217,35 @@ G4double G4BREPSolidPolyhedra::DistanceToOut(const G4ThreeVector& Pt) const
   //   function. But I don`t know if it is really needed because dToOut is 
   //   called only if the point is inside )
 
-  for(a = 0; a < nb_of_surfaces; a++)  {
-    if( fabs(Dist) > fabs(dists[a]) ) {
+  for(a = 0; a < nb_of_surfaces; a++)
+  {
+    if( fabs(Dist) > fabs(dists[a]) )
+    {
       //if( dists[a] <= 0)
-	    Dist = dists[a];
+      Dist = dists[a];
     }
   }
   
   delete[] dists;
 
-  if(Dist == kInfinity) {
+  if(Dist == kInfinity)
+  {
     // the point is ouside the solid or on a surface
+    //
     return 0;
-  } else {
+  }
+  else
+  {
     // return Dist;
     return fabs(Dist);
   }
 }
 
-// Streams solid contents to output stream.
 std::ostream& G4BREPSolidPolyhedra::StreamInfo(std::ostream& os) const
 {  
+
+  // Streams solid contents to output stream.
+
   G4BREPSolid::StreamInfo( os )
   << "\n start_angle:   " << constructorParams.start_angle
   << "\n opening_angle: " << constructorParams.opening_angle
@@ -1030,15 +1254,18 @@ std::ostream& G4BREPSolidPolyhedra::StreamInfo(std::ostream& os) const
   << "\n z_start:       " << constructorParams.z_start
   << "\n z_values:      ";
   G4int idx;
-  for( idx = 0; idx < constructorParams.num_z_planes; idx++ ) {
+  for( idx = 0; idx < constructorParams.num_z_planes; idx++ )
+  {
     os << constructorParams.z_values[idx] << " ";
   }
   os << "\n RMIN:          "; 
-  for( idx = 0; idx < constructorParams.num_z_planes; idx++ ) {
+  for( idx = 0; idx < constructorParams.num_z_planes; idx++ )
+  {
     os << constructorParams.RMIN[idx] << " ";
   }
   os << "\n RMAX:          ";
-  for( idx = 0; idx < constructorParams.num_z_planes; idx++ ) {
+  for( idx = 0; idx < constructorParams.num_z_planes; idx++ )
+  {
     os << constructorParams.RMAX[idx] << " ";
   }
   os << "\n-----------------------------------------------------------\n";
@@ -1046,12 +1273,17 @@ std::ostream& G4BREPSolidPolyhedra::StreamInfo(std::ostream& os) const
   return os;
 }
 
-G4Surface* G4BREPSolidPolyhedra::CreateTrapezoidalSurface( G4double r1, G4double r2,
-                                                           const G4Point3D& origin, G4double distance,
-                                                           G4Vector3D& xAxis, G4double partAngle,
-                                                           ESurfaceSense sense )
+G4Surface*
+G4BREPSolidPolyhedra::CreateTrapezoidalSurface( G4double r1,
+                                                G4double r2,
+                                          const G4Point3D& origin,
+                                                G4double distance,
+                                                G4Vector3D& xAxis,
+                                                G4double partAngle,
+                                                ESurfaceSense sense )
 {
   // The surface to be returned
+  //
   G4Surface* trapsrf = 0;
   G4Point3DVector PointList(4);
   G4Vector3D zAxis(0,0,1);
@@ -1062,20 +1294,26 @@ G4Surface* G4BREPSolidPolyhedra::CreateTrapezoidalSurface( G4double r1, G4double
   xAxis.rotateZ( partAngle );
   
   PointList[2] = origin + ( distance * zAxis)   + (r2 * xAxis);
-  PointList[1] = origin + ( r1       * xAxis);	  
+  PointList[1] = origin + ( r1       * xAxis);  
 
   // Return the planar trapezoidal surface
+  //
   trapsrf = new G4FPlane( &PointList, 0, sense );
   
   return trapsrf;
 }
 
-G4Surface* G4BREPSolidPolyhedra::CreateTriangularSurface( G4double r1, G4double r2,
-                                                          const G4Point3D& origin, G4double distance,
-                                                          G4Vector3D& xAxis, G4double partAngle,
-                                                          ESurfaceSense sense )
+G4Surface*
+G4BREPSolidPolyhedra::CreateTriangularSurface( G4double r1,
+                                               G4double r2,
+                                         const G4Point3D& origin,
+                                               G4double distance,
+                                               G4Vector3D& xAxis,
+                                               G4double partAngle,
+                                               ESurfaceSense sense )
 {
   // The surface to be returned
+  //
   G4Surface*      trapsrf = 0;
   G4Point3DVector PointList(3);
   G4Vector3D      zAxis(0,0,1);
@@ -1085,77 +1323,104 @@ G4Surface* G4BREPSolidPolyhedra::CreateTriangularSurface( G4double r1, G4double 
   
   xAxis.rotateZ( partAngle );
   
-  if( r1 < r2 ) {
+  if( r1 < r2 )
+  {
     PointList[1] = origin + ( distance * zAxis)   + (r2 * xAxis);
-  } else {
-    PointList[1] = origin + ( r1       * xAxis);	  
+  }
+  else
+  {
+    PointList[1] = origin + ( r1       * xAxis);  
   }
 
   // Return the planar trapezoidal surface
+  //
   trapsrf = new G4FPlane( &PointList, 0, sense );
   
   return trapsrf;
 }
 
-G4Surface* G4BREPSolidPolyhedra::ComputePlanarSurface( G4double r1, G4double r2,
-                                                       const G4Point3D& origin, G4Vector3D& xAxis,
-                                                       G4int sides, G4double partAngle,
-                                                       ESurfaceSense sense )
+G4Surface*
+G4BREPSolidPolyhedra::ComputePlanarSurface( G4double r1,
+                                            G4double r2,
+                                      const G4Point3D& origin,
+                                            G4Vector3D& xAxis,
+                                            G4int sides,
+                                            G4double partAngle,
+                                            ESurfaceSense sense )
 {
-  // This method can be called only when r1 != r2, otherwise it returns 0 which means
-  // that no surface can be created out of the given radius pair.
+  // This method can be called only when r1 != r2,
+  // otherwise it returns 0 which means that no surface can be
+  // created out of the given radius pair.
   // This method requires the xAxis to be pre-rotated properly.
+
   G4Point3DVector OuterPointList( sides );
   G4Point3DVector InnerPointList( sides );
     
   G4double   rIn, rOut;
   G4Surface* planarSrf = 0;
 
-  if( r1 < r2 ) {
+  if( r1 < r2 )
+  {
     rIn  = r1;
     rOut = r2;
-  } else if( r1 > r2 ) {
+  }
+  else if( r1 > r2 )
+  {
     rIn  = r2;
     rOut = r1;
-  } else {
+  }
+  else
+  {
     // Invalid precondition, the radius values are r1 == r2,
     // which means we can create only polyline but no surface
+    //
     return 0;
   }
 
-  for( G4int pidx = 0; pidx < sides; pidx++ ) {
+  for( G4int pidx = 0; pidx < sides; pidx++ )
+  {
     // Outer polyline
+    //
     OuterPointList[pidx] = origin + ( rOut * xAxis);
     // Inner polyline
+    //
     InnerPointList[pidx] = origin + ( rIn  * xAxis);
     xAxis.rotateZ( partAngle );
   }
 
-  if( rIn != 0.0 && rOut != 0.0 ) {
+  if( rIn != 0.0 && rOut != 0.0 )
+  {
     // Standard case
+    //
     planarSrf = new G4FPlane( &OuterPointList, &InnerPointList, sense );
-  } else if( rOut != 0.0 ) {
-    // Special case where inner radius is zero so no polyline is actually created
+  }
+  else if( rOut != 0.0 )
+  {
+    // Special case where inner radius is zero so no polyline
+    // is actually created
+    //
     planarSrf = new G4FPlane( &OuterPointList, 0, sense );
-  } else {
+  }
+  else
+  {
     // No surface being created
     // This should not happen as filtered out by precondition check above
-    ;
   }
   
   return planarSrf;
 }  
 
-//  In graphics_reps:   
+//  In graphics_reps:
+
 #include "G4Polyhedron.hh"   
 
 G4Polyhedron* G4BREPSolidPolyhedra::CreatePolyhedron() const
 {
   return new G4PolyhedronPgon( constructorParams.start_angle, 
-			       constructorParams.opening_angle, 
-			       constructorParams.sides, 
-			       constructorParams.num_z_planes, 
-			       constructorParams.z_values,
-			       constructorParams.RMIN,
-			       constructorParams.RMAX);
+                               constructorParams.opening_angle, 
+                               constructorParams.sides, 
+                               constructorParams.num_z_planes, 
+                               constructorParams.z_values,
+                               constructorParams.RMIN,
+                               constructorParams.RMAX);
 }

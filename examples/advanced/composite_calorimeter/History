@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: History,v 1.23 2004/05/27 09:07:50 ribon Exp $
+$Id: History,v 1.24 2004/07/14 12:26:26 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -8,6 +8,10 @@ $Id: History,v 1.23 2004/05/27 09:07:50 ribon Exp $
 
                       Example History file
                       ---------------------
+
+14.07.04 - G.Cosmo (ccal-V06-02-00)
+- Corrected hadronic_lists.gmk, removed unnecessary list of kernel
+  libraries from EXTRALIBS.
 
 27.05.04 - A.Ribon (ccal-V06-01-01)
 - Changed use of the ntuple. Now it is simpler and the ntuple

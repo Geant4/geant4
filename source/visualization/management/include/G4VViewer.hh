@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VViewer.hh,v 1.13 2003/06/16 17:14:09 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: G4VViewer.hh,v 1.14 2004/07/01 10:16:14 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-02-patch-01 $
 //
 // 
 // John Allison  27th March 1996
@@ -110,10 +110,10 @@ public: // With description
   // Flags all views the need to re-visit the GEANT4 kernel to refresh
   // the scene.
 
-protected:
-
   void ProcessView ();
   // Used by DrawView ().  Invokes SetView ().  The basic logic is here.
+
+protected:
 
   //////////////////////////////////////////////////////////////
   // Data members

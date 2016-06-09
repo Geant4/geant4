@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: SolidAnalyser.cc,v 1.3 2003/06/16 16:49:31 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: SolidAnalyser.cc,v 1.4 2004/06/28 07:25:33 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-02-patch-01 $
 //
 // 
 // --------------------------------------------------------------
@@ -116,8 +116,6 @@ G4int SolidAnalyser::GetParam(const G4Box * s,
 G4int SolidAnalyser::GetParam(const G4Cons * s,
            std::vector<std::pair<G4String,G4double> > & result) const
 {
-   result.push_back(std::make_pair(G4String("z/2"),
-                    s->GetZHalfLength()));
    result.push_back(std::make_pair(G4String("rInZ-"),
                     s->GetInnerRadiusMinusZ()));
    result.push_back(std::make_pair(G4String("rInZ+"),
@@ -126,6 +124,8 @@ G4int SolidAnalyser::GetParam(const G4Cons * s,
                     s->GetOuterRadiusMinusZ()));
    result.push_back(std::make_pair(G4String("rOutZ+"),
                     s->GetOuterRadiusPlusZ()));
+   result.push_back(std::make_pair(G4String("z/2"),
+                    s->GetZHalfLength()));
    result.push_back(std::make_pair(G4String("startPhi"),
                     s->GetStartPhiAngle()));
    result.push_back(std::make_pair(G4String("deltaPhi"),
@@ -190,14 +190,14 @@ G4int SolidAnalyser::GetParam(const G4Trap * s,
 {
    result.push_back(std::make_pair(G4String("z/2"), s->GetZHalfLength()));
 
+   result.push_back(std::make_pair(G4String("y/2_1"), s->GetYHalfLength1()));
    result.push_back(std::make_pair(G4String("x/2_1"), s->GetXHalfLength1()));
    result.push_back(std::make_pair(G4String("x/2_2"), s->GetXHalfLength2()));
-   result.push_back(std::make_pair(G4String("y/2_1"), s->GetYHalfLength1()));
    result.push_back(std::make_pair(G4String("tanAlpha_1"),s->GetTanAlpha1()));
    
+   result.push_back(std::make_pair(G4String("y/2_2"), s->GetYHalfLength2()));
    result.push_back(std::make_pair(G4String("x/2_3"), s->GetXHalfLength3()));
    result.push_back(std::make_pair(G4String("x/2_4"), s->GetXHalfLength4()));
-   result.push_back(std::make_pair(G4String("y/2_2"), s->GetYHalfLength2()));
    result.push_back(std::make_pair(G4String("tanAlpha_2"),s->GetTanAlpha2()));
 
    return 9;
@@ -207,12 +207,12 @@ G4int SolidAnalyser::GetParam(const G4Trap * s,
 G4int SolidAnalyser::GetParam(const G4Trd * s,
              std::vector<std::pair<G4String,G4double> > & result) const
 {
-   result.push_back(std::make_pair(G4String("z/2"), s->GetZHalfLength()));
-
    result.push_back(std::make_pair(G4String("x/2_1"), s->GetXHalfLength1()));
    result.push_back(std::make_pair(G4String("x/2_2"), s->GetXHalfLength2()));
    result.push_back(std::make_pair(G4String("y/2_1"), s->GetYHalfLength1()));
    result.push_back(std::make_pair(G4String("y/2_2"), s->GetYHalfLength2()));
+   result.push_back(std::make_pair(G4String("z/2"), s->GetZHalfLength()));
+
    return 5;
 }
 
@@ -220,9 +220,9 @@ G4int SolidAnalyser::GetParam(const G4Trd * s,
 G4int SolidAnalyser::GetParam(const G4Tubs * s,
            std::vector<std::pair<G4String,G4double> > & result) const
 {
-   result.push_back(std::make_pair(G4String("z/2"), s->GetZHalfLength()));
    result.push_back(std::make_pair(G4String("rIn"), s->GetInnerRadius()));
    result.push_back(std::make_pair(G4String("rOut"), s->GetOuterRadius()));
+   result.push_back(std::make_pair(G4String("z/2"), s->GetZHalfLength()));
    result.push_back(std::make_pair(G4String("startPhi"),
                     s->GetStartPhiAngle()));
    result.push_back(std::make_pair(G4String("deltaPhi"),

@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: History,v 1.8 2004/05/28 11:05:41 ribon Exp $
+$Id: History,v 1.9 2004/07/14 12:33:46 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -8,6 +8,9 @@ $Id: History,v 1.8 2004/05/28 11:05:41 ribon Exp $
 
                       Category History file
                       ---------------------
+14.07.04 - G.Cosmo (lAr_calorimeter-V06-02-00)
+           Corrected hadronic_lists.gmk, removed unnecessary addition
+           of kernel libraries to EXTRALIBS.
 
 28.05.04 - A.Ribon (lAr_calorimeter-V06-01-01)
            Now PI light is used.

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4QNucleus.hh,v 1.25 2004/03/25 10:44:42 gunter Exp $
-// GEANT4 tag $Name: geant4-06-01 $
+// $Id: G4QNucleus.hh,v 1.26 2004/07/05 16:51:49 mkossov Exp $
+// GEANT4 tag $Name: geant4-06-02-patch-01 $
 //
 //      ---------------- G4QNucleus ----------------
 //             by Mikhail Kossov, Sept 1999.
@@ -164,6 +164,9 @@ inline G4QNucleus G4QNucleus::operator+=(const G4QNucleus& rhs)
   Z+=rhs.Z;
   N+=rhs.N;
   S+=rhs.S;
+  dZ+=rhs.dZ;
+  dN+=rhs.dN;
+  dS+=rhs.dS;
   // Atributes of aHadron
   G4int           newPDG= GetPDGCode()   + rhs.GetPDGCode() - 90000000;
   SetQPDG        (newPDG);
@@ -181,6 +184,9 @@ inline G4QNucleus G4QNucleus::operator-=(const G4QNucleus& rhs)
   Z-=rhs.Z;
   N-=rhs.N;
   S-=rhs.S;
+  dZ-=rhs.dZ;
+  dN-=rhs.dN;
+  dS-=rhs.dS;
   // Atributes of aHadron
   G4int           newPDG= GetPDGCode()   - rhs.GetPDGCode() + 90000000;
   SetQPDG        (newPDG);
@@ -198,6 +204,9 @@ inline G4QNucleus G4QNucleus::operator*=(const G4int& rhs)
   Z*=rhs;
   N*=rhs;
   S*=rhs;
+  dZ*=rhs;
+  dN*=rhs;
+  dS*=rhs;
   // Atributes of aHadron
   G4int           newPDG= rhs*(GetPDGCode() - 90000000) + 90000000;
   SetQPDG        (newPDG);

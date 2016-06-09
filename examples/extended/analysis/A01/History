@@ -1,4 +1,4 @@
-$Id: History,v 1.24 2004/05/27 17:44:45 duns Exp $
+$Id: History,v 1.25 2004/07/14 12:20:02 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -10,6 +10,10 @@ $Id: History,v 1.24 2004/05/27 17:44:45 duns Exp $
      ----------------------------------------------------------
 
 ---------------------------------------------------------------------------  
+
+14th July 2004 Gabriele Cosmo (exampleA01-V06-02-00)
+- hadlist.gmk: removed unnecessary kernel libraries list.
+  Fixes problem report #647.
 
 27th May 2004 Mark Donszelmann (exampleA01-V06-01-01)
 - Updated Mac file to write separate geometry.

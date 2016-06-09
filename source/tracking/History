@@ -1,4 +1,4 @@
-$Id: History,v 1.75 2004/06/11 15:21:41 gcosmo Exp $
+$Id: History,v 1.77 2004/07/07 11:50:46 asaim Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,16 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Jul.06, 2004 M.Asai (tracking-V06-02-01)
+- Remove the modification along tracking-V06-00-00 tag for G4SteppingVerbose2.cc
+  and let a fix on it be on top of this.
+- The fix is for incorrect total number of secondaries.
+
+Jul.05, 2004 G.Cosmo (tracking-V06-02-00)
+- Moved inlined contructors/destructors for G4Vtrajectory and G4VTrajectoryPoint
+  to NOT inline. Created G4VtrajectoryPoint.cc file.
+  Corrected signature of operator==() to canonical implementation.
 
 Jun.11, 2004 G.Cosmo (tracking-V06-01-02)
 - Use global flag G4TRACKING_ALLOC_EXPORT to export extern symbols for DLLs.

@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.61 2004/06/11 14:08:57 gcosmo Exp $
+# $Id: GNUmakefile,v 1.64 2004/07/26 11:04:59 stesting Exp $
 # -----------------------------------------------------------------
 # "gmake" makes default libraries for each subdomain.
 # "gmake global" makes global libraries for each subdomain.
@@ -60,7 +60,7 @@ libmap: $(G4LIBDIR)/liblist
 	@echo "         files, e.g., after gmake in the source/ directory."
 	@echo "Searching $(G4INSTALL)/source"
 	@echo '  for GNUmakefiles containing "name" and sorting ...'
-	@find $(G4INSTALL)/source \
+	@find . \
 	  -name GNUmakefile -exec $(GREP) -l '^ *name *:=' {} \; \
 	  | sort \
 	  > /tmp/G4_all_lib_makefiles.$(unique);
@@ -78,7 +78,8 @@ libmap: $(G4LIBDIR)/liblist
 	do \
 	  $(GREP) '^ *name *:=' $$i | cut -d \  -f 3 \
 	  >> /tmp/G4libname.map.starter.$(unique); \
-	  echo $$i >> /tmp/G4libname.map.starter.$(unique); \
+	  echo $$i | sed "s/^\\./source/" \
+	  >> /tmp/G4libname.map.starter.$(unique); \
 	done
 	@echo "Making libname.map ..."
 	@rm -f $(G4LIBDIR)/libname.map;

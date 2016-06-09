@@ -24,8 +24,8 @@
 //34567890123456789012345678901234567890123456789012345678901234567890123456789012345678901
 //
 //
-// $Id: G4QEnvironment.cc,v 1.93 2004/06/18 09:19:27 gunter Exp $
-// GEANT4 tag $Name: geant4-06-02 $
+// $Id: G4QEnvironment.cc,v 1.94 2004/07/20 10:35:50 mkossov Exp $
+// GEANT4 tag $Name: geant4-06-02-patch-01 $
 //
 //      ---------------- G4QEnvironment ----------------
 //             by Mikhail Kossov, August 2000.
@@ -37,6 +37,7 @@
 //#define sdebug
 //#define ppdebug
 //#define cdebug
+//#define cldebug
 //#define edebug
 //#define fdebug
 //#define pdebug
@@ -835,7 +836,7 @@ void G4QEnvironment::CreateQuasmon(const G4QContent& projQC, const G4LorentzVect
     G4double EnFlP=ef4Mom.rho();                   // Mom. of EnergyFlow forClusterCreation
     PrepareInteractionProbabilities(EnFlQC,EnFlP); // InteractionProbabilities for clusters
 #ifdef pdebug
-	G4cout<<"G4QEnvironment::CreateQ: Interaction Probabilities are calculated"<<G4endl;
+	   G4cout<<"G4QEnvironment::CreateQ: Interaction Probabilities are calculated"<<G4endl;
 #endif
     G4int nCandid = theQCandidates.size();
     G4double maxP = theQCandidates[nCandid-1]->GetIntegProbability();
@@ -850,7 +851,7 @@ void G4QEnvironment::CreateQuasmon(const G4QContent& projQC, const G4LorentzVect
     if(nCandid==1||maxP==0.)
 	   {
 #ifdef pdebug
-	  G4cout<<"***G4QEnv::CrQ:MaxP=0||nCand=1: Use all Env., Env="<<theEnvironment<<G4endl;
+	     G4cout<<"***G4QEnv::CrQ:MaxP=0||nCand=1: Use all Env., Env="<<theEnvironment<<G4endl;
 #endif
       curQC=theEnvironment.GetQCZNS();
       theEnvironment=vacuum;
@@ -866,6 +867,9 @@ void G4QEnvironment::CreateQuasmon(const G4QContent& projQC, const G4LorentzVect
       curQC   = curCand->GetQC();               // Get QuarkContent of the selected cluster
       G4QNucleus targClust(curQC.GetP(),curQC.GetN(),curQC.GetL());//Define Clust as a QNuc
       G4double clMass=targClust.GetGSMass();    // Mass of residual nuclear environment
+#ifdef cldebug
+	     G4cout<<"G4QEnv::CrQ:Cl#"<<i<<"(of "<<nCandid<<"),QC="<<curQC<<",M="<<clMass<<G4endl;
+#endif
       G4LorentzVector pq4M=proj4M+G4LorentzVector(0.,0.,0.,clMass); 
       if(pq4M.m()>=clMass)
 	     {
@@ -951,6 +955,9 @@ void G4QEnvironment::PrepareInteractionProbabilities(const G4QContent& projQC, G
   {
     G4QCandidate* curCand=theQCandidates[index];   // Intermediate pointer
     G4int cPDG  = curCand->GetPDGCode();
+#ifdef sdebug
+	   G4cout<<"G4QE::PIP:=====> #"<<index<<", cPDG="<<cPDG<<G4endl;
+#endif
     if(cPDG>80000000&&cPDG!=90000000)              // ===> Nuclear cluster case
 	   {
       G4QNucleus cN(cPDG);
@@ -960,6 +967,9 @@ void G4QEnvironment::PrepareInteractionProbabilities(const G4QContent& projQC, G
       G4int ac = cN.GetA();                        // "A" of the cluster
       G4double nOfCl=curCand->GetPreProbability(); // A number of clusters of the type
       G4double dOfCl=curCand->GetDenseProbability();// A number of clusters in dense region
+#ifdef sdebug
+						G4cout<<"G4QE::PIP:Z="<<zc<<",N="<<nc<<",nC="<<nOfCl<<",dC="<<dOfCl<<G4endl;
+#endif
       if(cPDG==91000000||cPDG==90001000||cPDG==90000001)
 	     {
         allB+=nOfCl;
@@ -988,7 +998,7 @@ void G4QEnvironment::PrepareInteractionProbabilities(const G4QContent& projQC, G
       G4double baryn = qQC.GetBaryonNumber();
       G4double charge= qQC.GetCharge();
       G4double dq= abs(baryn-charge-charge);
-	     G4cout<<"G4QE::PrepIntProb:C="<<cPDG<<",P="<<probab<<",ac="<<ac<<",dq="<<dq<<",qC="
+	     G4cout<<"G4QE::PIP:P="<<probab<<",ac="<<ac<<",dq="<<dq<<",f="<<fact<<",qC="
             <<qC<<",rPDG="<<rPDG<<",pPDG="<<pPDG<<",nCP="<<nOfCl<<",dCP="<<dOfCl<<G4endl;
 #endif
 	   }

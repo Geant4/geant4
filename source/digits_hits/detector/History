@@ -1,4 +1,4 @@
-$Id: History,v 1.3 2004/05/03 08:14:01 gcosmo Exp $
+$Id: History,v 1.4 2004/07/01 09:19:11 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Jul,  1st 2004 G.Cosmo
+- G4CellScoreComposer.cc, G4TrackLogger.cc: trivial fix for extra
+  semicolons, required for porting on gcc-3.4.0 compiler.
 
 May,  3rd 2004 G.Cosmo
 - G4SDManager, G4SDStructure: added optional argument 'warning' to

@@ -1,4 +1,4 @@
-$Id: History,v 1.28 2004/06/18 12:45:10 gcosmo Exp $
+$Id: History,v 1.29 2004/06/29 16:14:59 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,16 @@ committal in the CVS repository !
      --------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Jun 29th, 2004 - G.Cosmo  (geomnav-V06-02-00)
+------------------------
+- Fixed zero step-length problem in G4ReplicaNavigation::ComputeStep()
+  for cases where different replica types are coincident. Resolves
+  problem report #633.
+- G4NormalNavigation: added extra verbosity to print out information
+  for each solid which returns a 'lowest-yet' step, including the
+  mother volume. It is activated by setting verbose level to 2 or
+  more (J.Apostolakis).
 
 Jun 18th, 2004 - G.Cosmo  (geomnav-V06-01-03)
 ------------------------

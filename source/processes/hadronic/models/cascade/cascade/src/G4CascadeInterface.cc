@@ -51,12 +51,12 @@ G4CascadeInterface::G4CascadeInterface()
   if (verboseLevel > 3) {
     G4cout << " >>> G4CascadeInterface::G4CascadeInterface" << G4endl;
   }
-};
+}
    
 G4ReactionProductVector* G4CascadeInterface::Propagate(G4KineticTrackVector* , 
 						       G4V3DNucleus* ) {
   return NULL;
-};
+}
 
 // #define debug_G4CascadeInterface
 

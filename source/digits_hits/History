@@ -1,4 +1,4 @@
-$Id: History,v 1.8 2004/06/11 14:46:49 gcosmo Exp $
+$Id: History,v 1.9 2004/07/01 09:19:11 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Jul 1, 2004,  G.Cosmo (digits_hits-V06-02-00)
+- G4CellScoreComposer.cc, G4TrackLogger.cc: trivial fix for extra
+  semicolons, required for porting on gcc-3.4.0 compiler.
 
 Jun 11, 2004, G.Cosmo (digits_hits-V06-01-03)
 - Use global flag G4DIGI_ALLOC_EXPORT to export extern symbols for DLLs.

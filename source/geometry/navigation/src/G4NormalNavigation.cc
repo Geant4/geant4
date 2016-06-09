@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4NormalNavigation.cc,v 1.4 2004/05/17 13:30:26 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-02 $
+// $Id: G4NormalNavigation.cc,v 1.6 2004/06/29 16:08:04 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-02-patch-01 $
 //
 //
 // class G4NormalNavigation Implementation
@@ -33,6 +33,8 @@
 
 #include "G4NormalNavigation.hh"
 #include "G4AffineTransform.hh"
+
+#include <iomanip>
 
 // ********************************************************************
 // Constructor
@@ -84,6 +86,7 @@ G4NormalNavigation::ComputeStep(const G4ThreeVector &localPoint,
   ourSafety = motherSafety; // Working isotropic safety
   
 #ifdef G4VERBOSE
+  static G4int precVerf= 20;  // Precision 
   if ( fCheck )
   {
     if( fVerbose == 1 )
@@ -123,6 +126,28 @@ G4NormalNavigation::ComputeStep(const G4ThreeVector &localPoint,
         G4Exception("G4NormalNavigation::ComputeStep()", "OutsideCurrentVolume", 
                     JustWarning, "Point is a little outside Current Volume."); 
     }
+
+    // Verification / verbosity
+    //
+    if ( fVerbose > 1 )
+    {
+      G4int oldprec = G4cout.precision(precVerf);
+      G4cout << " G4NormalNavigation::ComputeStep()"
+             << " - Information on mother / key daughters ..." << G4endl;
+      G4cout << " Type   " << std::setw(12) << "Solid-Name"   << " " 
+             << std::setw(3*(6+precVerf))   << " local point" << " "
+             << std::setw(4+precVerf)       << "solid-Safety" << " "
+             << std::setw(4+precVerf)       << "solid-Step"   << " "
+             << std::setw(17)               << "distance Method "
+             << std::setw(3*(6+precVerf))   << " local direction" << " "
+             << G4endl;
+      G4cout << " Mother " << std::setw(12) << motherSolid->GetName() << " "
+             << std::setw(4+precVerf)       << localPoint   << " "
+             << std::setw(4+precVerf)       << motherSafety << " "
+             << G4endl;
+      G4cout.precision(oldprec);
+    }
+
   }
 #endif
 
@@ -236,6 +261,22 @@ G4NormalNavigation::ComputeStep(const G4ThreeVector &localPoint,
               G4cout.precision(oldcoutPrec);
             }
           }
+
+          // Verification / verbosity
+          //
+          if ( fVerbose > 1 )
+          {
+            G4int oldprec = G4cout.precision(precVerf);
+            G4cout << " Daught "
+                   << std::setw(12)         << sampleSolid->GetName() << " "
+                   << std::setw(4+precVerf) << samplePoint  << " "
+                   << std::setw(4+precVerf) << sampleSafety << " "
+                   << std::setw(4+precVerf) << sampleStep   << " "
+                   << std::setw(16)         << "distanceToIn" << " "
+                   << std::setw(4+precVerf) << localDirection << " "
+                   << G4endl;
+            G4cout.precision(oldprec);
+          }
 #endif
         }
       }
@@ -286,6 +327,18 @@ G4NormalNavigation::ComputeStep(const G4ThreeVector &localPoint,
                       "PointDistOutInvalid", FatalException,
                       "Current point is outside the current solid !");
         }
+      }
+      if ( fVerbose > 1 )
+      {
+        G4int oldprec = G4cout.precision(precVerf);
+        G4cout << " Mother " << std::setw(12) << motherSolid->GetName() << " "
+               << std::setw(4+precVerf)       << localPoint   << " "
+               << std::setw(4+precVerf)       << motherSafety << " "
+               << std::setw(4+precVerf)       << motherStep   << " "
+               << std::setw(16)               << "distanceToOut" << " "
+               << std::setw(4+precVerf)       << localDirection << " "
+               << G4endl;
+        G4cout.precision(oldprec);      
       }
 #endif
 

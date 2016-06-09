@@ -1,4 +1,4 @@
-$Id: History,v 1.79 2004/06/11 14:52:16 gcosmo Exp $
+$Id: History,v 1.80 2004/07/01 10:07:02 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Jul 1, 2004, G.Cosmo (event-V06-02-00)
+- Trivial fix for porting on gcc-3.4.0 compiler: removed extra semicolons
+  in G4CellScorerStore.cc.
 
 Jun 11, 2004, G.Cosmo (event-V06-01-07)
 - Use global flag G4EVENT_ALLOC_EXPORT to export extern symbols for DLLs.

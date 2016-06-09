@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MscModel.cc,v 1.17 2004/04/29 18:40:54 vnivanch Exp $
-// GEANT4 tag $Name: geant4-06-02 $
+// $Id: G4MscModel.cc,v 1.19 2004/07/19 13:46:41 urban Exp $
+// GEANT4 tag $Name: geant4-06-02-patch-01 $
 //
 // -------------------------------------------------------------------
 //
@@ -58,6 +58,8 @@
 //          SampleCosineTheta
 // 23-04-04 true -> geom and geom -> true transformation has been
 //          rewritten, changes in the angular distribution (L.Urban)
+// 19-07-04 correction in SampleCosineTheta in order to avoid
+//          num. precision problems at high energy/small step(L.Urban) 
 
 // Class Description:
 //
@@ -509,14 +511,18 @@ G4double G4MscModel::TrueStepLength(G4double geomStepLength)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4MscModel::SampleCosineTheta(G4double trueStepLength, 
-                                       G4double KineticEnergy)
+// G4double G4MscModel::SampleCosineTheta(G4double trueStepLength, G4double KineticEnergy,
+//                                       G4double lambda)
+G4double G4MscModel::SampleCosineTheta(G4double trueStepLength, G4double KineticEnergy)
 {
   G4double cth = 1. ;
   G4double tau = trueStepLength/lambda0 ;
 
   if(trueStepLength >= currentRange*dtrl)
-    tau = -par2*log(1.-par1*trueStepLength) ;
+    if(par1*trueStepLength < 1.)
+      tau = -par2*log(1.-par1*trueStepLength) ;
+    else
+      tau = taubig ;
 
   currentTau = tau ;
 
@@ -524,7 +530,7 @@ G4double G4MscModel::SampleCosineTheta(G4double trueStepLength,
     cth = exp(-tau) ;
   else
   {
-    if (tau > taubig) cth = -1.+2.*G4UniformRand();
+    if (tau >= taubig) cth = -1.+2.*G4UniformRand();
     else if (tau >= tausmall)
     {
         G4double a ;
@@ -630,20 +636,22 @@ G4double G4MscModel::SampleCosineTheta(G4double trueStepLength,
           xmean1 = 1.-x1fac2/a ;
 
           // from continuity of the 1st derivatives
-          c = a*(b-x0) ;
+          //   c = a*(b-x0) ;
+          c = xsi ;
 
           if(c == 1.) c=1.000001 ;
           if(c == 2.) c=2.000001 ;
 
-          b1 = b+1. ;
-	  bx = b-x0 ;
+          b1 = 2.   ;
+	  //  bx = b-x0 ;
+	  bx = xsi/a ;
           eb1=exp((c-1.)*log(b1)) ;
           ebx=exp((c-1.)*log(bx)) ;
           xmean2 = (x0*eb1+ebx+(eb1*bx-b1*ebx)/(2.-c))/(eb1-ebx) ;
 
 	  G4double f1x0 = a*ea/eaa ;
 	  G4double f2x0 = (c-1.)*eb1*ebx/(eb1-ebx)/
-                          exp(c*log(b-x0)) ;
+                          exp(c*log(bx)) ;
           // from continuity at x=x0
           prob = f2x0/(f1x0+f2x0) ;
           // from xmean = xmeanth

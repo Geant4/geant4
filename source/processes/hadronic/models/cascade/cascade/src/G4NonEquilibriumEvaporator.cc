@@ -34,7 +34,7 @@ G4NonEquilibriumEvaporator::G4NonEquilibriumEvaporator()
   if (verboseLevel > 3) {
     G4cout << " >>> G4NonEquilibriumEvaporator::G4NonEquilibriumEvaporator" << G4endl;
   }
-};
+}
 
 G4CollisionOutput G4NonEquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
 						      G4InuclParticle* target) {

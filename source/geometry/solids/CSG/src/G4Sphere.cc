@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Sphere.cc,v 1.29 2004/01/26 09:03:19 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: G4Sphere.cc,v 1.30 2004/07/02 15:45:39 grichine Exp $
+// GEANT4 tag $Name: geant4-06-02-patch-01 $
 //
 // class G4Sphere
 //
@@ -30,6 +30,7 @@
 //
 // History:
 //
+// 02.06.04 V.Grichine: bug fixed in DistanceToIn(p,v), on Rmax,Rmin go inside
 // 30.10.03 J.Apostolakis: new algorithm in Inside for SPhi-sections
 // 29.10.03 J.Apostolakis: fix in Inside for SPhi-0.5*kAngTol < phi < SPhi, SPhi<0
 // 19.06.02 V.Grichine: bug fixed in Inside(p), && -> && fDTheta - kAngTolerance
@@ -885,7 +886,11 @@ G4double G4Sphere::DistanceToIn( const G4ThreeVector& p,
     // Inside outer radius
     // check not inside, and heading through G4Sphere (-> 0 to in)
 
-    if (rad2 > tolIRMin2 && pDotV3d < 0 )
+    d2 = pDotV3d*pDotV3d - c ;
+
+    // if (rad2 > tolIRMin2 && pDotV3d < 0 )
+
+    if (rad2 > tolIRMax2 && ( d2 >= flexRadMaxTolerance*fRmax && pDotV3d < 0 ) )
     {
       if (segPhi)
       {
@@ -937,12 +942,16 @@ G4double G4Sphere::DistanceToIn( const G4ThreeVector& p,
 
   if (fRmin)
   {
-    c = rad2 - fRmin*fRmin ;
+    c  = rad2 - fRmin*fRmin ;
+    d2 = pDotV3d*pDotV3d - c ;
 
     // Within tolerance inner radius of inner G4Sphere
     // Check for immediate entry/already inside and travelling outwards
 
-    if (c >- kRadTolerance*0.5 && pDotV3d >= 0 && rad2 < tolIRMax2 )
+    // if (c >- kRadTolerance*0.5 && pDotV3d >= 0 && rad2 < tolIRMin2 )
+
+    if ( c > -kRadTolerance*0.5 && rad2 < tolIRMin2 && 
+         ( d2 < fRmin*kCarTolerance || pDotV3d >= 0 ) )
     {
       if (segPhi)
       {
@@ -986,7 +995,8 @@ G4double G4Sphere::DistanceToIn( const G4ThreeVector& p,
     }
     else   // Not special tolerant case
     {
-      d2 = pDotV3d*pDotV3d - c ;
+      //  d2 = pDotV3d*pDotV3d - c ;
+
       if (d2 >= 0)
       {
         s = -pDotV3d + sqrt(d2) ;

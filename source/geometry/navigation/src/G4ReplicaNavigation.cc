@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ReplicaNavigation.cc,v 1.5 2004/03/11 13:08:38 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-01 $
+// $Id: G4ReplicaNavigation.cc,v 1.6 2004/06/29 16:09:26 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-02-patch-01 $
 //
 //
 // class G4ReplicaNavigation Implementation
@@ -716,10 +716,9 @@ G4ReplicaNavigation::ComputeStep(const G4ThreeVector &globalPoint,
                                localDirection);
     if ( sampleStep<ourStep )
     {
-      if ( (sampleStep == 0) && (sampleSafety<0.5*kCarTolerance) )
-        ourStep = sampleStep+kCarTolerance;
-      else
-        ourStep = sampleStep;
+      ourStep = ( !sampleStep && (sampleSafety<0.5*kCarTolerance) )
+              ? sampleStep+kCarTolerance
+              : sampleStep;
       exiting = true;
       validExitNormal = false;
     }
@@ -744,7 +743,9 @@ G4ReplicaNavigation::ComputeStep(const G4ThreeVector &globalPoint,
                    history.GetTransform(depth).TransformAxis(globalDirection));
       if ( sampleStep<ourStep )
       {
-        ourStep = sampleStep;
+        ourStep = ( !sampleStep && (sampleSafety<0.5*kCarTolerance) )
+                ? sampleStep+kCarTolerance
+                : sampleStep;
         exiting = true;
         validExitNormal = false;
       }

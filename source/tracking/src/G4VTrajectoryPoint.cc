@@ -21,45 +21,22 @@
 // ********************************************************************
 //
 //
-// $Id: G4TrackLogger.cc,v 1.2 2004/07/01 09:19:12 gcosmo Exp $
+// $Id: G4VTrajectoryPoint.cc,v 1.1 2004/07/05 17:08:16 gcosmo Exp $
 // GEANT4 tag $Name: geant4-06-02-patch-01 $
 //
-// ----------------------------------------------------------------------
-// GEANT 4 class source file
 //
-// G4TrackLogger.cc
+//---------------------------------------------------------------
 //
-// ----------------------------------------------------------------------
+// G4VTrajectoryPoint.cc
+//
+// ---------------------------------------------------------------
 
-#include "G4TrackLogger.hh"
+#include "G4VTrajectoryPoint.hh"
 
-G4TrackLogger::G4TrackLogger() : 
-  fPreviousEventID(-1)
-{}
+G4VTrajectoryPoint::G4VTrajectoryPoint() {;}
+G4VTrajectoryPoint::~G4VTrajectoryPoint() {;}
 
-G4TrackLogger::~G4TrackLogger(){}
-
-
-void G4TrackLogger::SetEventID(G4int id){
-  if (id != fPreviousEventID) {
-    fTrackIDsSet.clear();
-    fPreviousEventID =id;
-  }
-}
-
-G4bool G4TrackLogger::FirstEnterance(G4int trid){
-  G4bool first = true;
-  G4int n = fTrackIDsSet.count(trid);
-  if (n==1) {
-    first=false;
-  }
-  else  if(n==0) {
-    fTrackIDsSet.insert(trid);
-  }
-  else if (n>1) {
-    G4cout << "Error G4TrackLogger::FirstEnterance: " 
-	   << "more than one elm in set!" << G4endl;
-    
-  }
-  return first;
+G4bool G4VTrajectoryPoint::operator==(const G4VTrajectoryPoint& right) const
+{
+  return (this==&right);
 }

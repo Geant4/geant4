@@ -1,4 +1,4 @@
-$Id: History,v 1.4 2004/03/25 17:34:13 gcosmo Exp $
+$Id: History,v 1.5 2004/07/14 12:38:46 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,10 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+14.07.2004, G.Cosmo - ghad-lists-V06-02-00
+- Corrected example GNUmakefile to remove unnecessary addition of
+  kernel libraries from EXTRALIBS.
 
 25.04.2004, G.Cosmo - ghad-lists-V06-00-00
 - Updated lists to package 4.1 (H.P.Wellisch).

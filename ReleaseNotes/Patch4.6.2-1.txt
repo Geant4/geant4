@@ -1,0 +1,120 @@
+
+                 Geant4 6.2 - patch-01 Release Notes
+                 -----------------------------------
+
+                                                           27 July 2004
+
+List of fixes included in this public patch since release 6.2:
+
+  o Configuration:
+    -------------
+    + Configure script:
+      o Corrected behavior for setting of CLHEP_BASE_DIR in case the path
+        is set to '/usr' or '/usr/local'. Fixes problem report #638.
+    + source/GNUmakefile:
+      o Fixed search path from absolute to relative. Addresses problem
+        report #644.
+
+  o Digits_hits, Event
+    ------------------
+    + Trivial fixes for removal of redundant semicolons in the code.
+
+  o Geometry:
+    --------
+    + divisions:
+      o Removed unnecessary forward declaration of HepTransform3D from
+        G4ParameterisationBox and G4VDivisionParameterisation.
+    + navigation:
+      o Fixed zero step-length problem in G4ReplicaNavigation::ComputeStep()
+        for cases where different replica types are coincident. Resolves
+        problem report #633.
+      o G4NormalNavigation: added extra verbosity to print out information
+        for each solid which returns a 'lowest-yet' step, including the
+        mother volume. It is activated by setting verbose level to 2 or
+        more.
+    + solids/BREPS:
+      o G4BREPSolidPolyhedra and G4BREPSolidPCone:
+        Fixed usage of tolerances fir handling surface distances.
+        Implemented SurfaceNormal(p) to follow original specifications
+        for G4VSolid.
+      o G4BREPSolid:
+        Fixed usage of tolerances fir handling surface distances.
+      o Some code cleanup ...
+    + solids/CSG:
+      o Fixes curing rare conditions of loops at boundaries for G4Orb
+        and G4Sphere. Addresses problem report #547.
+
+  o Electromagnetic standard processes:
+    ----------------------------------
+    + standard:
+      o Improved cross-section parametrisation at low energy for
+        ComptonScattering.
+    + utils:
+      o Correction in G4MscModel::SampleCosTheta() for high-energy particles
+        at small step. Fixes some observed deflection of direction for
+        particles at high energies.
+      o Fixed a problem of G4VEnergyLossProcess observed for ions at small
+        cuts in range (ionization, charge>1).
+
+  o Hadronic Processes:
+    ------------------
+    + models/cascade, util:
+      o Trivial fixes for removal of redundant semicolons in the code.
+    + chiral_inv_phase_space:
+      o Fix for clusterization in G4QNucleus. Correcting problem observed
+        in system-testing.
+      o Fixed initialization of secondary values dZ,dN,dS in G4QNucleus.
+
+  o Run:
+    ---
+    + Updated date to run-manager.
+
+  o Tracking:
+    --------
+    + Fix in G4SteppingManager to correct the ordering of secondary tracks
+      generated in a step.
+    + Moved inlined constructor/destructor for G4Vtrajectory and
+      G4VtrajectoryPoint to not inline, and corrected signature of
+      operator==() to canonical form. 
+
+  o Visualization:
+    -------------
+    + management: made G4VViewer::ProcessView() public, since used as
+      private friend by some client classes.
+
+  o Hadronic Lists:
+    --------------
+    + Corrected user GNUmakefile sample, to allow for proper installation
+      when global compound libraries are used.
+
+  o Examples:
+    --------
+    + Updated reference outputs.
+    + advanced/composite_calorimeter, lAr_calorimeter
+      o Fixed configuration setup for hadronic physics lists, to allow
+        for proper installation when global compound libraries are used.
+    + advanced/Rich, xray_telescope
+      o Corrected to new visualization commands in input macro.
+    + extended/analysis/A01
+      o Fixed configuration setup for hadronic physics lists, to allow
+        for proper installation when global compound libraries are used.
+    + extended/geometry/olap
+      o Reordered storage of parameters for solids according to arguments
+        order in construction in SolidAnalyser. Resolving issue in problem
+        report #635.
+
+ ----------------------------------------------------------------------------
+
+                             Technical Notes
+                             --------------- 
+
+  o  This patch should be applied on top of release 6.2.
+  o  Technical notes distributed for release 6.2 are also applicable and
+     valid for this patch.
+
+The code and rebuilt binary libraries for release 6.2 are available through
+our "Source Code" Web page:  http://cern.ch/geant4
+
+Please refer to the Geant4 User Documentation:
+   http://cern.ch/geant4/G4UsersDocuments/Overview/html
+for further information about using Geant4.

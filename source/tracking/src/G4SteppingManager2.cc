@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4SteppingManager2.cc,v 1.13 2003/09/19 10:17:30 vnivanch Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: G4SteppingManager2.cc,v 1.16 2004/07/07 11:46:59 asaim Exp $
+// GEANT4 tag $Name: geant4-06-02-patch-01 $
 //
 //
 //---------------------------------------------------------------
@@ -102,6 +102,7 @@ void G4SteppingManager::GetProcessNumber()
 
 // Obtain the user defined maximum allowed Step in the volume
 //   1997.12.13 adds argument for  GetMaxAllowedStep by K.Kurashige
+//   2004.01.20 This block will be removed by Geant4 7.0 
    G4UserLimits* ul= fCurrentVolume->GetLogicalVolume()->GetUserLimits();
    if (ul) {
       physIntLength = ul->GetMaxAllowedStep(*fTrack);
@@ -231,7 +232,6 @@ void G4SteppingManager::InvokeAtRestDoItProcs()
    G4double lifeTime, shortestLifeTime;
 
    fAtRestDoItProcTriggered = 0;
-   fN2ndariesAtRestDoIt = 0;
    shortestLifeTime = DBL_MAX;
 
    unsigned int NofInactiveProc=0;
@@ -291,11 +291,13 @@ void G4SteppingManager::InvokeAtRestDoItProcs()
        fParticleChange->UpdateStepForAtRest(fStep);
 
        // Now Store the secondaries from ParticleChange to SecondaryList
-       G4Track*  tempSecondaryTrack;
+       G4Track* tempSecondaryTrack;
+       G4int    num2ndaries;
 
-       fN2ndariesAtRestDoIt = fParticleChange->GetNumberOfSecondaries();
+       num2ndaries = fParticleChange->GetNumberOfSecondaries();
+       fN2ndariesAtRestDoIt += num2ndaries;
 
-       for(G4int DSecLoop=0 ; DSecLoop< fN2ndariesAtRestDoIt; DSecLoop++){
+       for(G4int DSecLoop=0 ; DSecLoop< num2ndaries; DSecLoop++){
          tempSecondaryTrack = fParticleChange->GetSecondary(DSecLoop);
 
          if(tempSecondaryTrack->GetDefinition()->GetApplyCutsFlag())
@@ -347,8 +349,6 @@ void G4SteppingManager::InvokeAlongStepDoItProcs()
    }
 
 // Invoke the all active continuous processes
-   fN2ndariesAlongStepDoIt = 0;
-
    for( size_t ci=0 ; ci<MAXofAlongStepLoops ; ci++ ){
      fCurrentProcess = (*fAlongStepDoItVector)[ci];
      if (fCurrentProcess== NULL) continue;
@@ -366,10 +366,12 @@ void G4SteppingManager::InvokeAlongStepDoItProcs()
 
      // Now Store the secondaries from ParticleChange to SecondaryList
      G4Track* tempSecondaryTrack;
+     G4int    num2ndaries;
 
-     fN2ndariesAlongStepDoIt = fParticleChange->GetNumberOfSecondaries();
+     num2ndaries = fParticleChange->GetNumberOfSecondaries();
+     fN2ndariesAlongStepDoIt += num2ndaries;
 
-     for(G4int DSecLoop=0 ; DSecLoop< fN2ndariesAlongStepDoIt; DSecLoop++){
+     for(G4int DSecLoop=0 ; DSecLoop< num2ndaries; DSecLoop++){
          tempSecondaryTrack = fParticleChange->GetSecondary(DSecLoop);
 
          if(tempSecondaryTrack->GetDefinition()->GetApplyCutsFlag())
@@ -410,8 +412,6 @@ void G4SteppingManager::InvokePostStepDoItProcs()
 {
 
 // Invoke the specified discrete processes
-   fN2ndariesPostStepDoIt = 0;
-
    for(size_t np=0; np < MAXofPostStepLoops; np++){
    //
    // Note: DoItVector has inverse order against GetPhysIntVector
@@ -466,14 +466,16 @@ void G4SteppingManager::InvokePSDIP(size_t np)
 
          // Now Store the secondaries from ParticleChange to SecondaryList
          G4Track* tempSecondaryTrack;
+         G4int    num2ndaries;
 
-         fN2ndariesPostStepDoIt = fParticleChange->GetNumberOfSecondaries();
+         num2ndaries = fParticleChange->GetNumberOfSecondaries();
+         fN2ndariesPostStepDoIt += num2ndaries;
 
-         for(G4int DSecLoop=0 ; DSecLoop< fN2ndariesPostStepDoIt; DSecLoop++){
+         for(G4int DSecLoop=0 ; DSecLoop< num2ndaries; DSecLoop++){
             tempSecondaryTrack = fParticleChange->GetSecondary(DSecLoop);
-    
-           if(tempSecondaryTrack->GetDefinition()->GetApplyCutsFlag())
-           { ApplyProductionCut(tempSecondaryTrack); }
+   
+            if(tempSecondaryTrack->GetDefinition()->GetApplyCutsFlag())
+            { ApplyProductionCut(tempSecondaryTrack); }
 
             // Set parentID 
             tempSecondaryTrack->SetParentID( fTrack->GetTrackID() );

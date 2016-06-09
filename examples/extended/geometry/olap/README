@@ -34,14 +34,11 @@ MV can be rotated according to user given parameters inside the NewWorld.
 Intersecting DVs inside the same MV or a DV protruding from its MV
 are said to be overlapping. Thus a complete geometry is correct, if
 all direct DVs of any given MV are not intersecting mutually or whith
-their MV. Geant4 does not provide any possibilities for its tracking
-geometry to ensure this. The tools described here can't do this either
-strictly speaking. The geometry is not verified but falsified when
-using these tools. That means, that the geometry needs not be correct
-if a check using these tools succeeds (but it will be more likely
-to be a correct geometry). But if the check fails, the error is located
-and can be fixed more easily. Checking means, that a geantino is shot
-from a given point A to another point B and vice versa from B to A.
+their MV. To be noticed that the tool described here cannot do this in
+a perfect way, strictly speaking, but allows to identify most defects in
+the geometry if any. If the check fails, the error is located and can be
+fixed easily. Checking means, that a geantino is shot from a given point
+A to another point B and viceversa from B to A.
 At each step of the geantino's track a boundary crossing has occurred
 (only geometry limits the geantino's steps!). If the set of boundary
 crossings from A to B is different from the set going from B to A

@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.hh,v 1.21 2004/05/17 09:46:56 vnivanch Exp $
-// GEANT4 tag $Name: geant4-06-02 $
+// $Id: G4VEnergyLossProcess.hh,v 1.24 2004/07/05 13:36:11 vnivanch Exp $
+// GEANT4 tag $Name: geant4-06-02-patch-01 $
 //
 // -------------------------------------------------------------------
 //
@@ -50,6 +50,8 @@
 // 12-11-03 G4EnergyLossSTD -> G4EnergyLossProcess (V.Ivanchenko)
 // 14-01-04 Activate precise range calculation (V.Ivanchenko)
 // 10-03-04 Fix problem of step limit calculation (V.Ivanchenko)
+// 30-06-04 make destructor virtual (V.Ivanchenko)
+// 05-07-04 fix problem of GenericIons seen at small cuts (V.Ivanchenko)
 //
 // Class Description:
 //
@@ -93,7 +95,7 @@ public:
   G4VEnergyLossProcess(const G4String& name = "EnergyLoss",
                          G4ProcessType type = fElectromagnetic);
 
- ~G4VEnergyLossProcess();
+  virtual ~G4VEnergyLossProcess();
 
   void Initialise();
 
@@ -263,6 +265,8 @@ public:
 
   void ResetNumberOfInteractionLengthLeft();
   // reset (determine the value of)NumberOfInteractionLengthLeft
+
+  G4VEmModel* SelectModelForMaterial(G4double kinEnergy, size_t& idx) const;
 
 protected:
 
@@ -572,7 +576,7 @@ inline void G4VEnergyLossProcess::ComputeLambda(G4double e)
     if(e > emax) {
       mfpKinEnergy = e;
       preStepLambda = GetLambda(e);
-    } else preStepLambda = theCrossSectionMax[currentMaterialIndex];
+    } else preStepLambda = chargeSqRatio*theCrossSectionMax[currentMaterialIndex];
   }
 }
 
@@ -606,12 +610,8 @@ inline G4double G4VEnergyLossProcess::GetContinuousStepLimit(const G4Track&,
     x = fRange;
     G4double y = x*dRoverRange;
 
-    if(x > minStepLimit && y < currentMinStep ) {
-
+    if(x > minStepLimit && y < currentMinStep ) 
       x = y + minStepLimit*(1.0 - dRoverRange)*(2.0 - minStepLimit/fRange);
-      //if(x >fRange || x<minStepLimit) G4cout << "!!! StepLimit problem!!!" << G4endl;
-      //if(rndmStepFlag) x = minStepLimit + G4UniformRand()*(x-minStepLimit);
-    }
   }
   return x;
 }
@@ -630,6 +630,14 @@ inline void G4VEnergyLossProcess::ResetNumberOfInteractionLengthLeft()
 inline G4VEmModel* G4VEnergyLossProcess::SelectModel(G4double kinEnergy)
 {
   return modelManager->SelectModel(kinEnergy, currentMaterialIndex);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline G4VEmModel* G4VEnergyLossProcess::SelectModelForMaterial(
+                                           G4double kinEnergy, size_t& idx) const
+{
+  return modelManager->SelectModel(kinEnergy, idx);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -684,7 +692,7 @@ inline G4PhysicsTable* G4VEnergyLossProcess::RangeTableForLoss() const
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-  
+
 inline G4PhysicsTable* G4VEnergyLossProcess::InverseRangeTable() const 
 {
   return theInverseRangeTable;
@@ -712,7 +720,7 @@ inline G4bool G4VEnergyLossProcess::IsIntegral() const
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-  
+
 inline size_t G4VEnergyLossProcess::CurrentMaterialCutsCoupleIndex() const 
 {
   return currentMaterialIndex;
@@ -740,7 +748,7 @@ inline void G4VEnergyLossProcess::SetChargeSquare(G4double val)
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-  
+
 inline void G4VEnergyLossProcess::SetChargeSquareRatio(G4double val) 
 {
   chargeSqRatio = val;
