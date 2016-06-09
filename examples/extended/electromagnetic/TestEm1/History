@@ -1,4 +1,4 @@
-$Id: History,v 1.28 2003/03/27 11:16:16 maire Exp $
+$Id: History,v 1.29 2003/05/09 09:15:56 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,7 +14,10 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-     
+
+09-05-03 V.Ivant (testem1-V05-01-00)
+- change updated command
+
 27-03-03 mma (testem1-V05-00-05)
 - modular physics list
 
@@ -22,7 +25,7 @@ track of all tags.
 
 11-03-03 V.Ivant (testem1-V05-00-03)
 - Remove all old interfaces to cuts
-- Add definition of mean excitation energy for water 
+- Add definition of mean excitation energy for water
 
 06-03-03 mma (testem1-V05-00-02)
 - PhysicsList::SetCuts : suppress cutForProton

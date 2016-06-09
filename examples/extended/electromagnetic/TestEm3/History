@@ -1,4 +1,4 @@
-$Id: History,v 1.26 2003/03/28 15:16:13 maire Exp $
+$Id: History,v 1.28 2003/05/09 09:28:49 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,13 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+09-05-03 V.Ivanchenko (testem3-V05-01-00)
+- Change update command
+
+10-04-03 mma (testem3-V05-00-05)
+- define material BGO
+- RunMessenger: enlarge allowed range for histos.
      
 28-03-03 mma (testem3-V05-00-04)
 - G4PVPlacement and G4PVReplica in logical mother

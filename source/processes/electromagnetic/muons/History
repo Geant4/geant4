@@ -1,4 +1,4 @@
-$Id: History,v 1.44 2003/04/29 07:24:24 vnivanch Exp $
+$Id: History,v 1.46 2003/05/12 10:02:21 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,12 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+12 May 03: V.Ivant (muons-V05-01-01)
+-remove extra printout at initialisation
+
+09 May 03: V.Ivant (muons-V05-01-00)
+-remove extra printout at initialisation
 
 28 Apr 03: V.Ivant (muons-V05-00-08)
 -fix leak in retrieve tables

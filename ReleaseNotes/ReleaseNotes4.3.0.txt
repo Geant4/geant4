@@ -337,11 +337,11 @@ Notes:
 
 The code and some binary libraries are available through our "Source
 Code" Web page:
-- see our <A href="http://cern.ch/geant4">Geant4 Home Page</A>.
+- see our Geant4 Home Page (http://cern.ch/geant4).
 
-Please refer to <A
-href="http://cern.ch/geant4/G4UsersDocuments/Overview/html/index.html">Geant4
-User Documentation</A> for further information about using Geant4.
+Please refer to the Geant4 User Documentation
+(http://cern.ch/geant4/G4UsersDocuments/Overview/html)
+for further information about using Geant4.
 Updates to the documentation for Geant4 3.0 are expected to be published as
 usual within three weeks from the release date.
 
@@ -385,8 +385,8 @@ Platforms configured but not tested and not supported:
 
 Geant4 3.0 requires the installation of CLHEP. 
 
-See <A href="http://wwwinfo.cern.ch/asd/lhc++/INSTALLATION/clhep.html">
-CLHEP</A>. Tests have been performed with CLHEP 1.6.0.0.
+See CLHEP (http://cern.ch/clhep/INSTALLATION/clhep.html).
+Tests have been performed with CLHEP 1.6.0.0.
 
 By default, the CLHEP installation scripts will activate ISO/ANSI C++ features
 if the compiler is capable. You need to explicitly disable CLHEP settings in
@@ -398,8 +398,7 @@ Geant4 3.0 coworks with ANAPHE 3.2.0 and components included therein:
   HepODBMS 0.3.1.4
   CLHEP 1.6.0.0
 
-For more information about ANAPHE 3.2.0, see:
-  <A href="http://wwwinfo.cern.ch/asd/lhc++/release/3.2.0/3.2.0.html">ANAPHE 3.2.0</A>
+For more information about ANAPHE see: http://cern.ch/anaphe
 
 
 3. The Standard Template Library
@@ -410,7 +409,7 @@ The following versions of STL have been tested:
    ObjectSpace STL on
           DEC, HP and SUN (CC 4.2).
 
-          See <A href="http://www.objectspace.com/">ObjectSpace</A>.
+          See ObjectSpace (http://www.objectspace.com).
 
    "Native" STL on: Windows/NT, Linux, HP, DEC and SUN (CC 5.1).
 
@@ -507,7 +506,7 @@ For a complete list of outstanding run-time problems and to submit any
 problem you may find running this version of Geant4, please refer to the
 Geant4 Problem Reporting System, available on the Web at this address:
 
-    http://wwwinfo.cern.ch/asd/cgi-bin/geant4/problemreport
+    http://cern.ch/geant4/problemreport
 
 
 7. Compilation Warnings

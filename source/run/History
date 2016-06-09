@@ -1,4 +1,4 @@
-$Id: History,v 1.90 2003/04/29 08:29:15 gcosmo Exp $
+$Id: History,v 1.92 2003/05/16 09:12:48 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,21 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+May 16, 2003, G.Cosmo (run-V05-01-01)
+- G4RunManager.cc: changed date for 5.1-patch01.
+
+May 06, 2003, G.Cosmo (run-V05-01-00)
+- G4RunManager[hh.cc]: changed behavior of function DefineWorldVolume()
+  to properly reset navigation history and optimisation in case the
+  topology of the geometry has changed between runs.
+  It requires simplification of all examples/tests where geometry setup
+  is changed between runs.
+  o Added new boolean argument (default set to TRUE) to specify if
+    topology has changed. Call to DefineWorldVolume() at initialisation
+    will use FALSE as value for this argument.
+  o Forced open/close geometry in method ResetNavigator() to properly
+    reset G4Navigator status and remove old optimisations.
 
 Apr 29, 2003, M.Asai (run-V05-00-17)
 - G4UserPhysicsListMessenger.cc: changed implementation in

@@ -21,13 +21,11 @@ Note that the next release, Geant4.1.0, will be offered only in the
 STL version.
 
 This code and some binary libraries are available through our "Source
-Code" Web page - see our <A
-Href="http://wwwinfo.cern.ch/asd/geant4/geant4.html">Geant4 Home
-Page</A>.
+Code" Web page - see our Geant4 Home Page (http://cern.ch/geant4).
 
-Please refer to <A
-Href="http://wwwinfo.cern.ch/asd/geant4/G4UsersDocuments/Overview/html/index.html">Geant4
-User Documentation</A> for further information about using Geant4.
+Please refer to the Geant4 User Documentation
+(http://cern.ch/geant4/G4UsersDocuments/Overview/html)
+for further information about using Geant4.
 Updates to the documentation for Geant4.0.1 are still in preparation
 and are expected to be published within three weeks.
 
@@ -68,9 +66,9 @@ Platforms also tested but giving rise to some problems - see below:
 2. CLHEP 1.4
 ------------
 
-Geant4.0.1 requires the installation of <A
-href="http://wwwinfo.cern.ch/asd/lhc++/INSTALLATION/clhep.html">CLHEP
-1.4</A>.  The following platform specific instructions apply:
+Geant4.0.1 requires the installation of CLHEP 1.4
+(http://cern.ch/clhep/INSTALLATION/clhep.html).
+The following platform specific instructions apply:
 
   DEC: Do *not* use the compiler option "-std strict_ansi".
 
@@ -84,10 +82,10 @@ href="http://wwwinfo.cern.ch/asd/lhc++/INSTALLATION/clhep.html">CLHEP
 
 The following versions of STL have been tested:
 
-   <A href="http://www.objectspace.com/">ObjectSpace</A> STL on: AIX,
+   ObjectSpace STL (http://www.objectspace.com) on: AIX,
           DEC, HP, NT and SUN.
 
-   <A href="http://www.stlport.org/">STLPORT</A> STL on: NT
+   STLPORT STL (http://www.stlport.org) on: NT
 
    "Native" STL on: Linux.
 

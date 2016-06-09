@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PropagatorInField.cc,v 1.39.4.1 2003/03/31 14:34:27 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4PropagatorInField.cc,v 1.39.4.2 2003/05/08 17:15:56 gcosmo Exp $
+// GEANT4 tag $Name: geant4-05-01-patch-01 $
 // 
 // 
 //  This class implements an algorithm to track a particle in a
@@ -88,8 +88,18 @@ G4PropagatorInField::ComputeStep(
                 G4double&          currentSafety,                // IN/OUT
                 G4VPhysicalVolume* pPhysVol)
 {
-  // Introducing smooth trajectory display (jacek 01/11/2002)
-  if (fpTrajectoryFilter) {
+
+  // If step length is too small for finding Chords, just forget
+  //
+  if ( CurrentProposedStepLength<kCarTolerance )
+  {
+    return DBL_MAX;
+  }
+
+  // Introducing smooth trajectory display
+  //
+  if ( fpTrajectoryFilter )
+  {
     fpTrajectoryFilter->CreateNewTrajectorySegment();
   }
 
@@ -108,7 +118,7 @@ G4PropagatorInField::ComputeStep(
   // Set the field manager if the volume has one, else use the global one
   //
   fCurrentFieldMgr = fDetectorFieldMgr;
-  if( pPhysVol)
+  if( pPhysVol )
   {
     G4FieldManager *newFieldMgr = 0;
     newFieldMgr= pPhysVol->GetLogicalVolume()->GetFieldManager(); 

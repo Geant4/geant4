@@ -240,6 +240,7 @@ G4ReactionProductVector * G4BinaryCascade::Propagate(
   ClearAndDestroy(&theProjectileList);
   ClearAndDestroy(&theFinalState);
   G4std::vector<G4KineticTrack *>::iterator iter, jter;
+  G4int trialcount(0);
   if(nucleus->GetMassNumber() == 1) // 1H1 is special case
   {
     G4ParticleDefinition * aHTarg = G4Proton::ProtonDefinition();
@@ -252,7 +253,7 @@ G4ReactionProductVector * G4BinaryCascade::Propagate(
     // G4cout << "the lovely "<< mom << " "<<aHTarg->GetPDGMass()<<G4endl;
     G4KineticTrack aTarget(aHTarg, 0., pos, mom);
     G4bool done(false);
-    while(!done)
+    while(!done && trialcount<1000)
     {
       if(secs)
       {
@@ -260,6 +261,7 @@ G4ReactionProductVector * G4BinaryCascade::Propagate(
        delete secs;
       }
       secs = theScatterer->Scatter(*(*secondaries).front(), aTarget);
+      trialcount++;
       for(size_t ss=0; secs && ss<secs->size(); ss++)
       {
         if((*secs)[ss]->GetDefinition()->IsShortLived()) done = true;

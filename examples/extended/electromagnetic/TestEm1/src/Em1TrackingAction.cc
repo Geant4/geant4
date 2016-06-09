@@ -22,8 +22,8 @@
 //
 
 //
-// $Id: Em1TrackingAction.cc,v 1.8 2002/05/31 17:10:35 maire Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: Em1TrackingAction.cc,v 1.9 2003/05/09 09:15:57 vnivanch Exp $
+// GEANT4 tag $Name: geant4-05-01-patch-01 $
 //
 // 
 
@@ -53,14 +53,19 @@ void Em1TrackingAction::PostUserTrackingAction(const G4Track* aTrack)
   //count nb of steps of this track
   
   G4int   nbSteps = aTrack->GetCurrentStepNumber();
-  G4double Trleng = aTrack->GetTrackLength();
+
+  if (aTrack->GetDefinition()->GetPDGCharge() == 0.) {
+     runAction->CountTraks0(1); 
+     runAction->CountSteps0(nbSteps);
   
-  if (aTrack->GetDefinition()->GetPDGCharge() == 0.)
-       {runAction->CountTraks0(1); runAction->CountSteps0(nbSteps);}
-  else {runAction->CountTraks1(1); runAction->CountSteps1(nbSteps);
-#ifndef G4NOHIST  
-        runAction->GetHisto(0)->fill(Trleng);
-        runAction->GetHisto(1)->fill((float)nbSteps);
+  } else {
+     runAction->CountTraks1(1); 
+     runAction->CountSteps1(nbSteps);
+
+#ifndef G4NOHIST
+     G4double Trleng = aTrack->GetTrackLength();
+     runAction->GetHisto(0)->fill(Trleng);
+     runAction->GetHisto(1)->fill((float)nbSteps);
 #endif	
   }    
 }

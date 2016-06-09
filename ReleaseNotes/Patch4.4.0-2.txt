@@ -149,9 +149,8 @@ top of patch-01:
 
 The code and rebuilt binary libraries for release 4.0 are available through
 our "Source Code" Web page:
-- see our <A href="http://cern.ch/geant4">Geant4 Home Page</A>.
+- see our Geant4 Home Page (http://cern.ch/geant4).
 
-Please refer to <A
-href="http://cern.ch/geant4/G4UsersDocuments/Overview/html/index.html">Geant4
-User Documentation</A> for further information about using Geant4.
-
+Please refer to the Geant4 User Documentation
+(http://cern.ch/geant4/G4UsersDocuments/Overview/html)
+for further information about using Geant4.

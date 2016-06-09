@@ -22,8 +22,8 @@
 //
 
 //
-// $Id: Em1DetectorConstruction.cc,v 1.13 2003/03/27 11:16:20 maire Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: Em1DetectorConstruction.cc,v 1.14 2003/05/09 09:15:57 vnivanch Exp $
+// GEANT4 tag $Name: geant4-05-01-patch-01 $
 //
 // 
 
@@ -251,13 +251,7 @@ void Em1DetectorConstruction::SetMagField(G4double fieldValue)
 
 void Em1DetectorConstruction::UpdateGeometry()
 {
-  G4bool first = true;
-  if (pBox) first = false;
-  G4VPhysicalVolume* v = ConstructVolumes();
-  G4RunManager* rm = G4RunManager::GetRunManager();
-  rm->GeometryHasBeenModified();
-  rm->DefineWorldVolume(v);
-  if (!first) rm->ResetNavigator();
+  G4RunManager::GetRunManager()->DefineWorldVolume(ConstructVolumes());
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

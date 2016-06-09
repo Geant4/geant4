@@ -1,5 +1,5 @@
 
-$Id: History,v 1.36 2003/03/25 17:02:01 gcosmo Exp $
+$Id: History,v 1.37 2003/05/12 12:35:58 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+ May 12, 2003   G.Cosmo                   geom-bool-V05-01-00
+  - Added set/get methods for scale precision in G4ReflectionFactory.
 
  Mar 25, 2003   G.Cosmo                   geom-bool-V05-00-01
   - Fixed trivial strict pedantic warnings in G4ReflectedSolid.cc and

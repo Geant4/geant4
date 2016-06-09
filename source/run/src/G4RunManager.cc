@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunManager.cc,v 1.75 2003/04/24 17:42:06 asaim Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4RunManager.cc,v 1.77 2003/05/16 09:12:33 gcosmo Exp $
+// GEANT4 tag $Name: geant4-05-01-patch-01 $
 //
 // 
 
@@ -41,6 +41,7 @@
 #include "G4VUserPrimaryGeneratorAction.hh"
 #include "G4GeometryManager.hh"
 #include "G4SDManager.hh"
+#include "G4Navigator.hh"
 #include "G4TransportationManager.hh"
 #include "G4VPhysicalVolume.hh"
 #include "G4LogicalVolume.hh"
@@ -105,7 +106,7 @@ G4RunManager::G4RunManager()
   G4ParticleTable::GetParticleTable()->CreateMessenger();
   G4ProcessTable::GetProcessTable()->CreateMessenger();
   randomNumberStatusDir = "./";
-  versionString = " Geant4 version $Name: geant4-05-01 $\n                                (30-Apr-2003)";
+  versionString = " Geant4 version $Name: geant4-05-01-patch-01 $\n                                (19-May-2003)";
   G4cout 
   << "**********************************************" << G4endl
   << versionString << G4endl
@@ -395,7 +396,7 @@ void G4RunManager::InitializeGeometry()
   }
 
   if(verboseLevel>1) G4cout << "userDetector->Construct() start." << G4endl;
-  DefineWorldVolume(userDetector->Construct());
+  DefineWorldVolume(userDetector->Construct(),false);
   geometryInitialized = true;
 }
 
@@ -485,11 +486,10 @@ void G4RunManager::AbortEvent()
   }
 }
 
-void G4RunManager::DefineWorldVolume(G4VPhysicalVolume* worldVol)
+void G4RunManager::DefineWorldVolume(G4VPhysicalVolume* worldVol,
+                                     G4bool topologyIsChanged)
 {
-  // check if this is different from previous
-  //////if(currentWorld==worldVol) return;
-  // The world volume MUST NOT have a region defined by the user.
+  // The world volume MUST NOT have a region defined by the user
   if(worldVol->GetLogicalVolume()->GetRegion())
   {
     if(worldVol->GetLogicalVolume()->GetRegion()!=defaultRegion)
@@ -505,27 +505,22 @@ void G4RunManager::DefineWorldVolume(G4VPhysicalVolume* worldVol)
   }
   else
   {
-  // set the default region to the world
+    // Set the default region to the world
     G4LogicalVolume* worldLog = worldVol->GetLogicalVolume();
     worldLog->SetRegion(defaultRegion);
     defaultRegion->AddRootLogicalVolume(worldLog);
   }
 
+  // Set the world volume, notify the Navigator and reset its state
   currentWorld = worldVol; 
-  //geometryNeedsToBeClosed = true;
-  GeometryHasBeenModified();
-
-  // set the world volume to the Navigator
-  //ResetNavigator();
   G4TransportationManager::GetTransportationManager()
-    ->GetNavigatorForTracking()
-    ->SetWorldVolume(worldVol);
-  //ResetNavigator();
+      ->GetNavigatorForTracking()
+      ->SetWorldVolume(worldVol);
+  if (topologyIsChanged) ResetNavigator();
 
-  // Let VisManager know it
+  // Notify the VisManager as well
   G4VVisManager* pVVisManager = G4VVisManager::GetConcreteInstance();
   if(pVVisManager) pVVisManager->GeometryHasChanged();
-
 }
 
 void G4RunManager::ResetNavigator() const
@@ -542,12 +537,20 @@ void G4RunManager::ResetNavigator() const
     return;
   }
   
-  // We have to tweak the navigator's state in case a geometry has been modified between runs
-  // By the following call we ensure that navigator's state is reset properly
+  // We have to tweak the navigator's state in case a geometry has been
+  // modified between runs. By the following calls we ensure that navigator's
+  // state is reset properly. It is required the geometry to be closed
+  // and previous optimisations to be cleared.
+
+  G4GeometryManager* geomManager = G4GeometryManager::GetInstance();
+  if(verboseLevel>1) G4cout << "Start closing geometry." << G4endl;
+  geomManager->OpenGeometry();
+  geomManager->CloseGeometry(geometryToBeOptimized, verboseLevel>1);
+
   G4ThreeVector center(0,0,0);
-  G4TransportationManager::GetTransportationManager()
-      ->GetNavigatorForTracking()
-      ->LocateGlobalPointAndSetup(center,0,false);  
+  G4Navigator* navigator =
+      G4TransportationManager::GetTransportationManager()->GetNavigatorForTracking();
+  navigator->LocateGlobalPointAndSetup(center,0,false);
 }
 
 void G4RunManager::rndmSaveThisRun()
@@ -640,6 +643,3 @@ void G4RunManager::DumpRegion(G4Region* region) const
            << G4endl;
   }
 }
-
-
-
