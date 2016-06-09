@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: RE01IonPhysics.cc,v 1.2 2006/06/29 17:44:02 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: RE01IonPhysics.cc,v 1.2.6.1 2010/09/10 14:40:50 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-03-patch-02 $
 //
 
 #include "RE01IonPhysics.hh"
@@ -35,7 +35,7 @@
 #include "G4IonConstructor.hh"
 
 // processes
-#include "G4MultipleScattering.hh"
+#include "G4hMultipleScattering.hh"
 #include "G4hIonisation.hh"
 #include "G4ionIonisation.hh"
 #include "G4HadronElasticProcess.hh"
@@ -87,7 +87,7 @@ void RE01IonPhysics::ConstructProcess()
   pManager = G4Deuteron::Deuteron()->GetProcessManager();
 
   // EM processes
-  pManager->AddProcess(new G4MultipleScattering(), -1, 1, 1);
+  pManager->AddProcess(new G4hMultipleScattering(), -1, 1, 1);
   pManager->AddProcess(new G4hIonisation(),        -1, 2, 2);
 
   // hadron elastic
@@ -108,7 +108,7 @@ void RE01IonPhysics::ConstructProcess()
   pManager = G4Triton::Triton()->GetProcessManager(); 
 
   // EM processes
-  pManager->AddProcess(new G4MultipleScattering(), -1, 1, 1);
+  pManager->AddProcess(new G4hMultipleScattering(), -1, 1, 1);
   pManager->AddProcess(new G4hIonisation(),        -1, 2, 2);
 
   // hadron elastic
@@ -129,7 +129,7 @@ void RE01IonPhysics::ConstructProcess()
   pManager = G4He3::He3()->GetProcessManager(); 
 
   // EM processes
-  pManager->AddProcess(new G4MultipleScattering(), -1, 1, 1);
+  pManager->AddProcess(new G4hMultipleScattering(), -1, 1, 1);
   pManager->AddProcess(new G4hIonisation(),        -1, 2, 2);
 
   // hadron elastic 
@@ -146,7 +146,7 @@ void RE01IonPhysics::ConstructProcess()
   pManager = G4Alpha::Alpha()->GetProcessManager(); 
 
   // EM processes
-  pManager->AddProcess(new G4MultipleScattering(), -1, 1, 1);
+  pManager->AddProcess(new G4hMultipleScattering(), -1, 1, 1);
   pManager->AddProcess(new G4hIonisation(),        -1, 2, 2);
   
   // hadron elastic
@@ -167,7 +167,7 @@ void RE01IonPhysics::ConstructProcess()
   pManager = G4GenericIon::GenericIon()->GetProcessManager();
 
   // Only EM processes for generic ion
-  pManager->AddProcess(new G4MultipleScattering(), -1, 1, 1);
+  pManager->AddProcess(new G4hMultipleScattering(), -1, 1, 1);
   pManager->AddProcess(new G4ionIonisation(),      -1, 2, 2);
  
 }

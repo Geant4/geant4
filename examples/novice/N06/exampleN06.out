@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-03-patch-01-ref    (9-April-2010)
+ Geant4 version Name: geant4-09-03-patch-02-ref    (17-September-2010)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -255,10 +255,10 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
  Photon at Boundary! 
  thePrePV:  Tank
  thePostPV: World
- Old Momentum Direction: (0.77870173,0.43030047,0.4565798)
- Old Polarization:       (0.6175874,-0.39755793,-0.67862618)
- New Momentum Direction: (0.52190121,0.58503696,0.62076637)
- New Polarization:       (0.84115356,-0.23208025,-0.48846643)
+ Old Momentum Direction: (0.778702,0.4303,0.45658)
+ Old Polarization:       (0.617587,-0.397558,-0.678626)
+ New Momentum Direction: (0.521901,0.585037,0.620766)
+ New Polarization:       (0.841154,-0.23208,-0.488466)
  *** FresnelRefraction *** 
     1      5 m    2.76 m    2.93 m     3.9 eV      0 eV   6.42 m    6.42 m          Tank  Transportation
     2     10 m    8.37 m    8.88 m     3.9 eV      0 eV   9.58 m      16 m    OutOfWorld  Transportation
@@ -272,10 +272,10 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
  Photon at Boundary! 
  thePrePV:  Tank
  thePostPV: World
- Old Momentum Direction: (0.93064566,0.28395086,-0.23080416)
- Old Polarization:       (-0.3616968,0.80940268,-0.46264752)
- New Momentum Direction: (-0.93064566,-0.28395086,0.23080416)
- New Polarization:       (0.3616968,-0.80940268,0.46264752)
+ Old Momentum Direction: (0.930646,0.283951,-0.230804)
+ Old Polarization:       (-0.361697,0.809403,-0.462648)
+ New Momentum Direction: (-0.930646,-0.283951,0.230804)
+ New Polarization:       (0.361697,-0.809403,0.462648)
  *** BackScattering *** 
     1      5 m    1.53 m   -1.24 m    3.12 eV      0 eV   5.37 m    5.37 m          Tank  Transportation
  Photon at Boundary! 
@@ -286,10 +286,10 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
  Photon at Boundary! 
  thePrePV:  Tank
  thePostPV: World
- Old Momentum Direction: (-0.93064566,-0.28395086,0.23080416)
- Old Polarization:       (0.3616968,-0.80940268,0.46264752)
- New Momentum Direction: (-0.86839976,-0.38478517,0.31276545)
- New Polarization:       (-0.49025585,0.57164448,-0.65792993)
+ Old Momentum Direction: (-0.930646,-0.283951,0.230804)
+ Old Polarization:       (0.361697,-0.809403,0.462648)
+ New Momentum Direction: (-0.8684,-0.384785,0.312765)
+ New Polarization:       (-0.490256,0.571644,-0.65793)
  *** FresnelRefraction *** 
     3     -5 m   -1.53 m    1.24 m    3.12 eV      0 eV   10.7 m    16.1 m          Tank  Transportation
     4    -10 m   -3.74 m    3.04 m    3.12 eV      0 eV   5.76 m    21.9 m    OutOfWorld  Transportation
@@ -311,12 +311,12 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
     0    106 um  -18.2 um   4.01 um   3.84 eV      0 eV      0 fm      0 fm         Tank    initStep
 Scattering Photon!
-Old Momentum Direction: (0.86822062,0.092816376,0.48741982)
-Old Polarization: (-0.4675504,0.48189267,0.74106416)
-New Polarization: (-0.07896599,0.66859502,0.73942212)
-Polarization Change: (-0.07896599,0.66859502,0.73942212)
-New Momentum Direction: (0.94048299,0.29590711,-0.1671249)
-Momentum Change: (0.94048299,0.29590711,-0.1671249)
+Old Momentum Direction: (0.868221,0.0928164,0.48742)
+Old Polarization: (-0.46755,0.481893,0.741064)
+New Polarization: (-0.078966,0.668595,0.739422)
+Polarization Change: (-0.078966,0.668595,0.739422)
+New Momentum Direction: (0.940483,0.295907,-0.167125)
+Momentum Change: (0.940483,0.295907,-0.167125)
  Photon at Boundary! 
  thePrePV:  Tank
  thePostPV: Tank
@@ -325,10 +325,10 @@ Momentum Change: (0.94048299,0.29590711,-0.1671249)
  Photon at Boundary! 
  thePrePV:  Tank
  thePostPV: World
- Old Momentum Direction: (0.94048299,0.29590711,-0.1671249)
- Old Polarization:       (-0.07896599,0.66859502,0.73942212)
- New Momentum Direction: (0.88689903,0.402242,-0.22718161)
- New Polarization:       (0.10825305,0.29711968,0.94868392)
+ Old Momentum Direction: (0.940483,0.295907,-0.167125)
+ Old Polarization:       (-0.078966,0.668595,0.739422)
+ New Momentum Direction: (0.886899,0.402242,-0.227182)
+ New Polarization:       (0.108253,0.29712,0.948684)
  *** FresnelRefraction *** 
     2      5 m    58.1 cm   2.64 m    3.84 eV      0 eV   23.6 cm   5.74 m          Tank  Transportation
     3     10 m    2.85 m    1.36 m    3.84 eV      0 eV   5.64 m    11.4 m    OutOfWorld  Transportation
@@ -342,10 +342,10 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
  Photon at Boundary! 
  thePrePV:  Tank
  thePostPV: World
- Old Momentum Direction: (0.76095479,-0.64862538,0.015261908)
- Old Polarization:       (-0.64743915,-0.76066833,-0.046970618)
- New Momentum Direction: (0.47408186,-0.88023714,0.020711644)
- New Polarization:       (0.87887011,0.4716615,-0.071573473)
+ Old Momentum Direction: (0.760955,-0.648625,0.0152619)
+ Old Polarization:       (-0.647439,-0.760668,-0.0469706)
+ New Momentum Direction: (0.474082,-0.880237,0.0207116)
+ New Polarization:       (0.87887,0.471662,-0.0715735)
  *** FresnelRefraction *** 
     1      5 m   -4.26 m      10 cm   3.42 eV      0 eV   6.57 m    6.57 m          Tank  Transportation
     2   8.09 m     -10 m    23.5 cm   3.42 eV      0 eV   6.52 m    13.1 m    OutOfWorld  Transportation
@@ -371,10 +371,10 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
  Photon at Boundary! 
  thePrePV:  Tank
  thePostPV: World
- Old Momentum Direction: (0.13248482,-0.98911172,0.064076304)
- Old Polarization:       (-0.808013,-0.070333748,0.58495141)
- New Momentum Direction: (0.17979651,-0.97985275,0.086958611)
- New Polarization:       (-0.80436842,-0.095555617,0.58639625)
+ Old Momentum Direction: (0.132485,-0.989112,0.0640763)
+ Old Polarization:       (-0.808013,-0.0703337,0.584951)
+ New Momentum Direction: (0.179797,-0.979853,0.0869586)
+ New Polarization:       (-0.804368,-0.0955556,0.586396)
  *** FresnelRefraction *** 
     1     67 cm     -5 m    32.4 cm   3.43 eV      0 eV   5.05 m    5.05 m          Tank  Transportation
     2   1.59 m     -10 m    76.8 cm   3.43 eV      0 eV    5.1 m    10.2 m    OutOfWorld  Transportation
@@ -388,10 +388,10 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
  Photon at Boundary! 
  thePrePV:  Tank
  thePostPV: World
- Old Momentum Direction: (-0.37126758,-0.76308165,-0.52902436)
- Old Polarization:       (-0.84149238,0.035680808,0.53908948)
- New Momentum Direction: (-0.50126615,-0.48842939,-0.71426114)
- New Polarization:       (-0.80058429,-0.051420195,0.59700985)
+ Old Momentum Direction: (-0.371268,-0.763082,-0.529024)
+ Old Polarization:       (-0.841492,0.0356808,0.539089)
+ New Momentum Direction: (-0.501266,-0.488429,-0.714261)
+ New Polarization:       (-0.800584,-0.0514202,0.59701)
  *** FresnelRefraction *** 
     1  -2.43 m      -5 m   -3.47 m    2.55 eV      0 eV   6.55 m    6.55 m          Tank  Transportation
     2  -7.02 m   -9.47 m     -10 m    2.55 eV      0 eV   9.15 m    15.7 m    OutOfWorld  Transportation
@@ -405,10 +405,10 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
  Photon at Boundary! 
  thePrePV:  Tank
  thePostPV: World
- Old Momentum Direction: (-0.48079937,0.0066647291,0.87680531)
- Old Polarization:       (0.67061277,0.647027,0.3628148)
- New Momentum Direction: (-0.65307073,0.0090527146,0.75724281)
- New Polarization:       (0.58571917,0.6398696,0.49749366)
+ Old Momentum Direction: (-0.480799,0.00666473,0.876805)
+ Old Polarization:       (0.670613,0.647027,0.362815)
+ New Momentum Direction: (-0.653071,0.00905271,0.757243)
+ New Polarization:       (0.585719,0.63987,0.497494)
  *** FresnelRefraction *** 
     1  -2.74 m    3.77 cm      5 m    3.61 eV      0 eV    5.7 m     5.7 m          Tank  Transportation
     2  -7.05 m    9.75 cm     10 m    3.61 eV      0 eV    6.6 m    12.3 m    OutOfWorld  Transportation
@@ -422,10 +422,10 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
  Photon at Boundary! 
  thePrePV:  Tank
  thePostPV: World
- Old Momentum Direction: (-0.95977485,-0.26442172,0.094410777)
- Old Polarization:       (-0.24664117,0.95469282,0.16652252)
- New Momentum Direction: (-0.92507194,-0.35767691,0.12770719)
- New Polarization:       (-0.33404458,0.92626067,0.17451475)
+ Old Momentum Direction: (-0.959775,-0.264422,0.0944108)
+ Old Polarization:       (-0.246641,0.954693,0.166523)
+ New Momentum Direction: (-0.925072,-0.357677,0.127707)
+ New Polarization:       (-0.334045,0.926261,0.174515)
  *** FresnelRefraction *** 
     1     -5 m   -1.38 m    49.2 cm   2.79 eV      0 eV   5.21 m    5.21 m          Tank  Transportation
     2    -10 m   -3.31 m    1.18 m    2.79 eV      0 eV    5.4 m    10.6 m    OutOfWorld  Transportation
@@ -459,10 +459,10 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
  Photon at Boundary! 
  thePrePV:  Tank
  thePostPV: World
- Old Momentum Direction: (0.71764567,-0.64175028,-0.27044642)
- Old Polarization:       (0.48099655,0.73759693,-0.47391253)
- New Momentum Direction: (0.3441446,-0.86522508,-0.36462318)
- New Polarization:       (0.68302797,0.4971647,-0.53507014)
+ Old Momentum Direction: (0.717646,-0.64175,-0.270446)
+ Old Polarization:       (0.480997,0.737597,-0.473913)
+ New Momentum Direction: (0.344145,-0.865225,-0.364623)
+ New Polarization:       (0.683028,0.497165,-0.53507)
  *** FresnelRefraction *** 
     1      5 m   -4.47 m   -1.88 m    2.41 eV      0 eV   6.97 m    6.97 m          Tank  Transportation
     2    7.2 m     -10 m   -4.21 m    2.41 eV      0 eV   6.39 m    13.4 m    OutOfWorld  Transportation
@@ -476,10 +476,10 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
  Photon at Boundary! 
  thePrePV:  Tank
  thePostPV: World
- Old Momentum Direction: (0.072659249,-0.55096156,0.83136153)
- Old Polarization:       (0.99289623,-0.038788921,-0.11248331)
- New Momentum Direction: (0.097863544,-0.74208104,0.66312779)
- New Polarization:       (0.95141251,0.26523699,0.15640838)
+ Old Momentum Direction: (0.0726592,-0.550962,0.831362)
+ Old Polarization:       (0.992896,-0.0387889,-0.112483)
+ New Momentum Direction: (0.0978635,-0.742081,0.663128)
+ New Polarization:       (0.951413,0.265237,0.156408)
  *** FresnelRefraction *** 
     1   43.8 cm  -3.31 m       5 m    2.29 eV      0 eV   6.01 m    6.01 m          Tank  Transportation
     2   1.18 m   -8.91 m      10 m    2.29 eV      0 eV   7.54 m    13.6 m    OutOfWorld  Transportation
@@ -493,10 +493,10 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
  Photon at Boundary! 
  thePrePV:  Tank
  thePostPV: World
- Old Momentum Direction: (0.51346212,0.8233083,-0.24190927)
- Old Polarization:       (0.81791899,-0.38429484,0.42816585)
- New Momentum Direction: (0.6921263,0.64391803,-0.32608397)
- New Polarization:       (-0.093692878,0.52810979,0.84399153)
+ Old Momentum Direction: (0.513462,0.823308,-0.241909)
+ Old Polarization:       (0.817919,-0.384295,0.428166)
+ New Momentum Direction: (0.692126,0.643918,-0.326084)
+ New Polarization:       (-0.0936929,0.52811,0.843992)
  *** FresnelRefraction *** 
     1   3.12 m       5 m   -1.47 m    2.38 eV      0 eV   6.07 m    6.07 m          Tank  Transportation
     2   8.49 m      10 m      -4 m    2.38 eV      0 eV   7.76 m    13.8 m    OutOfWorld  Transportation
@@ -510,10 +510,10 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
  Photon at Boundary! 
  thePrePV:  Tank
  thePostPV: World
- Old Momentum Direction: (-0.57999484,-0.50154938,0.64191449)
- Old Polarization:       (0.7894317,-0.54048864,0.29098046)
- New Momentum Direction: (-0.57999484,-0.50154938,-0.64191449)
- New Polarization:       (-0.7894317,0.54048864,0.29098046)
+ Old Momentum Direction: (-0.579995,-0.501549,0.641914)
+ Old Polarization:       (0.789432,-0.540489,0.29098)
+ New Momentum Direction: (-0.579995,-0.501549,-0.641914)
+ New Polarization:       (-0.789432,0.540489,0.29098)
  *** LobeReflection *** 
     1  -4.52 m   -3.91 m       5 m    2.18 eV      0 eV   7.79 m    7.79 m          Tank  Transportation
  Photon at Boundary! 
@@ -524,10 +524,10 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
  Photon at Boundary! 
  thePrePV:  Tank
  thePostPV: World
- Old Momentum Direction: (-0.57999484,-0.50154938,-0.64191449)
- Old Polarization:       (-0.7894317,0.54048864,0.29098046)
- New Momentum Direction: (0.99754506,-0.00048977343,0.070025802)
- New Polarization:       (0.043670529,-0.77735795,-0.62754084)
+ Old Momentum Direction: (-0.579995,-0.501549,-0.641914)
+ Old Polarization:       (-0.789432,0.540489,0.29098)
+ New Momentum Direction: (0.997545,-0.000489773,0.0700258)
+ New Polarization:       (0.0436705,-0.777358,-0.627541)
  *** LambertianReflection *** 
     3     -5 m   -4.32 m    4.47 m    2.18 eV      0 eV   83.3 cm   8.62 m          Tank  Transportation
  Photon at Boundary! 
@@ -538,10 +538,10 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
  Photon at Boundary! 
  thePrePV:  Tank
  thePostPV: World
- Old Momentum Direction: (0.99754506,-0.00048977343,0.070025802)
- Old Polarization:       (0.043670529,-0.77735795,-0.62754084)
- New Momentum Direction: (-0.99754506,0.00048977343,-0.070025802)
- New Polarization:       (-0.043670529,0.77735795,0.62754084)
+ Old Momentum Direction: (0.997545,-0.000489773,0.0700258)
+ Old Polarization:       (0.0436705,-0.777358,-0.627541)
+ New Momentum Direction: (-0.997545,0.000489773,-0.0700258)
+ New Polarization:       (-0.0436705,0.777358,0.627541)
  *** BackScattering *** 
     5   2.61 m   -4.33 m       5 m    2.18 eV      0 eV   7.63 m    16.3 m          Tank  Transportation
  Photon at Boundary! 
@@ -552,10 +552,10 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
  Photon at Boundary! 
  thePrePV:  Tank
  thePostPV: World
- Old Momentum Direction: (-0.99754506,0.00048977343,-0.070025802)
- Old Polarization:       (-0.043670529,0.77735795,0.62754084)
- New Momentum Direction: (-0.99555119,0.00065899186,-0.094219961)
- New Polarization:       (-0.058769433,0.77727625,0.62640863)
+ Old Momentum Direction: (-0.997545,0.000489773,-0.0700258)
+ Old Polarization:       (-0.0436705,0.777358,0.627541)
+ New Momentum Direction: (-0.995551,0.000658992,-0.09422)
+ New Polarization:       (-0.0587694,0.777276,0.626409)
  *** FresnelRefraction *** 
     7     -5 m   -4.32 m    4.47 m    2.18 eV      0 eV   7.63 m    23.9 m          Tank  Transportation
     8    -10 m   -4.32 m    3.99 m    2.18 eV      0 eV   5.02 m    28.9 m    OutOfWorld  Transportation
@@ -569,10 +569,10 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
  Photon at Boundary! 
  thePrePV:  Tank
  thePostPV: World
- Old Momentum Direction: (0.029297401,0.93290475,-0.35892951)
- Old Polarization:       (0.73380661,0.22375082,0.64145415)
- New Momentum Direction: (0.039802274,0.87214416,-0.48762725)
- New Polarization:       (0.73350221,0.30588746,0.6069657)
+ Old Momentum Direction: (0.0292974,0.932905,-0.35893)
+ Old Polarization:       (0.733807,0.223751,0.641454)
+ New Momentum Direction: (0.0398023,0.872144,-0.487627)
+ New Polarization:       (0.733502,0.305887,0.606966)
  *** FresnelRefraction *** 
     1   15.8 cm      5 m   -1.92 m    3.66 eV      0 eV   5.36 m    5.36 m          Tank  Transportation
     2   38.6 cm     10 m   -4.72 m    3.66 eV      0 eV   5.73 m    11.1 m    OutOfWorld  Transportation
@@ -586,10 +586,10 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
  Photon at Boundary! 
  thePrePV:  Tank
  thePostPV: World
- Old Momentum Direction: (-0.88777544,-0.2301595,-0.39859927)
- Old Polarization:       (-0.1177929,-0.72355097,0.68014618)
- New Momentum Direction: (-0.78092222,-0.31234274,-0.54092744)
- New Polarization:       (-0.16277422,-0.7343164,0.65900226)
+ Old Momentum Direction: (-0.887775,-0.230159,-0.398599)
+ Old Polarization:       (-0.117793,-0.723551,0.680146)
+ New Momentum Direction: (-0.780922,-0.312343,-0.540927)
+ New Polarization:       (-0.162774,-0.734316,0.659002)
  *** FresnelRefraction *** 
     1     -5 m    -1.3 m   -2.25 m    3.42 eV      0 eV   5.63 m    5.63 m          Tank  Transportation
     2    -10 m    -3.3 m   -5.71 m    3.42 eV      0 eV    6.4 m      12 m    OutOfWorld  Transportation
@@ -603,10 +603,10 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
  Photon at Boundary! 
  thePrePV:  Tank
  thePostPV: World
- Old Momentum Direction: (0.77612067,0.60272294,-0.18536925)
- Old Polarization:       (-0.24542223,0.017932025,-0.96925042)
- New Momentum Direction: (0.52533801,0.81329811,-0.25013228)
- New Polarization:       (0.34752243,-0.4734076,-0.80939076)
+ Old Momentum Direction: (0.776121,0.602723,-0.185369)
+ Old Polarization:       (-0.245422,0.017932,-0.96925)
+ New Momentum Direction: (0.525338,0.813298,-0.250132)
+ New Polarization:       (0.347522,-0.473408,-0.809391)
  *** FresnelRefraction *** 
     1      5 m    3.88 m   -1.19 m    2.49 eV      0 eV   6.44 m    6.44 m          Tank  Transportation
     2   8.95 m      10 m   -3.08 m    2.49 eV      0 eV   7.52 m      14 m    OutOfWorld  Transportation
@@ -620,10 +620,10 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
  Photon at Boundary! 
  thePrePV:  Tank
  thePostPV: World
- Old Momentum Direction: (-0.66517233,0.4721229,0.57848573)
- Old Polarization:       (-0.21399382,0.62170199,-0.75345423)
- New Momentum Direction: (0.66517233,-0.4721229,-0.57848573)
- New Polarization:       (0.21399382,-0.62170199,0.75345423)
+ Old Momentum Direction: (-0.665172,0.472123,0.578486)
+ Old Polarization:       (-0.213994,0.621702,-0.753454)
+ New Momentum Direction: (0.665172,-0.472123,-0.578486)
+ New Polarization:       (0.213994,-0.621702,0.753454)
  *** BackScattering *** 
     1     -5 m    3.55 m    4.35 m    2.62 eV      0 eV   7.52 m    7.52 m          Tank  Transportation
  Photon at Boundary! 
@@ -634,10 +634,10 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
  Photon at Boundary! 
  thePrePV:  Tank
  thePostPV: World
- Old Momentum Direction: (0.66517233,-0.4721229,-0.57848573)
- Old Polarization:       (0.21399382,-0.62170199,0.75345423)
- New Momentum Direction: (-0.63079823,0.57673951,-0.51910031)
- New Polarization:       (0.60988447,-0.045083961,-0.79120691)
+ Old Momentum Direction: (0.665172,-0.472123,-0.578486)
+ Old Polarization:       (0.213994,-0.621702,0.753454)
+ New Momentum Direction: (-0.630798,0.57674,-0.5191)
+ New Polarization:       (0.609884,-0.045084,-0.791207)
  *** LambertianReflection *** 
     3      5 m   -3.55 m   -4.35 m    2.62 eV      0 eV     15 m    22.6 m          Tank  Transportation
  Photon at Boundary! 
@@ -648,10 +648,10 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
  Photon at Boundary! 
  thePrePV:  Tank
  thePostPV: World
- Old Momentum Direction: (-0.63079823,0.57673951,-0.51910031)
- Old Polarization:       (0.60988447,-0.045083961,-0.79120691)
- New Momentum Direction: (-0.13451045,0.53300177,0.83535385)
- New Polarization:       (-0.9754132,0.077297933,-0.20638344)
+ Old Momentum Direction: (-0.630798,0.57674,-0.5191)
+ Old Polarization:       (0.609884,-0.045084,-0.791207)
+ New Momentum Direction: (-0.13451,0.533002,0.835354)
+ New Polarization:       (-0.975413,0.0772979,-0.206383)
  *** LambertianReflection *** 
     5   4.21 m   -2.82 m      -5 m    2.62 eV      0 eV   1.26 m    23.8 m          Tank  Transportation
  Photon at Boundary! 
@@ -662,10 +662,10 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
  Photon at Boundary! 
  thePrePV:  Tank
  thePostPV: World
- Old Momentum Direction: (-0.13451045,0.53300177,0.83535385)
- Old Polarization:       (-0.9754132,0.077297933,-0.20638344)
- New Momentum Direction: (-0.18169764,0.71998245,0.66978447)
- New Polarization:       (-0.83112067,-0.47647585,0.28672146)
+ Old Momentum Direction: (-0.13451,0.533002,0.835354)
+ Old Polarization:       (-0.975413,0.0772979,-0.206383)
+ New Momentum Direction: (-0.181698,0.719982,0.669784)
+ New Polarization:       (-0.831121,-0.476476,0.286721)
  *** FresnelRefraction *** 
     7    2.6 m    3.56 m       5 m    2.62 eV      0 eV     12 m    35.8 m          Tank  Transportation
     8   1.24 m    8.93 m      10 m    2.62 eV      0 eV   7.47 m    43.2 m    OutOfWorld  Transportation
@@ -679,10 +679,10 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
  Photon at Boundary! 
  thePrePV:  Tank
  thePostPV: World
- Old Momentum Direction: (0.61726307,-0.717544,0.32267153)
- Old Polarization:       (-0.27108641,0.19103897,0.94340674)
- New Momentum Direction: (0.61726307,0.717544,0.32267153)
- New Polarization:       (-0.37241544,-0.094790201,0.92321263)
+ Old Momentum Direction: (0.617263,-0.717544,0.322672)
+ Old Polarization:       (-0.271086,0.191039,0.943407)
+ New Momentum Direction: (0.617263,0.717544,0.322672)
+ New Polarization:       (-0.372415,-0.0947902,0.923213)
  *** LobeReflection *** 
     1    4.3 m      -5 m    2.25 m    3.87 eV      0 eV   6.97 m    6.97 m          Tank  Transportation
  Photon at Boundary! 
@@ -693,10 +693,10 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
  Photon at Boundary! 
  thePrePV:  Tank
  thePostPV: World
- Old Momentum Direction: (0.61726307,0.717544,0.32267153)
- Old Polarization:       (-0.37241544,-0.094790201,0.92321263)
- New Momentum Direction: (-0.29001059,0.25142022,0.92340767)
- New Polarization:       (-0.84048553,-0.52835363,-0.12011045)
+ Old Momentum Direction: (0.617263,0.717544,0.322672)
+ Old Polarization:       (-0.372415,-0.0947902,0.923213)
+ New Momentum Direction: (-0.290011,0.25142,0.923408)
+ New Polarization:       (-0.840486,-0.528354,-0.12011)
  *** LambertianReflection *** 
     3      5 m   -4.19 m    2.61 m    3.87 eV      0 eV   1.13 m     8.1 m          Tank  Transportation
  Photon at Boundary! 
@@ -717,10 +717,10 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
  Photon at Boundary! 
  thePrePV:  Tank
  thePostPV: World
- Old Momentum Direction: (0.912663,-0.30459151,0.27252569)
- Old Polarization:       (-0.16892003,0.32606871,0.93013183)
- New Momentum Direction: (0.83142003,-0.41409159,0.37049817)
- New Polarization:       (0.23235874,0.86479723,0.44512377)
+ Old Momentum Direction: (0.912663,-0.304592,0.272526)
+ Old Polarization:       (-0.16892,0.326069,0.930132)
+ New Momentum Direction: (0.83142,-0.414092,0.370498)
+ New Polarization:       (0.232359,0.864797,0.445124)
  *** FresnelRefraction *** 
     1      5 m   -1.67 m    1.49 m    3.88 eV      0 eV   5.48 m    5.48 m          Tank  Transportation
     2     10 m   -4.16 m    3.72 m    3.88 eV      0 eV   6.01 m    11.5 m    OutOfWorld  Transportation
@@ -773,10 +773,10 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
  Photon at Boundary! 
  thePrePV:  Tank
  thePostPV: World
- Old Momentum Direction: (0.055497412,0.35714901,-0.93239725)
- Old Polarization:       (-0.61907957,-0.72035524,-0.31277599)
- New Momentum Direction: (0.075335816,0.48481741,-0.87136479)
- New Polarization:       (-0.60746597,-0.67066414,-0.42566971)
+ Old Momentum Direction: (0.0554974,0.357149,-0.932397)
+ Old Polarization:       (-0.61908,-0.720355,-0.312776)
+ New Momentum Direction: (0.0753358,0.484817,-0.871365)
+ New Polarization:       (-0.607466,-0.670664,-0.42567)
  *** FresnelRefraction *** 
     1   29.9 cm   1.91 m      -5 m    3.48 eV      0 eV   5.36 m    5.36 m          Tank  Transportation
     2   73.1 cm    4.7 m     -10 m    3.48 eV      0 eV   5.74 m    11.1 m    OutOfWorld  Transportation
@@ -790,10 +790,10 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
  Photon at Boundary! 
  thePrePV:  Tank
  thePostPV: World
- Old Momentum Direction: (-0.54006955,-0.28010649,-0.79364049)
- Old Polarization:       (0.51016878,-0.85894746,-0.044012203)
- New Momentum Direction: (-0.035614705,0.40992256,0.91142476)
- New Polarization:       (-0.62398334,0.70326386,-0.34068276)
+ Old Momentum Direction: (-0.54007,-0.280106,-0.79364)
+ Old Polarization:       (0.510169,-0.858947,-0.0440122)
+ New Momentum Direction: (-0.0356147,0.409923,0.911425)
+ New Polarization:       (-0.623983,0.703264,-0.340683)
  *** LambertianReflection *** 
     1   -3.4 m   -1.77 m      -5 m    2.53 eV      0 eV    6.3 m     6.3 m          Tank  Transportation
  Photon at Boundary! 
@@ -804,10 +804,10 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
  Photon at Boundary! 
  thePrePV:  Tank
  thePostPV: World
- Old Momentum Direction: (-0.035614705,0.40992256,0.91142476)
- Old Polarization:       (-0.62398334,0.70326386,-0.34068276)
- New Momentum Direction: (-0.035614705,0.40992256,-0.91142476)
- New Polarization:       (-0.73186992,-0.63172249,-0.25552518)
+ Old Momentum Direction: (-0.0356147,0.409923,0.911425)
+ Old Polarization:       (-0.623983,0.703264,-0.340683)
+ New Momentum Direction: (-0.0356147,0.409923,-0.911425)
+ New Polarization:       (-0.73187,-0.631722,-0.255525)
  *** LobeReflection *** 
     3  -3.79 m    2.73 m       5 m    2.53 eV      0 eV     11 m    17.3 m          Tank  Transportation
  Photon at Boundary! 
@@ -818,10 +818,10 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
  Photon at Boundary! 
  thePrePV:  Tank
  thePostPV: World
- Old Momentum Direction: (-0.035614705,0.40992256,-0.91142476)
- Old Polarization:       (-0.73186992,-0.63172249,-0.25552518)
- New Momentum Direction: (0.1210099,-0.92233318,0.3669579)
- New Polarization:       (0.76839102,0.32107239,0.55361336)
+ Old Momentum Direction: (-0.0356147,0.409923,-0.911425)
+ Old Polarization:       (-0.73187,-0.631722,-0.255525)
+ New Momentum Direction: (0.12101,-0.922333,0.366958)
+ New Polarization:       (0.768391,0.321072,0.553613)
  *** LambertianReflection *** 
     5  -3.99 m       5 m   -4.14 cm   2.53 eV      0 eV   5.53 m    22.8 m          Tank  Transportation
  Photon at Boundary! 
@@ -832,10 +832,10 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
  Photon at Boundary! 
  thePrePV:  Tank
  thePostPV: World
- Old Momentum Direction: (0.1210099,-0.92233318,0.3669579)
- Old Polarization:       (0.76839102,0.32107239,0.55361336)
- New Momentum Direction: (0.16335648,-0.85318285,0.49537227)
- New Polarization:       (0.30132384,-0.434976,-0.84852804)
+ Old Momentum Direction: (0.12101,-0.922333,0.366958)
+ Old Polarization:       (0.768391,0.321072,0.553613)
+ New Momentum Direction: (0.163356,-0.853183,0.495372)
+ New Polarization:       (0.301324,-0.434976,-0.848528)
  *** FresnelRefraction *** 
     7  -2.68 m      -5 m    3.94 m    2.53 eV      0 eV   10.8 m    33.6 m          Tank  Transportation
     8  -1.72 m     -10 m    6.84 m    2.53 eV      0 eV   5.86 m    39.5 m    OutOfWorld  Transportation
@@ -849,10 +849,10 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
  Photon at Boundary! 
  thePrePV:  Tank
  thePostPV: World
- Old Momentum Direction: (-0.88789879,0.26468034,-0.37627125)
- Old Polarization:       (-0.45945539,-0.46901879,0.75426926)
- New Momentum Direction: (-0.78197738,0.3586155,-0.50981006)
- New Polarization:       (-0.6225459,-0.40895419,0.6672279)
+ Old Momentum Direction: (-0.887899,0.26468,-0.376271)
+ Old Polarization:       (-0.459455,-0.469019,0.754269)
+ New Momentum Direction: (-0.781977,0.358615,-0.50981)
+ New Polarization:       (-0.622546,-0.408954,0.667228)
  *** FresnelRefraction *** 
     1     -5 m    1.49 m   -2.12 m    3.09 eV      0 eV   5.63 m    5.63 m          Tank  Transportation
     2    -10 m    3.78 m   -5.38 m    3.09 eV      0 eV   6.39 m      12 m    OutOfWorld  Transportation
@@ -866,10 +866,10 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
  Photon at Boundary! 
  thePrePV:  Tank
  thePostPV: World
- Old Momentum Direction: (0.66064161,-0.72698945,-0.18718708)
- Old Polarization:       (-0.41101259,-0.5589358,0.72018013)
- New Momentum Direction: (0.66064161,0.72698945,-0.18718708)
- New Polarization:       (0.58249301,-0.33912718,0.73871148)
+ Old Momentum Direction: (0.660642,-0.726989,-0.187187)
+ Old Polarization:       (-0.411013,-0.558936,0.72018)
+ New Momentum Direction: (0.660642,0.726989,-0.187187)
+ New Polarization:       (0.582493,-0.339127,0.738711)
  *** LobeReflection *** 
     1   4.54 m      -5 m   -1.29 m    2.77 eV      0 eV   6.88 m    6.88 m          Tank  Transportation
  Photon at Boundary! 
@@ -880,10 +880,10 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
  Photon at Boundary! 
  thePrePV:  Tank
  thePostPV: World
- Old Momentum Direction: (0.66064161,0.72698945,-0.18718708)
- Old Polarization:       (0.58249301,-0.33912718,0.73871148)
- New Momentum Direction: (-0.77416172,0.55007142,-0.31320131)
- New Polarization:       (0.60148449,0.4851172,-0.63472649)
+ Old Momentum Direction: (0.660642,0.726989,-0.187187)
+ Old Polarization:       (0.582493,-0.339127,0.738711)
+ New Momentum Direction: (-0.774162,0.550071,-0.313201)
+ New Polarization:       (0.601484,0.485117,-0.634726)
  *** LambertianReflection *** 
     3      5 m    -4.5 m   -1.42 m    2.77 eV      0 eV     69 cm   7.57 m          Tank  Transportation
  Photon at Boundary! 
@@ -894,10 +894,10 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
  Photon at Boundary! 
  thePrePV:  Tank
  thePostPV: World
- Old Momentum Direction: (-0.77416172,0.55007142,-0.31320131)
- Old Polarization:       (0.60148449,0.4851172,-0.63472649)
- New Momentum Direction: (0.037948842,-0.80416639,0.59319162)
- New Polarization:       (-0.96591592,0.1225917,0.22798622)
+ Old Momentum Direction: (-0.774162,0.550071,-0.313201)
+ Old Polarization:       (0.601484,0.485117,-0.634726)
+ New Momentum Direction: (0.0379488,-0.804166,0.593192)
+ New Polarization:       (-0.965916,0.122592,0.227986)
  *** LambertianReflection *** 
     5  -3.86 m     1.8 m      -5 m    2.77 eV      0 eV   11.4 m      19 m          Tank  Transportation
  Photon at Boundary! 
@@ -908,10 +908,10 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
  Photon at Boundary! 
  thePrePV:  Tank
  thePostPV: World
- Old Momentum Direction: (0.037948842,-0.80416639,0.59319162)
- Old Polarization:       (-0.96591592,0.1225917,0.22798622)
- New Momentum Direction: (0.051319354,-0.59485821,0.80219077)
- New Polarization:       (-0.98273798,-0.17303986,-0.065446652)
+ Old Momentum Direction: (0.0379488,-0.804166,0.593192)
+ Old Polarization:       (-0.965916,0.122592,0.227986)
+ New Momentum Direction: (0.0513194,-0.594858,0.802191)
+ New Polarization:       (-0.982738,-0.17304,-0.0654467)
  *** FresnelRefraction *** 
     7  -3.54 m      -5 m    1.26 cm   2.77 eV      0 eV   8.45 m    27.5 m          Tank  Transportation
     8  -3.11 m     -10 m    6.76 m    2.77 eV      0 eV   8.41 m    35.9 m    OutOfWorld  Transportation
@@ -925,10 +925,10 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
  Photon at Boundary! 
  thePrePV:  Tank
  thePostPV: World
- Old Momentum Direction: (0.87594245,-0.08844321,0.47423899)
- Old Polarization:       (-0.071799625,-0.9960029,-0.053132187)
- New Momentum Direction: (0.75847793,-0.11947857,0.64065287)
- New Polarization:       (0.099050133,-0.95049537,-0.2945295)
+ Old Momentum Direction: (0.875942,-0.0884432,0.474239)
+ Old Polarization:       (-0.0717996,-0.996003,-0.0531322)
+ New Momentum Direction: (0.758478,-0.119479,0.640653)
+ New Polarization:       (0.0990501,-0.950495,-0.294529)
  *** FresnelRefraction *** 
     1      5 m   -50.5 cm   2.71 m    2.63 eV      0 eV   5.71 m    5.71 m          Tank  Transportation
     2     10 m   -1.29 m    6.93 m    2.63 eV      0 eV   6.59 m    12.3 m    OutOfWorld  Transportation
@@ -942,10 +942,10 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
  Photon at Boundary! 
  thePrePV:  Tank
  thePostPV: World
- Old Momentum Direction: (-0.92642328,-0.051412685,0.37295663)
- Old Polarization:       (0.20640029,0.75913333,0.61734554)
- New Momentum Direction: (-0.86242589,-0.06912451,0.50144131)
- New Polarization:       (-0.27954756,0.89090034,-0.35798008)
+ Old Momentum Direction: (-0.926423,-0.0514127,0.372957)
+ Old Polarization:       (0.2064,0.759133,0.617346)
+ New Momentum Direction: (-0.862426,-0.0691245,0.501441)
+ New Polarization:       (-0.279548,0.8909,-0.35798)
  *** FresnelRefraction *** 
     1     -5 m   -27.8 cm   2.01 m     2.1 eV      0 eV    5.4 m     5.4 m          Tank  Transportation
     2    -10 m   -67.9 cm   4.92 m     2.1 eV      0 eV    5.8 m    11.2 m    OutOfWorld  Transportation
@@ -959,10 +959,10 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
  Photon at Boundary! 
  thePrePV:  Tank
  thePostPV: World
- Old Momentum Direction: (-0.92716917,-0.053231997,0.37084186)
- Old Polarization:       (0.34667989,0.25333534,0.90312472)
- New Momentum Direction: (-0.86360283,-0.071636536,0.49905748)
- New Polarization:       (-0.46723752,0.48560679,-0.73883364)
+ Old Momentum Direction: (-0.927169,-0.053232,0.370842)
+ Old Polarization:       (0.34668,0.253335,0.903125)
+ New Momentum Direction: (-0.863603,-0.0716365,0.499057)
+ New Polarization:       (-0.467238,0.485607,-0.738834)
  *** FresnelRefraction *** 
     1     -5 m   -28.7 cm      2 m     2.2 eV      0 eV   5.39 m    5.39 m          Tank  Transportation
     2    -10 m   -70.2 cm   4.89 m     2.2 eV      0 eV   5.79 m    11.2 m    OutOfWorld  Transportation
@@ -976,10 +976,10 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
  Photon at Boundary! 
  thePrePV:  Tank
  thePostPV: World
- Old Momentum Direction: (0.23962668,-0.51003615,-0.82610059)
- Old Polarization:       (0.80954836,0.57466334,-0.1199729)
- New Momentum Direction: (0.23962668,-0.51003615,0.82610059)
- New Polarization:       (0.89651449,0.44281345,0.013342294)
+ Old Momentum Direction: (0.239627,-0.510036,-0.826101)
+ Old Polarization:       (0.809548,0.574663,-0.119973)
+ New Momentum Direction: (0.239627,-0.510036,0.826101)
+ New Polarization:       (0.896514,0.442813,0.0133423)
  *** SpikeReflection *** 
     1   1.45 m   -3.09 m      -5 m    2.83 eV      0 eV   6.05 m    6.05 m          Tank  Transportation
  Photon at Boundary! 
@@ -990,10 +990,10 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
  Photon at Boundary! 
  thePrePV:  Tank
  thePostPV: World
- Old Momentum Direction: (0.23962668,-0.51003615,0.82610059)
- Old Polarization:       (0.89651449,0.44281345,0.013342294)
- New Momentum Direction: (0.23962668,0.51003615,0.82610059)
- New Polarization:       (-0.89651449,0.44281345,-0.013342294)
+ Old Momentum Direction: (0.239627,-0.510036,0.826101)
+ Old Polarization:       (0.896514,0.442813,0.0133423)
+ New Momentum Direction: (0.239627,0.510036,0.826101)
+ New Polarization:       (-0.896514,0.442813,-0.0133423)
  *** LobeReflection *** 
     3   2.35 m      -5 m    -1.9 m    2.83 eV      0 eV   3.75 m     9.8 m          Tank  Transportation
  Photon at Boundary! 
@@ -1004,10 +1004,10 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
  Photon at Boundary! 
  thePrePV:  Tank
  thePostPV: World
- Old Momentum Direction: (0.23962668,0.51003615,0.82610059)
- Old Polarization:       (-0.89651449,0.44281345,-0.013342294)
- New Momentum Direction: (0.32423625,0.69012436,0.64699244)
- New Polarization:       (-0.91156834,0.41072203,0.018723904)
+ Old Momentum Direction: (0.239627,0.510036,0.826101)
+ Old Polarization:       (-0.896514,0.442813,-0.0133423)
+ New Momentum Direction: (0.324236,0.690124,0.646992)
+ New Polarization:       (-0.911568,0.410722,0.0187239)
  *** FresnelRefraction *** 
     5   4.35 m   -73.9 cm      5 m    2.83 eV      0 eV   8.36 m    18.2 m          Tank  Transportation
     6   6.86 m    4.59 m      10 m    2.83 eV      0 eV   7.73 m    25.9 m    OutOfWorld  Transportation
@@ -1021,10 +1021,10 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
  Photon at Boundary! 
  thePrePV:  Tank
  thePostPV: World
- Old Momentum Direction: (-0.95933524,-0.12699365,-0.25208831)
- Old Polarization:       (0.25104586,-0.79214425,-0.55631239)
- New Momentum Direction: (-0.92350981,-0.1725713,-0.34256208)
- New Polarization:       (-0.34155666,-0.036436199,0.93915465)
+ Old Momentum Direction: (-0.959335,-0.126994,-0.252088)
+ Old Polarization:       (0.251046,-0.792144,-0.556312)
+ New Momentum Direction: (-0.92351,-0.172571,-0.342562)
+ New Polarization:       (-0.341557,-0.0364362,0.939155)
  *** FresnelRefraction *** 
     1     -5 m   -66.2 cm  -1.31 m    3.74 eV      0 eV   5.21 m    5.21 m          Tank  Transportation
     2    -10 m    -1.6 m   -3.17 m    3.74 eV      0 eV   5.41 m    10.6 m    OutOfWorld  Transportation
@@ -1048,15 +1048,15 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
  Photon at Boundary! 
  thePrePV:  Tank
  thePostPV: World
- Old Momentum Direction: (-0.98119001,-0.13629756,-0.13670826)
- Old Polarization:       (-0.14100443,0.022334848,0.98975699)
- New Momentum Direction: (-0.96517489,-0.18470452,-0.18526109)
- New Polarization:       (-0.19130411,0.015292165,0.98141168)
+ Old Momentum Direction: (-0.98119,-0.136298,-0.136708)
+ Old Polarization:       (-0.141004,0.0223348,0.989757)
+ New Momentum Direction: (-0.965175,-0.184705,-0.185261)
+ New Polarization:       (-0.191304,0.0152922,0.981412)
  *** FresnelRefraction *** 
     1     -5 m   -69.5 cm  -69.7 cm   3.13 eV      0 eV    5.1 m     5.1 m          Tank  Transportation
     2    -10 m   -1.65 m   -1.66 m    3.13 eV      0 eV   5.18 m    10.3 m    OutOfWorld  Transportation
 Number of optical photons produces in this event : 35
-number of event = 1 User=0.01s Real=0.03s Sys=0s
+number of event = 1 User=0s Real=0s Sys=0s
 #
 /process/inactivate Scintillation
 /run/physicsModified
@@ -1183,8 +1183,8 @@ hIoni:   for  pi+    SubType= 2
       finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       NuclearStopping= 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               Bragg :     Emin=          0 eV         Emax=   297.50434 keV
-          BetheBloch :     Emin=  297.50434 keV        Emax=   10 TeV
+               Bragg :     Emin=          0 eV         Emax=   297.504 keV
+          BetheBloch :     Emin=    297.504 keV        Emax=   10 TeV
 
 msc:   for pi-    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
@@ -1198,8 +1198,8 @@ hIoni:   for  pi-    SubType= 2
       finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       NuclearStopping= 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               Bragg :     Emin=          0 eV         Emax=   297.50434 keV
-          BetheBloch :     Emin=  297.50434 keV        Emax=   10 TeV
+               Bragg :     Emin=          0 eV         Emax=   297.504 keV
+          BetheBloch :     Emin=    297.504 keV        Emax=   10 TeV
 ### Run 1 start.
 
 *********************************************************************************************************

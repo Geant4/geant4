@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4TwistBoxSide.cc,v 1.6 2007/05/23 09:31:02 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4TwistBoxSide.cc,v 1.6.10.1 2010/09/08 15:54:59 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-03-patch-02 $
 //
 // 
 // --------------------------------------------------------------------
@@ -131,7 +131,11 @@ G4TwistBoxSide::G4TwistBoxSide(const G4String     &name,
 //* Fake default constructor ------------------------------------------
 
 G4TwistBoxSide::G4TwistBoxSide( __void__& a )
-  : G4VTwistSurface(a)
+  : G4VTwistSurface(a), fTheta(0.), fPhi(0.), fDy1(0.), fDx1(0.), fDx2(0.), 
+    fDy2(0.), fDx3(0.), fDx4(0.), fDz(0.), fAlph(0.), fTAlph(0.), fPhiTwist(0.), 
+    fAngleSide(0.), fdeltaX(0.), fdeltaY(0.), fDx4plus2(0.), fDx4minus2(0.), 
+    fDx3plus1(0.), fDx3minus1(0.), fDy2plus1(0.), fDy2minus1(0.), fa1md1(0.), 
+    fa2md2(0.)
 {
 }
 
@@ -240,7 +244,7 @@ G4int G4TwistBoxSide::DistanceToSurface(const G4ThreeVector &gp,
   G4cout << "Local direction v = " << v << G4endl ; 
 #endif
 
-  G4double phi,u ;  // parameters
+  G4double phi=0.,u=0.,q=0.;  // parameters
 
   // temporary variables
 
@@ -263,11 +267,19 @@ G4int G4TwistBoxSide::DistanceToSurface(const G4ThreeVector &gp,
 
   if ( v.z() == 0. ) {         
 
-    if ( std::fabs(p.z()) <= L ) {     // intersection possible in z
+    if ( (std::fabs(p.z()) <= L) && fPhiTwist ) {  // intersection possible in z
       
       phi = p.z() * fPhiTwist / L ;  // phi is determined by the z-position 
 
-      u = (2*(-(fdeltaY*phi*v.x()) + fPhiTwist*p.y()*v.x() + fdeltaX*phi*v.y() - fPhiTwist*p.x()*v.y()) + (fDx4plus2*fPhiTwist + 2*fDx4minus2*phi)*(v.y()*std::cos(phi) - v.x()*std::sin(phi)))/(2.* fPhiTwist*((v.x() - fTAlph*v.y())*std::cos(phi) + (fTAlph*v.x() + v.y())*std::sin(phi)))  ;
+      q = (2.* fPhiTwist*((v.x() - fTAlph*v.y())*std::cos(phi)
+                             + (fTAlph*v.x() + v.y())*std::sin(phi)));
+      
+      if (q) {
+        u = (2*(-(fdeltaY*phi*v.x()) + fPhiTwist*p.y()*v.x()
+                + fdeltaX*phi*v.y() - fPhiTwist*p.x()*v.y())
+             + (fDx4plus2*fPhiTwist + 2*fDx4minus2*phi)
+             * (v.y()*std::cos(phi) - v.x()*std::sin(phi))) / q;
+      }
 
       xbuftmp.phi = phi ;
       xbuftmp.u = u ;
@@ -329,13 +341,17 @@ G4int G4TwistBoxSide::DistanceToSurface(const G4ThreeVector &gp,
   
 
     for (G4int i = 0 ; i<num ; i++ ) {  // loop over all mathematical solutions
-      if ( si[i]==0.0 ) {  // only real solutions
+      if ( (si[i]==0.0) && fPhiTwist ) {  // only real solutions
 #ifdef G4TWISTDEBUG
         G4cout << "Solution " << i << " : " << sr[i] << G4endl ;
 #endif
         phi = std::fmod(sr[i] , pihalf)  ;
 
-        u   = (2*phiyz + 4*fDz*phi*v.y() - 2*fdeltaY*phi*v.z() - fDx4plus2*fPhiTwist*v.z()*std::sin(phi) - 2*fDx4minus2*phi*v.z()*std::sin(phi))/(2*fPhiTwist*v.z()*std::cos(phi) + 2*fPhiTwist*fTAlph*v.z()*std::sin(phi)) ;
+        u   = (2*phiyz + 4*fDz*phi*v.y() - 2*fdeltaY*phi*v.z()
+             - fDx4plus2*fPhiTwist*v.z()*std::sin(phi)
+             - 2*fDx4minus2*phi*v.z()*std::sin(phi))
+             /(2*fPhiTwist*v.z()*std::cos(phi)
+               + 2*fPhiTwist*fTAlph*v.z()*std::sin(phi)) ;
 
         xbuftmp.phi = phi ;
         xbuftmp.u = u ;

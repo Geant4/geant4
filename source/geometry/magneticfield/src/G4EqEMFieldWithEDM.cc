@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4EqEMFieldWithEDM.cc,v 1.2 2009/11/06 22:31:54 gum Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4EqEMFieldWithEDM.cc,v 1.2.2.1 2010/09/08 14:25:35 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-03-patch-02 $
 //
 //
 //  This is the standard right-hand side for equation of motion.
@@ -42,10 +42,10 @@
 #include "globals.hh"
 
 G4EqEMFieldWithEDM::G4EqEMFieldWithEDM(G4ElectroMagneticField *emField )
-      : G4EquationOfMotion( emField )
+      : G4EquationOfMotion( emField ), fElectroMagCof(0.), fMassCof(0.),
+        omegac(0.), anomaly(0.0011659208), eta(0.), pcharge(0.), E(0.),
+        gamma(0.), beta(0.)
 {
-  anomaly = 0.0011659208;
-  eta = 0.;
 }
 
 G4EqEMFieldWithEDM::~G4EqEMFieldWithEDM()
@@ -62,7 +62,7 @@ G4EqEMFieldWithEDM::SetChargeMomentumMass(G4double particleCharge, // e+ units
 
    omegac = 0.105658387*GeV/particleMass * 2.837374841e-3*(rad/cm/kilogauss);
 
-   ParticleCharge = particleCharge;
+   pcharge = particleCharge;
 
    E = std::sqrt(sqr(MomentumXc)+sqr(particleMass));
    beta  = MomentumXc/E;
@@ -144,17 +144,15 @@ G4EqEMFieldWithEDM::EvaluateRhsGivenB(const G4double y[],
    G4ThreeVector Spin(y[9],y[10],y[11]);
 
    G4ThreeVector dSpin
-     = ParticleCharge*omegac*( ucb*(Spin.cross(BField))-udb*(Spin.cross(u))
+     = pcharge*omegac*( ucb*(Spin.cross(BField))-udb*(Spin.cross(u))
                                // from Jackson
                                // -uce*Spin.cross(u.cross(EField)) )
                                // but this form has one less operation
-                               - uce*(u*(Spin*EField) - EField*(Spin*u))
-                               +eta/2.*(Spin.cross(EField) - ude*(Spin.cross(u))
-                                        // +Spin.cross(u.cross(Bfield))
-				        + (u*(Spin*BField) - BField*(Spin*u))
-                                       )
-                             );
-			      
+                       - uce*(u*(Spin*EField) - EField*(Spin*u))
+                       + eta/2.*(Spin.cross(EField) - ude*(Spin.cross(u))
+                               // +Spin.cross(u.cross(Bfield))
+                       + (u*(Spin*BField) - BField*(Spin*u)) ) );
+      
    dydx[ 9] = dSpin.x();
    dydx[10] = dSpin.y();
    dydx[11] = dSpin.z();

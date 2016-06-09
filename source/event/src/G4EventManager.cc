@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4EventManager.cc,v 1.30 2007/03/08 23:56:12 asaim Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4EventManager.cc,v 1.30.10.1 2010/09/08 14:14:08 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-03-patch-02 $
 //
 //
 //
@@ -334,31 +334,6 @@ void G4EventManager::ProcessOneEvent(G4Event* anEvent)
   trackIDCounter = 0;
   DoProcessing(anEvent);
 }
-
-#ifdef CLHEP_HepMC         // Temporarly disabled
-#include "G4HepMCInterface.hh"
-void G4EventManager::ProcessOneEvent(const HepMC::GenEvent* hepmcevt,G4Event* anEvent)
-{
-  static G4String randStat;
-  trackIDCounter = 0;
-  G4bool tempEvent = false;
-  if(!anEvent)
-  {
-    anEvent = new G4Event();
-    tempEvent = true;
-  }
-  if(storetRandomNumberStatusToG4Event==1 || storetRandomNumberStatusToG4Event==3)
-  {
-    std::ostringstream oss;
-    CLHEP::HepRandom::saveFullState(oss);
-    anEvent->SetRandomNumberStatus(randStat=oss.str());
-  }
-  G4HepMCInterface::HepMC2G4(hepmcevt,anEvent);
-  DoProcessing(anEvent);
-  if(tempEvent)
-  { delete anEvent; }
-}
-#endif
 
 void G4EventManager::ProcessOneEvent(G4TrackVector* trackVector,G4Event* anEvent)
 {

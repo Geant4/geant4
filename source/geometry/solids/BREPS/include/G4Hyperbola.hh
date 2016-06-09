@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Hyperbola.hh,v 1.10 2006/06/29 18:39:36 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4Hyperbola.hh,v 1.10.8.1 2010/09/08 16:31:32 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-03-patch-02 $
 //
 // ----------------------------------------------------------------------
 // Class G4Hyperbola
@@ -70,7 +70,7 @@ public:  // with description
 
   inline G4double GetSemiAxis() const;
   inline G4double GetSemiImagAxis() const;
-  inline void Init(G4Axis2Placement3D position0,
+  inline void Init(const G4Axis2Placement3D& position0,
 	           G4double semiAxis0, G4double semiImagAxis0);
     // Get/Set for the geometric data.
 

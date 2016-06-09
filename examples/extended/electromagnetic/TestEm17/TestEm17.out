@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-03-patch-01-ref    (9-April-2010)
+ Geant4 version Name: geant4-09-03-patch-02-ref    (17-September-2010)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -255,7 +255,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=4.67s Real=4.95s Sys=0.23s
+  User=4.8s Real=5.05s Sys=0.24s
 
  The run consists of 10000 mu+ of 10 TeV through 1 m   of Iron (density: 7.9 g/cm3 )
 
@@ -283,7 +283,7 @@ Region <DefaultRegionForTheWorld> -- appears in <Iron> world volume
 Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : Iron
  Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 0 fm 
- Energy thresholds :  gamma  20.643844 keV    e-  1.295918 MeV    e+  1.2116932 MeV proton 0 eV 
+ Energy thresholds :  gamma  20.6438 keV    e-  1.29592 MeV    e+  1.21169 MeV proton 0 eV 
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -319,7 +319,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=4.61s Real=4.87s Sys=0.24s
+  User=4.56s Real=4.79s Sys=0.23s
 
  The run consists of 10000 pi+ of 10 TeV through 1 m   of Iron (density: 7.9 g/cm3 )
 
@@ -346,7 +346,7 @@ Region <DefaultRegionForTheWorld> -- appears in <Iron> world volume
 Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : Iron
  Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 0 fm 
- Energy thresholds :  gamma  20.643844 keV    e-  1.295918 MeV    e+  1.2116932 MeV proton 0 eV 
+ Energy thresholds :  gamma  20.6438 keV    e-  1.29592 MeV    e+  1.21169 MeV proton 0 eV 
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -382,7 +382,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=4.22s Real=4.45s Sys=0.22s
+  User=4.18s Real=4.44s Sys=0.26s
 
  The run consists of 10000 proton of 10 TeV through 1 m   of Iron (density: 7.9 g/cm3 )
 

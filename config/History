@@ -1,4 +1,4 @@
-cvs log $Id: History,v 1.372.2.1 2010/03/18 10:02:13 gcosmo Exp $
+cvs log $Id: History,v 1.372.2.2 2010/09/08 13:52:41 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,6 +15,17 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+23rd August 2010  Gabriele Cosmo (config-V09-02-19)
+- Simplified QTLIBPATH setup in Linux-g++.gmk.
+
+11th June 2010  Gunter Folger
+- Increased stack size on Windows, in sys/WIN-VC added option /STACK:8368128 
+  (i.e. 8MB) option to LDFLAGS; needed by some CHIPS-based examples and tests.
+
+11th May 2010  Ben Morgan
+- Updated internal scripts for Configure: protected echos on LD_LIBRARY_PATH
+  so that output from use of Configure post-install is clean.
 
 15th March 2010  Ben Morgan (config-V09-02-18)
 - Configure script (Configure-V09-02-06):

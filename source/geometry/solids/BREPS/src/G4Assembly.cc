@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Assembly.cc,v 1.6 2006/06/29 18:41:07 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4Assembly.cc,v 1.6.8.1 2010/09/08 16:31:32 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-03-patch-02 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -37,6 +37,7 @@
 #include "G4Assembly.hh"
 
 G4Assembly::G4Assembly()
+  : numberOfSolids(0)
 {
   //  ReadSTEPFile();
   //  CopySTEPData();  
@@ -51,15 +52,18 @@ G4Assembly::~G4Assembly()
   {
     a = placedVec.back();
     placedVec.pop_back();
-    for (G4PlacedVector::iterator i=placedVec.begin(); i!=placedVec.end(); i++)
+    for (G4PlacedVector::iterator i=placedVec.begin(); i!=placedVec.end();)
     {
       if (*i==a)
       {
-	placedVec.erase(i);
-	i--;
+	i = placedVec.erase(i);
+      }
+      else
+      {
+	++i;
       }
     } 
-    if ( a )  delete a;    
+    if ( a )  { delete a; }
   } 
 }
 
@@ -68,6 +72,7 @@ void G4Assembly::SetPlacedVector(G4PlacedVector& pVec)
   numberOfSolids = pVec.size();
   
   for(G4int a=0;a<numberOfSolids;a++)
+  {
     placedVec.push_back( pVec[a]);
-  
+  }
 }

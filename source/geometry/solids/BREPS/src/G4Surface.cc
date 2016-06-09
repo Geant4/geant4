@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Surface.cc,v 1.17 2007/07/16 08:06:55 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4Surface.cc,v 1.17.6.1 2010/09/08 16:31:32 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-03-patch-02 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -39,19 +39,51 @@
 #include "G4GeometryTolerance.hh"
 
 G4Surface::G4Surface()
-  : FLT_MAXX(kInfinity), FLT_EPSILO(0.0001)
+  : G4STEPEntity(),
+    bbox(0), next(0), Intersected(0), Type(0), AdvancedFace(0),
+    active(1), distance(kInfinity), uhit(0.), vhit(0.), sameSense(0)
 {
-  AdvancedFace=0;
-  active = 1;
-  distance = 1.0e20;
-  Type = 0;
-  bbox = 0;
   kCarTolerance = G4GeometryTolerance::GetInstance()->GetSurfaceTolerance();
+  kAngTolerance = G4GeometryTolerance::GetInstance()->GetAngularTolerance();
 }
+
 
 G4Surface::~G4Surface()
 {
 }
+
+
+G4Surface::G4Surface( const G4Surface& c )
+  : G4STEPEntity(),
+    bbox(c.bbox), next(c.next), Intersected(c.Intersected), Type(c.Type),
+    AdvancedFace(c.AdvancedFace), active(c.active), distance(c.distance),
+    uhit(c.uhit), vhit(c.vhit), sameSense(c.sameSense)
+{
+  kCarTolerance = G4GeometryTolerance::GetInstance()->GetSurfaceTolerance();
+  kAngTolerance = G4GeometryTolerance::GetInstance()->GetAngularTolerance();
+}
+
+
+G4Surface&
+G4Surface::operator=( const G4Surface& c )
+{
+  if (&c == this)  { return *this; }
+  bbox = c.bbox;
+  next = c.next;
+  Intersected = c.Intersected;
+  Type = c.Type;
+  AdvancedFace = c.AdvancedFace;
+  active = c.active;
+  distance = c.distance;
+  uhit = c.uhit;
+  vhit = c.vhit;
+
+  kCarTolerance = G4GeometryTolerance::GetInstance()->GetSurfaceTolerance();
+  kAngTolerance = G4GeometryTolerance::GetInstance()->GetAngularTolerance();
+
+  return *this;
+}
+
 
 G4int G4Surface::operator==( const G4Surface& s )
 {
@@ -166,7 +198,6 @@ G4int G4Surface::Intersect(const G4Ray&)
 
 #endif 
   return Result;
-  
 }
 
 

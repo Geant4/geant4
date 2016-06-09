@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4SurfaceOfRevolution.hh,v 1.5 2006/06/29 18:40:56 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4SurfaceOfRevolution.hh,v 1.5.8.1 2010/09/08 16:31:32 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-03-patch-02 $
 //
 // ----------------------------------------------------------------------
 // Class G4SurfaceOfRevolution
@@ -34,7 +34,7 @@
 // 
 // Definition of a surface of revolution.
 // (not implemented yet).
-
+//
 // ----------------------------------------------------------------------
 #ifndef included_G4SurfaceOfRevolution
 #define included_G4SurfaceOfRevolution

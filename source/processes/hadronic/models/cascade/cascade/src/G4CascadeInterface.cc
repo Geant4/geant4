@@ -40,6 +40,9 @@
 #include "G4NucleiModel.hh"
 #include "G4LorentzRotation.hh"
 
+//16 July 2010: A. Dotti (andrea.dotti@cern.ch). Adding additional test on final state
+//              to avoid baryon number violation. Code changes are enclosed between
+//              AND-> and AND<- or marked with AND
 
 //#define BERTDEV 1  // A flag to activate a development version of Bertini cascade
 
@@ -143,12 +146,12 @@ G4HadFinalState* G4CascadeInterface::ApplyYourself(const G4HadProjectile& aTrack
 
   sumEnergy = bullet->getKineticEnergy(); // In GeV 
 
-  if (bulletType == proton || bulletType == neutron || bulletType == lambda ||
-      bulletType == sigmaPlus || bulletType == sigmaZero || bulletType == sigmaMinus ||
-      bulletType == xiZero || bulletType == xiMinus) {
-
-    sumBaryon += 1;
-  } 
+  //AND: Baryon number is calculated inside do {} while () loop
+  //if (bulletType == proton || bulletType == neutron || bulletType == lambda ||
+  //    bulletType == sigmaPlus || bulletType == sigmaZero || bulletType == sigmaMinus ||
+  //    bulletType == xiZero || bulletType == xiMinus) {
+  //  sumBaryon += 1;
+  //} 
 
   // Set target
   G4InuclNuclei*   target  = 0;
@@ -171,7 +174,7 @@ G4HadFinalState* G4CascadeInterface::ApplyYourself(const G4HadProjectile& aTrack
     const G4CascadeMomentum& tmom = target->getMomentum();
     eInit += std::sqrt(tmom[0] * tmom[0]);
 
-    sumBaryon += theNucleusA;
+    //sumBaryon += theNucleusA;//AND: Baryon number conservation check now done in do {} while () loop
 
     if (verboseLevel > 2) {
       G4cout << "Bullet:  " << G4endl;  
@@ -242,12 +245,35 @@ G4HadFinalState* G4CascadeInterface::ApplyYourself(const G4HadProjectile& aTrack
 	  output = collider->collide(bullet, targetH);
 	}
 
-	sumBaryon += 1;
+	//sumBaryon += 1;//AND
 
 	const G4CascadeMomentum& bmom = bullet->getMomentum();
 	eInit = std::sqrt(bmom[0] * bmom[0]);
 	const G4CascadeMomentum& tmom = targetH->getMomentum();
 	eInit += std::sqrt(tmom[0] * tmom[0]);
+
+	//AND->: Check baryon number conservation 
+	//Initial state baryon number
+	sumBaryon = 1;//Target is H(1,1)
+	if (bulletType == proton || bulletType == neutron || bulletType == lambda ||
+	    bulletType == sigmaPlus || bulletType == sigmaZero || bulletType == sigmaMinus ||
+	    bulletType == xiZero || bulletType == xiMinus) {
+	  sumBaryon += 1;
+	} 
+	//Final state baryon number
+	std::vector<G4InuclElementaryParticle> particles = output.getOutgoingParticles();
+	particleIterator itp_end = particles.end();
+	for ( particleIterator itp = particles.begin(); itp != itp_end ; ++itp ) {
+	    if ( itp->baryon() ) {
+	      sumBaryon -= 1;
+	    }
+	}
+	std::vector<G4InuclNuclei> nucleiFragments = output.getNucleiFragments();
+	nucleiIterator itnuc_end = nucleiFragments.end();
+	for ( nucleiIterator itnuc = nucleiFragments.begin() ; itnuc != itnuc_end ; ++itnuc ) {
+	  sumBaryon -= G4int(itnuc->getA());
+	}
+	//AND<-
 
 	if (verboseLevel > 2) {
 	  G4cout << "Target:  " << G4endl;
@@ -256,6 +282,8 @@ G4HadFinalState* G4CascadeInterface::ApplyYourself(const G4HadProjectile& aTrack
 
       } else {  // treat all other targets excepet H(1,1)
 
+        G4double initE=0;
+        G4double finalE=0;
 	do  // we try to create inelastic interaction
 	  {
 #ifdef BERTDEV
@@ -264,6 +292,11 @@ G4HadFinalState* G4CascadeInterface::ApplyYourself(const G4HadProjectile& aTrack
 	    output = collider->collide(bullet, target );
 	    nTries++;
 
+            // Temporary check of final state (DHW June 2010)
+            G4CascadeMomentum momCheck = output.getTotalOutputMomentum();
+            finalE = momCheck[0];
+            initE = bullet->getEnergy() + target->getMass();
+//            G4cout << " finalE = " << finalE << " , initE = " << initE << G4endl;
 #ifdef BERTDEV
 	    G4double coulumbBarrier = 8.7 * MeV; 
 	    std::vector<G4InuclElementaryParticle> p= output.getOutgoingParticles();
@@ -283,15 +316,117 @@ G4HadFinalState* G4CascadeInterface::ApplyYourself(const G4HadProjectile& aTrack
 		  (output.getOutgoingParticles().size()!=0)                                        
 		  );
 #else
+	//AND->: Check baryon number
+	//Initial state baryon number
+	sumBaryon = G4int(theNucleusA);
+	if (bulletType == proton || bulletType == neutron || bulletType == lambda ||
+	    bulletType == sigmaPlus || bulletType == sigmaZero || bulletType == sigmaMinus ||
+	    bulletType == xiZero || bulletType == xiMinus) {
+	  sumBaryon += 1;
+	} 
+	//Final state baryon number
+	std::vector<G4InuclElementaryParticle> particles = output.getOutgoingParticles();
+	particleIterator itp_end = particles.end();
+	for ( particleIterator itp = particles.begin(); itp != itp_end ; ++itp ) {
+	    if ( itp->baryon() ) {
+	      sumBaryon -= 1;
+	    }
+	}
+	std::vector<G4InuclNuclei> nucleiFragments = output.getNucleiFragments();
+	nucleiIterator itnuc_end = nucleiFragments.end();
+	for ( nucleiIterator itnuc = nucleiFragments.begin() ; itnuc != itnuc_end ; ++itnuc ) {
+	  sumBaryon -= G4int(itnuc->getA());
+	}
+	//AND<-
+//            G4cout << " ntries = " << nTries << G4endl;
+//            if (finalE > 1.05*initE) G4cout << " diff = " << finalE - initE << G4endl;
 
+	    //AND-> Add some printout in case of a re-try of interaction
+	if (verboseLevel > 0)
+	  {
+	    if ( finalE > 1.05*initE )
+	      {
+		//Internal Bertini units for Energy is GeV
+		G4cout<<"***WARNING*** G4CascadeInterface::ApplyYourself() : final state E="<<finalE<<" GeV, initial state E="
+		      <<initE<<" GeV. Re-trying interaction."<<G4endl;
+	      }
+	    if ( sumBaryon != 0 )
+	      {
+		G4cout<<"***WARNING*** G4CascadeInterface::ApplyYourself() : Baryon number non conservation Initial-Final="
+		      <<sumBaryon<<". Re-trying interaction."<<G4endl;
+	      }
+	  }
+	//AND<-
 	  } while(
-		   (nTries < maxTries)                                                               &&
+	      ((nTries < maxTries) &&
 		   (output.getOutgoingParticles().size() + output.getNucleiFragments().size() < 2.5) &&
 		   (output.getOutgoingParticles().size()!=0) &&
-                   (output.getOutgoingParticles().begin()->type()==bullet->type())
+	       (output.getOutgoingParticles().begin()->type()==bullet->type()) ) ||
+	      ( (finalE > 1.05*initE) && (nTries < maxTries) ) || //AND: add check on max tries to avoid infinite loopers
+	      ( (sumBaryon!=0) && (nTries < maxTries) )//AND: add check on baryon number conservation 
 		   );
+
+      //AND-> Error handling...
+      if ((verboseLevel > 0) && ( nTries == maxTries ))
+	{
+	  G4cout<<"***WARNING*** In G4CascadeInterface::ApplyYourself() : maximum number "<<(maxTries)<<" of re-tries reached"<<G4endl;
+        }
+      if ( finalE > 1.05*initE )
+	{
+	  //Internal Bertini units for Energy is GeV
+	  G4cerr<<"***ERROR*** G4CascadeInterface::ApplyYourself() : final state E="<<finalE
+		<<" GeV, initial state E="<<initE<<" GeV and maximum re-tries reached. Dumping info on standard output."<<G4endl;
+	  G4cout<<"Bullet info:"<<G4endl;
+	  bullet->printParticle();
+	  G4cout<<"Target:"<<G4endl;
+	  G4cout<<"A="<<theNucleusA<<" Z="<<theNucleus.GetZ()<<G4endl;
+	  G4cout<<"Dumping list of out-particles:"<<G4endl;
+	  std::vector<G4InuclElementaryParticle>::const_iterator it_end=output.getOutgoingParticles().end();
+	  std::vector<G4InuclElementaryParticle>::const_iterator it=output.getOutgoingParticles().begin();
+	  std::vector<G4InuclNuclei>::const_iterator nit_end=output.getNucleiFragments().end();
+	  std::vector<G4InuclNuclei>::const_iterator nit=output.getNucleiFragments().begin();
+	  for ( ; it != it_end ; ++it )
+	    {
+	      G4cout<<"   ";
+	      it->printParticle();
+	    }
+	  G4cout<<"Dumping list of fragments:"<<G4endl;
+	  for ( ; nit != nit_end; ++nit )
+	    {
+	      G4cout<<"   ";
+	      nit->printParticle();
+	    }
+	  throw G4HadronicException(__FILE__, __LINE__, "G4CascadeInterface::ApplyYourself() - Energy non-conservation. More info in output.");
+	}
+      if ( sumBaryon )
+	{
+	  G4cerr<<"***ERROR*** G4CascadeInterface::ApplyYourself() : Baryon number non conservation Initial-Final="<<sumBaryon
+		<<" and maximum re-tries reached. Dumping info on standard output."<<G4endl;
+	  G4cout<<"Bullet info:"<<G4endl;
+	  bullet->printParticle();
+	  G4cout<<"Target:"<<G4endl;
+	  G4cout<<"A="<<theNucleusA<<" Z="<<theNucleus.GetZ()<<G4endl;
+	  G4cout<<"Dumping list of out-particles:"<<G4endl;
+	  std::vector<G4InuclElementaryParticle>::const_iterator it_end=output.getOutgoingParticles().end();
+	  std::vector<G4InuclElementaryParticle>::const_iterator it=output.getOutgoingParticles().begin();
+	  std::vector<G4InuclNuclei>::const_iterator nit_end=output.getNucleiFragments().end();
+	  std::vector<G4InuclNuclei>::const_iterator nit=output.getNucleiFragments().begin();
+	  for ( ; it != it_end ; ++it )
+	    {
+	      G4cout<<"   ";
+	      it->printParticle();
+	    }
+	  G4cout<<"Dumping list of fragments:"<<G4endl;
+	  for ( ; nit != nit_end; ++nit )
+	    {
+	      G4cout<<"   ";
+	      nit->printParticle();
+	    }
+	  throw G4HadronicException(__FILE__, __LINE__, "G4CascadeInterface::ApplyYourself() - Baryon number non-conservation. More info in output.");
+	}
+      //AND<-
 #endif
-     }
+}
 
   if (verboseLevel > 1) 
     {

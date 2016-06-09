@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ConstRK4.cc,v 1.2 2008/10/29 14:17:42 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4ConstRK4.cc,v 1.2.4.1 2010/09/08 14:25:35 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-03-patch-02 $
 //
 //
 // - 18.09.2008 - J.Apostolakis, T.Nikitina - Created
@@ -47,19 +47,17 @@ G4ConstRK4::G4ConstRK4(G4Mag_EqRhs* EqRhs, G4int numberOfVariables)
     G4Exception("G4ConstRK4::G4ConstRK4()", "InvalidSetup", FatalException,
                 "Valid only for number of variables=8. Use another Stepper!");
   }
-  else
-  {
-    fEq=EqRhs;
-    yMiddle= new G4double[8];
-    dydxMid= new G4double[8];
-    yInitial= new G4double[8];
-    yOneStep= new G4double[8];
 
-    dydxm = new G4double[8];
-    dydxt = new G4double[8]; 
-    yt    = new G4double[8]; 
-    Field[0]=0.;Field[1]=0.;Field[2]=0.;
-  }
+  fEq = EqRhs;
+  yMiddle  = new G4double[8];
+  dydxMid  = new G4double[8];
+  yInitial = new G4double[8];
+  yOneStep = new G4double[8];
+
+  dydxm = new G4double[8];
+  dydxt = new G4double[8]; 
+  yt    = new G4double[8]; 
+  Field[0]=0.; Field[1]=0.; Field[2]=0.;
 }
 
 ////////////////////////////////////////////////////////////////
@@ -150,8 +148,6 @@ G4ConstRK4::Stepper( const G4double yInput[],
                            G4double yError [] )
 {
    const G4int nvar = 8 ;
-   const G4int maxvar= 8;
-
    G4int i;
 
    // Correction for Richardson extrapolation
@@ -166,7 +162,6 @@ G4ConstRK4::Stepper( const G4double yInput[],
    yMiddle[7] = yInput[7];  // Copy the time from initial value 
    yOneStep[7] = yInput[7]; // As it contributes to final value of yOutput ?
    yOutput[7] = yInput[7];  // -> dumb stepper does it too for RK4
-   for (i=nvar;i<maxvar;i++) { yOutput[i]=yInput[i]; }
    yError[7] = 0.0;         
 
    G4double halfStep = hstep * 0.5; 

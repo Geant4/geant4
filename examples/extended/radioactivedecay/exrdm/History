@@ -1,4 +1,4 @@
-$Id: History,v 1.27 2009/09/22 16:50:06 gunter Exp $
+$Id: History,v 1.27.2.1 2010/09/10 14:27:54 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+10/05/2010 V.Ivanchenko (exrdm-V09-02-01)
+- substitute G4MultipleScattering by specialized processes per particle type
 
 22/09/2009 G.Folger (exrdm-V09-02-00)
 -  remove trivial compilation warning when compiled without G4ANALYSIS_USE in 

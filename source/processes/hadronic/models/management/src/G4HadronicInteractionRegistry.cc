@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // $Id: G4HadronicInteractionRegistry.cc,v 1.9.2.1 2010/04/01 09:54:14 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-03-patch-01 $
+// GEANT4 tag $Name: geant4-09-03-patch-02 $
 //
 // 23-Jan-2009 V.Ivanchenko make the class to be a singleton
 

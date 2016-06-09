@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Cons.cc,v 1.67 2009/11/12 11:53:11 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4Cons.cc,v 1.67.2.1 2010/09/08 14:52:47 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-03-patch-02 $
 //
 //
 // class G4Cons
@@ -80,18 +80,15 @@ G4Cons::G4Cons( const G4String& pName,
                       G4double  pRmin2, G4double pRmax2,
                       G4double pDz,
                       G4double pSPhi, G4double pDPhi)
-  : G4CSGSolid(pName), fSPhi(0), fDPhi(0)
+  : G4CSGSolid(pName), fRmin1(pRmin1), fRmin2(pRmin2),
+    fRmax1(pRmax1), fRmax2(pRmax2), fDz(pDz), fSPhi(0.), fDPhi(0.)
 {
   kRadTolerance = G4GeometryTolerance::GetInstance()->GetRadialTolerance();
   kAngTolerance = G4GeometryTolerance::GetInstance()->GetAngularTolerance();
 
   // Check z-len
   //
-  if ( pDz > 0 )
-  {
-    fDz = pDz;
-  }
-  else
+  if ( pDz < 0 )
   {
     G4cerr << "ERROR - G4Cons()::G4Cons(): " << GetName() << G4endl
            << "        Negative Z half-length ! - "
@@ -102,17 +99,7 @@ G4Cons::G4Cons( const G4String& pName,
 
   // Check radii
   //
-  if ( (pRmin1<pRmax1) && (pRmin2<pRmax2) && (pRmin1>=0) && (pRmin2>=0) )
-  {
-
-    fRmin1 = pRmin1 ; 
-    fRmax1 = pRmax1 ;
-    fRmin2 = pRmin2 ; 
-    fRmax2 = pRmax2 ;
-    if( (pRmin1 == 0.0) && (pRmin2 > 0.0) ) { fRmin1 = 1e3*kRadTolerance ; }
-    if( (pRmin2 == 0.0) && (pRmin1 > 0.0) ) { fRmin2 = 1e3*kRadTolerance ; }
-  }
-  else
+  if (((pRmin1>=pRmax1) || (pRmin2>=pRmax2) || (pRmin1<0)) && (pRmin2<0))
   {
     G4cerr << "ERROR - G4Cons()::G4Cons(): " << GetName() << G4endl
            << "        Invalide values for radii ! - "
@@ -121,6 +108,8 @@ G4Cons::G4Cons( const G4String& pName,
     G4Exception("G4Cons::G4Cons()", "InvalidSetup",
                 FatalException, "Invalid radii.") ;
   }
+  if( (pRmin1 == 0.0) && (pRmin2 > 0.0) ) { fRmin1 = 1e3*kRadTolerance ; }
+  if( (pRmin2 == 0.0) && (pRmin1 > 0.0) ) { fRmin2 = 1e3*kRadTolerance ; }
 
   // Check angles
   //
@@ -133,7 +122,11 @@ G4Cons::G4Cons( const G4String& pName,
 //                            for usage restricted to object persistency.
 //
 G4Cons::G4Cons( __void__& a )
-  : G4CSGSolid(a)
+  : G4CSGSolid(a), kRadTolerance(0.), kAngTolerance(0.),
+    fRmin1(0.), fRmin2(0.), fRmax1(0.), fRmax2(0.), fDz(0.),
+    fSPhi(0.), fDPhi(0.), sinCPhi(0.), cosCPhi(0.), cosHDPhiOT(0.),
+    cosHDPhiIT(0.), sinSPhi(0.), cosSPhi(0.), sinEPhi(0.), cosEPhi(0.),
+    fPhiFullCone(false)
 {
 }
 
@@ -624,7 +617,7 @@ G4ThreeVector G4Cons::ApproxSurfaceNormal( const G4ThreeVector& p ) const
       rho *= secRMax ;
       norm = G4ThreeVector(p.x()/rho, p.y()/rho, -tanRMax/secRMax) ;
       break ;
-    case kNZ:      // +/- dz
+    case kNZ:         // +/- dz
       if (p.z() > 0)  { norm = G4ThreeVector(0,0,1);  }
       else            { norm = G4ThreeVector(0,0,-1); }
       break ;
@@ -634,7 +627,7 @@ G4ThreeVector G4Cons::ApproxSurfaceNormal( const G4ThreeVector& p ) const
     case kNEPhi:
       norm=G4ThreeVector(-std::sin(fSPhi+fDPhi), std::cos(fSPhi+fDPhi), 0) ;
       break ;
-    default:
+    default:          // Should never reach this case...
       DumpInfo();
       G4Exception("G4Cons::ApproxSurfaceNormal()", "Notification", JustWarning,
                   "Undefined side for valid surface normal to solid.") ;
@@ -1828,8 +1821,8 @@ G4double G4Cons::DistanceToOut( const G4ThreeVector& p,
             // Check intersecting with correct half-plane
             // (if not -> no intersect)
             //
-            if ( (std::abs(xi)<=kCarTolerance)
-              && (std::abs(yi)<=kCarTolerance) )
+            if ( (std::fabs(xi)<=kCarTolerance)
+              && (std::fabs(yi)<=kCarTolerance) )
             {
               sidephi= kSPhi;
               if ( ( fSPhi-halfAngTolerance <= vphi )
@@ -1875,8 +1868,8 @@ G4double G4Cons::DistanceToOut( const G4ThreeVector& p,
 
             // Check intersecting with correct half-plane
 
-            if ( (std::abs(xi)<=kCarTolerance)
-              && (std::abs(yi)<=kCarTolerance) )
+            if ( (std::fabs(xi)<=kCarTolerance)
+              && (std::fabs(yi)<=kCarTolerance) )
             {
               // Leaving via ending phi
 
@@ -1997,6 +1990,7 @@ G4double G4Cons::DistanceToOut( const G4ThreeVector& p,
         G4cout << "v.z() = "   << v.z() << G4endl<< G4endl ;
         G4cout << "Proposed distance :" << G4endl<< G4endl ;
         G4cout << "snxt = "    << snxt/mm << " mm" << G4endl << G4endl ;
+        G4cout.precision(6) ;
         G4Exception("G4Cons::DistanceToOut(p,v,..)","Notification",JustWarning,
                     "Undefined side for valid surface normal to solid.") ;
         break ;

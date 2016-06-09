@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4TwistTubsHypeSide.cc,v 1.6 2007/05/18 07:39:56 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4TwistTubsHypeSide.cc,v 1.6.10.1 2010/09/08 15:54:59 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-03-patch-02 $
 //
 // 
 // --------------------------------------------------------------------
@@ -62,11 +62,12 @@ G4TwistTubsHypeSide::G4TwistTubsHypeSide(const G4String         &name,
                                                G4double          axis0max,
                                                G4double          axis1max )
   : G4VTwistSurface(name, rot, tlate, handedness, axis0, axis1,
-               axis0min, axis1min, axis0max, axis1max),
+                   axis0min, axis1min, axis0max, axis1max),
     fKappa(kappa), fTanStereo(tanstereo),
-    fTan2Stereo(tanstereo*tanstereo), fR0(r0), fR02(r0*r0)
+    fTan2Stereo(tanstereo*tanstereo), fR0(r0), fR02(r0*r0), fDPhi(twopi)
 {
-   if (axis0 == kZAxis && axis1 == kPhi) {
+   if ( (axis0 == kZAxis) && (axis1 == kPhi) )
+   {
       G4Exception("G4TwistTubsHypeSide::G4TwistTubsHypeSide()", "InvalidSetup",
                   FatalException, "Should swap axis0 and axis1!");
    }
@@ -130,7 +131,8 @@ G4TwistTubsHypeSide::G4TwistTubsHypeSide(const G4String      &name,
 //* Fake default constructor ------------------------------------------
 
 G4TwistTubsHypeSide::G4TwistTubsHypeSide( __void__& a )
-  : G4VTwistSurface(a)
+  : G4VTwistSurface(a), fKappa(0.), fTanStereo(0.), fTan2Stereo(0.),
+    fR0(0.), fR02(0.), fDPhi(0.)
 {
 }
 
@@ -325,7 +327,7 @@ G4int G4TwistTubsHypeSide::DistanceToSurface(const G4ThreeVector &gp,
       //
 
       G4double vz    = v.z();
-      G4double absvz = std::abs(vz);
+      G4double absvz = std::fabs(vz);
       G4double vrho  = v.getRho();       
       G4double vslope = vrho/vz;
       G4double vslope2 = vslope * vslope;
@@ -376,7 +378,8 @@ G4int G4TwistTubsHypeSide::DistanceToSurface(const G4ThreeVector &gp,
    G4double a = v.x()*v.x() + v.y()*v.y() - v.z()*v.z()*fTan2Stereo;
    G4double b = 2.0 * ( p.x() * v.x() + p.y() * v.y() - p.z() * v.z() * fTan2Stereo );
    G4double c = p.x()*p.x() + p.y()*p.y() - fR02 - p.z()*p.z()*fTan2Stereo;
-   G4double D = b*b - 4*a*c;          //discriminant 
+   G4double D = b*b - 4*a*c;          //discriminant
+   G4int vout = 0;
    
    if (std::fabs(a) < DBL_MIN) {
       if (std::fabs(b) > DBL_MIN) {           // single solution
@@ -402,7 +405,7 @@ G4int G4TwistTubsHypeSide::DistanceToSurface(const G4ThreeVector &gp,
                  
          fCurStatWithV.SetCurrentStatus(0, gxx[0], distance[0], areacode[0],
                                         isvalid[0], 1, validate, &gp, &gv);
-         return 1;
+         vout = 1;
          
       } else {
          // if a=b=0 and c != 0, p is origin and v is parallel to asymptotic line.
@@ -412,7 +415,7 @@ G4int G4TwistTubsHypeSide::DistanceToSurface(const G4ThreeVector &gp,
          fCurStatWithV.SetCurrentStatus(0, gxx[0], distance[0], areacode[0],
                                         isvalid[0], 0, validate, &gp, &gv);
 
-         return 0;
+         vout = 0;
       }
       
    } else if (D > DBL_MIN) {         // double solutions
@@ -477,7 +480,7 @@ G4int G4TwistTubsHypeSide::DistanceToSurface(const G4ThreeVector &gp,
                                      isvalid[0], 2, validate, &gp, &gv);
       fCurStatWithV.SetCurrentStatus(1, gxx[1], distance[1], areacode[1],
                                      isvalid[1], 2, validate, &gp, &gv);
-      return 2;
+      vout = 2;
       
    } else {
       // if D<0, no solution
@@ -485,11 +488,9 @@ G4int G4TwistTubsHypeSide::DistanceToSurface(const G4ThreeVector &gp,
 
       fCurStatWithV.SetCurrentStatus(0, gxx[0], distance[0], areacode[0],
                                      isvalid[0], 0, validate, &gp, &gv);
-      return 0;
+      vout = 0;
    }
-   G4Exception("G4TwistTubsHypeSide::DistanceToSurface(p,v)",
-               "InvalidCondition", FatalException, "Illegal operation !");
-   return 1;
+   return vout;
 }
 
    

@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4PolyconeSide.hh,v 1.12.4.1 2010/03/18 11:04:57 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-03-patch-01 $
+// GEANT4 tag $Name: geant4-09-03-patch-02 $
 //
 // 
 // --------------------------------------------------------------------

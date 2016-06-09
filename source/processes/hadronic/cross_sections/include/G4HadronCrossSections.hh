@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// GEANT4 tag $Name: geant4-09-03-patch-01 $
+// GEANT4 tag $Name: geant4-09-03-patch-02 $
 //
 //
 // GEANT4 Hadron physics class -- header file

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: RE01HadronPhysics.cc,v 1.2 2006/06/29 17:44:00 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: RE01HadronPhysics.cc,v 1.2.6.1 2010/09/10 14:40:50 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-03-patch-02 $
 //
 
 #include "RE01HadronPhysics.hh"
@@ -36,7 +36,7 @@
 // processes
 #include "G4ParticleTable.hh"
 #include "G4ProcessManager.hh"
-#include "G4MultipleScattering.hh"
+#include "G4hMultipleScattering.hh"
 #include "G4hIonisation.hh"
 #include "G4HadronElasticProcess.hh"
 #include "G4PionPlusInelasticProcess.hh"
@@ -204,7 +204,7 @@ void RE01HadronPhysics::ConstructProcess()
   pManager = G4PionPlus::PionPlus()->GetProcessManager();
 
   // EM processes
-  pManager->AddProcess(new G4MultipleScattering(), -1, 1, 1);
+  pManager->AddProcess(new G4hMultipleScattering(), -1, 1, 1);
   pManager->AddProcess(new G4hIonisation(),        -1, 2, 2);
  
   // hadron elastic
@@ -233,7 +233,7 @@ void RE01HadronPhysics::ConstructProcess()
   pManager = G4PionMinus::PionMinus()->GetProcessManager();
 
   // EM processes
-  pManager->AddProcess(new G4MultipleScattering(), -1, 1, 1);
+  pManager->AddProcess(new G4hMultipleScattering(), -1, 1, 1);
   pManager->AddProcess(new G4hIonisation(),        -1, 2, 2);
 
   // hadron elastic
@@ -265,7 +265,7 @@ void RE01HadronPhysics::ConstructProcess()
   pManager = G4KaonPlus::KaonPlus()->GetProcessManager();
 
   // EM processes
-  pManager->AddProcess(new G4MultipleScattering(), -1, 1, 1);
+  pManager->AddProcess(new G4hMultipleScattering(), -1, 1, 1);
   pManager->AddProcess(new G4hIonisation(),        -1, 2, 2);
 
   // hadron elastic
@@ -288,7 +288,7 @@ void RE01HadronPhysics::ConstructProcess()
   pManager = G4KaonMinus::KaonMinus()->GetProcessManager();
 
   // EM processes
-  pManager->AddProcess(new G4MultipleScattering(), -1, 1, 1);
+  pManager->AddProcess(new G4hMultipleScattering(), -1, 1, 1);
   pManager->AddProcess(new G4hIonisation(),        -1, 2, 2);
 
   // hadron elastic
@@ -349,7 +349,7 @@ void RE01HadronPhysics::ConstructProcess()
   pManager = G4Proton::Proton()->GetProcessManager();
 
   // EM processes
-  pManager->AddProcess(new G4MultipleScattering(), -1, 1, 1);
+  pManager->AddProcess(new G4hMultipleScattering(), -1, 1, 1);
   pManager->AddProcess(new G4hIonisation(),        -1, 2, 2);
 
   // hadron elastic
@@ -379,7 +379,7 @@ void RE01HadronPhysics::ConstructProcess()
   pManager = G4AntiProton::AntiProton()->GetProcessManager();
 
   // EM processes
-  pManager->AddProcess(new G4MultipleScattering(), -1, 1, 1);
+  pManager->AddProcess(new G4hMultipleScattering(), -1, 1, 1);
   pManager->AddProcess(new G4hIonisation(),        -1, 2, 2);
 
   // hadron elastic
@@ -515,7 +515,7 @@ void RE01HadronPhysics::ConstructProcess()
   pManager = G4SigmaMinus::SigmaMinus()->GetProcessManager();
 
   // EM processes
-  pManager->AddProcess(new G4MultipleScattering(), -1, 1, 1);
+  pManager->AddProcess(new G4hMultipleScattering(), -1, 1, 1);
   pManager->AddProcess(new G4hIonisation(),        -1, 2, 2);
 
   // hadron elastic
@@ -539,7 +539,7 @@ void RE01HadronPhysics::ConstructProcess()
   pManager = G4AntiSigmaMinus::AntiSigmaMinus()->GetProcessManager();
 
   // EM processes
-  pManager->AddProcess(new G4MultipleScattering(), -1, 1, 1);
+  pManager->AddProcess(new G4hMultipleScattering(), -1, 1, 1);
   pManager->AddProcess(new G4hIonisation(),        -1, 2, 2);
 
   // hadron elastic
@@ -565,7 +565,7 @@ void RE01HadronPhysics::ConstructProcess()
   pManager = G4SigmaPlus::SigmaPlus()->GetProcessManager();
 
   // EM processes
-  pManager->AddProcess(new G4MultipleScattering(), -1, 1, 1);
+  pManager->AddProcess(new G4hMultipleScattering(), -1, 1, 1);
   pManager->AddProcess(new G4hIonisation(),        -1, 2, 2);
 
   // hadron elastic
@@ -588,7 +588,7 @@ void RE01HadronPhysics::ConstructProcess()
   pManager = G4AntiSigmaPlus::AntiSigmaPlus()->GetProcessManager();
 
   // EM processes
-  pManager->AddProcess(new G4MultipleScattering(), -1, 1, 1);
+  pManager->AddProcess(new G4hMultipleScattering(), -1, 1, 1);
   pManager->AddProcess(new G4hIonisation(),        -1, 2, 2);
 
   // hadron elastic
@@ -614,7 +614,7 @@ void RE01HadronPhysics::ConstructProcess()
   pManager = G4XiMinus::XiMinus()->GetProcessManager();
 
   // EM processes
-  pManager->AddProcess(new G4MultipleScattering(), -1, 1, 1);
+  pManager->AddProcess(new G4hMultipleScattering(), -1, 1, 1);
   pManager->AddProcess(new G4hIonisation(),        -1, 2, 2);
 
   // hadron elastic
@@ -637,7 +637,7 @@ void RE01HadronPhysics::ConstructProcess()
   pManager = G4AntiXiMinus::AntiXiMinus()->GetProcessManager();
 
   // EM processes
-  pManager->AddProcess(new G4MultipleScattering(), -1, 1, 1);
+  pManager->AddProcess(new G4hMultipleScattering(), -1, 1, 1);
   pManager->AddProcess(new G4hIonisation(),        -1, 2, 2);
 
   // hadron elastic
@@ -700,7 +700,7 @@ void RE01HadronPhysics::ConstructProcess()
   pManager = G4OmegaMinus::OmegaMinus()->GetProcessManager();
 
   // EM processes
-  pManager->AddProcess(new G4MultipleScattering(), -1, 1, 1);
+  pManager->AddProcess(new G4hMultipleScattering(), -1, 1, 1);
   pManager->AddProcess(new G4hIonisation(),        -1, 2, 2);
 
   // hadron elastic
@@ -724,7 +724,7 @@ void RE01HadronPhysics::ConstructProcess()
   pManager = G4AntiOmegaMinus::AntiOmegaMinus()->GetProcessManager();
 
   // EM processes
-  pManager->AddProcess(new G4MultipleScattering(), -1, 1, 1);
+  pManager->AddProcess(new G4hMultipleScattering(), -1, 1, 1);
   pManager->AddProcess(new G4hIonisation(),        -1, 2, 2);
 
   // hadron elastic

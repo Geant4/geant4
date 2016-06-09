@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-03-patch-01-ref    (9-April-2010)
+ Geant4 version Name: geant4-09-03-patch-02-ref    (17-September-2010)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -295,7 +295,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100000
-  User=1.76s Real=1.76s Sys=0s
+  User=1.92s Real=1.92s Sys=0s
 
  ======================== run summary ======================
 
@@ -303,19 +303,19 @@ Run Summary
  ===========================================================
 
 
- trackLength= 1.0004 cm 	 nb of steps= 1.5811  stepSize= 6.3275 mm 
+ trackLength= 1.0004 cm 	 nb of steps= 1.5808  stepSize= 6.3287 mm 
 
- d-rays  : eLoss/primary= 244.33 keV	  nb of d-rays= 0.23251  <Tkin>= 1.0508 MeV  Tmin= 351.89 keV  Tmax= 4.9635 MeV
+ d-rays  : eLoss/primary= 244.75 keV	  nb of d-rays= 0.23264  <Tkin>= 1.052 MeV  Tmin= 351.89 keV  Tmax= 4.9635 MeV
 
- brems   : eLoss/primary= 176.44 keV	  nb of gammas= 0.30574  <Tkin>= 577.09 keV  Tmin= 2.9418 keV  Tmax= 9.6102 MeV
+ brems   : eLoss/primary= 174.84 keV	  nb of gammas= 0.30567  <Tkin>= 571.99 keV  Tmin= 2.9418 keV  Tmax= 9.6102 MeV
 
- deposit : eLoss/primary= 1.7348 MeV	 <dEcut > table= 1.7359 MeV   ---> simul/reference= 0.99937
+ deposit : eLoss/primary= 1.7347 MeV	 <dEcut > table= 1.7359 MeV   ---> simul/reference= 0.99932
 
- total   : eLoss/primary= 2.1555 MeV	 <dEfull> table= 2.1629 MeV   ---> simul/reference= 0.99661
+ total   : eLoss/primary= 2.1543 MeV	 <dEfull> table= 2.1629 MeV   ---> simul/reference= 0.99603
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1543636667, 810894265
+ Current couple of seeds = 710236694, 35645062
 ----------------------------------------
 UserDetectorConstruction deleted.
 UserPhysicsList deleted.

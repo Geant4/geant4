@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4EqEMFieldWithSpin.hh,v 1.3 2008/11/14 13:37:09 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4EqEMFieldWithSpin.hh,v 1.3.4.1 2010/09/08 14:25:35 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-03-patch-02 $
 //
 //
 // class G4EqEMFieldWithSpin
@@ -72,10 +72,9 @@ class G4EqEMFieldWithSpin : public G4EquationOfMotion
 
     G4double fElectroMagCof ;
     G4double fMassCof;
-
     G4double omegac;
     G4double anomaly;
-    G4double ParticleCharge;
+    G4double pcharge;
     G4double E;
     G4double gamma;
     G4double beta;

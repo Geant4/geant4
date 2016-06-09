@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // $Id: G4HEKaonZeroLongInelastic.cc,v 1.10.6.1 2010/04/01 09:44:52 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-03-patch-01 $
+// GEANT4 tag $Name: geant4-09-03-patch-02 $
 //
 //
 

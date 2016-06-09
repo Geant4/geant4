@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // $Id: G4ExcitationHandler.cc,v 1.26.2.1 2010/04/01 09:41:42 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-03-patch-01 $
+// GEANT4 tag $Name: geant4-09-03-patch-02 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (May 1998)

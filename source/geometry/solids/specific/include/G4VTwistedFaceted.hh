@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VTwistedFaceted.hh,v 1.10 2006/10/20 13:45:20 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4VTwistedFaceted.hh,v 1.10.12.1 2010/09/08 15:54:58 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-03-patch-02 $
 // 
 // --------------------------------------------------------------------
 // GEANT 4 class header file
@@ -185,8 +185,6 @@ class G4VTwistedFaceted: public G4VSolid
     
   G4double fPhiTwist;  // twist angle ( dphi in surface equation)
 
-  G4double fAngleSide;
-     
   G4VTwistSurface *fLowerEndcap ;  // surface of -ve z
   G4VTwistSurface *fUpperEndcap ;  // surface of +ve z
   

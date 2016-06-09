@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: olapex.cc,v 1.3 2006/06/29 17:21:55 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: olapex.cc,v 1.3.6.1 2010/09/10 14:07:20 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-03-patch-02 $
 //
 // 
 // --------------------------------------------------------------
@@ -40,8 +40,6 @@
 
 // Geant4
 #include "G4RunManager.hh"
-#include "G4UIterminal.hh"
-#include "G4UItcsh.hh"
 
 // this module
 #include "OlapGenerator.hh"
@@ -55,6 +53,10 @@
 
 #ifdef G4VIS_USE
   #include "G4VisExecutive.hh"
+#endif
+
+#ifdef G4UI_USE
+#include "G4UIExecutive.hh"
 #endif
 
 #ifdef debug
@@ -84,12 +86,6 @@ int main(int argc,char** argv) {
   OlapManager * olap = OlapManager::GetOlapManager();
   olap->GotoLV(olap->GetFullWorld()->GetLogicalVolume()->GetName());
   
-#ifdef G4VIS_USE
-  //Instantiating VisManager
-  G4VisManager *visManager = new G4VisExecutive;
-  visManager -> Initialize();
-#endif
-
   //User action classes.
   OlapRunAction * olapRunAction = new OlapRunAction;
   OlapEventAction * olapEventAction = new OlapEventAction(olapRunAction);
@@ -97,8 +93,6 @@ int main(int argc,char** argv) {
   runManager->SetUserAction(olapRunAction);
   runManager->SetUserAction(olapEventAction);
   runManager->SetUserAction(olapSteppingAction);
-
-  
 
 #ifdef debug
   //Get number of logical and physical volumes
@@ -111,28 +105,32 @@ int main(int argc,char** argv) {
        << "====================================" << endl << endl;
 #endif
    
-   
+#ifdef G4VIS_USE
+  //Instantiating VisManager
+  G4VisManager *visManager = new G4VisExecutive;
+  visManager -> Initialize();
+#endif
 
   //Get the pointer for the User Interface maager
-  G4UImanager* UI = G4UImanager::GetUIpointer();
+  G4UImanager* UImanager = G4UImanager::GetUIpointer();
 
-  if (argc == 1) {
-    G4VUIshell * s = new G4UItcsh("Idle> ",10);
-    G4UIsession* session = new G4UIterminal(s);
-    
-    G4String command = "/control/execute gui.mac";
-    UI->ApplyCommand(command);        
-    session->SessionStart();
-
-    delete session;
-  }
-  //Batch mode
-  else {
-    G4String command = "/control/execute ";
-    G4String fileName = argv[1];
-    UI->ApplyCommand(command+fileName);    
-  }
-
+  if (argc!=1)   // batch mode
+    {
+#ifdef G4VIS_USE
+      visManager->SetVerboseLevel("quiet");
+#endif
+      G4String command = "/control/execute ";
+      G4String fileName = argv[1];
+      UImanager->ApplyCommand(command+fileName);    
+    }
+  else
+    {  // interactive mode : define UI session
+#ifdef G4UI_USE
+      G4UIExecutive* ui = new G4UIExecutive(argc, argv);
+      ui->SessionStart();
+      delete ui;
+#endif
+    }
 
 #ifdef G4VIS_USE
   delete visManager;

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunManagerKernel.hh,v 1.9 2007/05/30 00:42:09 asaim Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4RunManagerKernel.hh,v 1.9.6.1 2010/09/10 13:10:28 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-03-patch-02 $
 //
 // 
 
@@ -85,7 +85,7 @@ class G4RunManagerKernel
 
   public: // with description
     void DefineWorldVolume(G4VPhysicalVolume * worldVol,
-                                   G4bool topologyIsChanged=true);
+                           G4bool topologyIsChanged=true);
     //  This method must be invoked if the geometry setup has been changed between
     // runs. The flag 'topologyIsChanged' will specify if the geometry topology is
     // different from the original one used in the previous run; if not, it must be
@@ -120,7 +120,7 @@ class G4RunManagerKernel
     // At RunInitialization(), this method is automatically invoked, and thus
     // the user needs not invoke.
 
-    void DumpRegion(G4String rname) const;
+    void DumpRegion(const G4String& rname) const;
     // Dump information of a region.
 
     void DumpRegion(G4Region* region=0) const;
@@ -169,7 +169,7 @@ class G4RunManagerKernel
     inline G4PrimaryTransformer* GetPrimaryTransformer() const
     { return eventManager->GetPrimaryTransformer(); }
 
-    inline G4String GetVersionString() const
+    inline const G4String& GetVersionString() const
     { return versionString; }
 
     inline void SetVerboseLevel(G4int vl)

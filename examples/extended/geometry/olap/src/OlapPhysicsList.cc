@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: OlapPhysicsList.cc,v 1.2 2006/06/29 17:23:07 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: OlapPhysicsList.cc,v 1.2.6.1 2010/09/10 14:07:20 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-03-patch-02 $
 //
 // 
 // --------------------------------------------------------------
@@ -38,8 +38,6 @@
 #include "OlapPhysicsList.hh"
 
 #include "G4ios.hh"              
-#include "G4ParticleDefinition.hh"
-#include "G4ParticleWithCuts.hh"
 #include "G4ProcessManager.hh"
 #include "G4ProcessVector.hh"
 #include "G4ParticleTypes.hh"

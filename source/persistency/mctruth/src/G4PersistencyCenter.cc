@@ -36,6 +36,8 @@
 // Addtional Include:
 #include "G4UImanager.hh"
 #include "G4PersistencyManager.hh"
+#include "G4VHCIOentry.hh"
+#include "G4VDCIOentry.hh"
 
 G4PersistencyCenter* G4PersistencyCenter::f_thePointer=G4PersistencyCenter::GetPersistencyCenter();
 
@@ -73,9 +75,12 @@ G4PersistencyCenter::G4PersistencyCenter()
   f_currentManager = new G4PersistencyManager(this, "Default");
 }
 
-// Implementation of Constructor #2
-G4PersistencyCenter::G4PersistencyCenter(const G4PersistencyCenter&)
-{}
+// Fake implementation of Copy Constructor
+G4PersistencyCenter::G4PersistencyCenter(const G4PersistencyCenter& c)
+  : f_theMessenger(0), f_currentManager(0), m_verbose(0)
+{
+  *this = c;
+}
 
 // Implementation of Destructor #1
 G4PersistencyCenter::~G4PersistencyCenter()

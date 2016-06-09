@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunManagerKernel.cc,v 1.47 2009/11/13 23:13:40 asaim Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4RunManagerKernel.cc,v 1.47.2.1 2010/09/10 13:10:28 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-03-patch-02 $
 //
 //
 
@@ -257,8 +257,7 @@ void G4RunManagerKernel::InitializePhysics()
   if(!(currentState==G4State_Idle||currentState==G4State_PreInit))
   { 
     G4Exception("G4RunManagerKernel::InitializePhysics",
-                "InitializePhysicsAtIncorrectState",
-                JustWarning,
+                "InitializePhysicsAtIncorrectState", JustWarning,
                 "Geant4 kernel is not PreInit or Idle state : Method ignored.");
     return;
   }
@@ -266,13 +265,10 @@ void G4RunManagerKernel::InitializePhysics()
   if(!physicsList)
   {
     G4Exception("G4RunManagerKernel::InitializePhysics",
-                "PhysicsListIsNotDefined",
-                FatalException,
+                "PhysicsListIsNotDefined", FatalException,
                 "G4VUserPhysicsList is not defined");
+    return;
   }
-
-  //if(verboseLevel>1) G4cout << "physicsList->ConstructParticle() start." << G4endl;
-  //physicsList->ConstructParticle();
 
   if(verboseLevel>1) G4cout << "physicsList->Construct() start." << G4endl;
   if(numberOfParallelWorld>0) physicsList->UseCoupledTransportation();
@@ -430,7 +426,7 @@ void G4RunManagerKernel::CheckRegions()
   }
 }
 
-void G4RunManagerKernel::DumpRegion(G4String rname) const
+void G4RunManagerKernel::DumpRegion(const G4String& rname) const
 {
   G4Region* region = G4RegionStore::GetInstance()->GetRegion(rname);
   if(region) DumpRegion(region);
@@ -491,12 +487,19 @@ void G4RunManagerKernel::DumpRegion(G4Region* region) const
       region->SetProductionCuts(
           G4ProductionCutsTable::GetProductionCutsTable()->GetDefaultProductionCuts());
     }
-    G4cout << " Production cuts : "
-           << "  gamma " << G4BestUnit(cuts->GetProductionCut("gamma"),"Length")
-           << "     e- " << G4BestUnit(cuts->GetProductionCut("e-"),"Length")
-           << "     e+ " << G4BestUnit(cuts->GetProductionCut("e+"),"Length")
-           << " proton " << G4BestUnit(cuts->GetProductionCut("proton"),"Length")
-           << G4endl;
+    else
+    {
+      G4cout << " Production cuts : "
+             << "  gamma "
+             << G4BestUnit(cuts->GetProductionCut("gamma"),"Length")
+             << "     e- "
+             << G4BestUnit(cuts->GetProductionCut("e-"),"Length")
+             << "     e+ "
+             << G4BestUnit(cuts->GetProductionCut("e+"),"Length")
+             << " proton "
+             << G4BestUnit(cuts->GetProductionCut("proton"),"Length")
+             << G4endl;
+    }
   }
 }
 

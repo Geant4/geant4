@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4QNucleus.cc,v 1.116 2009/12/14 16:41:52 mkossov Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4QNucleus.cc,v 1.116.2.1 2010/09/13 08:53:05 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-03-patch-02 $
 //
 //      ---------------- G4QNucleus ----------------
 //             by Mikhail Kossov, Sept 1999.
@@ -3386,11 +3386,15 @@ void G4QNucleus::ChoosePositions()
   G4double       rPos=0.;                     // Radius of the nucleon position
   G4ThreeVector  delta(0.,0.,0.);             // Prototype of the distance between nucleons
   G4ThreeVector* places= new G4ThreeVector[theA]; // Vector of 3D positions
-  G4bool      freeplace= false;               // flag of free space available
+  G4bool         freeplace= false;            // flag of free space available
   G4double nucDist2= nucleonDistance*nucleonDistance; // @@ can be a common static
   G4double maxR= GetRadius(0.01);             // there are cond no nucleons at this density
-  G4ThreeVector sumPos(0.,0.,0.);             // Vector of the current 3D sum
-  while(i<theA)                               // LOOP over all nucleons
+  G4ThreeVector  sumPos(0.,0.,0.);            // Vector of the current 3D sum
+  G4ThreeVector  minPos(0.,0.,0.);            // Minimum nucleon 3D position
+  G4double       mirPos=maxR;                 // Proto MinimumRadius of the nucleonPosition
+  G4int failCNT=0;                            // Counter of bad attempts
+  G4int maxCNT=27;                            // Limit for the bad attempts
+  while( i < theA && maxR > 0.)               // LOOP over all nucleons
   {
     rPos = maxR*pow(G4UniformRand(),third);   // Get random radius of the nucleon position
     G4double density=rPos*rPos;               // Density at R (temporary squared radius)
@@ -3403,7 +3407,7 @@ void G4QNucleus::ChoosePositions()
     {
       // @@ Gaussian oscilator distribution is good only up to He4 (s-wave). Above: p-wave
       // (1+k*(r^2/R^2)]*exp[-r^2/R^2]. A=s+p=4+3*4=16 (M.K.) So Li,Be,C,N,O are wrong
-      if(i==lastN) aPos=-rPos*sumPos.unit();  // TheLast tries to compensate CenterOfGravity
+      if(i==lastN) aPos=-rPos*sumPos.unit();  // TheLast tries toCompensate CenterOfGravity
       else     aPos=rPos*G4RandomDirection(); // It uses the standard G4 function
       freeplace = true;                       // Imply that there is a free space
       for(G4int j=0; j<i && freeplace; j++)   // Check that there is no overlap with others
@@ -3425,15 +3429,24 @@ void G4QNucleus::ChoosePositions()
         G4double eFermi= sqrt(pFermi*pFermi+mProt2)-mProt;  // Kinetic energy
         if (eFermi <= CoulombBarrier()) freeplace=false;
       }
-      if(freeplace)
+      if(rPos<mirPos)
       {
+        mirPos=rPos;
+        minPos=aPos;
+      }
+      if( freeplace || failCNT > maxCNT )
+      {
+        if( failCNT > maxCNT ) aPos=minPos;
 #ifdef debug
-        G4cout<<"G4QNucl::ChoosePositions: fill nucleon i="<<i<<", V="<<aPos<<G4endl;
+        G4cout<<"G4QNuc::ChoosePos:->> fill N["<<i<<"], R="<<aPos<<", f="<<failCNT<<G4endl;
 #endif      
         places[i]=aPos;
         sumPos+=aPos;
         ++i;
+        failCNT=0;
+        mirPos=maxR;
       }
+      else ++failCNT;
     }
   }
 #ifdef debug

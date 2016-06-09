@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4GeometryCell.hh,v 1.6 2006/06/29 18:15:49 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4GeometryCell.hh,v 1.6.6.1 2010/09/08 14:18:53 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-03-patch-02 $
 //
 // ----------------------------------------------------------------------
 // Class G4GeometryCell
@@ -68,8 +68,8 @@ public:  // with description
   G4GeometryCell &operator=(const G4GeometryCell &rhs);
   
 private:
-  const G4VPhysicalVolume *fVPhysiclaVolume;
-    // pinter to the G4VPhysicalVolume of the "cell" 
+  const G4VPhysicalVolume *fVPhysicalVolume;
+    // pointer to the G4VPhysicalVolume of the "cell" 
     // it is treated as identifyer 
 
   G4int fRepNum;

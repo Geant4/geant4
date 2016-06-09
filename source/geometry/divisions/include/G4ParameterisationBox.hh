@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParameterisationBox.hh,v 1.6 2006/06/29 18:18:11 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4ParameterisationBox.hh,v 1.6.6.1 2010/09/08 14:21:12 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-03-patch-02 $
 //
 // classes G4ParameterisationBoxX,
 //         G4ParameterisationBoxY,
@@ -50,6 +50,7 @@ class G4VSolid;
 class G4VPhysicalVolume;
 
 // Dummy declarations to get rid of warnings ...
+//
 class G4Cons;
 class G4Trd;
 class G4Sphere;
@@ -79,13 +80,12 @@ class G4ParameterisationBoxX : public G4VParameterisationBox
     G4ParameterisationBoxX( EAxis axis, G4int nCopies,
                             G4double offset, G4double step,
                             G4VSolid* msolid, DivisionType divType );
-  
-    virtual ~G4ParameterisationBoxX();
+   ~G4ParameterisationBoxX();
 
-    virtual G4double GetMaxParameter() const;
+    G4double GetMaxParameter() const;
 
-    virtual void ComputeTransformation( const G4int copyNo,
-                                        G4VPhysicalVolume* physVol ) const;
+    void ComputeTransformation( const G4int copyNo,
+                                      G4VPhysicalVolume* physVol ) const;
     void ComputeDimensions(G4Box& box, const G4int copyNo,
                            const G4VPhysicalVolume* physVol) const;
 
@@ -122,12 +122,12 @@ class G4ParameterisationBoxY : public G4VParameterisationBox
     G4ParameterisationBoxY( EAxis axis, G4int nCopies,
                             G4double offset, G4double step,
                             G4VSolid* msolid, DivisionType divType );
-    virtual ~G4ParameterisationBoxY();
+   ~G4ParameterisationBoxY();
 
-    virtual G4double GetMaxParameter() const;
+    G4double GetMaxParameter() const;
 
-    virtual void ComputeTransformation( const G4int copyNo,
-                                        G4VPhysicalVolume* physVol ) const;
+    void ComputeTransformation( const G4int copyNo,
+                                      G4VPhysicalVolume* physVol ) const;
 
     void ComputeDimensions(G4Box& box, const G4int copyNo,
                            const G4VPhysicalVolume* physVol) const;
@@ -165,12 +165,12 @@ class G4ParameterisationBoxZ : public G4VParameterisationBox
     G4ParameterisationBoxZ( EAxis axis, G4int nCopies,
                             G4double offset, G4double step,
                             G4VSolid* msolid, DivisionType divType );
-    virtual ~G4ParameterisationBoxZ();
+   ~G4ParameterisationBoxZ();
 
-    virtual G4double GetMaxParameter() const;
+    G4double GetMaxParameter() const;
 
-    virtual void ComputeTransformation( const G4int copyNo,
-                                        G4VPhysicalVolume* physVol ) const;
+    void ComputeTransformation( const G4int copyNo,
+                                      G4VPhysicalVolume* physVol ) const;
     void ComputeDimensions(G4Box& box, const G4int copyNo,
                            const G4VPhysicalVolume* physVol) const;
 

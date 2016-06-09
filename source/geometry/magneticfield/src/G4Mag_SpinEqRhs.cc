@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Mag_SpinEqRhs.cc,v 1.15 2009/03/25 15:29:02 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4Mag_SpinEqRhs.cc,v 1.15.2.1 2010/09/08 14:25:35 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-03-patch-02 $
 //
 // This is the standard right-hand side for equation of motion.
 // This version of the right-hand side includes the three components
@@ -42,9 +42,9 @@
 #include "G4ThreeVector.hh"
 
 G4Mag_SpinEqRhs::G4Mag_SpinEqRhs( G4MagneticField* MagField )
-  : G4Mag_EqRhs( MagField ) 
+  : G4Mag_EqRhs( MagField ), omegac(0.), anomaly(0.0011659208),
+    pcharge(0.), E(0.), gamma(0.), beta(0.)
 {
-   anomaly = 0.0011659208;
 }
 
 G4Mag_SpinEqRhs::~G4Mag_SpinEqRhs()
@@ -61,7 +61,7 @@ G4Mag_SpinEqRhs::SetChargeMomentumMass(G4double particleCharge, // in e+ units
 
    omegac = 0.105658387*GeV/particleMass * 2.837374841e-3*(rad/cm/kilogauss);
 
-   ParticleCharge = particleCharge;
+   pcharge = particleCharge;
 
    E = std::sqrt(sqr(MomentumXc)+sqr(particleMass));
    beta  = MomentumXc/E;
@@ -100,7 +100,7 @@ G4Mag_SpinEqRhs::EvaluateRhsGivenB( const G4double y[],
 
    G4ThreeVector dSpin;
 
-   dSpin = ParticleCharge*omegac*(ucb*(Spin.cross(BField))-udb*(Spin.cross(u)));
+   dSpin = pcharge*omegac*(ucb*(Spin.cross(BField))-udb*(Spin.cross(u)));
 
    dydx[ 9] = dSpin.x();
    dydx[10] = dSpin.y();

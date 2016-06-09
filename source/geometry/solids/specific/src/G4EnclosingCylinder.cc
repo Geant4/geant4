@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4EnclosingCylinder.cc,v 1.10 2007/05/11 13:54:29 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4EnclosingCylinder.cc,v 1.10.10.1 2010/09/08 15:54:58 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-03-patch-02 $
 //
 // 
 // --------------------------------------------------------------------
@@ -93,6 +93,9 @@ G4EnclosingCylinder::G4EnclosingCylinder( const G4ReduciblePolygon *rz,
 //                            for usage restricted to object persistency.
 //
 G4EnclosingCylinder::G4EnclosingCylinder( __void__& )
+: radius(0.), zLo(0.), zHi(0.), phiIsOpen(0.), startPhi(0.), totalPhi(0.),
+  rx1(0.), ry1(0.), dx1(0.), dy1(0.), rx2(0.), ry2(0.), dx2(0.), dy2(0.),
+  concave(false)
 {
 }
 

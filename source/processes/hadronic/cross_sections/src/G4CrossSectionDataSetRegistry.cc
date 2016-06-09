@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4CrossSectionDataSetRegistry.cc,v 1.6.2.1 2010/04/01 09:24:11 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-03-patch-01 $
+// GEANT4 tag $Name: geant4-09-03-patch-02 $
 //
 // -------------------------------------------------------------------
 //

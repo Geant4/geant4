@@ -14,6 +14,32 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+9 September 2010  Tatsumi Koi (hadr-hpn-V09-02-03)
+- Add safety for negative value
+	G4NeutronHPInelasticCompFS.cc
+
+29 July 2010  Tatsumi Koi
+- Add safety for zero lenght cross section table Problem #1118
+        G4NeutronHPFissionData.cc
+
+29 July 2010  Tatsumi Koi
+- Add model name in constructor Problem #1116
+	G4NeutronHPThermalScattering.cc
+
+25 April 2010  Tatsumi Koi
+- Fix compiler warning
+	G4NeutronHPInelasticCompFS.cc
+
+13 April 2010  Tatsumi Koi
+- Fix bug about incidence energy
+	G4NeutronHPEnAngCorrelation.cc
+
+6 April 2010  Tatsumi Koi
+- "nothingWasKnownOnHadron=1" then sample mu isotropic in CM 
+   mu and p are correlated
+	G4NeutronHPInelasticCompFS.hh
+	G4NeutronHPInelasticCompFS.cc
+
 24 March 2010  Dennis Wright (hadr-hpn-V09-02-02)
 -------------------------------------------------
 - move all code in hadr-hpn-V09-02-01 to HEAD.

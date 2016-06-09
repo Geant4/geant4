@@ -1,4 +1,4 @@
-$Id$
+$Id: History,v 1.163.2.5 2010/09/10 08:56:35 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Apr 13th, 2010      G.Cosmo - geomvol-V09-02-06
+- Added Reset() method to G4ReflectionFactory for clearing maps of
+  constituent and reflected volumes.
 
 Apr 9th, 2010       G.Cosmo - geomvol-V09-02-05
 - Adopt assign() within G4NavigationHistory copy-constructor.

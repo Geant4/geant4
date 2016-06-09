@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4IntersectingCone.cc,v 1.12 2008/04/28 08:59:47 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4IntersectingCone.cc,v 1.12.4.1 2010/09/08 15:54:58 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-03-patch-02 $
 //
 // 
 // --------------------------------------------------------------------
@@ -47,10 +47,9 @@
 G4IntersectingCone::G4IntersectingCone( const G4double r[2],
                                         const G4double z[2] )
 { 
+  static const G4double halfCarTolerance
+    = 0.5 * G4GeometryTolerance::GetInstance()->GetSurfaceTolerance();
 
-
-  half_kCarTolerance = 0.5 * G4GeometryTolerance::GetInstance()
-                             ->GetSurfaceTolerance(); 
   //
   // What type of cone are we?
   //
@@ -71,20 +70,20 @@ G4IntersectingCone::G4IntersectingCone( const G4double r[2],
   //
   if (r[0] < r[1])
   {
-    rLo = r[0]-half_kCarTolerance; rHi = r[1]+half_kCarTolerance;
+    rLo = r[0]-halfCarTolerance; rHi = r[1]+halfCarTolerance;
   }
   else
   {
-    rLo = r[1]-half_kCarTolerance; rHi = r[0]+half_kCarTolerance;
+    rLo = r[1]-halfCarTolerance; rHi = r[0]+halfCarTolerance;
   }
   
   if (z[0] < z[1])
   {
-    zLo = z[0]-half_kCarTolerance; zHi = z[1]+half_kCarTolerance;
+    zLo = z[0]-halfCarTolerance; zHi = z[1]+halfCarTolerance;
   }
   else
   {
-    zLo = z[1]-half_kCarTolerance; zHi = z[0]+half_kCarTolerance;
+    zLo = z[1]-halfCarTolerance; zHi = z[0]+halfCarTolerance;
   }
 }
 
@@ -94,6 +93,7 @@ G4IntersectingCone::G4IntersectingCone( const G4double r[2],
 //                            for usage restricted to object persistency.
 //
 G4IntersectingCone::G4IntersectingCone( __void__& )
+  : zLo(0.), zHi(0.), rLo(0.), rHi(0.), type1(false), A(0.), B(0.)
 {
 }
 

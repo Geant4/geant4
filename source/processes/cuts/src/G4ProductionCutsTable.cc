@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4ProductionCutsTable.cc,v 1.25.2.1 2010/03/18 10:24:25 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-03-patch-01 $
+// GEANT4 tag $Name: geant4-09-03-patch-02 $
 //
 //
 // --------------------------------------------------------------

@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4VUserTrackInformation.hh,v 1.8.2.1 2010/03/18 10:09:31 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-03-patch-01 $
+// GEANT4 tag $Name: geant4-09-03-patch-02 $
 //
 //
 //---------------------------------------------------------------

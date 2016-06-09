@@ -16,6 +16,10 @@ Summarize all code modifications & keep track of all tags in this file.
      * Please list in reverse chronological order (last date on top) *
      -----------------------------------------------------------------
 
+29-Apr-2010 M.Kosov                          (hadr-chips-body-V09-02-18) 
+-----------------------------------------------------------------------
+Bug fix: Precautions for looping in G4QNucleus::ChoosePosition
+
 4-Feb-2009 M.Kosov                           (hadr-chips-body-V09-02-17) 
 -----------------------------------------------------------------------
 Fixed memory corruption in mass calculation
@@ -23,6 +27,10 @@ Fixed memory corruption in mass calculation
 4-Feb-2009 M.Kosov
 ------------------
 Mass correction in G4Quasmon, and closed loop-call in G4QEnvironment
+
+31-Jan-2010 M.Kosov
+-------------------
+Cleaning up
 
 26-Jan-2010 M.Kosov
 -------------------

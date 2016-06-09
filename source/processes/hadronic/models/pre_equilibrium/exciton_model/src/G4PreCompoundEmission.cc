@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4PreCompoundEmission.cc,v 1.22.2.1 2010/04/01 09:48:43 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-03-patch-01 $
+// GEANT4 tag $Name: geant4-09-03-patch-02 $
 //
 // -------------------------------------------------------------------
 //

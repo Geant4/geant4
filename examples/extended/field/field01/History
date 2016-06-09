@@ -1,4 +1,4 @@
-$Id: History,v 1.22.2.1 2010/04/06 09:46:57 gcosmo Exp $
+$Id: History,v 1.22.2.2 2010/09/10 14:35:52 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,10 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Apr 8th, 2010 Gabriele Cosmo - fieldex01-V09-02-02
+----------------------------
+- Removed unused pointers to G4MultipleScattering left...
 
 Mar 25th, 2010 Gabriele Cosmo - fieldex01-V09-02-01
 -----------------------------

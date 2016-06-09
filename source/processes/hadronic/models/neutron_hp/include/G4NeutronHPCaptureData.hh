@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4NeutronHPCaptureData.hh,v 1.11.4.1 2010/04/01 09:52:15 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-03-patch-01 $
+// GEANT4 tag $Name: geant4-09-03-patch-02 $
 //
 // 080417 Add IsZAApplicable method (return false) by T. Koi
 // 080428 Add bool onFlightDB by T. Koi

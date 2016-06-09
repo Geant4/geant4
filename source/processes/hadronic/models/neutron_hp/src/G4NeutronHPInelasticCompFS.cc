@@ -37,6 +37,9 @@
 // 081024 G4NucleiPropertiesTable:: to G4NucleiProperties::
 // 090514 Fix bug in IC electron emission case 
 //        Contribution from Chao Zhang (Chao.Zhang@usd.edu) and Dongming Mei(Dongming.Mei@usd.edu)
+// 100406 "nothingWasKnownOnHadron=1" then sample mu isotropic in CM 
+//        add two_body_reaction
+// 100909 add safty 
 //
 #include "G4NeutronHPInelasticCompFS.hh"
 #include "G4Nucleus.hh"
@@ -273,24 +276,21 @@ void G4NeutronHPInelasticCompFS::CompositeApply(const G4HadProjectile & theTrack
       aHadron.SetKineticEnergy(availableEnergy*residualMass*G4Neutron::Neutron()->GetPDGMass()/
                                (aHadron.GetMass()+residualMass*G4Neutron::Neutron()->GetPDGMass()));
 
-      aHadron.SetMomentum(theNeutron.GetMomentum()*(1./theNeutron.GetTotalMomentum())*
-                        std::sqrt(aHadron.GetTotalEnergy()*aHadron.GetTotalEnergy()-
-                                  aHadron.GetMass()*aHadron.GetMass()));
+      //aHadron.SetMomentum(theNeutron.GetMomentum()*(1./theNeutron.GetTotalMomentum())*
+      //                  std::sqrt(aHadron.GetTotalEnergy()*aHadron.GetTotalEnergy()-
+      //                            aHadron.GetMass()*aHadron.GetMass()));
 
-/*
-      G4double p2 = ( aHadron.GetTotalEnergy()*aHadron.GetTotalEnergy()-aHadron.GetMass()*aHadron.GetMass() );
+      //TK add safty 100909
+      G4double p2 = ( aHadron.GetTotalEnergy()*aHadron.GetTotalEnergy() - aHadron.GetMass()*aHadron.GetMass() );
       G4double p = 0.0;
-      if ( p2 > 0.0 )
-      { 
-         p = std::sqrt( p ); 
-      } 
+      if ( p2 > 0.0 ) p = std::sqrt( p ); 
+
       aHadron.SetMomentum(theNeutron.GetMomentum()*(1./theNeutron.GetTotalMomentum())*p );
-*/
 
     }
     else
     {
-      while( iLevel!=-1 && theGammas.GetLevel(iLevel)==0 ) { iLevel--; }
+      while( iLevel!=-1 && theGammas.GetLevel(iLevel) == 0 ) { iLevel--; }
     }
 
 
@@ -435,6 +435,47 @@ void G4NeutronHPInelasticCompFS::CompositeApply(const G4HadProjectile & theTrack
     //G4cout << "nothingWasKnownOnHadron " << nothingWasKnownOnHadron << G4endl;
     if(nothingWasKnownOnHadron)
     {
+//    TKDB 100405
+//    In this case, hadron should be isotropic in CM
+//    mu and p should be correlated
+//
+      G4double totalPhotonEnergy = 0.0;
+      if ( thePhotons != 0 )
+      {
+         unsigned int nPhotons = thePhotons->size();
+         unsigned int i0;
+         for ( i0=0; i0<nPhotons; i0++)
+         {
+            //thePhotons has energies at LAB system 
+            totalPhotonEnergy += thePhotons->operator[](i0)->GetTotalEnergy();
+         }
+      }
+
+      //isotropic distribution in CM 
+      G4double mu = 1.0 - 2 * G4UniformRand();
+
+      // need momentums in target rest frame;
+      G4LorentzVector target_in_LAB ( theTarget.GetMomentum() , theTarget.GetTotalEnergy() );
+      G4ThreeVector boostToTargetRest = -target_in_LAB.boostVector();
+      G4LorentzVector proj_in_LAB = incidentParticle->Get4Momentum();
+
+      G4DynamicParticle* proj = new G4DynamicParticle( G4Neutron::Neutron() , proj_in_LAB.boost( boostToTargetRest ) ); 
+      G4DynamicParticle* targ = new G4DynamicParticle( G4ParticleTable::GetParticleTable()->GetIon ( (G4int)theBaseZ , (G4int)theBaseA , totalPhotonEnergy )  , G4ThreeVector(0) );
+      G4DynamicParticle* hadron = new G4DynamicParticle( aHadron.GetDefinition() , G4ThreeVector(0) );  // will be fill momentum
+
+      two_body_reaction ( proj , targ , hadron , mu );
+
+      G4LorentzVector hadron_in_trag_rest = hadron->Get4Momentum();
+      G4LorentzVector hadron_in_LAB = hadron_in_trag_rest.boost ( -boostToTargetRest );
+      aHadron.SetMomentum( hadron_in_LAB.v() );
+      aHadron.SetKineticEnergy ( hadron_in_LAB.e() - hadron_in_LAB.m() );
+
+      delete proj;
+      delete targ; 
+      delete hadron;
+
+//TKDB 100405
+/*
       G4double totalPhotonEnergy = 0;
       if(thePhotons!=0)
       {
@@ -462,6 +503,7 @@ void G4NeutronHPInelasticCompFS::CompositeApply(const G4HadProjectile & theTrack
          p = std::sqrt ( p2 ); 
 
       aHadron.SetMomentum( Vector*p ); 
+*/
 
     }
 
@@ -600,4 +642,80 @@ void G4NeutronHPInelasticCompFS::CompositeApply(const G4HadProjectile & theTrack
 
 // clean up the primary neutron
     theResult.SetStatusChange(stopAndKill);
+}
+
+
+
+#include "G4RotationMatrix.hh" 
+void G4NeutronHPInelasticCompFS::two_body_reaction ( G4DynamicParticle* proj, G4DynamicParticle* targ, G4DynamicParticle* hadron, G4double mu ) 
+{
+
+// Target rest flame
+// 4vector in targ rest frame;
+// targ could have excitation energy (photon energy will be emiited) tricky but,,,
+
+   G4LorentzVector before = proj->Get4Momentum() + targ->Get4Momentum();
+
+   G4ThreeVector p3_proj = proj->GetMomentum();
+   G4ThreeVector d = p3_proj.unit();
+   G4RotationMatrix rot; 
+   G4RotationMatrix rot1; 
+   rot1.setPhi( pi/2 + d.phi() );
+   G4RotationMatrix rot2; 
+   rot2.setTheta( d.theta() );
+   rot=rot2*rot1;
+   proj->SetMomentum( rot*p3_proj );
+
+// Now proj only has pz component;
+
+// mu in CM system 
+
+   //Valid only for neutron incidence
+   G4DynamicParticle* residual = new G4DynamicParticle ( G4ParticleTable::GetParticleTable()->GetIon ( (G4int)( targ->GetDefinition()->GetPDGCharge() - hadron->GetDefinition()->GetPDGCharge() ) , (G4int)(targ->GetDefinition()->GetBaryonNumber() - hadron->GetDefinition()->GetBaryonNumber()+1) , 0 ) , G4ThreeVector(0) ); 
+
+   G4double Q = proj->GetDefinition()->GetPDGMass() + targ->GetDefinition()->GetPDGMass() 
+	      - ( hadron->GetDefinition()->GetPDGMass() + residual->GetDefinition()->GetPDGMass() );
+
+   // Non Relativistic Case 
+   G4double A = targ->GetDefinition()->GetPDGMass() / proj->GetDefinition()->GetPDGMass();
+   G4double AA = hadron->GetDefinition()->GetPDGMass() / proj->GetDefinition()->GetPDGMass(); 
+   G4double E1 = proj->GetKineticEnergy();
+   G4double beta = std::sqrt ( A*(A+1-AA)/AA*(1+(1+A)/A*Q/E1) );
+   G4double gamma = AA/(A+1-AA)*beta;
+   G4double E3 = AA/std::pow((1+A),2)*(beta*beta+1+2*beta*mu)*E1;
+   G4double omega3 = (1+beta*mu)/std::sqrt(beta*beta+1+2*beta*mu);
+
+   G4double E4 = (A+1-AA)/std::pow((1+A),2)*(gamma*gamma+1-2*gamma*mu)*E1;
+   G4double omega4 = (1-gamma*mu)/std::sqrt(gamma*gamma+1-2*gamma*mu);
+
+   hadron->SetKineticEnergy ( E3 );
+   
+   G4double M = hadron->GetDefinition()->GetPDGMass();
+   G4double pmag = std::sqrt ((E3+M)*(E3+M)-M*M) ;
+   G4ThreeVector p ( 0 , pmag*std::sqrt(1-omega3*omega3), pmag*omega3 );
+
+   G4double M4 = residual->GetDefinition()->GetPDGMass();
+   G4double pmag4 = std::sqrt ((E4+M4)*(E4+M4)-M4*M4) ;
+   G4ThreeVector p4 ( 0 , -pmag4*std::sqrt(1-omega4*omega4), pmag4*omega4 );
+
+// Rotate to orginal target rest flame.
+   p *= rot.inverse();
+   hadron->SetMomentum( p );
+// Now hadron had 4 momentum in target rest flame 
+
+// TypeA
+   p4 *= rot.inverse();
+   residual->SetMomentum ( p4 );
+
+//TypeB1
+   //residual->Set4Momentum ( p4_residual );
+//TypeB2
+   //residual->SetMomentum ( p4_residual.v() );
+
+// Type A make difference in Momenutum
+// Type B1 make difference in Mass of residual
+// Type B2 make difference in total energy.
+
+   delete residual;
+
 }

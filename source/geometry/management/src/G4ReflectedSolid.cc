@@ -24,9 +24,9 @@
 // ********************************************************************
 //
 //
-// $Id: G4ReflectedSolid.cc,v 1.11 2006/11/08 09:56:33 gcosmo Exp $
+// $Id: G4ReflectedSolid.cc,v 1.11.8.1 2010/09/08 14:29:46 gcosmo Exp $
 //
-// GEANT4 tag $Name: geant4-09-02 $
+// GEANT4 tag $Name: geant4-09-03-patch-02 $
 //
 // Implementation for G4ReflectedSolid class for boolean 
 // operations between other solids
@@ -256,13 +256,14 @@ G4ReflectedSolid::CalculateExtent( const EAxis pAxis,
 
   G4Point3D tmpPoint;
 
-// Calculate rotated vertex coordinates
+  // Calculate rotated vertex coordinates
 
   G4ThreeVectorList* vertices = new G4ThreeVectorList();
-  vertices->reserve(8);
 
   if (vertices)
   {
+    vertices->reserve(8);
+
     G4ThreeVector vertex0(x1,y1,z1) ;
     tmpPoint    = transform3D*G4Point3D(vertex0);
     vertex0     = G4ThreeVector(tmpPoint.x(),tmpPoint.y(),tmpPoint.z());

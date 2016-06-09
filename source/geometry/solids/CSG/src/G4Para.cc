@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Para.cc,v 1.39 2006/10/19 15:33:37 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4Para.cc,v 1.39.8.1 2010/09/08 14:52:47 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-03-patch-02 $
 //
 // class G4Para
 //
@@ -104,11 +104,7 @@ G4Para::G4Para(const G4String& pName,
                      G4double pAlpha, G4double pTheta, G4double pPhi)
   : G4CSGSolid(pName)
 {
-  if (pDx>0&&pDy>0&&pDz>0)
-  {
-    SetAllParameters( pDx, pDy, pDz, pAlpha, pTheta, pPhi);
-  }
-  else
+  if ((pDx<=0) || (pDy<=0) || (pDz<=0))
   {
     G4cerr << "ERROR - G4Para()::G4Para(): " << GetName() << G4endl
            << "        Invalid dimensions ! - "
@@ -116,6 +112,7 @@ G4Para::G4Para(const G4String& pName,
     G4Exception("G4Para::G4Para()", "InvalidSetup",
                 FatalException, "Invalid Length Parameters.");
   }
+  SetAllParameters( pDx, pDy, pDz, pAlpha, pTheta, pPhi);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -128,37 +125,29 @@ G4Para::G4Para( const G4String& pName,
                 const G4ThreeVector pt[8] )
   : G4CSGSolid(pName)
 {
-  if ( pt[0].z()<0 && pt[0].z()==pt[1].z() && pt[0].z()==pt[2].z() &&
-       pt[0].z()==pt[3].z() && pt[4].z()>0 && pt[4].z()==pt[5].z() &&
-       pt[4].z()==pt[6].z() && pt[4].z()==pt[7].z()           &&
-       (pt[0].z()+pt[4].z())==0                               &&
-       pt[0].y()==pt[1].y() && pt[2].y()==pt[3].y()           &&
-       pt[4].y()==pt[5].y() && pt[6].y()==pt[7].y()           &&
-       ( pt[0].y() + pt[2].y() + pt[4].y() + pt[6].y() ) == 0 && 
-       ( pt[0].x() + pt[1].x() + pt[4].x() + pt[5].x() ) == 0)
-  {
-    fDz = (pt[7]).z() ;
-
-    fDy = ((pt[2]).y()-(pt[1]).y())*0.5 ;
-    fDx = ((pt[1]).x()-(pt[0]).x())*0.5 ;
-    fDx = ((pt[3]).x()-(pt[2]).x())*0.5 ;
-    fTalpha = ((pt[2]).x()+(pt[3]).x()-(pt[1]).x()-(pt[0]).x())*0.25/fDy ;
-
-    // fDy = ((pt[6]).y()-(pt[5]).y())*0.5 ;
-    // fDx = ((pt[5]).x()-(pt[4]).x())*0.5 ;
-    // fDx = ((pt[7]).x()-(pt[6]).x())*0.5 ;
-    // fTalpha = ((pt[6]).x()+(pt[7]).x()-(pt[5]).x()-(pt[4]).x())*0.25/fDy ;
-
-    fTthetaCphi = ((pt[4]).x()+fDy*fTalpha+fDx)/fDz ;
-    fTthetaSphi = ((pt[4]).y()+fDy)/fDz ;
-  }
-  else
+  if (!( pt[0].z()<0 && pt[0].z()==pt[1].z() && pt[0].z()==pt[2].z() &&
+         pt[0].z()==pt[3].z() && pt[4].z()>0 && pt[4].z()==pt[5].z() &&
+         pt[4].z()==pt[6].z() && pt[4].z()==pt[7].z()           &&
+        (pt[0].z()+pt[4].z())==0                                &&
+         pt[0].y()==pt[1].y() && pt[2].y()==pt[3].y()           &&
+         pt[4].y()==pt[5].y() && pt[6].y()==pt[7].y()           &&
+       ( pt[0].y() + pt[2].y() + pt[4].y() + pt[6].y() ) == 0   && 
+       ( pt[0].x() + pt[1].x() + pt[4].x() + pt[5].x() ) == 0) )
   {
     G4cerr << "ERROR - G4Para()::G4Para(): " << GetName() << G4endl
            << "        Invalid dimensions !" << G4endl;
     G4Exception("G4Para::G4Para()", "InvalidSetup",
                 FatalException, "Invalid vertice coordinates.");
   }    
+  fDx = ((pt[3]).x()-(pt[2]).x())*0.5;
+  fDy = ((pt[2]).y()-(pt[1]).y())*0.5;
+  fDz = (pt[7]).z();
+  fTalpha = ((pt[2]).x()+(pt[3]).x()-(pt[1]).x()-(pt[0]).x())*0.25/fDy ;
+  fTthetaCphi = ((pt[4]).x()+fDy*fTalpha+fDx)/fDz ;
+  fTthetaSphi = ((pt[4]).y()+fDy)/fDz ;
+  fCubicVolume = 0.;
+  fSurfaceArea = 0.;
+  fpPolyhedron = 0;
 }
 
 ///////////////////////////////////////////////////////////////////////
@@ -167,7 +156,8 @@ G4Para::G4Para( const G4String& pName,
 //                            for usage restricted to object persistency.
 //
 G4Para::G4Para( __void__& a )
-  : G4CSGSolid(a)
+  : G4CSGSolid(a), fDx(0.), fDy(0.), fDz(0.),
+    fTalpha(0.), fTthetaCphi(0.), fTthetaSphi(0.)
 {
 }
 
@@ -1162,9 +1152,9 @@ G4Para::CreateRotatedVertices( const G4AffineTransform& pTransform ) const
 {
   G4ThreeVectorList *vertices;
   vertices=new G4ThreeVectorList();
-  vertices->reserve(8);
   if (vertices)
   {
+    vertices->reserve(8);
     G4ThreeVector vertex0(-fDz*fTthetaCphi-fDy*fTalpha-fDx,
                           -fDz*fTthetaSphi-fDy, -fDz);
     G4ThreeVector vertex1(-fDz*fTthetaCphi-fDy*fTalpha+fDx,

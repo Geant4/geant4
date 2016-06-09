@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Polycone.cc,v 1.43 2008/05/15 13:45:15 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4Polycone.cc,v 1.43.4.1 2010/09/08 15:54:58 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-03-patch-02 $
 //
 // 
 // --------------------------------------------------------------------
@@ -313,7 +313,8 @@ void G4Polycone::Create( G4double phiStart,
 //                            for usage restricted to object persistency.
 //
 G4Polycone::G4Polycone( __void__& a )
-  : G4VCSGfaceted(a), genericPcon(false), corners(0),
+  : G4VCSGfaceted(a), startPhi(0.),  endPhi(0.), phiIsOpen(false),
+    genericPcon(false), numCorner(0), corners(0),
     original_parameters(0), enclosingCylinder(0)
 {
 }
@@ -325,9 +326,8 @@ G4Polycone::G4Polycone( __void__& a )
 G4Polycone::~G4Polycone()
 {
   delete [] corners;
-  
-  if (original_parameters) delete original_parameters;
-  if (enclosingCylinder) delete enclosingCylinder;
+  delete original_parameters;
+  delete enclosingCylinder;
 }
 
 
@@ -733,7 +733,7 @@ G4ThreeVector G4Polycone::GetPointOnRing(G4double fRMin1, G4double fRMax1,
   else
   {
     rRand1 = RandFlat::shoot(fRMin1,fRMin2);
-    A1=std::abs(fRMin2*fRMin2-fRMin1*fRMin1);
+    A1=std::fabs(fRMin2*fRMin2-fRMin1*fRMin1);
   }
   if(fRMax1==fRMax2)
   {
@@ -742,7 +742,7 @@ G4ThreeVector G4Polycone::GetPointOnRing(G4double fRMin1, G4double fRMax1,
   else
   {
     rRand2 = RandFlat::shoot(fRMax1,fRMax2);
-    Atot   = A1+std::abs(fRMax2*fRMax2-fRMax1*fRMax1);
+    Atot   = A1+std::fabs(fRMax2*fRMax2-fRMax1*fRMax1);
   }
   rCh   = RandFlat::shoot(0.,Atot);
  
@@ -1150,8 +1150,8 @@ G4Polyhedron* G4Polycone::CreatePolyhedron() const
     }
     G4Polyhedron* polyhedron = new G4Polyhedron;
     G4int problem = polyhedron->createPolyhedron(nNodes, nFaces, xyz, faces_vec);
-    delete faces_vec;
-    delete xyz;
+    delete [] faces_vec;
+    delete [] xyz;
     if (problem)
     {
       std::ostringstream oss;
@@ -1183,7 +1183,8 @@ G4NURBS *G4Polycone::CreateNURBS() const
 //
 
 G4PolyconeHistorical::G4PolyconeHistorical()
-  : Z_values(0), Rmin(0), Rmax(0)
+  : Start_angle(0.), Opening_angle(0.), Num_z_planes(0),
+    Z_values(0), Rmin(0), Rmax(0)
 {
 }
 

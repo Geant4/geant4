@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eBremsstrahlungModel.cc,v 1.44 2009/04/09 18:41:18 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4eBremsstrahlungModel.cc,v 1.44.2.1 2010/09/10 15:16:04 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-03-patch-02 $
 //
 // -------------------------------------------------------------------
 //
@@ -91,7 +91,7 @@ G4eBremsstrahlungModel::G4eBremsstrahlungModel(const G4ParticleDefinition* p,
 {
   if(p) SetParticle(p);
   theGamma = G4Gamma::Gamma();
-  minThreshold = 1.0*keV;
+  minThreshold = 0.1*keV;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -900,20 +900,18 @@ const G4Element* G4eBremsstrahlungModel::SelectRandomAtom(
 
   if(1 < nElements) {
 
+    --nElements; 
     G4DataVector* dv = partialSumSigma[couple->GetIndex()];
-    G4double rval = G4UniformRand()*((*dv)[nElements-1]);
+    G4double rval = G4UniformRand()*((*dv)[nElements]);
 
-    for (G4int i=0; i<nElements; i++) {
-      if (rval <= (*dv)[i]) elm = (*theElementVector)[i];
+    elm = (*theElementVector)[nElements];
+    for (G4int i=0; i<nElements; ++i) {
+      if (rval <= (*dv)[i]) {
+	elm = (*theElementVector)[i];
+	break;
+      }
     }
-    if(!elm) {
-      G4cout << "G4eBremsstrahlungModel::SelectRandomAtom: Warning -"
-	     << " no elements found in "
-	     << material->GetName()
-	     << G4endl;
-      elm = (*theElementVector)[0];
-    }
-  } else elm = (*theElementVector)[0];
+  } else { elm = (*theElementVector)[0]; }
  
   SetCurrentElement(elm);
   return elm;

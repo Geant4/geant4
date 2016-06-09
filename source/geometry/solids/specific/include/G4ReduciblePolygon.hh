@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ReduciblePolygon.hh,v 1.9 2006/06/29 18:47:29 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4ReduciblePolygon.hh,v 1.9.12.1 2010/09/08 15:54:58 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-03-patch-02 $
 //
 // 
 // --------------------------------------------------------------------
@@ -141,7 +141,7 @@ class G4ReduciblePolygon
     friend struct ABVertex;       // protected nested structures
     struct ABVertex
     {
-      ABVertex() { next = 0; }
+      ABVertex() : a(0.), b(0.), next(0) {}
       G4double a, b;
       ABVertex *next;
     };

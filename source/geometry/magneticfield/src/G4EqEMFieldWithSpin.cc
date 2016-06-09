@@ -24,16 +24,15 @@
 // ********************************************************************
 //
 //
-// $Id: G4EqEMFieldWithSpin.cc,v 1.8 2009/11/06 22:31:35 gum Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4EqEMFieldWithSpin.cc,v 1.8.2.1 2010/09/08 14:25:35 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-03-patch-02 $
 //
 //
 //  This is the standard right-hand side for equation of motion.
 //
 //  30.08.2007 Chris Gong, Peter Gumplinger
 //  14.02.2009 Kevin Lynch
-//  06.11.2009 Hiromi Iinuma see:
-//  http://hypernews.slac.stanford.edu/HyperNews/geant4/get/emfields/161.html
+//  06.11.2009 Hiromi Iinuma
 //
 // -------------------------------------------------------------------
 
@@ -43,9 +42,9 @@
 #include "globals.hh"
 
 G4EqEMFieldWithSpin::G4EqEMFieldWithSpin(G4ElectroMagneticField *emField )
-  : G4EquationOfMotion( emField )
+  : G4EquationOfMotion( emField ), fElectroMagCof(0.), fMassCof(0.),
+    omegac(0.), anomaly(0.0011659208), pcharge(0.), E(0.), gamma(0.), beta(0.)
 {
-  anomaly = 0.0011659208;
 }
 
 G4EqEMFieldWithSpin::~G4EqEMFieldWithSpin()
@@ -62,7 +61,7 @@ G4EqEMFieldWithSpin::SetChargeMomentumMass(G4double particleCharge, // e+ units
 
    omegac = 0.105658387*GeV/particleMass * 2.837374841e-3*(rad/cm/kilogauss);
 
-   ParticleCharge = particleCharge;
+   pcharge = particleCharge;
 
    E = std::sqrt(sqr(MomentumXc)+sqr(particleMass));
    beta  = MomentumXc/E;
@@ -134,11 +133,11 @@ G4EqEMFieldWithSpin::EvaluateRhsGivenB(const G4double y[],
    G4ThreeVector Spin(y[9],y[10],y[11]);
 
    G4ThreeVector dSpin
-     = ParticleCharge*omegac*( ucb*(Spin.cross(BField))-udb*(Spin.cross(u))
+     = pcharge*omegac*( ucb*(Spin.cross(BField))-udb*(Spin.cross(u))
                                // from Jackson
                                // -uce*Spin.cross(u.cross(EField)) );
                                // but this form has one less operation
-                               - uce*(u*(Spin*EField) - EField*(Spin*u)) );
+                      - uce*(u*(Spin*EField) - EField*(Spin*u)) );
 
    dydx[ 9] = dSpin.x();
    dydx[10] = dSpin.y();

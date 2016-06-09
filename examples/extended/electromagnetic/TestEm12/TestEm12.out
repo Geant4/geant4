@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-03-patch-01-ref    (9-April-2010)
+ Geant4 version Name: geant4-09-03-patch-02-ref    (17-September-2010)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -389,7 +389,7 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
  Current couple of seeds = 9876, 54321
 ----------------------------------------
 
----> stepMax from HistoManager = 2e+02 um 
+---> stepMax from HistoManager = 200 um 
 Start Run processing.
 
 ---> Begin of Event: 0
@@ -414,7 +414,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=43.14s Real=43.63s Sys=0.31s
+  User=43.88s Real=44.2s Sys=0.29s
 
  ======================== run summary ======================
 
@@ -422,18 +422,18 @@ Run Summary
 
  ============================================================
 
- Total Energy deposited        = 3.938 MeV +- 225.530 keV
+ Total Energy deposited        = 3.937 MeV +- 229.403 keV
 
- Track length of primary track = 2.043 cm  +- 2.841 mm 
+ Track length of primary track = 2.043 cm  +- 2.806 mm 
  Range from EmCalculator       = 2.048 cm  (from full dE/dx)
 
- Projected range               = 1.316 cm  +- 4.207 mm 
+ Projected range               = 1.312 cm  +- 4.225 mm 
 
- Nb of steps of primary track  = 241.38 +- 31.72	 Step size= 84.638 um  +- 4.473 um 
+ Nb of steps of primary track  = 241.60 +- 31.10	 Step size= 84.538 um  +- 4.510 um 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1893906933, 259187119
+ Current couple of seeds = 237573985, 1167364186
 ----------------------------------------
 Graphics systems deleted.
 Visualization Manager deleting...

@@ -23,11 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4AdjointPrimaryGeneratorAction.hh,v 1.2 2009/11/18 18:02:06 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4AdjointPrimaryGeneratorAction.hh,v 1.2.2.1 2010/09/10 13:10:28 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-03-patch-02 $
 //
 /////////////////////////////////////////////////////////////////////////////////
-//      Class Name:	G4AdjointPosOnPhysVolGenerator
+//      Class Name:	G4AdjointPrimaryGeneratorAction
 //	Author:       	L. Desorgher
 // 	Organisation: 	SpaceIT GmbH
 //	Contract:	ESA contract 21435/08/NL/AT

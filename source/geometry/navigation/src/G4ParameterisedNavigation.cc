@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParameterisedNavigation.cc,v 1.12 2007/11/09 16:06:02 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4ParameterisedNavigation.cc,v 1.12.8.1 2010/09/08 14:40:52 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-03-patch-02 $
 //
 //
 // class G4ParameterisedNavigation Implementation
@@ -57,7 +57,8 @@
 // ********************************************************************
 //
 G4ParameterisedNavigation::G4ParameterisedNavigation()
-  : fVoxelHeader(0)
+  : fVoxelAxis(kUndefined), fVoxelNoSlices(0), fVoxelSliceWidth(0.),
+    fVoxelNodeNo(0), fVoxelHeader(0)
 {
 }
 

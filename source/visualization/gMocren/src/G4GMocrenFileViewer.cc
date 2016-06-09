@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4GMocrenFileViewer.cc,v 1.2.2.1 2010/03/18 10:29:16 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-03-patch-01 $
+// GEANT4 tag $Name: geant4-09-03-patch-02 $
 //
 //
 // Created:  Mar. 31, 2009  Akinori Kimura  

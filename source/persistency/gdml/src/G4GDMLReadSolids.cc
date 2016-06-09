@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // $Id: G4GDMLReadSolids.cc,v 1.27.2.1 2010/03/18 11:08:21 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-03-patch-01 $
+// GEANT4 tag $Name: geant4-09-03-patch-02 $
 //
 // class G4GDMLReadSolids Implementation
 //

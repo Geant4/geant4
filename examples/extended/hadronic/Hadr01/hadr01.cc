@@ -25,7 +25,7 @@
 //
 //
 // $Id: hadr01.cc,v 1.10.2.1 2010/03/18 10:33:19 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-03-patch-01 $
+// GEANT4 tag $Name: geant4-09-03-patch-02 $
 //
 // -------------------------------------------------------------
 //      GEANT4 hadr01

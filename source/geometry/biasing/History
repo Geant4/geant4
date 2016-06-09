@@ -1,4 +1,4 @@
-$Id: History,v 1.45 2007/11/09 15:22:38 ahoward Exp $
+$Id: History,v 1.45.6.1 2010/09/08 14:18:53 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,20 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+September 6th, 2010 G.Cosmo geombias-V09-02-00
+     - Fixed false-positive cases of invalid iterator in G4IStore and
+       G4WeightWindowStore.
+
+July 2nd, 2010 G.Cosmo
+     - G4IStore: corrected use of internal cell-importance iterator to avoid
+       invalidation in methods GetImportance().
+     - Corrected mispelled name for GetLowerWeight() method in classes
+       G4WeightWindowStore and G4VWeightWindowStore. Fixed use of internal
+       cell-importance iterator in G4WeightWindowStore::GetLowerWeight() to
+       avoid cases of invalidation.
+     - Fixed initialization of data in copy-constructor for G4GeometryCell
+       and corrected mispelled name for data member pointer.
 
 November 9th, 2007 A.Howard geombias-V09-00-01
      - Revised search algorithm to Weight/UpperBound + 1.

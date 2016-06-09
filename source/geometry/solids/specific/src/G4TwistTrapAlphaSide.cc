@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4TwistTrapAlphaSide.cc,v 1.8 2007/05/23 13:26:06 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4TwistTrapAlphaSide.cc,v 1.8.10.1 2010/09/08 15:54:59 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-03-patch-02 $
 //
 // 
 // --------------------------------------------------------------------
@@ -122,7 +122,11 @@ G4TwistTrapAlphaSide(const G4String     &name,
 //* Fake default constructor ------------------------------------------
 
 G4TwistTrapAlphaSide::G4TwistTrapAlphaSide( __void__& a )
-  : G4VTwistSurface(a)
+  : G4VTwistSurface(a), fTheta(0.), fPhi(0.), fDy1(0.), fDx1(0.), fDx2(0.), 
+    fDy2(0.), fDx3(0.), fDx4(0.), fDz(0.), fAlph(0.), fTAlph(0.), fPhiTwist(0.), 
+    fAngleSide(0.), fDx4plus2(0.), fDx4minus2(0.), fDx3plus1(0.), fDx3minus1(0.), 
+    fDy2plus1(0.), fDy2minus1(0.), fa1md1(0.), fa2md2(0.), fdeltaX(0.),
+    fdeltaY(0.)
 {
 }
 

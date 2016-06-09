@@ -25,7 +25,7 @@
 //
 //
 // $Id: B01PhysicsList.cc,v 1.8.6.1 2010/04/06 09:45:02 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-03-patch-01 $
+// GEANT4 tag $Name: geant4-09-03-patch-02 $
 //
 
 #include "globals.hh"

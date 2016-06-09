@@ -34,10 +34,12 @@
 //       -level density parameter of residual calculated at its right excitation energy.
 //       -InitialLeveldensity calculated according to the right conditions of the 
 //        initial excited nucleus.
+// J. M. Quesada 19/04/2010 fix in  emission probability calculation.
+// V.Ivanchenko  20/04/2010 added usage of G4Pow and use more safe computation
 
 #include "G4GEMProbability.hh"
 #include "G4PairingCorrection.hh"
-
+#include "G4Pow.hh"
 
 
 G4GEMProbability::G4GEMProbability(const G4GEMProbability &) : G4VEmissionProbability()
@@ -85,8 +87,10 @@ G4double G4GEMProbability::EmissionProbability(const G4Fragment & fragment,
 	G4double Tmax = MaximalKineticEnergy - ExcitationEnergies->operator[](i);
 	if (Tmax > 0.0) {
 	  G4double width = CalcProbability(fragment,Tmax,CoulombBarrier);
+	  //JMQ April 2010 added condition to prevent reported crash
 	  // update probability
-	  if (hbar_Planck*std::log(2.0)/width < ExcitationLifetimes->operator[](i)) {
+	  if (width > 0. && 
+	      hbar_Planck*G4Pow::GetInstance()->logZ(2) < width*ExcitationLifetimes->operator[](i)) {
 	    EmissionProbability += width;
 	  }
 	}

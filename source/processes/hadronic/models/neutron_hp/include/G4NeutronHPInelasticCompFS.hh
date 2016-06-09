@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPInelasticCompFS.hh,v 1.13 2007/06/06 12:45:13 ahoward Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4NeutronHPInelasticCompFS.hh,v 1.13.6.1 2010/09/13 08:42:10 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-03-patch-02 $
 //
 #ifndef G4NeutronHPInelasticCompFS_h
 #define G4NeutronHPInelasticCompFS_h 1
@@ -108,5 +108,10 @@ class G4NeutronHPInelasticCompFS : public G4NeutronHPFinalState
   
   G4double theCurrentA;
   G4double theCurrentZ;
+
+   private:
+      //                       proj                 targ                 had                  mu of had   
+      void two_body_reaction ( G4DynamicParticle* , G4DynamicParticle* , G4DynamicParticle* , G4double mu ); 
+
 };
 #endif

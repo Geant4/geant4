@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4MagIntegratorDriver.hh,v 1.20 2007/05/10 10:10:05 japost Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4MagIntegratorDriver.hh,v 1.20.8.1 2010/09/08 14:25:35 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-03-patch-02 $
 //
 //
 // class G4MagInt_Driver
@@ -240,8 +240,8 @@ class G4MagInt_Driver
 
      G4int  fNoTotalSteps, fNoBadSteps, fNoSmallSteps, fNoInitialSmallSteps; 
      G4double fDyerr_max, fDyerr_mx2;
-     G4double fDyerrPos_smTot, fDyerrVel_smTot, fDyerrPos_lgTot, fDyerrVel_lgTot; 
-     G4double fSumH_sm,   fSumH_lg; 
+     G4double fDyerrPos_smTot, fDyerrPos_lgTot, fDyerrVel_lgTot; 
+     G4double fSumH_sm, fSumH_lg; 
         // Step Statistics 
 
      G4int    fStatisticsVerboseLevel;

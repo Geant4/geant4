@@ -14,6 +14,13 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+16 Jul 2010 Andrea Dotti (hadr-casc-V09-02-13)
+----------------------------------------------
+- Fix for long-standing problem of energy non conservation in pion-nuclear
+  reaction on very light nuclei (in particular He) in G4CascadeInterface.
+  The workaround re-samples the interaction in the rare case when an
+  unphysical final state with baryon number violation is generated.
+
 20 Jan 2010 Gabriele Cosmo (hadr-casc-V09-02-12)
 ------------------------------------------------
 - G4InteractionCase.hh:  Minor fix in initialisation in constructor to

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4MagIntegratorDriver.cc,v 1.53 2009/11/05 22:31:43 japost Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4MagIntegratorDriver.cc,v 1.53.2.1 2010/09/08 14:25:35 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-03-patch-02 $
 //
 // 
 //
@@ -77,7 +77,7 @@ G4MagInt_Driver::G4MagInt_Driver( G4double                hminimum,
     fNoTotalSteps(0),  fNoBadSteps(0), fNoSmallSteps(0),
     fNoInitialSmallSteps(0), fDyerr_max(0.0), fDyerr_mx2(0.0), 
     fDyerrPos_smTot(0.0), fDyerrPos_lgTot(0.0), fDyerrVel_lgTot(0.0), 
-    fSumH_sm(0.0),   fSumH_lg(0.0),
+    fSumH_sm(0.0), fSumH_lg(0.0),
     fStatisticsVerboseLevel(statisticsVerbose)
 {  
   // In order to accomodate "Laboratory Time", which is [7], fMinNoVars=8
@@ -207,6 +207,7 @@ G4MagInt_Driver::AccurateAdvance(G4FieldTrack& y_current,
     G4ThreeVector StartPos( y[0], y[1], y[2] );
 
 #ifdef G4DEBUG_FIELD
+    G4double xSubStepStart= x; 
     for (i=0;i<nvar;i++)  { ySubStepStart[i] = y[i]; }
     yFldTrkStart.LoadFromArray(y, fNoIntegrationVariables);
     yFldTrkStart.SetCurveLength(x);
@@ -226,9 +227,8 @@ G4MagInt_Driver::AccurateAdvance(G4FieldTrack& y_current,
       //--------------------------------------
       lastStepSucceeded= (hdid == h);   
 #ifdef G4DEBUG_FIELD
-      if (dbg>2)
-      {
-        PrintStatus( ySubStepStart, xSubStart, y, x, h,  nstp); // Only
+      if (dbg>2) {
+        PrintStatus( ySubStepStart, xSubStepStart, y, x, h,  nstp); // Only
       }
 #endif
     }
@@ -290,8 +290,11 @@ G4MagInt_Driver::AccurateAdvance(G4FieldTrack& y_current,
     if( (dbg>0) && (dbg<=2) && (nstp>nStpPr))
     {
       if( nstp==nStpPr )  { G4cout << "***** Many steps ****" << G4endl; }
+      G4cout << "MagIntDrv: " ; 
       G4cout << "hdid="  << std::setw(12) << hdid  << " "
-             << "hnext=" << std::setw(12) << hnext << " " << G4endl;
+             << "hnext=" << std::setw(12) << hnext << " " 
+	     << "hstep=" << std::setw(12) << hstep << " (requested) " 
+	     << G4endl;
       PrintStatus( ystart, x1, y, x, h, (nstp==nStpPr) ? -nstp: nstp); 
     }
 #endif
@@ -368,13 +371,16 @@ G4MagInt_Driver::AccurateAdvance(G4FieldTrack& y_current,
         // Cannot progress - accept this as last step - by default
         lastStep = true;
 #ifdef G4DEBUG_FIELD
-        if (dbg)
+        if (dbg>2)
         {
+          int prec= G4cout.precision(12); 
           G4cout << "Warning: G4MagIntegratorDriver::AccurateAdvance"
                  << G4endl
                  << "  Integration step 'h' became "
-                 << h << " due to roundoff " << G4endl
+                 << h << " due to roundoff. " << G4endl
+		 << " Calculated as difference of x2= "<< x2 << " and x=" << x
                  << "  Forcing termination of advance." << G4endl;
+          G4cout.precision(prec);
         }          
 #endif
       }
@@ -580,7 +586,8 @@ G4MagInt_Driver::OneGoodStep(      G4double y[],        // InOut
       errspin_sq =  ( sqr(yerr[9]) + sqr(yerr[10]) + sqr(yerr[11]) )
                  /  ( sqr(y[9]) + sqr(y[10]) + sqr(y[11]) );
       errspin_sq *= inv_eps_vel_sq;
-    }
+      errmax_sq = std::max( errmax_sq, errspin_sq ); 
+   }
 
     if ( errmax_sq <= 1.0 )  { break; } // Step succeeded. 
 

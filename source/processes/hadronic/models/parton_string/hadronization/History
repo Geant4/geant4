@@ -1,4 +1,4 @@
-$Id: History,v 1.10 2009/07/17 12:30:45 vuzhinsk Exp $
+$Id: History,v 1.10.2.2 2010/09/13 09:24:01 gcosmo Exp $
 -------------------------------------------------------------------
 
        ==========================================================
@@ -14,18 +14,30 @@ code and to keep track of all tags.
      ---------------------------------------------------------------
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
-17-July-2009 V. Uzhinsky                 (had-hadronization-V09-02-03)
-   Some small optimization are done.
----------------------------------------------------------------------
+
+21-June-2010  V. Uzhinsky               (had-hadronization-V09-02-06)
+--------------------------------------------------------------
+- Lund string fragmentation is improved. The inselfconsistency
+  between LightFragmentationTest and Lund fragmentation is erased.
+  Energy conservation in FTF is recovered.
+
+6-December-2010  V. Uzhinsky,           (had-hadronization-V09-02-04)
+--------------------------------------------------------------
+- Lund string fragm. improved, start fragmentation.
+
+17-July-2009  V. Uzhinsky               (had-hadronization-V09-02-03)
+--------------------------------------------------------------
+- Some small optimization are done.
+
 9-July-2009 V. Uzhinsky                 (had-hadronization-V09-02-02)
----------------------------------------------------------------------
+--------------------------------------------------------------
 - Bug was fixed in G4VLongitudinalStringDecay.cc at calculation of
   formation/creation time, c_light was inserted.
 - String tension parameter was set to the usual value (1 GeV/fm) in
   G4LundStringFragmentation.cc
 
---------------------------------------------------------------
 22-May-2009   Gunter Folger             (had-hadronization-V09-02-01)
+--------------------------------------------------------------
 - remove temporary workaround - fix is now in QGS
 - change pt sampling in G4LundStringFragmentation to avoid near endless
   loop; this should improve overall performance slightly.
@@ -33,34 +45,33 @@ code and to keep track of all tags.
   implemented; affected .hh and .cc for new optional argument of max Pt 
   to SampleQuarkPt()
 
-
 18-May-2009   Gunter Folger             (had-hadronization-V09-02-00)
 ---------------------------------------------------------------------
 - reset formatting changes by MK with tags hadr-prtn-hadr-V09-02-xx
 - temporary workaround for wrong PDG codes created on wrong input from QGS 
-   when used for e.g. antiproton.
+  when used for e.g. antiproton.
    
 2-May 2007    Gunter Folger             (had-hadronization-V08-02-03)
 ---------------------------------------------------------------------
--  G4ExcitedStringDecay.hh: protect againt divide by 0 when KTsum1.e() 
-    is 0. 
+- G4ExcitedStringDecay.hh: protect againt divide by 0 when KTsum1.e() is 0. 
     
 24-April 2007 Gunter Folger             (had-hadronization-V08-02-02)
 ---------------------------------------------------------------------
--  Seperate FTF and QGS fragmentation dir methods where V.Uzhinsky
-    modified the algorithm for FTF. 
-    
+- Seperate FTF and QGS fragmentation dir methods where V.Uzhinsky
+  modified the algorithm for FTF.
 
-2-March 2007 G.Folger                   (had-hadronization-V08-02-01)
+2-March 2007 Gunter Folger              (had-hadronization-V08-02-01)
 ---------------------------------------------------------------------
 - G4ExcitedStringDecay::EnergyAndMomentumCorrector no longer causes Exception 
-   when no converging. Add more info when failing. Return correct status.
+  when no converging. Add more info when failing. Return correct status.
    
+24-Jan 2007 Gunter Folger               (had-hadronization-V08-02-00)
+--------------------------------------------------------------
+- G4ExcitedStringDecay::EnergyAndMomentumCorrector :
+  Correct bug which did stop correction even if not yet converged;
+  check on convergence must check that scale-1 is close to 0,
+  and not less than 0
 
-24-Jan 2007 GF: 				tag had-hadronization-V08-02-00
-	G4ExcitedStringDecay::EnergyAndMomentumCorrector :
-          Correct bug which did stop correction even if not yet converged;
-          check on convergence must check that scale-1 is close to 0, 
-	  and not less than 0
-26-May 2006 GF: Fix ( finally?) the charge check in G4HadronBuilder.cc
-
+26-May 2006 Gunter Folger
+--------------------------------------------------------------
+- Fix ( finally?) the charge check in G4HadronBuilder.cc

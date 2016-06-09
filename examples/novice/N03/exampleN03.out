@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-03-patch-01-ref    (9-April-2010)
+ Geant4 version Name: geant4-09-03-patch-02-ref    (17-September-2010)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -357,16 +357,16 @@ Index : 2     used in the geometry : Yes     recalculation needed : No
  Current couple of seeds = 9876, 54321
 ----------------------------------------
 ---> End of event: 0
-   Absorber: total energy: 275.20785 MeV       total track length: 19.457951 cm 
-        Gap: total energy: 19.115159 MeV       total track length: 9.3632873 cm 
+   Absorber: total energy: 275.208 MeV       total track length:  19.458 cm 
+        Gap: total energy: 19.1152 MeV       total track length: 9.36329 cm 
 
 --------------------End of Run------------------------------
 
- mean Energy in Absorber : 275.20785 MeV +- 0 eV 
- mean Energy in Gap      : 19.115159 MeV +- 0 eV 
+ mean Energy in Absorber : 275.208 MeV +- 0 eV 
+ mean Energy in Gap      : 19.1152 MeV +- 0 eV 
 
- mean trackLength in Absorber : 19.457951 cm  +- 0 fm 
- mean trackLength in Gap      : 9.3632873 cm  +- 0 fm 
+ mean trackLength in Absorber : 19.458 cm  +- 0 fm 
+ mean trackLength in Gap      : 9.36329 cm  +- 0 fm 
 ------------------------------------------------------------
 
      Transportation,                msc,              hIoni,            ionIoni
@@ -385,7 +385,7 @@ compt:   for  gamma    SubType= 13
        Klein-Nishina :     Emin=          0 eV         Emax=   10 TeV
 
 conv:   for  gamma    SubType= 14
-      Lambda tables from 1.0219978 MeV to 10 TeV in 77 bins, spline: 1
+      Lambda tables from 1.022 MeV to 10 TeV in 77 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
        Bethe-Heitler :     Emin=          0 eV         Emax=   10 TeV
 
@@ -468,8 +468,8 @@ ionIoni:   for  GenericIon    SubType= 2
       finalRange(mm)= 0.1, dRoverRange= 0.1, integral: 1, fluct: 1, linLossLimit= 0.02
       Stopping Power data for 17 ion/material pairs, nuclearStopping: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            BraggIon :     Emin=          0 eV         Emax=   2.0000006 MeV
-          BetheBloch :     Emin=  2.0000006 MeV        Emax=   10 TeV
+            BraggIon :     Emin=          0 eV         Emax=   2 MeV
+          BetheBloch :     Emin=          2 MeV        Emax=   10 TeV
 
 hIoni:   for  anti_proton    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -486,8 +486,8 @@ hIoni:   for  kaon+    SubType= 2
       finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       NuclearStopping= 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               Bragg :     Emin=          0 eV         Emax=   1.052311 MeV
-          BetheBloch :     Emin=   1.052311 MeV        Emax=   10 TeV
+               Bragg :     Emin=          0 eV         Emax=   1.05231 MeV
+          BetheBloch :     Emin=    1.05231 MeV        Emax=   10 TeV
 
 hIoni:   for  kaon-    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -495,8 +495,8 @@ hIoni:   for  kaon-    SubType= 2
       finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       NuclearStopping= 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               Bragg :     Emin=          0 eV         Emax=   1.052311 MeV
-          BetheBloch :     Emin=   1.052311 MeV        Emax=   10 TeV
+               Bragg :     Emin=          0 eV         Emax=   1.05231 MeV
+          BetheBloch :     Emin=    1.05231 MeV        Emax=   10 TeV
 
 muMsc:   for mu+    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
@@ -552,8 +552,8 @@ hIoni:   for  pi+    SubType= 2
       finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       NuclearStopping= 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               Bragg :     Emin=          0 eV         Emax=   297.50434 keV
-          BetheBloch :     Emin=  297.50434 keV        Emax=   10 TeV
+               Bragg :     Emin=          0 eV         Emax=   297.504 keV
+          BetheBloch :     Emin=    297.504 keV        Emax=   10 TeV
 
 hBrems:   for  pi+    SubType= 3
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -579,8 +579,8 @@ hIoni:   for  pi-    SubType= 2
       finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       NuclearStopping= 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               Bragg :     Emin=          0 eV         Emax=   297.50434 keV
-          BetheBloch :     Emin=  297.50434 keV        Emax=   10 TeV
+               Bragg :     Emin=          0 eV         Emax=   297.504 keV
+          BetheBloch :     Emin=    297.504 keV        Emax=   10 TeV
 
 hBrems:   for  pi-    SubType= 3
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -602,16 +602,16 @@ hPairProd:   for  pi-    SubType= 4
  Current couple of seeds = 399520705, 1405277458
 ----------------------------------------
 ---> End of event: 0
-   Absorber: total energy: 279.75422 MeV       total track length: 19.901912 cm 
-        Gap: total energy: 18.671614 MeV       total track length: 9.7191178 cm 
+   Absorber: total energy: 279.754 MeV       total track length: 19.9019 cm 
+        Gap: total energy: 18.6716 MeV       total track length: 9.71912 cm 
 
 --------------------End of Run------------------------------
 
- mean Energy in Absorber : 279.75422 MeV +- 0 eV 
- mean Energy in Gap      : 18.671614 MeV +- 0 eV 
+ mean Energy in Absorber : 279.754 MeV +- 0 eV 
+ mean Energy in Gap      : 18.6716 MeV +- 0 eV 
 
- mean trackLength in Absorber : 19.901912 cm  +- 0 fm 
- mean trackLength in Gap      : 9.7191178 cm  +- 0 fm 
+ mean trackLength in Absorber : 19.9019 cm  +- 0 fm 
+ mean trackLength in Gap      : 9.71912 cm  +- 0 fm 
 ------------------------------------------------------------
 
 
@@ -629,7 +629,7 @@ compt:   for  gamma    SubType= 13
        Klein-Nishina :     Emin=          0 eV         Emax=   10 TeV
 
 conv:   for  gamma    SubType= 14
-      Lambda tables from 1.0219978 MeV to 10 TeV in 77 bins, spline: 1
+      Lambda tables from 1.022 MeV to 10 TeV in 77 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
        Bethe-Heitler :     Emin=          0 eV         Emax=   10 TeV
 
@@ -712,8 +712,8 @@ ionIoni:   for  GenericIon    SubType= 2
       finalRange(mm)= 0.1, dRoverRange= 0.1, integral: 1, fluct: 1, linLossLimit= 0.02
       Stopping Power data for 17 ion/material pairs, nuclearStopping: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            BraggIon :     Emin=          0 eV         Emax=   2.0000006 MeV
-          BetheBloch :     Emin=  2.0000006 MeV        Emax=   10 TeV
+            BraggIon :     Emin=          0 eV         Emax=   2 MeV
+          BetheBloch :     Emin=          2 MeV        Emax=   10 TeV
 
 hIoni:   for  anti_proton    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -730,8 +730,8 @@ hIoni:   for  kaon+    SubType= 2
       finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       NuclearStopping= 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               Bragg :     Emin=          0 eV         Emax=   1.052311 MeV
-          BetheBloch :     Emin=   1.052311 MeV        Emax=   10 TeV
+               Bragg :     Emin=          0 eV         Emax=   1.05231 MeV
+          BetheBloch :     Emin=    1.05231 MeV        Emax=   10 TeV
 
 hIoni:   for  kaon-    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -739,8 +739,8 @@ hIoni:   for  kaon-    SubType= 2
       finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       NuclearStopping= 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               Bragg :     Emin=          0 eV         Emax=   1.052311 MeV
-          BetheBloch :     Emin=   1.052311 MeV        Emax=   10 TeV
+               Bragg :     Emin=          0 eV         Emax=   1.05231 MeV
+          BetheBloch :     Emin=    1.05231 MeV        Emax=   10 TeV
 
 muMsc:   for mu+    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
@@ -796,8 +796,8 @@ hIoni:   for  pi+    SubType= 2
       finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       NuclearStopping= 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               Bragg :     Emin=          0 eV         Emax=   297.50434 keV
-          BetheBloch :     Emin=  297.50434 keV        Emax=   10 TeV
+               Bragg :     Emin=          0 eV         Emax=   297.504 keV
+          BetheBloch :     Emin=    297.504 keV        Emax=   10 TeV
 
 hBrems:   for  pi+    SubType= 3
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -823,8 +823,8 @@ hIoni:   for  pi-    SubType= 2
       finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       NuclearStopping= 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               Bragg :     Emin=          0 eV         Emax=   297.50434 keV
-          BetheBloch :     Emin=  297.50434 keV        Emax=   10 TeV
+               Bragg :     Emin=          0 eV         Emax=   297.504 keV
+          BetheBloch :     Emin=    297.504 keV        Emax=   10 TeV
 
 hBrems:   for  pi-    SubType= 3
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -846,16 +846,16 @@ hPairProd:   for  pi-    SubType= 4
  Current couple of seeds = 330333918, 180809835
 ----------------------------------------
 ---> End of event: 0
-   Absorber: total energy: 404.61721 MeV       total track length: 96.080817 cm 
-        Gap: total energy: 89.598634 MeV       total track length: 2.4895852 m  
+   Absorber: total energy: 404.617 MeV       total track length: 96.0808 cm 
+        Gap: total energy: 89.5986 MeV       total track length: 2.48959 m  
 
 --------------------End of Run------------------------------
 
- mean Energy in Absorber : 404.61721 MeV +- 0 eV 
- mean Energy in Gap      : 89.598634 MeV +- 0 eV 
+ mean Energy in Absorber : 404.617 MeV +- 0 eV 
+ mean Energy in Gap      : 89.5986 MeV +- 0 eV 
 
- mean trackLength in Absorber : 96.080817 cm  +- 0 fm 
- mean trackLength in Gap      : 2.4895852 m   +- 0 fm 
+ mean trackLength in Absorber : 96.0808 cm  +- 0 fm 
+ mean trackLength in Gap      : 2.48959 m   +- 0 fm 
 ------------------------------------------------------------
 
 Graphics systems deleted.

@@ -14,7 +14,12 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+03 September 2010 Gabriele Cosmo    hadr-mod-util-V09-02-08
+--------------------------------------------------------
+- G4Fancy3DNucleus: added missing std:: to call to sort() algorithm in code.
+
 10 December 2009 Gunter Folger     hadr-mod-util-V09-02-07
+--------------------------------------------------------
 - G4NuclearFermiDensity.hh: chnage value of prtection in GetDeriv() to lower
     value
     

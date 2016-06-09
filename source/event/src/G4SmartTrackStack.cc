@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4SmartTrackStack.cc,v 1.3 2009/09/16 23:10:46 asaim Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4SmartTrackStack.cc,v 1.3.2.1 2010/09/08 14:14:08 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-03-patch-02 $
 //
 
 #include "G4SmartTrackStack.hh"
@@ -72,7 +72,7 @@ G4StackedTrack * G4SmartTrackStack::PopFromStack()
   {
     if(stacks[fTurn]->GetNTrack()==0)
     {
-      fTurn = (++fTurn)%nTurn;
+      fTurn = (fTurn+1)%nTurn;
       //G4cout<<"++++++++ Shift to Stack ["<<fTurn<<"] with "<<stacks[fTurn]->GetNTrack()<<" stacked tracks."<<G4endl;
     }
     else

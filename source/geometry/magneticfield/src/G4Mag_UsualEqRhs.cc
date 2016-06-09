@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Mag_UsualEqRhs.cc,v 1.12 2006/06/29 18:24:42 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4Mag_UsualEqRhs.cc,v 1.12.8.1 2010/09/08 14:25:35 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-03-patch-02 $
 //
 //
 //  This is the 'standard' right-hand side for the equation of motion
@@ -39,7 +39,7 @@
 #include "G4MagneticField.hh"
 
 G4Mag_UsualEqRhs::G4Mag_UsualEqRhs( G4MagneticField* MagField )
-  : G4Mag_EqRhs( MagField ) {}
+  : G4Mag_EqRhs( MagField ), fInvCurrentMomentumXc(0.) {}
 
 G4Mag_UsualEqRhs::~G4Mag_UsualEqRhs() {}
 

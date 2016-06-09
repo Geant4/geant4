@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Navigator.cc,v 1.39 2009/05/08 06:47:32 tnikitin Exp $
+// $Id: G4Navigator.cc,v 1.39.4.1 2010/09/08 14:40:52 gcosmo Exp $
 // GEANT4 tag $ Name:  $
 // 
 // class G4Navigator Implementation
@@ -165,6 +165,9 @@ G4Navigator::LocateGlobalPointAndSetup( const G4ThreeVector& globalPoint,
         {
           fLastLocatedPointLocal = localPoint;
           fLocatedOutsideWorld = true;
+#ifdef G4VERBOSE
+          G4cout.precision(oldcoutPrec);
+#endif
           return 0;           // Have exited world volume
         }
         // A fix for the case where a volume is "entered" at an edge
@@ -290,6 +293,9 @@ G4Navigator::LocateGlobalPointAndSetup( const G4ThreeVector& globalPoint,
       {
         fLastLocatedPointLocal = localPoint;
         fLocatedOutsideWorld = true;
+#ifdef G4VERBOSE
+        G4cout.precision(oldcoutPrec);
+#endif
         return 0;         // Have exited world volume
       }
     }
@@ -328,6 +334,9 @@ G4Navigator::LocateGlobalPointAndSetup( const G4ThreeVector& globalPoint,
           {
             fLastLocatedPointLocal = localPoint;
             fLocatedOutsideWorld = true;
+#ifdef G4VERBOSE
+            G4cout.precision(oldcoutPrec);
+#endif
             return 0;          // Have exited world volume
           }
         }
@@ -359,6 +368,7 @@ G4Navigator::LocateGlobalPointAndSetup( const G4ThreeVector& globalPoint,
     // Determine `type' of current mother volume
     //
     targetPhysical = fHistory.GetTopVolume();
+    if (!targetPhysical) { break; }
     targetLogical = targetPhysical->GetLogicalVolume();
     switch( CharacteriseDaughters(targetLogical) )
     {
@@ -451,12 +461,8 @@ G4Navigator::LocateGlobalPointAndSetup( const G4ThreeVector& globalPoint,
 #ifdef G4VERBOSE
   if( fVerbose == 4 )
   {
-    G4cout.precision(6);
     G4String curPhysVol_Name("None");
-    if (targetPhysical!=0)
-    {
-      curPhysVol_Name = targetPhysical->GetName();
-    }
+    if (targetPhysical)  { curPhysVol_Name = targetPhysical->GetName(); }
     G4cout << "    Return value = new volume = " << curPhysVol_Name << G4endl;
     G4cout << "    ----- Upon exiting:" << G4endl;
     PrintState();
@@ -626,7 +632,7 @@ G4double G4Navigator::ComputeStep( const G4ThreeVector &pGlobalpoint,
                                          G4double &pNewSafety)
 {
   G4ThreeVector localDirection = ComputeLocalAxis(pDirection);
-  G4double Step = DBL_MAX;
+  G4double Step = kInfinity;
   G4VPhysicalVolume  *motherPhysical = fHistory.GetTopVolume();
   G4LogicalVolume *motherLogical = motherPhysical->GetLogicalVolume();
 
@@ -1111,7 +1117,7 @@ void G4Navigator::ResetState()
   fBlockedPhysicalVolume = 0;
   fBlockedReplicaNo      = -1;
 
-  fLastLocatedPointLocal = G4ThreeVector( DBL_MAX, -DBL_MAX, 0.0 ); 
+  fLastLocatedPointLocal = G4ThreeVector( kInfinity, -kInfinity, 0.0 ); 
   fLocatedOutsideWorld   = false;
 }
 
@@ -1131,7 +1137,6 @@ void G4Navigator::SetupHierarchy()
   G4VSolid *pSolid;
   G4VPVParameterisation *pParam;
 
-  mother = fHistory.GetVolume(0);
   for ( i=1; i<=cdepth; i++ )
   {
     current = fHistory.GetVolume(i);

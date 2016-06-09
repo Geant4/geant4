@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OsloMatrix.cc,v 1.6 2006/06/29 18:42:24 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4OsloMatrix.cc,v 1.6.8.1 2010/09/08 16:31:32 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-03-patch-02 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -37,14 +37,13 @@
 #include "G4OsloMatrix.hh"
 
 G4OsloMatrix::G4OsloMatrix()
+  : next(0), offset(0), osize(0), o_vec(0)
 {
-  o_vec = (G4KnotVector*)0;
-  next  = (G4OsloMatrix*)0;
 }
 
 G4OsloMatrix::G4OsloMatrix(G4int vec_size, G4int offsetparam, G4int osizeparam)
 {
-  next   = (G4OsloMatrix*)0;
+  next   = 0;
   o_vec  = new G4KnotVector(vec_size);
   offset = offsetparam;
   osize  = osizeparam;
@@ -62,26 +61,24 @@ G4PointMatrix::G4PointMatrix()
 }
 
 
-G4PointMatrix::G4PointMatrix(int rows, int columns)
+G4PointMatrix::G4PointMatrix(G4int rows, G4int columns)
 {
-  nr=rows; 
-  nc=columns; 
+  nr=rows; nc=columns; 
   data = new G4double[nr*nc];
-  
-  for(int a =0; a<nr*nc;a++) 
-    data[a]=0;
+  for(G4int a =0; a<nr*nc;a++) 
+    { data[a]=0; }
 }
 
 
 G4PointMatrix::G4PointMatrix(G4double vec[])
 {
-  nr = 4;
-  nc = 4; 
+  nr = nc = 4; 
   data = new G4double[nr*nc];
-  
-  for(int a=0;a<nr*nc;a++)
-    data[a]=vec[a];
+  for(G4int a=0;a<nr*nc;a++)
+    { data[a]=vec[a]; }
 }
 
-G4PointMatrix::~G4PointMatrix(){;}
-
+G4PointMatrix::~G4PointMatrix()
+{
+  delete [] data;
+}

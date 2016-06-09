@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4CurvePoint.cc,v 1.5 2006/06/29 18:42:04 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4CurvePoint.cc,v 1.5.8.1 2010/09/08 16:31:32 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-03-patch-02 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -41,7 +41,7 @@ const G4int G4CurvePoint::uFlag= 2;
 const G4int G4CurvePoint::allFlags= 0xFF; // lots of bits...
 
 G4CurvePoint::G4CurvePoint()
- : c(0)
+ : c(0), u(0.), notComputed(allFlags)
 {
 }
 

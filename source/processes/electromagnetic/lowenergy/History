@@ -1,4 +1,4 @@
-$Id: History,v 1.407.4.2 2010/04/01 09:08:29 gcosmo Exp $
+$Id: History,v 1.407.4.3 2010/09/10 13:02:45 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,11 +17,22 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+15.06.2010, G. Cosmo, tag emlowen-V09-02-71
+            Corrected return value case in method GetPhotoElectronDirection()
+            in G4PhotoElectricAngularGeneratorSauterGavrila; addressing problem
+            report #1120.
+
+10.06.2010, A. Mantero,
+            Fix in G4AugerTransition to cure crash on Windows.
+
+26.03.2010, A. Mantero
+            Fixed bugs in G4AtomicDeexcitation.cc, G4AugerTransition.cc
+
 25.03.2010, S. Incerti, tag emlowen-V09-02-70
             Modified hydrogen correction in G4DNARuddIonisation.cc
 
 18.03.2010, S. Incerti
-            - Re-added vapor water shell constants to G4DNARuddIonisationModel.cc
+            Re-added vapor water shell constants to G4DNARuddIonisationModel.cc
             as suggested by Ziad.
 
 18.03.2010, S. Incerti

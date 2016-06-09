@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4NystromRK4.cc,v 1.6 2009/12/16 17:49:57 gunter Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4NystromRK4.cc,v 1.6.2.2 2010/09/14 07:59:52 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-03-patch-02 $
 //
 // History:
 // - Created:      I.Gavrilenko    15.05.2009   (as G4AtlasRK4)
@@ -48,10 +48,11 @@ G4NystromRK4::G4NystromRK4(G4Mag_EqRhs* magEqRhs, G4double distanceConstField)
     m_imom( 0.0 ),
     m_cachedMom( false )
 {
-  m_fldPosition[0]  = m_iPoint[1] = m_fPoint[2] = 9.9999999e+99 ;
-  m_fldPosition[1]  = m_iPoint[1] = m_fPoint[2] = 9.9999999e+99 ;
-  m_fldPosition[2]  = m_iPoint[1] = m_fPoint[2] = 9.9999999e+99 ;
+  m_fldPosition[0]  = m_iPoint[0] = m_fPoint[0] = m_mPoint[0] = 9.9999999e+99 ;
+  m_fldPosition[1]  = m_iPoint[1] = m_fPoint[1] = m_mPoint[1] = 9.9999999e+99 ;
+  m_fldPosition[2]  = m_iPoint[2] = m_fPoint[2] = m_mPoint[2] = 9.9999999e+99 ;
   m_fldPosition[3]  = -9.9999999e+99;
+  m_lastField[0] = m_lastField[1] = m_lastField[2] = 0.0;
 
   m_magdistance2 = distanceConstField*distanceConstField;
 }
@@ -195,7 +196,8 @@ G4NystromRK4::DistChord() const
 void 
 G4NystromRK4::ComputeRightHandSide(const G4double P[],G4double dPdS[])
 {
-  getField(P);
+  G4double P4vec[4]= { P[0], P[1], P[2], P[7] }; // Time is P[7]
+  getField(P4vec);
   m_mom   = std::sqrt(P[3]*P[3]+P[4]*P[4]+P[5]*P[5])     ; 
   m_imom  = 1./m_mom                                ;
   m_cof   = m_fEq->FCof()*m_imom                    ;

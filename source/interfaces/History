@@ -1,4 +1,4 @@
-$Id: History,v 1.122 2009/11/20 22:15:20 kmura Exp $
+$Id: History,v 1.122.2.1 2010/09/10 09:02:49 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+15 April, 2010 G. Cosmo (interfaces-V09-02-08)
+- Fixed call to contructor QKeySequence() in G4UIQt:AddButton() to
+  allow for porting on gcc-4.5.
 
 20 November, 2009 K. Murakami (interfaces-V09-02-07)
 - G4UIExecutive.hh:  no default arguments of the constructor

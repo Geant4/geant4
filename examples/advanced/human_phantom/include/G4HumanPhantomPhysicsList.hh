@@ -23,14 +23,18 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// Authors: S. Guatelli and M. G. Pia, INFN Genova, Italy
-// 
-// Based on code developed by the undergraduate student G. Guerrieri 
-// Note: this is a preliminary beta-version of the code; an improved 
-// version will be distributed in the next Geant4 public release, compliant
-// with the design in a forthcoming publication, and subject to a 
-// design and code review.
 //
+// $Id: G4HumanPhantomPhysicsList.hh,v 1.5.6.1 2010/09/10 14:23:49 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-03-patch-02 $
+//
+// Authors: S. Guatelli, G. Guerrieri and M. G. Pia 
+//
+//    **********************************
+//    *                                *
+//    *      G4HumanPhantomPhysicsList.hh      *
+//    *                                *
+//    **********************************
+
 #ifndef G4HumanPhantomPhysicsList_h
 #define G4HumanPhantomPhysicsList_h 1
 
@@ -53,9 +57,11 @@ protected:
   void SetCuts();
 
 private:
+
   // These methods construct physics processes and register them
   void ConstructEM();
 };
+
 #endif
 
 

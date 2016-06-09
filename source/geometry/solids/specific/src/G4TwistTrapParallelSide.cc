@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4TwistTrapParallelSide.cc,v 
-// GEANT4 tag $Name: geant4-09-02 $
+// GEANT4 tag $Name: geant4-09-03-patch-02 $
 //
 // 
 // --------------------------------------------------------------------
@@ -61,7 +61,8 @@ G4TwistTrapParallelSide::G4TwistTrapParallelSide(const G4String     &name,
                            G4double      pDx4,        // half x length at +pDz,+pDy
                            G4double      pAlph,      // tilt angle at +pDz
                            G4double      AngleSide    // parity
-                                               ) : G4VTwistSurface(name)
+                                               )
+  : G4VTwistSurface(name), fDy(0.)
 {  
   
   fAxis[0]    = kXAxis; // in local coordinate system
@@ -119,7 +120,11 @@ G4TwistTrapParallelSide::G4TwistTrapParallelSide(const G4String     &name,
 //* Fake default constructor ------------------------------------------
 
 G4TwistTrapParallelSide::G4TwistTrapParallelSide( __void__& a )
-  : G4VTwistSurface(a)
+  : G4VTwistSurface(a), fTheta(0.), fPhi(0.), fDy1(0.), fDx1(0.), fDx2(0.), 
+    fDy2(0.), fDx3(0.), fDx4(0.), fDz(0.), fAlph(0.), fTAlph(0.), fPhiTwist(0.), 
+    fAngleSide(0.), fdeltaX(0.), fdeltaY(0.), fDx4plus2(0.), fDx4minus2(0.), 
+    fDx3plus1(0.), fDx3minus1(0.), fDy2plus1(0.), fDy2minus1(0.), fa1md1(0.), 
+    fa2md2(0.), fDy(0.)
 {
 }
 

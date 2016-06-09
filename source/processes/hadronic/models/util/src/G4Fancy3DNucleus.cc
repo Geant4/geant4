@@ -143,7 +143,7 @@ void G4Fancy3DNucleus::SortNucleonsIncZ() // on increased Z-coordinates Uzhi 29.
 
 	if (theRWNucleons.size() < 2 ) return; 
 
-	sort( theRWNucleons.begin(),theRWNucleons.end(),G4Fancy3DNucleusHelperForSortInZ); 
+	std::sort( theRWNucleons.begin(),theRWNucleons.end(),G4Fancy3DNucleusHelperForSortInZ); 
 
 // now copy sorted nucleons to theNucleons array. TheRWNucleons are pointers in theNucleons
 //  so we need to copy to new, and then swap. 
@@ -168,7 +168,7 @@ void G4Fancy3DNucleus::SortNucleonsDecZ() // on decreased Z-coordinates Uzhi 29.
 	GetNucleons();   // make sure theRWNucleons is initialised
 
 	if (theRWNucleons.size() < 2 ) return; 
-	sort( theRWNucleons.begin(),theRWNucleons.end(),G4Fancy3DNucleusHelperForSortInZ); 
+	std::sort( theRWNucleons.begin(),theRWNucleons.end(),G4Fancy3DNucleusHelperForSortInZ); 
 
 // now copy sorted nucleons to theNucleons array. TheRWNucleons are pointers in theNucleons
 //  so we need to copy to new, and then swap. 

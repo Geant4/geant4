@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Mag_SpinEqRhs.hh,v 1.11 2006/06/29 18:23:09 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4Mag_SpinEqRhs.hh,v 1.11.8.1 2010/09/08 14:25:35 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-03-patch-02 $
 //
 //
 // class G4Mag_SpinEqRhs
@@ -74,8 +74,7 @@ class G4Mag_SpinEqRhs : public G4Mag_EqRhs
 
      G4double omegac;
      G4double anomaly;
-     G4double ParticleCharge;
-
+     G4double pcharge;
      G4double E;
      G4double gamma;
      G4double beta;

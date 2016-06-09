@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4GeometryManager.cc,v 1.22 2008/05/16 13:46:48 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4GeometryManager.cc,v 1.22.4.1 2010/09/08 14:29:46 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-03-patch-02 $
 //
 // class G4GeometryManager
 //
@@ -260,7 +260,7 @@ void G4GeometryManager::BuildOptimisations(G4bool allOpts,
      // Don't create voxels for this node
 #ifdef G4GEOMETRY_VOXELDEBUG
      G4cout << "**** G4GeometryManager::BuildOptimisations" << G4endl
-            << "     Skipping logical volume name = " << volume->GetName()
+            << "     Skipping logical volume name = " << tVolume->GetName()
             << G4endl;
 #endif
    }
@@ -358,7 +358,8 @@ G4GeometryManager::ReportVoxelStats( std::vector<G4SmartVoxelStat> & stats,
   G4cout << "    Total memory consumed for geometry optimisation:   "
          << totalMemory/1024 << " kByte" << G4endl;
   G4cout << "    Total CPU time elapsed for geometry optimisation: " 
-         << std::setprecision(2) << totalCpuTime << " seconds" << G4endl;
+         << std::setprecision(2) << totalCpuTime << " seconds"
+         << std::setprecision(6) << G4endl;
  
   //
   // First list: sort by total CPU time

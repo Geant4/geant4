@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4AtomicDeexcitation.cc,v 1.11 
-// GEANT4 tag $Name: geant4-09-03 $
+// GEANT4 tag $Name: geant4-09-03-patch-02 $
 //
 // Authors: Elena Guardincerri (Elena.Guardincerri@ge.infn.it)
 //          Alfonso Mantero (Alfonso.Mantero@ge.infn.it)
@@ -383,9 +383,7 @@ G4DynamicParticle* G4AtomicDeexcitation::GenerateAuger(G4int Z, G4int shellId)
       // G4int augerOriginatingShellId = 0;
       
       G4int numberOfPossibleAuger = 0;
-      numberOfPossibleAuger = anAugerTransition->AugerTransitionProbabilities(transitionRandomShellId)->size();
-
-
+      
       G4bool foundFlag = false;
 
       while (transitionRandomShellIndex < transitionSize) {

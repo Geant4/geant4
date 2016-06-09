@@ -1,4 +1,4 @@
-$Id: History,v 1.31 2009/05/20 08:55:23 gcosmo Exp $
+$Id: History,v 1.31.2.1 2010/09/08 14:21:12 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,21 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+September, 6th, 2010    G.Cosmo (geomdiv-V09-02-01)
+- Removed obvious else statement in constructors of G4PVDivision.
+
+July, 2nd, 2010         G.Cosmo
+- Improved logic in G4PVDivision constructors and in method
+  G4PVDivisionFactory::CreatePVDivision() in case of invalid construct.
+- Properly initialise Boolean flag 'bDivInTrap' in G4VParameterisationTrd
+  constructor.
+- G4ParameterisationTrd: disabled unreachable error message in method
+  G4ParameterisationTrdX::CheckParametersValidity().
+- Removed uninitialised member in G4ParameterisationTrdX and correction in
+  method ComputeSolid().
+- Get rid of unnecessary virtual specification for leaf classes in the
+  hierarchy...
 
 May, 20th, 2009         I.Hrivnacova (geomdiv-V09-02-00)
 - Allow for generic divisions along Z for polyhedras and polycones; now

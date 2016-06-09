@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4BREPSolid.cc,v 1.37 2008/03/13 14:18:57 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4BREPSolid.cc,v 1.37.4.1 2010/09/08 16:31:32 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-03-patch-02 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -54,7 +54,7 @@ G4BREPSolid::G4BREPSolid(const G4String& name)
  : G4VSolid(name),
    Box(0), Convex(0), AxisBox(0), PlaneSolid(0), place(0), bbox(0),
    intersectionDistance(kInfinity), active(1), startInside(0),
-   nb_of_surfaces(0), SurfaceVec(0), solidname(name),
+   nb_of_surfaces(0), SurfaceVec(0), RealDist(0.), solidname(name), Id(0),
    fStatistics(1000000), fCubVolEpsilon(0.001), fAreaAccuracy(-1.),
    fCubicVolume(0.), fSurfaceArea(0.), fpPolyhedron(0)
 {
@@ -66,7 +66,8 @@ G4BREPSolid::G4BREPSolid( const G4String&   name        ,
  : G4VSolid(name),
    Box(0), Convex(0), AxisBox(0), PlaneSolid(0), place(0), bbox(0),
    intersectionDistance(kInfinity), active(1), startInside(0),
-   nb_of_surfaces(numberOfSrfs), SurfaceVec(srfVec),
+   nb_of_surfaces(numberOfSrfs), SurfaceVec(srfVec), RealDist(0.),
+   solidname(name), Id(0),
    fStatistics(1000000), fCubVolEpsilon(0.001), fAreaAccuracy(-1.),
    fCubicVolume(0.), fSurfaceArea(0.), fpPolyhedron(0)
 {
@@ -77,7 +78,7 @@ G4BREPSolid::G4BREPSolid( __void__& a )
   : G4VSolid(a),
    Box(0), Convex(0), AxisBox(0), PlaneSolid(0), place(0), bbox(0),
    intersectionDistance(kInfinity), active(1), startInside(0),
-   nb_of_surfaces(0), SurfaceVec(0),
+   nb_of_surfaces(0), SurfaceVec(0), RealDist(0.), solidname(""), Id(0),
    fStatistics(1000000), fCubVolEpsilon(0.001), fAreaAccuracy(-1.),
    fCubicVolume(0.), fSurfaceArea(0.), fpPolyhedron(0)
 {
@@ -386,8 +387,7 @@ G4int G4BREPSolid::IsBox()
 
 G4bool G4BREPSolid::IsConvex()
 {
-  if(!PlaneSolid)
-    return 0; // All faces must be planar
+  if (!PlaneSolid) { return 0; }    // All faces must be planar
 
   // This is not robust. There can be concave solids
   // where the concavity comes for example from three triangles.
@@ -397,8 +397,8 @@ G4bool G4BREPSolid::IsConvex()
   // connecting face. If the result changes value at any point the
   // solid is concave.
   
-  G4Surface* Srf;
-  G4Surface* ConnectedSrf;
+  G4Surface* Srf=0;
+  G4Surface* ConnectedSrf=0;
   G4int Result;
   Convex = 1;
   
@@ -413,7 +413,7 @@ G4bool G4BREPSolid::IsConvex()
     //
     Result = Srf->IsConvex();
     
-    if(Result != -1)
+    if (Result != -1)
     {
       Convex = 0;
       return 0;
@@ -421,22 +421,20 @@ G4bool G4BREPSolid::IsConvex()
   }
 
   Srf = SurfaceVec[0];        
-  G4Point3D Pt1;
-  G4Point3D Pt2;
-  
-  G4int ConnectingPoints=0;
-  
-  G4Vector3D N1;
-  G4Vector3D N2;    
+
+  G4int ConnectingPoints=0;  
+  G4Point3D  Pt1, Pt2;
+  G4Vector3D N1, N2;    
 
   // L. Broglia
   // The number of connecting points can be 
   // (nb_of_surfaces-1) * nb_of_surfaces  (loop a & loop b)
   
-  // G4int* ConnectedList = new G4int[nb_of_surfaces];  
-  G4int* ConnectedList = new G4int[(nb_of_surfaces-1) * nb_of_surfaces];  
+  // G4int* ConnectedList = new G4int[nb_of_surfaces];
+  const G4int maxCNum =  (nb_of_surfaces-1)*nb_of_surfaces; 
+  G4int* ConnectedList = new G4int[maxCNum];  
 
-  for(a=0; a<nb_of_surfaces; a++)
+  for(a=0; a<maxCNum; a++)
   {
     ConnectedList[a]=0;
   }
@@ -451,12 +449,8 @@ G4bool G4BREPSolid::IsConvex()
     
     for(b=0; b<nb_of_surfaces; b++)
     {
-      if(b==a)
-        b++;
-      
-      if(b==nb_of_surfaces)
-        break;
-      
+      if (b==a) { continue; }
+
       // Get next in List
       //
       ConnectedSrf = SurfaceVec[b];
@@ -474,14 +468,12 @@ G4bool G4BREPSolid::IsConvex()
           // Find common points
           //
           const G4Point3D& Pts2 = ConnectedSrf->GetPoint(d);
-          if(Pts1 == Pts2)
-            ConnectingPoints++;
+          if (Pts1 == Pts2)  { ConnectingPoints++; }
         }
-        if(ConnectingPoints > 0) 
-          break;
+        if (ConnectingPoints > 0)  { break; }
       }
       
-      if( ConnectingPoints > 0 )
+      if (ConnectingPoints > 0)
       {
         Connections++;
         ConnectedList[Connections]=b;
@@ -511,13 +503,12 @@ G4bool G4BREPSolid::IsConvex()
     //
     G4Vector3D CP = G4Vector3D( N1.cross(N2) ); 
     G4double CrossProd = CP.x()+CP.y()+CP.z();
-    if( CrossProd > 0 )
-      Left++;
-    if(CrossProd < 0)
-      Right++;
-    if(Left&&Right)
+    if (CrossProd > 0)  { Left++;  }
+    if (CrossProd < 0)  { Right++; }
+    if (Left&&Right)
     {
       Convex = 0;
+      delete [] ConnectedList;
       return 0;
     }
     Connections=0;
@@ -525,9 +516,7 @@ G4bool G4BREPSolid::IsConvex()
   
   Convex=1;
 
-  // L. Broglia
-  // Problems with this delete when there are many solids to create
-  // delete [] ConnectedList;
+  delete [] ConnectedList;
 
   return 1;
 }
@@ -699,10 +688,10 @@ G4BREPSolid::CreateRotatedVertices(const G4AffineTransform& pTransform) const
 
   G4ThreeVectorList *vertices;
   vertices=new G4ThreeVectorList();
-  vertices->reserve(8);
     
   if (vertices)
   {
+    vertices->reserve(8);
     G4ThreeVector vertex0(Min.x(),Min.y(),Min.z());
     G4ThreeVector vertex1(Max.x(),Min.y(),Min.z());
     G4ThreeVector vertex2(Max.x(),Max.y(),Min.z());

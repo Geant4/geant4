@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4GMocrenIO.cc,v 1.4.2.1 2010/03/18 10:29:16 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-03-patch-01 $
+// GEANT4 tag $Name: geant4-09-03-patch-02 $
 //
 //
 // File I/O manager class for writing or reading calcuated dose

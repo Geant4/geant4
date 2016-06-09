@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParameterisationPolycone.hh,v 1.8 2009/05/14 14:19:32 ivana Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4ParameterisationPolycone.hh,v 1.8.2.1 2010/09/08 14:21:12 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-03-patch-02 $
 // 
 // classes G4ParameterisationPolyconeRho,
 //         G4ParameterisationPolyconePhi,
@@ -50,6 +50,7 @@
 class G4VPhysicalVolume;
 
 // Dummy declarations to get rid of warnings ...
+//
 class G4Trd;
 class G4Trap;
 class G4Cons;
@@ -84,14 +85,14 @@ class G4ParameterisationPolyconeRho : public G4VParameterisationPolycone
                                    G4double offset, G4double step,
                                    G4VSolid* motherSolid,
                                    DivisionType divType );
-    virtual ~G4ParameterisationPolyconeRho();
+   ~G4ParameterisationPolyconeRho();
 
-    virtual void CheckParametersValidity();
+    void CheckParametersValidity();
 
-    virtual G4double GetMaxParameter() const;
+    G4double GetMaxParameter() const;
 
-    virtual void ComputeTransformation( const G4int copyNo,
-                                        G4VPhysicalVolume* physVol ) const;
+    void ComputeTransformation( const G4int copyNo,
+                                      G4VPhysicalVolume* physVol ) const;
     void ComputeDimensions( G4Polycone& pcone, const G4int copyNo,
                             const G4VPhysicalVolume* physVol ) const;
 
@@ -133,12 +134,12 @@ class G4ParameterisationPolyconePhi : public G4VParameterisationPolycone
                                    G4double offset, G4double step,
                                    G4VSolid* motherSolid,
                                    DivisionType divType );
-    virtual ~G4ParameterisationPolyconePhi();
+   ~G4ParameterisationPolyconePhi();
 
-    virtual G4double GetMaxParameter() const;
+    G4double GetMaxParameter() const;
 
-    virtual void ComputeTransformation( const G4int copyNo,
-                                        G4VPhysicalVolume* physVol ) const;
+    void ComputeTransformation( const G4int copyNo,
+                                      G4VPhysicalVolume* physVol ) const;
     void ComputeDimensions( G4Polycone& pcone, const G4int copyNo,
                             const G4VPhysicalVolume* physVol ) const;
 
@@ -180,24 +181,23 @@ class G4ParameterisationPolyconeZ : public G4VParameterisationPolycone
                                  G4double offset, G4double step,
                                  G4VSolid* motherSolid,
                                  DivisionType divType );
-    virtual ~G4ParameterisationPolyconeZ();
+   ~G4ParameterisationPolyconeZ();
 
-    virtual void CheckParametersValidity();
+    void CheckParametersValidity();
 
-    virtual G4double GetMaxParameter() const;
+    G4double GetMaxParameter() const;
 
-    virtual void ComputeTransformation( const G4int copyNo,
-                                        G4VPhysicalVolume* physVol ) const;
+    void ComputeTransformation( const G4int copyNo,
+                                      G4VPhysicalVolume* physVol ) const;
     void ComputeDimensions( G4Polycone& pcone, const G4int copyNo,
                             const G4VPhysicalVolume* physVol ) const;
 
-  private:  
-    G4double GetR(G4double z, G4double z1, G4double r1, G4double z2, G4double r2) const;
+  private:
+
+    G4double GetR(G4double z, G4double z1, G4double r1,
+                  G4double z2, G4double r2) const;
     G4double GetRmin(G4double z, G4int nsegment) const;
     G4double GetRmax(G4double z, G4int nsegment) const;
-
-    G4int fNSegment;
-    G4PolyconeHistorical* fOrigParamMother;
 
     // Dummy declarations to get rid of warnings ...
 
@@ -223,6 +223,10 @@ class G4ParameterisationPolyconeZ : public G4VParameterisationPolycone
                             const G4VPhysicalVolume*) const {}
     void ComputeDimensions (G4Polyhedra&,const G4int,
                             const G4VPhysicalVolume*) const {}
+  private:
+
+    G4int fNSegment;
+    G4PolyconeHistorical* fOrigParamMother;
 };
 
 #endif

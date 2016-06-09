@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4QPDGCode.cc,v 1.63.2.1 2010/04/01 09:32:48 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-03-patch-01 $
+// GEANT4 tag $Name: geant4-09-03-patch-02 $
 //
 //      ---------------- G4QPDGCode ----------------
 //             by Mikhail Kossov, Sept 1999.

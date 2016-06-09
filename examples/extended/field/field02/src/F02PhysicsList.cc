@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: F02PhysicsList.cc,v 1.11.6.1 2010/04/06 09:48:16 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-03-patch-01 $
+// $Id: F02PhysicsList.cc,v 1.11.6.2 2010/09/10 14:37:57 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-03-patch-02 $
 // 
 
 #include "G4Timer.hh"
@@ -55,10 +55,9 @@
 
 F02PhysicsList::F02PhysicsList(F02DetectorConstruction* p)
 :  G4VUserPhysicsList(), MaxChargedStep(DBL_MAX),
-   thePhotoElectricEffect(0), theComptonScattering(0), theGammaConversion(0),
-   theeminusMultipleScattering(0), theeminusIonisation(0),
-   theeminusBremsstrahlung(0),
-   theeplusMultipleScattering(0), theeplusIonisation(0),
+   thePhotoElectricEffect(0), theComptonScattering(0),
+   theGammaConversion(0), theeminusIonisation(0),
+   theeminusBremsstrahlung(0), theeplusIonisation(0),
    theeplusBremsstrahlung(0), theeplusAnnihilation(0),
    theeminusStepCut(0), theeplusStepCut(0)
 {

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PolyhedraSide.hh,v 1.11.4.1 2010/03/18 11:04:57 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-03-patch-01 $
+// $Id: G4PolyhedraSide.hh,v 1.11.4.2 2010/09/08 15:54:58 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-03-patch-02 $
 //
 // 
 // --------------------------------------------------------------------
@@ -152,7 +152,7 @@ class G4PolyhedraSide : public G4VCSGface
     } G4PolyhedraSideVec;
 
     G4bool IntersectSidePlane( const G4ThreeVector &p, const G4ThreeVector &v,
-                               const G4PolyhedraSideVec vec,
+                               const G4PolyhedraSideVec& vec,
                                      G4double normSign, 
                                      G4double surfTolerance,
                                      G4double &distance,

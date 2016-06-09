@@ -1,4 +1,4 @@
-$Id: README,v 1.14 2009/02/19 14:05:06 gcosmo Exp $
+$Id: README,v 1.14.2.1 2010/09/10 14:23:49 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -8,8 +8,10 @@ $Id: README,v 1.14 2009/02/19 14:05:06 gcosmo Exp $
                                  README
                           -----------------------
 
-Authors: S. Guatelli (guatelli@ge.infn.it) and M. G. Pia (pia@ge.infn.it),
-         INFN Genova, Italy.
+Authors: S. Guatelli (susanna.guatelli@uow.edu.au), G. Guerrieri
+	 and M. G. Pia (pia@ge.infn.it)
+
+Maintained by: S. Guatelli (susanna.guatelli@uow.edu.au)
 
 ------> Introduction
 

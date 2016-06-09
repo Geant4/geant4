@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BrentLocator.cc,v 1.8 2009/05/15 12:55:48 tnikitin Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4BrentLocator.cc,v 1.8.4.1 2010/09/08 14:40:52 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-03-patch-02 $
 //
 // Class G4BrentLocator implementation
 //
@@ -141,6 +141,7 @@ G4bool G4BrentLocator::EstimateIntersectionPoint(
 
   G4bool restoredFullEndpoint = false;
 
+  G4int oldprc;  // cout, cerr precision
   G4int substep_no = 0;
    
   // Limits for substep number
@@ -504,7 +505,7 @@ G4bool G4BrentLocator::EstimateIntersectionPoint(
             G4cerr << "Recalculation of EndPoint was called with fEpsStep= "
                    << GetEpsilonStepFor() << G4endl;
           }
-          G4cerr.precision(20);
+          oldprc = G4cerr.precision(20);
           G4cerr << " Point A (Curve start)     is " << CurveStartPointVelocity
                  << G4endl;
           G4cerr << " Point B (Curve   end)     is " << CurveEndPointVelocity
@@ -528,6 +529,7 @@ G4bool G4BrentLocator::EstimateIntersectionPoint(
           G4cerr << "        Restarted no= "<< restartB  << " Epsilon= "
                  << GetEpsilonStepFor() <<" DeltaInters= "
                  << GetDeltaIntersectionFor() << G4endl;
+          G4cerr.precision( oldprc ); 
 
           G4Exception("G4BrentLocator::EstimateIntersectionPoint()",
                       "FatalError", FatalException,
@@ -727,7 +729,7 @@ G4bool G4BrentLocator::EstimateIntersectionPoint(
     printStatus( CurrentA_PointVelocity, CurrentB_PointVelocity,
                  -1.0, NewSafety, substep_no);
     G4cout << G4endl;
-    G4cout.precision( 10 ); 
+    oldprc = G4cout.precision( 10 ); 
     G4double done_len = CurrentA_PointVelocity.GetCurveLength(); 
     G4double full_len = CurveEndPointVelocity.GetCurveLength();
     G4cout << "ERROR - G4BrentLocator::EstimateIntersectionPoint()"
@@ -735,6 +737,7 @@ G4bool G4BrentLocator::EstimateIntersectionPoint(
            << "        Undertaken only length: " << done_len
            << " out of " << full_len << " required." << G4endl;
     G4cout << "        Remaining length = " << full_len - done_len << G4endl; 
+    G4cout.precision( oldprc ); 
 
     G4Exception("G4BrentLocator::EstimateIntersectionPoint()",
                 "UnableToLocateIntersection", FatalException,
@@ -742,7 +745,7 @@ G4bool G4BrentLocator::EstimateIntersectionPoint(
   }
   else if( substep_no >= warn_substeps )
   {  
-    G4int oldprc= G4cout.precision( 10 ); 
+    oldprc= G4cout.precision( 10 ); 
     G4cout << "WARNING - G4BrentLocator::EstimateIntersectionPoint()"
            << G4endl
            << "          Undertaken length: "  

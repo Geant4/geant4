@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Hyperbola.cc,v 1.12 2007/05/18 07:33:31 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4Hyperbola.cc,v 1.12.6.1 2010/09/08 16:31:32 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-03-patch-02 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -39,6 +39,7 @@
 #include "G4GeometryTolerance.hh"
 
 G4Hyperbola::G4Hyperbola()
+  : semiAxis(0.), semiImagAxis(0.), ratioAxisImagAxis(0.), forTangent(0.)
 {
 }
 

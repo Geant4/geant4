@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4TwistTubsSide.cc,v 1.6 2009/11/11 12:23:37 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4TwistTubsSide.cc,v 1.6.2.1 2010/09/08 15:54:59 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-03-patch-02 $
 //
 // 
 // --------------------------------------------------------------------
@@ -108,7 +108,7 @@ G4TwistTubsSide::G4TwistTubsSide(const G4String     &name,
 //* Fake default constructor ------------------------------------------
 
 G4TwistTubsSide::G4TwistTubsSide( __void__& a )
-  : G4VTwistSurface(a)
+  : G4VTwistSurface(a), fKappa(0.)
 {
 }
 
@@ -262,6 +262,7 @@ G4int G4TwistTubsSide::DistanceToSurface(const G4ThreeVector &gp,
    G4double b = fKappa * (v.x() * p.z() + v.z() * p.x()) - v.y();
    G4double c = fKappa * p.x() * p.z() - p.y();
    G4double D = b * b - 4 * a * c;             // discriminant
+   G4int vout = 0;
 
    if (std::fabs(a) < DBL_MIN) {
       if (std::fabs(b) > DBL_MIN) { 
@@ -292,13 +293,13 @@ G4int G4TwistTubsSide::DistanceToSurface(const G4ThreeVector &gp,
                fCurStatWithV.SetCurrentStatus(0, gxx[0], distance[0],
                                               areacode[0], isvalid[0],
                                               0, validate, &gp, &gv);
-               return 0;
+               return vout;
             } 
          }
                  
          fCurStatWithV.SetCurrentStatus(0, gxx[0], distance[0], areacode[0],
                                         isvalid[0], 1, validate, &gp, &gv);
-         return 1;
+         vout = 1;
 
       } else {
          // if a=b=0 , v.y=0 and (v.x=0 && p.x=0) or (v.z=0 && p.z=0) .
@@ -310,8 +311,6 @@ G4int G4TwistTubsSide::DistanceToSurface(const G4ThreeVector &gp,
 
          fCurStatWithV.SetCurrentStatus(0, gxx[0], distance[0], areacode[0],
                                         isvalid[0], 0, validate, &gp, &gv);
-
-         return 0;
       }
       
    } else if (D > DBL_MIN) {   
@@ -439,19 +438,16 @@ G4int G4TwistTubsSide::DistanceToSurface(const G4ThreeVector &gp,
          }
 
       }
-      return 2;
+      vout = 2;
    } else {
       // if D<0, no solution
       // if D=0, just grazing the surfaces, return kInfinity
 
       fCurStatWithV.SetCurrentStatus(0, gxx[0], distance[0], areacode[0],
                                      isvalid[0], 0, validate, &gp, &gv);
-
-      return 0;
    }
-   G4Exception("G4TwistTubsSide::DistanceToSurface(p,v)",
-               "InvalidCondition", FatalException, "Illegal operation !");
-   return 1;
+
+   return vout;
 }
 
 //=====================================================================

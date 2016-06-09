@@ -35,7 +35,7 @@
 // 14.10.96 John Apostolakis,   design and implementation
 // 17.03.97 John Apostolakis,   renaming new set functions being added
 //
-// $Id: G4PropagatorInField.cc,v 1.50.2.1 2010/03/18 10:14:21 gcosmo Exp $
+// $Id: G4PropagatorInField.cc,v 1.50.2.2 2010/09/08 14:40:52 gcosmo Exp $
 // GEANT4 tag $ Name:  $
 // ---------------------------------------------------------------------------
 
@@ -469,20 +469,19 @@ G4PropagatorInField::printStatus( const G4FieldTrack&        StartFT,
                                         G4int                stepNo, 
                                         G4VPhysicalVolume*   startVolume)
 {
-  const G4int verboseLevel= fVerboseLevel;
+  const G4int verboseLevel=fVerboseLevel;
   const G4ThreeVector StartPosition       = StartFT.GetPosition();
   const G4ThreeVector StartUnitVelocity   = StartFT.GetMomentumDir();
   const G4ThreeVector CurrentPosition     = CurrentFT.GetPosition();
   const G4ThreeVector CurrentUnitVelocity = CurrentFT.GetMomentumDir();
 
   G4double step_len = CurrentFT.GetCurveLength() - StartFT.GetCurveLength();
+
+  G4int oldprec;   // cout/cerr precision settings
       
-  if( ((stepNo == 0) && (verboseLevel <3))
-      || (verboseLevel >= 3) )
+  if( ((stepNo == 0) && (verboseLevel <3)) || (verboseLevel >= 3) )
   {
-    static G4int noPrecision= 4;
-    G4cout.precision(noPrecision);
-    // G4cout.setf(ios_base::fixed,ios_base::floatfield);
+    oldprec = G4cout.precision(4);
     G4cout << std::setw( 6)  << " " 
            << std::setw( 25) << " Current Position  and  Direction" << " "
            << G4endl; 
@@ -494,79 +493,62 @@ G4PropagatorInField::printStatus( const G4FieldTrack&        StartFT,
            << std::setw( 7) << " N_x " << " "
            << std::setw( 7) << " N_y " << " "
            << std::setw( 7) << " N_z " << " " ;
-    //            << G4endl; 
-    G4cout     // << " >>> "
-           << std::setw( 7) << " Delta|N|" << " "
-      //   << std::setw( 7) << " Delta(N_z) " << " "
+    G4cout << std::setw( 7) << " Delta|N|" << " "
            << std::setw( 9) << "StepLen" << " "  
            << std::setw(12) << "StartSafety" << " "  
            << std::setw( 9) << "PhsStep" << " ";  
-    if( startVolume ) {
-      G4cout << std::setw(18) << "NextVolume" << " "; 
-    }
+    if( startVolume )
+      { G4cout << std::setw(18) << "NextVolume" << " "; }
+    G4cout.precision(oldprec);
     G4cout << G4endl;
   }
-  if((stepNo == 0) && (verboseLevel <=3)){
-     // Recurse to print the start values
-     //
-     printStatus( StartFT, StartFT, -1.0, safety, -1, startVolume);
-   }
-   if( verboseLevel <= 3 )
-   {
-     if( stepNo >= 0)
-       G4cout << std::setw( 4) << stepNo << " ";
-     else
-       G4cout << std::setw( 5) << "Start" ;
-     G4cout.precision(8);
-     G4cout << std::setw(10) << CurrentFT.GetCurveLength() << " "; 
-     G4cout.precision(8);
-     G4cout << std::setw(10) << CurrentPosition.x() << " "
-            << std::setw(10) << CurrentPosition.y() << " "
-            << std::setw(10) << CurrentPosition.z() << " ";
-     G4cout.precision(4);
-     G4cout << std::setw( 7) << CurrentUnitVelocity.x() << " "
-            << std::setw( 7) << CurrentUnitVelocity.y() << " "
-            << std::setw( 7) << CurrentUnitVelocity.z() << " ";
-     //  G4cout << G4endl; 
-     //     G4cout << " >>> " ; 
-     G4cout.precision(3); 
-     G4cout << std::setw( 7) << CurrentFT.GetMomentum().mag()- StartFT.GetMomentum().mag() << " "; 
-     //   << std::setw( 7) << CurrentUnitVelocity.z() - InitialUnitVelocity.z() << " ";
-     G4cout << std::setw( 9) << step_len << " "; 
-     G4cout << std::setw(12) << safety << " ";
-     if( requestStep != -1.0 ) 
-       G4cout << std::setw( 9) << requestStep << " ";
-     else
-       G4cout << std::setw( 9) << "Init/NotKnown" << " "; 
-
-     if( startVolume != 0)
-     {
-       G4cout << std::setw(12) << startVolume->GetName() << " ";
-     }
-#if 0
-     else
-     {
-       if( step_len != -1 )
-         G4cout << std::setw(12) << "OutOfWorld" << " ";
-       else
-         G4cout << std::setw(12) << "NotGiven" << " ";
-     }
-#endif
-
-     G4cout << G4endl;
-   }
-   else // if( verboseLevel > 3 )
-   {
-     //  Multi-line output
-       
-     G4cout << "Step taken was " << step_len  
-            << " out of PhysicalStep = " <<  requestStep << G4endl;
-     G4cout << "Final safety is: " << safety << G4endl;
-
-     G4cout << "Chord length = " << (CurrentPosition-StartPosition).mag()
-            << G4endl;
-     G4cout << G4endl; 
-   }
+  if((stepNo == 0) && (verboseLevel <=3))
+  {
+    // Recurse to print the start values
+    //
+    printStatus( StartFT, StartFT, -1.0, safety, -1, startVolume);
+  }
+  if( verboseLevel <= 3 )
+  {
+    if( stepNo >= 0)
+      { G4cout << std::setw( 4) << stepNo << " "; }
+    else
+      { G4cout << std::setw( 5) << "Start" ; }
+    oldprec = G4cout.precision(8);
+    G4cout << std::setw(10) << CurrentFT.GetCurveLength() << " "; 
+    G4cout.precision(8);
+    G4cout << std::setw(10) << CurrentPosition.x() << " "
+           << std::setw(10) << CurrentPosition.y() << " "
+           << std::setw(10) << CurrentPosition.z() << " ";
+    G4cout.precision(4);
+    G4cout << std::setw( 7) << CurrentUnitVelocity.x() << " "
+           << std::setw( 7) << CurrentUnitVelocity.y() << " "
+           << std::setw( 7) << CurrentUnitVelocity.z() << " ";
+    G4cout.precision(3); 
+    G4cout << std::setw( 7)
+           << CurrentFT.GetMomentum().mag()-StartFT.GetMomentum().mag() << " "; 
+    G4cout << std::setw( 9) << step_len << " "; 
+    G4cout << std::setw(12) << safety << " ";
+    if( requestStep != -1.0 ) 
+      { G4cout << std::setw( 9) << requestStep << " "; }
+    else
+      { G4cout << std::setw( 9) << "Init/NotKnown" << " "; }
+    if( startVolume != 0)
+      { G4cout << std::setw(12) << startVolume->GetName() << " "; }
+    G4cout.precision(oldprec);
+    G4cout << G4endl;
+  }
+  else // if( verboseLevel > 3 )
+  {
+    //  Multi-line output
+      
+    G4cout << "Step taken was " << step_len  
+           << " out of PhysicalStep = " <<  requestStep << G4endl;
+    G4cout << "Final safety is: " << safety << G4endl;
+    G4cout << "Chord length = " << (CurrentPosition-StartPosition).mag()
+           << G4endl;
+    G4cout << G4endl; 
+  }
 }
 
 ///////////////////////////////////////////////////////////////////////////

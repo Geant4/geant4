@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VScoringMesh.hh,v 1.29 2009/10/12 04:11:25 akimura Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4VScoringMesh.hh,v 1.29.2.1 2010/09/08 13:57:56 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-03-patch-02 $
 //
 
 #ifndef G4VScoringMesh_h
@@ -54,7 +54,7 @@ class G4VScoringMesh
 {
   public:
   G4VScoringMesh(G4String wName);
-  ~G4VScoringMesh();
+  virtual ~G4VScoringMesh();
 
   public: // with description
   // a pure virtual function to construct this mesh geometry

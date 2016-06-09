@@ -96,19 +96,37 @@ const std::vector<G4int>* G4AugerTransition::TransitionOriginatingShellIds() con
 const G4DataVector* G4AugerTransition::AugerTransitionEnergies(G4int startShellId) const
 {
   std::map<G4int,G4DataVector,std::less<G4int> >::const_iterator shellId = augerTransitionEnergiesMap.find(startShellId);
+
+  if (shellId == augerTransitionEnergiesMap.end() ) 
+    {G4Exception("G4AugerTransition: corresponding map element not found");}
+
   const G4DataVector* dataSet = &(*shellId).second;
 
 
   return dataSet;
 }
 
-// Returns the emission probabilities of the auger electrons, given th shell
+// Returns the emission probabilities of the auger electrons, given the shell
 // from wich the transition electron cames from.
 
 const G4DataVector* G4AugerTransition::AugerTransitionProbabilities(G4int startShellId) const
 {
+
+  //debugging
+  //if (startShellId == 1){G4cout <<"OI!!!"<< G4endl;}
+
   std::map<G4int,G4DataVector,std::less<G4int> >::const_iterator shellId = augerTransitionProbabilitiesMap.find(startShellId);
+
+  if (shellId == augerTransitionProbabilitiesMap.end() ) 
+    {G4Exception("G4AugerTransition: corresponding map element not found");}
+  
   const G4DataVector* dataSet = &(*shellId).second;
+  // debugging purpose:
+  /*  G4cout << "id: " << shellId->first << G4endl;
+  G4cout << "size:" << dataSet->size() << G4endl;
+  for (G4int i = 0; i < dataSet->size(); i++){
+    G4cout << (dataSet[0])[i] << G4endl;
+    }*/
   return dataSet; 
 }
 

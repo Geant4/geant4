@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: History,v 1.16 2009/11/12 13:09:56 ribon Exp $
+$Id: History,v 1.16.2.1 2010/09/10 14:30:52 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -8,6 +8,12 @@ $Id: History,v 1.16 2009/11/12 13:09:56 ribon Exp $
 
                       Category History file
                       ---------------------
+
+31.03.2010 - A.Ribon (Rich-V09-02-02)
+             Replaced obsolete G4MultipleScattering class with:
+	     G4eMultipleScattering for e+ and e-;
+             G4MuMultipleScattering for mu+ and mu-;
+             G4hMultipleScattering for hadrons and ions.
 
 12.11.2009 - A.Ribon (Rich-V09-02-01)
              Added the possibility to use QGSP_BIC_EMY as 

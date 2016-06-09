@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // $Id: G4DNAChargeDecrease.cc,v 1.3.4.1 2010/04/01 09:07:24 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-03-patch-01 $
+// GEANT4 tag $Name: geant4-09-03-patch-02 $
 
 #include "G4DNAChargeDecrease.hh"
 

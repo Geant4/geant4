@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4BSplineSurface.cc,v 1.15 2008/03/13 14:18:57 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4BSplineSurface.cc,v 1.15.4.1 2010/09/08 16:31:32 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-03-patch-02 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -40,19 +40,23 @@
 #include "G4BoundingBox3D.hh"
 
 G4BSplineSurface::G4BSplineSurface()
+  : ord(0), k_index(0), param(0.), Rational(0)
 {
   distance = kInfinity;
   dir=ROW;
   first_hit = Hit = (G4UVHit*)0;
+  order[0] = 0; order[1] = 0;
   ctl_points = (G4ControlPoints*)0;
   u_knots = v_knots = tmp_knots = (G4KnotVector*)0;
 }
 
 
 G4BSplineSurface::G4BSplineSurface(const char*, G4Ray&)
+  : dir(0), ord(0), k_index(0), param(0.), Rational(0)
 {
   distance = kInfinity;    
   first_hit = Hit = (G4UVHit*)0;
+  order[0] = 0; order[1] = 0;
   ctl_points = (G4ControlPoints*)0;
   u_knots = v_knots = tmp_knots = (G4KnotVector*)0;
 }
@@ -60,11 +64,11 @@ G4BSplineSurface::G4BSplineSurface(const char*, G4Ray&)
 
 G4BSplineSurface::G4BSplineSurface(G4int u, G4int v, G4KnotVector& u_kv, 
 				   G4KnotVector& v_kv, G4ControlPoints& cp)
+  : dir(0), ord(0), k_index(0), param(0.), Rational(0)
 {
   first_hit = Hit = (G4UVHit*)0;
 
-  order[0] = u+1;
-  order[1] = v+1;
+  order[0] = u+1; order[1] = v+1;
 
   u_knots    = new G4KnotVector(u_kv);
   v_knots    = new G4KnotVector(v_kv);

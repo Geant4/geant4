@@ -1,4 +1,4 @@
-$Id: History,v 1.70 2008/07/08 10:01:13 gcosmo Exp $
+$Id: History,v 1.70.4.1 2010/09/08 16:31:32 gcosmo Exp $
 ----------------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,37 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+06/09/2010 : G. Cosmo          breps-V09-02-00
+- Fixed possible leak in G4BREPSolid::IsConvex() method.
+- Corrected possible dereferencing of null pointer in method
+  G4BREPSolidSphere::DistanceToOut().
+- Corrected deletion of internal data in G4BSplineCurve::Project() method.
+- Fixed possible leak in G4BezierSurface::ClipSurface() method, and fixed
+  case of dereferenciation of null pointer.
+- Fixed leak in destructor of G4ToroidalSurface.
+- Added dummy initialisation of static data in G4BoundingBox3D,
+  G4ProjectedSurface and G4Surface.
+
+13/07/2010 : G. Cosmo
+- Fixed compilation warning on Linux for G4Surface...
+
+05/07/2010 : G. Cosmo
+- G4Hyperbola: corrected signature to internal Init() function to avoid
+  parameter passed by value.
+- G4Assembly: corrected case of invalid iterator in destructor.
+- G4BREPSolid: corrected logic in IsConvex(), avoiding explicit memory leak.
+- G4BSplineCurve: corrected initialization of null pointer in Project();
+  removed useless typedef.
+- G4CompositeCurve, G4SurfaceBoundary: corrected cases of invalid iterator.
+- G4OsloMatrix: fixed leak in construction of G4PointMatrix.
+- Added fake initializations to constructors in G4BREPSolid, G4Assembly,
+  G4BREPSolidPCone, G4BREPSolidPolyhedra, G4BSplineSurface, G4BezierSurface,
+  G4BoundingBox3D, G4CircularCurve, G4Curve, G4CurvePoint, G4Ellipse,
+  G4FCylindricalSurface, G4FPlane, G4Hyperbola, G4KnotVector, G4OsloMatrix,
+  G4Parabola, G4ProjectedSurface, G4Ray, G4RectangularTrimmedSurface,
+  G4Surface, G4ToroidalSurface.
+- Code cleanup in G4ConicalSurface, GCylindricalSurface and G4SpericalSurface.
 
 08/07/2008 : G. Cosmo          breps-V09-01-02
 - Replaced exit() statement with G4Exception in G4Ray.

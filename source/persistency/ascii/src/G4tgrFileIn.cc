@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgrFileIn.cc,v 1.9 2008/12/18 12:59:50 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4tgrFileIn.cc,v 1.9.4.1 2010/09/10 09:27:38 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-03-patch-02 $
 //
 //
 // class G4tgrFileIn
@@ -38,6 +38,7 @@
 
 #include <iostream>
 #include <fstream>
+#include <sstream>
 
 #include "G4tgrFileIn.hh"
 #include "G4tgrMessenger.hh"

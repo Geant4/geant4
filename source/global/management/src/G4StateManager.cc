@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4StateManager.cc,v 1.13 2006/11/23 00:41:56 asaim Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4StateManager.cc,v 1.13.12.1 2010/09/08 16:11:37 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-03-patch-02 $
 //
 // 
 // ------------------------------------------------------------
@@ -60,12 +60,15 @@ G4StateManager::~G4StateManager()
     state = theDependentsList.back();
     theDependentsList.pop_back();
     for (std::vector<G4VStateDependent*>::iterator
-         i=theDependentsList.begin(); i!=theDependentsList.end(); i++)
+         i=theDependentsList.begin(); i!=theDependentsList.end();)
     {
       if (*i==state)
       {
-        theDependentsList.erase(i);
-        i--;
+        i == theDependentsList.erase(i);
+      }
+      else
+      {
+        ++i;
       }
     } 
     if ( state )  { delete state; }
@@ -152,14 +155,18 @@ G4StateManager::DeregisterDependent(G4VStateDependent* aDependent)
 {
   G4VStateDependent* tmp = 0;
   for (std::vector<G4VStateDependent*>::iterator i=theDependentsList.begin();
-       i!=theDependentsList.end(); i++)
+       i!=theDependentsList.end();)
+  {
+    if (**i==*aDependent) 
     {
-      if (**i==*aDependent) 
-        {
-          tmp = *i;
-          theDependentsList.erase(i);
-        } 
+      tmp = *i;
+      i = theDependentsList.erase(i);
     }
+    else
+    {
+      ++i;
+    }
+  }
   return (tmp != 0);
 }
 
@@ -215,14 +222,18 @@ G4StateManager::RemoveDependent(const G4VStateDependent* aDependent)
 {
   G4VStateDependent* tmp = 0;
   for (std::vector<G4VStateDependent*>::iterator i=theDependentsList.begin();
-       i!=theDependentsList.end(); i++)
+       i!=theDependentsList.end();)
+  {
+    if (**i==*aDependent) 
     {
-      if (**i==*aDependent) 
-        {
-          tmp = *i;
-          theDependentsList.erase(i);
-        } 
+      tmp = *i;
+      i = theDependentsList.erase(i);
     }
+    else
+    {
+      ++i;
+    }
+  }
   return tmp;
 }
 

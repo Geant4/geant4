@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4RectangularTrimmedSurface.cc,v 1.7 2006/06/29 18:42:37 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4RectangularTrimmedSurface.cc,v 1.7.8.1 2010/09/08 16:31:32 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-03-patch-02 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -41,7 +41,7 @@
 #include "G4SphericalSurface.hh"
 
 G4RectangularTrimmedSurface::G4RectangularTrimmedSurface()
-  : BasisSurface(0)
+  : BasisSurface(0), TrimU1(0.), TrimU2(0.), TrimV1(0.), TrimV2(0.)
 {
 }
 

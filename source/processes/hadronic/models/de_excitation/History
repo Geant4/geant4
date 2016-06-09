@@ -14,6 +14,10 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+20 April 2010 Vladimir Ivanchenko (hadr-deex-V09-02-25)
+----------------------------------------------------------
+- G4GEMProbability - (JQM + VI) fixed numerical problem (division by zero)
+
 17 February 2010 Vladimir Ivanchenko (hadr-deex-V09-02-24)
 ----------------------------------------------------------
 - G4ExcitationHandler - deactivate Multi-Fragmentation models

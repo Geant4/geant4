@@ -24,8 +24,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4TriangularFacet.cc,v 1.12 2008/11/13 08:25:07 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4TriangularFacet.cc,v 1.12.4.1 2010/09/08 15:54:59 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-03-patch-02 $
 //
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 //
@@ -55,6 +55,9 @@
 //                  function to correctly treat rays nearly parallel to the
 //                  plane of the triangle.
 //
+// 12 April 2010    P R Truscott, QinetiQ, bug fixes to treat optical
+//                  photon transport, in particular internal reflection
+//                  at surface.
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 #include "G4TriangularFacet.hh"
@@ -72,7 +75,7 @@
 G4TriangularFacet::G4TriangularFacet (const G4ThreeVector Pt0,
              const G4ThreeVector vt1, const G4ThreeVector vt2,
                    G4FacetVertexType vertexType)
-  : G4VFacet()
+  : G4VFacet(), sMin(0.), sMax(1.), tMin(0.), sqrDist(0.)
 {
   tGeomAlg  = G4TessellatedGeometryAlgorithms::GetInstance();
   P0        = Pt0;
@@ -128,7 +131,7 @@ G4TriangularFacet::G4TriangularFacet (const G4ThreeVector Pt0,
     a   = E[0].mag2();
     b   = E[0].dot(E[1]);
     c   = E[1].mag2();
-    det = std::abs(a*c - b*b);
+    det = std::fabs(a*c - b*b);
     
     sMin = -0.5*kCarTolerance/std::sqrt(a);
     sMax = 1.0 - sMin;
@@ -349,11 +352,31 @@ G4ThreeVector G4TriangularFacet::Distance (const G4ThreeVector &p)
   }
 //
 //
-// Do a heck for rounding errors in the distance-squared.
+// Do a check for rounding errors in the distance-squared.  It appears that
+// the conventional methods for calculating sqrDist breaks down when very near
+// to or at the surface (as required by transport).  We'll therefore also use
+// the magnitude-squared of the vector displacement.  (Note that I've also
+// tried to get around this problem by using the existing equations for
+//
+//    sqrDist = function(a,b,c,d,s,t)
+//
+// and use a more accurate addition process which minimises errors and
+// breakdown of cummutitivity [where (A+B)+C != A+(B+C)] but this still
+// doesn't work.
+// Calculation from u = D + s*E[0] + t*E[1] is less efficient, but appears
+// more robust.
 //
   if (sqrDist < 0.0) { sqrDist = 0.0; }
+  G4ThreeVector u = D + s*E[0] + t*E[1];
+  G4double u2     = u.mag2();
+//
+//
+// The following (part of the roundoff error check) is from Oliver Merle's
+// updates.
+//
+  if ( sqrDist > u2 ) sqrDist = u2;
 
-  return D + s*E[0] + t*E[1];
+  return u;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -541,7 +564,8 @@ G4bool G4TriangularFacet::Intersect (const G4ThreeVector &p,
 // We're very close.  Therefore return a small negative number to pretend
 // we intersect.
 //
-      distance = -0.5*kCarTolerance;
+//      distance = -0.5*kCarTolerance;
+      distance = 0.0;
       normal   = surfaceNormal;
       return true;
     }
@@ -610,7 +634,7 @@ G4bool G4TriangularFacet::Intersect (const G4ThreeVector &p,
       else
       {
         G4double dnormDist = normDist1-normDist0;
-        if (std::abs(dnormDist) < DBL_EPSILON)
+        if (std::fabs(dnormDist) < DBL_EPSILON)
         {
           distance = s0;
           normal   = surfaceNormal;
@@ -727,3 +751,5 @@ G4double G4TriangularFacet::GetArea()
 {
   return area;
 }
+////////////////////////////////////////////////////////////////////////
+//

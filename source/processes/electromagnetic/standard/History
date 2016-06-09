@@ -1,4 +1,4 @@
-$Id: History,v 1.480.2.2 2010/04/14 09:10:31 gcosmo Exp $
+$Id: History,v 1.480.2.3 2010/09/10 15:16:04 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,13 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+28 April 2010:  V.Ivant (emstand-V09-02-39)
+- G4eBremsstrahlungModel - fixed SelectRandomAtom method (bug report #1115)
+
+26 April 2010:  V.Ivant
+- G4ASTARStopping - fixed G4_O data
+- G4PSTARStopping - fixed G4_Pt and G4_PROPANE data
 
 31 March 09:  V.Ivant (emstand-V09-02-38)
 - Use data for Oxigen (G4_O) from ICRU'49 instead NIST for alpha stopping

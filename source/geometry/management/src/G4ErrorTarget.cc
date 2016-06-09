@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ErrorTarget.cc,v 1.1 2007/05/16 12:50:52 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4ErrorTarget.cc,v 1.1.6.1 2010/09/08 14:29:46 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-03-patch-02 $
 //
 //
 // --------------------------------------------------------------------
@@ -34,8 +34,10 @@
 
 #include "G4ErrorTarget.hh"
 
-G4ErrorTarget::G4ErrorTarget(){}
-G4ErrorTarget::~G4ErrorTarget(){}
+G4ErrorTarget::G4ErrorTarget()
+ : theType(G4ErrorTarget_GeomVolume) {}
+
+G4ErrorTarget::~G4ErrorTarget() {}
 
 G4double G4ErrorTarget::GetDistanceFromPoint( const G4ThreeVector&,
                                               const G4ThreeVector& ) const

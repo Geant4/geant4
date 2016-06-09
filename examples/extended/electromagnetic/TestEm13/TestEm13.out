@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-03-patch-01-ref    (9-April-2010)
+ Geant4 version Name: geant4-09-03-patch-02-ref    (17-September-2010)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -292,7 +292,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100000
-  User=0.97s Real=0.97s Sys=0s
+  User=0.94s Real=0.93s Sys=0s
 
  The run consists of 100000 gamma of 100 keV through 1 cm  of Water (density: 1 g/cm3 )
 
@@ -325,7 +325,7 @@ Region <DefaultRegionForTheWorld> -- appears in <Water> world volume
 Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : Water
  Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 0 fm 
- Energy thresholds :  gamma  2.9405585 keV    e-  351.8774 keV    e+  342.54485 keV proton 0 eV 
+ Energy thresholds :  gamma  2.94056 keV    e-  351.877 keV    e+  342.545 keV proton 0 eV 
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -361,14 +361,14 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100000
-  User=1.06s Real=1.06s Sys=0s
+  User=1.08s Real=1.08s Sys=0s
 
  The run consists of 100000 e- of 100 MeV through 1 cm  of Water (density: 1 g/cm3 )
 
- Process calls frequency --->	eBrem = 27721	Transportation = 54367	eIoni = 17912
+ Process calls frequency --->	eBrem = 27716	Transportation = 54349	eIoni = 17935
 
- Nb of incident particles unaltered after 1 cm  of Water : 54367 over 100000 incident particles.  Ratio = 54.367 %
- ---> CrossSection per volume:	0.60941 cm^-1 	CrossSection per mass: 0.60941 cm2/g
+ Nb of incident particles unaltered after 1 cm  of Water : 54349 over 100000 incident particles.  Ratio = 54.349 %
+ ---> CrossSection per volume:	0.60974 cm^-1 	CrossSection per mass: 0.60974 cm2/g
 
  Verification from G4EmCalculator: 
 	eBrem= 0.37217 cm2/g	eIoni= 0.24166 cm2/g	total= 0.61383 cm2/g
@@ -376,7 +376,7 @@ Run Summary
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1771165050, 1179259148
+ Current couple of seeds = 2114557748, 1664835703
 ----------------------------------------
 UserDetectorConstruction deleted.
 UserPhysicsList deleted.

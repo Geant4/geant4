@@ -1,4 +1,4 @@
-$Id: History,v 1.116.2.1 2010/03/18 11:08:21 gcosmo Exp $
+$Id: History,v 1.116.2.2 2010/09/10 09:38:33 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,13 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+19 Aug 2010 Gabriele Cosmo (gdml-V09-02-20)
+- Fixed printout of unit in G4GDMLWriteStructure for replicas and divisions,
+  in the case of angles.
+
+20 May 2010 Gabriele Cosmo
+- Corrected dump of division axis in writer.
 
 18 Feb 2010 Gabriele Cosmo (gdml-V09-02-19)
 - Added missing reference attribute in G4GDMLWriteMaterials for dumping

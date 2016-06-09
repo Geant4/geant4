@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhantomParameterisation.cc,v 1.6 2009/05/20 08:27:10 gcosmo Exp $
+// $Id: G4PhantomParameterisation.cc,v 1.6.4.1 2010/09/08 14:40:52 gcosmo Exp $
 // GEANT4 tag $ Name:$
 //
 // class G4PhantomParameterisation implementation
@@ -44,17 +44,13 @@
 
 //------------------------------------------------------------------
 G4PhantomParameterisation::G4PhantomParameterisation()
+  : fVoxelHalfX(0.), fVoxelHalfY(0.), fVoxelHalfZ(0.),
+    fNoVoxelX(0), fNoVoxelY(0), fNoVoxelZ(0), fNoVoxelXY(0), fNoVoxel(0),
+    fMaterialIndices(0), fContainerSolid(0),
+    fContainerWallX(0.), fContainerWallY(0.), fContainerWallZ(0.),
+    bSkipEqualMaterials(true)
 {
-  // Initialise data
-  //
-  fMaterialIndices = 0;
-  fContainerWallX = 0.;
-  fContainerWallY = 0.;
-  fContainerWallZ = 0.;
-
   kCarTolerance = G4GeometryTolerance::GetInstance()->GetSurfaceTolerance();
-
-  bSkipEqualMaterials = 1;
 }
 
 

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4QFragmentation.cc,v 1.6.2.1 2010/04/01 09:36:10 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-03-patch-01 $
+// $Id: G4QFragmentation.cc,v 1.6.2.2 2010/09/13 09:10:13 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-03-patch-02 $
 //
 // -----------------------------------------------------------------------------
 //      GEANT 4 class header file
@@ -598,7 +598,7 @@ G4QFragmentation::G4QFragmentation(const G4QNucleus &aNucleus, const G4QHadron &
       {
         rep=true;
 #ifdef debug
-        G4cout<<"G4QFragmentation::Construct: *** Begin ***"<<G4endl;
+        G4cout<<"G4QFragmentation::Construct: *** IT Begin ***"<<G4endl;
 #endif
         break;
       }
@@ -609,7 +609,7 @@ G4QFragmentation::G4QFragmentation(const G4QNucleus &aNucleus, const G4QHadron &
 #endif
    }
 #ifdef debug
-   G4cout<<"G4QFragmentation::Construct: *** While *** , r="<<rep<<G4endl;
+   G4cout<<"G4QFragmentation::Construct: *** IT While *** , r="<<rep<<G4endl;
 #endif
   }
 #ifdef debug
@@ -774,8 +774,11 @@ G4QFragmentation::G4QFragmentation(const G4QNucleus &aNucleus, const G4QHadron &
   //
   G4int problem=0;                                   // 0="no problem", incremented by ASIS
   G4QStringVector::iterator ist;
-  for(ist = strings.begin(); ist < strings.end(); ist++)
+  G4bool con=true;
+  while(con && strings.size())
   {
+   for(ist = strings.begin(); ist < strings.end(); ++ist)
+   {
     G4bool bad=true;
     G4LorentzVector cS4M=(*ist)->Get4Momentum();
     G4double cSM2=cS4M.m2();                         // Squared mass of the String
@@ -1606,11 +1609,26 @@ G4QFragmentation::G4QFragmentation(const G4QNucleus &aNucleus, const G4QHadron &
         pRight->Set4Momentum(pR4M);
         delete (*ist);
         strings.erase(ist);
-        ist--;
 #ifdef debug
         G4LorentzVector ss4M=pL4M+pR4M;
         G4cout<<"G4QFragmentation::Construct:Created,4M="<<ss4M<<",m2="<<ss4M.m2()<<G4endl;
 #endif
+        if( ist != strings.begin() ) // To avoid going below begin() (for Windows)
+        {
+          ist--;
+          con=false;
+#ifdef debug
+          G4cout<<"G4QFragmentation::Construct: *** IST Decremented ***"<<G4endl;
+#endif
+        }
+        else
+        {
+          con=true;
+#ifdef debug
+          G4cout<<"G4QFragmentation::Construct: *** IST Begin ***"<<G4endl;
+#endif
+          break;
+        }
       } // End of the IF(the best partnerString candidate was found)
       else
       {
@@ -1618,9 +1636,15 @@ G4QFragmentation::G4QFragmentation(const G4QNucleus &aNucleus, const G4QHadron &
         G4cout<<"-Warning-G4QFragm::Const:S4M="<<cS4M<<",M2="<<cSM2<<" Leave ASIS"<<G4endl;
 #endif
         ++problem;
+        con=false;
       }
-    }
-  }
+    } // End of IF
+    else con=false;
+   } // End of loop over ist iterator
+#ifdef debug
+   G4cout<<"G4QFragmentation::Construct: *** IST While *** , con="<<con<<G4endl;
+#endif
+  } // End of "con" while 
 #ifdef edebug
   // This print has meaning only if something appear between it and the StringFragmLOOP
   G4LorentzVector t4M=theNucleus.Get4Momentum();    // Nucleus 4Mom in LS

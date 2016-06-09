@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4BSplineCurve.icc,v 1.7 2006/06/29 18:38:07 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4BSplineCurve.icc,v 1.7.8.1 2010/09/08 16:31:32 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-03-patch-02 $
 //
 // --------------------------------------------------------------------
 // GEANT 4 inline definitions file
@@ -48,14 +48,14 @@ G4BSplineCurve::GetControlPointsList() const
 }
 
 inline
-const G4BSplineCurve::G4doubleVector*
+const std::vector<G4double>*
 G4BSplineCurve::GetKnots() const
 {
   return knots;
 }
 
 inline
-const G4BSplineCurve::G4doubleVector*
+const std::vector<G4double>*
 G4BSplineCurve::GetWeightsData() const
 {
   return weightsData;

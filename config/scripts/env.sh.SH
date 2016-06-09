@@ -190,6 +190,7 @@ if [ X$g4realsurfacedata != X ] ; then
     fi
 fi
 
+
 #
 # g4clhep.U
 #
@@ -843,29 +844,39 @@ fi
 
 #
 # Warning about LD_LIBRARY_PATH
-#
-echo ''
+# NB: ONLY echo if g4non_display not set
 if [ $G4LIB_BUILD_SHARED ] ; then
     if test "X$G4SYSTEM" = "XDarwin-g++" ; then
-        echo 'DYLD_LIBRARY_PATH is set to include CLHEP and Geant4 libraries. '
+        if [ X\$g4non_display = X ] ; then
+            echo 'DYLD_LIBRARY_PATH is set to include CLHEP and Geant4 libraries. '
+        fi
     else
-        echo 'LD_LIBRARY_PATH is set to include CLHEP and Geant4 libraries. '
+        if [ X\$g4non_display = X ] ; then
+            echo 'LD_LIBRARY_PATH is set to include CLHEP and Geant4 libraries. '
+        fi
     fi
 else
     if test "X$G4SYSTEM" = "XDarwin-g++" ; then
-        echo 'DYLD_LIBRARY_PATH is set to include CLHEP libraries. '
+        if [ X\$g4non_display = X ] ; then
+            echo 'DYLD_LIBRARY_PATH is set to include CLHEP libraries. '
+        fi
     else
-        echo 'LD_LIBRARY_PATH is set to include CLHEP libraries. '
+        if [ X\$g4non_display = X ] ; then
+            echo 'LD_LIBRARY_PATH is set to include CLHEP libraries. '
+        fi
     fi
 fi
-echo 'NOTE : you should verify that the correct path for the CLHEP library'
-echo ''
-echo ${CLHEP_BASE_DIR}/lib
-echo ''
-echo 'is included in the dynamic library search path ahead of any other'
-echo 'installations of CLHEP on your system that may be referenced by this'
-echo 'path.'
-echo ''
+
+if [ X\$g4non_display = X ] ; then
+    echo 'NOTE : you should verify that the correct path for the CLHEP library'
+    echo ''
+    echo ${CLHEP_BASE_DIR}/lib
+    echo ''
+    echo 'is included in the dynamic library search path ahead of any other'
+    echo 'installations of CLHEP on your system that may be referenced by this'
+    echo 'path.'
+    echo ''
+fi
 
 
 #

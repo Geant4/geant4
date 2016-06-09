@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Polyhedra.cc,v 1.42 2008/05/15 13:45:15 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4Polyhedra.cc,v 1.42.4.1 2010/09/08 15:54:58 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-03-patch-02 $
 //
 // 
 // --------------------------------------------------------------------
@@ -365,7 +365,8 @@ void G4Polyhedra::Create( G4double phiStart,
 //                            for usage restricted to object persistency.
 //
 G4Polyhedra::G4Polyhedra( __void__& a )
-  : G4VCSGfaceted(a), genericPgon(false), corners(0),
+  : G4VCSGfaceted(a), numSide(0), startPhi(0.), endPhi(0.),
+    phiIsOpen(false), genericPgon(false), numCorner(0), corners(0),
     original_parameters(0), enclosingCylinder(0)
 {
 }
@@ -1125,8 +1126,8 @@ G4Polyhedron* G4Polyhedra::CreatePolyhedron() const
     }
     G4Polyhedron* polyhedron = new G4Polyhedron;
     G4int problem = polyhedron->createPolyhedron(nNodes, nFaces, xyz, faces_vec);
-    delete faces_vec;
-    delete xyz;
+    delete [] faces_vec;
+    delete [] xyz;
     if (problem)
     {
       std::ostringstream oss;
@@ -1156,7 +1157,8 @@ G4NURBS *G4Polyhedra::CreateNURBS() const
 // G4PolyhedraHistorical stuff
 //
 G4PolyhedraHistorical::G4PolyhedraHistorical()
-  : Z_values(0), Rmin(0), Rmax(0)
+  : Start_angle(0.), Opening_angle(0.), numSide(0), Num_z_planes(0),
+    Z_values(0), Rmin(0), Rmax(0)
 {
 }
 

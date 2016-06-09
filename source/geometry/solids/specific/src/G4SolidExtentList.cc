@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4SolidExtentList.cc,v 1.5.10.1 2010/03/18 11:04:57 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-03-patch-01 $
+// $Id: G4SolidExtentList.cc,v 1.5.10.2 2010/09/08 15:54:58 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-03-patch-02 $
 //
 // 
 // --------------------------------------------------------------------
@@ -50,8 +50,8 @@ G4SolidExtentList::G4SolidExtentList()
 {
   axis = kZAxis;
   limited = false;
-  minLimit = -kInfinity;
-  maxLimit = +kInfinity;
+  minLimit = -INT_MAX/2;
+  maxLimit =  INT_MAX/2;
 }
 
 
@@ -71,8 +71,8 @@ G4SolidExtentList::G4SolidExtentList( const EAxis targetAxis,
   }
   else
   {
-    minLimit = -kInfinity;
-    maxLimit = +kInfinity;
+    minLimit = -INT_MAX/2;
+    maxLimit =  INT_MAX/2;
   }
 }
 

@@ -1,4 +1,4 @@
-$Id: History,v 1.138.2.2 2010/03/18 10:15:23 gcosmo Exp $
+$Id: History,v 1.138.2.3 2010/09/08 14:40:52 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,35 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+September 6th, 2010 - G.Cosmo (geomnav-V09-02-13)
+-----------------------------
+- Added missing initialization for 'fNewSafety' and 'fTrueMinStep' in
+  G4MultiNavigator constructor.
+
+September 3rd, 2010 - G.Cosmo
+-----------------------------
+- Fixed typo in signature of ComputeStepSkippingEqualMaterials() in
+  G4RegularNavigation.
+
+August 19th, 2010 - T.Nikitina
+------------------------------
+- Fix in G4GeomTestSegment::FindSomePoints(), to address problem report #980.
+
+July 12th, 2010 - G.Cosmo
+-------------------------
+- Fixed array out of bound error in G4MultipleNavigator and G4PathFinder
+  constructors (J.Apostolakis).
+- Fixed cout precision restoring in G4BrentLocator, G4PropagatorInField,
+  G4SimpleLocator, G4VIntersectionLocator and G4MultiLevelLocator.
+- Removed unused private data members in G4MultiLevelLocator.
+- Replaced use of DBL_MAX for distances with kInfinity in G4MultiNavigator
+  and G4Navigator internals.
+- Exchanged conditions for initialization of members in G4TransportationManager
+  constructor.
+- Added dummy initialisation of members in constructors in G4MultiNavigator,
+  G4ParameterisedNavigation, G4PathFinder, G4PhantomParameterisation,
+  G4RegularNavigation.
 
 March 8th, 2010 - G.Cosmo (geomnav-V09-02-12)
 -------------------------
@@ -38,6 +67,12 @@ November 30th, 2009 - J.Apostolakis (geomnav-V09-02-10)
 
 Nov 23rd, 2009 - J.Apostolakis 
 ------------------------------
+<<<<<<< History
+- Fixes in G4PropagatorInField.cc: 
+   * Revised condition for flagging ZeroStep to avoid fake triggering. Small
+     proposed steps (from Physics) could trigger the previous simple condition
+     for Tiny/Zero Problem steps.
+=======
 - Fixes in G4PropagatorInField.cc: 
    * Revised condition for flagging ZeroStep to avoid fake triggering. Small
      proposed steps (from Physics) could trigger the previous simple condition
@@ -52,9 +87,25 @@ November 12th, 2009 - J.Apostolakis (geomnav-V09-02-09)
      SetDeltaIntersection() and SetDeltaOneStep().
    * Revised implementation to avoid using the older methods GetDeltaIntersection()
      and GetDeltaOneStep().
+>>>>>>> 1.143
+
+<<<<<<< History
+November 12th, 2009 - J.Apostolakis (geomnav-V09-02-09)
+-----------------------------------
+- Cleanup of minor methods in G4PropagatorInField:
+   * Added new method RefreshIntersectionLocator() to update the state of locator.
+     It is used to synchronise with G4IntersectionLocator.
+   * Deleted long obsolete methods: SetAccuraciesWithDeltaOneStep(),
+     SetDeltaIntersection() and SetDeltaOneStep().
+   * Revised implementation to avoid using the older methods GetDeltaIntersection()
+     and GetDeltaOneStep().
 
 November 12th, 2009 - J.Apostolakis (geomnav-V09-02-08)
 -----------------------------------
+=======
+November 12th, 2009 - J.Apostolakis (geomnav-V09-02-08)
+-----------------------------------
+>>>>>>> 1.143
 - Refined G4PropagatorInField.cc: 
    * Changed parameters for treating consecutive tiny/zero steps:
      - the value of default decrease factor to 0.25 (from 0.1), 

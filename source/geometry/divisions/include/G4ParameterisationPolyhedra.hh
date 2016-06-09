@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParameterisationPolyhedra.hh,v 1.9 2009/05/14 14:19:32 ivana Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4ParameterisationPolyhedra.hh,v 1.9.2.1 2010/09/08 14:21:12 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-03-patch-02 $
 // 
 // classes G4ParameterisationPolyhedraRho,
 //         G4ParameterisationPolyhedraPhi,
@@ -50,6 +50,7 @@
 class G4VPhysicalVolume;
 
 // Dummy declarations to get rid of warnings ...
+//
 class G4Trd;
 class G4Trap;
 class G4Cons;
@@ -90,14 +91,14 @@ class G4ParameterisationPolyhedraRho : public G4VParameterisationPolyhedra
                                     G4double offset, G4double step,
                                     G4VSolid* motherSolid,
                                     DivisionType divType );
-    virtual ~G4ParameterisationPolyhedraRho();
+   ~G4ParameterisationPolyhedraRho();
 
-    virtual void CheckParametersValidity();
+    void CheckParametersValidity();
 
-    virtual G4double GetMaxParameter() const;
+    G4double GetMaxParameter() const;
 
-    virtual void ComputeTransformation( const G4int copyNo,
-                                        G4VPhysicalVolume* physVol ) const;
+    void ComputeTransformation( const G4int copyNo,
+                                      G4VPhysicalVolume* physVol ) const;
     void ComputeDimensions( G4Polyhedra& phedra, const G4int copyNo,
                             const G4VPhysicalVolume* physVol ) const;
 
@@ -139,14 +140,14 @@ class G4ParameterisationPolyhedraPhi : public G4VParameterisationPolyhedra
                                    G4double offset, G4double step,
                                    G4VSolid* motherSolid,
                                    DivisionType divType );
-    virtual ~G4ParameterisationPolyhedraPhi();
+   ~G4ParameterisationPolyhedraPhi();
 
-    virtual void CheckParametersValidity();
+    void CheckParametersValidity();
 
-    virtual G4double GetMaxParameter() const;
+    G4double GetMaxParameter() const;
 
-    virtual void ComputeTransformation( const G4int copyNo,
-                                        G4VPhysicalVolume* physVol ) const;
+    void ComputeTransformation( const G4int copyNo,
+                                      G4VPhysicalVolume* physVol ) const;
     void ComputeDimensions( G4Polyhedra& phedra, const G4int copyNo,
                             const G4VPhysicalVolume* physVol ) const;
 
@@ -188,24 +189,23 @@ class G4ParameterisationPolyhedraZ : public G4VParameterisationPolyhedra
                                   G4double offset, G4double step,
                                   G4VSolid* motherSolid,
                                   DivisionType divType );
-    virtual ~G4ParameterisationPolyhedraZ();
+   ~G4ParameterisationPolyhedraZ();
 
-    virtual void CheckParametersValidity();
+    void CheckParametersValidity();
 
-    virtual G4double GetMaxParameter() const;
+    G4double GetMaxParameter() const;
 
-    virtual void ComputeTransformation( const G4int copyNo,
-                                        G4VPhysicalVolume* physVol ) const;
+    void ComputeTransformation( const G4int copyNo,
+                                      G4VPhysicalVolume* physVol ) const;
     void ComputeDimensions( G4Polyhedra& phedra, const G4int copyNo,
                             const G4VPhysicalVolume* physVol ) const;
 
-  private: 
-    G4double GetR(G4double z, G4double z1, G4double r1, G4double z2, G4double r2) const;
+  private:
+
+    G4double GetR(G4double z, G4double z1, G4double r1,
+                  G4double z2, G4double r2) const;
     G4double GetRmin(G4double z, G4int nsegment) const;
     G4double GetRmax(G4double z, G4int nsegment) const;
-
-    G4int fNSegment;
-    G4PolyhedraHistorical* fOrigParamMother;
 
     // Dummy declarations to get rid of warnings ...
     void ComputeDimensions (G4Trd&,const G4int,
@@ -230,6 +230,10 @@ class G4ParameterisationPolyhedraZ : public G4VParameterisationPolyhedra
                             const G4VPhysicalVolume*) const {}
     void ComputeDimensions (G4Polycone&,const G4int,
                             const G4VPhysicalVolume*) const {}
+  private:
+
+    G4int fNSegment;
+    G4PolyhedraHistorical* fOrigParamMother;
 };
 
 #endif

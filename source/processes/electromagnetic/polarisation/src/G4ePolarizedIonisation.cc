@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ePolarizedIonisation.cc,v 1.7 2008/10/30 22:34:23 schaelic Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4ePolarizedIonisation.cc,v 1.7.4.1 2010/09/10 13:36:32 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-03-patch-02 $
 // -------------------------------------------------------------------
 //
 // GEANT4 Class file
@@ -74,12 +74,12 @@ G4ePolarizedIonisation::G4ePolarizedIonisation(const G4String& name)
     theTransverseAsymmetryTable(NULL)
 {
   verboseLevel=0;
-  SetDEDXBinning(120);
-  SetLambdaBinning(120);
-  numBinAsymmetryTable=120;
+  //  SetDEDXBinning(120);
+  //  SetLambdaBinning(120);
+  //  numBinAsymmetryTable=78;
 
-  SetMinKinEnergy(0.1*keV);
-  SetMaxKinEnergy(100.0*TeV);
+  //  SetMinKinEnergy(0.1*keV);
+  //  SetMaxKinEnergy(100.0*TeV);
   //  PrintInfoDefinition();
   SetProcessSubType(fIonisation);
 }
@@ -116,8 +116,8 @@ void G4ePolarizedIonisation::InitialiseEnergyLossProcess(
 
     //    G4VEmModel* em = new G4MollerBhabhaModel();
     emModel = new G4PolarizedMollerBhabhaModel;
-    emModel->SetLowEnergyLimit(100*eV);
-    emModel->SetHighEnergyLimit(100*TeV);
+    emModel->SetLowEnergyLimit(MinKinEnergy());
+    emModel->SetHighEnergyLimit(MaxKinEnergy());
     AddEmModel(1, emModel, flucModel);
 
     isInitialised = true;
@@ -276,8 +276,9 @@ void G4ePolarizedIonisation::BuildPhysicsTable(const G4ParticleDefinition& part)
     //create physics vectors then fill it (same parameters as lambda vector)
     G4PhysicsVector * ptrVectorA = LambdaPhysicsVector(couple,cut);
     G4PhysicsVector * ptrVectorB = LambdaPhysicsVector(couple,cut);
+    size_t nBins = ptrVectorA->GetVectorLength();
 
-    for (size_t i = 0 ; i < numBinAsymmetryTable ; i++ ) {
+    for (size_t i = 0 ; i < nBins ; i++ ) {
       G4double lowEdgeEnergy = ptrVectorA->GetLowEdgeEnergy(i);
       G4double tasm=0.;
       G4double asym = ComputeAsymmetry(lowEdgeEnergy, couple, part, cut, tasm);

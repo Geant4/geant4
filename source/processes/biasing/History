@@ -1,4 +1,4 @@
-$Id: History,v 1.19 2008/04/22 09:29:35 ahoward Exp $
+$Id: History,v 1.19.4.1 2010/09/10 09:42:36 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+June 2nd, 2010 Gabriele Cosmo (procbiasing-V09-02-00)
+- G4WeightWindowProcess: corrected call to G4WeightWindowStore::GetLowerWeight()
+  after correction of mispelling in name...
 
 April 22nd, 2008 Alex Howard (procbiasing-V09-01-02)
 - Removed G4CellFinder and associated dependency in G4WeigthCutOffProcess and 

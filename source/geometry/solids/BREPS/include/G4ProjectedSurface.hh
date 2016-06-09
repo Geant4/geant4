@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProjectedSurface.hh,v 1.7 2006/06/29 18:40:17 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4ProjectedSurface.hh,v 1.7.8.1 2010/09/08 16:31:32 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-03-patch-02 $
 //
 // ----------------------------------------------------------------------
 // Class G4ProjectedSurface
@@ -45,10 +45,9 @@
 class G4ProjectedSurface : public G4Surface
 {
   friend class G4BSplineSurface;
-  
   friend void CopySurface(G4ProjectedSurface& proj);
   
-public:  // with description
+ public:  // with description
 
   G4ProjectedSurface();
   virtual ~G4ProjectedSurface();
@@ -60,18 +59,12 @@ public:  // with description
     // to the surface. The bounding rectangle is used
     // for a preliminary check of intersection.
         
-public:  // without description
+ public:  // without description
 
   inline G4Vector3D SurfaceNormal(const G4Point3D& Pt) const;
     // Returns normal to surface (G4Vector3D(0,0,0)).
 
-protected:
-
-  static G4int Splits;
-  G4ControlPoints *ctl_points;
-    // Test variables
-
-private:
+ private:
 
   G4ProjectedSurface(const G4ProjectedSurface&);
   G4ProjectedSurface& operator=(const G4ProjectedSurface&);
@@ -112,7 +105,13 @@ private:
   inline G4int Amin(G4int i, G4int j) const;
   inline G4int AhIndex(G4int j, G4int t, G4int iorder) const;
 
-private:
+ protected:
+
+  static G4int Splits;
+  G4ControlPoints *ctl_points;
+    // Test variables
+
+ private:
 
   short dir;
   G4KnotVector *u_knots;

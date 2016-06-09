@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgbDetectorBuilder.hh,v 1.2 2008/12/18 12:58:00 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4tgbDetectorBuilder.hh,v 1.2.4.1 2010/09/10 09:27:38 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-03-patch-02 $
 //
 //
 // class G4tgbDetectorBuilder
@@ -60,7 +60,7 @@ class G4tgbDetectorBuilder
  public:  // with description
 
   G4tgbDetectorBuilder();
-  ~G4tgbDetectorBuilder();
+  virtual ~G4tgbDetectorBuilder();
 
   virtual const G4tgrVolume* ReadDetector();
   virtual G4VPhysicalVolume* ConstructDetector( const G4tgrVolume* tgrVoltop );

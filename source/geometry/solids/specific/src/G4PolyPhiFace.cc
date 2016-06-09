@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PolyPhiFace.cc,v 1.15 2008/05/15 11:41:59 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4PolyPhiFace.cc,v 1.15.4.1 2010/09/08 15:54:58 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-03-patch-02 $
 //
 // 
 // --------------------------------------------------------------------
@@ -63,9 +63,9 @@ G4PolyPhiFace::G4PolyPhiFace( const G4ReduciblePolygon *rz,
                                     G4double phi, 
                                     G4double deltaPhi,
                                     G4double phiOther )
+  : fSurfaceArea(0.), triangles(0)  
 {
   kCarTolerance = G4GeometryTolerance::GetInstance()->GetSurfaceTolerance();
-  fSurfaceArea = 0.;  
 
   numEdges = rz->NumVertices();
   
@@ -290,7 +290,8 @@ void G4PolyPhiFace::Diagnose( G4VSolid *owner )
 //                            for usage restricted to object persistency.
 //
 G4PolyPhiFace::G4PolyPhiFace( __void__&)
-  : edges(0), corners(0)
+  : numEdges(0), edges(0), corners(0), rMin(0.), rMax(0.), zMin(0.), zMax(0.),
+    allBehind(false), kCarTolerance(0.), fSurfaceArea(0.), triangles(0)
 {
 }
 
@@ -320,7 +321,7 @@ G4PolyPhiFace::G4PolyPhiFace( const G4PolyPhiFace &source )
 //
 G4PolyPhiFace& G4PolyPhiFace::operator=( const G4PolyPhiFace &source )
 {
-  if (this == &source) return *this;
+  if (this == &source)  { return *this; }
 
   delete [] edges;
   delete [] corners;
@@ -348,6 +349,7 @@ void G4PolyPhiFace::CopyStuff( const G4PolyPhiFace &source )
   zMin    = source.zMin;
   zMax    = source.zMax;
   allBehind  = source.allBehind;
+  triangles  = 0;
 
   kCarTolerance = source.kCarTolerance;
   fSurfaceArea = source.fSurfaceArea;
@@ -1300,4 +1302,5 @@ void G4PolyPhiFace::Triangulate()
   } while( i<numEdges-2 );
  
   delete [] tri_help;
+  tri_help = 0;
 }

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoringBox.hh,v 1.18 2007/11/06 09:41:34 akimura Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4ScoringBox.hh,v 1.18.6.1 2010/09/08 13:57:56 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-03-patch-02 $
 //
 
 #ifndef G4ScoringBox_h
@@ -48,10 +48,10 @@ public:
   ~G4ScoringBox();
 
 public:
-  virtual void Construct(G4VPhysicalVolume* fWorldPhys);
-  virtual void List() const;
-  virtual void Draw(std::map<G4int, G4double*> * map, G4VScoreColorMap* colorMap, G4int axflg=111);
-  virtual void DrawColumn(std::map<G4int, G4double*> * map, G4VScoreColorMap* colorMap, 
+  void Construct(G4VPhysicalVolume* fWorldPhys);
+  void List() const;
+  void Draw(std::map<G4int, G4double*> * map, G4VScoreColorMap* colorMap, G4int axflg=111);
+  void DrawColumn(std::map<G4int, G4double*> * map, G4VScoreColorMap* colorMap, 
                           G4int idxProj, G4int idxColumn); 
 
   // set a direction to segment this mesh

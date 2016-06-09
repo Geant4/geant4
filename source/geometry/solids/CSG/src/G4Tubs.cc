@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Tubs.cc,v 1.79 2009/06/30 10:10:11 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4Tubs.cc,v 1.79.2.1 2010/09/08 14:52:47 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-03-patch-02 $
 //
 // 
 // class G4Tubs
@@ -89,17 +89,13 @@ G4Tubs::G4Tubs( const G4String &pName,
                       G4double pRMin, G4double pRMax,
                       G4double pDz,
                       G4double pSPhi, G4double pDPhi )
-  : G4CSGSolid(pName), fSPhi(0), fDPhi(0)
+  : G4CSGSolid(pName), fRMin(pRMin), fRMax(pRMax), fDz(pDz), fSPhi(0), fDPhi(0)
 {
 
   kRadTolerance = G4GeometryTolerance::GetInstance()->GetRadialTolerance();
   kAngTolerance = G4GeometryTolerance::GetInstance()->GetAngularTolerance();
 
-  if (pDz>0) // Check z-len
-  {
-    fDz = pDz ;
-  }
-  else
+  if (pDz<=0) // Check z-len
   {
     G4cerr << "ERROR - G4Tubs()::G4Tubs()" << G4endl
            << "        Negative Z half-length (" << pDz << ") in solid: "
@@ -107,12 +103,7 @@ G4Tubs::G4Tubs( const G4String &pName,
     G4Exception("G4Tubs::G4Tubs()", "InvalidSetup", FatalException,
                 "Invalid Z half-length");
   }
-  if ( (pRMin < pRMax) && (pRMin >= 0) ) // Check radii
-  {
-    fRMin = pRMin ; 
-    fRMax = pRMax ;
-  }
-  else
+  if ( (pRMin >= pRMax) || (pRMin < 0) ) // Check radii
   {
     G4cerr << "ERROR - G4Tubs()::G4Tubs()" << G4endl
            << "        Invalid values for radii in solid " << GetName()
@@ -123,7 +114,7 @@ G4Tubs::G4Tubs( const G4String &pName,
   }
 
   // Check angles
-
+  //
   CheckPhiAngles(pSPhi, pDPhi);
 }
 
@@ -133,7 +124,11 @@ G4Tubs::G4Tubs( const G4String &pName,
 //                            for usage restricted to object persistency.
 //
 G4Tubs::G4Tubs( __void__& a )
-  : G4CSGSolid(a)
+  : G4CSGSolid(a), kRadTolerance(0.), kAngTolerance(0.),
+    fRMin(0.), fRMax(0.), fDz(0.), fSPhi(0.), fDPhi(0.),
+    sinCPhi(0.), cosCPhi(0.), cosHDPhiOT(0.), cosHDPhiIT(0.),
+    sinSPhi(0.), cosSPhi(0.), sinEPhi(0.), cosEPhi(0.),
+    fPhiFullTube(false)
 {
 }
 
@@ -403,7 +398,8 @@ EInside G4Tubs::Inside( const G4ThreeVector& p ) const
         // Try inner tolerant phi boundaries (=>inside)
         // if not inside, try outer tolerant phi boundaries
 
-        if ((tolRMin==0)&&(p.x()<=halfCarTolerance)&&(p.y()<=halfCarTolerance))
+        if ( (tolRMin==0) && (std::fabs(p.x())<=halfCarTolerance)
+                          && (std::fabs(p.y())<=halfCarTolerance) )
         {
           in=kSurface;
         }
@@ -414,8 +410,8 @@ EInside G4Tubs::Inside( const G4ThreeVector& p ) const
 
           if ( fSPhi >= 0 )
           {
-            if ( (std::abs(pPhi) < halfAngTolerance)
-              && (std::abs(fSPhi + fDPhi - twopi) < halfAngTolerance) )
+            if ( (std::fabs(pPhi) < halfAngTolerance)
+              && (std::fabs(fSPhi + fDPhi - twopi) < halfAngTolerance) )
             { 
               pPhi += twopi ; // 0 <= pPhi < 2pi
             }
@@ -467,8 +463,8 @@ EInside G4Tubs::Inside( const G4ThreeVector& p ) const
           if ( pPhi < -halfAngTolerance)  { pPhi += twopi; } // 0<=pPhi<2pi
           if ( fSPhi >= 0 )
           {
-            if ( (std::abs(pPhi) < halfAngTolerance)
-              && (std::abs(fSPhi + fDPhi - twopi) < halfAngTolerance) )
+            if ( (std::fabs(pPhi) < halfAngTolerance)
+              && (std::fabs(fSPhi + fDPhi - twopi) < halfAngTolerance) )
             { 
               pPhi += twopi ; // 0 <= pPhi < 2pi
             }
@@ -512,8 +508,8 @@ EInside G4Tubs::Inside( const G4ThreeVector& p ) const
         if ( pPhi < -halfAngTolerance )  { pPhi += twopi; }  // 0<=pPhi<2pi
         if ( fSPhi >= 0 )
         {
-          if ( (std::abs(pPhi) < halfAngTolerance)
-            && (std::abs(fSPhi + fDPhi - twopi) < halfAngTolerance) )
+          if ( (std::fabs(pPhi) < halfAngTolerance)
+            && (std::fabs(fSPhi + fDPhi - twopi) < halfAngTolerance) )
           { 
             pPhi += twopi ; // 0 <= pPhi < 2pi
           }
@@ -718,7 +714,7 @@ G4ThreeVector G4Tubs::ApproxSurfaceNormal( const G4ThreeVector& p ) const
       norm = G4ThreeVector(p.x()/rho, p.y()/rho, 0) ;
       break ;
     }
-    case kNZ : //    + or - dz
+    case kNZ :    // + or - dz
     {                              
       if ( p.z() > 0 )  { norm = G4ThreeVector(0,0,1) ; }
       else              { norm = G4ThreeVector(0,0,-1); }
@@ -734,7 +730,7 @@ G4ThreeVector G4Tubs::ApproxSurfaceNormal( const G4ThreeVector& p ) const
       norm = G4ThreeVector(-std::sin(fSPhi+fDPhi), std::cos(fSPhi+fDPhi), 0) ;
       break;
     }
-    default:
+    default:      // Should never reach this case ...
     {
       DumpInfo();
       G4Exception("G4Tubs::ApproxSurfaceNormal()", "Notification", JustWarning,
@@ -1425,7 +1421,7 @@ G4double G4Tubs::DistanceToOut( const G4ThreeVector& p,
               // Check intersecting with correct half-plane
               // (if not -> no intersect)
               //
-              if( (std::abs(xi)<=kCarTolerance)&&(std::abs(yi)<=kCarTolerance) )
+              if( (std::fabs(xi)<=kCarTolerance)&&(std::fabs(yi)<=kCarTolerance) )
               {
                 sidephi = kSPhi;
                 if (((fSPhi-halfAngTolerance)<=vphi)
@@ -1468,7 +1464,7 @@ G4double G4Tubs::DistanceToOut( const G4ThreeVector& p,
               xi = p.x() + sphi2*v.x() ;
               yi = p.y() + sphi2*v.y() ;
               
-              if ((std::abs(xi)<=kCarTolerance)&&(std::abs(yi)<=kCarTolerance))
+              if ((std::fabs(xi)<=kCarTolerance)&&(std::fabs(yi)<=kCarTolerance))
               {
                 // Leaving via ending phi
                 //
@@ -1592,6 +1588,7 @@ G4double G4Tubs::DistanceToOut( const G4ThreeVector& p,
         G4cout << "v.z() = "   << v.z() << G4endl << G4endl ;
         G4cout << "Proposed distance :" << G4endl << G4endl ;
         G4cout << "snxt = "    << snxt/mm << " mm" << G4endl << G4endl ;
+        G4cout.precision(6) ;
         G4Exception("G4Tubs::DistanceToOut(p,v,..)","Notification",JustWarning,
                     "Undefined side for valid surface normal to solid.");
         break ;
@@ -1709,10 +1706,10 @@ G4Tubs::CreateRotatedVertices( const G4AffineTransform& pTransform ) const
   else                                { sAngle =  fSPhi ; }
     
   vertices = new G4ThreeVectorList();
-  vertices->reserve(noCrossSections*4);
     
   if ( vertices )
   {
+    vertices->reserve(noCrossSections*4);
     for (crossSection = 0 ; crossSection < noCrossSections ; crossSection++ )
     {
       // Compute coordinates of cross section at section crossSection

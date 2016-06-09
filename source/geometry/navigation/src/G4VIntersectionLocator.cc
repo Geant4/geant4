@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VIntersectionLocator.cc,v 1.7 2009/11/27 15:21:59 japost Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4VIntersectionLocator.cc,v 1.7.2.1 2010/09/08 14:40:52 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-03-patch-02 $
 //
 // Class G4VIntersectionLocator implementation
 //
@@ -82,12 +82,11 @@ G4VIntersectionLocator::printStatus( const G4FieldTrack&        StartFT,
   const G4ThreeVector CurrentUnitVelocity = CurrentFT.GetMomentumDir();
 
   G4double step_len = CurrentFT.GetCurveLength() - StartFT.GetCurveLength();
-      
+  G4int oldprc;  // cout/cerr precision settings
+
   if( ((stepNo == 0) && (verboseLevel <3)) || (verboseLevel >= 3) )
   {
-    static G4int noPrecision= 4;
-    G4cout.precision(noPrecision);
-    // G4cout.setf(ios_base::fixed,ios_base::floatfield);
+    oldprc = G4cout.precision(4);
     G4cout << std::setw( 6)  << " " 
            << std::setw( 25) << " Current Position  and  Direction" << " "
            << G4endl; 
@@ -99,15 +98,12 @@ G4VIntersectionLocator::printStatus( const G4FieldTrack&        StartFT,
            << std::setw( 7) << " N_x " << " "
            << std::setw( 7) << " N_y " << " "
            << std::setw( 7) << " N_z " << " " ;
-    //            << G4endl; 
-    G4cout     // << " >>> "
-           << std::setw( 7) << " Delta|N|" << " "
-      //   << std::setw( 7) << " Delta(N_z) " << " "
+    G4cout << std::setw( 7) << " Delta|N|" << " "
            << std::setw( 9) << "StepLen" << " "  
            << std::setw(12) << "StartSafety" << " "  
            << std::setw( 9) << "PhsStep" << " ";  
-  
     G4cout << G4endl;
+    G4cout.precision(oldprc);
   }
   if((stepNo == 0) && (verboseLevel <=3))
   {
@@ -125,9 +121,8 @@ G4VIntersectionLocator::printStatus( const G4FieldTrack&        StartFT,
     {
        G4cout << std::setw( 5) << "Start" ;
     }
-    G4cout.precision(8);
+    oldprc = G4cout.precision(8);
     G4cout << std::setw(10) << CurrentFT.GetCurveLength() << " "; 
-    G4cout.precision(8);
     G4cout << std::setw(10) << CurrentPosition.x() << " "
            << std::setw(10) << CurrentPosition.y() << " "
            << std::setw(10) << CurrentPosition.z() << " ";
@@ -135,38 +130,34 @@ G4VIntersectionLocator::printStatus( const G4FieldTrack&        StartFT,
     G4cout << std::setw( 7) << CurrentUnitVelocity.x() << " "
            << std::setw( 7) << CurrentUnitVelocity.y() << " "
            << std::setw( 7) << CurrentUnitVelocity.z() << " ";
-     //  G4cout << G4endl; 
-     //     G4cout << " >>> " ; 
-     G4cout.precision(3); 
-     G4cout << std::setw( 7)
-            << CurrentFT.GetMomentum().mag()- StartFT.GetMomentum().mag()
-            << " "; 
-     //   << std::setw( 7)
-     //   << CurrentUnitVelocity.z() - InitialUnitVelocity.z() << " ";
-     G4cout << std::setw( 9) << step_len << " "; 
-     G4cout << std::setw(12) << safety << " ";
-     if( requestStep != -1.0 )
-     {
-       G4cout << std::setw( 9) << requestStep << " ";
-     }
-     else
-     {
-       G4cout << std::setw( 9) << "Init/NotKnown" << " "; 
-     }
-     G4cout << G4endl;
-   }
-   else // if( verboseLevel > 3 )
-   {
-     //  Multi-line output
+    G4cout.precision(3); 
+    G4cout << std::setw( 7)
+           << CurrentFT.GetMomentum().mag()- StartFT.GetMomentum().mag()
+           << " "; 
+    G4cout << std::setw( 9) << step_len << " "; 
+    G4cout << std::setw(12) << safety << " ";
+    if( requestStep != -1.0 )
+    {
+      G4cout << std::setw( 9) << requestStep << " ";
+    }
+    else
+    {
+      G4cout << std::setw( 9) << "Init/NotKnown" << " "; 
+    }
+    G4cout << G4endl;
+    G4cout.precision(oldprc);
+  }
+  else // if( verboseLevel > 3 )
+  {
+    //  Multi-line output
        
-     G4cout << "Step taken was " << step_len  
-            << " out of PhysicalStep= " <<  requestStep << G4endl;
-     G4cout << "Final safety is: " << safety << G4endl;
-
-     G4cout << "Chord length = " << (CurrentPosition-StartPosition).mag()
-            << G4endl;
-     G4cout << G4endl; 
-   }
+    G4cout << "Step taken was " << step_len  
+           << " out of PhysicalStep= " <<  requestStep << G4endl;
+    G4cout << "Final safety is: " << safety << G4endl;
+    G4cout << "Chord length = " << (CurrentPosition-StartPosition).mag()
+           << G4endl;
+    G4cout << G4endl; 
+  }
 }
 
 ///////////////////////////////////////////////////////////////////////////

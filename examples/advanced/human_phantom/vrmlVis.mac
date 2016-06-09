@@ -4,7 +4,7 @@
 #
 # Sets some default verbose
 #
-/vis/open VRML2FILE
+/vis/open VRML2
 /vis/drawVolume
 /vis/scene/create
 # Attack the current scene handler to the current scene

@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-03-patch-01-ref    (9-April-2010)
+ Geant4 version Name: geant4-09-03-patch-02-ref    (17-September-2010)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -74,12 +74,12 @@ msc:   for e-    SubType= 10
           UrbanMsc92 :     Emin=          0 eV         Emax=   10 TeV
 
 pol-eIoni:   for  e-    SubType= 2
-      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
-      Lambda tables from threshold to 100 TeV in 120 bins, spline: 1
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
       finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       Delta cross sections from Moller+Bhabha, good description from 1 KeV to 100 GeV.
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-PolarizedMollerBhabha :     Emin=          0 eV         Emax=   100 TeV
+PolarizedMollerBhabha :     Emin=          0 eV         Emax=   10 TeV
 
 pol-eBrem:   for  e-    SubType= 3
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -88,12 +88,12 @@ pol-eBrem:   for  e-    SubType= 3
              PolBrem :     Emin=          0 eV         Emax=   10 TeV
 
 pol-eIoni:   for  e+    SubType= 2
-      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
-      Lambda tables from threshold to 100 TeV in 120 bins, spline: 1
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
       finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       Delta cross sections from Moller+Bhabha, good description from 1 KeV to 100 GeV.
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-PolarizedMollerBhabha :     Emin=          0 eV         Emax=   100 TeV
+PolarizedMollerBhabha :     Emin=          0 eV         Emax=   10 TeV
 
 pol-eBrem:   for  e+    SubType= 3
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -152,39 +152,39 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=0.28s Real=0.28s Sys=0s
+  User=0.27s Real=0.27s Sys=0s
 
  The run consists of 10000 gamma of 10 MeV through 1.75 mm  of G4_Fe (density: 7.874 g/cm3 )
 
 --------- Ranlux engine status ---------
  Initial seed = 9876
- float_seed_table[] = 0.327186 0.406724 0.440079 0.769111 0.803129 0.366524 0.0286527 0.0578583 0.622567 0.140711 0.992686 0.361992 0.837692 0.198571 0.710228 0.679671 0.88341 0.910976 0.584298 0.661074 0.244239 0.0382392 0.626088 0.336393 
- i_lag = 10, j_lag = 20
- carry = 5.96046e-08, count24 = 14
+ float_seed_table[] = 0.0955113 0.45227 0.657226 0.336152 0.117084 0.839724 0.853947 0.0422882 0.79092 0.643599 0.0855913 0.549115 0.971677 0.687932 0.140658 0.216536 0.9429 0.799757 0.935579 0.13988 0.111588 0.856807 0.128863 0.631 
+ i_lag = 15, j_lag = 1
+ carry = 5.96046e-08, count24 = 19
  luxury = 3 nskip = 199
 ----------------------------------------
 
  Process calls frequency --->
-	Transportation = 31248
-	pol-compt = 283
-	pol-eBrem = 383
-	msc = 2968
-	pol-conv = 201
-	pol-phot = 174
-	pol-eIoni = 584
-	pol-annihil = 60
+	Transportation = 31236
+	pol-compt = 291
+	pol-eBrem = 367
+	msc = 3023
+	pol-conv = 206
+	pol-phot = 169
+	pol-eIoni = 598
+	pol-annihil = 65
  Gamma: 
-Mean Number per Event :1.0115
-Mean Energy :9.5556 MeV +- 1.9431 MeV
-Mean Polarization :-0.96279 +- 0.18598
+Mean Number per Event :1.0111
+Mean Energy :9.5582 MeV +- 1.9385 MeV
+Mean Polarization :-0.96278 +- 0.18584
  Electron: 
-Mean Number per Event :0.0363
-Mean Energy :4.9456 MeV +- 2.608 MeV
-Mean Polarization :-0.702 +- 0.30913
+Mean Number per Event :0.0361
+Mean Energy :4.9462 MeV +- 2.6435 MeV
+Mean Polarization :-0.69842 +- 0.31272
  Positron: 
 Mean Number per Event :0.0146
-Mean Energy :4.1287 MeV +- 2.1373 MeV
-Mean Polarization :-0.59393 +- 0.3522
+Mean Energy :4.2176 MeV +- 2.1474 MeV
+Mean Polarization :-0.60142 +- 0.35133
 #
 UserDetectorConstruction deleted.
 UserPhysicsList deleted.

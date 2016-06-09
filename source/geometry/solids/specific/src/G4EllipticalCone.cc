@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EllipticalCone.cc,v 1.16 2008/04/25 08:45:26 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4EllipticalCone.cc,v 1.16.4.1 2010/09/08 15:54:58 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-03-patch-02 $
 //
 // Implementation of G4EllipticalCone class
 //
@@ -77,13 +77,9 @@ G4EllipticalCone::G4EllipticalCone(const G4String& pName,
 
   kRadTolerance = G4GeometryTolerance::GetInstance()->GetRadialTolerance();
 
-  // Check Semi-Axis
+  // Check Semi-Axis & Z-cut
   //
-  if ( (pxSemiAxis > 0.) && (pySemiAxis > 0.) && (pzMax > 0.) )
-  {
-     SetSemiAxis( pxSemiAxis, pySemiAxis, pzMax );
-  }
-  else
+  if ( (pxSemiAxis <= 0.) || (pySemiAxis <= 0.) || (pzMax <= 0.) )
   {
      G4cerr << "ERROR - G4EllipticalCone::G4EllipticalCone(): "
             << GetName() << G4endl
@@ -91,12 +87,7 @@ G4EllipticalCone::G4EllipticalCone(const G4String& pName,
      G4Exception("G4EllipticalCone::G4EllipticalCone()", "InvalidSetup",
                  FatalException, "Invalid semi-axis or height.");
   }
-
-  if ( pzTopCut > 0 )
-  {
-     SetZCut(pzTopCut);
-  }
-  else
+  if ( pzTopCut <= 0 )
   {
      G4cerr << "ERROR - G4EllipticalCone::G4EllipticalCone(): "
             << GetName() << G4endl
@@ -104,6 +95,9 @@ G4EllipticalCone::G4EllipticalCone(const G4String& pName,
      G4Exception("G4EllipticalCone::G4EllipticalCone()", "InvalidSetup",
                  FatalException, "Invalid z-coordinate for cutting plane.");
   }
+
+  SetSemiAxis( pxSemiAxis, pySemiAxis, pzMax );
+  SetZCut(pzTopCut);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -112,8 +106,9 @@ G4EllipticalCone::G4EllipticalCone(const G4String& pName,
 //                            for usage restricted to object persistency.
 //
 G4EllipticalCone::G4EllipticalCone( __void__& a )
-  : G4VSolid(a), fpPolyhedron(0), fCubicVolume(0.), fSurfaceArea(0.),
-    zTopCut(0.)
+  : G4VSolid(a), fpPolyhedron(0), kRadTolerance(0.), fCubicVolume(0.),
+    fSurfaceArea(0.), xSemiAxis(0.), ySemiAxis(0.), zheight(0.),
+    semiAxisMax(0.), zTopCut(0.)
 {
 }
 
@@ -256,17 +251,20 @@ EInside G4EllipticalCone::Inside(const G4ThreeVector& p) const
   
   EInside in;
 
+  static const G4double halfRadTol = 0.5*kRadTolerance;
+  static const G4double halfCarTol = 0.5*kCarTolerance;
+
   // check this side of z cut first, because that's fast
   //
 
-  if ( (p.z() < -zTopCut - 0.5*kCarTolerance)
-    || (p.z() > zTopCut + 0.5*kCarTolerance ) )
+  if ( (p.z() < -zTopCut - halfCarTol)
+    || (p.z() > zTopCut + halfCarTol ) )
   {
     return in = kOutside; 
   }
 
-  rad2oo= sqr(p.x()/( xSemiAxis + 0.5*kRadTolerance ))
-        + sqr(p.y()/( ySemiAxis + 0.5*kRadTolerance ));
+  rad2oo= sqr(p.x()/( xSemiAxis + halfRadTol ))
+        + sqr(p.y()/( ySemiAxis + halfRadTol ));
 
   if ( rad2oo > sqr( zheight-p.z() ) )
   {
@@ -275,13 +273,13 @@ EInside G4EllipticalCone::Inside(const G4ThreeVector& p) const
 
   //  rad2oi= sqr( p.x()*(1.0 + 0.5*kRadTolerance/(xSemiAxis*xSemiAxis)) )
   //      + sqr( p.y()*(1.0 + 0.5*kRadTolerance/(ySemiAxis*ySemiAxis)) );
-  rad2oi = sqr(p.x()/( xSemiAxis - 0.5*kRadTolerance ))
-        + sqr(p.y()/( ySemiAxis - 0.5*kRadTolerance ));
+  rad2oi = sqr(p.x()/( xSemiAxis - halfRadTol ))
+        + sqr(p.y()/( ySemiAxis - halfRadTol ));
      
   if (rad2oi < sqr( zheight-p.z() ) )
   {
-    in = ( ( p.z() < -zTopCut + 0.5*kRadTolerance )
-        || ( p.z() >  zTopCut - 0.5*kRadTolerance ) ) ? kSurface : kInside;
+    in = ( ( p.z() < -zTopCut + halfRadTol )
+        || ( p.z() >  zTopCut - halfRadTol ) ) ? kSurface : kInside;
   }
   else 
   {
@@ -541,8 +539,8 @@ G4double G4EllipticalCone::DistanceToIn( const G4ThreeVector& p,
       }
   }
   
-  if (p.z() > zTopCut - 0.5*kCarTolerance
-   && p.z() < zTopCut + 0.5*kCarTolerance )
+  if (p.z() > zTopCut - halfTol
+   && p.z() < zTopCut + halfTol )
   {
     if (v.z() > 0.) 
       { return kInfinity; }
@@ -550,8 +548,8 @@ G4double G4EllipticalCone::DistanceToIn( const G4ThreeVector& p,
     return distMin = 0.;
   }
   
-  if (p.z() < -zTopCut + 0.5*kCarTolerance
-   && p.z() > -zTopCut - 0.5*kCarTolerance)
+  if (p.z() < -zTopCut + halfTol
+   && p.z() > -zTopCut - halfTol)
   {
     if (v.z() < 0.)
       { return distMin = kInfinity; }
@@ -575,12 +573,12 @@ G4double G4EllipticalCone::DistanceToIn( const G4ThreeVector& p,
    
   // if the discriminant is negative it never hits the curved object
   //
-  if ( discr < -0.5*kCarTolerance )
+  if ( discr < -halfTol )
     { return distMin; }
   
   //case below is when it hits or grazes the surface
   //
-  if ( (discr >= - 0.5*kCarTolerance ) && (discr < 0.5*kCarTolerance ) )
+  if ( (discr >= - halfTol ) && (discr < halfTol ) )
   {
     return distMin = std::fabs(-B/(2.*A)); 
   }
@@ -621,13 +619,6 @@ G4double G4EllipticalCone::DistanceToIn( const G4ThreeVector& p,
     }
   }
 
-#ifdef G4SPECSDEBUG    
-//  G4cout << "DToIn: plus,minus, lambda = " << plus
-//         << ", " << minus << ", " << lambda << G4endl ;
-//  G4cout << "DToIn: distMin = " << distMin << G4endl ;
-#endif
-
-    
   return distMin ;
 }
 
@@ -809,8 +800,8 @@ G4double G4EllipticalCone::DistanceToOut(const G4ThreeVector& p,
         } 
         break;
 
-        default:
-          G4cout.precision(16);
+        default:            // Should never reach this case ...
+          G4int oldprc = G4cout.precision(16);
           G4cout << G4endl;
           DumpInfo();
           G4cout << "Position:"  << G4endl << G4endl;
@@ -823,6 +814,7 @@ G4double G4EllipticalCone::DistanceToOut(const G4ThreeVector& p,
           G4cout << "v.z() = "   << v.z() << G4endl << G4endl;
           G4cout << "Proposed distance :" << G4endl << G4endl;
           G4cout << "distMin = "    << distMin/mm << " mm" << G4endl << G4endl;
+          G4cout.precision(oldprc);
           G4Exception("G4EllipticalCone::DistanceToOut(p,v,..)",
                       "Notification", JustWarning,
                       "Undefined side for valid surface normal to solid.");
@@ -853,6 +845,7 @@ G4double G4EllipticalCone::DistanceToOut(const G4ThreeVector& p) const
      G4cout << "p.x() = "   << p.x()/mm << " mm" << G4endl ;
      G4cout << "p.y() = "   << p.y()/mm << " mm" << G4endl ;
      G4cout << "p.z() = "   << p.z()/mm << " mm" << G4endl << G4endl ;
+     G4cout.precision(6) ;
      G4Exception("G4Ellipsoid::DistanceToOut(p)", "Notification", JustWarning, 
                  "Point p is outside !?" );
   }

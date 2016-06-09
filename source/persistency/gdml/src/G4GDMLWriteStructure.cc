@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLWriteStructure.cc,v 1.80 2009/04/24 15:34:20 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4GDMLWriteStructure.cc,v 1.80.2.1 2010/09/10 09:38:33 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-03-patch-02 $
 //
 // class G4GDMLWriteStructure Implementation
 //
@@ -66,6 +66,7 @@ G4GDMLWriteStructure::DivisionvolWrite(xercesc::DOMElement* volumeElement,
    G4bool consuming = false;
 
    divisionvol->GetReplicationData(axis,number,width,offset,consuming);
+   axis = divisionvol->GetDivisionAxis();
 
    G4String unitString("mm");
    G4String axisString("kUndefined");
@@ -73,7 +74,7 @@ G4GDMLWriteStructure::DivisionvolWrite(xercesc::DOMElement* volumeElement,
    else if (axis==kYAxis) { axisString = "kYAxis"; }
    else if (axis==kZAxis) { axisString = "kZAxis"; }
    else if (axis==kRho)   { axisString = "kRho";     }
-   else if (axis==kPhi)   { axisString = "kPhi"; unitString = "degree"; }
+   else if (axis==kPhi)   { axisString = "kPhi"; unitString = "rad"; }
 
    const G4String name
          = GenerateName(divisionvol->GetName(),divisionvol);
@@ -186,7 +187,8 @@ void G4GDMLWriteStructure::ReplicavolWrite(xercesc::DOMElement* volumeElement,
    else if(axis==kRho)
      { dirElement->setAttributeNode(NewAttribute("rho","1")); }
    else if(axis==kPhi)
-     { dirElement->setAttributeNode(NewAttribute("phi","1")); }
+     { dirElement->setAttributeNode(NewAttribute("phi","1"));
+       unitString="rad"; }
    replicateElement->appendChild(dirElement);
 
    xercesc::DOMElement* widthElement = NewElement("width");

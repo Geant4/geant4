@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysicsList.cc,v 1.14 2009/11/27 14:54:58 hbu Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: PhysicsList.cc,v 1.14.2.1 2010/09/10 14:32:52 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-03-patch-02 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -41,7 +41,6 @@
 #include "G4AntiProton.hh"
 #include "G4Neutron.hh"
 #include "G4AntiNeutron.hh"
-//#include "G4GenericIon.hh"
 
 #include "G4GammaConversionToMuons.hh"
 
@@ -194,7 +193,7 @@ void PhysicsList::ConstructEM()
       //positron
       // to make the process of e+e- annihilation more visible,
       // do not enable the other standard processes:
-      //pmanager->AddProcess(new G4MultipleScattering,-1, 1,1);
+      //pmanager->AddProcess(new G4eMultipleScattering,-1, 1,1);
       //pmanager->AddProcess(new G4eIonisation,       -1, 2,2);
       //pmanager->AddProcess(new G4eBremsstrahlung,   -1, 3,3);
       //pmanager->AddProcess(new G4eplusAnnihilation,  0,-1,4);

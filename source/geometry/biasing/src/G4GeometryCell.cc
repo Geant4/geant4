@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4GeometryCell.cc,v 1.6 2006/06/29 18:17:07 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4GeometryCell.cc,v 1.6.6.1 2010/09/08 14:18:53 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-03-patch-02 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -35,11 +35,10 @@
 // ----------------------------------------------------------------------
 
 #include "G4GeometryCell.hh"
-//#include "G4VPhysicalVolume.hh"
 
 G4GeometryCell::G4GeometryCell(const G4VPhysicalVolume &aVolume,
-                                 G4int RepNum)
- : fVPhysiclaVolume(&aVolume),
+                                     G4int RepNum)
+ : fVPhysicalVolume(&aVolume),
    fRepNum(RepNum)
 {}
 
@@ -49,7 +48,7 @@ G4GeometryCell::~G4GeometryCell()
 
 const G4VPhysicalVolume &G4GeometryCell::GetPhysicalVolume() const
 {
-  return *fVPhysiclaVolume;
+  return *fVPhysicalVolume;
 }
 
 G4int G4GeometryCell::GetReplicaNumber() const 
@@ -58,14 +57,16 @@ G4int G4GeometryCell::GetReplicaNumber() const
 }
 
 
-G4GeometryCell::G4GeometryCell(const G4GeometryCell &rhs){
-  *this = rhs;
+G4GeometryCell::G4GeometryCell(const G4GeometryCell &rhs)
+ : fVPhysicalVolume(rhs.fVPhysicalVolume),
+   fRepNum(rhs.fRepNum)
+{
 }
 
 G4GeometryCell &G4GeometryCell::operator=(const G4GeometryCell &rhs){
   if (this != &rhs) {
-    fVPhysiclaVolume = rhs.fVPhysiclaVolume; // this is treated 
-                                           // as identifyer
+    fVPhysicalVolume = rhs.fVPhysicalVolume; // this is treated 
+                                             // as identifyer
     fRepNum = rhs.fRepNum;
   }
   return *this;

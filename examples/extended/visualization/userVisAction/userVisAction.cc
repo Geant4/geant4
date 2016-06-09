@@ -25,7 +25,7 @@
 //
 //
 // $Id: userVisAction.cc,v 1.2.6.1 2010/04/01 09:12:39 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-03-patch-01 $
+// GEANT4 tag $Name: geant4-09-03-patch-02 $
 //
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

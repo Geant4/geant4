@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VWeightWindowStore.hh,v 1.3 2006/06/29 18:16:57 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4VWeightWindowStore.hh,v 1.3.6.1 2010/09/08 14:18:53 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-03-patch-02 $
 //
 // ----------------------------------------------------------------------
 // Class G4VWeightWindowStore
@@ -54,8 +54,8 @@ public:  // with description
   G4VWeightWindowStore();
   virtual  ~G4VWeightWindowStore();
 
-  virtual G4double GetLowerWeitgh(const G4GeometryCell &gCell, 
-			 G4double partEnergy) const = 0;
+  virtual G4double GetLowerWeight(const G4GeometryCell &gCell, 
+			                G4double partEnergy) const = 0;
     // derive a lower weight bound value of a "cell" addresed by a 
     // G4GeometryCell and the coresponding energy from the store.
 

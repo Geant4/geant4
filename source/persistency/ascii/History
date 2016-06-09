@@ -1,4 +1,4 @@
-$Id: History,v 1.13 2009/11/25 15:36:09 gcosmo Exp $
+$Id: History,v 1.13.2.1 2010/09/10 09:27:38 gcosmo Exp $
 -------------------------------------------------------------------
      =========================================================
      Geant4 - an Object-Oriented Toolkit for Simulation in HEP
@@ -15,6 +15,13 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+3 September, 10  G.Cosmo (ascii-V09-02-11)
+- Fixed signature for std::map in G4tgrVolumeMgr.hh..
+- Added missing inclusion of <sstream> header in G4tgrFileIn.cc.
+
+14 June, 10  G.Cosmo
+- Added missing virtual destructor to G4tgbDetectorBuilder.
 
 25 November, 09  G.Cosmo (ascii-V09-02-10)
 - Fixed compilation warnings on G4tgbVolume detected on MacOS.

@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Pow.hh,v 1.2 2009/07/03 11:35:07 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4Pow.hh,v 1.2.2.1 2010/09/08 16:11:37 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-03-patch-02 $
 //
 //
 // -------------------------------------------------------------------
@@ -34,7 +34,10 @@
 // Class description:
 //
 // Utility singleton class for the fast computation of log and pow
-// functions 
+// functions. Integer argument should in the interval 0-255, no
+// check is performed inside these methods for performance reasons.
+// Computations with double arguments are fast for the interval
+// 0.5-255.5, standard library is used in the opposite case
 
 // Author: Vladimir Ivanchenko
 //
@@ -108,12 +111,13 @@ inline G4double G4Pow::Z13(G4int Z)
 
 inline G4double G4Pow::A13(G4double A)
 {
-  const G4int maxZ = 256; 
+  const G4double minA = 0.5000001; 
+  const G4double maxA = 255.5; 
 
   G4double res;
-  G4int i = G4int(A + 0.5);
-  if((i >= 1) && (i < maxZ))
+  if((A >= minA) && (A <= maxA))
   {
+    G4int i = G4int(A + 0.5);
     G4double x = (1.0 - A/G4double(i))*onethird;
     res = pz13[i]*(1.0 + x - x*x*(1.0 - 1.66666666*x));
   }
@@ -143,12 +147,13 @@ inline G4double G4Pow::logZ(G4int Z)
 
 inline G4double G4Pow::logA(G4double A)
 {
-  const G4int maxZ = 256;
+  const G4double minA = 0.5000001; 
+  const G4double maxA = 255.5; 
 
   G4double res;
-  G4int i = G4int(A + 0.5);
-  if((i >= 1) && (i < maxZ))
+  if((A >= minA) && (A <= maxA))
   {
+    G4int i = G4int(A + 0.5);
     G4double x = 1.0 - A/G4double(i);
     res = lz[i] + x*(1.0 - 0.5*x + onethird*x*x);
   }

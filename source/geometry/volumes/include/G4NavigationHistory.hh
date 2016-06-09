@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id$
-// GEANT4 tag $Name$
+// $Id: G4NavigationHistory.hh,v 1.14.2.3 2010/04/20 16:36:00 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-03-patch-02 $
 //
 // class G4NavigationHistory
 //

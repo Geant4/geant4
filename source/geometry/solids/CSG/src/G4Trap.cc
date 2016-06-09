@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Trap.cc,v 1.45 2008/04/23 09:49:57 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4Trap.cc,v 1.45.4.1 2010/09/08 14:52:47 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-03-patch-02 $
 //
 // class G4Trap
 //
@@ -91,26 +91,8 @@ G4Trap::G4Trap( const G4String& pName,
                       G4double pAlp2)
   : G4CSGSolid(pName)
 {
-  if ( pDz > 0 && pDy1 > 0 && pDx1 > 0 && 
-       pDx2 > 0 && pDy2 > 0 && pDx3 > 0 && pDx4 > 0 )
-  {
-    fDz=pDz;
-    fTthetaCphi=std::tan(pTheta)*std::cos(pPhi);
-    fTthetaSphi=std::tan(pTheta)*std::sin(pPhi);
-      
-    fDy1=pDy1;
-    fDx1=pDx1;
-    fDx2=pDx2;
-    fTalpha1=std::tan(pAlp1);
-     
-    fDy2=pDy2;
-    fDx3=pDx3;
-    fDx4=pDx4;
-    fTalpha2=std::tan(pAlp2);
-
-    MakePlanes();
-  }
-  else
+  if ( pDz <= 0 || pDy1 <= 0 || pDx1 <= 0 ||
+       pDx2 <= 0 || pDy2 <= 0 || pDx3 <= 0 || pDx4 <= 0 )
   {
     G4cerr << "ERROR - G4Trap()::G4Trap(): " << GetName() << G4endl
            << "        Invalid dimensions !" << G4endl
@@ -121,6 +103,22 @@ G4Trap::G4Trap( const G4String& pName,
     G4Exception("G4Trap::G4Trap()", "InvalidSetup", FatalException,
                 "Invalid length G4Trap parameters.");
   }
+
+  fDz=pDz;
+  fTthetaCphi=std::tan(pTheta)*std::cos(pPhi);
+  fTthetaSphi=std::tan(pTheta)*std::sin(pPhi);
+      
+  fDy1=pDy1;
+  fDx1=pDx1;
+  fDx2=pDx2;
+  fTalpha1=std::tan(pAlp1);
+     
+  fDy2=pDy2;
+  fDx3=pDx3;
+  fDx4=pDx4;
+  fTalpha2=std::tan(pAlp2);
+
+  MakePlanes();
 }
 
 ////////////////////////////////////////////////////////////////////////////
@@ -133,87 +131,85 @@ G4Trap::G4Trap( const G4String& pName,
                 const G4ThreeVector pt[8] )
   : G4CSGSolid(pName)
 {
+  G4bool good;
+
   // Start with check of centering - the center of gravity trap line
   // should cross the origin of frame
 
-  if (   pt[0].z() < 0 
-      && pt[0].z() == pt[1].z() && pt[0].z() == pt[2].z()
-      && pt[0].z() == pt[3].z()
-      && pt[4].z() > 0 
-      && pt[4].z() == pt[5].z() && pt[4].z() == pt[6].z()
-      && pt[4].z() == pt[7].z()
-      && std::fabs( pt[0].z() + pt[4].z() ) < kCarTolerance
-      && pt[0].y() == pt[1].y() && pt[2].y() == pt[3].y()
-      && pt[4].y() == pt[5].y() && pt[6].y() == pt[7].y()
-      && std::fabs( pt[0].y() + pt[2].y() + pt[4].y() + pt[6].y() ) < kCarTolerance 
-      && std::fabs( pt[0].x() + pt[1].x() + pt[4].x() + pt[5].x() + 
-           pt[2].x() + pt[3].x() + pt[6].x() + pt[7].x() ) < kCarTolerance )
-  {
-    G4bool good;
-    
-    // Bottom side with normal approx. -Y
-    
-    good = MakePlane(pt[0],pt[4],pt[5],pt[1],fPlanes[0]);
-
-    if (!good)
-    {
-      DumpInfo();
-      G4Exception("G4Trap::G4Trap()", "InvalidSetup", FatalException,
-                  "Face at ~-Y not planar.");
-    }
-
-    // Top side with normal approx. +Y
-    
-    good = MakePlane(pt[2],pt[3],pt[7],pt[6],fPlanes[1]);
-
-    if (!good)
-    {
-      G4cerr << "ERROR - G4Trap()::G4Trap(): " << GetName() << G4endl;
-      G4Exception("G4Trap::G4Trap()", "InvalidSetup", FatalException,
-                  "Face at ~+Y not planar.");
-    }
-
-    // Front side with normal approx. -X
-    
-    good = MakePlane(pt[0],pt[2],pt[6],pt[4],fPlanes[2]);
-
-    if (!good)
-    {
-      G4cerr << "ERROR - G4Trap()::G4Trap(): " << GetName() << G4endl;
-      G4Exception("G4Trap::G4Trap()", "InvalidSetup", FatalException,
-                  "Face at ~-X not planar.");
-    }
-
-    // Back side iwth normal approx. +X
-    
-    good = MakePlane(pt[1],pt[5],pt[7],pt[3],fPlanes[3]);
-    if (!good)
-    {
-      G4cerr << "ERROR - G4Trap()::G4Trap(): " << GetName() << G4endl;
-      G4Exception("G4Trap::G4Trap()", "InvalidSetup", FatalException,
-                  "Face at ~+X not planar.");
-    }
-    fDz = (pt[7]).z() ;
-      
-    fDy1     = ((pt[2]).y()-(pt[1]).y())*0.5;
-    fDx1     = ((pt[1]).x()-(pt[0]).x())*0.5;
-    fDx2     = ((pt[3]).x()-(pt[2]).x())*0.5;
-    fTalpha1 = ((pt[2]).x()+(pt[3]).x()-(pt[1]).x()-(pt[0]).x())*0.25/fDy1;
-
-    fDy2     = ((pt[6]).y()-(pt[5]).y())*0.5;
-    fDx3     = ((pt[5]).x()-(pt[4]).x())*0.5;
-    fDx4     = ((pt[7]).x()-(pt[6]).x())*0.5;
-    fTalpha2 = ((pt[6]).x()+(pt[7]).x()-(pt[5]).x()-(pt[4]).x())*0.25/fDy2;
-
-    fTthetaCphi = ((pt[4]).x()+fDy2*fTalpha2+fDx3)/fDz;
-    fTthetaSphi = ((pt[4]).y()+fDy2)/fDz;
-  }
-  else
+  if (!(   pt[0].z() < 0 
+        && pt[0].z() == pt[1].z() && pt[0].z() == pt[2].z()
+        && pt[0].z() == pt[3].z()
+        && pt[4].z() > 0 
+        && pt[4].z() == pt[5].z() && pt[4].z() == pt[6].z()
+        && pt[4].z() == pt[7].z()
+        && std::fabs( pt[0].z() + pt[4].z() ) < kCarTolerance
+        && pt[0].y() == pt[1].y() && pt[2].y() == pt[3].y()
+        && pt[4].y() == pt[5].y() && pt[6].y() == pt[7].y()
+        && std::fabs( pt[0].y() + pt[2].y() + pt[4].y() + pt[6].y() ) < kCarTolerance 
+        && std::fabs( pt[0].x() + pt[1].x() + pt[4].x() + pt[5].x() + 
+           pt[2].x() + pt[3].x() + pt[6].x() + pt[7].x() ) < kCarTolerance ) )
   {
     G4cerr << "ERROR - G4Trap()::G4Trap(): " << GetName() << G4endl;
     G4Exception("G4Trap::G4Trap()", "InvalidSetup", FatalException,
                   "Invalid vertice coordinates.");
   }
+    
+  // Bottom side with normal approx. -Y
+    
+  good = MakePlane(pt[0],pt[4],pt[5],pt[1],fPlanes[0]);
+
+  if (!good)
+  {
+    DumpInfo();
+    G4Exception("G4Trap::G4Trap()", "InvalidSetup", FatalException,
+                "Face at ~-Y not planar.");
+  }
+
+  // Top side with normal approx. +Y
+    
+  good = MakePlane(pt[2],pt[3],pt[7],pt[6],fPlanes[1]);
+
+  if (!good)
+  {
+    G4cerr << "ERROR - G4Trap()::G4Trap(): " << GetName() << G4endl;
+    G4Exception("G4Trap::G4Trap()", "InvalidSetup", FatalException,
+                "Face at ~+Y not planar.");
+  }
+
+  // Front side with normal approx. -X
+    
+  good = MakePlane(pt[0],pt[2],pt[6],pt[4],fPlanes[2]);
+
+  if (!good)
+  {
+    G4cerr << "ERROR - G4Trap()::G4Trap(): " << GetName() << G4endl;
+    G4Exception("G4Trap::G4Trap()", "InvalidSetup", FatalException,
+                "Face at ~-X not planar.");
+  }
+
+  // Back side iwth normal approx. +X
+    
+  good = MakePlane(pt[1],pt[5],pt[7],pt[3],fPlanes[3]);
+  if (!good)
+  {
+    G4cerr << "ERROR - G4Trap()::G4Trap(): " << GetName() << G4endl;
+    G4Exception("G4Trap::G4Trap()", "InvalidSetup", FatalException,
+                "Face at ~+X not planar.");
+  }
+  fDz = (pt[7]).z() ;
+      
+  fDy1     = ((pt[2]).y()-(pt[1]).y())*0.5;
+  fDx1     = ((pt[1]).x()-(pt[0]).x())*0.5;
+  fDx2     = ((pt[3]).x()-(pt[2]).x())*0.5;
+  fTalpha1 = ((pt[2]).x()+(pt[3]).x()-(pt[1]).x()-(pt[0]).x())*0.25/fDy1;
+
+  fDy2     = ((pt[6]).y()-(pt[5]).y())*0.5;
+  fDx3     = ((pt[5]).x()-(pt[4]).x())*0.5;
+  fDx4     = ((pt[7]).x()-(pt[6]).x())*0.5;
+  fTalpha2 = ((pt[6]).x()+(pt[7]).x()-(pt[5]).x()-(pt[4]).x())*0.25/fDy2;
+
+  fTthetaCphi = ((pt[4]).x()+fDy2*fTalpha2+fDx3)/fDz;
+  fTthetaSphi = ((pt[4]).y()+fDy2)/fDz;
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -224,91 +220,88 @@ G4Trap::G4Trap( const G4String& pName,
                       G4double pZ,
                       G4double pY,
                       G4double pX, G4double pLTX )
-  : G4CSGSolid(pName) 
-         
+  : G4CSGSolid(pName)
 {
   G4bool good;
 
-  if ( pZ>0 && pY>0 && pX>0 && pLTX>0 && pLTX<=pX )
-  {
-    fDz = 0.5*pZ ;
-    fTthetaCphi = 0 ;
-    fTthetaSphi = 0 ;
-
-    fDy1 = 0.5*pY;
-    fDx1 = 0.5*pX ;
-    fDx2 = 0.5*pLTX;
-    fTalpha1 =  0.5*(pLTX - pX)/pY;
-
-    fDy2 = fDy1 ;
-    fDx3 = fDx1;
-    fDx4 = fDx2 ;
-    fTalpha2 = fTalpha1 ;
-
-    G4ThreeVector pt[8] ;
-
-    pt[0]=G4ThreeVector(-fDz*fTthetaCphi-fDy1*fTalpha1-fDx1,
-                        -fDz*fTthetaSphi-fDy1,-fDz);
-    pt[1]=G4ThreeVector(-fDz*fTthetaCphi-fDy1*fTalpha1+fDx1,
-                        -fDz*fTthetaSphi-fDy1,-fDz);
-    pt[2]=G4ThreeVector(-fDz*fTthetaCphi+fDy1*fTalpha1-fDx2,
-                        -fDz*fTthetaSphi+fDy1,-fDz);
-    pt[3]=G4ThreeVector(-fDz*fTthetaCphi+fDy1*fTalpha1+fDx2,
-                        -fDz*fTthetaSphi+fDy1,-fDz);
-    pt[4]=G4ThreeVector(+fDz*fTthetaCphi-fDy2*fTalpha2-fDx3,
-                        +fDz*fTthetaSphi-fDy2,+fDz);
-    pt[5]=G4ThreeVector(+fDz*fTthetaCphi-fDy2*fTalpha2+fDx3,
-                        +fDz*fTthetaSphi-fDy2,+fDz);
-    pt[6]=G4ThreeVector(+fDz*fTthetaCphi+fDy2*fTalpha2-fDx4,
-                        +fDz*fTthetaSphi+fDy2,+fDz);
-    pt[7]=G4ThreeVector(+fDz*fTthetaCphi+fDy2*fTalpha2+fDx4,
-                        +fDz*fTthetaSphi+fDy2,+fDz);
-
-    // Bottom side with normal approx. -Y
-    //
-    good=MakePlane(pt[0],pt[4],pt[5],pt[1],fPlanes[0]);
-    if (!good)
-    {
-      G4cerr << "ERROR - G4Trap()::G4Trap(): " << GetName() << G4endl;
-      G4Exception("G4Trap::G4Trap()", "InvalidSetup", FatalException,
-                  "Face at ~-Y not planar.");
-    }
-
-    // Top side with normal approx. +Y
-    //
-    good=MakePlane(pt[2],pt[3],pt[7],pt[6],fPlanes[1]);
-    if (!good)
-    {
-      G4cerr << "ERROR - G4Trap()::G4Trap(): " << GetName() << G4endl;
-      G4Exception("G4Trap::G4Trap()", "InvalidSetup", FatalException,
-                  "Face at ~+Y not planar.");
-    }
-
-    // Front side with normal approx. -X
-    //
-    good=MakePlane(pt[0],pt[2],pt[6],pt[4],fPlanes[2]);
-    if (!good)
-    {
-      G4cerr << "ERROR - G4Trap()::G4Trap(): " << GetName() << G4endl;
-      G4Exception("G4Trap::G4Trap()", "InvalidSetup", FatalException,
-                  "Face at ~-X not planar.");
-    }
-
-    // Back side iwth normal approx. +X
-    //
-    good=MakePlane(pt[1],pt[5],pt[7],pt[3],fPlanes[3]);
-    if (!good)
-    {
-      G4cerr << "ERROR - G4Trap()::G4Trap(): " << GetName() << G4endl;
-      G4Exception("G4Trap::G4Trap()", "InvalidSetup", FatalException,
-                  "Face at ~+X not planar.");
-    }
-  }
-    else
+  if ( pZ<=0 || pY<=0 || pX<=0 || pLTX<=0 || pLTX>pX )
   {
     G4cerr << "ERROR - G4Trap()::G4Trap(): " << GetName() << G4endl;
     G4Exception("G4Trap::G4Trap()", "InvalidSetup", FatalException,
                 "Invalid length G4Trap parameters.");
+  }
+
+  fDz = 0.5*pZ ;
+  fTthetaCphi = 0 ;
+  fTthetaSphi = 0 ;
+
+  fDy1 = 0.5*pY;
+  fDx1 = 0.5*pX ;
+  fDx2 = 0.5*pLTX;
+  fTalpha1 =  0.5*(pLTX - pX)/pY;
+
+  fDy2 = fDy1 ;
+  fDx3 = fDx1;
+  fDx4 = fDx2 ;
+  fTalpha2 = fTalpha1 ;
+
+  G4ThreeVector pt[8] ;
+
+  pt[0]=G4ThreeVector(-fDz*fTthetaCphi-fDy1*fTalpha1-fDx1,
+                      -fDz*fTthetaSphi-fDy1,-fDz);
+  pt[1]=G4ThreeVector(-fDz*fTthetaCphi-fDy1*fTalpha1+fDx1,
+                      -fDz*fTthetaSphi-fDy1,-fDz);
+  pt[2]=G4ThreeVector(-fDz*fTthetaCphi+fDy1*fTalpha1-fDx2,
+                      -fDz*fTthetaSphi+fDy1,-fDz);
+  pt[3]=G4ThreeVector(-fDz*fTthetaCphi+fDy1*fTalpha1+fDx2,
+                      -fDz*fTthetaSphi+fDy1,-fDz);
+  pt[4]=G4ThreeVector(+fDz*fTthetaCphi-fDy2*fTalpha2-fDx3,
+                      +fDz*fTthetaSphi-fDy2,+fDz);
+  pt[5]=G4ThreeVector(+fDz*fTthetaCphi-fDy2*fTalpha2+fDx3,
+                      +fDz*fTthetaSphi-fDy2,+fDz);
+  pt[6]=G4ThreeVector(+fDz*fTthetaCphi+fDy2*fTalpha2-fDx4,
+                      +fDz*fTthetaSphi+fDy2,+fDz);
+  pt[7]=G4ThreeVector(+fDz*fTthetaCphi+fDy2*fTalpha2+fDx4,
+                      +fDz*fTthetaSphi+fDy2,+fDz);
+
+  // Bottom side with normal approx. -Y
+  //
+  good=MakePlane(pt[0],pt[4],pt[5],pt[1],fPlanes[0]);
+  if (!good)
+  {
+    G4cerr << "ERROR - G4Trap()::G4Trap(): " << GetName() << G4endl;
+    G4Exception("G4Trap::G4Trap()", "InvalidSetup", FatalException,
+                "Face at ~-Y not planar.");
+  }
+
+  // Top side with normal approx. +Y
+  //
+  good=MakePlane(pt[2],pt[3],pt[7],pt[6],fPlanes[1]);
+  if (!good)
+  {
+    G4cerr << "ERROR - G4Trap()::G4Trap(): " << GetName() << G4endl;
+    G4Exception("G4Trap::G4Trap()", "InvalidSetup", FatalException,
+                "Face at ~+Y not planar.");
+  }
+
+  // Front side with normal approx. -X
+  //
+  good=MakePlane(pt[0],pt[2],pt[6],pt[4],fPlanes[2]);
+  if (!good)
+  {
+    G4cerr << "ERROR - G4Trap()::G4Trap(): " << GetName() << G4endl;
+    G4Exception("G4Trap::G4Trap()", "InvalidSetup", FatalException,
+                "Face at ~-X not planar.");
+  }
+
+  // Back side iwth normal approx. +X
+  //
+  good=MakePlane(pt[1],pt[5],pt[7],pt[3],fPlanes[3]);
+  if (!good)
+  {
+    G4cerr << "ERROR - G4Trap()::G4Trap(): " << GetName() << G4endl;
+    G4Exception("G4Trap::G4Trap()", "InvalidSetup", FatalException,
+                "Face at ~+X not planar.");
   }
 }
 
@@ -324,86 +317,84 @@ G4Trap::G4Trap( const G4String& pName,
 {
   G4bool good;
 
-  if ( pDz>0 && pDy1>0 && pDx1>0 && pDx2>0 && pDy2>0 )
-  {
-    fDz = pDz;
-    fTthetaCphi = 0 ;
-    fTthetaSphi = 0 ;
-      
-    fDy1 = pDy1 ;
-    fDx1 = pDx1 ;
-    fDx2 = pDx1 ;
-    fTalpha1 = 0 ;
-     
-    fDy2 = pDy2 ;
-    fDx3 = pDx2 ;
-    fDx4 = pDx2 ;
-    fTalpha2 = 0 ;
-
-    G4ThreeVector pt[8] ;
-     
-    pt[0]=G4ThreeVector(-fDz*fTthetaCphi-fDy1*fTalpha1-fDx1,
-                        -fDz*fTthetaSphi-fDy1,-fDz);
-    pt[1]=G4ThreeVector(-fDz*fTthetaCphi-fDy1*fTalpha1+fDx1,
-                        -fDz*fTthetaSphi-fDy1,-fDz);
-    pt[2]=G4ThreeVector(-fDz*fTthetaCphi+fDy1*fTalpha1-fDx2,
-                        -fDz*fTthetaSphi+fDy1,-fDz);
-    pt[3]=G4ThreeVector(-fDz*fTthetaCphi+fDy1*fTalpha1+fDx2,
-                        -fDz*fTthetaSphi+fDy1,-fDz);
-    pt[4]=G4ThreeVector(+fDz*fTthetaCphi-fDy2*fTalpha2-fDx3,
-                        +fDz*fTthetaSphi-fDy2,+fDz);
-    pt[5]=G4ThreeVector(+fDz*fTthetaCphi-fDy2*fTalpha2+fDx3,
-                        +fDz*fTthetaSphi-fDy2,+fDz);
-    pt[6]=G4ThreeVector(+fDz*fTthetaCphi+fDy2*fTalpha2-fDx4,
-                        +fDz*fTthetaSphi+fDy2,+fDz);
-    pt[7]=G4ThreeVector(+fDz*fTthetaCphi+fDy2*fTalpha2+fDx4,
-                        +fDz*fTthetaSphi+fDy2,+fDz);
-
-    // Bottom side with normal approx. -Y
-    //
-    good=MakePlane(pt[0],pt[4],pt[5],pt[1],fPlanes[0]);
-    if (!good)
-    {
-      G4cerr << "ERROR - G4Trap()::G4Trap(): " << GetName() << G4endl;
-      G4Exception("G4Trap::G4Trap()", "InvalidSetup", FatalException,
-                  "Face at ~-Y not planar.");
-    }
-
-    // Top side with normal approx. +Y
-    //
-    good=MakePlane(pt[2],pt[3],pt[7],pt[6],fPlanes[1]);
-    if (!good)
-    {
-      G4cerr << "ERROR - G4Trap()::G4Trap(): " << GetName() << G4endl;
-      G4Exception("G4Trap::G4Trap()", "InvalidSetup", FatalException,
-                  "Face at ~+Y not planar.");
-    }
-
-    // Front side with normal approx. -X
-    //
-    good=MakePlane(pt[0],pt[2],pt[6],pt[4],fPlanes[2]);
-    if (!good)
-    {
-      G4cerr << "ERROR - G4Trap()::G4Trap(): " << GetName() << G4endl;
-      G4Exception("G4Trap::G4Trap()", "InvalidSetup", FatalException,
-                  "Face at ~-X not planar.");
-    }
-
-    // Back side iwth normal approx. +X
-    //
-    good=MakePlane(pt[1],pt[5],pt[7],pt[3],fPlanes[3]);
-    if (!good)
-    {
-      G4cerr << "ERROR - G4Trap()::G4Trap(): " << GetName() << G4endl;
-      G4Exception("G4Trap::G4Trap()", "InvalidSetup", FatalException,
-                  "Face at ~+X not planar.");
-    }
-  }
-  else
+  if ( pDz<=0 || pDy1<=0 || pDx1<=0 || pDx2<=0 || pDy2<=0 )
   {
     G4cerr << "ERROR - G4Trap()::G4Trap(): " << GetName() << G4endl;
     G4Exception("G4Trap::G4Trap()", "InvalidSetup", FatalException,
                 "Invalid length G4Trap parameters.");
+  }
+
+  fDz = pDz;
+  fTthetaCphi = 0 ;
+  fTthetaSphi = 0 ;
+      
+  fDy1 = pDy1 ;
+  fDx1 = pDx1 ;
+  fDx2 = pDx1 ;
+  fTalpha1 = 0 ;
+     
+  fDy2 = pDy2 ;
+  fDx3 = pDx2 ;
+  fDx4 = pDx2 ;
+  fTalpha2 = 0 ;
+
+  G4ThreeVector pt[8] ;
+     
+  pt[0]=G4ThreeVector(-fDz*fTthetaCphi-fDy1*fTalpha1-fDx1,
+                      -fDz*fTthetaSphi-fDy1,-fDz);
+  pt[1]=G4ThreeVector(-fDz*fTthetaCphi-fDy1*fTalpha1+fDx1,
+                      -fDz*fTthetaSphi-fDy1,-fDz);
+  pt[2]=G4ThreeVector(-fDz*fTthetaCphi+fDy1*fTalpha1-fDx2,
+                      -fDz*fTthetaSphi+fDy1,-fDz);
+  pt[3]=G4ThreeVector(-fDz*fTthetaCphi+fDy1*fTalpha1+fDx2,
+                      -fDz*fTthetaSphi+fDy1,-fDz);
+  pt[4]=G4ThreeVector(+fDz*fTthetaCphi-fDy2*fTalpha2-fDx3,
+                      +fDz*fTthetaSphi-fDy2,+fDz);
+  pt[5]=G4ThreeVector(+fDz*fTthetaCphi-fDy2*fTalpha2+fDx3,
+                      +fDz*fTthetaSphi-fDy2,+fDz);
+  pt[6]=G4ThreeVector(+fDz*fTthetaCphi+fDy2*fTalpha2-fDx4,
+                      +fDz*fTthetaSphi+fDy2,+fDz);
+  pt[7]=G4ThreeVector(+fDz*fTthetaCphi+fDy2*fTalpha2+fDx4,
+                      +fDz*fTthetaSphi+fDy2,+fDz);
+
+  // Bottom side with normal approx. -Y
+  //
+  good=MakePlane(pt[0],pt[4],pt[5],pt[1],fPlanes[0]);
+  if (!good)
+  {
+    G4cerr << "ERROR - G4Trap()::G4Trap(): " << GetName() << G4endl;
+    G4Exception("G4Trap::G4Trap()", "InvalidSetup", FatalException,
+                "Face at ~-Y not planar.");
+  }
+
+  // Top side with normal approx. +Y
+  //
+  good=MakePlane(pt[2],pt[3],pt[7],pt[6],fPlanes[1]);
+  if (!good)
+  {
+    G4cerr << "ERROR - G4Trap()::G4Trap(): " << GetName() << G4endl;
+    G4Exception("G4Trap::G4Trap()", "InvalidSetup", FatalException,
+                "Face at ~+Y not planar.");
+  }
+
+  // Front side with normal approx. -X
+  //
+  good=MakePlane(pt[0],pt[2],pt[6],pt[4],fPlanes[2]);
+  if (!good)
+  {
+    G4cerr << "ERROR - G4Trap()::G4Trap(): " << GetName() << G4endl;
+    G4Exception("G4Trap::G4Trap()", "InvalidSetup", FatalException,
+                "Face at ~-X not planar.");
+  }
+
+  // Back side iwth normal approx. +X
+  //
+  good=MakePlane(pt[1],pt[5],pt[7],pt[3],fPlanes[3]);
+  if (!good)
+  {
+    G4cerr << "ERROR - G4Trap()::G4Trap(): " << GetName() << G4endl;
+    G4Exception("G4Trap::G4Trap()", "InvalidSetup", FatalException,
+                "Face at ~+X not planar.");
   }
 }
 
@@ -415,91 +406,89 @@ G4Trap::G4Trap( const G4String& pName,
                       G4double pDx, G4double pDy,
                       G4double pDz,
                       G4double pAlpha,
-                      G4double pTheta, G4double pPhi)
+                      G4double pTheta, G4double pPhi )
   : G4CSGSolid(pName)       
 {
   G4bool good;
 
-  if ( pDz>0 && pDy>0 && pDx>0 )
-  {
-    fDz = pDz ;
-    fTthetaCphi = std::tan(pTheta)*std::cos(pPhi) ;
-    fTthetaSphi = std::tan(pTheta)*std::sin(pPhi) ;
-     
-    fDy1 = pDy ;
-    fDx1 = pDx ;
-    fDx2 = pDx ;
-    fTalpha1 = std::tan(pAlpha) ;
-    
-    fDy2 = pDy ;
-    fDx3 = pDx ;
-    fDx4 = pDx ;
-    fTalpha2 = fTalpha1 ;
-
-    G4ThreeVector pt[8] ;
-     
-    pt[0]=G4ThreeVector(-fDz*fTthetaCphi-fDy1*fTalpha1-fDx1,
-                        -fDz*fTthetaSphi-fDy1,-fDz);
-    pt[1]=G4ThreeVector(-fDz*fTthetaCphi-fDy1*fTalpha1+fDx1,
-                        -fDz*fTthetaSphi-fDy1,-fDz);
-    pt[2]=G4ThreeVector(-fDz*fTthetaCphi+fDy1*fTalpha1-fDx2,
-                        -fDz*fTthetaSphi+fDy1,-fDz);
-    pt[3]=G4ThreeVector(-fDz*fTthetaCphi+fDy1*fTalpha1+fDx2,
-                        -fDz*fTthetaSphi+fDy1,-fDz);
-    pt[4]=G4ThreeVector(+fDz*fTthetaCphi-fDy2*fTalpha2-fDx3,
-                        +fDz*fTthetaSphi-fDy2,+fDz);
-    pt[5]=G4ThreeVector(+fDz*fTthetaCphi-fDy2*fTalpha2+fDx3,
-                        +fDz*fTthetaSphi-fDy2,+fDz);
-    pt[6]=G4ThreeVector(+fDz*fTthetaCphi+fDy2*fTalpha2-fDx4,
-                        +fDz*fTthetaSphi+fDy2,+fDz);
-    pt[7]=G4ThreeVector(+fDz*fTthetaCphi+fDy2*fTalpha2+fDx4,
-                        +fDz*fTthetaSphi+fDy2,+fDz);
-
-    // Bottom side with normal approx. -Y
-    //
-    good=MakePlane(pt[0],pt[4],pt[5],pt[1],fPlanes[0]);
-    if (!good)
-    {
-      G4cerr << "ERROR - G4Trap()::G4Trap(): " << GetName() << G4endl;
-      G4Exception("G4Trap::G4Trap()", "InvalidSetup", FatalException,
-                  "Face at ~-Y not planar.");
-    }
-
-    // Top side with normal approx. +Y
-    //
-    good=MakePlane(pt[2],pt[3],pt[7],pt[6],fPlanes[1]);
-    if (!good)
-    {
-      G4cerr << "ERROR - G4Trap()::G4Trap(): " << GetName() << G4endl;
-      G4Exception("G4Trap::G4Trap()", "InvalidSetup", FatalException,
-                  "Face at ~+Y not planar.");
-    }
-
-    // Front side with normal approx. -X
-    //
-    good=MakePlane(pt[0],pt[2],pt[6],pt[4],fPlanes[2]);
-    if (!good)
-    {
-      G4cerr << "ERROR - G4Trap()::G4Trap(): " << GetName() << G4endl;
-      G4Exception("G4Trap::G4Trap()", "InvalidSetup", FatalException,
-                  "Face at ~-X not planar.");
-    }
-
-    // Back side iwth normal approx. +X
-    //
-    good=MakePlane(pt[1],pt[5],pt[7],pt[3],fPlanes[3]);
-    if (!good)
-    {
-      G4cerr << "ERROR - G4Trap()::G4Trap(): " << GetName() << G4endl;
-      G4Exception("G4Trap::G4Trap()", "InvalidSetup", FatalException,
-                  "Face at ~+X not planar.");
-    }
-  }
-  else
+  if ( pDz<=0 || pDy<=0 || pDx<=0 )
   {
     G4cerr << "ERROR - G4Trap()::G4Trap(): " << GetName() << G4endl;
     G4Exception("G4Trap::G4Trap()", "InvalidSetup", FatalException,
                 "Invalid length G4Trap parameters.");
+  }
+
+  fDz = pDz ;
+  fTthetaCphi = std::tan(pTheta)*std::cos(pPhi) ;
+  fTthetaSphi = std::tan(pTheta)*std::sin(pPhi) ;
+     
+  fDy1 = pDy ;
+  fDx1 = pDx ;
+  fDx2 = pDx ;
+  fTalpha1 = std::tan(pAlpha) ;
+    
+  fDy2 = pDy ;
+  fDx3 = pDx ;
+  fDx4 = pDx ;
+  fTalpha2 = fTalpha1 ;
+
+  G4ThreeVector pt[8] ;
+     
+  pt[0]=G4ThreeVector(-fDz*fTthetaCphi-fDy1*fTalpha1-fDx1,
+                      -fDz*fTthetaSphi-fDy1,-fDz);
+  pt[1]=G4ThreeVector(-fDz*fTthetaCphi-fDy1*fTalpha1+fDx1,
+                      -fDz*fTthetaSphi-fDy1,-fDz);
+  pt[2]=G4ThreeVector(-fDz*fTthetaCphi+fDy1*fTalpha1-fDx2,
+                      -fDz*fTthetaSphi+fDy1,-fDz);
+  pt[3]=G4ThreeVector(-fDz*fTthetaCphi+fDy1*fTalpha1+fDx2,
+                      -fDz*fTthetaSphi+fDy1,-fDz);
+  pt[4]=G4ThreeVector(+fDz*fTthetaCphi-fDy2*fTalpha2-fDx3,
+                      +fDz*fTthetaSphi-fDy2,+fDz);
+  pt[5]=G4ThreeVector(+fDz*fTthetaCphi-fDy2*fTalpha2+fDx3,
+                      +fDz*fTthetaSphi-fDy2,+fDz);
+  pt[6]=G4ThreeVector(+fDz*fTthetaCphi+fDy2*fTalpha2-fDx4,
+                      +fDz*fTthetaSphi+fDy2,+fDz);
+  pt[7]=G4ThreeVector(+fDz*fTthetaCphi+fDy2*fTalpha2+fDx4,
+                      +fDz*fTthetaSphi+fDy2,+fDz);
+
+  // Bottom side with normal approx. -Y
+  //
+  good=MakePlane(pt[0],pt[4],pt[5],pt[1],fPlanes[0]);
+  if (!good)
+  {
+    G4cerr << "ERROR - G4Trap()::G4Trap(): " << GetName() << G4endl;
+    G4Exception("G4Trap::G4Trap()", "InvalidSetup", FatalException,
+                "Face at ~-Y not planar.");
+  }
+
+  // Top side with normal approx. +Y
+  //
+  good=MakePlane(pt[2],pt[3],pt[7],pt[6],fPlanes[1]);
+  if (!good)
+  {
+    G4cerr << "ERROR - G4Trap()::G4Trap(): " << GetName() << G4endl;
+    G4Exception("G4Trap::G4Trap()", "InvalidSetup", FatalException,
+                "Face at ~+Y not planar.");
+  }
+
+  // Front side with normal approx. -X
+  //
+  good=MakePlane(pt[0],pt[2],pt[6],pt[4],fPlanes[2]);
+  if (!good)
+  {
+    G4cerr << "ERROR - G4Trap()::G4Trap(): " << GetName() << G4endl;
+    G4Exception("G4Trap::G4Trap()", "InvalidSetup", FatalException,
+                "Face at ~-X not planar.");
+  }
+
+  // Back side iwth normal approx. +X
+  //
+  good=MakePlane(pt[1],pt[5],pt[7],pt[3],fPlanes[3]);
+  if (!good)
+  {
+    G4cerr << "ERROR - G4Trap()::G4Trap(): " << GetName() << G4endl;
+    G4Exception("G4Trap::G4Trap()", "InvalidSetup", FatalException,
+                "Face at ~+X not planar.");
   }
 }
 
@@ -510,20 +499,11 @@ G4Trap::G4Trap( const G4String& pName,
 // angles: final check of coplanarity
 
 G4Trap::G4Trap( const G4String& pName )
-  : G4CSGSolid (pName),
-    fDz         (1.),
-    fTthetaCphi (0.),
-    fTthetaSphi (0.),
-    fDy1        (1.),
-    fDx1        (1.),
-    fDx2        (1.),
-    fTalpha1    (0.),
-    fDy2        (1.),
-    fDx3        (1.),
-    fDx4        (1.),
-    fTalpha2    (0.)
+  : G4CSGSolid (pName), fDz(1.), fTthetaCphi(0.), fTthetaSphi(0.),
+    fDy1(1.), fDx1(1.), fDx2(1.), fTalpha1(0.),
+    fDy2(1.), fDx3(1.), fDx4(1.), fTalpha2(0.)
 {
- MakePlanes();
+  MakePlanes();
 }
 
 ///////////////////////////////////////////////////////////////////////
@@ -532,8 +512,11 @@ G4Trap::G4Trap( const G4String& pName )
 //                            for usage restricted to object persistency.
 //
 G4Trap::G4Trap( __void__& a )
-  : G4CSGSolid(a)
+  : G4CSGSolid(a), fDz(1.), fTthetaCphi(0.), fTthetaSphi(0.),
+    fDy1(1.), fDx1(1.), fDx2(1.), fTalpha1(0.),
+    fDy2(1.), fDx3(1.), fDx4(1.), fTalpha2(0.)
 {
+  MakePlanes();
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -561,28 +544,7 @@ void G4Trap::SetAllParameters ( G4double pDz,
                                 G4double pDx4,
                                 G4double pAlp2 )
 {
-  fCubicVolume= 0.;
-  fSurfaceArea= 0.;
-  fpPolyhedron = 0;
-  if ( pDz>0 && pDy1>0 && pDx1>0 && pDx2>0 && pDy2>0 && pDx3>0 && pDx4>0 )
-  {
-    fDz=pDz;
-    fTthetaCphi=std::tan(pTheta)*std::cos(pPhi);
-    fTthetaSphi=std::tan(pTheta)*std::sin(pPhi);
-     
-    fDy1=pDy1;
-    fDx1=pDx1;
-    fDx2=pDx2;
-    fTalpha1=std::tan(pAlp1);
-    
-    fDy2=pDy2;
-    fDx3=pDx3;
-    fDx4=pDx4;
-    fTalpha2=std::tan(pAlp2);
-
-    MakePlanes();
-  }
-  else
+  if ( pDz<=0 || pDy1<=0 || pDx1<=0 || pDx2<=0 || pDy2<=0 || pDx3<=0 || pDx4<=0 )
   {
     G4cerr << "ERROR - G4Trap()::SetAllParameters(): " << GetName() << G4endl
            << "        Invalid dimensions !" << G4endl
@@ -593,6 +555,24 @@ void G4Trap::SetAllParameters ( G4double pDz,
     G4Exception("G4Trap::SetAllParameters()", "InvalidSetup",
                 FatalException, "Invalid Length Parameters.");
   }
+  fCubicVolume= 0.;
+  fSurfaceArea= 0.;
+  fpPolyhedron = 0;
+  fDz=pDz;
+  fTthetaCphi=std::tan(pTheta)*std::cos(pPhi);
+  fTthetaSphi=std::tan(pTheta)*std::sin(pPhi);
+     
+  fDy1=pDy1;
+  fDx1=pDx1;
+  fDx2=pDx2;
+  fTalpha1=std::tan(pAlp1);
+    
+  fDy2=pDy2;
+  fDx3=pDx3;
+  fDx4=pDx4;
+  fTalpha2=std::tan(pAlp2);
+
+  MakePlanes();
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -1633,6 +1613,7 @@ G4double G4Trap::DistanceToOut(const G4ThreeVector& p, const G4ThreeVector& v,
         G4cout << "v.z() = "   << v.z() << G4endl << G4endl;
         G4cout << "Proposed distance :" << G4endl << G4endl;
         G4cout << "snxt = "    << snxt/mm << " mm" << G4endl << G4endl;
+        G4cout.precision(6);
         G4Exception("G4Trap::DistanceToOut(p,v,..)","Notification",JustWarning,
                     "Undefined side for valid surface normal to solid.");
         break;
@@ -1695,9 +1676,9 @@ G4Trap::CreateRotatedVertices( const G4AffineTransform& pTransform ) const
 {
   G4ThreeVectorList *vertices;
   vertices=new G4ThreeVectorList();
-  vertices->reserve(8);
   if (vertices)
   {
+    vertices->reserve(8);
     G4ThreeVector vertex0(-fDz*fTthetaCphi-fDy1*fTalpha1-fDx1,
                           -fDz*fTthetaSphi-fDy1,-fDz);
     G4ThreeVector vertex1(-fDz*fTthetaCphi-fDy1*fTalpha1+fDx1,

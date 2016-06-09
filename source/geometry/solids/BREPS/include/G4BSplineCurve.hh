@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4BSplineCurve.hh,v 1.13 2006/06/29 18:38:05 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4BSplineCurve.hh,v 1.13.8.1 2010/09/08 16:31:32 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-03-patch-02 $
 //
 // ----------------------------------------------------------------------
 // Class G4BSplineCurve
@@ -48,9 +48,6 @@ class G4KnotVector;
 
 class G4BSplineCurve : public G4Curve
 {
-public:
-
-  typedef std::vector<G4double> G4doubleVector;
 
 public:  // with description
 
@@ -74,11 +71,11 @@ public:  // with description
     // Accessors methods.
 
   void Init(G4int degree0, G4Point3DVector* controlPointsList0,
-	    G4doubleVector* knots0, G4doubleVector* weightsData0);
+	    std::vector<G4double>* knots0, std::vector<G4double>* weightsData0);
   G4int GetDegree() const;
   const G4Point3DVector* GetControlPointsList() const;
-  const G4doubleVector*  GetKnots() const;
-  const G4doubleVector*  GetWeightsData() const;
+  const std::vector<G4double>*  GetKnots() const;
+  const std::vector<G4double>*  GetWeightsData() const;
     // Get/Set methods for the geometric data.
     // The "knots" vector contains each knot multiplicity Times.
     // The object is responsible for deleting the containers passed
@@ -113,8 +110,8 @@ protected:
   //
   G4int degree;
   G4Point3DVector* controlPointsList;
-  G4doubleVector*  knots;
-  G4doubleVector*  weightsData;
+  std::vector<G4double>*  knots;
+  std::vector<G4double>*  weightsData;
 
 };
 

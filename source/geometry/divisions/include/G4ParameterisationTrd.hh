@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParameterisationTrd.hh,v 1.8 2008/12/03 16:48:48 arce Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4ParameterisationTrd.hh,v 1.8.4.1 2010/09/08 14:21:12 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-03-patch-02 $
 //
 // classes G4ParameterisationTrdX
 //         G4ParameterisationTrdY
@@ -44,12 +44,15 @@
 #ifndef G4ParameterisationTrd_H
 #define G4ParameterisationTrd_H 1
 
+#include <vector>
+
 #include "G4VDivisionParameterisation.hh"
 #include "G4VSolid.hh" 
 
 class G4VPhysicalVolume;
 
 // Dummy declarations to get rid of warnings ...
+//
 class G4Cons;
 class G4Box;
 class G4Sphere;
@@ -60,7 +63,6 @@ class G4Hype;
 class G4Tubs;
 class G4Polycone;
 class G4Polyhedra;
-#include <vector>
 
 class G4VParameterisationTrd : public G4VDivisionParameterisation
 { 
@@ -72,9 +74,9 @@ class G4VParameterisationTrd : public G4VDivisionParameterisation
   
     virtual ~G4VParameterisationTrd();
 
+  protected:
 
-protected:
-  G4bool bDivInTrap;
+    G4bool bDivInTrap;
 };
 
 class G4ParameterisationTrdX : public G4VParameterisationTrd
@@ -84,22 +86,22 @@ class G4ParameterisationTrdX : public G4VParameterisationTrd
     G4ParameterisationTrdX( EAxis axis, G4int nCopies,
                             G4double width, G4double offset,
                             G4VSolid* motherSolid, DivisionType divType );
-    virtual ~G4ParameterisationTrdX();
+   ~G4ParameterisationTrdX();
 
-    virtual void CheckParametersValidity();
+    void CheckParametersValidity();
 
-    virtual G4double GetMaxParameter() const;
+    G4double GetMaxParameter() const;
 
-    virtual void ComputeTransformation(const G4int copyNo,
-                                       G4VPhysicalVolume* physVol) const;
+    void ComputeTransformation(const G4int copyNo,
+                                     G4VPhysicalVolume* physVol) const;
 
-    virtual void ComputeDimensions(G4Trd& trd, const G4int copyNo,
+    void ComputeDimensions(G4Trd& trd, const G4int copyNo,
                            const G4VPhysicalVolume* pv) const;
 
-    virtual void ComputeDimensions(G4Trap& trd, const G4int copyNo,
+    void ComputeDimensions(G4Trap& trd, const G4int copyNo,
                            const G4VPhysicalVolume* pv) const;
   
-    virtual G4VSolid*   ComputeSolid(const G4int, G4VPhysicalVolume *);
+    G4VSolid*   ComputeSolid(const G4int, G4VPhysicalVolume *);
 
 
   private:  // Dummy declarations to get rid of warnings ...
@@ -125,8 +127,7 @@ class G4ParameterisationTrdX : public G4VParameterisationTrd
     void ComputeDimensions (G4Polyhedra&,const G4int,
                             const G4VPhysicalVolume*) const {}
 
-  void ComputeTrapParams();
- G4Trap* theTrap;
+    void ComputeTrapParams();
 };
 
 
@@ -137,14 +138,14 @@ class G4ParameterisationTrdY : public G4VParameterisationTrd
     G4ParameterisationTrdY( EAxis axis, G4int nCopies,
                             G4double width, G4double offset,
                             G4VSolid* motherSolid, DivisionType divType );
-    virtual ~G4ParameterisationTrdY();
+   ~G4ParameterisationTrdY();
 
-    virtual void CheckParametersValidity();
+    void CheckParametersValidity();
 
-    virtual G4double GetMaxParameter() const;
+    G4double GetMaxParameter() const;
 
-    virtual void ComputeTransformation(const G4int copyNo,
-                                       G4VPhysicalVolume *physVol) const;
+    void ComputeTransformation(const G4int copyNo,
+                                     G4VPhysicalVolume *physVol) const;
  
     void ComputeDimensions(G4Trd& trd, const G4int copyNo,
                            const G4VPhysicalVolume* pv) const;
@@ -183,12 +184,12 @@ class G4ParameterisationTrdZ : public G4VParameterisationTrd
     G4ParameterisationTrdZ( EAxis axis, G4int nCopies,
                             G4double width, G4double offset,
                             G4VSolid* motherSolid, DivisionType divType );
-    virtual ~G4ParameterisationTrdZ();
+   ~G4ParameterisationTrdZ();
 
-    virtual G4double GetMaxParameter() const;
+    G4double GetMaxParameter() const;
 
-    virtual void ComputeTransformation(const G4int copyNo,
-                                       G4VPhysicalVolume* physVol) const;
+    void ComputeTransformation(const G4int copyNo,
+                                     G4VPhysicalVolume* physVol) const;
     void ComputeDimensions(G4Trd& trd, const G4int copyNo,
                            const G4VPhysicalVolume* pv) const;
 

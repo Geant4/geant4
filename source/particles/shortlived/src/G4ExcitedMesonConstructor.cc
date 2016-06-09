@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ExcitedMesonConstructor.cc,v 1.21 2009/10/09 14:34:02 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4ExcitedMesonConstructor.cc,v 1.21.2.1 2010/09/10 09:25:15 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-03-patch-02 $
 //
 // 
 // --------------------------------------------------------------
@@ -1062,7 +1062,7 @@ G4DecayTable*  G4ExcitedMesonConstructor::Add3PiMode(
     mode = new G4PhaseSpaceDecayChannel(nameParent, br, 3,
 					"pi+","pi-","pi0");
     decayTable->Insert(mode);
-  } else if (iIso==0) {
+  } else if (iIso==2) {
   // This mode is X(I=1) --> pi + pipi(I=0) mode
     if (iIso3==+2) {
       mode = new G4PhaseSpaceDecayChannel(nameParent, br/3., 3,

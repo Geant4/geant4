@@ -1,4 +1,4 @@
-$Id: History,v 1.160.2.1 2010/03/18 11:04:57 gcosmo Exp $
+$Id: History,v 1.160.2.2 2010/09/08 15:54:58 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,49 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+07-Sep-2010  G.Cosmo (geom-specific-V09-02-10)
+- Fix within G4CSGDEBUG code for restoring cout precision.
+
+19-Aug-2010  T.Nikitina
+- G4EllipticalTube: extended implementation of SurfaceNormal(p) in agreement
+  with canonical form. Added unit test testG4EllipticalTube.cc.
+
+16-Jul-2010  G.Cosmo
+- Fixed cases of division by zero in G4VTwistSurface and G4TwistBoxSide.
+- Use INT_MAX as initialisation for max limits in G4SolidExtentList.
+
+12-Jul-2010  G.Cosmo
+- Added dummy initialization to members in struct 
+  G4PolyPhiFace::G4PolyPhiFaceEdge, struct G4ReduciblePolygon::ABVertex.
+  G4Ellipsoid, G4EllipticalTube, G4EnclosingCylinder, G4ExtrudedSolid, G4Hype,
+  G4IntersectingCone, G4Paraboloid, G4PolyPhiFace, G4Polycone, G4PolyconeSide,
+  G4Polyhedra, G4PolyhedraSide, G4QuadrangularFacet, G4ReduciblePolygon,
+  G4TessellatedSolid, G4TriangularFacet, G4TwistBoxSide, G4TwistTrapAlphaSide,
+  G4TwistTrapFlatSide, G4TwistTrapParallelSide, G4TwistTubsFlatSide,
+  G4TwistTubsHypeSide, G4TwistTubsSide, G4TwistedTubs, G4VCSGfaceted, G4VFacet,
+  G4VTwistSurface, G4VTwistedFaceted.
+- Fixed case of dereferencing null pointer in methods
+  G4EllipticalTube::DistanceToOut(p,v), G4VCSGfaceted::DistanceToIn(p,v)
+  and G4VCSGfaceted::DistanceToOut(p,v).
+- Fixed unecessary object copy as argument in method
+  G4PolyhedraSide::IntersectSidePlane().
+- Replaced calls to std::abs() with std::fabs() where suitable.
+
+16-Jun-2010  G.Cosmo
+- Fixed deletion of internal arrays in CreatePolyhedron() for G4Polycone
+  and G4Polyhedra.
+
+28-Apr-2010  P.R.Truscott
+- Fix in G4TriangularFacet and G4TessellatedSolid to correct treatment of
+  optical photon transport related to internal reflection at surface.
+  Addresses problem report #1103.
+
+15-Apr-2010  I.Hrivnacova
+- G4ExtrudedSolid: eliminated requirement for clockwise ordering of polygon
+  vertices. Added a check for vertices ordering; if vertices are defined
+  anti-clockwise their ordering is reverted.
+  Fix in polygon facet triangularization for consequent concave vertices.
 
 24-Feb-2010  G.Cosmo (geom-specific-V09-02-09)
 - Adopt caching of Phi in G4PolyconeSide and G4PolyhedraSide to avoid

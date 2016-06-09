@@ -25,8 +25,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4QuadrangularFacet.cc,v 1.7 2008/12/18 12:57:34 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4QuadrangularFacet.cc,v 1.7.4.1 2010/09/08 15:54:58 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-03-patch-02 $
 //
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 //
@@ -59,7 +59,7 @@
 G4QuadrangularFacet::G4QuadrangularFacet (const G4ThreeVector Pt0,
                  const G4ThreeVector vt1, const G4ThreeVector vt2,
                  const G4ThreeVector vt3, G4FacetVertexType vertexType)
-  : G4VFacet()
+  : G4VFacet(), facet1(0), facet2(0)
 {
   P0        = Pt0;
   nVertices = 4;
@@ -136,8 +136,8 @@ G4QuadrangularFacet::G4QuadrangularFacet (const G4ThreeVector Pt0,
 //
 G4QuadrangularFacet::~G4QuadrangularFacet ()
 {
-  if (facet1 != 0) delete facet1;
-  if (facet2 != 0) delete facet2;
+  delete facet1;
+  delete facet2;
   
   P.clear();
   E.clear();
