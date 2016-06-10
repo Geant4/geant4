@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEmModel.cc 84661 2014-10-17 14:30:16Z gcosmo $
+// $Id: G4VEmModel.cc 88981 2015-03-17 10:14:15Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -58,14 +58,6 @@
 #include "G4SystemOfUnits.hh"
 #include "G4Log.hh"
 #include "Randomize.hh"
-//#include "G4MTHepRandom.hh"
-
-#if __clang__
-  #if (defined(G4MULTITHREADED) && !defined(G4USE_STD11) && \
-      !__has_feature(cxx_thread_local))
-    #define CLANG_NOSTDTLS
-  #endif
-#endif
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -93,12 +85,7 @@ G4VEmModel::G4VEmModel(const G4String& nam):
   fManager = G4LossTableManager::Instance();
   fManager->Register(this);
 
-#if (defined(G4MULTITHREADED) && !defined(G4USE_STD11)) || \
-    (defined(CLANG_NOSTDTLS))
-  rndmEngineMod = G4MTHepRandom::getTheEngine(); 
-#else // Sequential mode or supporting C++11 standard
-  rndmEngineMod = CLHEP::HepRandom::getTheEngine();
-#endif
+  rndmEngineMod = G4Random::getTheEngine();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -295,7 +282,9 @@ G4double G4VEmModel::CrossSectionPerVolume(const G4Material* material,
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void G4VEmModel::StartTracking(G4Track*)
-{}
+{
+  rndmEngineMod = G4Random::getTheEngine();
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

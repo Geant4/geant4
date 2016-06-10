@@ -14,6 +14,32 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+09 Febrary 2015 Tatsumi Koi	(hadr-hpn-V10-00-37)
+Delete unnesessary codes: Bugzilla#1710
+	src/G4NeutronHPInelasticCompFS.cc
+
+
+15 January 2015 Tatsumi Koi
+Fix coverity issue #43437
+	src/G4NeutronHPElasticFS.cc
+
+
+13 January 2015 Tatsumi Koi
+Fix coverity issue #43442
+	src/G4NeutronHPChannelList.cc
+
+
+8 January 2015 Tatsumi Koi
+Fix coverity issue #53411
+	include/G4FissionProductYieldDist.hh
+	src/G4FissionProductYieldDist.cc
+
+
+11 December 2014 Gabriele Cosmo
+Removed commented header in sources.cmake script to allow for proper
+validation of sources in system testing.
+
+
 17 November 2014 Tatsumi Koi   (hadr-hpn-V10-00-36)
 Fix potential overwritten problem Bugzilla#1689
 	include/G4NeutronHPInterpolator.hh

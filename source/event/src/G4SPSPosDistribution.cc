@@ -55,15 +55,23 @@
 #include "G4AutoLock.hh"
 #include "G4AutoDelete.hh"
 
-G4SPSPosDistribution::G4SPSPosDistribution()
-  : posRndm(0)
+
+G4SPSPosDistribution::thread_data_t::thread_data_t()
 {
+  CSideRefVec1 = G4ThreeVector(CLHEP::HepXHat);
+  CSideRefVec2 = G4ThreeVector(CLHEP::HepYHat);
+  CSideRefVec3 =  G4ThreeVector(CLHEP::HepZHat);
+  CParticlePos = G4ThreeVector(0,0,0);
+}
 
-  // Initialise all variables
-  // Position distribution Variables
-
+G4SPSPosDistribution::G4SPSPosDistribution() : PosRndm(0)
+{
   SourcePosType = "Point";
   Shape = "NULL";
+  CentreCoords = G4ThreeVector(0,0,0);
+  Rotx = CLHEP::HepXHat;
+  Roty = CLHEP::HepYHat;
+  Rotz = CLHEP::HepZHat;
   halfx = 0.;
   halfy = 0.;
   halfz = 0.;
@@ -75,63 +83,45 @@ G4SPSPosDistribution::G4SPSPosDistribution()
   ParAlpha = 0.;
   ParTheta = 0.;
   ParPhi = 0.;
-  CentreCoords = G4ThreeVector(0., 0., 0.);
-  Rotx = CLHEP::HepXHat;
-  Roty = CLHEP::HepYHat;
-  Rotz = CLHEP::HepZHat;
   Confine = false; //If true confines source distribution to VolName
   VolName = "NULL";
-//  SideRefVec1 = CLHEP::HepXHat; // x-axis
-//  SideRefVec2 = CLHEP::HepYHat; // y-axis
-//  SideRefVec3 = CLHEP::HepZHat; // z-axis
   verbosityLevel = 0 ;
-  //The following cannot be a data-member because this class is shared among threads
-  //but navigator is not. Get it only when needed
-  //gNavigator = G4TransportationManager::GetTransportationManager()
-  //  ->GetNavigatorForTracking();
-    
-  G4MUTEXINIT(mutex);
+  G4MUTEXINIT(a_mutex);
 }
 
 G4SPSPosDistribution::~G4SPSPosDistribution()
 {
-  G4MUTEXDESTROY(mutex);
+  G4MUTEXDESTROY(a_mutex);
 }
 
 void G4SPSPosDistribution::SetPosDisType(G4String PosType)
 {
-    G4AutoLock l(&mutex);
-  SourcePosType = PosType;
+    SourcePosType = PosType;
 }
 
 void G4SPSPosDistribution::SetPosDisShape(G4String shapeType)
 {
-     G4AutoLock l(&mutex);
-  Shape = shapeType;
+     Shape = shapeType;
 }
 
 void G4SPSPosDistribution::SetCentreCoords(G4ThreeVector coordsOfCentre)
 {
-     G4AutoLock l(&mutex);
   CentreCoords = coordsOfCentre;
 }
 
 void G4SPSPosDistribution::SetPosRot1(G4ThreeVector posrot1)
 {
-     G4AutoLock l(&mutex);
   // This should be x'
   Rotx = posrot1;
   if(verbosityLevel == 2)
     {
       G4cout << "Vector x' " << Rotx << G4endl;
     }
-    l.unlock();
   GenerateRotationMatrices();
 }
 
 void G4SPSPosDistribution::SetPosRot2(G4ThreeVector posrot2)
 {
-     G4AutoLock l(&mutex);
   // This is a vector in the plane x'y' but need not
   // be y'
   Roty = posrot2;
@@ -139,177 +129,133 @@ void G4SPSPosDistribution::SetPosRot2(G4ThreeVector posrot2)
     {
       G4cout << "The vector in the x'-y' plane " << Roty << G4endl;
     }
-    l.unlock();
   GenerateRotationMatrices();
 }
 
 void G4SPSPosDistribution::SetHalfX(G4double xhalf)
 {
-     G4AutoLock l(&mutex);
   halfx = xhalf;
 }
 
 void G4SPSPosDistribution::SetHalfY(G4double yhalf)
 {
-     G4AutoLock l(&mutex);
   halfy = yhalf;
 }
 
 void G4SPSPosDistribution::SetHalfZ(G4double zhalf)
 {
-    G4AutoLock l(&mutex);
   halfz = zhalf;
 }
 
 void G4SPSPosDistribution::SetRadius(G4double rds)
 {
-    G4AutoLock l(&mutex);
   Radius = rds;
 }
 
 void G4SPSPosDistribution::SetRadius0(G4double rds)
 {
-    G4AutoLock l(&mutex);
   Radius0 = rds;
 }
 
 void G4SPSPosDistribution::SetBeamSigmaInR(G4double r)
 {
-    G4AutoLock l(&mutex);
   SX = SY = r;
   SR = r;
 }
 
 void G4SPSPosDistribution::SetBeamSigmaInX(G4double r)
 {
-    G4AutoLock l(&mutex);
   SX = r;
 }
 
 void G4SPSPosDistribution::SetBeamSigmaInY(G4double r)
 {
-    G4AutoLock l(&mutex);
   SY = r;
 }
 
 void G4SPSPosDistribution::SetParAlpha(G4double paralp)
 {
-    G4AutoLock l(&mutex);
   ParAlpha = paralp;
 }
 
 void G4SPSPosDistribution::SetParTheta(G4double parthe)
 {
-    G4AutoLock l(&mutex);
   ParTheta = parthe;
 }
 
 void G4SPSPosDistribution::SetParPhi(G4double parphi)
 {
-    G4AutoLock l(&mutex);
   ParPhi = parphi;
 }
 
-G4String G4SPSPosDistribution::GetPosDisType()
+G4String G4SPSPosDistribution::GetPosDisType() const
 {
-     G4AutoLock l(&mutex);
     return SourcePosType;
 }
 
-G4String G4SPSPosDistribution::GetPosDisShape()
+G4String G4SPSPosDistribution::GetPosDisShape() const
 {
-     G4AutoLock l(&mutex);
     return Shape;
 }
 
-G4ThreeVector G4SPSPosDistribution::GetCentreCoords()
+G4ThreeVector G4SPSPosDistribution::GetCentreCoords() const
 {
-     G4AutoLock l(&mutex);
     return CentreCoords;
 }
 
-G4double G4SPSPosDistribution::GetHalfX()
+G4double G4SPSPosDistribution::GetHalfX() const
 {
-    G4AutoLock l(&mutex);
     return halfx;
 }
 
-G4double G4SPSPosDistribution::GetHalfY()
+G4double G4SPSPosDistribution::GetHalfY() const
 {
-    G4AutoLock l(&mutex);
     return halfy;
 }
 
-G4double G4SPSPosDistribution::GetHalfZ()
+G4double G4SPSPosDistribution::GetHalfZ() const
 {
-    G4AutoLock l(&mutex);
     return halfz;
 }
 
-G4double G4SPSPosDistribution::GetRadius()
+G4double G4SPSPosDistribution::GetRadius() const
 {
-    G4AutoLock l(&mutex);
-    return Radius;
+    return   Radius;
 }
 
 void G4SPSPosDistribution::SetBiasRndm (G4SPSRandomGenerator* a)
 {
-    G4AutoLock l(&mutex);
-    posRndm = a ;
+    G4AutoLock l(&a_mutex);
+    PosRndm = a ;
 }
 
 void G4SPSPosDistribution::SetVerbosity(G4int a)
 {
-    G4AutoLock l(&mutex);
     verbosityLevel = a;
 }
 
-G4String G4SPSPosDistribution::GetSourcePosType() {
-    G4AutoLock l(&mutex);
+G4String G4SPSPosDistribution::GetSourcePosType() const {
     return SourcePosType;
 }
 
 G4ThreeVector G4SPSPosDistribution::GetParticlePos() const {
-    return CParticlePos.Get();
-}
-
-void G4SPSPosDistribution::HandleThreadLocalCache(const G4ThreeVector& v1,const G4ThreeVector& v2 ,const G4ThreeVector& v3)
-{
-    InitThreadLocalCache();
-    *CSideRefVec1.Get() = v1;
-    *CSideRefVec2.Get() = v2;
-    *CSideRefVec3.Get() = v3;
-}
-
-void G4SPSPosDistribution::InitThreadLocalCache() const {
-    if ( CSideRefVec1.Get() == NULL ) {//Initialize chaches if needed
-        CSideRefVec1.Put( new G4ThreeVector(CLHEP::HepXHat));
-        G4AutoDelete::Register(CSideRefVec1.Get());
-        CSideRefVec2.Put( new G4ThreeVector(CLHEP::HepYHat));
-        G4AutoDelete::Register(CSideRefVec2.Get());
-        CSideRefVec3.Put( new G4ThreeVector(CLHEP::HepZHat));
-        G4AutoDelete::Register(CSideRefVec3.Get());
-    }
+    return ThreadData.Get().CParticlePos;
 }
 
 G4ThreeVector G4SPSPosDistribution::GetSideRefVec1() const {
-    InitThreadLocalCache();
-    return *CSideRefVec1.Get();
+    return ThreadData.Get().CSideRefVec1;
 }
 
 G4ThreeVector G4SPSPosDistribution::GetSideRefVec2() const {
-    InitThreadLocalCache();
-    return *CSideRefVec2.Get();
+    return ThreadData.Get().CSideRefVec2;
 }
 
 G4ThreeVector G4SPSPosDistribution::GetSideRefVec3() const {
-    InitThreadLocalCache();
-    return *CSideRefVec3.Get();
+  return ThreadData.Get().CSideRefVec3;
 }
 
 void G4SPSPosDistribution::GenerateRotationMatrices()
 {
-    G4AutoLock l(&mutex);
   // This takes in 2 vectors, x' and one in the plane x'-y',
   // and from these takes a cross product to calculate z'.
   // Then a cross product is taken between x' and z' to give
@@ -318,8 +264,8 @@ void G4SPSPosDistribution::GenerateRotationMatrices()
   Roty = Roty.unit(); // vector in x'y' plane
   Rotz = Rotx.cross(Roty); // z'
   Rotz = Rotz.unit();
-  Roty = Rotz.cross(Rotx); // y'
-  Roty = Roty.unit();
+  Roty =Rotz.cross(Rotx); // y'
+  Roty =Roty.unit();
   if(verbosityLevel == 2)
     {
       G4cout << "The new axes, x', y', z' " << Rotx << " " << Roty << " " << Rotz << G4endl;
@@ -328,7 +274,6 @@ void G4SPSPosDistribution::GenerateRotationMatrices()
 
 void G4SPSPosDistribution::ConfineSourceToVolume(G4String Vname)
 {
-    G4AutoLock l(&mutex);
   VolName = Vname;
   if(verbosityLevel == 2)
     G4cout << VolName << G4endl;
@@ -390,8 +335,8 @@ void G4SPSPosDistribution::GeneratePointsInBeam(G4ThreeVector& pos)
       y = Radius + 100.;
       while(std::sqrt((x*x) + (y*y)) > Radius)
 	{
-	  x = posRndm->GenRandX();
-	  y = posRndm->GenRandY();
+	  x = PosRndm->GenRandX();
+	  y = PosRndm->GenRandY();
 
 	  x = (x*2.*Radius) - Radius;
 	  y = (y*2.*Radius) - Radius;
@@ -402,8 +347,8 @@ void G4SPSPosDistribution::GeneratePointsInBeam(G4ThreeVector& pos)
   else
     {
       // all other cases default to Rectangle case
-      x = posRndm->GenRandX();
-      y = posRndm->GenRandY();
+      x = PosRndm->GenRandX();
+      y = PosRndm->GenRandY();
       x = (x*2.*halfx) - halfx;
       y = (y*2.*halfy) - halfy;
       x += G4RandGauss::shoot(0.0,SX);
@@ -442,7 +387,7 @@ void G4SPSPosDistribution::GeneratePointsInPlane(G4ThreeVector& pos)
   G4ThreeVector RandPos;
   G4double tempx, tempy, tempz;
   x = y = z = 0.;
-
+  thread_data_t& td = ThreadData.Get();
   if(SourcePosType != "Plane" && verbosityLevel >= 1)
     G4cerr << "Error: SourcePosType is not Plane" << G4endl;
 
@@ -453,8 +398,8 @@ void G4SPSPosDistribution::GeneratePointsInPlane(G4ThreeVector& pos)
       y = Radius + 100.;
       while(std::sqrt((x*x) + (y*y)) > Radius)
 	{
-	  x = posRndm->GenRandX();
-	  y = posRndm->GenRandY();
+	  x = PosRndm->GenRandX();
+	  y = PosRndm->GenRandY();
 
 	  x = (x*2.*Radius) - Radius;
 	  y = (y*2.*Radius) - Radius;
@@ -466,8 +411,8 @@ void G4SPSPosDistribution::GeneratePointsInPlane(G4ThreeVector& pos)
       y = Radius + 100.;
       while(std::sqrt((x*x) + (y*y)) > Radius || std::sqrt((x*x) + (y*y)) < Radius0 )
 	{
-	  x = posRndm->GenRandX();
-	  y = posRndm->GenRandY();
+	  x = PosRndm->GenRandX();
+	  y = PosRndm->GenRandY();
 
 	  x = (x*2.*Radius) - Radius;
 	  y = (y*2.*Radius) - Radius;
@@ -478,8 +423,8 @@ void G4SPSPosDistribution::GeneratePointsInPlane(G4ThreeVector& pos)
       expression = 20.;
       while(expression > 1.)
 	{
-	  x = posRndm->GenRandX();
-	  y = posRndm->GenRandY();
+	  x = PosRndm->GenRandX();
+	  y = PosRndm->GenRandY();
 
 	  x = (x*2.*halfx) - halfx;
 	  y = (y*2.*halfy) - halfy;
@@ -489,15 +434,15 @@ void G4SPSPosDistribution::GeneratePointsInPlane(G4ThreeVector& pos)
     }
   else if(Shape == "Square")
     {
-      x = posRndm->GenRandX();
-      y = posRndm->GenRandY();
+      x = PosRndm->GenRandX();
+      y = PosRndm->GenRandY();
       x = (x*2.*halfx) - halfx;
       y = (y*2.*halfy) - halfy;
     }
   else if(Shape == "Rectangle")
     {
-      x = posRndm->GenRandX();
-      y = posRndm->GenRandY();
+      x = PosRndm->GenRandX();
+      y = PosRndm->GenRandY();
       x = (x*2.*halfx) - halfx;
       y = (y*2.*halfy) - halfy;
     }
@@ -531,7 +476,10 @@ void G4SPSPosDistribution::GeneratePointsInPlane(G4ThreeVector& pos)
 
   // For Cosine-Law make SideRefVecs = to Rotation matrix vectors
     //Note: these need to be thread-local, use G4Cache
-  HandleThreadLocalCache(Rotx,Roty,Rotz);
+  td.CSideRefVec1 = Rotx;
+  td.CSideRefVec2 = Roty;
+  td.CSideRefVec3 = Rotz;
+  //HandleThreadLocalCache(Rotx,Roty,Rotz);
   // If rotation matrix z' point to origin then invert the matrix
   // So that SideRefVecs point away.
   if((CentreCoords.x() > 0. && Rotz.x() < 0.)
@@ -542,11 +490,13 @@ void G4SPSPosDistribution::GeneratePointsInPlane(G4ThreeVector& pos)
      || (CentreCoords.z() < 0. && Rotz.z() > 0.))
     {
       // Invert y and z.
-        HandleThreadLocalCache(*CSideRefVec1.Get(),-(*CSideRefVec2.Get()),-(*CSideRefVec3.Get()));
+      td.CSideRefVec2 = - td.CSideRefVec2;
+      td.CSideRefVec3 = - td.CSideRefVec3;
+      //HandleThreadLocalCache(*CSideRefVec1.Get(),-(*CSideRefVec2.Get()),-(*CSideRefVec3.Get()));
     }
   if(verbosityLevel == 2)
     {
-      G4cout << "Reference vectors for cosine-law " << *CSideRefVec1.Get()<< " " << *CSideRefVec2.Get()<< " " << *CSideRefVec3.Get()<< G4endl;
+      G4cout << "Reference vectors for cosine-law " << td.CSideRefVec1<< " " << td.CSideRefVec2<< " " << td.CSideRefVec3<< G4endl;
     }
 }
 
@@ -558,15 +508,15 @@ void G4SPSPosDistribution::GeneratePointsOnSurface(G4ThreeVector& pos)
   x = y = z = 0.;
   G4ThreeVector RandPos;
   //  G4double tempx, tempy, tempz;
-
+  thread_data_t& td = ThreadData.Get();
   if(SourcePosType != "Surface" && verbosityLevel >= 1)
     G4cout << "Error SourcePosType not Surface" << G4endl;
 
   if(Shape == "Sphere")
     {
       // G4double tantheta;
-      theta = posRndm->GenRandPosTheta();
-      phi = posRndm->GenRandPosPhi();
+      theta = PosRndm->GenRandPosTheta();
+      phi = PosRndm->GenRandPosPhi();
       theta = std::acos(1. - 2.*theta); // theta isotropic
       phi = phi * 2. * pi;
       // tantheta = std::tan(theta);
@@ -584,19 +534,22 @@ void G4SPSPosDistribution::GeneratePointsOnSurface(G4ThreeVector& pos)
       zdash = zdash.unit();
       G4ThreeVector xdash = Rotz.cross(zdash);
       G4ThreeVector ydash = xdash.cross(zdash);
-      HandleThreadLocalCache(xdash.unit(),ydash.unit(),zdash.unit());
+      td.CSideRefVec1 = xdash.unit();
+      td.CSideRefVec2 = ydash.unit();
+      td.CSideRefVec3 = zdash.unit();
+      //HandleThreadLocalCache(xdash.unit(),ydash.unit(),zdash.unit());
     }
   else if(Shape == "Ellipsoid")
     {
       G4double minphi, maxphi, middlephi;
       G4double answer, constant;
 
-      constant = pi/(halfx*halfx) + pi/(halfy*halfy) + 
+      constant = pi/(halfx*halfx) + pi/(halfy*halfy) +
 	twopi/(halfz*halfz);
       
       // simplified approach
-      theta = posRndm->GenRandPosTheta();
-      phi = posRndm->GenRandPosPhi();
+      theta = PosRndm->GenRandPosTheta();
+      phi = PosRndm->GenRandPosPhi();
       
       theta = std::acos(1. - 2.*theta);
       minphi = 0.;
@@ -650,8 +603,8 @@ void G4SPSPosDistribution::GeneratePointsOnSurface(G4ThreeVector& pos)
       tempzvar = 1./tempzvar;
       G4double coordz = std::sqrt(tempzvar);
 
-      lhs = std::sqrt((coordx*coordx)/(halfx*halfx) + 
-		 (coordy*coordy)/(halfy*halfy) + 
+      lhs = std::sqrt((coordx*coordx)/(halfx*halfx) +
+		 (coordy*coordy)/(halfy*halfy) +
 		 (coordz*coordz)/(halfz*halfz));
       
       if(std::fabs(lhs-1.) > 0.001 && verbosityLevel >= 1)
@@ -683,7 +636,9 @@ void G4SPSPosDistribution::GeneratePointsOnSurface(G4ThreeVector& pos)
       zdash = zdash.unit();
       G4ThreeVector xdash = Rotz.cross(zdash);
       G4ThreeVector ydash = xdash.cross(zdash);
-      HandleThreadLocalCache(xdash.unit(),ydash.unit(),zdash.unit());
+      td.CSideRefVec1 = xdash.unit();
+      td.CSideRefVec2 = ydash.unit();
+      td.CSideRefVec3 = zdash.unit();
     }
   else if(Shape == "Cylinder")
     {
@@ -721,8 +676,8 @@ void G4SPSPosDistribution::GeneratePointsOnSurface(G4ThreeVector& pos)
 	  y = Radius + 100.;
 	  while(((x*x)+(y*y)) > (Radius*Radius))
 	    {
-	      x = posRndm->GenRandX();
-	      y = posRndm->GenRandY();
+	      x = PosRndm->GenRandX();
+	      y = PosRndm->GenRandY();
 
 	      x = x * 2. * Radius;
 	      y = y * 2. * Radius;
@@ -730,7 +685,9 @@ void G4SPSPosDistribution::GeneratePointsOnSurface(G4ThreeVector& pos)
 	      y = y - Radius;
 	    }
 	  // Cosine law
-      HandleThreadLocalCache(Rotx,Roty,Rotz);
+	  td.CSideRefVec1 = Rotx;
+	  td.CSideRefVec2 = Roty;
+	  td.CSideRefVec3 = Rotz;
 	}
       else if((testrand > prob1) && (testrand <= (prob1 + prob2)))
 	{
@@ -740,8 +697,8 @@ void G4SPSPosDistribution::GeneratePointsOnSurface(G4ThreeVector& pos)
 	  y = Radius + 100.;
 	  while(((x*x)+(y*y)) > (Radius*Radius))
 	    {
-	      x = posRndm->GenRandX();
-	      y = posRndm->GenRandY();
+	      x = PosRndm->GenRandX();
+	      y = PosRndm->GenRandY();
 
 	      x = x * 2. * Radius;
 	      y = y * 2. * Radius;
@@ -749,22 +706,24 @@ void G4SPSPosDistribution::GeneratePointsOnSurface(G4ThreeVector& pos)
 	      y = y - Radius;
 	    }
 	  // Cosine law
-      HandleThreadLocalCache(Rotx,-Roty,-Rotz);
+	  td.CSideRefVec1 = Rotx;
+	  td.CSideRefVec2 = -Roty;
+	  td.CSideRefVec3 = -Rotz;
 	}
       else if(testrand > (prob1+prob2))
 	{
 	  G4double rand;
 	  //Point on Lateral Surface
 
-	  rand = posRndm->GenRandPosPhi();
+	  rand = PosRndm->GenRandPosPhi();
 	  rand = rand * 2. * pi;
 
 	  x = Radius * std::cos(rand);
 	  y = Radius * std::sin(rand);
 
-	  z = posRndm->GenRandZ();
+	  z = PosRndm->GenRandZ();
 
-	  z = z * 2. * halfz;
+	  z = z * 2. *halfz;
 	  z = z - halfz;
 	  
 	  // Cosine law
@@ -772,7 +731,9 @@ void G4SPSPosDistribution::GeneratePointsOnSurface(G4ThreeVector& pos)
 	  zdash = zdash.unit();
 	  G4ThreeVector xdash = Rotz.cross(zdash);
 	  G4ThreeVector ydash = xdash.cross(zdash);
-      HandleThreadLocalCache(xdash.unit(),ydash.unit(),zdash.unit());
+	  td.CSideRefVec1 = xdash.unit();
+	  td.CSideRefVec2 = ydash.unit();
+	  td.CSideRefVec3 = zdash.unit();
 	}
       else
 	G4cout << "Error: testrand " << testrand << G4endl;
@@ -803,9 +764,9 @@ void G4SPSPosDistribution::GeneratePointsOnSurface(G4ThreeVector& pos)
       Probs[4] = Probs[3] + AreaZ/AreaTotal;
       Probs[5] = Probs[4] + AreaZ/AreaTotal;
       
-      x = posRndm->GenRandX();
-      y = posRndm->GenRandY();
-      z = posRndm->GenRandZ();
+      x = PosRndm->GenRandX();
+      y = PosRndm->GenRandY();
+      z = PosRndm->GenRandZ();
       
       x = x * halfx * 2.;
       x = x - halfx;
@@ -822,13 +783,15 @@ void G4SPSPosDistribution::GeneratePointsOnSurface(G4ThreeVector& pos)
 	  // z = z;
 	  // Cosine-law
 	  G4ThreeVector xdash(halfz*std::tan(ParTheta)*std::cos(ParPhi),
-			      halfz*std::tan(ParTheta)*std::sin(ParPhi), 
-			      halfz/std::cos(ParPhi));
+	      halfz*std::tan(ParTheta)*std::sin(ParPhi),
+	      halfz/std::cos(ParPhi));
 	  G4ThreeVector ydash(halfy*std::tan(ParAlpha), -halfy, 0.0);
 	  xdash = xdash.unit();
 	  ydash = ydash.unit();
 	  G4ThreeVector zdash = xdash.cross(ydash);
-      HandleThreadLocalCache(xdash.unit(),ydash.unit(),zdash.unit());
+	  td.CSideRefVec1 = xdash.unit();
+	  td.CSideRefVec2 = ydash.unit();
+	  td.CSideRefVec3 = zdash.unit();
 	}
       else if(testrand >= Probs[0] && testrand < Probs[1])
 	{
@@ -838,13 +801,15 @@ void G4SPSPosDistribution::GeneratePointsOnSurface(G4ThreeVector& pos)
 	  // z = z;
 	  // Cosine-law
 	  G4ThreeVector xdash(halfz*std::tan(ParTheta)*std::cos(ParPhi),
-			      halfz*std::tan(ParTheta)*std::sin(ParPhi), 
-			      halfz/std::cos(ParPhi));
+	      halfz*std::tan(ParTheta)*std::sin(ParPhi),
+	      halfz/std::cos(ParPhi));
 	  G4ThreeVector ydash(halfy*std::tan(ParAlpha), halfy, 0.0);
 	  xdash = xdash.unit();
 	  ydash = ydash.unit();
 	  G4ThreeVector zdash = xdash.cross(ydash);
-      HandleThreadLocalCache(xdash.unit(),ydash.unit(),zdash.unit());
+	  td.CSideRefVec1 = xdash.unit();
+	  td.CSideRefVec2 = ydash.unit();
+	  td.CSideRefVec3 = zdash.unit();
 	}
       else if(testrand >= Probs[1] && testrand < Probs[2])
 	{
@@ -854,12 +819,14 @@ void G4SPSPosDistribution::GeneratePointsOnSurface(G4ThreeVector& pos)
 	  // z = z;
 	  // Cosine-law
 	  G4ThreeVector ydash(halfz*std::tan(ParTheta)*std::cos(ParPhi),
-			      halfz*std::tan(ParTheta)*std::sin(ParPhi), 
-			      halfz/std::cos(ParPhi));
+	      halfz*std::tan(ParTheta)*std::sin(ParPhi),
+	      halfz/std::cos(ParPhi));
 	  ydash = ydash.unit();
 	  G4ThreeVector xdash = Roty.cross(ydash);
 	  G4ThreeVector zdash = xdash.cross(ydash);
-    HandleThreadLocalCache(xdash.unit(),-ydash.unit(),-zdash.unit());
+	  td.CSideRefVec1 = xdash.unit();
+	  td.CSideRefVec2 = -ydash.unit();
+	  td.CSideRefVec3 = -zdash.unit();
 	}
       else if(testrand >= Probs[2] && testrand < Probs[3])
 	{
@@ -869,12 +836,14 @@ void G4SPSPosDistribution::GeneratePointsOnSurface(G4ThreeVector& pos)
 	  // z = z;
 	  // Cosine-law
 	  G4ThreeVector ydash(halfz*std::tan(ParTheta)*std::cos(ParPhi),
-			      halfz*std::tan(ParTheta)*std::sin(ParPhi), 
-			      halfz/std::cos(ParPhi));
+	      halfz*std::tan(ParTheta)*std::sin(ParPhi),
+	      halfz/std::cos(ParPhi));
 	  ydash = ydash.unit();
 	  G4ThreeVector xdash = Roty.cross(ydash);
 	  G4ThreeVector zdash = xdash.cross(ydash);
-      HandleThreadLocalCache(xdash.unit(),ydash.unit(),zdash.unit());
+	  td.CSideRefVec1 = xdash.unit();
+	  td.CSideRefVec2 = ydash.unit();
+	  td.CSideRefVec3 = zdash.unit();
 	}
       else if(testrand >= Probs[3] && testrand < Probs[4])
 	{
@@ -883,7 +852,9 @@ void G4SPSPosDistribution::GeneratePointsOnSurface(G4ThreeVector& pos)
 	  y = y + halfz*std::sin(ParPhi)*std::tan(ParTheta);
 	  x = x + halfz*std::cos(ParPhi)*std::tan(ParTheta) + y*std::tan(ParAlpha);
 	  // Cosine-law
-      HandleThreadLocalCache(Rotx,Roty,Rotz);
+	  td.CSideRefVec1 = Rotx;
+	  td.CSideRefVec2 = Roty;
+	  td.CSideRefVec3 = Rotz;
 	}
       else if(testrand >= Probs[4] && testrand < Probs[5])
 	{
@@ -892,7 +863,9 @@ void G4SPSPosDistribution::GeneratePointsOnSurface(G4ThreeVector& pos)
 	  y = y - halfz*std::sin(ParPhi)*std::tan(ParTheta);
 	  x = x - halfz*std::cos(ParPhi)*std::tan(ParTheta) + y*std::tan(ParAlpha);
 	  // Cosine-law
-      HandleThreadLocalCache(Rotx,-Roty,-Rotz);
+	  td.CSideRefVec1 = Rotx;
+	  td.CSideRefVec2 = -Roty;
+	  td.CSideRefVec3 = -Rotz;
 	}
       else
 	{
@@ -930,7 +903,7 @@ void G4SPSPosDistribution::GeneratePointsOnSurface(G4ThreeVector& pos)
     }
   if(verbosityLevel == 2)
     {
-      G4cout << "Reference vectors for cosine-law " << *CSideRefVec1.Get() << " " << *CSideRefVec2.Get() << " " << *CSideRefVec3.Get() << G4endl;
+      G4cout << "Reference vectors for cosine-law " << td.CSideRefVec1 << " " << td.CSideRefVec2 << " " << td.CSideRefVec3 << G4endl;
     }
 }
 
@@ -950,9 +923,9 @@ void G4SPSPosDistribution::GeneratePointsInVolume(G4ThreeVector& pos)
       z = Radius*2.;
       while(((x*x)+(y*y)+(z*z)) > (Radius*Radius))
 	{
-	  x = posRndm->GenRandX();
-	  y = posRndm->GenRandY();
-	  z = posRndm->GenRandZ();
+	  x = PosRndm->GenRandX();
+	  y = PosRndm->GenRandY();
+	  z = PosRndm->GenRandZ();
 
 	  x = (x*2.*Radius) - Radius;
 	  y = (y*2.*Radius) - Radius;
@@ -965,9 +938,9 @@ void G4SPSPosDistribution::GeneratePointsInVolume(G4ThreeVector& pos)
       temp = 100.;
       while(temp > 1.)
 	{
-	  x = posRndm->GenRandX();
-	  y = posRndm->GenRandY();
-	  z = posRndm->GenRandZ();
+	  x = PosRndm->GenRandX();
+	  y = PosRndm->GenRandY();
+	  z = PosRndm->GenRandZ();
 
 	  x = (x*2.*halfx) - halfx;
 	  y = (y*2.*halfy) - halfy;
@@ -983,9 +956,9 @@ void G4SPSPosDistribution::GeneratePointsInVolume(G4ThreeVector& pos)
       y = Radius*2.;
       while(((x*x)+(y*y)) > (Radius*Radius))
 	{
-	  x = posRndm->GenRandX();
-	  y = posRndm->GenRandY();
-	  z = posRndm->GenRandZ();
+	  x = PosRndm->GenRandX();
+	  y = PosRndm->GenRandY();
+	  z = PosRndm->GenRandZ();
 
 	  x = (x*2.*Radius) - Radius;
 	  y = (y*2.*Radius) - Radius;
@@ -994,9 +967,9 @@ void G4SPSPosDistribution::GeneratePointsInVolume(G4ThreeVector& pos)
     }
   else if(Shape == "Para")
     {
-      x = posRndm->GenRandX();
-      y = posRndm->GenRandY();
-      z = posRndm->GenRandZ();
+      x = PosRndm->GenRandX();
+      y = PosRndm->GenRandY();
+      z = PosRndm->GenRandZ();
       x = (x*2.*halfx) - halfx;
       y = (y*2.*halfy) - halfy;
       z = (z*2.*halfz) - halfz;
@@ -1037,11 +1010,13 @@ void G4SPSPosDistribution::GeneratePointsInVolume(G4ThreeVector& pos)
   zdash = zdash.unit();
   G4ThreeVector xdash = Rotz.cross(zdash);
   G4ThreeVector ydash = xdash.cross(zdash);
-  HandleThreadLocalCache(xdash.unit(),ydash.unit(),zdash.unit());
-
+  thread_data_t& td = ThreadData.Get();
+  td.CSideRefVec1 = xdash.unit();
+  td.CSideRefVec2 = ydash.unit();
+  td.CSideRefVec3 = zdash.unit();
   if(verbosityLevel == 2)
     {
-      G4cout << "Reference vectors for cosine-law " << *CSideRefVec1.Get() << " " << *CSideRefVec2.Get() << " " << *CSideRefVec3.Get() << G4endl;
+      G4cout << "Reference vectors for cosine-law " << td.CSideRefVec1 << " " << td.CSideRefVec2 << " " << td.CSideRefVec3 << G4endl;
     } 
 }
 
@@ -1074,7 +1049,7 @@ G4bool G4SPSPosDistribution::IsSourceConfined(G4ThreeVector& pos)
 G4ThreeVector G4SPSPosDistribution::GenerateOne()
 {
   //
-  G4ThreeVector localP = particle_position;
+  G4ThreeVector localP;
   G4bool srcconf = false;
   G4int LoopCount = 0;
   while(srcconf == false)
@@ -1120,7 +1095,7 @@ G4ThreeVector G4SPSPosDistribution::GenerateOne()
           srcconf = true; //Avoids an infinite loop
       }
     }
-  CParticlePos.Put(localP);
+  ThreadData.Get().CParticlePos=localP;
   return localP;
 }
 

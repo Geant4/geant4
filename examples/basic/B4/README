@@ -1,4 +1,4 @@
-$Id: README 83399 2014-08-21 14:47:20Z gcosmo $
+$Id: README 89037 2015-03-18 09:25:01Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -160,7 +160,7 @@ $Id: README 83399 2014-08-21 14:47:20Z gcosmo $
  
    The analysis tools are used to accumulate statistics and compute the dispersion
    of the energy deposit and track lengths of the charged particles.
-   H1D histograms are created in B4RunAction::BeginOfRunAction() for the 
+   H1D histograms are created in B4[b]RunAction::B4[b]RunAction() for the 
    following quantities:
    - Energy deposit in absorber
    - Energy deposit in gap

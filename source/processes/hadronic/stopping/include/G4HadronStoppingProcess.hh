@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronStoppingProcess.hh 85517 2014-10-30 15:53:26Z gcosmo $
+// $Id: G4HadronStoppingProcess.hh 88993 2015-03-17 11:17:13Z gcosmo $
 //
 //---------------------------------------------------------------------
 //
@@ -110,9 +110,9 @@ private:
   G4HadronicInteraction* fEmCascade;
   G4HadronicInteraction* fBoundDecay;
 
-  const G4int emcID;
-  const G4int ncID;
-  const G4int dioID;
+  G4int emcID;
+  G4int ncID;
+  G4int dioID;
 
   // This is shadowing "result" in the cc file and
   // looks to be unnecessary.  Removed by DHW, 12 June 2012   

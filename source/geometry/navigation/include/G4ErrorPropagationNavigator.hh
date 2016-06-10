@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ErrorPropagationNavigator.hh 86834 2014-11-19 08:27:45Z gcosmo $
+// $Id: G4ErrorPropagationNavigator.hh 88941 2015-03-16 16:04:56Z gcosmo $
 //
 //
 // --------------------------------------------------------------------
@@ -73,6 +73,9 @@ class G4ErrorPropagationNavigator : public G4Navigator
     // the Navigator's last Step has crossed a volume geometrical boundary.
     // Normal points out of the volume exited and/or into the volume entered.
 
+    G4double TargetSafetyFromPoint( const G4ThreeVector &pGlobalpoint );
+    // Isotropic safety for 'Target' 
+   
     //-- NOT implemented, as it is difficult to define the coordinate system:
     // G4ThreeVector GetLocalExitNormal(G4bool* valid);
     // G4ThreeVector GetLocalExitNormalAndCheck(const G4ThreeVector& point,

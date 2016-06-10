@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4WeightWindowStore.cc 77780 2013-11-28 07:50:59Z gcosmo $
+// $Id: G4WeightWindowStore.cc 88917 2015-03-16 13:31:41Z gcosmo $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -43,10 +43,7 @@
 // ***************************************************************************
 // Static class variable: ptr to single instance of class
 // ***************************************************************************
-//G4ThreadLocal 
-G4WeightWindowStore* G4WeightWindowStore::fInstance = 0;
-
-
+G4ThreadLocal G4WeightWindowStore* G4WeightWindowStore::fInstance = 0;
 
 G4WeightWindowStore::
 G4WeightWindowStore() :
@@ -57,7 +54,7 @@ fWorldVolume(G4TransportationManager::GetTransportationManager()->GetNavigatorFo
 {}
 
 G4WeightWindowStore::
-G4WeightWindowStore(G4String ParallelWorldName) :
+G4WeightWindowStore(const G4String& ParallelWorldName) :
 fWorldVolume(G4TransportationManager::GetTransportationManager()->GetParallelWorld(ParallelWorldName)),
   fGeneralUpperEnergyBounds(),
   fCellToUpEnBoundLoWePairsMap(),
@@ -243,7 +240,7 @@ G4WeightWindowStore* G4WeightWindowStore::GetInstance()
 // Creates it in case it's called for the first time.
 // ***************************************************************************
 //
-G4WeightWindowStore* G4WeightWindowStore::GetInstance(G4String ParallelWorldName)
+G4WeightWindowStore* G4WeightWindowStore::GetInstance(const G4String& ParallelWorldName)
 {
   if (!fInstance)
   {

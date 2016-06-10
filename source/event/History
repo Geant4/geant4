@@ -1,4 +1,4 @@
-$Id: History 86965 2014-11-21 11:48:22Z gcosmo $
+$Id: History 88933 2015-03-16 14:47:19Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,20 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+February 20th, 2015 A.Dotti (event-V10-00-21)
+- Clean code and remove not needed thread-local data that 
+  need to be shared for UI commands to work properly 
+  (bug introduced in previous tag)
+
+February 20th, 2015 A.Dotti
+- Bug fixing: bringing back of sharing of random generator for SPSPosDistribution class, wrongly made thread-local
+ 
+February 19th, 2015 A.Dotti
+- Bug fixing for unused variable
+
+February 16th, 2015 A.Dotti
+- Attempting fixing bug #1706
 
 November 20th, 2014 A.Dotti (event-V10-00-19 and -20)
 - Coverity fixes for G4Adjoint* classes

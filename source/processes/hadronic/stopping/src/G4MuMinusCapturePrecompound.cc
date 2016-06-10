@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MuMinusCapturePrecompound.cc 80902 2014-05-15 09:33:52Z gcosmo $
+// $Id: G4MuMinusCapturePrecompound.cc 88993 2015-03-17 11:17:13Z gcosmo $
 //
 //-----------------------------------------------------------------------------
 //
@@ -207,8 +207,11 @@ G4MuMinusCapturePrecompound::ApplyYourself(const G4HadProjectile& projectile,
 	eEx = momResidual.mag() - residualMass;
         if(eEx < 0.0 && eEx + nenergy >= 0.0) {
           momResidual.set(0.0, 0.0, 0.0, residualMass);
+          eEx = 0.0;
 	}
       }
+      // in the case of many iterations stop the loop
+      // with zero excitation energy
       if(reentryCount > 100 && eEx < 0.0) {
 	G4ExceptionDescription ed;
 	ed << "Call for " << GetModelName() << G4endl;
@@ -219,6 +222,7 @@ G4MuMinusCapturePrecompound::ApplyYourself(const G4HadProjectile& projectile,
 	G4Exception("G4MuMinusCapturePrecompound::ApplyYourself", "had006", 
 		    JustWarning, ed);
 	momResidual.set(0.0, 0.0, 0.0, residualMass);
+	eEx = 0.0;
       }
     } while(eEx <= 0.0);
 

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VGammaDeexcitation.hh 85841 2014-11-05 15:35:06Z gcosmo $
+// $Id: G4VGammaDeexcitation.hh 88987 2015-03-17 10:39:50Z gcosmo $
 //
 // -------------------------------------------------------------------
 //      GEANT 4 class file
@@ -101,6 +101,7 @@ protected:
   G4VGammaTransition* _transition; 
   G4int _verbose;
   G4double _tolerance;  
+  G4double _timeLimit;
 
 private:
 
@@ -111,7 +112,6 @@ private:
 
   G4ElectronOccupancy _electronO;
   G4int _vSN;
-  G4double _timeLimit;
 
 };
 

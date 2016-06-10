@@ -32,17 +32,18 @@
 #include "GammaKnifePrimaryGeneratorAction.hh"
 #include "GammaKnifeRunAction.hh"
 #include "G4GeneralParticleSource.hh"
+#include "G4ParticleTable.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 GammaKnifeActionInitialization::GammaKnifeActionInitialization()
  : G4VUserActionInitialization()
 {
-    //AND->3June2014, temporary to take into account new GPS
-    //Create an instance of GPS in master so shared resources and messenger
-    //exist in master.
+  //Defatults are set once by master
     masterGPS = new G4GeneralParticleSource();
-    //AND<-3June2014
+    G4ParticleTable* particleTable = G4ParticleTable::GetParticleTable();
+    G4ParticleDefinition* particle = particleTable->FindParticle("gamma");
+    masterGPS->SetParticleDefinition(particle);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

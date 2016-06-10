@@ -126,26 +126,39 @@
 #include "G4SPSEneDistribution.hh"
 #include "G4SPSRandomGenerator.hh"
 #include "G4Threading.hh"
+#include "G4Cache.hh"
+
+/** Andrea Dotti Feb 2015
+ * Important: This is a shared class between threads.
+ * Only one thread should use the set-methods here.
+ * Note that this is exactly what is achieved using UI commands.
+ * If you use the set methods to set defaults in your
+ * application take care that only one thread is executing them.
+ * In addition take care of calling these methods before the run is started
+ * Do not use these setters during the event loop
+ */
 
 class G4SingleParticleSource: public G4VPrimaryGenerator {
 public:
 	G4SingleParticleSource();
 	~G4SingleParticleSource();
+
 	void GeneratePrimaryVertex(G4Event *evt);
 	//
-	G4SPSPosDistribution* GetPosDist() {
+
+	G4SPSPosDistribution* GetPosDist() const {
 		return posGenerator;
 	}
 	;
-	G4SPSAngDistribution* GetAngDist() {
+	G4SPSAngDistribution* GetAngDist() const {
 		return angGenerator;
 	}
 	;
-	G4SPSEneDistribution* GetEneDist() {
+	G4SPSEneDistribution* GetEneDist() const {
 		return eneGenerator;
 	}
 	;
-	G4SPSRandomGenerator* GetBiasRndm() {
+	G4SPSRandomGenerator* GetBiasRndm() const {
 		return biasRndm;
 	}
 	;
@@ -155,55 +168,55 @@ public:
 
 	// Set the particle species
 	void SetParticleDefinition(G4ParticleDefinition * aParticleDefinition);
-	inline G4ParticleDefinition * GetParticleDefinition() {
-		return particle_definition;
+	inline G4ParticleDefinition * GetParticleDefinition() const {
+		return definition;
 	}
 	;
 
 	inline void SetParticleCharge(G4double aCharge) {
-		particle_charge = aCharge;
+	        charge = aCharge;
 	}
 	;
 
 	// Set polarization
 	inline void SetParticlePolarization(G4ThreeVector aVal) {
-		particle_polarization = aVal;
+	  polarization = aVal;
 	}
 	;
-	inline G4ThreeVector GetParticlePolarization() {
-		return particle_polarization;
+	inline G4ThreeVector GetParticlePolarization() const {
+		return polarization;
 	}
 	;
 
 	// Set Time.
 	inline void SetParticleTime(G4double aTime) {
-		particle_time = aTime;
+	  time = aTime;
 	}
 	;
-	inline G4double GetParticleTime() {
-		return particle_time;
+	inline G4double GetParticleTime() const {
+		return time;
 	}
 	;
 
 	inline void SetNumberOfParticles(G4int i) {
-		NumberOfParticlesToBeGenerated = i;
+	  NumberOfParticlesToBeGenerated = i;
 	}
 	;
 	//
-	inline G4int GetNumberOfParticles() {
+	inline G4int GetNumberOfParticles() const {
 		return NumberOfParticlesToBeGenerated;
 	}
 	;
-	inline G4ThreeVector GetParticlePosition() {
-		return particle_position;
+	inline G4ThreeVector GetParticlePosition() const {
+		return ParticleProperties.Get().position;
 	}
 	;
-	inline G4ThreeVector GetParticleMomentumDirection() {
-		return particle_momentum_direction;
+	inline G4ThreeVector GetParticleMomentumDirection() const {
+		return ParticleProperties.Get().momentum_direction;
 	}
 	;
-	inline G4double GetParticleEnergy() {
-		return particle_energy;
+	inline G4double GetParticleEnergy() const {
+		return ParticleProperties.Get().energy;
 	}
 	;
 
@@ -215,15 +228,21 @@ private:
 	G4SPSRandomGenerator* biasRndm;
 	//
 	// Other particle properties
-	G4int NumberOfParticlesToBeGenerated;
-	G4ParticleDefinition * particle_definition;
-	G4ParticleMomentum particle_momentum_direction;
-	G4double particle_energy;
-	G4double particle_charge;
-	G4ThreeVector particle_position;
-	G4double particle_time;
-	G4ThreeVector particle_polarization;
-	G4double particle_weight;
+	//These need to be thread-local because
+	//a getter for them exits
+	struct part_prop_t {
+	  G4ParticleMomentum momentum_direction; ////////<<<<<<<
+	  G4double energy; /////<<<<<
+	  G4ThreeVector position; //////////<<<<<<<<<
+	  //G4double weight;
+	  part_prop_t();
+	};
+	G4Cache<part_prop_t> ParticleProperties;
+        G4int NumberOfParticlesToBeGenerated;
+        G4ParticleDefinition * definition;
+        G4double charge;
+        G4double time;
+        G4ThreeVector polarization;
 
 	// Verbosity
 	G4int verbosityLevel;

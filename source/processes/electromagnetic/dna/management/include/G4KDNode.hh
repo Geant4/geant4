@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4KDNode.hh 85244 2014-10-27 08:24:13Z gcosmo $
+// $Id: G4KDNode.hh 88973 2015-03-17 09:39:05Z gcosmo $
 //
 // Author: Mathieu Karamitros, kara@cenbg.in2p3.fr
 
@@ -171,7 +171,7 @@ private :
 };
 
 template <typename PointT>
-G4ThreadLocal G4Allocator<G4KDNode<PointT> >* G4KDNode<PointT>::fgAllocator(0);
+G4ThreadLocal G4Allocator<G4KDNode<PointT> >* G4KDNode<PointT>::fgAllocator = 0;
 
 template<typename PointT>
 void* G4KDNode<PointT>::operator new(size_t)

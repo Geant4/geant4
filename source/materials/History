@@ -1,4 +1,4 @@
-$Id: History 84401 2014-10-15 07:23:36Z gcosmo $
+$Id: History 88957 2015-03-16 16:46:05Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,19 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+06-02-15 V.Ivanchenko (materials-V10-00-27)
+- G4Material, G4NistManager, G4NistMaterialBuilder, G4IonisParamMat 
+    introduced NTP_Temperature=20C; set this tempature default for 
+    all materials instead of STP_Temperature; this is needed,
+    because NIST materials are defined for NTP and not for STP 
+    conditions; addressed problem report #1704; no change in 
+    results of EM testing suite (densities of materials 
+    used in tests are not changed)
+
+15-01-15 V.Ivanchenko
+- G4Material, G4Element, G4Isotope - make arguments of stream 
+    operator const (fix proposed by D. Mancusi)
 
 13-10-14 V.Ivanchenko (materials-V10-00-26)
 - G4SandiaData - optimized run time methods

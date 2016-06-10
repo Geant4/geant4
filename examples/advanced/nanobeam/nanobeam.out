@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-01-ref-00    (5-December-2014)
+ Geant4 version Name: geant4-10-01-patch-01    (27-March-2015)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -15,7 +15,7 @@
 ***** Table : Nb of materials = 1 *****
 
  Material:   Vacuum    density:  0.000 kg/m3   RadL: 204727512.315 pc   Nucl.Int.Length: 113427275.267 pc 
-                       Imean:  19.200 eV   temperature: 273.15 K  pressure:   1.00 atm
+                       Imean:  19.200 eV   temperature: 293.15 K  pressure:   1.00 atm
 
    --->  Element: H (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole
          --->  Isotope:    H1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
@@ -162,7 +162,7 @@ Index : 0     used in the geometry : Yes
 
 ====================================================================
 
-##### Create analysis manager   0x10be7b0
+##### Create analysis manager   0x8f1200
 Using Root analysis manager
 Ntuple-1 created
 Ntuple-2 created
@@ -296,4 +296,3 @@ Ntuple-3 created
 <y|y>=
       101.40563117133
 
-Total navigation history collections cleaned: 7

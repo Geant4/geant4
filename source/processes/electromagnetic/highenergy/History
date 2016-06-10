@@ -1,4 +1,4 @@
-$Id: History 85013 2014-10-23 09:45:07Z gcosmo $
+$Id: History 88977 2015-03-17 10:03:17Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,14 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+20 Feb 2015: V.Ivant (emhighenergy-V10-00-06)
+- G4eeTo3PiModel - increased majoranta for sampling of 3-body final
+    state; fixed bug in sampling
+
+20 Feb 2015: V.Ivant
+- G4eeToHadronsModel - fixed kinematics in ISR gamma emission
+    (problem #1716); added check on energy balance
 
 22 Oct 2014: V.Ivant (emhighenergy-V10-00-05)
 - G4eeToHadrons, G4hBremsstrahlung, G4hPairProduction, 

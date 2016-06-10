@@ -11,12 +11,13 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake 66373 2012-12-18 09:41:34Z gcosmo $
+# $Id: sources.cmake 89001 2015-03-17 11:47:01Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
 # List external includes needed.
 include_directories(${CLHEP_INCLUDE_DIRS})
+include_directories(${USOLIDS_INCLUDE_DIRS})
 
 # List internal includes needed.
 include_directories(${CMAKE_SOURCE_DIR}/source/digits_hits/detector/include)

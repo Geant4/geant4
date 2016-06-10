@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ContinuumGammaDeexcitation.cc 87017 2014-11-21 16:26:26Z gcosmo $
+// $Id: G4ContinuumGammaDeexcitation.cc 88987 2015-03-17 10:39:50Z gcosmo $
 //
 // -------------------------------------------------------------------
 //      GEANT 4 class file 
@@ -109,13 +109,12 @@ G4bool G4ContinuumGammaDeexcitation::CanDoTransition(G4Fragment* nucleus)
   } else {
     ctransition->Update(levelManager,Z,A,excitation);
   }
-
-  if (_verbose > 1) {
+  /*
     G4cout <<"G4ContinuumGammaDeexcitation::CanDoTransition: " 
 	   << " Eex(MeV)= " << excitation 
 	   << " Emax(MeV)= " << levelManager->MaxLevelEnergy()
 	   << " Z= " << Z << " A= " << A << G4endl;
-  }
+  */
   return true;
 }
 

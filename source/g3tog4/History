@@ -1,7 +1,10 @@
-$Id: History 79777 2014-03-13 17:23:18Z gcosmo $
+$Id: History 88939 2015-03-16 16:00:23Z gcosmo $
 --------------------------------------------------------------------
 G3toG4 Modification History (reverse chronological order, please !)
 --------------------------------------------------------------------
+
+g3tog4-V10-00-02 2-Feb-2015 G.Cosmo
+- Fix to sources.cmake script to include missing dependency on external library.
 
 g3tog4-V10-00-01 29-Jan-2014 G.Cosmo
 - Remove inline specification for G3VolTableEntry::operator==()

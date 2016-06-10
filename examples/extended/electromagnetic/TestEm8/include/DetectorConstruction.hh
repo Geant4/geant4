@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm8/include/DetectorConstruction.hh
 /// \brief Definition of the DetectorConstruction class
 //
-// $Id: DetectorConstruction.hh 85243 2014-10-27 08:22:42Z gcosmo $
+// $Id: DetectorConstruction.hh 89039 2015-03-18 09:28:24Z gcosmo $
 //
 /////////////////////////////////////////////////////////////////////////
 //
@@ -92,7 +92,6 @@ private:
   G4LogicalVolume*   fLogicDet;
 
   DetectorMessenger* fDetectorMessenger;  
-  TargetSD*          fTargetSD;
   G4ProductionCuts*  fGasDetectorCuts;
   G4Region*          fRegGasDet;
 

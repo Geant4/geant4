@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PathFinder.hh 81060 2014-05-20 09:12:39Z gcosmo $
+// $Id: G4PathFinder.hh 89289 2015-03-31 08:35:38Z gcosmo $
 // 
 // class G4PathFinder 
 //
@@ -216,7 +216,7 @@ class G4PathFinder
    G4int   fNoActiveNavigators; 
    G4bool  fNewTrack;               // Flag a new track (ensure first step)
 
-   static const G4int fMaxNav = 8;  // rename to kMaxNoNav ??
+   static const G4int fMaxNav = 16;  // rename to kMaxNoNav ??
 
    // Global state (retained during stepping for one track)
 

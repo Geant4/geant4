@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4IStore.hh 77780 2013-11-28 07:50:59Z gcosmo $
+// $Id: G4IStore.hh 88917 2015-03-16 13:31:41Z gcosmo $
 //
 // ----------------------------------------------------------------------
 // Class G4IStore
@@ -68,23 +68,23 @@ public:
   static G4IStore* GetInstance();
   // Return ptr to singleton instance of the class.
   //  static G4ThreadLocal G4IStore* GetInstance(G4String ParallelWorldName);
-  static G4IStore* GetInstance(G4String ParallelWorldName);
+  static G4IStore* GetInstance(const G4String& ParallelWorldName);
   // Return ptr to singleton instance of the class.
 
 protected:
 
   explicit G4IStore();
     // initialise the importance store for the given geometry
-  explicit G4IStore(G4String ParallelWorldName);
+  explicit G4IStore(const G4String& ParallelWorldName);
     // initialise the importance store for the given geometry
+
+  ~G4IStore();
+    // destruct
 
 public:  // with description
 
-  virtual ~G4IStore();
-    // destruct
-
   virtual G4double GetImportance(const G4GeometryCell &gCell) const;
-    // derive a importance value of a "cell" addresed by a G4GeometryCell
+    // derive an importance value of a "cell" addressed by a G4GeometryCell
     // from the store.
 
   virtual G4bool IsKnown(const G4GeometryCell &gCell) const;
@@ -143,9 +143,7 @@ private:
 
   mutable G4GeometryCellImportance::const_iterator fCurrentIterator;
 
-  //  static G4ThreadLocal G4IStore* fInstance;
-  static G4IStore* fInstance;
-
+  static G4ThreadLocal G4IStore* fInstance;
 };
 
 #endif

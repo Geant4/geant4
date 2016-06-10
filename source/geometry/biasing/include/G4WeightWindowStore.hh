@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4WeightWindowStore.hh 77780 2013-11-28 07:50:59Z gcosmo $
+// $Id: G4WeightWindowStore.hh 88917 2015-03-16 13:31:41Z gcosmo $
 //
 // ----------------------------------------------------------------------
 // Class G4WeightWindowStore
@@ -63,20 +63,20 @@ public:  // with description
   static G4WeightWindowStore* GetInstance();
   // Return ptr to singleton instance of the class.
 
-  static G4WeightWindowStore* GetInstance(G4String ParallelWorldName);
+  static G4WeightWindowStore* GetInstance(const G4String& ParallelWorldName);
   // Return ptr to singleton instance of the class.
 
 protected:
 
   explicit G4WeightWindowStore();
     // initialise the weight window store for the given geometry
-  explicit G4WeightWindowStore(G4String ParallelWorldName);
+  explicit G4WeightWindowStore(const G4String& ParallelWorldName);
     // initialise the weight window store for the given geometry
 
-public:  // with description
-
-  virtual ~G4WeightWindowStore();
+  ~G4WeightWindowStore();
     // destructor
+
+public:  // with description
 
   virtual G4double GetLowerWeight(const G4GeometryCell &gCell, 
 			                G4double partEnergy) const;
@@ -130,7 +130,7 @@ private:
   G4GeometryCellWeight fCellToUpEnBoundLoWePairsMap;
   mutable G4GeometryCellWeight::const_iterator fCurrentIterator;
 
-  static G4WeightWindowStore* fInstance;
+  static G4ThreadLocal G4WeightWindowStore* fInstance;
   
 };
 

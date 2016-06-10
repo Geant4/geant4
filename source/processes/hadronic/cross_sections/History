@@ -14,11 +14,31 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+06 February 2015 W.Pokorski (hadr-cross-V10-00-19)
+------------------------------------------------
+- including V.Grishine change in G4ComponentGGHadronNucleusXsc to work
+  for H target
 
-07 November 2014 V.Ivanchenko (hadr-cross-V10-00-17)
+07 January 2015 W.Pokorski
+--------------------------
+- removing obsolete (wrong) checks for particle types in IsIsoApplicable
+  in Chips cross sections
+
+12 December 2014 G.Cosmo
+------------------------
+- Workaround in G4CrossSectionFactory<T,2>::Instantiate() to allow for
+  compilation on clang-3.5 on Linux, for initialisation of TLS pointer.
+
+18 November 2014 V.Ivanchenko (hadr-cross-V10-00-18)
 ---------------------------------------------------
-07 November 2014 V.Grichine class managing single diffraction to 
-                  elastic cross section ratio G4DiffElasticRatio 
+- G4CrossSectionDataSetRegistry, G4CrossSectionFactoryRegistry,
+  G4HadronCrossSections - use thread local singletone for
+  proper deletion of cross sections end of run
+
+07 November 2014 V.Grichine (hadr-cross-V10-00-17)
+---------------------------------------------------
+- Class managing single diffraction to elastic cross section ratio
+  G4DiffElasticRatio 
 
 30 October 2014 V.Ivanchenko (hadr-cross-V10-00-16)
 ---------------------------------------------------

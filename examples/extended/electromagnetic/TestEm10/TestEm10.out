@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-01-ref-00    (5-December-2014)
+ Geant4 version Name: geant4-10-01-patch-01    (27-March-2015)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -140,7 +140,7 @@ Lorentz Factor	XTR photon number
 8.085e+04	3.149
 9.283e+04	3.149
 
-total time for build X-ray TR energy loss tables = 0.08 s
+total time for build X-ray TR energy loss tables = 0.09 s
 
 SynRad:  Incoherent Synchrotron Radiation
       good description for long magnets at all energies
@@ -224,7 +224,7 @@ Lorentz Factor	XTR photon number
 8.085e+04	3.149
 9.283e+04	3.149
 
-total time for build X-ray TR energy loss tables = 0.08 s
+total time for build X-ray TR energy loss tables = 0.09 s
 
 msc:   for proton    SubType= 10
       RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
@@ -396,7 +396,7 @@ Index : 2     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.92s Real=0.92s Sys=0s
+  User=1.18s Real=1.18s Sys=0s
  ================== run summary =====================
  end of Run TotNbofEvents = 1000
     mean charged track length   in absorber=45.2012 +- 0.667544  mm  
@@ -517,7 +517,6 @@ Index : 2     used in the geometry : Yes
 ====================================================================
 
 G4 kernel has come to Quit state.
-Total navigation history collections cleaned: 13
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 12 of which, static: 1
 Dynamic pools deleted: 11 / Total memory freed: 0.034 Mb

@@ -656,7 +656,7 @@ void B03PhysicsList::AddScoringProcess(){
     pmanager->AddProcess(theParallelWorldProcess);
     if(theParallelWorldProcess->IsAtRestRequired(particle))
     {pmanager->SetProcessOrdering(theParallelWorldProcess, idxAtRest, 9999);}
-    pmanager->SetProcessOrdering(theParallelWorldProcess, idxAlongStep, 1);
+    pmanager->SetProcessOrderingToSecond(theParallelWorldProcess, idxAlongStep);
     pmanager->SetProcessOrdering(theParallelWorldProcess, idxPostStep, 9999);
    }
   }

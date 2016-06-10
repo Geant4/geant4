@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-01-ref-00    (5-December-2014)
+ Geant4 version Name: geant4-10-01-patch-01    (27-March-2015)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -15,7 +15,7 @@
 ***** Table : Nb of materials = 16 *****
 
  Material:   Vacuum    density:  0.000 kg/m3   RadL: 204727512.315 pc   Nucl.Int.Length: 113427275.267 pc 
-                       Imean:  19.200 eV   temperature: 273.15 K  pressure:   1.00 atm
+                       Imean:  19.200 eV   temperature: 293.15 K  pressure:   1.00 atm
 
    --->  Element: H (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole
          --->  Isotope:    H1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
@@ -328,10 +328,12 @@ Current available graphics systems are:
   DAWNFILE (DAWNFILE)
   G4HepRep (HepRepXML)
   G4HepRepFile (HepRepFile)
+  OpenGLImmediateQt (OGLI, OGLIQt)
   OpenGLImmediateX (OGLIX)
-  OpenGLImmediateXm (OGLI, OGLIXm)
+  OpenGLImmediateXm (OGLIXm, OGLI_FALLBACK, OGLIQt_FALLBACK)
+  OpenGLStoredQt (OGL, OGLS, OGLSQt)
   OpenGLStoredX (OGLSX)
-  OpenGLStoredXm (OGL, OGLS, OGLSXm)
+  OpenGLStoredXm (OGLSXm, OGL_FALLBACK, OGLS_FALLBACK, OGLSQt_FALLBACK)
   RayTracer (RayTracer)
   RayTracerX (RayTracerX)
   VRML1FILE (VRML1FILE)
@@ -807,7 +809,7 @@ Index : 12     used in the geometry : Yes
 
 ====================================================================
 
-##### Create analysis manager   0x2505870
+##### Create analysis manager   0x1e34660
 Using Root analysis manager
 All Ntuples have been created 
 -> Event # 1 generated 
@@ -820,38 +822,33 @@ All Ntuples have been created
    ===> Sorry, the incident alpha particle has missed the targeted cell !
 
 -> Event # 4 generated 
-   ===> The incident alpha particle has reached the targeted cell :
-   -----> total absorbed dose within Nucleus   is (Gy) = 0.35689378057726
-   -----> total absorbed dose within Cytoplasm is (Gy) = 0.045341766694307
+   ===> Sorry, the incident alpha particle has missed the targeted cell !
 
 -> Event # 5 generated 
-   ===> The incident alpha particle has reached the targeted cell :
-   -----> total absorbed dose within Nucleus   is (Gy) = 0.3184838760985
-   -----> total absorbed dose within Cytoplasm is (Gy) = 0.013511302315534
+   ===> Sorry, the incident alpha particle has missed the targeted cell !
 
 -> Event # 6 generated 
    ===> Sorry, the incident alpha particle has missed the targeted cell !
 
 -> Event # 7 generated 
    ===> The incident alpha particle has reached the targeted cell :
-   -----> total absorbed dose within Nucleus   is (Gy) = 0.28600701865489
-   -----> total absorbed dose within Cytoplasm is (Gy) = 0.035232641971449
+   -----> total absorbed dose within Nucleus   is (Gy) = 0.28407214364651
+   -----> total absorbed dose within Cytoplasm is (Gy) = 0.040725951694058
 
 -> Event # 8 generated 
    ===> The incident alpha particle has reached the targeted cell :
-   -----> total absorbed dose within Nucleus   is (Gy) = 0.36000670574369
-   -----> total absorbed dose within Cytoplasm is (Gy) = 0.031929146834042
+   -----> total absorbed dose within Nucleus   is (Gy) = 0.29755062533152
+   -----> total absorbed dose within Cytoplasm is (Gy) = 0.043358693832365
 
 -> Event # 9 generated 
-   ===> Sorry, the incident alpha particle has missed the targeted cell !
+   ===> The incident alpha particle has reached the targeted cell :
+   -----> total absorbed dose within Nucleus   is (Gy) = 0.31087396894474
+   -----> total absorbed dose within Cytoplasm is (Gy) = 0.027630118637624
 
 -> Event # 10 generated 
-   ===> The incident alpha particle has reached the targeted cell :
-   -----> total absorbed dose within Nucleus   is (Gy) = 0.30535196833663
-   -----> total absorbed dose within Cytoplasm is (Gy) = 0.053071137449501
+   ===> Sorry, the incident alpha particle has missed the targeted cell !
 
--> Total number of particles detected by the gas detector : 5
+-> Total number of particles detected by the gas detector : 3
 
 Graphics systems deleted.
 Visualization Manager deleting...
-Total navigation history collections cleaned: 14

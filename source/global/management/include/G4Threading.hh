@@ -67,10 +67,15 @@
     #define G4MUTEXLOCK pthread_mutex_lock
     #define G4MUTEXUNLOCK pthread_mutex_unlock
 
-    // Macro to iniaizlie a Mutex
+    // Macro to initialize a Mutex
+    //
     #define G4MUTEXINIT(mutex) pthread_mutex_init( &mutex , NULL);
     #define G4MUTEXDESTROY(mutex) pthread_mutex_destroy( &mutex );
 
+    // Macro to put current thread to sleep
+    //
+    #define G4THREADSLEEP( tick ) { sleep(tick); }
+	
     // Macro to create a G4Thread object
     //
     #define G4THREADCREATE( worker , func , arg )  { \
@@ -82,10 +87,12 @@
     }
 
     // Macro to join thread
+    //
     #define G4THREADJOIN( worker ) pthread_join( worker , NULL)
 
-   // Macro to retrieve caller thread
-   #define G4THREADSELF pthread_self
+    // Macro to retrieve caller thread
+    //
+    #define G4THREADSELF pthread_self
 
     // Some useful types
     //
@@ -131,6 +138,7 @@
     BOOL G4ReleaseMutex( __in G4Mutex m);
     #define G4MUTEXUNLOCK G4ReleaseMutex
 
+    #define G4THREADSLEEP( tick ) { Sleep(tick); }
     #define G4THREADCREATE( worker, func, arg ) { *worker = CreateThread( NULL, 16*1024*1024 , func , arg , 0 , NULL ); }
     #define G4THREADJOIN( worker ) WaitForSingleObject( worker , INFINITE);
     #define G4THREADSELF GetCurrentThreadId
@@ -166,6 +174,7 @@
   #define G4MUTEXDESTROY(mutex) ;;
   #define G4MUTEXLOCK fake_mutex_lock_unlock
   #define G4MUTEXUNLOCK fake_mutex_lock_unlock
+  #define G4THREADSLEEP ( tick ) ;;
   #define G4THREADCREATE( worker , func , arg ) ;;
   #define G4THREADJOIN( worker ) ;;
   #define G4THREADSELF( nothing ) G4Thread(nothing); 

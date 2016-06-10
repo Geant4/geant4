@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Material.hh 81374 2014-05-27 13:07:25Z gcosmo $
+// $Id: G4Material.hh 88957 2015-03-16 16:46:05Z gcosmo $
 //
 
 //---------------------------------------------------------------------------
@@ -113,6 +113,8 @@
 
 enum G4State { kStateUndefined = 0, kStateSolid, kStateLiquid, kStateGas };
 
+static const G4double NTP_Temperature = 293.15;
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class G4Material
@@ -126,7 +128,7 @@ public:  // with description
                    G4double  a,					//mass of mole
                    G4double  density, 				//density
                    G4State   state    = kStateUndefined,	//solid,gas
-                   G4double  temp     = CLHEP::STP_Temperature,	//temperature
+                   G4double  temp     = NTP_Temperature,	//temperature
                    G4double  pressure = CLHEP::STP_Pressure);	//pressure
 
   //
@@ -137,7 +139,7 @@ public:  // with description
                    G4double  density, 				//density
                    G4int     nComponents,			//nbOfComponents
                    G4State   state    = kStateUndefined,	//solid,gas
-                   G4double  temp     = CLHEP::STP_Temperature,	//temperature
+                   G4double  temp     = NTP_Temperature,	//temperature
                    G4double  pressure = CLHEP::STP_Pressure);	//pressure
 
   //
@@ -147,7 +149,7 @@ public:  // with description
                    G4double  density, 				//density
              const G4Material* baseMaterial,			//base material
                    G4State   state    = kStateUndefined,	//solid,gas
-                   G4double  temp     = CLHEP::STP_Temperature,	//temperature
+                   G4double  temp     = NTP_Temperature,	//temperature
                    G4double  pressure = CLHEP::STP_Pressure);	//pressure
 
   //
@@ -265,8 +267,8 @@ public:  // with description
   //
   //printing methods
   //
-  friend std::ostream& operator<<(std::ostream&, G4Material*);    
-  friend std::ostream& operator<<(std::ostream&, G4Material&);    
+  friend std::ostream& operator<<(std::ostream&, const G4Material*);    
+  friend std::ostream& operator<<(std::ostream&, const G4Material&);    
   friend std::ostream& operator<<(std::ostream&, G4MaterialTable);
     
   // operators       

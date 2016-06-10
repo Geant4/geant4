@@ -1,5 +1,5 @@
 Starting run with
-Macro File    : /ec/G4-builds/release/slc6-gcc49-RelWithDebInfo/10-01-ref-00_branch/examples/extended/medical/electronScattering2/electronScattering2.in
+Macro File    : /ec/G4-builds/release/slc6-gcc49-RelWithDebInfo/geant4-10-01-patch-01_cand-02/examples/extended/medical/electronScattering2/electronScattering2.in
 Starting Seed : 1
 Output File   : output.csv
 
@@ -8,7 +8,7 @@ Output File   : output.csv
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-01-ref-00    (5-December-2014)
+ Geant4 version Name: geant4-10-01-patch-01    (27-March-2015)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -20,7 +20,7 @@ Output File   : output.csv
 ***** Table : Nb of materials = 11 *****
 
  Material:    G4_He    density:  0.166 kg/m3   RadL:   5.671 km   Nucl.Int.Length:   3.343 km 
-                       Imean:  41.800 eV   temperature: 273.15 K  pressure:   1.00 atm
+                       Imean:  41.800 eV   temperature: 293.15 K  pressure:   1.00 atm
 
    --->  Element: He (He)   Z =  2.0   N =   4.0   A =   4.00 g/mole
          --->  Isotope:   He3   Z =  2   N =   3   A =   3.02 g/mole   abundance:   0.00 %
@@ -66,7 +66,7 @@ Output File   : output.csv
 
 
  Material:   G4_AIR    density:  1.205 mg/cm3  RadL: 303.921 m    Nucl.Int.Length: 710.137 m  
-                       Imean:  85.700 eV   temperature: 273.15 K  pressure:   1.00 atm
+                       Imean:  85.700 eV   temperature: 293.15 K  pressure:   1.00 atm
 
    --->  Element: C (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole
          --->  Isotope:   C12   Z =  6   N =  12   A =  12.00 g/mole   abundance:  98.93 %
@@ -169,10 +169,12 @@ Current available graphics systems are:
   DAWNFILE (DAWNFILE)
   G4HepRep (HepRepXML)
   G4HepRepFile (HepRepFile)
+  OpenGLImmediateQt (OGLI, OGLIQt)
   OpenGLImmediateX (OGLIX)
-  OpenGLImmediateXm (OGLI, OGLIXm)
+  OpenGLImmediateXm (OGLIXm, OGLI_FALLBACK, OGLIQt_FALLBACK)
+  OpenGLStoredQt (OGL, OGLS, OGLSQt)
   OpenGLStoredX (OGLSX)
-  OpenGLStoredXm (OGL, OGLS, OGLSXm)
+  OpenGLStoredXm (OGLSXm, OGL_FALLBACK, OGLS_FALLBACK, OGLSQt_FALLBACK)
   RayTracer (RayTracer)
   RayTracerX (RayTracerX)
   VRML1FILE (VRML1FILE)
@@ -453,4 +455,3 @@ Number of Events Processed:20000
      232  0.0067719  0.0028997          8          3 
 Graphics systems deleted.
 Visualization Manager deleting...
-Total navigation history collections cleaned: 13

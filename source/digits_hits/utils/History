@@ -1,4 +1,4 @@
-$Id: History 74457 2013-10-07 15:21:35Z gcosmo $
+$Id: History 89175 2015-03-23 15:22:54Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,22 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+March 20, 2015  A.Kimura (detutils-V10-00-02)
+- fixed type convertion warnigs at l.132 and l.157 of G4VScoreColorMap.cc
+
+March 11, 2015  A.Kimura (detutils-V10-00-01)
+- fine adjustment of the position drawing surfaces in G4ScoringBox::Draw(...)
+
+March 11, 2015  A.Kimura
+- Revised G4ScoringBox::Draw(...), ::DrawColumn(...), 
+  G4ScoringCylinder::Draw(...) and ::DrawColumn(...) to spped up 
+  drawing primitive scorers attached to the scoring meshes.
+
+October 03, 2014  A.Kimura (detutils-V10-00-00)
+- Added several sets of G4VisManager::BeginDraw2D() call and 
+  G4VisManager::EndDraw() call in G4VScoreColorMap.cc for the speedup 
+  of drawing the texts and the color chart.
 
 October 05, 2013  A.Kimura (detutils-V09-06-00)
 - Fixed a bug in G4ScoringBox::DrawColumn(...), which was a wrong size check of the column.

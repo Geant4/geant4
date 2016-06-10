@@ -1,4 +1,4 @@
-$Id: History 76272 2013-11-08 11:53:00Z gcosmo $
+$Id: History 88931 2015-03-16 14:26:21Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+February 2 2015  Gabriele Cosmo  (detscorer-V10-00-00)
+- Fix to sources.cmake script to include missing dependency on external library.
 
 November 7 2013  Gabriele Cosmo  (detscorer-V09-06-00)
 - Replaced deprecated calls to G4Sphere accessor methods.

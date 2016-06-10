@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-01-ref-00    (5-December-2014)
+ Geant4 version Name: geant4-10-01-patch-01    (27-March-2015)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -20,10 +20,12 @@ Current available graphics systems are:
   DAWNFILE (DAWNFILE)
   G4HepRep (HepRepXML)
   G4HepRepFile (HepRepFile)
+  OpenGLImmediateQt (OGLI, OGLIQt)
   OpenGLImmediateX (OGLIX)
-  OpenGLImmediateXm (OGLI, OGLIXm)
+  OpenGLImmediateXm (OGLIXm, OGLI_FALLBACK, OGLIQt_FALLBACK)
+  OpenGLStoredQt (OGL, OGLS, OGLSQt)
   OpenGLStoredX (OGLSX)
-  OpenGLStoredXm (OGL, OGLS, OGLSXm)
+  OpenGLStoredXm (OGLSXm, OGL_FALLBACK, OGLS_FALLBACK, OGLSQt_FALLBACK)
   RayTracer (RayTracer)
   RayTracerX (RayTracerX)
   VRML1FILE (VRML1FILE)
@@ -86,7 +88,7 @@ Available colours:
 
 
  Material:      Air    density:  1.290 mg/cm3  RadL: 285.161 m    Nucl.Int.Length: 662.680 m  
-                       Imean:  85.703 eV   temperature: 273.15 K  pressure:   1.00 atm
+                       Imean:  85.703 eV   temperature: 293.15 K  pressure:   1.00 atm
 
    --->  Element: Nitrogen (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole
          --->  Isotope:   N14   Z =  7   N =  14   A =  14.00 g/mole   abundance:  99.63 %
@@ -116,7 +118,7 @@ Available colours:
 
 
  Material:    Argon    density:  1.784 mg/cm3  RadL: 109.604 m    Nucl.Int.Length: 670.814 m  
-                       Imean: 188.000 eV   temperature: 273.15 K  pressure:   1.00 atm
+                       Imean: 188.000 eV   temperature: 293.15 K  pressure:   1.00 atm
 
    --->  Element: Argon (Ar)   Z = 18.0   N =  39.9   A =  39.95 g/mole
          --->  Isotope:  Ar36   Z = 18   N =  36   A =  35.97 g/mole   abundance:   0.34 %
@@ -126,7 +128,7 @@ Available colours:
 
 
  Material:       N2    density:  1.251 mg/cm3  RadL: 303.846 m    Nucl.Int.Length: 674.714 m  
-                       Imean:  82.000 eV   temperature: 273.15 K  pressure:   1.00 atm
+                       Imean:  82.000 eV   temperature: 293.15 K  pressure:   1.00 atm
 
    --->  Element: Nitrogen (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole
          --->  Isotope:   N14   Z =  7   N =  14   A =  14.00 g/mole   abundance:  99.63 %
@@ -135,7 +137,7 @@ Available colours:
 
 
  Material:       O2    density:  1.429 mg/cm3  RadL: 239.621 m    Nucl.Int.Length: 617.219 m  
-                       Imean:  95.000 eV   temperature: 273.15 K  pressure:   1.00 atm
+                       Imean:  95.000 eV   temperature: 293.15 K  pressure:   1.00 atm
 
    --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole
          --->  Isotope:   O16   Z =  8   N =  16   A =  15.99 g/mole   abundance:  99.76 %
@@ -322,4 +324,3 @@ Total number of event = 5000
 ----------------------------------------
 Graphics systems deleted.
 Visualization Manager deleting...
-Total navigation history collections cleaned: 7

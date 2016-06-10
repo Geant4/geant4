@@ -19,10 +19,11 @@
 #
 /run/initialize
 #
+/process/em/deexcitationIgnoreCut true
 #/process/em/deexcitation world true false true
 /process/em/fluo true
 /process/em/pixe true
-/process/em/auger false
+/process/em/auger true
 #
 /testem/gun/setDefault
 /gun/particle e-
@@ -38,6 +39,13 @@
 /analysis/h1/set 47 100 0.001 0.1 MeV log10 #gamma: energy at vertex (log scale)
 /analysis/h1/set 20 100 0 0.1 MeV           #gamma: energy at exit
 /analysis/h1/set 40 100 0 0.1 MeV           #gamma: energy at back
+#
+/analysis/h1/set  2 100 0 0.1 MeV           #e-: energy at vertex
+/analysis/h1/set  4 100 0.001 0.1 MeV log10 #e-: energy at vertex (log scale)
+/analysis/h1/set 16 100 0 0.1 MeV	    #e-: energy at vertex
+/analysis/h1/set 18 100 0.001 0.1 MeV log10 #e-: energy at vertex (log scale)
+/analysis/h1/set 44 100 0 0.1 MeV	    #e-: energy at vertex
+/analysis/h1/set 46 100 0.001 0.1 MeV log10 #e-: energy at vertex (log scale)
 #
 /run/printProgress 10000
 # 

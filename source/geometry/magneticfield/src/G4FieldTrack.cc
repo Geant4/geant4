@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FieldTrack.cc 81175 2014-05-22 07:39:10Z gcosmo $
+// $Id: G4FieldTrack.cc 88944 2015-03-16 16:11:10Z gcosmo $
 //
 // -------------------------------------------------------------------
 
@@ -42,7 +42,8 @@ std::ostream& operator<<( std::ostream& os, const G4FieldTrack& SixVec)
         << G4ThreeVector(SixV[3], SixV[4], SixV[5]).mag(); // mom magnitude
      os << " Ekin= " << SixVec.fKineticEnergy ;
      os << " m0= " <<   SixVec.fRestMass_c2;
-     os << " Pdir= " <<  SixVec.fMomentumDir.mag(); 
+     os << " Pdir= " <<  SixVec.fMomentumDir.mag();
+     os << " PolV= " << SixVec.GetPolarization(); 
      os << " l= " <<    SixVec.GetCurveLength();
      os << " t_lab= " << SixVec.fLabTimeOfFlight; 
      os << " t_proper= " << SixVec.fProperTimeOfFlight ; 

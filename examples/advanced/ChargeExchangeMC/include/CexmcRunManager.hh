@@ -114,8 +114,6 @@ class  CexmcRunManager : public G4RunManager
 #endif
 #endif
 
-        void  EnableLiveHistograms( G4bool  on = true );
-
         void  BeamParticleChangeHook( void );
 
         void  SetupConstructionHook( void );
@@ -144,8 +142,6 @@ class  CexmcRunManager : public G4RunManager
 
         boost::archive::binary_oarchive *  GetFastEventsArchive( void ) const;
 #endif
-
-        G4bool                    AreLiveHistogramsEnabled( void ) const;
 
         CexmcEventDataVerboseLevel  GetEventDataVerboseLevel( void ) const;
 
@@ -190,8 +186,6 @@ class  CexmcRunManager : public G4RunManager
         G4String                    cfFileName;
 
         CexmcEventCountPolicy       eventCountPolicy;
-
-        G4bool                      areLiveHistogramsEnabled;
 
         G4bool                      skipInteractionsWithoutEDTonWrite;
 
@@ -383,18 +377,6 @@ inline void  CexmcRunManager::SkipInteractionsWithoutEDTonWrite( G4bool  on )
 }
 
 #endif
-
-
-inline void  CexmcRunManager::EnableLiveHistograms( G4bool  on )
-{
-    areLiveHistogramsEnabled = on;
-}
-
-
-inline G4bool  CexmcRunManager::AreLiveHistogramsEnabled( void ) const
-{
-    return areLiveHistogramsEnabled;
-}
 
 
 inline CexmcEventDataVerboseLevel  CexmcRunManager::GetEventDataVerboseLevel(

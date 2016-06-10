@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4TriangularFacet.cc 66819 2013-01-12 16:20:10Z gcosmo $
+// $Id: G4TriangularFacet.cc 88948 2015-03-16 16:26:50Z gcosmo $
 //
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 //
@@ -136,8 +136,25 @@ G4TriangularFacet::G4TriangularFacet (const G4ThreeVector &vt0,
     //    G4ThreeVector vtmp = 0.25 * (fE1 + fE2);
 
     fArea = 0.5 * (fE1.cross(fE2)).mag();
-    G4double lambda0 = (fA-fB) * fC / (8.0*fArea*fArea);
-    G4double lambda1 = (fC-fB) * fA / (8.0*fArea*fArea);
+    G4double lambda0, lambda1;
+    if(std::fabs(fArea) < kCarTolerance*kCarTolerance)
+    {
+      ostringstream message;
+      message << "Area of Facet is too small, possible flat triangle!" << G4endl
+              << "  fVertices[0] = " << GetVertex(0) << G4endl
+              << "  fVertices[1] = " << GetVertex(1) << G4endl
+              << "  fVertices[2] = " << GetVertex(2) << G4endl
+              << "Area = " << fArea;
+      G4Exception("G4TriangularFacet::G4TriangularFacet()",
+                  "GeomSolids1001", JustWarning, message);
+      lambda0 = 0.5;
+      lambda1 = 0.5;  
+    }
+    else
+    {
+      lambda0 = (fA-fB) * fC / (8.0*fArea*fArea);
+      lambda1 = (fC-fB) * fA / (8.0*fArea*fArea);
+    }
     G4ThreeVector p0 = GetVertex(0);
     fCircumcentre = p0 + lambda0*fE1 + lambda1*fE2;
     G4double radiusSqr = (fCircumcentre-p0).mag2();
@@ -576,6 +593,7 @@ G4bool G4TriangularFacet::Intersect (const G4ThreeVector &p,
   distFromSurface  = D.dot(fSurfaceNormal);
   G4bool wrongSide = (outgoing && distFromSurface < -0.5*kCarTolerance) ||
     (!outgoing && distFromSurface >  0.5*kCarTolerance);
+ 
   if (wrongSide)
   {
     distance = kInfinity;

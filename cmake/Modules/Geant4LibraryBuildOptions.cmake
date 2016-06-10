@@ -255,6 +255,12 @@ if(CMAKE_COMPILER_IS_GNUCXX)
   set(GEANT4_COMPILER "g++")
 elseif(CMAKE_CXX_COMPILER_ID MATCHES "Clang")
   set(GEANT4_COMPILER "clang")
+
+  # - Newer g++ on OS X may identify as Clang
+  if(APPLE AND (CMAKE_CXX_COMPILER MATCHES ".*g\\+\\+"))
+    set(GEANT4_COMPILER "g++")
+  endif()
+
 elseif(MSVC)
   set(GEANT4_COMPILER "VC")
 elseif(CMAKE_CXX_COMPILER MATCHES "icpc.*|icc.*")

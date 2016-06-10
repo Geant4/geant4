@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4WeightWindowProcess.cc 77999 2013-12-02 08:18:01Z gcosmo $
+// $Id: G4WeightWindowProcess.cc 88919 2015-03-16 13:41:02Z gcosmo $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -65,7 +65,8 @@ G4WeightWindowProcess::G4WeightWindowProcess(
    fPostStepAction(0),
    fPlaceOfAction(placeOfAction),
    fGhostWorldName("NoParallelWorld"),fGhostWorld(0),
-   fGhostNavigator(0), fNavigatorID(-1), fFieldTrack('0')
+   fGhostNavigator(0), fNavigatorID(-1), fFieldTrack('0'),
+   fParaflag(), fEndTrack('0'), feLimited(kDoNot)
 {
   if (TrackTerminator)
   {
@@ -95,7 +96,7 @@ G4WeightWindowProcess::G4WeightWindowProcess(
     G4cout << GetProcessName() << " is created " << G4endl;
   }
 
-  paraflag = para;
+  fParaflag = para;
 
 }
 
@@ -115,7 +116,7 @@ G4WeightWindowProcess::~G4WeightWindowProcess()
 //
 //------------------------------------------------------
 void G4WeightWindowProcess::
-SetParallelWorld(G4String parallelWorldName)
+SetParallelWorld(const G4String &parallelWorldName)
 {
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 // Get pointers of the parallel world and its navigator
@@ -150,7 +151,7 @@ void G4WeightWindowProcess::StartTracking(G4Track* trk)
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 // G4cout << " G4ParallelWorldScoringProcess::StartTracking" << G4endl;
 
-  if(paraflag) {
+  if(fParaflag) {
     if(fGhostNavigator)
       { fNavigatorID = fTransportationManager->ActivateNavigator(fGhostNavigator); }
     else
@@ -203,7 +204,7 @@ G4WeightWindowProcess::PostStepDoIt(const G4Track &aTrack,
 
   fParticleChange->Initialize(aTrack);
 
-  if(paraflag) {
+  if(fParaflag) {
     fOldGhostTouchable = fGhostPostStepPoint->GetTouchableHandle();
     //xbug?    fOnBoundary = false;
     CopyStep(aStep);
@@ -242,7 +243,7 @@ G4WeightWindowProcess::PostStepDoIt(const G4Track &aTrack,
 //            (aStep.GetPostStepPoint()->GetStepStatus() == fGeomBoundary) )
 //       || ( (fPlaceOfAction == onCollision) && 
 //            (aStep.GetPostStepPoint()->GetStepStatus() != fGeomBoundary) ) )
-    if(paraflag) {
+    if(fParaflag) {
       if ( ( fPlaceOfAction == onBoundaryAndCollision)
 	   || ( (fPlaceOfAction == onBoundary) && 
 		(fGhostPostStepPoint->GetStepStatus() == fGeomBoundary) )
@@ -302,10 +303,8 @@ AlongStepGetPhysicalInteractionLength(
             const G4Track& track, G4double  previousStepSize, G4double  currentMinimumStep,
             G4double& proposedSafety, G4GPILSelection* selection)
 {
-  if(paraflag) {
-    static G4ThreadLocal G4FieldTrack *endTrack_G4MT_TLS_ = 0 ; if (!endTrack_G4MT_TLS_) endTrack_G4MT_TLS_ = new  G4FieldTrack ('0') ;  G4FieldTrack &endTrack = *endTrack_G4MT_TLS_;
-    static G4ThreadLocal ELimited *eLimited_G4MT_TLS_ = 0 ; if (!eLimited_G4MT_TLS_) eLimited_G4MT_TLS_ = new  ELimited  ;  ELimited &eLimited = *eLimited_G4MT_TLS_;
-    
+  if(fParaflag)
+  {
     *selection = NotCandidateForSelection;
     G4double returnedStep = DBL_MAX;
     
@@ -333,14 +332,15 @@ AlongStepGetPhysicalInteractionLength(
 	//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	returnedStep
 	  = fPathFinder->ComputeStep(fFieldTrack,currentMinimumStep,fNavigatorID,
-				     track.GetCurrentStepNumber(),fGhostSafety,eLimited,
-				     endTrack,track.GetVolume());
+				     track.GetCurrentStepNumber(),fGhostSafety,feLimited,
+				     fEndTrack,track.GetVolume());
 	//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	if(eLimited == kDoNot)
+	if(feLimited == kDoNot)
 	  {
 	    // Track is not on the boundary
 	    fOnBoundary = false;
-	    fGhostSafety = fGhostNavigator->ComputeSafety(endTrack.GetPosition());
+	    fGhostSafety = fGhostNavigator->ComputeSafety(fEndTrack.GetPosition());
+            // fGhostSafety = fGhostNavigator->ComputeSafety(endTrack.GetPosition(), DBL_MAX, true);
 	  }
 	else
 	  {
@@ -349,9 +349,9 @@ AlongStepGetPhysicalInteractionLength(
 	    proposedSafety = fGhostSafety;
 	  }
 	//xbug?	proposedSafety = fGhostSafety;
-	if(eLimited == kUnique || eLimited == kSharedOther) {
+	if(feLimited == kUnique || feLimited == kSharedOther) {
 	  *selection = CandidateForSelection;
-	}else if (eLimited == kSharedTransport) { 
+	}else if (feLimited == kSharedTransport) { 
 	  returnedStep *= (1.0 + 1.0e-9);  
 	  // Expand to disable its selection in Step Manager comparison
 	}

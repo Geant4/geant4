@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm5/src/StackingAction.cc
 /// \brief Implementation of the StackingAction class
 //
-// $Id: StackingAction.cc 83921 2014-09-23 09:14:40Z gcosmo $
+// $Id: StackingAction.cc 88929 2015-03-16 14:14:54Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -126,8 +126,11 @@ StackingAction::ClassifyNewTrack(const G4Track* aTrack)
   if (fKillSecondary) {
     if (fKillSecondary == 1) {
      fEventAction->AddEnergy(energy);
-    }  
      status = fKill;
+    }  
+    if (aTrack->GetDefinition() == G4Gamma::Gamma()) {
+      status = fKill;
+    }
   }
     
   return status;

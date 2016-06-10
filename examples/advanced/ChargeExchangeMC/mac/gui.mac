@@ -22,5 +22,9 @@
 /gui/addButton viewer "Unhighlight inner crystals" "/cexmc/vis/hlIC false"
 /gui/addButton viewer "Update scene" "/vis/scene/notifyHandlers"
 
+/cexmc/histo/addHistoMenu histo Histo
+/cexmc/histo/drawOptions2D contz
+/cexmc/histo/drawOptions3D iso
+
 # Add an icon toolbar
 /control/execute mac/icons.mac

@@ -141,6 +141,17 @@
 #include "G4PhysicsOrderedFreeVector.hh"
 #include "G4DataInterpolation.hh"
 #include "G4Threading.hh"
+#include "G4Cache.hh"
+
+/** Andrea Dotti Feb 2015
+ * Important: This is a shared class between threads.
+ * Only one thread should use the set-methods here.
+ * Note that this is exactly what is achieved using UI commands.
+ * If you use the set methods to set defaults in your
+ * application take care that only one thread is executing them.
+ * In addition take care of calling these methods before the run is started
+ * Do not use these setters during the event loop
+ */
 
 class G4SPSRandomGenerator {
 public:
@@ -178,42 +189,59 @@ public:
 	void SetVerbosity(G4int a);
 
 private:
-
-	//  static G4SPSRandomGenerator  *instance;
-
+	//Encapsulate in a struct
+	//to gurantee that correct
+	//initial state is set via constructor
+        struct a_check {
+          G4bool val;
+          a_check() { val = false; }
+        };
+        //See .cc for an explanation of this
+        //in method GenRandX()
+	G4Cache<a_check> local_IPDFXBias;
 	G4bool XBias, IPDFXBias;
 	G4PhysicsOrderedFreeVector XBiasH;
 	G4PhysicsOrderedFreeVector IPDFXBiasH;
+        G4Cache<a_check> local_IPDFYBias;
 	G4bool YBias, IPDFYBias;
 	G4PhysicsOrderedFreeVector YBiasH;
 	G4PhysicsOrderedFreeVector IPDFYBiasH;
+        G4Cache<a_check> local_IPDFZBias;
 	G4bool ZBias, IPDFZBias;
 	G4PhysicsOrderedFreeVector ZBiasH;
 	G4PhysicsOrderedFreeVector IPDFZBiasH;
+        G4Cache<a_check> local_IPDFThetaBias;
 	G4bool ThetaBias, IPDFThetaBias;
 	G4PhysicsOrderedFreeVector ThetaBiasH;
 	G4PhysicsOrderedFreeVector IPDFThetaBiasH;
+        G4Cache<a_check> local_IPDFPhiBias;
 	G4bool PhiBias, IPDFPhiBias;
 	G4PhysicsOrderedFreeVector PhiBiasH;
 	G4PhysicsOrderedFreeVector IPDFPhiBiasH;
+        G4Cache<a_check> local_IPDFEnergyBias;
 	G4bool EnergyBias, IPDFEnergyBias;
 	G4PhysicsOrderedFreeVector EnergyBiasH;
 	G4PhysicsOrderedFreeVector IPDFEnergyBiasH;
+        G4Cache<a_check> local_IPDFPosThetaBias;
 	G4bool PosThetaBias, IPDFPosThetaBias;
 	G4PhysicsOrderedFreeVector PosThetaBiasH;
 	G4PhysicsOrderedFreeVector IPDFPosThetaBiasH;
+        G4Cache<a_check> local_IPDFPosPhiBias;
 	G4bool PosPhiBias, IPDFPosPhiBias;
 	G4PhysicsOrderedFreeVector PosPhiBiasH;
 	G4PhysicsOrderedFreeVector IPDFPosPhiBiasH;
 
 	//G4double alpha;   // for biasing energy
-
-	G4double bweights[9]; //record x,y,z,theta,phi,energy,posThet,posPhi,intensity weights
+	struct bweights_t {
+	  G4double w[9];
+	  bweights_t();
+	  G4double& operator[] (const int i);
+	};
+	G4Cache<bweights_t> bweights;
+	//G4double bweights[9]; //record x,y,z,theta,phi,energy,posThet,posPhi,intensity weights
 
 	// Verbosity
 	G4int verbosityLevel;
-
-	G4PhysicsOrderedFreeVector ZeroPhysVector; // for re-set only
 
     G4Mutex mutex; //protect shared resources
 };

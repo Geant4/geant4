@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmCalculator.cc 83007 2014-07-24 14:46:57Z gcosmo $
+// $Id: G4EmCalculator.cc 88981 2015-03-17 10:14:15Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -984,8 +984,9 @@ const G4MaterialCutsCouple* G4EmCalculator::FindCouple(
   }
   if(!couple) {
     G4ExceptionDescription ed;
-    ed << "G4EmCalculator::FindCouple: fail for material " << material
-       << " <" << currentMaterialName << " > and region " << region;
+    ed << "G4EmCalculator::FindCouple: fail for material <" 
+       << currentMaterialName << ">";
+    if(region) { ed << " and region " << region->GetName(); }
     G4Exception("G4EmCalculator::FindCouple", "em0078",
 		FatalException, ed);
   }

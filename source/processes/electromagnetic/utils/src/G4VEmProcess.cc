@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEmProcess.cc 85424 2014-10-29 08:23:44Z gcosmo $
+// $Id: G4VEmProcess.cc 88981 2015-03-17 10:14:15Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -160,10 +160,12 @@ G4VEmProcess::G4VEmProcess(const G4String& name, G4ProcessType type):
 
 G4VEmProcess::~G4VEmProcess()
 {
+  /*
   if(1 < verboseLevel) {
     G4cout << "G4VEmProcess destruct " << GetProcessName() 
 	   << "  " << this << "  " <<  theLambdaTable <<G4endl;
   }
+  */
   if(lManager->IsMaster()) {
     if(theLambdaTable) {
       theLambdaTable->clearAndDestroy();
@@ -356,10 +358,11 @@ void G4VEmProcess::BuildPhysicsTable(const G4ParticleDefinition& part)
 
   G4String num = part.GetParticleName();
   if(1 < verboseLevel) {
-    G4cout << "G4VEmProcess::BuildPhysicsTable() for "
+    G4cout << "### G4VEmProcess::BuildPhysicsTable() for "
            << GetProcessName()
            << " and particle " << num
 	   << " buildLambdaTable= " << buildLambdaTable
+	   << " isMaster= " << isMaster 
            << G4endl;
   }
 
@@ -413,7 +416,7 @@ void G4VEmProcess::BuildPhysicsTable(const G4ParticleDefinition& part)
     }
 
   if(1 < verboseLevel) {
-    G4cout << "G4VEmProcess::BuildPhysicsTable() done for "
+    G4cout << "### G4VEmProcess::BuildPhysicsTable() done for "
            << GetProcessName()
            << " and particle " << num
            << G4endl;
@@ -530,40 +533,50 @@ void G4VEmProcess::PrintInfoProcess(const G4ParticleDefinition& part)
     G4cout << "  BuildTable= " << buildLambdaTable;
     G4cout << G4endl;
     if(buildLambdaTable) {
-      size_t length = theLambdaTable->length();
-      for(size_t i=0; i<length; ++i) {
-        G4PhysicsVector* v = (*theLambdaTable)[i];
-        if(v) { 
-	  G4cout << "      Lambda table from ";
-          G4double emin = v->Energy(0);
-          G4double emax = v->GetMaxEnergy();
-          G4int nbin = v->GetVectorLength() - 1;
-          if(emin > minKinEnergy) { G4cout << "threshold "; }
-          else { G4cout << G4BestUnit(emin,"Energy"); } 
-          G4cout << " to "
-		 << G4BestUnit(emax,"Energy")
-		 << ", " << G4lrint(nbin/std::log10(emax/emin))
-		 << " bins per decade, spline: " 
-		 << splineFlag
-		 << G4endl;
-	  break;
+      if(particle == &part) { 
+	size_t length = theLambdaTable->length();
+	for(size_t i=0; i<length; ++i) {
+	  G4PhysicsVector* v = (*theLambdaTable)[i];
+	  if(v) { 
+	    G4cout << "      Lambda table from ";
+	    G4double emin = v->Energy(0);
+	    G4double emax = v->GetMaxEnergy();
+	    G4int nbin = v->GetVectorLength() - 1;
+	    if(emin > minKinEnergy) { G4cout << "threshold "; }
+	    else { G4cout << G4BestUnit(emin,"Energy"); } 
+	    G4cout << " to "
+		   << G4BestUnit(emax,"Energy")
+		   << ", " << G4lrint(nbin/std::log10(emax/emin))
+		   << " bins per decade, spline: " 
+		   << splineFlag
+		   << G4endl;
+	    break;
+	  }
 	}
+      } else {
+	G4cout << "      Used Lambda table of " 
+	       << particle->GetParticleName() << G4endl;;
       }
     }
     if(minKinEnergyPrim < maxKinEnergy) {
-      size_t length = theLambdaTablePrim->length();
-      for(size_t i=0; i<length; ++i) {
-        G4PhysicsVector* v = (*theLambdaTablePrim)[i];
-        if(v) { 
-	  G4cout << "      LambdaPrime table from "
-		 << G4BestUnit(v->Energy(0),"Energy") 
-		 << " to "
-		 << G4BestUnit(v->GetMaxEnergy(),"Energy")
-		 << " in " << v->GetVectorLength()-1
-		 << " bins " 
-		 << G4endl;
-	  break;
+      if(particle == &part) { 
+	size_t length = theLambdaTablePrim->length();
+	for(size_t i=0; i<length; ++i) {
+	  G4PhysicsVector* v = (*theLambdaTablePrim)[i];
+	  if(v) { 
+	    G4cout << "      LambdaPrime table from "
+		   << G4BestUnit(v->Energy(0),"Energy") 
+		   << " to "
+		   << G4BestUnit(v->GetMaxEnergy(),"Energy")
+		   << " in " << v->GetVectorLength()-1
+		   << " bins " 
+		   << G4endl;
+	    break;
+	  }
 	}
+      } else {
+	G4cout << "      Used LambdaPrime table of " 
+	       << particle->GetParticleName() << G4endl;;
       }
     }
     PrintInfo();
@@ -572,7 +585,9 @@ void G4VEmProcess::PrintInfoProcess(const G4ParticleDefinition& part)
 
   if(verboseLevel > 2 && buildLambdaTable) {
     G4cout << "      LambdaTable address= " << theLambdaTable << G4endl;
-    if(theLambdaTable) { G4cout << (*theLambdaTable) << G4endl; }
+    if(theLambdaTable && particle == &part) { 
+      G4cout << (*theLambdaTable) << G4endl; 
+    }
   }
 }
 
@@ -643,8 +658,6 @@ G4double G4VEmProcess::PostStepGetPhysicalInteractionLength(
     if (theNumberOfInteractionLengthLeft < 0.0) {
 
       // beggining of tracking (or just after DoIt of this process)
-      // ResetNumberOfInteractionLengthLeft();
-
       theNumberOfInteractionLengthLeft =  -G4Log( G4UniformRand() );
       theInitialNumberOfInteractionLength = theNumberOfInteractionLengthLeft; 
 
@@ -661,6 +674,7 @@ G4double G4VEmProcess::PostStepGetPhysicalInteractionLength(
     // new mean free path and step limit for the next step
     currentInteractionLength = 1.0/preStepLambda;
     x = theNumberOfInteractionLengthLeft * currentInteractionLength;
+    /*
 #ifdef G4VERBOSE
     if (verboseLevel>2){
       G4cout << "G4VEmProcess::PostStepGetPhysicalInteractionLength ";
@@ -673,6 +687,7 @@ G4double G4VEmProcess::PostStepGetPhysicalInteractionLength(
 	     << " InteractionLength= " << x/cm <<"[cm] " <<G4endl;
     }
 #endif
+    */
   }
   return x;
 }
@@ -839,6 +854,9 @@ G4bool G4VEmProcess::StorePhysicsTable(const G4ParticleDefinition* part,
 				             G4bool ascii)
 {
   G4bool yes = true;
+  const G4VEmProcess* masterProc = 
+    static_cast<const G4VEmProcess*>(GetMasterProcess());
+  if(masterProc && masterProc != this) { return yes; }
 
   if ( theLambdaTable && part == particle) {
     const G4String name = 

@@ -1,0 +1,139 @@
+
+                 Geant4 9.6 - patch-04 Release Notes
+                 -----------------------------------
+
+                                                              30 January 2015
+
+List of fixes included in this public patch since the public release 9.6.p03:
+
+  o Geometry:
+    --------
+    + navigation:
+      o G4Navigator: corrected saving/restoring of 'navigator state'.
+      o G4PathFinder: added EndTrack() method, to reset internal state
+        and inform G4TransportationManager to use 'ordinary' Navigator.
+      o Fix in G4MultiNavigator to properly set 'fIdNavLimiting' index to
+        navigator limiting the step, if only one navigator limits the step.
+    + solids/specific:
+      o Fixed triangularisation method AddGeneralPOlygoneFacets() in
+        G4ExtrudedSolid by avoiding flat triangles. Added warning message to
+        G4TriangularFacet constructor if Area is 0; i.e., case of flat triangle.
+        Addressing problem report #1703.
+      o Get rid of deprecated 'register' storage class specifier in source files.
+    + volumes
+      o Avoid post-increment in G4NavigationLevelRep::AddAReference().
+
+  o Global:
+    ------
+    + Fix in G4SimplexDownhill header to proper define header guard.
+    + Updated date and version for 9.6.p04.
+
+  o Generic Processes:
+    -----------------
+    + Management:
+      o Fixed logic in G4ProcessManager::SetProcessOrderingToSecond() to make
+        sure the process is always set before the process that has ordering
+        index 1.
+    + Transportation:
+      o Fix in G4CoupledTransportation to message G4PathFinder for resetting
+        to the default navigator as the 'standard' Mass navigator at end of
+        tracking. Avoid use of multi-navigator when it should not be used.
+      o Fix in G4Transportation to save pointer to particle change as required
+        by G4VProcess interface.
+
+  o Hadronic Processes:
+    ------------------
+    + management:
+      o G4HadronicProcess::CheckResult(): added check for dynamic mass 
+        to correspond to PDG mass within ~10%.
+    + models/binary_cascade:
+      o G4BinaryCasacde: improved calculation of mass, and of correction for
+        outgoing particles by always using GetIon() method; addresses potential
+        crash for p+d seen in d+H in BIC.
+      o G4{Proton,Neutron}Field: protect against negative index into buffer.
+    + models/cascade:
+      o G4CascadeInterface: fixed possible infinite-loop condition where
+        (nTries >= maxTries) and momentum balance fails.
+      o G4InuclNuclei: fix case of floating-point exception in
+        setExcitationEnergy() for zero Ekin.
+      o Fix for memory leak in secondaries in G4IntraNucleiCascader.
+        Addressing problem report #1584.
+    + models/parton_string:
+      o Fix for rare crash in G4LundStringFragmentation in the case of
+        anti-sigma+ capture at rest on hydrogen.
+    + stopping:
+      o G4MuMinusCapturePrecompound: added simplified model for capture in
+        deuterium and in He4; reduced number of trials to find neutrino
+        4-momentum from 1000 to 100; added protection 1 keV for negative
+        excitation energy, and substituted FatalException by JustWarning.
+        Addressing rare cases of infinite loop reported by ATLAS.
+      o G4AntiProtonAnnihilationAtRest: fixed bug related to a wrong target
+        sampling (always the last element of the element vector was sampled
+        as target).
+      o G4HadronStoppingProcess, G4MuonMinusBoundDecay: fixed time of muon 
+        nuclear capture secondaries. Addressing problem report #1695.
+      o Fix for Coverity defects in G4MuonMinusCaptureAtRest.
+
+  o Intercoms:
+    ---------
+    + G4GenericMessenger: fixed case of core dump when GetCurrentValue()
+      method is invoked for a command defined by DeclareMethod().
+    + Corrected inclusion protection flag in G4GenericMessenger.hh.
+      Addressing old problem report #1527.
+    + Fixed treatment of double-quotes in G4UImanager::ForeachS().
+      Addressing problem report #1614.
+
+  o Interfaces:
+    ----------
+    + Explicitly set the LC_NUMERIC locale to "C" in G4Qt.
+      Addressing problem report #1487.
+      Fixed problem with resizing the QGLwidget when scene is opened from UI.
+
+  o Persistency:
+    -----------
+    + ascii:
+      o Corrected dump of 'phi' and 'theta' for G4Trap and G4Para in dumper.
+        Addressing problem report #1602.
+    + gdml:
+      o Fixed typo in G4GDMLWriteSolids::BooleanWrite() for the case of repeated
+        displacements of the reference solid in the same Boolean operation (issue
+        reported by ATLAS).
+      o Correction to G4GDMLReadMaterials::MixtureRead() to revert order of
+        reading (first elements then materials) for mixtures by fraction;
+        corrects referencing for cases when elements and materials may carry
+        the same name (case reported by ATLAS).
+      o Correction to G4GDMLRead::Read() for the case when schema validation
+        is turned off, to disable initialisation of validation machinery in the
+        parser and allow for standalone parsing off-network.
+        Added better description to fatal exception in case document content
+        imported happens to be empty in G4GDMLRead::Read().
+      o Corrected minor Coverity defect in G4GDMLParser for uninitialised
+        'strip' flag in constructors.
+      o Corrected potential memory leak in G4GDMLReadSolids.
+      o Corrected dump of 'phi' and 'theta' for G4Trap and G4Para in writer.
+        Addressing problem report #1602.
+      o Get rid of deprecated 'register' storage class specifier in source files.
+      o Added comparison operator for 3-vector key in 'vertexMap' in
+        G4GDMLWriteSolids for export of tessellated solid.
+        Addressing problem report #1573.
+
+  o Examples:
+    --------
+    + Updated reference outputs.
+
+ ----------------------------------------------------------------------------
+
+                             Technical Notes
+                             --------------- 
+
+  o  This patch should be applied on top of release 9.6.
+  o  Technical notes distributed for release 9.6 are also applicable and
+     valid for this patch.
+
+The code and rebuilt binary libraries for release 9.6.p04 are available
+through our "Download" Web page:
+   http://cern.ch/geant4/support/download.shtml
+
+Please refer to the Geant4 User Documentation:
+   http://cern.ch/geant4/support/userdocuments.shtml
+for further information about using Geant4.

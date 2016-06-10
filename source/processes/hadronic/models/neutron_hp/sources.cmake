@@ -11,7 +11,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake 86780 2014-11-18 08:38:07Z gcosmo $
+# $Id: sources.cmake 88991 2015-03-17 10:49:19Z gcosmo $
 #
 #-----------------------------------------------------------------------
 
@@ -150,7 +150,6 @@ GEANT4_DEFINE_MODULE(NAME G4had_neu_hp
     G4NeutronHPPInelasticFS.hh
     G4NeutronHPPTInelasticFS.hh
     G4NeutronHPPhotonDist.hh
-    #G4NeutronHPPhotonXSection.hh
     G4NeutronHPPolynomExpansion.hh
     G4NeutronHPSCFissionFS.hh
     G4NeutronHPSimpleEvapSpectrum.hh

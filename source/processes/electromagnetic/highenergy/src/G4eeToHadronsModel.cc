@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eeToHadronsModel.cc 82961 2014-07-21 09:20:49Z gcosmo $
+// $Id: G4eeToHadronsModel.cc 88977 2015-03-17 10:03:17Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -60,6 +60,8 @@
 #include "G4Vee2hadrons.hh"
 #include "G4PhysicsVector.hh"
 #include "G4PhysicsLogVector.hh"
+#include "G4Log.hh"
+#include "G4Exp.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -82,6 +84,7 @@ G4eeToHadronsModel::G4eeToHadronsModel(G4Vee2hadrons* mod, G4int ver,
   emax = highKinEnergy;
   peakKinEnergy = highKinEnergy;
   epeak = emax;
+  //verbose = 1;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -117,7 +120,7 @@ void G4eeToHadronsModel::Initialise(const G4ParticleDefinition*,
   crossBornPerElectron = model->PhysicsVector();
   crossPerElectron     = model->PhysicsVector(); 
   nbins = crossPerElectron->GetVectorLength();
-  for(G4int i=0; i<nbins; i++) {
+  for(G4int i=0; i<nbins; ++i) {
     G4double e  = crossPerElectron->Energy(i);
     G4double cs = model->ComputeCrossSection(e);
     crossBornPerElectron->PutValue(i, cs);
@@ -130,7 +133,7 @@ void G4eeToHadronsModel::Initialise(const G4ParticleDefinition*,
            << " emin(MeV)= " << emin/MeV
            << " emax(MeV)= " << emax/MeV
            << G4endl;
-    for(G4int i=0; i<nbins; i++) {
+    for(G4int i=0; i<nbins; ++i) {
       G4double e  = crossPerElectron->Energy(i);
       G4double s1 = crossPerElectron->Value(e);
       G4double s2 = crossBornPerElectron->Value(e);
@@ -188,30 +191,45 @@ void G4eeToHadronsModel::SampleSecondaries(std::vector<G4DynamicParticle*>* newp
 					   G4double)
 {
   if(crossPerElectron) {
-    G4double t = dParticle->GetKineticEnergy();
-    G4double e = 2.0*electron_mass_c2*sqrt(1.0 + 0.5*t/electron_mass_c2);
-    G4LorentzVector inlv = dParticle->Get4Momentum();
+    G4double t = dParticle->GetKineticEnergy() + 2*electron_mass_c2;
+    G4LorentzVector inlv = dParticle->Get4Momentum() + 
+      G4LorentzVector(0.0,0.0,0.0,electron_mass_c2);
+    G4double e = inlv.m();
     G4ThreeVector inBoost = inlv.boostVector();
+    //G4cout << "G4eeToHadronsModel::SampleSecondaries e= " << e 
+    //	   << " " << inlv << " " << inBoost <<G4endl;
     if(e > emin) {
       G4DynamicParticle* gamma = GenerateCMPhoton(e);
       G4LorentzVector gLv = gamma->Get4Momentum();
       G4LorentzVector lv(0.0,0.0,0.0,e);
       lv -= gLv;
       G4double mass = lv.m();
+      //G4cout << "mass= " << mass << " " << lv << G4endl;
       G4ThreeVector boost = lv.boostVector();
+      //G4cout << "mass= " << mass << " " << boost << G4endl;
       const G4ThreeVector dir = gamma->GetMomentumDirection();
       model->SampleSecondaries(newp, mass, dir);
       G4int np = newp->size();
-      for(G4int j=0; j<np; j++) {
+      for(G4int j=0; j<np; ++j) {
 	G4DynamicParticle* dp = (*newp)[j];
 	G4LorentzVector v = dp->Get4Momentum();
 	v.boost(boost);
+        //G4cout << j << ". " << v << G4endl;
 	v.boost(inBoost);
+        //G4cout << "   " << v << G4endl;
 	dp->Set4Momentum(v);
+        t -= v.e();
       }
+      //G4cout << "Gamma   " << gLv << G4endl;
       gLv.boost(inBoost);
+      //G4cout << "        " << gLv << G4endl;
       gamma->Set4Momentum(gLv);
+      t -= gLv.e();
       newp->push_back(gamma);
+      if(fabs(t) > MeV) {
+	G4cout << "G4eeToHadronsModel::SampleSecondaries: Ebalance(MeV)= " 
+	       << t/MeV << " primary 4-momentum: " << inlv <<  G4endl;
+      }
     }
   }
 }
@@ -221,29 +239,29 @@ void G4eeToHadronsModel::SampleSecondaries(std::vector<G4DynamicParticle*>* newp
 void G4eeToHadronsModel::ComputeCMCrossSectionPerElectron()
 {
   for(G4int i=0; i<nbins; i++) {
-    G4double e  = crossPerElectron->GetLowEdgeEnergy(i);
+    G4double e  = crossPerElectron->Energy(i);
     G4double cs = 0.0;
     if(i > 0) {
-      G4double L   = 2.0*log(e/electron_mass_c2);
+      G4double L   = 2.0*G4Log(e/electron_mass_c2);
       G4double bt  = 2.0*fine_structure_const*(L - 1.0)/pi;
       G4double btm1= bt - 1.0;
       G4double del = 1. + fine_structure_const*(1.5*L + pi*pi/3. -2.)/pi;
       G4double s1  = crossBornPerElectron->Value(e);
-      G4double e1  = crossPerElectron->GetLowEdgeEnergy(i-1);
+      G4double e1  = crossPerElectron->Energy(i-1);
       G4double x1  = 1. - e1/e;
-      cs += s1*(del*pow(x1,bt) - bt*(x1 - 0.25*x1*x1));
+      cs += s1*(del*G4Exp(G4Log(x1)*bt) - bt*(x1 - 0.25*x1*x1));
       if(i > 1) {
 	G4double e2  = e1;
 	G4double x2  = x1;
 	G4double s2  = crossBornPerElectron->Value(e2);
-	G4double w2  = bt*(del*pow(x2,btm1) - 1.0 + 0.5*x2);
+	G4double w2  = bt*(del*G4Exp(G4Log(x2)*btm1) - 1.0 + 0.5*x2);
         G4double w1;      
 
-	for(G4int j=i-2; j>=0; j--) {
-	  e1  = crossPerElectron->GetLowEdgeEnergy(j);
+	for(G4int j=i-2; j>=0; --j) {
+	  e1  = crossPerElectron->Energy(j);
 	  x1  = 1. - e1/e;
 	  s1  = crossBornPerElectron->Value(e1);
-	  w1  = bt*(del*pow(x1,btm1) - 1.0 + 0.5*x1);
+	  w1  = bt*(del*G4Exp(G4Log(x1)*btm1) - 1.0 + 0.5*x1);
 	  cs += 0.5*(x1 - x2)*(w2*s2 + w1*s1);
 	  e2 = e1;
 	  x2 = x1;
@@ -262,58 +280,60 @@ G4DynamicParticle* G4eeToHadronsModel::GenerateCMPhoton(G4double e)
 {
   G4double x;
   G4DynamicParticle* gamma = 0;
-  G4double L   = 2.0*log(e/electron_mass_c2);
+  G4double L   = 2.0*G4Log(e/electron_mass_c2);
   G4double bt  = 2.0*fine_structure_const*(L - 1.)/pi;
   G4double btm1= bt - 1.0;
   G4double del = 1. + fine_structure_const*(1.5*L + pi*pi/3. -2.)/pi;
 
   G4double s0 = crossBornPerElectron->Value(e);
   G4double de = (emax - emin)/(G4double)nbins;
-  G4double x0 = min(de,e - emin)/e;
-  G4double ds = crossBornPerElectron->Value(e)
-              *(del*pow(x0,bt) - bt*(x0 - 0.25*x0*x0));
-  G4double e1 = e*(1. - x0);
-
+  G4double xmax = 0.5*(1.0 - (emin*emin)/(e*e));
+  G4double xmin = std::min(de/e, xmax);
+  G4double ds = s0*(del*G4Exp(G4Log(xmin)*bt) - bt*(xmin - 0.25*xmin*xmin));
+  G4double e1 = e*(1. - xmin);
+  
+  //G4cout << "e1= " << e1 << G4endl;
   if(e1 < emax && s0*G4UniformRand()<ds) { 
-    x = x0*pow(G4UniformRand(),1./bt);
+    x = xmin*G4Exp(G4Log(G4UniformRand())/bt);
   } else {    
 
-    x  = 1. - e1/e;
+    x = xmin;
     G4double s1 = crossBornPerElectron->Value(e1);
-    G4double w1 = bt*(del*pow(x,btm1) - 1.0 + 0.5*x);
+    G4double w1 = bt*(del*G4Exp(G4Log(x)*btm1) - 1.0 + 0.5*x);
     G4double grej = s1*w1;
     G4double f;
-    //    G4cout << "e= " << e/GeV << " epeak= " << epeak/GeV 
-    //       << " s1= " << s1 << " w1= " << w1 
-    //       << " grej= " << grej << G4endl;
-    // Above emax cross section is 0
+    /*
+     G4cout << "e(GeV)= " << e/GeV << " epeak(GeV)= " << epeak/GeV 
+           << " s1= " << s1 << " w1= " << w1 
+           << " grej= " << grej << G4endl;
+    */
+    // Above emax cross section is const
     if(e1 > emax) {
-      x  = 1. - emax/e;
+      x  = 0.5*(1. - (emax*emax)/(e*e));
       G4double s2 = crossBornPerElectron->Value(emax);
-      G4double w2 = bt*(del*pow(x,btm1) - 1.0 + 0.5*x);
+      G4double w2 = bt*(del*G4Exp(G4Log(x)*btm1) - 1.0 + 0.5*x);
       grej = s2*w2;
-      //  G4cout << "emax= " << emax << " s2= " << s2 << " w2= " << w2 
-      //   << " grej= " << grej << G4endl;
+      //G4cout << "emax= " << emax << " s2= " << s2 << " w2= " << w2 
+      // << " grej= " << grej << G4endl;
     }
 
     if(e1 > epeak) {
-      x  = 1. - epeak/e;
+      x = 0.5*(1.0 - (epeak*epeak)/(e*e));
       G4double s2 = crossBornPerElectron->Value(epeak);
-      G4double w2 = bt*(del*pow(x,btm1) - 1.0 + 0.5*x);
-      grej = max(grej,s2*w2);
+      G4double w2 = bt*(del*G4Exp(G4Log(x)*btm1) - 1.0 + 0.5*x);
+      grej = std::max(grej,s2*w2);
       //G4cout << "epeak= " << epeak << " s2= " << s2 << " w2= " << w2 
       //     << " grej= " << grej << G4endl;
     }
-    G4double xmin = 1. - e1/e;
-    if(e1 > emax) xmin = 1. - emax/e;
-    G4double xmax = 1. - emin/e;
     do {
       x = xmin + G4UniformRand()*(xmax - xmin);
-      G4double s2 = crossBornPerElectron->Value((1.0 - x)*e);
-      G4double w2 = bt*(del*pow(x,btm1) - 1.0 + 0.5*x);
-      //G4cout << "x= " << x << " xmin= " << xmin << " xmax= " << xmax
-      //     << " s2= " << s2 << " w2= " << w2 
-      //	   << G4endl;
+      
+      G4double s2 = crossBornPerElectron->Value(sqrt(1.0 - 2*x)*e);
+      G4double w2 = bt*(del*G4Exp(G4Log(x)*btm1) - 1.0 + 0.5*x);
+      /*
+      G4cout << "x= " << x << " xmin= " << xmin << " xmax= " << xmax
+           << " s2= " << s2 << " w2= " << w2 << G4endl;
+      */
       f = s2*w2;
       if(f > grej) {
 	G4cout << "G4DynamicParticle* G4eeToHadronsModel:WARNING "
@@ -324,6 +344,8 @@ G4DynamicParticle* G4eeToHadronsModel::GenerateCMPhoton(G4double e)
   }
 
   G4ThreeVector dir(0.0,0.0,1.0);
+  if(G4UniformRand() > 0.5) { dir.set(0.0,0.0,-1.0); }
+  //G4cout << "Egamma(MeV)= " << x*e <<  " " << dir << G4endl; 
   gamma = new G4DynamicParticle(theGamma,dir,x*e);
   return gamma;
 }

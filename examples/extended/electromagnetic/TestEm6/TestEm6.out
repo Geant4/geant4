@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-01-ref-00    (5-December-2014)
+ Geant4 version Name: geant4-10-01-patch-01    (27-March-2015)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -192,7 +192,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
  Run terminated.
 Run Summary
   Number of events processed : 5
-  User=0s Real=0s Sys=0s
+  User=0.01s Real=0s Sys=0s
 
  Number of process calls --->	GammaToMuPair : 5... write Root file : testem6_0.root - done
 
@@ -268,7 +268,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
     0   -250 m       0 fm      0 fm      1 TeV     0 eV      0 fm      0 fm       Iron   initStep
-    1   -247 m       0 fm      0 fm      1 TeV     0 eV   3.31 m    3.31 m        Iron      ee2hadr
+    1   -245 m       0 fm      0 fm      1 TeV     0 eV   4.94 m    4.94 m        Iron      ee2hadr
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e+,   Track ID = 1,   Parent ID = 0
@@ -285,7 +285,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
     0   -250 m       0 fm      0 fm      1 TeV     0 eV      0 fm      0 fm       Iron   initStep
-    1   -249 m       0 fm      0 fm      1 TeV     0 eV    1.3 m     1.3 m        Iron      ee2hadr
+    1   -246 m       0 fm      0 fm      0 eV      0 eV   3.55 m    3.55 m        Iron   AnnihiToMuPair
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e+,   Track ID = 1,   Parent ID = 0
@@ -293,7 +293,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
     0   -250 m       0 fm      0 fm      1 TeV     0 eV      0 fm      0 fm       Iron   initStep
-    1   -250 m       0 fm      0 fm      0 eV      0 eV   10.4 cm   10.4 cm       Iron   AnnihiToMuPair
+    1   -250 m       0 fm      0 fm      1 TeV     0 eV   36.6 cm   36.6 cm       Iron      ee2hadr
  Run terminated.
 Run Summary
   Number of events processed : 5

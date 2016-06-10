@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eeTo3PiModel.cc 82961 2014-07-21 09:20:49Z gcosmo $
+// $Id: G4eeTo3PiModel.cc 88977 2015-03-17 10:03:17Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -77,7 +77,7 @@ G4eeTo3PiModel::G4eeTo3PiModel(G4eeCrossSections* cr,
   massPi0 = G4PionZero::PionZero()->GetPDGMass();
   massOm  = 782.62*MeV;
   massPhi = 1019.46*MeV;
-  gmax    = 1.5e-8;
+  gmax    = 3.0e-8;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -139,8 +139,8 @@ void G4eeTo3PiModel::SampleSecondaries(std::vector<G4DynamicParticle*>* newp,
     // pi- 
     w1.set(-w2.px(), -w2.py(), -w2.pz(), w2.e());
 
-    w1.boost(-bst);
-    w2.boost(-bst);
+    w1.boost(bst);
+    w2.boost(bst);
 
     G4double px2 = w2.x();
     G4double py2 = w2.y();

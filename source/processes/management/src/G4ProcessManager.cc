@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProcessManager.cc 71231 2013-06-12 13:06:28Z gcosmo $
+// $Id: G4ProcessManager.cc 88995 2015-03-17 11:21:16Z gcosmo $
 //
 // 
 // --------------------------------------------------------------
@@ -799,8 +799,8 @@ void G4ProcessManager::SetProcessOrderingToSecond(
   }
 
   // set ordering parameter to 1
-  pAttr->ordProcVector[ivec-1] = 1;
-  pAttr->ordProcVector[ivec]   = 1;
+  pAttr->ordProcVector[ivec-1] = 0;
+  pAttr->ordProcVector[ivec]   = 0;
 
   // find insert position
   G4ProcessVector* pVector = theProcVector[ivec];

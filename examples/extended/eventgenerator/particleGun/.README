@@ -19,9 +19,9 @@
 
  These usages can be chosen by a UI command
 \verbatim 
-/gunExample/selectGunAction <actionID>
+/gunExample/selectGunAction actionID
 \endverbatim 
- where <actionID> corresponds to above cases.
+ where <i>actionID</i> corresponds to above cases.
  	
 \section ParticleGun_s1 Geometry construction
 

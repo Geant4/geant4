@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Element.cc 80747 2014-05-09 12:53:43Z gcosmo $
+// $Id: G4Element.cc 88957 2015-03-16 16:46:05Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -504,7 +504,7 @@ G4int G4Element::operator!=(const G4Element& right) const
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-std::ostream& operator<<(std::ostream& flux, G4Element* element)
+std::ostream& operator<<(std::ostream& flux, const G4Element* element)
 {
   std::ios::fmtflags mode = flux.flags();
   flux.setf(std::ios::fixed,std::ios::floatfield);
@@ -530,7 +530,7 @@ std::ostream& operator<<(std::ostream& flux, G4Element* element)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
- std::ostream& operator<<(std::ostream& flux, G4Element& element)
+ std::ostream& operator<<(std::ostream& flux, const G4Element& element)
 {
   flux << &element;        
   return flux;

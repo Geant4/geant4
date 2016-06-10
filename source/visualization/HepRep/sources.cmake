@@ -11,13 +11,14 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake 68732 2013-04-05 09:44:10Z gcosmo $
+# $Id: sources.cmake 89001 2015-03-17 11:47:01Z gcosmo $
 #
 #-----------------------------------------------------------------------
 
 # List external includes needed.
 include_directories(${CLHEP_INCLUDE_DIRS})
 include_directories(${ZLIB_INCLUDE_DIRS})
+include_directories(${USOLIDS_INCLUDE_DIRS})
 
 # List internal includes needed.
 include_directories(${CMAKE_SOURCE_DIR}/source/digits_hits/hits/include)

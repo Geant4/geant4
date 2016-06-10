@@ -1332,7 +1332,7 @@ inline void fill_infos_histo(List<StreamerInfo>& a_infos,std::ostream&) {
   info->add(new streamer_basic_type("fNbins","Number of bins",68,streamer_info::INT,"Int_t")); //4
   info->add(new streamer_basic_type("fXmin","low edge of first bin",72,streamer_info::DOUBLE,"Axis_t")); //8
   info->add(new streamer_basic_type("fXmax","upper edge of last bin",80,streamer_info::DOUBLE,"Axis_t")); //8
-  info->add(new streamer_basic_type("fXbins","Bin edges array in X",88,streamer_info::OBJECT_ANY,"TArrayD")); //12
+  info->add(new streamer_object_any("fXbins","Bin edges array in X",88,"TArrayD")); //12
   info->add(new streamer_basic_type("fFirst","first bin to display",100,streamer_info::INT,"Int_t")); //4
   info->add(new streamer_basic_type("fLast","last bin to display",104,streamer_info::INT,"Int_t")); //4
   info->add(new streamer_basic_type("fTimeDisplay","on/off displaying time values instead of numerics",108,streamer_info::UNSIGNED_CHAR,"Bool_t")); //4 (Bool_t = 1 + 3 for alignement)
@@ -1410,9 +1410,9 @@ inline void fill_infos_histo(List<StreamerInfo>& a_infos,std::ostream&) {
   info->add(new streamer_base("TAttFill","Fill area attributes",40,TAttFill_version)); //8
   info->add(new streamer_base("TAttMarker","Marker attributes",48,TAttMarker_version)); //12
   info->add(new streamer_basic_type("fNcells","number of bins(1D), cells (2D) +U/Overflows",60,streamer_info::INT,"Int_t")); //4
-  info->add(new streamer_basic_type("fXaxis","X axis descriptor",64,streamer_info::OBJECT_ANY,"TAxis")); //128
-  info->add(new streamer_basic_type("fYaxis","Y axis descriptor",192,streamer_info::OBJECT_ANY,"TAxis")); //128
-  info->add(new streamer_basic_type("fZaxis","Z axis descriptor",320,streamer_info::OBJECT_ANY,"TAxis")); //128
+  info->add(new streamer_object("fXaxis","X axis descriptor",64,"TAxis")); //128
+  info->add(new streamer_object("fYaxis","Y axis descriptor",192,"TAxis")); //128
+  info->add(new streamer_object("fZaxis","Z axis descriptor",320,"TAxis")); //128
   info->add(new streamer_basic_type("fBarOffset","(1000*offset) for bar charts or legos",448,streamer_info::SHORT,"Short_t"));//2
   info->add(new streamer_basic_type("fBarWidth","(1000*width) for bar charts or legos",450,streamer_info::SHORT,"Short_t"));//2
   info->add(new streamer_basic_type("fEntries","Number of entries",452,streamer_info::DOUBLE,"Stat_t"));//2
@@ -1423,10 +1423,10 @@ inline void fill_infos_histo(List<StreamerInfo>& a_infos,std::ostream&) {
   info->add(new streamer_basic_type("fMaximum","Maximum value for plotting",492,streamer_info::DOUBLE,"Double_t"));//8
   info->add(new streamer_basic_type("fMinimum","Minimum value for plotting",500,streamer_info::DOUBLE,"Double_t"));//8
   info->add(new streamer_basic_type("fNormFactor","Normalization factor",508,streamer_info::DOUBLE,"Double_t"));//8
-  info->add(new streamer_basic_type("fContour","Array to display contour levels",516,streamer_info::OBJECT_ANY,"TArrayD"));//12
-  info->add(new streamer_basic_type("fSumw2","Array of sum of squares of weights",528,streamer_info::OBJECT_ANY,"TArrayD"));//12
+  info->add(new streamer_object_any("fContour","Array to display contour levels",516,"TArrayD"));//12
+  info->add(new streamer_object_any("fSumw2","Array of sum of squares of weights",528,"TArrayD"));//12
   info->add(new streamer_basic_type("fOption","histogram options",540,streamer_info::TSTRING,"TString"));//8
-  info->add(new streamer_basic_type("fFunctions","->Pointer to list of functions (fits and user)",548,streamer_info::OBJECT_ARROW,"TList*"));//4
+  info->add(new streamer_object_pointer("fFunctions","->Pointer to list of functions (fits and user)",548,"TList*"));//4
   //!fDirectory offset 552 : //4
   //!fDimension offset 556 : //4
   //!fIntegral  offset 560 : //4
@@ -1494,7 +1494,7 @@ inline void fill_infos_histo(List<StreamerInfo>& a_infos,std::ostream&) {
   a_infos.push_back(info);
 
   info->add(new streamer_base("TH1D","1-Dim histograms (one double per channel)",0,TH1D_version));//580
-  info->add(new streamer_basic_type("fBinEntries","number of entries per bin",580,streamer_info::OBJECT_ANY,"TArrayD"));//12
+  info->add(new streamer_object_any("fBinEntries","number of entries per bin",580,"TArrayD"));//12
   info->add(new streamer_basic_type("fErrorMode","Option to compute errors",592,streamer_info::INT,"EErrorType"));//4
   info->add(new streamer_basic_type("fYmin","Lower limit in Y (if set)",596,streamer_info::DOUBLE,"Double_t"));//8
   info->add(new streamer_basic_type("fYmax","Upper limit in Y (if set)",604,streamer_info::DOUBLE,"Double_t"));//8
@@ -1512,7 +1512,7 @@ inline void fill_infos_histo(List<StreamerInfo>& a_infos,std::ostream&) {
   //bases :
   scs(check,"TH1");
   //members :
-  scs(check,"fScaleFactor");
+  scs(check,"fScalefactor");
   scs(check,"Double_t");
 
   scs(check,"fTsumwy");
@@ -1528,7 +1528,7 @@ inline void fill_infos_histo(List<StreamerInfo>& a_infos,std::ostream&) {
   a_infos.push_back(info);
 
   info->add(new streamer_base("TH1","1-Dim histogram base class",0,TH1_version));//568
-  info->add(new streamer_basic_type("fScaleFactor","Scale Factor",568,streamer_info::DOUBLE,"Double_t"));//8
+  info->add(new streamer_basic_type("fScalefactor","Scale Factor",568,streamer_info::DOUBLE,"Double_t"));//8
   info->add(new streamer_basic_type("fTsumwy","Total Sum of weight*Y",576,streamer_info::DOUBLE,"Double_t"));//8
   info->add(new streamer_basic_type("fTsumwy2","Total Sum of weight*Y*Y",584,streamer_info::DOUBLE,"Double_t"));//8
   info->add(new streamer_basic_type("fTsumwxy","Total Sum of weight*X*Y",592,streamer_info::DOUBLE,"Double_t"));//8
@@ -1598,7 +1598,7 @@ inline void fill_infos_histo(List<StreamerInfo>& a_infos,std::ostream&) {
   a_infos.push_back(info);
 
   info->add(new streamer_base("TH2D","2-Dim histograms (one double per channel)",0,TH2D_version));//612
-  info->add(new streamer_basic_type("fBinEntries","number of entries per bin",612,streamer_info::OBJECT_ANY,"TArrayD"));//12
+  info->add(new streamer_object_any("fBinEntries","number of entries per bin",612,"TArrayD"));//12
   info->add(new streamer_basic_type("fErrorMode","Option to compute errors",624,streamer_info::INT,"EErrorType"));//4
   info->add(new streamer_basic_type("fZmin","Lower limit in Z (if set)",628,streamer_info::DOUBLE,"Double_t"));//8
   info->add(new streamer_basic_type("fZmax","Upper limit in Z (if set)",636,streamer_info::DOUBLE,"Double_t"));//8

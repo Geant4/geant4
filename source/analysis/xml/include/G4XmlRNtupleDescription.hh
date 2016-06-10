@@ -32,8 +32,12 @@
 #ifndef G4XmlRNtupleDescription_h
 #define G4XmlRNtupleDescription_h 1
 
+#include <map>
+
 #include "tools/raxml"
 #include "tools/ntuple_binding"
+
+#include <map>
 
 namespace tools { 
 class ntuple_binding;
@@ -45,16 +49,40 @@ struct G4XmlRNtupleDescription
     tools::aida::ntuple* rntuple) 
     :  fNtuple(rntuple),
        fNtupleBinding(new tools::ntuple_binding()),
+       fIVectorBindingMap(),
+       fFVectorBindingMap(),
+       fDVectorBindingMap(),
        fIsInitialized(false) {}
 
   ~G4XmlRNtupleDescription()
       { 
         delete fNtupleBinding;
         delete fNtuple;   // CHECK
+
+        {std::map< tools::aida::ntuple*, std::vector<int>* >::iterator it;
+        for ( it = fIVectorBindingMap.begin(); 
+              it != fIVectorBindingMap.end(); it++) {
+          delete it->first;        
+        }}
+        {std::map<tools::aida::ntuple*, std::vector<float>* >::iterator it;
+        for ( it = fFVectorBindingMap.begin(); 
+              it != fFVectorBindingMap.end(); it++) {
+          delete it->first;        
+        }}
+        {std::map<tools::aida::ntuple*, std::vector<double>* >::iterator it;
+        for ( it = fDVectorBindingMap.begin(); 
+              it != fDVectorBindingMap.end(); it++) {
+          delete it->first;        
+        }}
+
       }
 
   tools::aida::ntuple* fNtuple; 
   tools::ntuple_binding* fNtupleBinding;
+  std::map<tools::aida::ntuple*, std::vector<int>* >    fIVectorBindingMap;           
+  std::map<tools::aida::ntuple*, std::vector<float>* >  fFVectorBindingMap;           
+  std::map<tools::aida::ntuple*, std::vector<double>* > fDVectorBindingMap;           
+
   G4bool fIsInitialized;
   
   private:

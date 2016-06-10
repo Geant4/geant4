@@ -40,8 +40,6 @@ public:
   ~GammaKnifePrimaryGeneratorAction();
   
 public:
-  void SetDefaultPrimaryParticle();
-
   void GeneratePrimaries(G4Event*);
 
 private:

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UniversalFluctuation.cc 81365 2014-05-27 12:56:32Z gcosmo $
+// $Id: G4UniversalFluctuation.cc 88979 2015-03-17 10:10:21Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -147,6 +147,8 @@ G4UniversalFluctuation::SampleFluctuations(const G4MaterialCutsCouple* couple,
   if (meanLoss < minLoss) { return meanLoss; }
 
   if(dp->GetDefinition() != particle) { InitialiseMe(dp->GetDefinition()); }
+
+  rndmEngineF = G4Random::getTheEngine();
   
   G4double tau   = tkin * m_Inv_particleMass;            
   G4double gam   = tau + 1.0;

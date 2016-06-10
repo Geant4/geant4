@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Isotope.hh 68070 2013-03-13 15:03:06Z gcosmo $
+// $Id: G4Isotope.hh 88957 2015-03-16 16:46:05Z gcosmo $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
@@ -113,10 +113,10 @@ class G4Isotope
     size_t GetIndex() const {return fIndexInTable;}
     
     friend
-    std::ostream& operator<<(std::ostream&, G4Isotope*);
+    std::ostream& operator<<(std::ostream&, const G4Isotope*);
     
     friend
-    std::ostream& operator<<(std::ostream&, G4Isotope&);
+    std::ostream& operator<<(std::ostream&, const G4Isotope&);
     
     friend
     std::ostream& operator<<(std::ostream&, G4IsotopeTable);

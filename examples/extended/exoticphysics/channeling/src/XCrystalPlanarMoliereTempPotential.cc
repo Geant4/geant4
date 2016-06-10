@@ -60,7 +60,7 @@ ComputeECForSinglePlane(G4double vX,
     
     G4double vTau[3];
     for(unsigned int i=0;i<3;i++){
-        vTau[i] = (std::pow( vTVA / aTF * fBeta[i] , 2. ) / 2.0);
+        vTau[i] = (pow( vTVA / aTF * fBeta[i] , 2. ) / 2.0);
     }
 
     
@@ -68,11 +68,11 @@ ComputeECForSinglePlane(G4double vX,
     
     for(unsigned int i=0;i<3;i++){
         G4double vTemp = 0.;
-        vTemp += ( std::exp(-vX/ aTF * fBeta[i] ) *
-                  (1.-CLHEP::HepStat::erfQ((vTVA / aTF * fBeta[i] - vX/ vTVA) / std::pow(2.,0.5))) );
-        vTemp += ( std::exp( vX/ aTF * fBeta[i] ) *
-                  (1.-CLHEP::HepStat::erfQ((vTVA / aTF * fBeta[i] + vX/ vTVA) / std::pow(2.,0.5))) );
-        vValueForSinglePlane += ( vTemp * fGamma[i] * std::exp( vTau[i] ) /2.0);
+        vTemp += ( exp(-vX/ aTF * fBeta[i] ) *
+                  (1.-CLHEP::HepStat::erfQ((vTVA / aTF * fBeta[i] - vX/ vTVA) / pow(2.,0.5))) );
+        vTemp += ( exp( vX/ aTF * fBeta[i] ) *
+                  (1.-CLHEP::HepStat::erfQ((vTVA / aTF * fBeta[i] + vX/ vTVA) / pow(2.,0.5))) );
+        vValueForSinglePlane += ( vTemp * fGamma[i] * exp( vTau[i] ) /2.0);
     }
     
     vValueForSinglePlane *= 2. * CLHEP::pi;

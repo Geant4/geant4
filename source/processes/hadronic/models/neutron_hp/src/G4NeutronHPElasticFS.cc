@@ -142,9 +142,9 @@
              theData >> coeff;
              theCoefficients->SetCoeff(i, ii+1, coeff); // @@@HPW@@@
           }
+          tE_of_repFlag3 = energy; //the last one will be transition energy from Legendre to table
        } 
 
-       tE_of_repFlag3 = energy; 
 
        G4int nEnergy_Prob;
        theData >> nEnergy_Prob;

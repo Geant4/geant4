@@ -150,8 +150,8 @@ protected:
     m_in_range_entries = 0;
     m_in_range_Sw = 0;
     m_in_range_Sw2 = 0;
-    m_in_range_Sxw.resize(m_dimension,0);
-    m_in_range_Sx2w.resize(m_dimension,0);
+    m_in_range_Sxw.assign(m_dimension,0);
+    m_in_range_Sx2w.assign(m_dimension,0);
   }
 public:
   void update_fast_getters() {

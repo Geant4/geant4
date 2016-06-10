@@ -31,6 +31,33 @@
 #include "G4XmlRNtupleDescription.hh"
 #include "G4AnalysisManagerState.hh"
 
+// 
+// utility function (to be provided in tools)
+//
+
+namespace tools {
+namespace aida {
+template <class T>
+bool to_vector(base_ntu& a_ntu,std::vector<T>& a_vec) {
+  a_vec.clear();
+  const std::vector<base_col*>& cols = a_ntu.cols();
+  if(cols.empty()) return false;
+  base_col* _base_col = cols.front();
+  aida_col<T>* _col = safe_cast<base_col, aida_col<T> >(*_base_col);
+  if(!_col) return false;
+  a_ntu.start();
+  uint64 _rows = a_ntu.rows();
+  a_vec.resize(_rows);
+  T v;
+ {for(uint64 row=0;row<_rows;row++) {
+    if(!a_ntu.next()) {a_vec.clear();return false;}
+    if(!_col->get_entry(v)) {a_vec.clear();return false;}
+    a_vec[row] = v;
+  }}
+  return true;
+}
+}}
+
 //_____________________________________________________________________________
 G4XmlRNtupleManager::G4XmlRNtupleManager(const G4AnalysisManagerState& state)
  : G4VRNtupleManager(state),
@@ -318,8 +345,14 @@ G4bool G4XmlRNtupleManager::SetNtupleIColumn(G4int ntupleId,
     = GetNtupleInFunction(ntupleId, "SetNtupleIColumn");
   if ( ! ntupleDescription )  return false;   
   
+  // not supported
+  //tools::ntuple_binding* ntupleBinding = ntupleDescription->fNtupleBinding;
+  //ntupleBinding->add_column(columnName, vector);
+
+  tools::aida::ntuple* subNtuple = new tools::aida::ntuple(G4cout, columnName);
+  ntupleDescription->fIVectorBindingMap[subNtuple] = &vector;
   tools::ntuple_binding* ntupleBinding = ntupleDescription->fNtupleBinding;
-  ntupleBinding->add_column(columnName, vector);
+  ntupleBinding->add_column(columnName, *subNtuple);
 
 #ifdef G4VERBOSE
   if ( fState.GetVerboseL2() ) {
@@ -351,8 +384,14 @@ G4bool G4XmlRNtupleManager::SetNtupleFColumn(G4int ntupleId,
     = GetNtupleInFunction(ntupleId, "SetNtupleFColumn");
   if ( ! ntupleDescription )  return false;   
   
+  // not supported
+  //tools::ntuple_binding* ntupleBinding = ntupleDescription->fNtupleBinding;
+  //ntupleBinding->add_column(columnName, vector);
+
+  tools::aida::ntuple* subNtuple = new tools::aida::ntuple(G4cout, columnName);
+  ntupleDescription->fFVectorBindingMap[subNtuple] = &vector;
   tools::ntuple_binding* ntupleBinding = ntupleDescription->fNtupleBinding;
-  ntupleBinding->add_column(columnName, vector);
+  ntupleBinding->add_column(columnName, *subNtuple);
 
 #ifdef G4VERBOSE
   if ( fState.GetVerboseL2() ) {
@@ -384,8 +423,14 @@ G4bool G4XmlRNtupleManager::SetNtupleDColumn(G4int ntupleId,
     = GetNtupleInFunction(ntupleId, "SetNtupleDColumn");
   if ( ! ntupleDescription )  return false;   
   
+  // not supported
+  //tools::ntuple_binding* ntupleBinding = ntupleDescription->fNtupleBinding;
+  //ntupleBinding->add_column(columnName, vector);
+
+  tools::aida::ntuple* subNtuple = new tools::aida::ntuple(G4cout, columnName);
+  ntupleDescription->fDVectorBindingMap[subNtuple] = &vector;
   tools::ntuple_binding* ntupleBinding = ntupleDescription->fNtupleBinding;
-  ntupleBinding->add_column(columnName, vector);
+  ntupleBinding->add_column(columnName, *subNtuple);
 
 #ifdef G4VERBOSE
   if ( fState.GetVerboseL2() ) {
@@ -448,6 +493,24 @@ G4bool G4XmlRNtupleManager::GetNtupleRow(G4int ntupleId)
                   "Analysis_WR021", JustWarning, description);
       return false;
     }
+
+    // fill vector from sub ntuples
+
+    {std::map<tools::aida::ntuple*, std::vector<int>* >::iterator it;
+    for ( it = ntupleDescription->fIVectorBindingMap.begin(); 
+          it != ntupleDescription->fIVectorBindingMap.end(); it++) {
+      tools::aida::to_vector<int>(*(it->first), *(it->second));        
+    }}
+    {std::map<tools::aida::ntuple*, std::vector<float>* >::iterator it;
+    for ( it = ntupleDescription->fFVectorBindingMap.begin(); 
+          it != ntupleDescription->fFVectorBindingMap.end(); it++) {
+      tools::aida::to_vector<float>(*(it->first), *(it->second));        
+    }}
+    {std::map<tools::aida::ntuple*, std::vector<double>* >::iterator it;
+    for ( it = ntupleDescription->fDVectorBindingMap.begin(); 
+          it != ntupleDescription->fDVectorBindingMap.end(); it++) {
+      tools::aida::to_vector<double>(*(it->first), *(it->second));        
+    }}
   }  
 
 #ifdef G4VERBOSE

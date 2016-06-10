@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4WentzelVIRelModel.cc 80656 2014-05-06 08:31:39Z gcosmo $
+// $Id: G4WentzelVIRelModel.cc 88979 2015-03-17 10:10:21Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -173,6 +173,7 @@ void G4WentzelVIRelModel::StartTracking(G4Track* track)
 {
   SetupParticle(track->GetDynamicParticle()->GetDefinition());
   inside = false;
+  G4VEmModel::StartTracking(track);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

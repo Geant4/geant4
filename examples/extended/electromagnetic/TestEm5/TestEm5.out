@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-01-ref-00    (5-December-2014)
+ Geant4 version Name: geant4-10-01-patch-01    (27-March-2015)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -420,7 +420,7 @@ Index : 1     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 100000
-  User=4.28s Real=4.3s Sys=0.01s
+  User=3.93s Real=3.94s Sys=0s
 
  ======================== run summary ======================
 
@@ -855,7 +855,7 @@ Index : 2     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 50000
-  User=3.3s Real=3.31s Sys=0s
+  User=3.18s Real=3.17s Sys=0s
 
  ======================== run summary ======================
 
@@ -1301,7 +1301,7 @@ Index : 3     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 50000
-  User=7.2s Real=7.42s Sys=0.01s
+  User=7.56s Real=7.56s Sys=0s
 
  ======================== run summary ======================
 
@@ -1746,7 +1746,7 @@ Index : 4     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 50000
-  User=2.1s Real=2.11s Sys=0s
+  User=2.3s Real=2.3s Sys=0s
 
  ======================== run summary ======================
 
@@ -2195,7 +2195,7 @@ Index : 5     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 50000
-  User=23.66s Real=23.74s Sys=0s
+  User=26.11s Real=26.12s Sys=0s
 
  ======================== run summary ======================
 
@@ -2237,7 +2237,6 @@ Run Summary
 ----------------------------------------
 #
 G4 kernel has come to Quit state.
-Total navigation history collections cleaned: 8
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 9 of which, static: 0
 Dynamic pools deleted: 9 / Total memory freed: 0.049 Mb

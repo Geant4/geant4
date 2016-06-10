@@ -786,14 +786,14 @@ void G4NeutronHPInelasticCompFS::two_body_reaction ( G4DynamicParticle* proj, G4
    }
 
    G4double beta = std::sqrt ( A*(A+1-AA)/AA*( 1 + (1+A)/A*Q/E1 ) );
-   G4double gamma = AA/(A+1-AA)*beta;
+   //G4double gamma = AA/(A+1-AA)*beta;
    G4double E3 = AA/std::pow((1+A),2)*(beta*beta+1+2*beta*mu)*E1;
    G4double omega3 = (1+beta*mu)/std::sqrt(beta*beta+1+2*beta*mu);
    if ( omega3 > 1.0 ) omega3 = 1.0;
 
-   G4double E4 = (A+1-AA)/std::pow((1+A),2)*(gamma*gamma+1-2*gamma*mu)*E1;
-   G4double omega4 = (1-gamma*mu)/std::sqrt(gamma*gamma+1-2*gamma*mu);
-   if ( omega4 > 1.0 ) omega4 = 1.0;
+   //G4double E4 = (A+1-AA)/std::pow((1+A),2)*(gamma*gamma+1-2*gamma*mu)*E1;
+   //G4double omega4 = (1-gamma*mu)/std::sqrt(gamma*gamma+1-2*gamma*mu);
+   //if ( omega4 > 1.0 ) omega4 = 1.0;
 
    hadron->SetKineticEnergy ( E3 );
    
@@ -801,9 +801,9 @@ void G4NeutronHPInelasticCompFS::two_body_reaction ( G4DynamicParticle* proj, G4
    G4double pmag = std::sqrt ((E3+M)*(E3+M)-M*M) ;
    G4ThreeVector p ( 0 , pmag*std::sqrt(1-omega3*omega3), pmag*omega3 );
 
-   G4double M4 = residual->GetDefinition()->GetPDGMass();
-   G4double pmag4 = std::sqrt ((E4+M4)*(E4+M4)-M4*M4) ;
-   G4ThreeVector p4 ( 0 , -pmag4*std::sqrt(1-omega4*omega4), pmag4*omega4 );
+   //G4double M4 = residual->GetDefinition()->GetPDGMass();
+   //G4double pmag4 = std::sqrt ((E4+M4)*(E4+M4)-M4*M4) ;
+   //G4ThreeVector p4 ( 0 , -pmag4*std::sqrt(1-omega4*omega4), pmag4*omega4 );
 
 // Rotate to orginal target rest flame.
    p *= rot.inverse();
@@ -811,8 +811,8 @@ void G4NeutronHPInelasticCompFS::two_body_reaction ( G4DynamicParticle* proj, G4
 // Now hadron had 4 momentum in target rest flame 
 
 // TypeA
-   p4 *= rot.inverse();
-   residual->SetMomentum ( p4 );
+   //p4 *= rot.inverse();
+   //residual->SetMomentum ( p4 );
 
 //TypeB1
    //residual->Set4Momentum ( p4_residual );

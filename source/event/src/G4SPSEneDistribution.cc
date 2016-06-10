@@ -58,7 +58,7 @@
 #include "G4AutoLock.hh"
 #include "G4Threading.hh"
 
-G4SPSEneDistribution::G4SPSEneDistribution(): eneRndm(0), Splinetemp(0)
+G4SPSEneDistribution::G4SPSEneDistribution(): Epnflag(false),eneRndm(0),Splinetemp(0)
 {
     G4MUTEXINIT(mutex);
 	//
@@ -1145,45 +1145,45 @@ void G4SPSEneDistribution::GeneratePowEnergies(G4bool bArb = false)
 
 void G4SPSEneDistribution::GenerateBiasPowEnergies()//G4double& ene,G4double& wweight)
 {
-	// Method to generate particle energies distributed as
-	// in biased power-law and calculate its weight
+  // Method to generate particle energies distributed as
+  // in biased power-law and calculate its weight
     
     threadLocal_t& params = threadLocalData.Get();
     
     G4double rndm;
-	G4double emina, emaxa, emin, emax;
+    G4double emina, emaxa, emin, emax;
 
-	G4double normal = 1.;
+    G4double normal = 1.;
 
-	emin = params.Emin;
-	emax = params.Emax;
-	//	if (EnergyDisType == "Arb") { 
-	//  emin = ArbEmin;
-	//  emax = ArbEmax;
-	//}
+    emin = params.Emin;
+    emax = params.Emax;
+    //	if (EnergyDisType == "Arb") {
+    //  emin = ArbEmin;
+    //  emax = ArbEmax;
+    //}
 
-	rndm = eneRndm->GenRandEnergy();
+    rndm = eneRndm->GenRandEnergy();
 
-	if (biasalpha != -1.)
+    if (biasalpha != -1.)
     {
         emina = std::pow(emin, biasalpha + 1);
         emaxa = std::pow(emax, biasalpha + 1);
-		G4double ee = ((rndm * (emaxa - emina)) + emina);
-		params.particle_energy = std::pow(ee, (1. / (biasalpha + 1.)));
-		normal = 1./(1+biasalpha) * (emaxa - emina);
-	}
+        G4double ee = ((rndm * (emaxa - emina)) + emina);
+        params.particle_energy = std::pow(ee, (1. / (biasalpha + 1.)));
+        normal = 1./(1+biasalpha) * (emaxa - emina);
+    }
     else
     {
-		G4double ee = (std::log(emin) + rndm * (std::log(emax) - std::log(emin)));
-		params.particle_energy = std::exp(ee);
-		normal = std::log(emax) - std::log(emin) ;
-	}
-	params.weight = GetProbability(params.particle_energy)
-                  / (std::pow(params.particle_energy,biasalpha)/normal);
+        G4double ee = (std::log(emin) + rndm * (std::log(emax) - std::log(emin)));
+        params.particle_energy = std::exp(ee);
+        normal = std::log(emax) - std::log(emin) ;
+    }
+    params.weight = GetProbability(params.particle_energy)
+                      / (std::pow(params.particle_energy,biasalpha)/normal);
 
-	if (verbosityLevel >= 1)
+    if (verbosityLevel >= 1)
     {
-		G4cout << "Energy is " << params.particle_energy << G4endl;
+        G4cout << "Energy is " << params.particle_energy << G4endl;
     }
 }
 
@@ -1702,8 +1702,6 @@ void G4SPSEneDistribution::ReSetHist(G4String atype)
 		IPDFEnergyExist = false;
 		Emin = 0.;
 		Emax = 1e30;
-        threadLocalData.Get().Emin = Emin;
-        threadLocalData.Get().Emax = Emax;
 	}
     else if (atype == "arb")
     {
@@ -1726,7 +1724,7 @@ G4double G4SPSEneDistribution::GenerateOne(G4ParticleDefinition* a)
 {
     //Copy global shared status to thread-local one
     threadLocal_t& params = threadLocalData.Get();
-	params.particle_definition=a;
+    params.particle_definition=a;
     params.particle_energy=-1;
     params.Emax = Emax;
     params.Emin = Emin;
@@ -1735,13 +1733,13 @@ G4double G4SPSEneDistribution::GenerateOne(G4ParticleDefinition* a)
     params.grad = grad;
     params.cept = cept;
     params.weight = weight;
-	//particle_energy = -1.;
-	while ((EnergyDisType == "Arb") ? (params.particle_energy < ArbEmin || params.particle_energy > ArbEmax) : (params.particle_energy < params.Emin|| params.particle_energy > params.Emax))
+    //particle_energy = -1.;
+    while ((EnergyDisType == "Arb") ? (params.particle_energy < ArbEmin || params.particle_energy > ArbEmax) : (params.particle_energy < params.Emin|| params.particle_energy > params.Emax))
     {
-		if (Biased)
+        if (Biased)
         {
-			GenerateBiasPowEnergies();
-		}
+            GenerateBiasPowEnergies();
+        }
         else
         {
 			if (EnergyDisType == "Mono")

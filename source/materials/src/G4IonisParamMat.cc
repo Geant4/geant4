@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4IonisParamMat.cc 83992 2014-09-26 09:26:06Z gcosmo $
+// $Id: G4IonisParamMat.cc 88957 2015-03-16 16:46:05Z gcosmo $
 //
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
@@ -298,7 +298,7 @@ void G4IonisParamMat::ComputeDensityEffect()
     G4double Pressure = fMaterial->GetPressure();
     G4double Temp     = fMaterial->GetTemperature();
       
-    G4double DensitySTP = Density*STP_Pressure*Temp/(Pressure*STP_Temperature);
+    G4double DensitySTP = Density*STP_Pressure*Temp/(Pressure*NTP_Temperature);
 
     G4double ParCorr = G4Log(Density/DensitySTP);
   

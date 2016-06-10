@@ -153,13 +153,7 @@ G4Track* theTrack = aStep->GetTrack();
     << "   POS     " << aStep->GetTrack()->GetPosition().x()
     << G4endl;*/
     
-    
-
-
-
-
-
-
+   
 if ((namePre=="PhysicEntranceWindow")   &&  
     (aStep->GetTrack()->GetDefinition()->GetParticleName() == "e-") && (PreStep->GetStepStatus() == fGeomBoundary))
 {       

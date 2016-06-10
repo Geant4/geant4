@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoreLogColorMap.cc 67992 2013-03-13 10:59:57Z gcosmo $
+// $Id: G4ScoreLogColorMap.cc 89027 2015-03-18 08:37:30Z gcosmo $
 //
 
 #include "G4ScoreLogColorMap.hh"
@@ -93,7 +93,10 @@ void G4ScoreLogColorMap::GetMapColor(G4double val, G4double color[4])
   }
 
   G4double logmin = 0., logmax = 0., logval = 0.;
-  if(lmin) logmin = std::log10(fMinVal);
+  if(lmin) {
+    if(fMinVal > 0.) logmin = std::log10(fMinVal);
+    else logmin =0.;
+  }
   if(lmax) logmax = std::log10(fMaxVal);
   if(lval) logval = std::log10(val);
   G4double value = 0.;
@@ -107,12 +110,12 @@ void G4ScoreLogColorMap::GetMapColor(G4double val, G4double color[4])
   struct ColorMap {
     G4double val;
     G4double rgb[4];
-  } colormap[NCOLOR] = {{0.0, {1., 1., 1., 1.}}, // value, r, g, b, alpha
-			{0.2, {0., 0., 1., 1.}},
-			{0.4, {0., 1., 1., 1.}},
-			{0.6, {0., 1., 0., 1.}},
-			{0.8, {1., 1., 0., 1.}},
-			{1.0, {1., 0., 0., 1.}}};
+  } colormap[] = {{0.0, {1., 1., 1., 1.}}, // value, r, g, b, alpha
+                  {0.2, {0., 0., 1., 1.}},
+                  {0.4, {0., 1., 1., 1.}},
+                  {0.6, {0., 1., 0., 1.}},
+                  {0.8, {1., 1., 0., 1.}},
+                  {1.0, {1., 0., 0., 1.}}};
   
   // search
   G4int during[2] = {0, 0};
@@ -130,6 +133,7 @@ void G4ScoreLogColorMap::GetMapColor(G4double val, G4double color[4])
   for(int i = 0; i < 4; i++) {
     color[i] = (b*colormap[during[0]].rgb[i] + a*colormap[during[1]].rgb[i])
       /(colormap[during[1]].val - colormap[during[0]].val);
+    if(color[i] > 1.) color[i] = 1.;
   } 
 
 }
@@ -179,7 +183,7 @@ void G4ScoreLogColorMap::DrawColorChartText(G4int _nPoint) {
   //if(max > 0.) max = std::ceil(max);
   //else max = std::floor(max);
 
-  G4double c[4];
+  G4double c[4] = {1., 1., 1., 1.};
   G4Colour black(0., 0., 0.);
   for(int n = 0; n < _nPoint; n++) {
     G4double a = n/(_nPoint-1.), b = 1.-a;
@@ -205,12 +209,12 @@ void G4ScoreLogColorMap::DrawColorChartText(G4int _nPoint) {
     std::ostringstream oss;
     oss << std::setw(8) << std::setprecision(1) << std::scientific << std::pow(10., v);
     std::string str = oss.str();
-    G4String value(str.c_str());
+    G4String value(str);//.c_str());
     G4Text text(value, G4Point3D(-0.9, -0.9+0.05*n, 0));
     G4double size = 12.;
     text.SetScreenSize(size);
     //this->GetMapColor(std::pow(10., v), c);
-    G4Colour color(c[0], c[1], c[2]);
+    G4Colour color(1.,1.,1.);//c[0], c[1], c[2], 1.);
     G4VisAttributes att(color);
     text.SetVisAttributes(&att);
 

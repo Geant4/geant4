@@ -81,7 +81,7 @@ G4EmParametersMessenger::G4EmParametersMessenger(G4EmParameters* ptr)
   rangeCmd->SetGuidance("Enable/disable CSDA range calculation");
   rangeCmd->SetParameterName("range",true);
   rangeCmd->SetDefaultValue(false);
-  rangeCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  rangeCmd->AvailableForStates(G4State_PreInit);
 
   lpmCmd = new G4UIcmdWithABool("/process/eLoss/LPM",this);
   lpmCmd->SetGuidance("Enable/disable LPM effect calculation");

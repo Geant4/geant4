@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MultiNavigator.hh 66356 2012-12-18 09:02:32Z gcosmo $
+// $Id: G4MultiNavigator.hh 89289 2015-03-31 08:35:38Z gcosmo $
 //
 //
 // class G4MultiNavigator
@@ -164,7 +164,7 @@ class G4MultiNavigator : public G4Navigator
    // STATE Information 
 
    G4int   fNoActiveNavigators; 
-   static const G4int fMaxNav = 8;   // rename to kMaxNoNav ??
+   static const G4int fMaxNav = 16;   // rename to kMaxNoNav ??
    G4VPhysicalVolume* fLastMassWorld; 
 
    // Global state (retained during stepping for one track

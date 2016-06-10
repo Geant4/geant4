@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NeutronRadCapture.cc 79977 2014-03-27 15:16:59Z gcosmo $
+// $Id: G4NeutronRadCapture.cc 88987 2015-03-17 10:39:50Z gcosmo $
 //
 //
 // Physics model class G4NeutronRadCapture 
@@ -57,6 +57,7 @@ G4NeutronRadCapture::G4NeutronRadCapture()
   SetMinEnergy( 0.0*GeV );
   SetMaxEnergy( 100.*TeV );
   photonEvaporation = new G4PhotonEvaporation();
+  photonEvaporation->SetICM(true);
   //photonEvaporation = 0;
   theTableOfIons = G4ParticleTable::GetParticleTable()->GetIonTable();
 }

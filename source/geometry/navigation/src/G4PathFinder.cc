@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PathFinder.cc 81060 2014-05-20 09:12:39Z gcosmo $
+// $Id: G4PathFinder.cc 89289 2015-03-31 08:35:38Z gcosmo $
 // GEANT4 tag $ Name:  $
 // 
 // class G4PathFinder Implementation
@@ -1153,6 +1153,15 @@ G4PathFinder::DoNextCurvedStep( const G4FieldTrack &initialState,
   G4FieldTrack  fieldTrack= initialState;
   G4ThreeVector startPoint= initialState.GetPosition(); 
 
+
+  G4EquationOfMotion* equationOfMotion = 
+     (fpFieldPropagator->GetChordFinder()->GetIntegrationDriver()->GetStepper())
+     ->GetEquationOfMotion();
+
+  equationOfMotion->SetChargeMomentumMass( *(initialState.GetChargeState()), 
+                                           initialState.GetMomentum().mag2(),
+                                           initialState.GetRestMass() );
+  
 #ifdef G4DEBUG_PATHFINDER
   G4int prc= G4cout.precision(9);
   if( fVerboseLevel > 2 )

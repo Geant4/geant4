@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4WeightCutOffProcess.hh 66241 2012-12-13 18:34:42Z gunter $
+// $Id: G4WeightCutOffProcess.hh 88919 2015-03-16 13:41:02Z gcosmo $
 //
 // ----------------------------------------------------------------------
 // Class G4WeightCutOffProcess
@@ -53,8 +53,7 @@ class G4VTouchable;
 
 #include "G4FieldTrack.hh"
 #include "G4TouchableHandle.hh"
-
-
+#include "G4MultiNavigator.hh"   // For ELimited enum
 
 class G4WeightCutOffProcess : public G4VProcess
 {
@@ -74,10 +73,10 @@ public:  // with description
 
 
   //--------------------------------------------------------------
-  // Set Paralle World
+  // Set Parallel World
   //--------------------------------------------------------------
 
-  void SetParallelWorld(G4String parallelWorldName);
+  void SetParallelWorld(const G4String &parallelWorldName);
   void SetParallelWorld(G4VPhysicalVolume* parallelWorld);
 
   //--------------------------------------------------------------
@@ -151,8 +150,9 @@ private:
   G4double             fGhostSafety;
   G4bool               fOnBoundary;
 
-  G4bool               paraflag;
-
+  G4bool               fParaflag;
+  G4FieldTrack         fEndTrack;
+  ELimited             feLimited;
 };
 
 #endif

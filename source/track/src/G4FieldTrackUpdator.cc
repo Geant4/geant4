@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FieldTrackUpdator.cc 81134 2014-05-21 13:12:24Z gcosmo $
+// $Id: G4FieldTrackUpdator.cc 88999 2015-03-17 11:28:05Z gcosmo $
 //
 //   M. Asai - first implementation Apr/28/2006
 //
@@ -82,7 +82,9 @@ void G4FieldTrackUpdator::Update(G4FieldTrack* ftrk,const G4Track* trk)
 
   ftrk->SetProperTimeOfFlight(trk->GetProperTime());
 
-  ftrk->SetChargeAndMoments( ptDynamicParticle->GetCharge() );
+  ftrk->SetChargeAndMoments( ptDynamicParticle->GetCharge(),
+                             ptDynamicParticle->GetMagneticMoment()); 
+  ftrk->SetPDGSpin(          ptDynamicParticle->GetParticleDefinition()->GetPDGSpin() ); 
    // The charge can change during tracking
   ftrk->SetSpin( ptDynamicParticle->GetPolarization() );
 }

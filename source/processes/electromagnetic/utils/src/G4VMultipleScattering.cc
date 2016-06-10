@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VMultipleScattering.cc 85266 2014-10-27 09:02:03Z gcosmo $
+// $Id: G4VMultipleScattering.cc 88981 2015-03-17 10:14:15Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -660,6 +660,10 @@ G4VMultipleScattering::StorePhysicsTable(const G4ParticleDefinition* part,
 {
   G4bool yes = true;
   if(part != firstParticle) { return yes; }
+  const G4VMultipleScattering* masterProcess = 
+    static_cast<const G4VMultipleScattering*>(GetMasterProcess()); 
+  if(masterProcess && masterProcess != this) { return yes; }
+
   G4int nmod = modelManager->NumberOfModels();
   static const G4String ss[4] = {"1","2","3","4"};
   for(G4int i=0; i<nmod; ++i) {

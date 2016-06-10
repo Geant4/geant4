@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-01-ref-00    (5-December-2014)
+ Geant4 version Name: geant4-10-01-patch-01    (27-March-2015)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -23,10 +23,12 @@ Current available graphics systems are:
   DAWNFILE (DAWNFILE)
   G4HepRep (HepRepXML)
   G4HepRepFile (HepRepFile)
+  OpenGLImmediateQt (OGLI, OGLIQt)
   OpenGLImmediateX (OGLIX)
-  OpenGLImmediateXm (OGLI, OGLIXm)
+  OpenGLImmediateXm (OGLIXm, OGLI_FALLBACK, OGLIQt_FALLBACK)
+  OpenGLStoredQt (OGL, OGLS, OGLSQt)
   OpenGLStoredX (OGLSX)
-  OpenGLStoredXm (OGL, OGLS, OGLSXm)
+  OpenGLStoredXm (OGLSXm, OGL_FALLBACK, OGLS_FALLBACK, OGLSQt_FALLBACK)
   RayTracer (RayTracer)
   RayTracerX (RayTracerX)
   VRML1FILE (VRML1FILE)
@@ -185,13 +187,13 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
     Total memory consumed for geometry optimisation:   0 kByte
     Total CPU time elapsed for geometry optimisation: 0 seconds
 ### Run 0 starts.
-##### Create analysis manager   0x2495d00
+##### Create analysis manager   0x1abe2f0
 Using Root analysis manager
 ... open Root analysis file : microelectronics.root - done
  Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.26s Real=0.26s Sys=0s
+  User=0.26s Real=0.28s Sys=0s
 ... write Root file : microelectronics.root - done
 Number and type of particles created outside region "Target" :
 _______________________
@@ -237,7 +239,7 @@ Index : 1     used in the geometry : Yes
 ====================================================================
 
 ### Run 1 starts.
-##### Create analysis manager   0x2495d00
+##### Create analysis manager   0x1abe2f0
 Using Root analysis manager
 ... open Root analysis file : microelectronics.root - done
  Run terminated.

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoringBox.cc 83518 2014-08-27 12:57:10Z gcosmo $
+// $Id: G4ScoringBox.cc 89027 2015-03-18 08:37:30Z gcosmo $
 //
 
 #include "G4ScoringBox.hh"
@@ -43,6 +43,7 @@
 #include "G4MultiFunctionalDetector.hh"
 #include "G4SDParticleFilter.hh"
 #include "G4VPrimitiveScorer.hh"
+#include "G4Polyhedron.hh"
 
 #include "G4ScoringManager.hh"
 
@@ -240,7 +241,7 @@ void G4ScoringBox::Draw(std::map<G4int, G4double*> * map,
   
   G4VVisManager * pVisManager = G4VVisManager::GetConcreteInstance();
   if(pVisManager) {
-    
+
     // cell vectors
     std::vector<std::vector<std::vector<double> > > cell; // cell[X][Y][Z]
     std::vector<double> ez;
@@ -295,16 +296,18 @@ void G4ScoringBox::Draw(std::map<G4int, G4double*> * map,
     G4VisAttributes att;
     att.SetForceSolid(true);
     att.SetForceAuxEdgeVisible(true);
+    G4double thick = 0.01;
     
     G4Scale3D scale;
     if(axflg/100==1) {
+      pVisManager->BeginDraw();
+
       // xy plane
       if(colorMap->IfFloatMinMax()) { colorMap->SetMinMax(xymin ,xymax); }
-      G4ThreeVector zhalf(0., 0., fSize[2]/fNSegment[2]*0.98);
-      G4Box xyplate("xy", fSize[0]/fNSegment[0], fSize[1]/fNSegment[1],
-                    fSize[2]/fNSegment[2]*0.01);
+      G4ThreeVector zhalf(0., 0., fSize[2]/fNSegment[2]-thick);
       for(int x = 0; x < fNSegment[0]; x++) {
         for(int y = 0; y < fNSegment[1]; y++) {
+
           G4ThreeVector pos(GetReplicaPosition(x, y, 0) - zhalf);
           G4ThreeVector pos2(GetReplicaPosition(x, y, fNSegment[2]-1) + zhalf);
           G4Transform3D trans, trans2;
@@ -320,21 +323,54 @@ void G4ScoringBox::Draw(std::map<G4int, G4double*> * map,
           G4double c[4];
           colorMap->GetMapColor(xycell[x][y], c);
           att.SetColour(c[0], c[1], c[2]);//, c[3]);
-          pVisManager->Draw(xyplate, att, trans);
-          pVisManager->Draw(xyplate, att, trans2);
           
+          G4Box xyplate("xy", fSize[0]/fNSegment[0], fSize[1]/fNSegment[1],
+                        thick);
+          G4Polyhedron * poly = xyplate.GetPolyhedron();
+          poly->Transform(trans);
+          poly->SetVisAttributes(&att);
+          pVisManager->Draw(*poly);
+          
+          G4Box xyplate2 = xyplate;
+          G4Polyhedron * poly2 = xyplate2.GetPolyhedron();
+          poly2->Transform(trans2);
+          poly2->SetVisAttributes(&att);
+          pVisManager->Draw(*poly2);
+
+          /*
+          G4double nodes[][3] =
+            {{-fSize[0]/fNSegment[0], -fSize[1]/fNSegment[1], 0.},
+             { fSize[0]/fNSegment[0], -fSize[1]/fNSegment[1], 0.},
+             { fSize[0]/fNSegment[0],  fSize[1]/fNSegment[1], 0.},
+             {-fSize[0]/fNSegment[0],  fSize[1]/fNSegment[1], 0.}};
+          G4int facets[][4] = {{4, 3, 2, 1}};
+          G4int facets2[][4] = {{1, 2, 3, 4}};
+
+          G4Polyhedron poly, poly2;
+          poly.createPolyhedron(4, 1, nodes, facets);
+          poly.Transform(trans);
+          poly.SetVisAttributes(att);
+          pVisManager->Draw(poly);
+          
+          poly2.createPolyhedron(4, 1, nodes, facets2);
+          poly2.Transform(trans2);
+          poly2.SetVisAttributes(att);
+          pVisManager->Draw(poly2);
+          */
         }
       }
+      pVisManager->EndDraw();
     }
     axflg = axflg%100;
     if(axflg/10==1) {
+      pVisManager->BeginDraw();
+
       // yz plane
       if(colorMap->IfFloatMinMax()) { colorMap->SetMinMax(yzmin, yzmax); }
-      G4ThreeVector xhalf(fSize[0]/fNSegment[0]*0.98, 0., 0.);
-      G4Box yzplate("yz", fSize[0]/fNSegment[0]*0.01, fSize[1]/fNSegment[1],
-                    fSize[2]/fNSegment[2]);
+      G4ThreeVector xhalf(fSize[0]/fNSegment[0]-thick, 0., 0.);
       for(int y = 0; y < fNSegment[1]; y++) {
         for(int z = 0; z < fNSegment[2]; z++) {
+          
           G4ThreeVector pos(GetReplicaPosition(0, y, z) - xhalf);
           G4ThreeVector pos2(GetReplicaPosition(fNSegment[0]-1, y, z) + xhalf);
           G4Transform3D trans, trans2;
@@ -350,21 +386,55 @@ void G4ScoringBox::Draw(std::map<G4int, G4double*> * map,
           G4double c[4];
           colorMap->GetMapColor(yzcell[y][z], c);
           att.SetColour(c[0], c[1], c[2]);//, c[3]);
-          pVisManager->Draw(yzplate, att, trans);
-          pVisManager->Draw(yzplate, att, trans2);
           
+          G4Box yzplate("yz", thick,//fSize[0]/fNSegment[0]*0.001,
+                        fSize[1]/fNSegment[1],
+                        fSize[2]/fNSegment[2]);
+          G4Polyhedron * poly = yzplate.GetPolyhedron();
+          poly->Transform(trans);
+          poly->SetVisAttributes(&att);
+          pVisManager->Draw(*poly);
+          
+          G4Box yzplate2 = yzplate;
+          G4Polyhedron * poly2 = yzplate2.GetPolyhedron();
+          poly2->Transform(trans2);
+          poly2->SetVisAttributes(&att);
+          pVisManager->Draw(*poly2);
+
+          /*
+          G4double nodes[][3] =
+          {{0., -fSize[1]/fNSegment[1], -fSize[2]/fNSegment[2]},
+           {0.,  fSize[1]/fNSegment[1], -fSize[2]/fNSegment[2]},
+           {0.,  fSize[1]/fNSegment[1],  fSize[2]/fNSegment[2]},
+           {0., -fSize[1]/fNSegment[1],  fSize[2]/fNSegment[2]}};
+          G4int facets[][4] = {{4, 3, 2, 1}};
+          G4int facets2[][4] = {{1, 2, 3, 4}};
+          
+          G4Polyhedron poly, poly2;
+          poly.createPolyhedron(4, 1, nodes, facets);
+          poly.Transform(trans);
+          poly.SetVisAttributes(att);
+          pVisManager->Draw(poly);
+          
+          poly2.createPolyhedron(4, 1, nodes, facets2);
+          poly2.Transform(trans2);
+          poly2.SetVisAttributes(att);
+          pVisManager->Draw(poly2);
+          */
         }
       }
+      pVisManager->EndDraw();
     }
     axflg = axflg%10;
     if(axflg==1) {
+      pVisManager->BeginDraw();
+
       // xz plane
       if(colorMap->IfFloatMinMax()) { colorMap->SetMinMax(xzmin,xzmax); }
-      G4ThreeVector yhalf(0., fSize[1]/fNSegment[1]*0.98, 0.);
-      G4Box xzplate("xz", fSize[0]/fNSegment[0], fSize[1]/fNSegment[1]*0.01,
-                    fSize[2]/fNSegment[2]);
+      G4ThreeVector yhalf(0., fSize[1]/fNSegment[1]-thick, 0.);
       for(int x = 0; x < fNSegment[0]; x++) {
         for(int z = 0; z < fNSegment[2]; z++) {
+
           G4ThreeVector pos(GetReplicaPosition(x, 0, z) - yhalf);
           G4ThreeVector pos2(GetReplicaPosition(x, fNSegment[1]-1, z) + yhalf);
           G4Transform3D trans, trans2;
@@ -380,11 +450,44 @@ void G4ScoringBox::Draw(std::map<G4int, G4double*> * map,
           G4double c[4];
           colorMap->GetMapColor(xzcell[x][z], c);
           att.SetColour(c[0], c[1], c[2]);//, c[3]);
-          pVisManager->Draw(xzplate, att, trans);
-          pVisManager->Draw(xzplate, att, trans2);
+
+          G4Box xzplate("xz", fSize[0]/fNSegment[0], thick,//fSize[1]/fNSegment[1]*0.001,
+                        fSize[2]/fNSegment[2]);
+          G4Polyhedron * poly = xzplate.GetPolyhedron();
+          poly->Transform(trans);
+          poly->SetVisAttributes(&att);
+          pVisManager->Draw(*poly);
           
+          G4Box xzplate2 = xzplate;
+          G4Polyhedron * poly2 = xzplate2.GetPolyhedron();
+          poly2->Transform(trans2);
+          poly2->SetVisAttributes(&att);
+          pVisManager->Draw(*poly2);
+
+          
+          /*
+          G4double nodes[][3] =
+          {{-fSize[1]/fNSegment[1], 0., -fSize[2]/fNSegment[2]},
+           { fSize[1]/fNSegment[1], 0., -fSize[2]/fNSegment[2]},
+           { fSize[1]/fNSegment[1], 0.,  fSize[2]/fNSegment[2]},
+           {-fSize[1]/fNSegment[1], 0.,  fSize[2]/fNSegment[2]}};
+          G4int facets[][4] = {{1, 2, 3, 4}};
+          G4int facets2[][4] = {{4, 3, 2, 1}};
+          
+          G4Polyhedron poly, poly2;
+          poly.createPolyhedron(4, 1, nodes, facets);
+          poly.Transform(trans);
+          poly.SetVisAttributes(att);
+          pVisManager->Draw(poly);
+          
+          poly2.createPolyhedron(4, 1, nodes, facets2);
+          poly2.Transform(trans2);
+          poly2.SetVisAttributes(att);
+          pVisManager->Draw(poly2);
+          */
         }
       }
+      pVisManager->EndDraw();
     }
   }
   colorMap->SetPSUnit(fDrawUnit);
@@ -429,6 +532,7 @@ void G4ScoringBox::DrawColumn(std::map<G4int, G4double*> * map,
   }
   G4VVisManager * pVisManager = G4VVisManager::GetConcreteInstance();
   if(pVisManager) {
+    pVisManager->BeginDraw();
     
     // cell vectors
     std::vector<std::vector<std::vector<double> > > cell; // cell[X][Y][Z]
@@ -490,16 +594,16 @@ void G4ScoringBox::DrawColumn(std::map<G4int, G4double*> * map,
     G4VisAttributes att;
     att.SetForceSolid(true);
     att.SetForceAuxEdgeVisible(true);
-    
-    
+
     G4Scale3D scale;
     // xy plane
     if(idxProj == 0) {
       if(colorMap->IfFloatMinMax()) { colorMap->SetMinMax(xymin,xymax); }
-      G4Box xyplate("xy", fSize[0]/fNSegment[0], fSize[1]/fNSegment[1],
-                    fSize[2]/fNSegment[2]);
       for(int x = 0; x < fNSegment[0]; x++) {
         for(int y = 0; y < fNSegment[1]; y++) {
+          G4Box xyplate("xy", fSize[0]/fNSegment[0], fSize[1]/fNSegment[1],
+                        fSize[2]/fNSegment[2]);
+
           G4ThreeVector pos(GetReplicaPosition(x, y, idxColumn));
           G4Transform3D trans;
           if(fRotationMatrix) {
@@ -510,19 +614,24 @@ void G4ScoringBox::DrawColumn(std::map<G4int, G4double*> * map,
           }
           G4double c[4];
           colorMap->GetMapColor(xycell[x][y], c);
-          att.SetColour(c[0], c[1], c[2]);//, c[3]);
-          pVisManager->Draw(xyplate, att, trans);
+          att.SetColour(c[0], c[1], c[2]);
           
+          G4Polyhedron * poly = xyplate.GetPolyhedron();
+          poly->Transform(trans);
+          poly->SetVisAttributes(att);
+          pVisManager->Draw(*poly);
         }
       }
+
     } else
       // yz plane
       if(idxProj == 1) {
         if(colorMap->IfFloatMinMax()) { colorMap->SetMinMax(yzmin,yzmax); }
-        G4Box yzplate("yz", fSize[0]/fNSegment[0], fSize[1]/fNSegment[1],
-                      fSize[2]/fNSegment[2]);
         for(int y = 0; y < fNSegment[1]; y++) {
           for(int z = 0; z < fNSegment[2]; z++) {
+            G4Box yzplate("yz", fSize[0]/fNSegment[0], fSize[1]/fNSegment[1],
+                          fSize[2]/fNSegment[2]);
+
             G4ThreeVector pos(GetReplicaPosition(idxColumn, y, z));
             G4Transform3D trans;
             if(fRotationMatrix) {
@@ -534,17 +643,22 @@ void G4ScoringBox::DrawColumn(std::map<G4int, G4double*> * map,
             G4double c[4];
             colorMap->GetMapColor(yzcell[y][z], c);
             att.SetColour(c[0], c[1], c[2]);//, c[3]);
-            pVisManager->Draw(yzplate, att, trans);
+
+            G4Polyhedron * poly = yzplate.GetPolyhedron();
+            poly->Transform(trans);
+            poly->SetVisAttributes(att);
+            pVisManager->Draw(*poly);
           }
         }
       } else
         // xz plane
         if(idxProj == 2) {
           if(colorMap->IfFloatMinMax()) { colorMap->SetMinMax(xzmin,xzmax);}
-          G4Box xzplate("xz", fSize[0]/fNSegment[0], fSize[1]/fNSegment[1],
-                        fSize[2]/fNSegment[2]);
           for(int x = 0; x < fNSegment[0]; x++) {
             for(int z = 0; z < fNSegment[2]; z++) {
+              G4Box xzplate("xz", fSize[0]/fNSegment[0], fSize[1]/fNSegment[1],
+                            fSize[2]/fNSegment[2]);
+
               G4ThreeVector pos(GetReplicaPosition(x, idxColumn, z));
               G4Transform3D trans;
               if(fRotationMatrix) {
@@ -556,10 +670,16 @@ void G4ScoringBox::DrawColumn(std::map<G4int, G4double*> * map,
               G4double c[4];
               colorMap->GetMapColor(xzcell[x][z], c);
               att.SetColour(c[0], c[1], c[2]);//, c[3]);
-              pVisManager->Draw(xzplate, att, trans);
+              
+              G4Polyhedron * poly = xzplate.GetPolyhedron();
+              poly->Transform(trans);
+              poly->SetVisAttributes(att);
+              pVisManager->Draw(*poly);
             }
           }
         }
+    pVisManager->EndDraw();
+
   }
   
   colorMap->SetPSUnit(fDrawUnit);

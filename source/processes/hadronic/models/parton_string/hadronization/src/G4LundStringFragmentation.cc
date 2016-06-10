@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LundStringFragmentation.cc 87361 2014-12-01 16:10:28Z gcosmo $
+// $Id: G4LundStringFragmentation.cc 88879 2015-03-13 16:13:58Z gcosmo $
 // GEANT4 tag $Name:  $ 1.8
 //
 // -----------------------------------------------------------------------------
@@ -1151,7 +1151,7 @@ Diquark_AntiDiquark_aboveThreshold_lastSplitting(G4FragmentingString * & string,
 								+Baryon[Di_q1-1][Di_q2-1][ProdQ-1][StateDiQ]);
 				G4double RightHadronMass=RightHadron->GetPDGMass();
 
-				if(StringMass >= LeftHadronMass + RightHadronMass)
+				if(StringMass > LeftHadronMass + RightHadronMass)
 				{
                                         if ( NumberOf_FS > 34 ) {
                                           G4ExceptionDescription ed;
@@ -1173,7 +1173,7 @@ Diquark_AntiDiquark_aboveThreshold_lastSplitting(G4FragmentingString * & string,
 					FS_RightHadron[NumberOf_FS]= RightHadron;
 
 					NumberOf_FS++;
-				} // End of if(StringMass >= LeftHadronMass + RightHadronMass)
+				} // End of if(StringMass > LeftHadronMass + RightHadronMass)
 
 				StateDiQ++;
 
@@ -1254,7 +1254,7 @@ Quark_Diquark_lastSplitting(G4FragmentingString * & string,
 								Baryon[Di_q1-1][Di_q2-1][ProdQ-1][StateDiQ]);
 				G4double RightHadronMass=RightHadron->GetPDGMass();
 
-				if(StringMass >= LeftHadronMass + RightHadronMass)
+				if(StringMass > LeftHadronMass + RightHadronMass)
 				{
                                         if ( NumberOf_FS > 34 ) {
                                           G4ExceptionDescription ed;
@@ -1275,7 +1275,7 @@ Quark_Diquark_lastSplitting(G4FragmentingString * & string,
 					FS_RightHadron[NumberOf_FS]= RightHadron;
 
 					NumberOf_FS++;
-				} // End of if(StringMass >= LeftHadronMass + RightHadronMass)
+				} // End of if(StringMass > LeftHadronMass + RightHadronMass)
 
 				StateDiQ++;
 
@@ -1344,7 +1344,7 @@ Quark_AntiQuark_lastSplitting(G4FragmentingString * & string,
 								Meson[AbsIDanti_quark-1][ProdQ-1][StateAQ]);
 				G4double RightHadronMass=RightHadron->GetPDGMass();
 
-				if(StringMass >= LeftHadronMass + RightHadronMass)
+				if(StringMass > LeftHadronMass + RightHadronMass)
 				{
                                         if ( NumberOf_FS > 34 ) {
                                           G4ExceptionDescription ed;
@@ -1373,7 +1373,7 @@ Quark_AntiQuark_lastSplitting(G4FragmentingString * & string,
 					}
 					NumberOf_FS++;
 
-				} // End of if(StringMass >= LeftHadronMass + RightHadronMass)
+				} // End of if(StringMass > LeftHadronMass + RightHadronMass)
 
 				StateAQ++;
 			} while(Meson[AbsIDanti_quark-1][ProdQ-1][StateAQ]!=0);

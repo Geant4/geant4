@@ -76,13 +76,11 @@ G4ChipsProtonInelasticXS::~G4ChipsProtonInelasticXS()
   delete HEN;
 }
 
-G4bool G4ChipsProtonInelasticXS::IsIsoApplicable(const G4DynamicParticle* Pt, G4int, G4int,    
+G4bool G4ChipsProtonInelasticXS::IsIsoApplicable(const G4DynamicParticle*, G4int, G4int,    
 				 const G4Element*,
 				 const G4Material*)
 {
-  const G4ParticleDefinition* particle = Pt->GetDefinition();
-  if (particle == G4Proton::Proton()      ) return true;
-  return false;
+  return true;
 }
 
 

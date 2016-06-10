@@ -1,4 +1,4 @@
-$Id: History 86805 2014-11-18 13:25:55Z gcosmo $
+$Id: History 88981 2015-03-17 10:14:15Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,32 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+06 February 15: V.Ivant (emutils-V10-00-47)
+- G4VEmProcess - fixed crash in printout for verbose level > 2 
+                 (reported by D.Mancusi) 
+
+30 January 15: V.Ivant
+- G4EmCalculator - fixed minor defect reported by Coverity
+
+16 January 15: V.Ivant
+- G4VEmModel, G4VEmFluctuationModel - switch to use 
+  G4Random::getTheEngine() to have more clean code 
+
+15 January 15: V.Ivant
+- G4VEmModel - redefine random engine pointer in StartTracking() method
+    to address problem reported by CMS
+
+27 December 14: V.Ivant
+- G4VEnergyLossProcess - removed debug printout from previous tag 
+
+22 December 14: V.Ivant
+- G4EmParametersMessenger - allowed to set CSDA range flag only in 
+    the PreInit state to avoid crash in store/retrieve tables
+- G4VEnergyLossProcess, G4VEmProcess, G4VMultipleScattering - store
+    physics table only from master thread
+- G4VEmProcess - fixed printout at initialisation for the case when
+    process class is shared between different particles
 
 18 November 14: V.Ivant (emutils-V10-00-46)
 - G4VAtomDeexcitation - fixed printout at initialisation 

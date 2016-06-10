@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIQt.cc 86972 2014-11-21 11:56:23Z gcosmo $
+// $Id: G4UIQt.cc 88937 2015-03-16 15:55:38Z gcosmo $
 //
 // L. Garnier
 
@@ -2808,7 +2808,7 @@ void G4UIQt::updateHelpArea (
         fParameterHelpTable->resizeColumnToContents(c);
       }
     }
-
+    fParameterHelpLabel->setVisible(true);
     fParameterHelpTable->setVisible(true);
     
   }

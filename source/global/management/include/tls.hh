@@ -63,8 +63,13 @@
     #endif
   #elif ( (defined(__linux__) || defined(__MACH__)) && \
           defined(__INTEL_COMPILER) )
+    #if (defined (G4USE_STD11) && __INTEL_COMPILER>=1500)
+      #  define G4ThreadLocalStatic static thread_local
+      #  define G4ThreadLocal thread_local
+    #else
       #  define G4ThreadLocalStatic static __thread
       #  define G4ThreadLocal __thread
+    #endif
   #elif defined(_AIX)
     #if defined (G4USE_STD11)
       #  define G4ThreadLocalStatic static thread_local

@@ -17,6 +17,13 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+January 12, 2015 G.Cosmo (global-V10-00-45)
+- Define G4THREADSLEEP(tick) macro in G4Threading.hh.
+
+December 10, 2014 G.Cosmo
+- Define support for c++11 thread_local keyword on Intel-icc compiler
+  version 15.
+
 November 18, 2014 G.Cosmo (global-V10-00-44)
 - G4FPEDetection.hh: added call to 'sigfillset' to clear any signals
   before any use of sigset_t in InvalidOperationDetection() for both

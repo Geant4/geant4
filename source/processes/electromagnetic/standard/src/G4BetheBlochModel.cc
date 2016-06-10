@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BetheBlochModel.cc 81579 2014-06-03 10:15:54Z gcosmo $
+// $Id: G4BetheBlochModel.cc 88979 2015-03-17 10:10:21Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -347,6 +347,9 @@ void G4BetheBlochModel::SampleSecondaries(vector<G4DynamicParticle*>* vdp,
   G4double maxKinEnergy = std::min(maxEnergy,tmax);
   if(minKinEnergy >= maxKinEnergy) { return; }
 
+  //G4cout << "G4BetheBlochModel::SampleSecondaries Emin= " << minKinEnergy
+  //	 << " Emax= " << maxKinEnergy << G4endl;
+
   G4double totEnergy     = kineticEnergy + mass;
   G4double etot2         = totEnergy*totEnergy;
   G4double beta2         = kineticEnergy*(kineticEnergy + 2.0*mass)/etot2;
@@ -416,7 +419,6 @@ void G4BetheBlochModel::SampleSecondaries(vector<G4DynamicParticle*>* vdp,
     deltaDirection.set(sint*cos(phi),sint*sin(phi), cost) ;
     deltaDirection.rotateUz(dp->GetMomentumDirection());
   }  
-
   /*
     G4cout << "### G4BetheBlochModel " 
 	   << dp->GetDefinition()->GetParticleName()
@@ -427,9 +429,7 @@ void G4BetheBlochModel::SampleSecondaries(vector<G4DynamicParticle*>* vdp,
            << " dir= " << dp->GetMomentumDirection()
            << " dirDelta= " << deltaDirection
 	   << G4endl;
-  }
   */
-
   // create G4DynamicParticle object for delta ray
   G4DynamicParticle* delta = 
     new G4DynamicParticle(theElectron,deltaDirection,deltaKinEnergy);

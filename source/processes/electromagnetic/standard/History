@@ -1,4 +1,4 @@
-$Id: History 87015 2014-11-21 16:24:10Z gcosmo $
+$Id: History 88979 2015-03-17 10:10:21Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -18,6 +18,31 @@ committal in the CVS repository !
 
      ----------------------------------------------------------
 
+16 January 15: V.Ivanchenko (emstand-V10-00-53)
+- G4UniversalFluctuation - switch to use 
+  G4Random::getTheEngine() to have more clean code 
+
+15 January 15: V.Ivanchenko
+- G4GoudsmitSaundersonMscModel, G4UrbanMscModel,G4WentzelVIModel,
+  G4WentzelVIRelModel, G4UniversalFluctuation - redefine random 
+    engine pointer in StartTracking() method to address problem 
+    reported by CMS
+
+17 December 14: V.Ivanchenko
+- G4GoudsmitSaundersonMscModel - return back version of 10.0 with
+    two fixes: trivial Coverity report, added protection aginst precision
+    loss for small angle calculation. Keeping 10.0 version the same
+    backscattering result is obtained for 10.1 as for 10.0
+
+12 December 14: V.Ivanchenko
+- G4KleinNishinaModel - fixed very rare crash (reported by L.Urban) 
+    happens when de-excitation module is active and de-excitation energy
+    is slightly larger than available energy; now secondary
+    energy slightly modified to keep energy balance instead
+    of deletion of secondary particle
+- G4PEEffFluoModel - use the same pattern as G4KleinNishinaModel
+    for de-excitation products
+   
 21 November 14: V.Ivanchenko (emstand-V10-00-52)
 - G4PAIPhotonModel - fixed Coverity report (V.Grichine)
 

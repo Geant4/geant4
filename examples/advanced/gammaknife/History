@@ -7,6 +7,9 @@ francesco.romano@lns.infn.it
              History file of the GammaKnife application
          ====================================================
 
+06.03.2015 A.Dotti        Tag: gammaknife-V10-00-01
+	   - Moving of GPS defaults to master
+
 04.06.2014 A.Dotti        Tag: gammaknife-V10-00-00
            - New GPS for MT
 

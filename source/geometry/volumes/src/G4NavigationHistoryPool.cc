@@ -70,12 +70,20 @@ void G4NavigationHistoryPool::Clean()
   {
     delete fPool[i];
   }
+  fPool.clear();
+  fActive.clear();
+}
+
+// ***************************************************************************
+// Print number of entries
+// ***************************************************************************
+//
+void G4NavigationHistoryPool::Print() const
+{
 #ifdef G4VERBOSE
   G4cout << "Total navigation history collections cleaned: "
          << fPool.size() << G4endl;
 #endif
-  fPool.clear();
-  fActive.clear();
 }
 
 // ***************************************************************************

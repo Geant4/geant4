@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FieldTrack.hh 81175 2014-05-22 07:39:10Z gcosmo $
+// $Id: G4FieldTrack.hh 88944 2015-03-16 16:11:10Z gcosmo $
 //
 //
 // class G4FieldTrack
@@ -123,6 +123,7 @@ class  G4FieldTrack
      inline G4double       GetProperTimeOfFlight() const;
      inline G4double       GetKineticEnergy() const;
      inline G4double       GetCharge() const;
+     inline G4double       GetRestMass() const { return fRestMass_c2; }
        // Accessors.
 
      inline void SetPosition(G4ThreeVector nPos); 

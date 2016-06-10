@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-01-ref-00    (5-December-2014)
+ Geant4 version Name: geant4-10-01-patch-01    (27-March-2015)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -20,10 +20,12 @@ Current available graphics systems are:
   DAWNFILE (DAWNFILE)
   G4HepRep (HepRepXML)
   G4HepRepFile (HepRepFile)
+  OpenGLImmediateQt (OGLI, OGLIQt)
   OpenGLImmediateX (OGLIX)
-  OpenGLImmediateXm (OGLI, OGLIXm)
+  OpenGLImmediateXm (OGLIXm, OGLI_FALLBACK, OGLIQt_FALLBACK)
+  OpenGLStoredQt (OGL, OGLS, OGLSQt)
   OpenGLStoredX (OGLSX)
-  OpenGLStoredXm (OGL, OGLS, OGLSXm)
+  OpenGLStoredXm (OGLSXm, OGL_FALLBACK, OGLS_FALLBACK, OGLSQt_FALLBACK)
   RayTracer (RayTracer)
   RayTracerX (RayTracerX)
   VRML1FILE (VRML1FILE)
@@ -123,7 +125,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
  Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.01s Real=0s Sys=0s
+  User=0s Real=0s Sys=0s
 
  ======================== run summary ======================
  The run was 1 Co60 of 0 eV 
@@ -184,7 +186,7 @@ Index : 0     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 100000
-  User=4.04s Real=4.06s Sys=0s
+  User=4.28s Real=4.28s Sys=0s
 
  ======================== run summary ======================
  The run was 100000 Co60 of 0 eV 
@@ -245,7 +247,7 @@ Index : 0     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 100000
-  User=9.55s Real=9.59s Sys=0s
+  User=9.88s Real=9.89s Sys=0s
 
  ======================== run summary ======================
  The run was 100000 Co60 of 0 eV 
@@ -253,25 +255,24 @@ Run Summary
 
  Nb of generated particles: 
 
-           Ni60:  100000  Emean = 0.4472 eV 	( 0 eV  --> 25.61 eV )
-  Ni60[1332.518]:     141  Emean =  7.495 eV 	( 0.0006112 eV  --> 25.62 eV )
-  Ni60[2505.766]:   99859  Emean = 0.4373 eV 	( 0 eV  --> 3.792 eV )
-      anti_nu_e:  100000  Emean =  223.4 keV	( 1.05 keV --> 1.461 MeV)
-             e-:  100032  Emean =  96.78 keV	( 6.009 eV  --> 1.371 MeV)
-          gamma:  199842  Emean =  1.253 MeV	( 8.333 keV --> 1.341 MeV)
+           Ni60:  100000  Emean = 0.4485 eV 	( 0 eV  --> 24.15 eV )
+  Ni60[1332.518]:     120  Emean =  7.324 eV 	( 0.0001455 eV  --> 24.15 eV )
+  Ni60[2505.766]:   99880  Emean = 0.4403 eV 	( 0 eV  --> 3.653 eV )
+      anti_nu_e:  100000  Emean =  222.9 keV	( 6.327 keV --> 1.478 MeV)
+             e-:  100031  Emean =  97.05 keV	( 2.176 eV  --> 1.347 MeV)
+          gamma:  199856  Emean =  1.253 MeV	( 346.9 keV --> 1.333 MeV)
 
    Ekin Total (Q): mean =  1.412 MeV	( 318.1 keV --> 2.506 MeV)
 
-   Momentum balance (excluding gamma desexcitation): mean =    274 eV 	( 0 eV  --> 1.771 MeV)
+   Momentum balance (excluding gamma desexcitation): mean =  266.7 eV 	( 0 eV  --> 1.763 MeV)
 
-   Total time of life : mean =  7.612 y    half-life =  5.276 y     ( 21.98 min --> 87.74 y  )
+   Total time of life : mean =  7.639 y    half-life =  5.295 y     ( 24.31 min --> 87.32 y  )
 
-   Activity of Co60 = 4.181e+13 Bq/g   (1130 Ci/g) 
+   Activity of Co60 = 4.167e+13 Bq/g   (1126 Ci/g) 
 
 Graphics systems deleted.
 Visualization Manager deleting...
 G4 kernel has come to Quit state.
-Total navigation history collections cleaned: 6
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 10 of which, static: 0
 Dynamic pools deleted: 10 / Total memory freed: 0.012 Mb

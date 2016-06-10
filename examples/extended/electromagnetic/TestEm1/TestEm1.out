@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-01-ref-00    (5-December-2014)
+ Geant4 version Name: geant4-10-01-patch-01    (27-March-2015)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -14,7 +14,7 @@
 ***** Table : Nb of materials = 20 *****
 
  Material:      Air    density:  1.290 mg/cm3  RadL: 285.161 m    Nucl.Int.Length: 662.680 m  
-                       Imean:  85.703 eV   temperature: 273.15 K  pressure:   1.00 atm
+                       Imean:  85.703 eV   temperature: 293.15 K  pressure:   1.00 atm
 
    --->  Element: Nitrogen (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole
          --->  Isotope:   N14   Z =  7   N =  14   A =  14.00 g/mole   abundance:  99.63 %
@@ -53,7 +53,7 @@
 
 
  Material:      CO2    density:  0.001 kg/m3   RadL: 361.873 km   Nucl.Int.Length: 858.384 km 
-                       Imean:  90.958 eV   temperature: 273.15 K  pressure:   1.00 atm
+                       Imean:  90.958 eV   temperature: 293.15 K  pressure:   1.00 atm
 
    --->  Element: Hydrogen (C)   Z =  6.0   N =  12.0   A =  12.00 g/mole
          --->  Isotope:   C12   Z =  6   N =  12   A =  12.00 g/mole   abundance:  98.93 %
@@ -68,7 +68,7 @@
 
 
  Material:   D2_gas    density:  0.036 kg/m3   RadL:  34.993 km   Nucl.Int.Length:   9.791 km 
-                       Imean:  19.200 eV   temperature: 273.15 K  pressure:   1.00 atm
+                       Imean:  19.200 eV   temperature: 293.15 K  pressure:   1.00 atm
 
    --->  Element: Heavy-Hydrogen (D)   Z =  1.0   N =   2.0   A =   2.01 g/mole
          --->  Isotope:     d   Z =  1   N =   2   A =   2.01 g/mole   abundance: 100.00 %
@@ -324,7 +324,7 @@ Index : 0     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 2000
-  User=4.07s Real=4.09s Sys=0s
+  User=4.18s Real=4.2s Sys=0s
 
  ======================== run summary ======================
 
@@ -357,7 +357,6 @@ Run Summary
  Current couple of seeds = 1724451476, 2015559535
 ----------------------------------------
 G4 kernel has come to Quit state.
-Total navigation history collections cleaned: 6
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 9 of which, static: 0
 Dynamic pools deleted: 9 / Total memory freed: 0.06 Mb

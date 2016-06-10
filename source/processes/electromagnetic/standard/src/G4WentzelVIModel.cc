@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4WentzelVIModel.cc 85306 2014-10-27 14:17:47Z gcosmo $
+// $Id: G4WentzelVIModel.cc 88979 2015-03-17 10:10:21Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -63,6 +63,7 @@
 #include "G4PhysicsTableHelper.hh"
 #include "G4ElementVector.hh"
 #include "G4ProductionCutsTable.hh"
+#include "G4EmParameters.hh"
 #include "G4Log.hh"
 #include "G4Exp.hh"
 
@@ -135,7 +136,7 @@ void G4WentzelVIModel::Initialise(const G4ParticleDefinition* p,
 
   //G4cout << "G4WentzelVIModel::Initialise " << p->GetParticleName() << G4endl;
   wokvi->Initialise(p, cosThetaMax);
-  /*    
+  /*  
   G4cout << "G4WentzelVIModel: " << particle->GetParticleName()
          << "  1-cos(ThetaLimit)= " << 1 - cosThetaMax 
 	 << " SingScatFactor= " << ssFactor
@@ -149,8 +150,11 @@ void G4WentzelVIModel::Initialise(const G4ParticleDefinition* p,
   // build second moment table only if transport table is build
   G4PhysicsTable* table = GetCrossSectionTable();
   if(useSecondMoment && IsMaster() && table) {
+
+    //G4cout << "### G4WentzelVIModel::Initialise: build 2nd moment table "
+    //	   << table << G4endl;
     fSecondMoments =  
-      G4PhysicsTableHelper::PreparePhysicsTable(table);
+      G4PhysicsTableHelper::PreparePhysicsTable(fSecondMoments);
     // Access to materials
     const G4ProductionCutsTable* theCoupleTable =
       G4ProductionCutsTable::GetProductionCutsTable();
@@ -158,24 +162,38 @@ void G4WentzelVIModel::Initialise(const G4ParticleDefinition* p,
 
     G4bool splineFlag = true;
     G4PhysicsVector* aVector = 0;
-    for(size_t i=0; i<numOfCouples; ++i) {
+    G4PhysicsVector* bVector = 0;
+    G4double emin = std::max(LowEnergyLimit(), LowEnergyActivationLimit());
+    G4double emax = std::min(HighEnergyLimit(), HighEnergyActivationLimit());
+    if(emin < emax) {
+      size_t n = G4EmParameters::Instance()->NumberOfBinsPerDecade()
+	*G4lrint(std::log10(emax/emin));
+      if(n < 3) { n = 3; }
 
-      //G4cout<< "i= " << i << " Flag=  " << GetFlag(i) << G4endl;
-      if(table->GetFlag(i)) {
-	DefineMaterial(theCoupleTable->GetMaterialCutsCouple(i));
+      for(size_t i=0; i<numOfCouples; ++i) {
+
+	//G4cout<< "i= " << i << " Flag=  " << fSecondMoments->GetFlag(i) 
+	//      << G4endl;
+	if(fSecondMoments->GetFlag(i)) {
+	  DefineMaterial(theCoupleTable->GetMaterialCutsCouple(i));
        
-	delete (*fSecondMoments)[i];
-        aVector = new G4PhysicsVector((*table)[i]);
-        size_t n = aVector->GetVectorLength();
-
-        for(size_t j=0; j<n; ++j) {
-	  G4double e = aVector->Energy(j); 
-          aVector->PutValue(j, ComputeSecondMoment(p, e)*e*e);
+	  delete (*fSecondMoments)[i];
+	  if(!aVector) { 
+	    aVector = new G4PhysicsLogVector(emin, emax, n);
+	    bVector = aVector;
+	  } else {
+	    bVector = new G4PhysicsVector(*aVector);
+	  }
+	  for(size_t j=0; j<n; ++j) {
+	    G4double e = bVector->Energy(j); 
+	    bVector->PutValue(j, ComputeSecondMoment(p, e)*e*e);
+	  }
+	  if(splineFlag) { bVector->FillSecondDerivatives(); }
+	  (*fSecondMoments)[i] = bVector;  
 	}
-	if(splineFlag) { aVector->FillSecondDerivatives(); } 
-	G4PhysicsTableHelper::SetPhysicsVector(fSecondMoments, i, aVector);
       }
     } 
+    //G4cout << *fSecondMoments << G4endl;
   }
 }
 
@@ -227,6 +245,7 @@ void G4WentzelVIModel::StartTracking(G4Track* track)
 {
   SetupParticle(track->GetDynamicParticle()->GetDefinition());
   inside = false;
+  G4VEmModel::StartTracking(track);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

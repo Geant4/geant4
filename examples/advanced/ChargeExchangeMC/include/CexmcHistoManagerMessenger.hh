@@ -77,6 +77,14 @@ class  CexmcHistoManagerMessenger : public G4UImessenger
 
 #ifdef CEXMC_USE_ROOTQT
         G4UIcmdWithAString *       drawHisto;
+
+        G4UIcmdWithAString *       addHistoMenu;
+
+        G4UIcmdWithAString *       drawHistoOptions1D;
+
+        G4UIcmdWithAString *       drawHistoOptions2D;
+
+        G4UIcmdWithAString *       drawHistoOptions3D;
 #endif
 };
 

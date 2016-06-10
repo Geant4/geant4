@@ -92,8 +92,8 @@ UTubs::UTubs(const UTubs& rhs)
     kRadTolerance(rhs.kRadTolerance), kAngTolerance(rhs.kAngTolerance),
     fRMin(rhs.fRMin), fRMax(rhs.fRMax), fDz(rhs.fDz),
     fSPhi(rhs.fSPhi), fDPhi(rhs.fDPhi),
-    fSinCPhi(rhs.fSinCPhi), fCosCPhi(rhs.fSinCPhi),
-    fCosHDPhiOT(rhs.fCosHDPhiOT), fCosHDPhiIT(rhs.fCosHDPhiOT),
+    fSinCPhi(rhs.fSinCPhi), fCosCPhi(rhs.fCosCPhi),
+    fCosHDPhiOT(rhs.fCosHDPhiOT), fCosHDPhiIT(rhs.fCosHDPhiIT),
     fSinSPhi(rhs.fSinSPhi), fCosSPhi(rhs.fCosSPhi),
     fSinEPhi(rhs.fSinEPhi), fCosEPhi(rhs.fCosEPhi),
     fSinSPhiDPhi(rhs.fSinSPhiDPhi), fCosSPhiDPhi(rhs.fCosSPhiDPhi),
@@ -130,9 +130,9 @@ UTubs& UTubs::operator = (const UTubs& rhs)
   fSPhi = rhs.fSPhi;
   fDPhi = rhs.fDPhi;
   fSinCPhi = rhs.fSinCPhi;
-  fCosCPhi = rhs.fSinCPhi;
+  fCosCPhi = rhs.fCosCPhi;
   fCosHDPhiOT = rhs.fCosHDPhiOT;
-  fCosHDPhiIT = rhs.fCosHDPhiOT;
+  fCosHDPhiIT = rhs.fCosHDPhiIT;
   fSinSPhi = rhs.fSinSPhi;
   fCosSPhi = rhs.fCosSPhi;
   fSinEPhi = rhs.fSinEPhi;

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4KleinNishinaModel.cc 82754 2014-07-08 14:06:13Z gcosmo $
+// $Id: G4KleinNishinaModel.cc 88979 2015-03-17 10:10:21Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -200,12 +200,11 @@ void G4KleinNishinaModel::SampleSecondaries(
    
     bindingEnergy = elm->GetAtomicShell(i);
     lv1.set(0.0,0.0,energy,energy);
-
-    //G4cout << "nShells= " << nShells << " i= " << i 
-    //   << " Egamma= " << energy << " Ebind= " << bindingEnergy
-    //   << " Elim= " << limitEnergy 
-    //   << G4endl;
-
+    /*
+    G4cout << "nShells= " << nShells << " i= " << i 
+       << " Egamma= " << energy << " Ebind= " << bindingEnergy
+       << G4endl;
+    */
     // for rest frame of the electron
     G4double x = -G4Log(rndmEngineMod->flat());
     eKinEnergy = bindingEnergy*x;
@@ -229,6 +228,7 @@ void G4KleinNishinaModel::SampleSecondaries(
     // (Nuc Phys 20(1960),15). 
     G4double E0_m = gamEnergy0/electron_mass_c2;
 
+    //G4cout << "Nloop= "<< nloop << " Ecm(keV)= " << gamEnergy0/keV << G4endl;
     //
     // sample the energy rate of the scattered gamma 
     //
@@ -281,10 +281,11 @@ void G4KleinNishinaModel::SampleSecondaries(
     v.rotateUz(gamDir);
     lv1.set(gamEnergy1*v.x(),gamEnergy1*v.y(),gamEnergy1*v.z(),gamEnergy1);
     lv2 -= lv1;
-    //G4cout<<"Egam= "<<lv1.e()<<" Ee= "<< lv2.e()-electron_mass_c2 << G4endl;
+    //G4cout<<"Egam(keV)= " << lv1.e()/keV
+    //	  <<" Ee(keV)= " << (lv2.e()-electron_mass_c2)/keV << G4endl;
     lv2.boost(bst);
     eKinEnergy = lv2.e() - electron_mass_c2 - ePotEnergy;   
-    //G4cout << "eKinEnergy= " << eKinEnergy << G4endl;
+    //G4cout << "Nloop= " << nloop << " eKinEnergy= " << eKinEnergy << G4endl;
 
   } while ( eKinEnergy < 0.0 );
 
@@ -327,14 +328,18 @@ void G4KleinNishinaModel::SampleSecondaries(
       G4int Z = G4lrint(elm->GetZ());
       G4AtomicShellEnumerator as = G4AtomicShellEnumerator(i);
       const G4AtomicShell* shell = fAtomDeexcitation->GetAtomicShell(Z, as);
-      size_t nbefore = fvect->size();
+      G4int nbefore = fvect->size();
       fAtomDeexcitation->GenerateParticles(fvect, shell, Z, index);
-      size_t nafter = fvect->size();
-      if(nafter > nbefore) {
-	for (size_t j=nbefore; j<nafter; ++j) {
-	  G4double e = ((*fvect)[j])->GetKineticEnergy();
-	  if(esec + e > edep) {
-	    /*   
+      G4int nafter = fvect->size();
+      //G4cout << "N1= " << nbefore << "  N2= " << nafter << G4endl;
+      for (G4int j=nbefore; j<nafter; ++j) {
+	G4double e = ((*fvect)[j])->GetKineticEnergy();
+	if(esec + e > edep) {
+	  // correct energy in order to have energy balance
+	  e = edep - esec;
+	  ((*fvect)[j])->SetKineticEnergy(e);
+	  esec += e;
+	  /*	    
 	    G4cout << "### G4KleinNishinaModel Edep(eV)= " << edep/eV 
 		   << " Esec(eV)= " << esec/eV 
 		   << " E["<< j << "](eV)= " << e/eV
@@ -343,15 +348,15 @@ void G4KleinNishinaModel::SampleSecondaries(
 		   << "  Ebind(keV)= " << bindingEnergy/keV 
 		   << "  Eshell(keV)= " << shell->BindingEnergy()/keV 
 		   << G4endl;
-	    */
-	    for (size_t jj=nafter-1; jj>=j; --jj) { 
-	      delete (*fvect)[jj]; 
-	      fvect->pop_back(); 
-	    }
-	    break;	      
+	  */
+	  // delete the rest of secondaries
+	  for (G4int jj=nafter-1; jj>j; --jj) { 
+	    delete (*fvect)[jj]; 
+	    fvect->pop_back(); 
 	  }
-	  esec += e;
-	} 
+	  break;	      
+	}
+	esec += e; 
       }
       edep -= esec;
     }

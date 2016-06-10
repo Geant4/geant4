@@ -9,6 +9,9 @@ $Id: History 70524 2013-05-31 16:36:26Z gcosmo $
                        Package History file
                        --------------------
 
+16 Jan 2015 - S.Incerti - tag microbeam-V10-00-07
+- added protection against loops 
+
 14 Oct 2014 - S.Incerti - tag microbeam-V10-00-06
 - warnings fix for Windows
 

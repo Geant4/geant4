@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: B4cEventAction.cc 75604 2013-11-04 13:17:26Z gcosmo $
+// $Id: B4cEventAction.cc 89037 2015-03-18 09:25:01Z gcosmo $
 // 
 /// \file B4cEventAction.cc
 /// \brief Implementation of the B4cEventAction class
@@ -118,7 +118,7 @@ void B4cEventAction::EndOfEventAction(const G4Event* event)
 
   // Get hit with total values
   B4cCalorHit* absoHit = (*absoHC)[absoHC->entries()-1];
-  B4cCalorHit* gapHit = (*gapHC)[absoHC->entries()-1];
+  B4cCalorHit* gapHit = (*gapHC)[gapHC->entries()-1];
  
   // Print per event (modulo n)
   //

@@ -459,7 +459,7 @@ int  main( int  argc, char **  argv )
                     uiManager->ApplyCommand( "/control/execute " +
                                              guiMacroName );
 #ifdef CEXMC_USE_ROOTQT
-                runManager->EnableLiveHistograms();
+                CexmcHistoManager::Instance()->EnableLiveHistograms( session );
 #endif
 #endif
             }

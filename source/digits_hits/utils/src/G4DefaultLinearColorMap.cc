@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DefaultLinearColorMap.cc 67992 2013-03-13 10:59:57Z gcosmo $
+// $Id: G4DefaultLinearColorMap.cc 89027 2015-03-18 08:37:30Z gcosmo $
 //
 
 #include "G4DefaultLinearColorMap.hh"
@@ -75,6 +75,7 @@ void G4DefaultLinearColorMap::GetMapColor(G4double val, G4double color[4])
   for(int i = 0; i < 4; i++) {
     color[i] = (b*colormap[during[0]].rgb[i] + a*colormap[during[1]].rgb[i])
       /(colormap[during[1]].val - colormap[during[0]].val);
+    if(color[i] > 1.) color[i] = 1.;
   } 
 
 }

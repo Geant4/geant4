@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DiscreteGammaTransition.cc 87257 2014-11-28 08:02:05Z gcosmo $
+// $Id: G4DiscreteGammaTransition.cc 88987 2015-03-17 10:39:50Z gcosmo $
 //
 // -------------------------------------------------------------------
 //      GEANT 4 class file 
@@ -190,7 +190,6 @@ void G4DiscreteGammaTransition::SelectGamma()
 	    { iShell = 8;}
 	  // the following is needed to match the ishell to that used in  
 	  // G4AtomicShells
-	  /*
 	  if ( iShell == 9) {
 	    if ( (nucleusZ < 28) && (nucleusZ > 20)) {
 	      iShell--;
@@ -198,7 +197,6 @@ void G4DiscreteGammaTransition::SelectGamma()
 	      iShell = iShell -2;
 	    }
 	  }
-	  */
 	  //L.Desorgher 02/11/2011
 	  //Atomic shell information is available in Geant4 only up top Z=100
 	  //To extend the photo evaporation code to Z>100  the call 

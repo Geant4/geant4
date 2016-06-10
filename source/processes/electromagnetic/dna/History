@@ -14,6 +14,18 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------*
 
+12-12-2014, G.Cosmo,  tag emdna-V10-00-64
+- Explicitly initialise to zero TLS pointers in G4KDNode.hh and G4ITFinder.icc
+  to allow for compilation on Linux/clang-3.5.
+
+05-12-2014, G.Cosmo
+- Corrected sources.cmake in management and molecules/management, to
+  include missing files:
+    G4ITTransportationManager.icc
+    G4KDNode.icc
+    G4KDTree.icc
+    G4MoleculeFinder.hh
+
 01-12-2014, MK,  tag emdna-V10-00-63
 - Temporary fix for avoiding bad relocation of Brownian particles
 It slows the computation by forcing the Brownian particles to stop at the volumes' boundaries

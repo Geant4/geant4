@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NistMaterialBuilder.cc 80654 2014-05-06 08:29:10Z gcosmo $
+// $Id: G4NistMaterialBuilder.cc 88957 2015-03-16 16:46:05Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -171,7 +171,7 @@ G4Material* G4NistMaterialBuilder::BuildMaterial(G4int i)
   G4int nc = components[i];
 
   // Check gas parameters
-  G4double t = STP_Temperature;
+  G4double t = NTP_Temperature;
   G4double p = STP_Pressure;
   if(kStateGas == states[i]) {
     size_t nn = idxGas.size();
@@ -266,7 +266,7 @@ G4Material* G4NistMaterialBuilder::ConstructNewMaterial(
   // add parameters of material into internal vectors
   // density in g/cm3, mean ionisation potential is not defined
   G4bool stp = true;
-  if(state == kStateGas && temp != STP_Temperature && pres != STP_Pressure)
+  if(state == kStateGas && temp != NTP_Temperature && pres != STP_Pressure)
     { stp = false; }
 
   AddMaterial(name,dens*cm3/g,0,0.,els,state,stp);
@@ -316,7 +316,7 @@ G4Material* G4NistMaterialBuilder::ConstructNewMaterial(
   // add parameters of material into internal vectors
   // density in g/cm3, mean ionisation potential is not defined
   G4bool stp = true;
-  if(state == kStateGas && temp != STP_Temperature && pres != STP_Pressure)
+  if(state == kStateGas && temp != NTP_Temperature && pres != STP_Pressure)
     { stp = false; }
   AddMaterial(name,dens*cm3/g,0,0.,els,state,stp);
   if(!stp) { AddGas(name,temp,pres); }
@@ -364,7 +364,7 @@ G4Material* G4NistMaterialBuilder::ConstructNewGasMaterial(
     return 0;
   }
 
-  G4double dens = bmat->GetDensity()*pres*STP_Temperature/(temp*STP_Pressure);
+  G4double dens = bmat->GetDensity()*pres*NTP_Temperature/(temp*STP_Pressure);
   mat = new G4Material(name,dens,bmat,kStateGas,temp,pres);
 
   if (verbose>1) {
@@ -411,7 +411,7 @@ G4Material* G4NistMaterialBuilder::ConstructNewIdealGasMaterial(
   // add parameters of material into internal vectors
   // density in g/cm3, mean ionisation potential is not defined
   G4bool stp = true;
-  if(temp != STP_Temperature && pres != STP_Pressure)
+  if(temp != NTP_Temperature && pres != STP_Pressure)
     { stp = false; }
 
   G4double massPerMole = 0;

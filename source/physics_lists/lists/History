@@ -1,4 +1,4 @@
-$Id: History 86364 2014-11-10 08:41:56Z gcosmo $
+$Id: History 88971 2015-03-17 09:23:48Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -13,6 +13,11 @@ introduced in the code and keeptrack of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+17-Feb-2015, Davide Mancusi             (phys-lists-V10-00-15)
+- INCLXXPhysicsListHelper: do not use G4NeutronTrackingCut for *_HP physics
+  lists
+
 07-Nov-2014, Robert Hatcher             (phys-lists-V10-00-14)
 - Also remove support for G4GenericPhysicsList in new factory
   until the problem w/ mac/clang and G4AnyMethod is understood

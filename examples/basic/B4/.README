@@ -1,4 +1,4 @@
-//$Id: .README 83399 2014-08-21 14:47:20Z gcosmo $
+//$Id: .README 89037 2015-03-18 09:25:01Z gcosmo $
 
 ///\file "B4/.README"
 ///\brief Example B4 README page
@@ -255,7 +255,7 @@ Idle> exit
 % exampleB4a -u tcsh 
 \endverbatim                
 
-]<hr>
+<hr>
 
 The following paragraphs are common to all basic examples
 
@@ -315,48 +315,6 @@ The following paragraphs are common to all basic examples
    The selection of the user command interface is then done automatically 
    according to the Geant4 configuration or it can be done explicitly via 
    the third argument of the G4UIExecutive constructor (see exampleB4a.cc). 
- 
-\section B4_C HOW TO RUN
-
-   This example handles the program arguments in a new way.
-   It can be run with the following optional arguments:
-\verbatim
-% exampleB4a [-m macro ] [-u UIsession] [-t nThreads]
-\endverbatim 
-    
-   The -t option is available only in multi-threading mode
-   and it allows the user to override the Geant4 default number of 
-   threads. The number of threads can be also set via G4FORCENUMBEROFTHREADS
-   environment variable which has the top priority.
- 
-   - Execute exampleB4a in the 'interactive mode' with visualization
-\verbatim
-% exampleB4a
-and type in the commands from run1.mac line by line:  
-Idle> /tracking/verbose 1 
-Idle> /run/beamOn 1
-Idle> ...
-Idle> exit
-\endverbatim                
-     or
-\verbatim
-Idle> /control/execute run1.mac
-....
-Idle> exit
-\endverbatim                
-
-   - Execute exampleB4a in the 'batch' mode from macro files 
-     (without visualization)
-\verbatim
-% exampleB4a -m run2.mac
-% exampleB4a -m exampleB4.in > exampleB4.out
-\endverbatim                
-
-   - Execute exampleB4a in the 'interactive mode' with a selected UI session,
-     e.g. tcsh
-\verbatim
-% exampleB4a -u tcsh 
-\endverbatim                
 
 */
  

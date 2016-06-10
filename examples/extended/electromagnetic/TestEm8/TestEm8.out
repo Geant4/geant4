@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-01-ref-00    (5-December-2014)
+ Geant4 version Name: geant4-10-01-patch-01    (27-March-2015)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -14,7 +14,7 @@
 ***** Table : Nb of materials = 20 *****
 
  Material:    G4_Ar    density:  1.662 mg/cm3  RadL: 117.621 m    Nucl.Int.Length: 719.437 m  
-                       Imean: 188.000 eV   temperature: 273.15 K  pressure:   1.00 atm
+                       Imean: 188.000 eV   temperature: 293.15 K  pressure:   1.00 atm
 
    --->  Element: Ar (Ar)   Z = 18.0   N =  40.0   A =  39.95 g/mole
          --->  Isotope:  Ar36   Z = 18   N =  36   A =  35.97 g/mole   abundance:   0.34 %
@@ -24,7 +24,7 @@
 
 
  Material:    G4_Kr    density:  3.478 mg/cm3  RadL:  32.694 m    Nucl.Int.Length: 440.022 m  
-                       Imean: 352.000 eV   temperature: 273.15 K  pressure:   1.00 atm
+                       Imean: 352.000 eV   temperature: 293.15 K  pressure:   1.00 atm
 
    --->  Element: Kr (Kr)   Z = 36.0   N =  83.9   A =  83.80 g/mole
          --->  Isotope:  Kr78   Z = 36   N =  78   A =  77.92 g/mole   abundance:   0.35 %
@@ -37,7 +37,7 @@
 
 
  Material:    G4_Xe    density:  5.485 mg/cm3  RadL:  15.462 m    Nucl.Int.Length: 324.140 m  
-                       Imean: 482.000 eV   temperature: 273.15 K  pressure:   1.00 atm
+                       Imean: 482.000 eV   temperature: 293.15 K  pressure:   1.00 atm
 
    --->  Element: Xe (Xe)   Z = 54.0   N = 131.4   A = 131.29 g/mole
          --->  Isotope: Xe124   Z = 54   N = 124   A = 123.91 g/mole   abundance:   0.09 %
@@ -53,7 +53,7 @@
 
 
  Material: G4_CARBON_DIOXIDE CO_2   density:  1.842 mg/cm3  RadL: 196.486 m    Nucl.Int.Length: 465.934 m  
-                       Imean:  85.000 eV   temperature: 273.15 K  pressure:   1.00 atm
+                       Imean:  85.000 eV   temperature: 293.15 K  pressure:   1.00 atm
 
    --->  Element: C (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole
          --->  Isotope:   C12   Z =  6   N =  12   A =  12.00 g/mole   abundance:  98.93 %
@@ -88,7 +88,7 @@
 
 
  Material: G4_METHANE    density:  0.667 kg/m3   RadL: 696.482 m    Nucl.Int.Length: 910.346 m  
-                       Imean:  41.700 eV   temperature: 273.15 K  pressure:   1.00 atm
+                       Imean:  41.700 eV   temperature: 293.15 K  pressure:   1.00 atm
 
    --->  Element: C (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole
          --->  Isotope:   C12   Z =  6   N =  12   A =  12.00 g/mole   abundance:  98.93 %
@@ -102,7 +102,7 @@
 
 
  Material: G4_PROPANE    density:  1.879 mg/cm3  RadL: 241.434 m    Nucl.Int.Length: 345.990 m  
-                       Imean:  47.100 eV   temperature: 273.15 K  pressure:   1.00 atm
+                       Imean:  47.100 eV   temperature: 293.15 K  pressure:   1.00 atm
 
    --->  Element: C (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole
          --->  Isotope:   C12   Z =  6   N =  12   A =  12.00 g/mole   abundance:  98.93 %
@@ -125,7 +125,7 @@
 
 
  Material:   Kr7CH4    density:  3.491 mg/cm3  RadL:  32.924 m    Nucl.Int.Length: 429.288 m  
-                       Imean: 337.765 eV   temperature: 273.15 K  pressure:   1.00 atm
+                       Imean: 337.765 eV   temperature: 293.15 K  pressure:   1.00 atm
 
    --->  Element: Kr (Kr)   Z = 36.0   N =  83.9   A =  83.80 g/mole
          --->  Isotope:  Kr78   Z = 36   N =  78   A =  77.92 g/mole   abundance:   0.35 %
@@ -223,7 +223,7 @@
 
 
  Material:     C3H8    density:  3.758 mg/cm3  RadL: 120.742 m    Nucl.Int.Length: 173.031 m  
-                       Imean:  52.014 eV   temperature: 273.15 K  pressure:   1.00 atm
+                       Imean:  52.014 eV   temperature: 293.15 K  pressure:   1.00 atm
 
    --->  Element: C (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole
          --->  Isotope:   C12   Z =  6   N =  12   A =  12.00 g/mole   abundance:  98.93 %
@@ -237,7 +237,7 @@
 
 
  Material: XeCH4C3H8    density:  4.920 mg/cm3  RadL:  17.657 m    Nucl.Int.Length: 343.477 m  
-                       Imean: 438.262 eV   temperature: 273.15 K  pressure:   1.00 atm
+                       Imean: 438.262 eV   temperature: 293.15 K  pressure:   1.00 atm
 
    --->  Element: Xe (Xe)   Z = 54.0   N = 131.4   A = 131.29 g/mole
          --->  Isotope: Xe124   Z = 54   N = 124   A = 123.91 g/mole   abundance:   0.09 %
@@ -263,7 +263,7 @@
 
 
  Material:   Ar7CH4    density:  1.709 mg/cm3  RadL: 116.342 m    Nucl.Int.Length: 680.536 m  
-                       Imean: 177.716 eV   temperature: 273.15 K  pressure:   1.00 atm
+                       Imean: 177.716 eV   temperature: 293.15 K  pressure:   1.00 atm
 
    --->  Element: Ar (Ar)   Z = 18.0   N =  40.0   A =  39.95 g/mole
          --->  Isotope:  Ar36   Z = 18   N =  36   A =  35.97 g/mole   abundance:   0.34 %
@@ -283,7 +283,7 @@
 
 
  Material:    ArCO2    density:  1.822 mg/cm3  RadL: 119.168 m    Nucl.Int.Length: 604.582 m  
-                       Imean: 158.492 eV   temperature: 273.15 K  pressure:   1.00 atm
+                       Imean: 158.492 eV   temperature: 293.15 K  pressure:   1.00 atm
 
    --->  Element: Ar (Ar)   Z = 18.0   N =  40.0   A =  39.95 g/mole
          --->  Isotope:  Ar36   Z = 18   N =  36   A =  35.97 g/mole   abundance:   0.34 %
@@ -304,7 +304,7 @@
 
 
  Material:  Xe20CO2    density:  5.082 mg/cm3  RadL:  17.750 m    Nucl.Int.Length: 322.893 m  
-                       Imean: 412.596 eV   temperature: 273.15 K  pressure:   1.00 atm
+                       Imean: 412.596 eV   temperature: 293.15 K  pressure:   1.00 atm
 
    --->  Element: Xe (Xe)   Z = 54.0   N = 131.4   A = 131.29 g/mole
          --->  Isotope: Xe124   Z = 54   N = 124   A = 123.91 g/mole   abundance:   0.09 %
@@ -331,7 +331,7 @@
 
 
  Material:  Kr20CO2    density:  3.601 mg/cm3  RadL:  34.157 m    Nucl.Int.Length: 391.318 m  
-                       Imean: 296.925 eV   temperature: 273.15 K  pressure:   1.00 atm
+                       Imean: 296.925 eV   temperature: 293.15 K  pressure:   1.00 atm
 
    --->  Element: Kr (Kr)   Z = 36.0   N =  83.9   A =  83.80 g/mole
          --->  Isotope:  Kr78   Z = 36   N =  78   A =  77.92 g/mole   abundance:   0.35 %
@@ -355,7 +355,7 @@
 
 
  Material: TPC_Ne-CO2-2    density:  0.939 kg/m3   RadL: 320.739 m    Nucl.Int.Length: 993.129 m  
-                       Imean: 126.355 eV   temperature: 273.15 K  pressure:   1.00 atm
+                       Imean: 126.355 eV   temperature: 293.15 K  pressure:   1.00 atm
 
    --->  Element: Ne (Ne)   Z = 10.0   N =  20.2   A =  20.18 g/mole
          --->  Isotope:  Ne20   Z = 10   N =  20   A =  19.99 g/mole   abundance:  90.48 %
@@ -521,6 +521,7 @@ hPairProd:   for  proton    SubType= 4
            hPairProd :  Emin=        0 eV    Emax=       10 TeV
 
 CoulombScat:   for  proton, integral: 1     SubType= 1  BuildTable= 1
+      Used Lambda table of anti_proton
       180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering :  Emin=        0 eV    Emax=       10 TeV
@@ -646,7 +647,7 @@ hPairProd:   for  kaon-    SubType= 4
            hPairProd :  Emin=        0 eV    Emax=       10 TeV
 
 CoulombScat:   for  kaon-, integral: 1     SubType= 1  BuildTable= 1
-      Lambda table from threshold  to 10 TeV, 7 bins per decade, spline: 1
+      Used Lambda table of kaon+
       180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering :  Emin=        0 eV    Emax=       10 TeV
@@ -718,7 +719,7 @@ muPairProd:   for  mu-    SubType= 4
           muPairProd :  Emin=        0 eV    Emax=       10 TeV
 
 CoulombScat:   for  mu-, integral: 1     SubType= 1  BuildTable= 1
-      Lambda table from threshold  to 10 TeV, 7 bins per decade, spline: 1
+      Used Lambda table of mu+
       180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering :  Emin=        0 eV    Emax=       10 TeV
@@ -788,7 +789,7 @@ hPairProd:   for  pi-    SubType= 4
            hPairProd :  Emin=        0 eV    Emax=       10 TeV
 
 CoulombScat:   for  pi-, integral: 1     SubType= 1  BuildTable= 1
-      Lambda table from threshold  to 10 TeV, 7 bins per decade, spline: 1
+      Used Lambda table of pi+
       180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering :  Emin=        0 eV    Emax=       10 TeV
@@ -828,7 +829,7 @@ Index : 2     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.23s Real=0.24s Sys=0s
+  User=0.27s Real=0.27s Sys=0s
 RunAction: End of run actions are started 1  Nevt=  1000  Edep= 0.0156616
  ================== run summary =====================
    End of Run TotNbofEvents    = 1000
@@ -863,7 +864,6 @@ RunAction: End of run actions are started 1  Nevt=  1000  Edep= 0.0156616
 ... write Root file : testem8.root - done
 #
 G4 kernel has come to Quit state.
-Total navigation history collections cleaned: 8
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 10 of which, static: 0
 Dynamic pools deleted: 10 / Total memory freed: 0.012 Mb

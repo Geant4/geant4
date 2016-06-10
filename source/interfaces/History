@@ -1,4 +1,4 @@
-$Id: History 86972 2014-11-21 11:56:23Z gcosmo $
+$Id: History 88937 2015-03-16 15:55:38Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+15th December 2014  Laurent Garnier (interfaces-V10-00-24)
+- G4UIQt.cc
+  o Fix a problem when displaying the first time the help tree. The guidance label
+    was not show
 
 20th November 2014  Laurent Garnier (interfaces-V10-00-23)
 - G4UIQt.cc

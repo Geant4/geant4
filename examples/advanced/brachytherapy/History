@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: History 84280 2014-10-13 07:21:10Z gcosmo $
+$Id: History 89132 2015-03-20 09:32:45Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -8,6 +8,9 @@ $Id: History 84280 2014-10-13 07:21:10Z gcosmo $
 
                       Category History file
                       ---------------------
+
+06.03.2015 -  A. Dotti; brachy-V10-00-01
+              Removing unnecessary instantiation of GPS in master
 
 09.10.2014 -  S. Guatelli; brachy-V10-00-00
 	      Compilation errors and warnings with cdash deleted

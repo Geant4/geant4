@@ -1,4 +1,4 @@
-$Id: History 81783 2014-06-05 09:10:33Z gcosmo $
+$Id: History 89124 2015-03-20 09:21:20Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+06-Mar-2015, Andrea Dotti (exgflash-V10-00-01)
+- Remove unnecessary GPS in master
 
 04-Jun-2014, Andrea Dotti (exgflash-V10-00-00)
 - New GPS MT compliant system

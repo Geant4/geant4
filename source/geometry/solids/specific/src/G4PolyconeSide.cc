@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PolyconeSide.cc 70648 2013-06-03 15:15:16Z gcosmo $
+// $Id: G4PolyconeSide.cc 88948 2015-03-16 16:26:50Z gcosmo $
 //
 // 
 // --------------------------------------------------------------------
@@ -58,12 +58,14 @@ template <class G4PlSideData> G4ThreadLocal
 //
 G4PlSideManager G4PolyconeSide::subInstanceManager;
 
+
 // Returns the private data instance manager.
 //
 const G4PlSideManager& G4PolyconeSide::GetSubInstanceManager()
 {
   return subInstanceManager;
 }
+
 
 //
 // Constructor
@@ -408,6 +410,9 @@ G4bool G4PolyconeSide::Intersect( const G4ThreeVector &p,
 }
 
 
+//
+// Distance
+//
 G4double G4PolyconeSide::Distance( const G4ThreeVector &p, G4bool outgoing )
 {
   G4double normSign = outgoing ? -1 : +1;
@@ -452,32 +457,20 @@ EInside G4PolyconeSide::Inside( const G4ThreeVector &p,
                                       G4double tolerance, 
                                       G4double *bestDistance )
 {
-  //
-  // Check both sides
-  //
-  G4double distFrom[2], distOut2[2], dist2[2];
-  G4double edgeRZnorm[2];
+  G4double distFrom, distOut2, dist2;
+  G4double edgeRZnorm;
      
-  distFrom[0] =  DistanceAway( p, false, distOut2[0], edgeRZnorm   );
-  distFrom[1] =  DistanceAway( p,  true, distOut2[1], edgeRZnorm+1 );
+  distFrom =  DistanceAway( p, distOut2, &edgeRZnorm );
+  dist2 = distFrom*distFrom + distOut2;
+ 
+  *bestDistance = std::sqrt( dist2);
   
-  dist2[0] = distFrom[0]*distFrom[0] + distOut2[0];
-  dist2[1] = distFrom[1]*distFrom[1] + distOut2[1];
-  
-  //
-  // Who's closest?
-  //
-  G4int i = std::fabs(dist2[0]) < std::fabs(dist2[1]) ? 0 : 1;
-  
-  *bestDistance = std::sqrt( dist2[i] );
-  
-  //
   // Okay then, inside or out?
   //
-  if ( (std::fabs(edgeRZnorm[i]) < tolerance)
-    && (distOut2[i] < tolerance*tolerance) )
+  if ( (std::fabs(edgeRZnorm) < tolerance)
+    && (distOut2< tolerance*tolerance) )
     return kSurface;
-  else if (edgeRZnorm[i] < 0)
+  else if (edgeRZnorm < 0)
     return kInside;
   else
     return kOutside;
@@ -563,7 +556,6 @@ G4double G4PolyconeSide::Extent( const G4ThreeVector axis )
   
   return a;
 }
-
 
 
 //
@@ -883,6 +875,7 @@ void G4PolyconeSide::CalculateExtent( const EAxis axis,
   return;
 }
 
+
 //
 // GetPhi
 //
@@ -906,6 +899,7 @@ G4double G4PolyconeSide::GetPhi( const G4ThreeVector& p )
   }
   return val;
 }
+
 
 //
 // DistanceAway
@@ -994,6 +988,97 @@ G4double G4PolyconeSide::DistanceAway( const G4ThreeVector &p,
       // Add result to our distance
       //
       G4double dist = d1*rx;
+      
+      distOutside2 += dist*dist;
+      if (edgeRZnorm)
+      {
+        *edgeRZnorm = std::max(std::fabs(*edgeRZnorm),std::fabs(dist));
+      }
+    }
+  }
+
+  return answer;
+}
+
+
+//
+// DistanceAway
+//
+// Special version of DistanceAway for Inside.
+// Opposite parameter is not used, instead use sign of rx for choosing the side
+//
+G4double G4PolyconeSide::DistanceAway( const G4ThreeVector &p,
+                                             G4double &distOutside2,
+                                             G4double *edgeRZnorm  )
+{
+  //
+  // Convert our point to r and z
+  //
+  G4double rx = p.perp(), zx = p.z();
+  
+  //
+  // Change sign of r if we should
+  //
+  G4int part = 1;
+  if (rx < 0) part = -1;
+  
+  //
+  // Calculate return value
+  //
+  G4double deltaR  = rx - r[0]*part, deltaZ = zx - z[0];
+  G4double answer = deltaR*rNorm*part + deltaZ*zNorm;
+  
+  //
+  // Are we off the surface in r,z space?
+  //
+  G4double q = deltaR*rS*part + deltaZ*zS;
+  if (q < 0)
+  {
+    distOutside2 = q*q;
+    if (edgeRZnorm)
+    {
+      *edgeRZnorm = deltaR*rNormEdge[0]*part + deltaZ*zNormEdge[0];
+    }
+  }
+  else if (q > length)
+  {
+    distOutside2 = sqr( q-length );
+    if (edgeRZnorm)
+    {
+      deltaR = rx - r[1]*part;
+      deltaZ = zx - z[1];
+      *edgeRZnorm = deltaR*rNormEdge[1]*part + deltaZ*zNormEdge[1];
+    }
+  }
+  else
+  {
+    distOutside2 = 0;
+    if (edgeRZnorm) *edgeRZnorm = answer;
+  }
+
+  if (phiIsOpen)
+  {
+    //
+    // Finally, check phi
+    //
+    G4double phi = GetPhi(p);
+    while( phi < startPhi ) phi += twopi;
+    
+    if (phi > startPhi+deltaPhi)
+    {
+      //
+      // Oops. Are we closer to the start phi or end phi?
+      //
+      G4double d1 = phi-startPhi-deltaPhi;
+      while( phi > startPhi ) phi -= twopi;
+      G4double d2 = startPhi-phi;
+      
+      if (d2 < d1) d1 = d2;
+      
+      //
+      // Add result to our distance
+      //
+      G4double dist = d1*rx*part;
       
       distOutside2 += dist*dist;
       if (edgeRZnorm)
@@ -1103,6 +1188,7 @@ void G4PolyconeSide::FindLineIntersect( G4double x1,  G4double y1,
   y = 0.5*( y1+s1*ty1 + y2+s2*ty2 );
 }
 
+
 //
 // Calculate surface area for GetPointOnSurface()
 //
@@ -1115,6 +1201,7 @@ G4double G4PolyconeSide::SurfaceArea()
   }  
   return fSurfaceArea;
 }
+
 
 //
 // GetPointOnFace

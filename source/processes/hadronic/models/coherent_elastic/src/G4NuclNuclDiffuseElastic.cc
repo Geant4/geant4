@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NuclNuclDiffuseElastic.cc 83427 2014-08-21 15:44:43Z gcosmo $
+// $Id: G4NuclNuclDiffuseElastic.cc 88985 2015-03-17 10:30:14Z gcosmo $
 //
 //
 // Physics model class G4NuclNuclDiffuseElastic 
@@ -989,6 +989,7 @@ void G4NuclNuclDiffuseElastic::BuildAngleTable()
 
     if(alphaMax > pi) alphaMax = pi;
 
+    alphaMax = pi2;
 
     alphaCoulomb = fRutherfordTheta*fCofAlphaCoulomb;
 

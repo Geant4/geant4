@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LogicalBorderSurface.cc 80067 2014-03-31 13:48:09Z gcosmo $
+// $Id: G4LogicalBorderSurface.cc 88950 2015-03-16 16:31:29Z gcosmo $
 //
 // --------------------------------------------------------------------
 // G4LogicalBorderSurface Implementation
@@ -92,15 +92,14 @@ G4LogicalBorderSurface&
 G4LogicalBorderSurface::operator=(const G4LogicalBorderSurface &right)
 {
   if (&right == this) return *this;
-  if (&right)
-  {
-    SetSurfaceProperty(right.GetSurfaceProperty());
-    SetName(right.GetName());
-    SetTransitionRadiationSurface(right.GetTransitionRadiationSurface());
-    Volume1 = right.Volume1;
-    Volume2 = right.Volume2;
-    (*theBorderSurfaceTable) = (*right.theBorderSurfaceTable);
-  }
+
+  SetSurfaceProperty(right.GetSurfaceProperty());
+  SetName(right.GetName());
+  SetTransitionRadiationSurface(right.GetTransitionRadiationSurface());
+  Volume1 = right.Volume1;
+  Volume2 = right.Volume2;
+  (*theBorderSurfaceTable) = (*right.theBorderSurfaceTable);
+
   return *this;
 }
 

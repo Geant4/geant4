@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ChipsHyperonElasticXS.cc 83409 2014-08-21 15:16:07Z gcosmo $
+// $Id: G4ChipsHyperonElasticXS.cc 88983 2015-03-17 10:24:43Z gcosmo $
 //
 //
 // G4 Physics class: G4ChipsHyperonElasticXS for pA elastic cross sections
@@ -136,40 +136,11 @@ G4ChipsHyperonElasticXS::~G4ChipsHyperonElasticXS()
   B4T.clear();
 }
 
-G4bool G4ChipsHyperonElasticXS::IsIsoApplicable(const G4DynamicParticle* Pt, G4int, G4int,    
+G4bool G4ChipsHyperonElasticXS::IsIsoApplicable(const G4DynamicParticle*, G4int, G4int,    
 				 const G4Element*,
 				 const G4Material*)
 {
-  const G4ParticleDefinition* particle = Pt->GetDefinition();
-  if (particle == G4Lambda::Lambda()) 
-    {
-      return true;
-    }
-  else if(particle == G4SigmaPlus::SigmaPlus())
-    {
-    return true;
-    }
-  else if(particle == G4SigmaMinus::SigmaMinus())
-    {
-    return true;
-    }
-  else if(particle == G4SigmaZero::SigmaZero())
-    {
-      return true;
-    }
-  else if(particle == G4XiMinus::XiMinus())
-    {
-      return true;
-    }
-  else if(particle == G4XiZero::XiZero())
-    {
-      return true;
-    }
-  else if(particle == G4OmegaMinus::OmegaMinus())
-    {
-      return true;
-    }
-  return false;
+  return true;
 }
 
 // The main member function giving the collision cross section (P is in IU, CS is in mb)

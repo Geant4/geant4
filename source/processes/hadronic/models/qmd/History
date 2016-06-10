@@ -13,6 +13,14 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+13 March 2015 Tatsumi Koi (hadr-qmd-V10-00-04)
+- Fix for Coverity #56310 and 56302
+	src/G4QMDNucleus.cc
+
+02 March 2015 Tatsumi Koi
+- Fix for Coverity #20339
+	src/G4QMDGroundStateNucleus.cc
+
 09 September 2014 Witek Pokorski (hadr-qmd-V10-00-03)
 - update to use G4CrossSectionDataSetRegistry
 

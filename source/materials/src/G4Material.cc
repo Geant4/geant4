@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Material.cc 81374 2014-05-27 13:07:25Z gcosmo $
+// $Id: G4Material.cc 88957 2015-03-16 16:46:05Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //
@@ -720,7 +720,7 @@ G4int G4Material::operator!=(const G4Material& right) const
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-std::ostream& operator<<(std::ostream& flux, G4Material* material)
+std::ostream& operator<<(std::ostream& flux, const G4Material* material)
 {
   std::ios::fmtflags mode = flux.flags();
   flux.setf(std::ios::fixed,std::ios::floatfield);
@@ -768,7 +768,7 @@ std::ostream& operator<<(std::ostream& flux, G4Material* material)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-std::ostream& operator<<(std::ostream& flux, G4Material& material)
+std::ostream& operator<<(std::ostream& flux, const G4Material& material)
 {
   flux << &material;        
   return flux;

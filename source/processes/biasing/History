@@ -1,4 +1,4 @@
-$Id: History 78011 2013-12-02 11:32:48Z gcosmo $
+$Id: History 88923 2015-03-16 13:58:51Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,12 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Mar 10th, 2015 Gabriele Cosmo (procbiasing-V10-00-00)
+- G4ImportanceProcess, G4WeightCutOffProcess, G4WeightWindowProcess: made
+  static thread-local variables into class data members.
+  Renamed them accordingly: fEndTrack, feLimited, fParaflag.
+  Use const reference for string in argument in SetParallelWorld().
 
 Nov 30th, 2013 Alex Howard (procbiasing-V09-06-18)
     - Moved static methods in the initialiser to the body for G4GeometrySampler

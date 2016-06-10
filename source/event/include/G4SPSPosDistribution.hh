@@ -142,31 +142,44 @@
 #include "G4Threading.hh"
 #include "G4Cache.hh"
 
+/** Andrea Dotti Feb 2015
+ * Important: This is a shared class between threads.
+ * Only one thread should use the set-methods here.
+ * Note that this is exactly what is achieved using UI commands.
+ * If you use the set methods to set defaults in your
+ * application take care that only one thread is executing them.
+ * In addition take care of calling these methods before the run is started
+ * Do not use these setters during the event loop
+ */
+
+
 class G4SPSPosDistribution
 {
 public:
   G4SPSPosDistribution (); 
   ~G4SPSPosDistribution ();
 
+  /**
+   * Important: This is a shared class between threads.
+   * Only one thread should use the set-methods here.
+   * Note that this is achieved by UI commands.
+   * If you use these methods to set defaults in your
+   * application take care that only one thread is executing them.
+   * In addition take care of calling these methods before the run is started
+   * Do not use these setters during the event loop
+   */
   // methods to create source position dist.
   void SetPosDisType(G4String); // Point, Plane, Surface, Volume
-  G4String GetPosDisType();
   void SetPosDisShape(G4String);
-  G4String GetPosDisShape();
   // SetPosDisShape - Square, Circle, Annulus, Ellipse, Rectangle, Sphere,
   // Ellipsoid, Cylinder, Right (parallelepiped).
   void SetCentreCoords(G4ThreeVector);
-  G4ThreeVector GetCentreCoords();
   void SetPosRot1(G4ThreeVector); 
   void SetPosRot2(G4ThreeVector); 
   void SetHalfX(G4double);
-  G4double GetHalfX();
   void SetHalfY(G4double);
-  G4double GetHalfY();
   void SetHalfZ(G4double);
-  G4double GetHalfZ();
   void SetRadius(G4double);
-  G4double GetRadius();
   void SetRadius0(G4double);
   void SetBeamSigmaInR(G4double);
   void SetBeamSigmaInX(G4double);
@@ -181,11 +194,19 @@ public:
   void SetVerbosity(G4int a);
   //
   G4ThreeVector GenerateOne();
-    
+
+  G4String GetPosDisType() const;
+  G4String GetPosDisShape() const;
+  G4ThreeVector GetCentreCoords() const;
+  G4double GetHalfX() const;
+  G4double GetHalfY() const;
+  G4double GetHalfZ() const;
+  G4double GetRadius() const;
+
     G4ThreeVector GetSideRefVec1() const;
     G4ThreeVector GetSideRefVec2() const;
     G4ThreeVector GetSideRefVec3() const;
-    G4String GetSourcePosType();
+    G4String GetSourcePosType() const;
     G4ThreeVector GetParticlePos() const;
 
 private:
@@ -200,37 +221,57 @@ private:
 
   G4bool IsSourceConfined(G4ThreeVector& outputPos);
 
-    void InitThreadLocalCache() const;
-    void HandleThreadLocalCache( const G4ThreeVector& v1 , const G4ThreeVector& v2, const G4ThreeVector& v3 );
 private:
-
-  // Position distribution Variables
-  G4String SourcePosType; //Point,Plane,Surface,Volume
-  G4String Shape; //Circle,Square,Rectangle etc..
-  G4double halfx, halfy, halfz; //half lengths
-  G4double Radius; //Radius for circles or spheres
-  G4double Radius0; // The inner radius of an annulus
-  G4double SR,SX,SY; // Standard deviation in raduial, x, y for beam type source
-  G4ThreeVector CentreCoords; // Coords of centre of input shape
-  G4ThreeVector Rotx, Roty, Rotz; // Unit vectors defining rotation matrix
-  G4double ParAlpha, ParTheta, ParPhi; //Angle for Right Parallellepipeds
-  G4bool Confine; //If true confines source distribution to VolName
+  //VERY IMPORTANT:
+  //This is a shared resource, however setters that
+  //changes the parameters via UI commands are by design
+  //thread-safe because only one thread will call these methods
+  //See G4GeneralParticleSourceMessenger constructor for an explanation
+  struct thread_data_t {
+    //Caching of some data
+    G4ThreeVector CSideRefVec1;
+    G4ThreeVector CSideRefVec2;
+    G4ThreeVector CSideRefVec3;
+    G4ThreeVector CParticlePos;
+    thread_data_t();
+  };
+  //Point,Plane,Surface,Volume
+  G4String SourcePosType;
+  //Circle,Square,Rectangle etc..
+  G4String Shape;
+  // Coords of centre of input shape
+  G4ThreeVector CentreCoords;
+  // Unit vectors defining rotation matrix
+  G4ThreeVector Rotx;
+  G4ThreeVector Roty;
+  G4ThreeVector Rotz;
+  //half lengths
+  G4double halfx;
+  G4double halfy;
+  G4double halfz;
+  //Radius for circles or spheres
+  G4double Radius;
+  // The inner radius of an annulus
+  G4double Radius0;
+  // Standard deviation in raduial, x, y for beam type source
+  G4double SR;
+  G4double SX;
+  G4double SY;
+  //Angle for Right Parallellepipeds
+  G4double ParAlpha;
+  G4double ParTheta;
+  G4double ParPhi;
+  //If true confines source distribution to VolName
+  G4bool Confine;
   G4String VolName;
-  //Thread local caches
-    G4Cache<G4ThreeVector*> CSideRefVec1, CSideRefVec2, CSideRefVec3;
-    G4Cache<G4ThreeVector> CParticlePos;
-
-  G4ThreeVector particle_position; // the final particle position
-  //
-  //G4Navigator *gNavigator;
-  //
-  G4SPSRandomGenerator* posRndm; // biased random generator
   // Verbosity
   G4int verbosityLevel;
-    
-  G4Mutex mutex; // protect access to shared resources
-
+  G4Cache<thread_data_t> ThreadData;
+  // biased random generator
+  G4Mutex a_mutex;
+  G4SPSRandomGenerator* PosRndm;
 };
+
 
 #endif
 

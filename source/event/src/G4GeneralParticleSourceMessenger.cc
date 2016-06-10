@@ -107,8 +107,11 @@ G4GeneralParticleSourceMessenger::G4GeneralParticleSourceMessenger
       
 {
   //A.Dotti - 10th October 2014
-  //This messenger is special: it is instantiated in a user action but
-  //the UI commands it defines should be executed by the master thread.
+  //This messenger is special: it is instantiated in a user action but (e.g. in
+  // a thread).
+  //the UI commands it defines should be executed by the *master* thread because
+  //they operate on shared resources and we want the UI commands to take
+  //effect BEFORE the threads do some work (so all data are properly initialized)
   //To achieve this behavior we set to true a base calss protected
   //data member. Since it makes no sense to have more than one instance
   //of the messenger we check that we actually have only one.

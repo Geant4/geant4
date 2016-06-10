@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm8/src/DetectorConstruction.cc
 /// \brief Implementation of the DetectorConstruction class
 //
-// $Id: DetectorConstruction.cc 86976 2014-11-21 12:07:00Z gcosmo $
+// $Id: DetectorConstruction.cc 89039 2015-03-18 09:28:24Z gcosmo $
 //
 /////////////////////////////////////////////////////////////////////////
 //
@@ -76,8 +76,7 @@ DetectorConstruction::DetectorConstruction()
   : G4VUserDetectorConstruction(),
     fGasMat(0), fWindowMat(0), fWorldMaterial(0),
     fPhysWorld(0), fLogicWorld(0), fLogicWind(0), fLogicDet(0),
-    fDetectorMessenger(0), fTargetSD(0), fGasDetectorCuts(0),
-    fRegGasDet(0)
+    fDetectorMessenger(0), fGasDetectorCuts(0), fRegGasDet(0)
 {
   fGasThickness = 23.0*mm;
   fGasRadius    = 10.*cm;
@@ -311,8 +310,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 
 void DetectorConstruction::ConstructSDandField()
 {  
-  fTargetSD = new TargetSD("GasSD");
-  SetSensitiveDetector(fLogicDet, fTargetSD); 
+  SetSensitiveDetector(fLogicDet, new TargetSD("GasSD")); 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

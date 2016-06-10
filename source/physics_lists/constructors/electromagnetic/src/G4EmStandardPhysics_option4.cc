@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmStandardPhysics_option4.cc 86233 2014-11-07 17:21:03Z gcosmo $
+// $Id: G4EmStandardPhysics_option4.cc 88877 2015-03-13 16:00:02Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -127,7 +127,7 @@ G4EmStandardPhysics_option4::G4EmStandardPhysics_option4(G4int ver)
   param->SetNumberOfBinsPerDecade(20);
   param->ActivateAngularGeneratorForIonisation(true);
   //param->SetMuHadLateralDisplacement(false);
-  param->SetLatDisplacementBeyondSafety(true);
+  //param->SetLatDisplacementBeyondSafety(true);
   SetPhysicsType(bElectromagnetic);
 }
 
@@ -264,7 +264,7 @@ void G4EmStandardPhysics_option4::ConstructProcess()
 
       // multiple scattering
       G4eMultipleScattering* msc = new G4eMultipleScattering;
-      msc->SetStepLimitType(fUseSafetyPlus);
+      msc->SetStepLimitType(fUseDistanceToBoundary);
       G4UrbanMscModel* msc1 = new G4UrbanMscModel();
       G4WentzelVIModel* msc2 = new G4WentzelVIModel();
       msc1->SetHighEnergyLimit(highEnergyLimit);
@@ -304,7 +304,7 @@ void G4EmStandardPhysics_option4::ConstructProcess()
 
       // multiple scattering
       G4eMultipleScattering* msc = new G4eMultipleScattering;
-      msc->SetStepLimitType(fUseSafetyPlus);
+      msc->SetStepLimitType(fUseDistanceToBoundary);
       G4UrbanMscModel* msc1 = new G4UrbanMscModel();
       G4WentzelVIModel* msc2 = new G4WentzelVIModel();
       msc1->SetHighEnergyLimit(highEnergyLimit);

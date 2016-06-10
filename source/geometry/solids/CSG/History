@@ -1,4 +1,4 @@
-$Id: History 83851 2014-09-19 10:12:12Z gcosmo $
+$Id: History 88946 2015-03-16 16:14:24Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,12 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+February 16, 2015  G.Cosmo               geom-csg-V10-00-07
+- Fixed typo in copy-ctor and assignment operator for G4Tubs and G4OTubs.
+
+December 5, 2014  G.Cosmo
+- Fix in temporary class G4OTubs to include symbol in library in any case.
 
 September 17, 2014  G.Cosmo              geom-csg-V10-00-06
 - Added wrapper for UTrap shape; adapted switch to original G4Trap accordingly.

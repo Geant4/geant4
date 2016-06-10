@@ -1,4 +1,4 @@
-$Id: History 87361 2014-12-01 16:10:28Z gcosmo $
+$Id: History 88879 2015-03-13 16:13:58Z gcosmo $
 -------------------------------------------------------------------
 
        ==========================================================
@@ -14,6 +14,10 @@ code and to keep track of all tags.
      ---------------------------------------------------------------
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
+
+21-Jan-2015 A. Ribon      (had-hadronization-V10-00-14)
+ - G4LundStringFragmentation - re-introduced M.Novak's fix, replacing
+   "if(StringMass >= ...)" with "if(StringMass > ...)" in three places.
 
 28-Nov-2014 V. Uzhinsky   (had-hadronization-V10-00-13)
  - G4LundStringFragmentation - charged baryon number conservation is fixed

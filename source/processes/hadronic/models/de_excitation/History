@@ -14,6 +14,44 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+02 Feb 2015 Vladimir Ivanchenko (hadr-deex-V10-00-30)
+----------------------------------------------------------
+- G4GEMProbability - due to change of history a very rare bug appeares
+    in FTF_BIC Physics List where a nucleus get excited to 8 GeV;
+    protection is added to avoid numerical problem
+
+02 Feb 2015 Vladimir Ivanchenko
+----------------------------------------------------------
+- G4VGammaDeexcitation, G4DiscreteGammaDeexcitation, G4PhotonEvaporation,
+    changed default set of parameters: ICM disabled;
+    time limit for isomere production is set to DBL_MAX; sampling of
+    gamma decay of long-lived isomere levels is performed as it was in 
+    Geant4 9.6 assuming decay at rest and making correction for energy
+    balance (in that case momentum balance is not guranteed); binding
+    energy is taken into account in the case of ICM enabled. These
+    modifications should provide correct sampling of the decay time for
+    all type of levels, energy balance in hadronic interactions, and
+    reproducibility of hadronic transport
+- G4NeutronRadCapture - enable ICM by default
+
+06 Jan 2015 Laurent Desorgher
+----------------------------------------------------------
+- G4VGammaDeexcitation::GenerateGamma() take into account atomic bond energy 
+  for computation of transition energy and kinematics in the case of internal 
+  conversion. 
+
+10 Dec 2014 Vladimir Ivanchenko
+----------------------------------------------------------
+- G4DiscreteGammaTransition return back correction on shell number
+     to avoid assert fail in simplified calorimeter
+- G4ContinuumGammaDeexcitation - fixed Coverity report
+
+01 Dec 2014 Vladimir Ivanchenko (hadr-deex-V10-00-29)
+----------------------------------------------------------
+- G4VGammaDeexcitation, G4PhotonEvaporation - propagate vacant
+    shell number after internal convertion allowing to enable 
+    atomic de-excitation in radioactive decay 
+
 28 Nov 2014 Vladimir Ivanchenko (hadr-deex-V10-00-28)
 ----------------------------------------------------------
 - G4FermiBreakUp - fixed value of const coefficient to probability

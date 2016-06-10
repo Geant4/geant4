@@ -164,7 +164,7 @@ MACRO(GEANT4_LIBRARY_TARGET)
     # Because externals like clhep appear in G4LIBTARGET_LINK_LIBRARIES,
     # filter this list to replace shared builtins with their static variant
     string(REGEX REPLACE
-      "(G4clhep|G4expat|G4zlib)(;|$)" "\\1-static\\2"
+      "(G4clhep|G4expat|G4zlib|G4geomUSolids)(;|$)" "\\1-static\\2"
       G4LIBTARGET_LINK_LIBRARIES_STATIC
       "${G4LIBTARGET_LINK_LIBRARIES}"
       )

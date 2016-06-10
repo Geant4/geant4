@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ChipsAntiBaryonElasticXS.cc 83409 2014-08-21 15:16:07Z gcosmo $
+// $Id: G4ChipsAntiBaryonElasticXS.cc 88983 2015-03-17 10:24:43Z gcosmo $
 //
 //
 // G4 Physics class: G4ChipsAntiBaryonElasticXS for pA elastic cross sections
@@ -132,12 +132,12 @@ G4ChipsAntiBaryonElasticXS::~G4ChipsAntiBaryonElasticXS()
 }
 
 
-G4bool G4ChipsAntiBaryonElasticXS::IsIsoApplicable(const G4DynamicParticle* Pt, G4int, G4int,    
+G4bool G4ChipsAntiBaryonElasticXS::IsIsoApplicable(const G4DynamicParticle*, G4int, G4int,    
 				 const G4Element*,
 				 const G4Material*)
 {
-  const G4ParticleDefinition* particle = Pt->GetDefinition();
 
+  /*
   if(particle == G4AntiNeutron::AntiNeutron())
   {
     return true;
@@ -174,7 +174,8 @@ G4bool G4ChipsAntiBaryonElasticXS::IsIsoApplicable(const G4DynamicParticle* Pt, 
   {
     return true;
   }
-  return false;
+  */
+  return true;
 }
 
 // The main member function giving the collision cross section (P is in IU, CS is in mb)

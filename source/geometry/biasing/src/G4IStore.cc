@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4IStore.cc 77780 2013-11-28 07:50:59Z gcosmo $
+// $Id: G4IStore.cc 88917 2015-03-16 13:31:41Z gcosmo $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -43,14 +43,13 @@
 // ***************************************************************************
 // Static class variable: ptr to single instance of class
 // ***************************************************************************
-//G4ThreadLocal 
-G4IStore* G4IStore::fInstance = 0;
+G4ThreadLocal G4IStore* G4IStore::fInstance = 0;
 
 G4IStore::G4IStore() :
 fWorldVolume(G4TransportationManager::GetTransportationManager()->GetNavigatorForTracking()->GetWorldVolume())
 {}
 
-G4IStore::G4IStore(G4String ParallelWorldName) :
+G4IStore::G4IStore(const G4String& ParallelWorldName) :
 fWorldVolume(G4TransportationManager::GetTransportationManager()->GetParallelWorld(ParallelWorldName))
 {
   G4cout << " G4IStore:: ParallelWorldName = " << ParallelWorldName << G4endl;
@@ -223,7 +222,7 @@ G4IStore* G4IStore::GetInstance()
 // Creates it in case it's called for the first time.
 // ***************************************************************************
 //
-G4IStore* G4IStore::GetInstance(G4String ParallelWorldName)
+G4IStore* G4IStore::GetInstance(const G4String& ParallelWorldName)
 {
   if (!fInstance)
   {

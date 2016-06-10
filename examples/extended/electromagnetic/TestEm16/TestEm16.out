@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-01-ref-00    (5-December-2014)
+ Geant4 version Name: geant4-10-01-patch-01    (27-March-2015)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -268,7 +268,7 @@ G4SynchrotronRadiation::GetRandomEnergySR :
  Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.76s Real=0.75s Sys=0s
+  User=0.77s Real=0.77s Sys=0s
 Summary for synchrotron radiation :
   Number of photons = 64554
   Emean             = 20.24 +/- 0.1449 keV
@@ -281,7 +281,6 @@ Summary for synchrotron radiation :
  Current couple of seeds = 1554742231, 6856043
 ----------------------------------------
 G4 kernel has come to Quit state.
-Total navigation history collections cleaned: 6
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 9 of which, static: 0
 Dynamic pools deleted: 9 / Total memory freed: 0.35 Mb

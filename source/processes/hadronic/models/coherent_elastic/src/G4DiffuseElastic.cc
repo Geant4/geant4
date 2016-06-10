@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DiffuseElastic.cc 84417 2014-10-15 08:22:44Z gcosmo $
+// $Id: G4DiffuseElastic.cc 88985 2015-03-17 10:30:14Z gcosmo $
 //
 //
 // Physics model class G4DiffuseElastic 
@@ -107,14 +107,16 @@ G4DiffuseElastic::G4DiffuseElastic()
 
 G4DiffuseElastic::~G4DiffuseElastic()
 {
-  if ( fEnergyVector ) {
+  if ( fEnergyVector ) 
+  {
     delete fEnergyVector;
     fEnergyVector = 0;
   }
-
   for ( std::vector<G4PhysicsTable*>::iterator it = fAngleBank.begin();
-        it != fAngleBank.end(); ++it ) {
+        it != fAngleBank.end(); ++it ) 
+  {
     if ( (*it) ) (*it)->clearAndDestroy();
+
     delete *it;
     *it = 0;
   }
@@ -134,13 +136,13 @@ void G4DiffuseElastic::Initialise()
 
   size_t jEl, numOfEl = G4Element::GetNumberOfElements();
 
-  for(jEl = 0 ; jEl < numOfEl; ++jEl) // application element loop
+  for( jEl = 0; jEl < numOfEl; ++jEl) // application element loop
   {
     fAtomicNumber = (*theElementTable)[jEl]->GetZ();     // atomic number
     fAtomicWeight = G4NistManager::Instance()->GetAtomicMassAmu( static_cast< G4int >( fAtomicNumber ) );
     fNuclearRadius = CalculateNuclearRad(fAtomicWeight);
 
-    if(verboseLevel > 0) 
+    if( verboseLevel > 0 ) 
     {   
       G4cout<<"G4DiffuseElastic::Initialise() the element: "
 	    <<(*theElementTable)[jEl]->GetName()<<G4endl;
@@ -380,20 +382,20 @@ G4DiffuseElastic::GetDiffElasticProb( // G4ParticleDefinition* particle,
   // G4double r0    = 1.08*fermi;
   // G4double rad   = r0*std::pow(A, 1./3.);
 
-  G4double kr    = fWaveVector*fNuclearRadius; // wavek*rad;
-  G4double kr2   = kr*kr;
-  G4double krt   = kr*theta;
-
-  bzero      = BesselJzero(krt);
-  bzero2     = bzero*bzero;    
-  bone       = BesselJone(krt);
-  bone2      = bone*bone;
-  bonebyarg  = BesselOneByArg(krt);
-  bonebyarg2 = bonebyarg*bonebyarg;  
-
   if (fParticle == theProton)
   {
     diffuse = 0.63*fermi;
+    gamma   = 0.3*fermi;
+    delta   = 0.1*fermi*fermi;
+    e1      = 0.3*fermi;
+    e2      = 0.35*fermi;
+  }
+  else if (fParticle == theNeutron)
+  {
+    diffuse =  0.63*fermi; // 1.63*fermi; //
+    G4double k0 = 1*GeV/hbarc;
+    diffuse *= k0/fWaveVector;
+
     gamma   = 0.3*fermi;
     delta   = 0.1*fermi*fermi;
     e1      = 0.3*fermi;
@@ -407,6 +409,17 @@ G4DiffuseElastic::GetDiffElasticProb( // G4ParticleDefinition* particle,
     e1      = 0.3*fermi;
     e2      = 0.35*fermi;
   }
+  G4double kr    = fWaveVector*fNuclearRadius; // wavek*rad;
+  G4double kr2   = kr*kr;
+  G4double krt   = kr*theta;
+
+  bzero      = BesselJzero(krt);
+  bzero2     = bzero*bzero;    
+  bone       = BesselJone(krt);
+  bone2      = bone*bone;
+  bonebyarg  = BesselOneByArg(krt);
+  bonebyarg2 = bonebyarg*bonebyarg;  
+
   G4double lambda = 15.; // 15 ok
 
   //  G4double kgamma    = fWaveVector*gamma;   // wavek*delta;
@@ -477,6 +490,17 @@ G4DiffuseElastic::GetDiffElasticSumProb( // G4ParticleDefinition* particle,
     e1      = 0.3*fermi;
     e2      = 0.35*fermi;
   }
+  else if (fParticle == theNeutron)
+  {
+    diffuse = 0.63*fermi;
+    // diffuse = 0.6*fermi;
+    G4double k0 = 1*GeV/hbarc;
+    diffuse *= k0/fWaveVector;
+    gamma   = 0.3*fermi;
+    delta   = 0.1*fermi*fermi;
+    e1      = 0.3*fermi;
+    e2      = 0.35*fermi;
+  }
   else // as proton, if were not defined 
   {
     diffuse = 0.63*fermi;
@@ -535,7 +559,7 @@ G4DiffuseElastic::GetDiffElasticSumProb( // G4ParticleDefinition* particle,
 ////////////////////////////////////////////////////////////////////////////
 //
 // return differential elastic probability d(probability)/d(t) with 
-// Coulomb correction
+// Coulomb correction. It is called from BuildAngleTable()
 
 G4double 
 G4DiffuseElastic::GetDiffElasticSumProbA( G4double alpha )
@@ -565,10 +589,21 @@ G4DiffuseElastic::GetDiffElasticSumProbA( G4double alpha )
   bonebyarg  = BesselOneByArg(krt);
   bonebyarg2 = bonebyarg*bonebyarg;  
 
-  if (fParticle == theProton)
+  if ( fParticle == theProton )
   {
     diffuse = 0.63*fermi;
     // diffuse = 0.6*fermi;
+    gamma   = 0.3*fermi;
+    delta   = 0.1*fermi*fermi;
+    e1      = 0.3*fermi;
+    e2      = 0.35*fermi;
+  }
+  else if ( fParticle == theNeutron )
+  {
+    diffuse = 0.63*fermi;
+    // diffuse = 0.6*fermi;
+    // G4double k0 = 0.8*GeV/hbarc;
+    // diffuse *= k0/fWaveVector;
     gamma   = 0.3*fermi;
     delta   = 0.1*fermi*fermi;
     e1      = 0.3*fermi;
@@ -588,7 +623,7 @@ G4DiffuseElastic::GetDiffElasticSumProbA( G4double alpha )
 
   // G4cout<<"kgamma = "<<kgamma<<G4endl;
 
-  if(fAddCoulomb)  // add Coulomb correction
+  if( fAddCoulomb )  // add Coulomb correction
   {
     G4double sinHalfTheta  = theta*0.5; // std::sin(0.5*theta);
     G4double sinHalfTheta2 = sinHalfTheta*sinHalfTheta;
@@ -596,7 +631,6 @@ G4DiffuseElastic::GetDiffElasticSumProbA( G4double alpha )
     kgamma += 0.5*fZommerfeld/kr/(sinHalfTheta2+fAm); // correction at J0()
   // kgamma += 0.65*fZommerfeld/kr/(sinHalfTheta2+fAm); // correction at J0()
   }
-
   G4double kgamma2   = kgamma*kgamma;
 
   // G4double dk2t  = delta*fWaveVector*fWaveVector*theta; // delta*wavek*wavek*theta;
@@ -604,14 +638,14 @@ G4DiffuseElastic::GetDiffElasticSumProbA( G4double alpha )
   // G4double dk2t2 = dk2t*dk2t;
   // G4double pikdt = pi*fWaveVector*diffuse*theta;// pi*wavek*diffuse*theta;
 
-  G4double pikdt    = lambda*(1.-std::exp(-pi*fWaveVector*diffuse*theta/lambda));   // wavek*delta;
+  G4double pikdt    = lambda*(1. - std::exp( -pi*fWaveVector*diffuse*theta/lambda ) );   // wavek*delta;
 
   // G4cout<<"pikdt = "<<pikdt<<G4endl;
 
-  damp           = DampFactor(pikdt);
+  damp           = DampFactor( pikdt );
   damp2          = damp*damp;
 
-  G4double mode2k2 = (e1*e1+e2*e2)*fWaveVector*fWaveVector;  
+  G4double mode2k2 = ( e1*e1 + e2*e2 )*fWaveVector*fWaveVector;  
   G4double e2dk3t  = -2.*e2*delta*fWaveVector*fWaveVector*fWaveVector*theta;
 
   sigma  = kgamma2;
@@ -745,7 +779,7 @@ G4double G4DiffuseElastic::SampleInvariantT( const G4ParticleDefinition* aPartic
                                                G4int Z, G4int A)
 {
   fParticle = aParticle;
-  G4double m1 = fParticle->GetPDGMass();
+  G4double m1 = fParticle->GetPDGMass(), t;
   G4double totElab = std::sqrt(m1*m1+p*p);
   G4double mass2 = G4NucleiProperties::GetNuclearMass(A, Z);
   G4LorentzVector lv1(p,0.0,0.0,totElab);
@@ -757,10 +791,37 @@ G4double G4DiffuseElastic::SampleInvariantT( const G4ParticleDefinition* aPartic
 
   G4ThreeVector p1 = lv1.vect();
   G4double momentumCMS = p1.mag();
+  
+  if( aParticle == theNeutron)
+  {
+    G4double Tmax = NeutronTuniform( Z );
+    G4double pCMS2 = momentumCMS*momentumCMS;
+    G4double Tkin = std::sqrt(pCMS2+m1*m1)-m1;
 
-  G4double t = SampleTableT( aParticle,  momentumCMS, G4double(Z), G4double(A) ); // sample theta2 in cms
+    if( Tkin <= Tmax )
+    {
+      t = 4.*pCMS2*G4UniformRand();
+      // G4cout<<Tkin<<", "<<Tmax<<", "<<std::sqrt(t)<<";   ";
+      return t;
+    }
+  }
+  
+  t = SampleTableT( aParticle,  momentumCMS, G4double(Z), G4double(A) ); // sample theta2 in cms
+
   return t;
 }
+
+///////////////////////////////////////////////////////
+
+G4double G4DiffuseElastic::NeutronTuniform(G4int Z)
+{
+  G4double elZ  = G4double(Z);
+  elZ -= 1.;
+  // G4double Tkin = 20.*std::exp(-elZ/10.) + 1.;
+  G4double Tkin = 12.*std::exp(-elZ/10.) + 1.;
+  return Tkin;
+}
+
 
 ////////////////////////////////////////////////////////////////////////////
 //
@@ -770,8 +831,8 @@ G4double G4DiffuseElastic::SampleTableT( const G4ParticleDefinition* aParticle, 
                                                G4double Z, G4double A)
 {
   G4double alpha = SampleTableThetaCMS( aParticle,  p, Z, A); // sample theta2 in cms
-  // G4double t     = 2*p*p*( 1 - std::cos(std::sqrt(alpha)) );             // -t !!!
-  G4double t     = p*p*alpha;             // -t !!!
+  G4double t     = 2*p*p*( 1 - std::cos(std::sqrt(alpha)) );             // -t !!!
+  // G4double t     = p*p*alpha;             // -t !!!
   return t;
 }
 
@@ -892,6 +953,8 @@ G4DiffuseElastic::SampleTableThetaCMS(const G4ParticleDefinition* particle,
   // G4double angle = randAngle;
   // if (randAngle > 0.) randAngle /= 2*pi*std::sin(angle);
 
+  if(randAngle < 0.) randAngle = 0.;
+
   return randAngle;
 }
 
@@ -908,7 +971,7 @@ void G4DiffuseElastic::InitialiseOnFly(G4double Z, G4double A)
 
   if( verboseLevel > 0 )    
   {
-    G4cout<<"G4DiffuseElastic::Initialise() the element with Z = "
+    G4cout<<"G4DiffuseElastic::InitialiseOnFly() the element with Z = "
 	  <<Z<<"; and A = "<<A<<G4endl;
   }
   fElementNumberVector.push_back(fAtomicNumber);
@@ -951,7 +1014,12 @@ void G4DiffuseElastic::BuildAngleTable()
 
     alphaMax = kRmax*kRmax/kR2;
 
-    if (alphaMax > 4.) alphaMax = 4.;  // vmg05-02-09: was pi2 
+
+    // if (alphaMax > 4.) alphaMax = 4.;  // vmg05-02-09: was pi2 
+    // if ( alphaMax > 4. || alphaMax < 1. ) alphaMax = 15.;  // vmg27.11.14  
+    if ( alphaMax > 4. || alphaMax < 1. ) alphaMax = CLHEP::pi*CLHEP::pi;  // vmg06.01.15  
+    // if (alphaMax > 4. || alphaMax < 1. ) alphaMax = 4.;  // vmg07.01.15: was pi2 
+    // G4cout<<"alphaMax = "<<alphaMax<<", ";
 
     alphaCoulomb = kRcoul*kRcoul/kR2;
 

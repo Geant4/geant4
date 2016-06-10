@@ -1,4 +1,4 @@
-$Id: History 78011 2013-12-02 11:32:48Z gcosmo $
+$Id: History 88919 2015-03-16 13:41:02Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,17 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+March 10th, 2015  G.Cosmo
+- G4ImportanceProcess, G4WeightCutOffProcess: made static thread-local
+  variables into class data members.
+  Renamed them accordingly: fEndTrack, feLimited, fParaflag.
+- Use const reference for string in argument in SetParallelWorld() in
+  G4ImportanceProcess, G4WeithCutOffProcess and G4WeightWindowProcess.
+
+February 12th, 2015  J.Apostolakis
+- G4WeightWindowProcess: made static thread-local variables into class
+  data members. Renamed them accordingly: fEndTrack, feLimited, fParaflag.
 
 December 2nd, 2013  A.Howard
 - Moved static methods in the initialiser to the body for G4GeometrySampler

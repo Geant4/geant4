@@ -55,7 +55,6 @@ class WLSActionInitialization : public G4VUserActionInitialization
 
   private:
     WLSDetectorConstruction* fDetector;
-    G4GeneralParticleSource* masterGPS;
 };
 
 #endif

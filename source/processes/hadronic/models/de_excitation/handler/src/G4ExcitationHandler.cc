@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ExcitationHandler.cc 87443 2014-12-04 12:26:31Z gunter $
+// $Id: G4ExcitationHandler.cc 88987 2015-03-17 10:39:50Z gcosmo $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (May 1998)
@@ -231,8 +231,11 @@ G4ExcitationHandler::BreakItUp(const G4Fragment & theInitialState)
 	theFermiModel->BreakFragment(&results, frag);
         size_t nsec = results.size();
 	//G4cout << "FermiBreakUp Nsec= " << nsec << G4endl;
+
 	// FBU takes care to delete input fragment or add it to the results
 	// results may be excited - photo-evaporation should be applied
+	// If no final products then the fragment should be de-excited 
+	// by evaporation
 	if(0 < nsec) {
           for(size_t j=0; j<nsec; ++j) {
 	    exEnergy = results[j]->GetExcitationEnergy();
@@ -384,9 +387,7 @@ G4ExcitationHandler::BreakItUp(const G4Fragment & theInitialState)
 	/*  
 	  G4cout << "### Find ion Z= " << theFragmentZ << " A= " << theFragmentA
 	  << " ground state, energy corrected  " << theKindOfFragment << G4endl;
-	*/
-      } else {
-	  /*	
+	} else {
 		G4cout << "### Find ion Z= " << theFragmentZ 
 		<< " A= " << theFragmentA << " failed  " << G4endl;
 	  */

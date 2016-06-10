@@ -35,6 +35,7 @@
 
 // 121031 First implementation done by T. Koi (SLAC/PPA)
 //
+#include <map>
 #include "globals.hh"
 
 #include "G4ParticleHPReactionWhiteBoard.hh"
@@ -59,10 +60,14 @@ class G4ParticleHPManager
       void CloseReactionWhiteBoard(){delete RWB; RWB=NULL;};
 
       void GetDataStream( G4String , std::istringstream& iss );
+      void GetDataStream2( G4String , std::istringstream& iss );
       void SetVerboseLevel( G4int i ); 
       G4int GetVerboseLevel() {return verboseLevel; }; 
 
+      void DumpDataSource();
    private:
+      void register_data_file( G4String , G4String );
+      std::map<G4String,G4String> mDataEvaluation;
       G4ParticleHPReactionWhiteBoard* RWB;
 
       G4int verboseLevel;

@@ -147,6 +147,7 @@
        //TK121106
        G4NeutronHPManager::GetInstance()->GetReactionWhiteBoard()->SetTargA( targA ); 
        G4NeutronHPManager::GetInstance()->GetReactionWhiteBoard()->SetTargZ( targZ ); 
+       delete [] running;
        return &unChanged;
     }
     //TK120607

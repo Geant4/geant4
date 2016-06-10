@@ -1,4 +1,4 @@
-$Id: History 77780 2013-11-28 07:50:59Z gcosmo $
+$Id: History 88925 2015-03-16 14:00:25Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+March 10th, 2015 G.Cosmo (geombias-V10-00-00)
+- Made G4IStore and G4WeightWindowStore singletons thread-local to avoid
+  data races when accessing iterators.
+  Use const references for string in argument for constructor and accessor.
 
 November 27th, 2013 A.Howard (geombias-V09-06-10)
 - Added Clear() method to G4IStore and G4WeightWindowStore to allow changes to

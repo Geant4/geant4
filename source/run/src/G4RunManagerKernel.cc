@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunManagerKernel.cc 87128 2014-11-25 09:00:59Z gcosmo $
+// $Id: G4RunManagerKernel.cc 88997 2015-03-17 11:24:44Z gcosmo $
 //
 //
 
@@ -287,6 +287,7 @@ G4RunManagerKernel::~G4RunManagerKernel()
   if(verboseLevel>1) G4cout << "Units table cleared." << G4endl;
 
   // deletion of navigation levels
+  if(verboseLevel>1) G4NavigationHistoryPool::GetInstance()->Print();
   delete G4NavigationHistoryPool::GetInstance();
 
   // deletion of allocators
