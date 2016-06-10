@@ -218,6 +218,7 @@ void G4EmStandardPhysicsSS::ConstructProcess()
       G4CoulombScattering* ss = new G4CoulombScattering();
       if(G4EmParameters::Instance()->UseMottCorrection()) {
 	ss->SetEmModel(new G4eSingleCoulombScatteringModel(), 1);
+        ss->SetBuildTableFlag(false);
       }
 
       ph->RegisterProcess(new G4eIonisation(), particle);

@@ -99,7 +99,11 @@ G4NuclearLevelData::~G4NuclearLevelData()
   delete fLevelReader;
   for(G4int Z=1; Z<ZMAX; ++Z) {
     size_t nn = (fLevelManagers[Z]).size();
-    for(size_t j=0; j<nn; ++j) { delete (fLevelManagers[Z])[j]; }
+    for(size_t j=0; j<nn; ++j) { 
+      //G4cout << " G4NuclearLevelData delete Z= " << Z 
+      //       << " A= " << AMIN[Z]+j << G4endl;
+      delete (fLevelManagers[Z])[j]; 
+    }
   }
 }
 

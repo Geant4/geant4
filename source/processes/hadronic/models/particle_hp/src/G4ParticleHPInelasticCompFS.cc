@@ -519,7 +519,7 @@ void G4ParticleHPInelasticCompFS::CompositeApply(const G4HadProjectile & theTrac
             {
               G4ReactionProductVector * theNext = 
         	theFinalStatePhotons[j]->GetPhotons(anEnergy);
-              thePhotons->push_back(theNext->operator[](0));
+              if ( thePhotons != NULL ) thePhotons->push_back(theNext->operator[](0));
               aBaseEnergy = testEnergy-theNext->operator[](0)->GetTotalEnergy();
               delete theNext;
 	      foundMatchingLevel = true;
@@ -535,7 +535,7 @@ void G4ParticleHPInelasticCompFS::CompositeApply(const G4HadProjectile & theTrac
 	  {
             G4ReactionProductVector * theNext = 
                theFinalStatePhotons[closest]->GetPhotons(anEnergy);
-            thePhotons->push_back(theNext->operator[](0));
+            if ( thePhotons != NULL ) thePhotons->push_back(theNext->operator[](0));
             aBaseEnergy = aBaseEnergy-theNext->operator[](0)->GetTotalEnergy();
             delete theNext;
 	  }

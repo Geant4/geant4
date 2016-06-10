@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LossTableManager.hh 91566 2015-07-27 12:20:23Z gcosmo $
+// $Id: G4LossTableManager.hh 95476 2016-02-12 09:39:50Z gcosmo $
 //
 //
 // -------------------------------------------------------------------
@@ -368,8 +368,8 @@ private:
 inline G4VEnergyLossProcess* 
 G4LossTableManager::GetEnergyLossProcess(const G4ParticleDefinition *aParticle)
 {
-  //G4cout << aParticle << "  " << currentParticle 
-  //<< "  " << currentLoss << G4endl;
+  //G4cout << "G4LossTableManager::GetEnergyLossProcess: " 
+  //	 << aParticle << "  " << currentParticle << "  " << currentLoss << G4endl;
   if(aParticle != currentParticle) {
     currentParticle = aParticle;
     std::map<PD,G4VEnergyLossProcess*,std::less<PD> >::const_iterator pos;
@@ -377,10 +377,8 @@ G4LossTableManager::GetEnergyLossProcess(const G4ParticleDefinition *aParticle)
       currentLoss = (*pos).second;
     } else {
       currentLoss = 0;
-      //if(aParticle->GetParticleType() == "nucleus") {
       if ((pos = loss_map.find(theGenericIon)) != loss_map.end()) {
         currentLoss = (*pos).second;
-        //}
       }
     }
   }

@@ -94,12 +94,19 @@ if(NOT GEANT4_BUILD_GRANULAR_LIBS AND UNIX)
   # - CLHEP
   if(GEANT4_USE_SYSTEM_CLHEP)
     set(G4_BUILTWITH_CLHEP "no")
+    #inc path
+    get_filename_component(G4_SYSTEM_CLHEP_INCLUDE_DIR "${CLHEP_INCLUDE_DIR}" ABSOLUTE)
+
     #libpath
     list(GET CLHEP_LIBRARIES 0 _zeroth_clhep_lib)
-    get_filename_component(_system_clhep_libdir "${_zeroth_clhep_lib}" PATH)
+    get_target_property(_system_clhep_libdir "${_zeroth_clhep_lib}" LOCATION)
+    get_filename_component(_system_clhep_libdir "${_system_clhep_libdir}" REALPATH)
+    get_filename_component(_system_clhep_libdir "${_system_clhep_libdir}" DIRECTORY)
     set(G4_SYSTEM_CLHEP_LIBRARIES "-L${_system_clhep_libdir}")
+
     foreach(_clhep_lib ${CLHEP_LIBRARIES})
-      get_filename_component(_curlib "${_clhep_lib}" NAME)
+      get_target_property(_curlib "${_clhep_lib}" LOCATION)
+      get_filename_component(_curlib "${_curlib}" NAME)
       string(REGEX REPLACE "^lib(.*)\\.(so|a|dylib|lib|dll)$" "\\1" _curlib "${_curlib}")
       set(G4_SYSTEM_CLHEP_LIBRARIES "${G4_SYSTEM_CLHEP_LIBRARIES} -l${_curlib}")
     endforeach()

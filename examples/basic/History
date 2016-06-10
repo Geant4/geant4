@@ -16,6 +16,10 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+08/01/16 I. Hrivnacova (exbasic-V10-01-00)
+- Updated README files:
+  Added G4ENSDFSTATEDATA in the lists of mandatory data sets.
+
 29/11/14 I. Hrivnacova (exbasic-V10-00-01)
 - Use G4endl instead of \n in G4cout;
   this makes each new line in the output on threads preceded with

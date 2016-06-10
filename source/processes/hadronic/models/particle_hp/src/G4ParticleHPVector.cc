@@ -93,7 +93,6 @@
     the15percentBorderCash = -DBL_MAX;
     the50percentBorderCash = -DBL_MAX;
     label = -DBL_MAX;
-
   }
   
   G4ParticleHPVector::G4ParticleHPVector(G4int n)
@@ -108,6 +107,7 @@
     maxValue = -DBL_MAX;
     the15percentBorderCash = -DBL_MAX;
     the50percentBorderCash = -DBL_MAX;
+    label = -DBL_MAX;
   }
 
   G4ParticleHPVector::~G4ParticleHPVector()

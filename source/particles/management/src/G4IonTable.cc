@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4IonTable.cc 94421 2015-11-16 08:22:56Z gcosmo $
+// $Id: G4IonTable.cc 95470 2016-02-12 09:02:26Z gcosmo $
 //
 // 
 // --------------------------------------------------------------
@@ -76,7 +76,6 @@ G4ThreadLocal G4IonTable::G4IonList* G4IonTable::fIonList = 0;
 G4ThreadLocal std::vector<G4VIsotopeTable*> *G4IonTable::fIsotopeTableList = 0;
 G4IonTable::G4IonList* G4IonTable::fIonListShadow = 0;
 std::vector<G4VIsotopeTable*> *G4IonTable::fIsotopeTableListShadow = 0;
-const G4double G4IonTable::tolerance = 2.0*keV;
 
 namespace lightions {
     static const G4ParticleDefinition* p_proton=0;
@@ -299,7 +298,7 @@ G4ParticleDefinition* G4IonTable::CreateIon(G4int Z, G4int A, G4double E)
     if (Eex>0.0) lvl=9;
   }
 
-  Eex = G4NuclideTable::Round(Eex); 
+  //Eex = G4NuclideTable::Round(Eex); 
   if (Eex==0.0) lvl=0;
   // ion name
   G4String name =""; 
@@ -405,7 +404,8 @@ G4ParticleDefinition* G4IonTable::CreateIon(G4int Z, G4int A, G4int LL, G4double
   G4bool stable = true;
  
   // excitation energy
-  G4double Eex = G4NuclideTable::Round(E); 
+  //G4double Eex = G4NuclideTable::Round(E); 
+  G4double Eex = E; 
   G4double mass =  GetNucleusMass(Z, A, LL)+ Eex;
   G4int    lvl = 0;
   // lvl is assigned to 9 temporally
@@ -482,7 +482,7 @@ G4ParticleDefinition* G4IonTable::CreateIon(G4int Z, G4int A, G4int LL, G4int lv
     return 0;
   }
   
-  return CreateIon(A,Z,LL,0.0);
+  return CreateIon(Z,A,LL,0.0);
 }
 
 ////////////////////
@@ -503,6 +503,8 @@ G4ParticleDefinition* G4IonTable::GetIon(G4int Z, G4int A, G4int lvl)
   // Search ions with A, Z, lvl 
   G4ParticleDefinition* ion = FindIon(Z,A,lvl);
 
+  if ( ion == 0 && lvl == 0 ) return GetIon(Z,A,0.0);
+  
   // create ion
 #ifdef G4MULTITHREADED
   if(ion == 0)
@@ -732,7 +734,7 @@ G4ParticleDefinition* G4IonTable::FindIon(G4int Z, G4int A, G4double E, G4int J)
       if ( ( ion->GetAtomicNumber() != Z) || (ion->GetAtomicMass()!=A) ) break;
       // excitation level
       G4double anExcitaionEnergy = ((const G4Ions*)(ion))->GetExcitationEnergy();
-      if ( std::fabs( E - anExcitaionEnergy )< tolerance) {
+      if (std::fabs(E - anExcitaionEnergy) < pNuclideTable->GetLevelTolerance() ) {
 	isFound = true;
 	break;
       }
@@ -778,7 +780,7 @@ G4ParticleDefinition* G4IonTable::FindIon(G4int Z, G4int A, G4int LL, G4double E
     if(  ion->GetQuarkContent(3) != LL) break;
     // excitation level
     G4double anExcitaionEnergy = ((const G4Ions*)(ion))->GetExcitationEnergy();
-    if ( std::fabs( E - anExcitaionEnergy )< tolerance) {
+    if (std::fabs(E - anExcitaionEnergy) < pNuclideTable->GetLevelTolerance() ) {
       isFound = true;
       break;
     }
@@ -1655,7 +1657,7 @@ G4ParticleDefinition* G4IonTable::FindIonInMaster(G4int Z, G4int A, G4double E, 
     if ( ( ion->GetAtomicNumber() != Z) || (ion->GetAtomicMass()!=A) ) break;
     // excitation level
     G4double anExcitaionEnergy = ((const G4Ions*)(ion))->GetExcitationEnergy();
-    if ( std::fabs( E - anExcitaionEnergy )< tolerance) {
+    if (std::fabs(E - anExcitaionEnergy) < pNuclideTable->GetLevelTolerance() ) {
       isFound = true;
       break;
     }
@@ -1688,7 +1690,7 @@ G4ParticleDefinition* G4IonTable::FindIonInMaster(G4int Z, G4int A, G4int LL, G4
     if(  ion->GetQuarkContent(3) != LL) break;
     // excitation level
     G4double anExcitaionEnergy = ((const G4Ions*)(ion))->GetExcitationEnergy();
-    if ( std::fabs( E - anExcitaionEnergy )< tolerance) {
+    if (std::fabs(E - anExcitaionEnergy) < pNuclideTable->GetLevelTolerance() ) {
       isFound = true;
       break;
     }

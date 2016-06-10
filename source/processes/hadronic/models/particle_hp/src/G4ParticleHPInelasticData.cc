@@ -83,14 +83,17 @@ G4ParticleHPInelasticData::G4ParticleHPInelasticData(G4ParticleDefinition* proje
    theProjectile=projectile;
 
    theHPData = NULL;
+   instanceOfWorker = false;
    if ( G4Threading::IsMasterThread() ) {
       theHPData = new G4ParticleHPData( theProjectile ); 
+   } else {
+      instanceOfWorker = true;
    }
 }
    
 G4ParticleHPInelasticData::~G4ParticleHPInelasticData()
 {
-   if ( theCrossSections != NULL ) {
+   if ( theCrossSections != NULL && instanceOfWorker != true ) {
      theCrossSections->clearAndDestroy();
      delete theCrossSections;
      theCrossSections = NULL;

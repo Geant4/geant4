@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunManager.cc 90233 2015-05-21 08:56:28Z gcosmo $
+// $Id: G4RunManager.cc 95503 2016-02-12 11:05:11Z gcosmo $
 //
 // 
 
@@ -765,9 +765,9 @@ void G4RunManager::ConstructScoringWorlds()
           {
             pmanager->AddProcess(theParallelWorldProcess);
             if(theParallelWorldProcess->IsAtRestRequired(particle))
-            { pmanager->SetProcessOrdering(theParallelWorldProcess, idxAtRest, 9999); }
+            { pmanager->SetProcessOrdering(theParallelWorldProcess, idxAtRest, 9900); }
             pmanager->SetProcessOrderingToSecond(theParallelWorldProcess, idxAlongStep);
-            pmanager->SetProcessOrdering(theParallelWorldProcess, idxPostStep, 9999);
+            pmanager->SetProcessOrdering(theParallelWorldProcess, idxPostStep, 9900);
           }
         }
       }

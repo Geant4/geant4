@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: exampleB4c.cc 86065 2014-11-07 08:51:15Z gcosmo $
+// $Id: exampleB4c.cc 95508 2016-02-12 13:52:06Z gcosmo $
 //
 /// \file exampleB4c.cc
 /// \brief Main program of the B4c example
@@ -91,7 +91,7 @@ int main(int argc,char** argv)
   //
   G4UIExecutive* ui = 0;
   if ( ! macro.size() ) {
-    ui = new G4UIExecutive(argc, argv);
+    ui = new G4UIExecutive(argc, argv, session);
   }
 
   // Choose the Random engine

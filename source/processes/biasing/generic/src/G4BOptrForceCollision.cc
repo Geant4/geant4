@@ -46,7 +46,9 @@
 G4BOptrForceCollision::G4BOptrForceCollision(G4String particleName, G4String name)
   : G4VBiasingOperator(name),
     fForceCollisionModelID(-1),
+    fCurrentTrack(nullptr),
     fCurrentTrackData(nullptr),
+    fInitialTrackWeight(-1.0),
     fSetup(true)
 {
   fSharedForceInteractionOperation = new G4BOptnForceCommonTruncatedExp("SharedForceInteraction");
@@ -68,7 +70,9 @@ G4BOptrForceCollision::G4BOptrForceCollision(G4String particleName, G4String nam
 G4BOptrForceCollision::G4BOptrForceCollision(const G4ParticleDefinition* particle, G4String name)
   : G4VBiasingOperator(name),
     fForceCollisionModelID(-1),
+    fCurrentTrack(nullptr),
     fCurrentTrackData(nullptr),
+    fInitialTrackWeight(-1.0),
     fSetup(true)
 {
   fSharedForceInteractionOperation = new G4BOptnForceCommonTruncatedExp("SharedForceInteraction");

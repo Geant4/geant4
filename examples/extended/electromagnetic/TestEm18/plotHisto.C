@@ -3,7 +3,7 @@
   
   // Draw histos filled by Geant4 simulation 
   //   
-  TFile f = TFile("pixe.root");
+  TFile f("pixe.root");
   TCanvas* c1 = new TCanvas("c1", "  ");
   
   TH1D* hist3 = (TH1D*)f.Get("3");

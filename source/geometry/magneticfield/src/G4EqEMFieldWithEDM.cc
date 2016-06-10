@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EqEMFieldWithEDM.cc 71664 2013-06-20 08:36:05Z gcosmo $
+// $Id: G4EqEMFieldWithEDM.cc 95824 2016-02-26 08:45:54Z gcosmo $
 //
 //
 //  This is the standard right-hand side for equation of motion.
@@ -71,7 +71,7 @@ G4EqEMFieldWithEDM::SetChargeMomentumMass(G4ChargeState particleCharge,
    G4double muB = 0.5*eplus*hbar_Planck/(mass/c_squared);
 
    G4double g_BMT;
-   if ( spin != 0. ) g_BMT = (magMoment/muB)/spin;
+   if ( spin != 0. ) g_BMT = (std::abs(magMoment)/muB)/spin;
    else g_BMT = 2.;
 
    anomaly = (g_BMT - 2.)/2.;

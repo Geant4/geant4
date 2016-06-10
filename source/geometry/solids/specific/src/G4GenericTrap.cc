@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GenericTrap.cc 83851 2014-09-19 10:12:12Z gcosmo $
+// $Id: G4GenericTrap.cc 95652 2016-02-17 11:40:43Z gcosmo $
 //
 //
 // --------------------------------------------------------------------
@@ -505,8 +505,10 @@ G4ThreeVector G4GenericTrap::SurfaceNormal( const G4ThreeVector& p ) const
   //
   if ( noSurfaces == 0 )
   {
+#ifdef G4SPECSDEBUG
     G4Exception("G4GenericTrap::SurfaceNormal(p)", "GeomSolids1002",
                 JustWarning, "Point p is not on surface !?" );
+#endif
     sumnorm=apprnorm;
     // Add Approximative Surface Normal Calculation?
   }
@@ -549,7 +551,9 @@ G4ThreeVector G4GenericTrap::NormalToPlane( const G4ThreeVector& p,
       
   if (std::fabs(distz)<halfCarTolerance)
   {
-    p1=G4ThreeVector(fVertices[i].x(),fVertices[i].y(),-fDz);distz=-1;}
+    p1=G4ThreeVector(fVertices[i].x(),fVertices[i].y(),-fDz);
+    distz=-1;
+  }
   else
   {
     p1=G4ThreeVector(fVertices[i+4].x(),fVertices[i+4].y(),fDz);
@@ -1218,11 +1222,8 @@ G4bool G4GenericTrap::CalculateExtent(const EAxis pAxis,
 
   // Computes bounding vectors for a shape
   //
-  G4double Dx,Dy;
   G4ThreeVector minVec = GetMinimumBBox();
   G4ThreeVector maxVec = GetMaximumBBox();
-  Dx = 0.5*(maxVec.x()- minVec.x());
-  Dy = 0.5*(maxVec.y()- minVec.y());
 
   if (!pTransform.IsRotated())
   {
@@ -1235,8 +1236,8 @@ G4bool G4GenericTrap::CalculateExtent(const EAxis pAxis,
     G4double zoffset,zMin,zMax;
 
     xoffset=pTransform.NetTranslation().x();
-    xMin=xoffset-Dx;
-    xMax=xoffset+Dx;
+    xMin=xoffset+minVec.x();
+    xMax=xoffset+maxVec.x();
     if (pVoxelLimit.IsXLimited())
     {
       if ( (xMin>pVoxelLimit.GetMaxXExtent()+kCarTolerance)
@@ -1258,8 +1259,8 @@ G4bool G4GenericTrap::CalculateExtent(const EAxis pAxis,
     }
 
     yoffset=pTransform.NetTranslation().y();
-    yMin=yoffset-Dy;
-    yMax=yoffset+Dy;
+    yMin=yoffset+minVec.y();
+    yMax=yoffset+maxVec.y();
     if (pVoxelLimit.IsYLimited())
     {
       if ( (yMin>pVoxelLimit.GetMaxYExtent()+kCarTolerance)
@@ -1281,8 +1282,8 @@ G4bool G4GenericTrap::CalculateExtent(const EAxis pAxis,
     }
 
     zoffset=pTransform.NetTranslation().z();
-    zMin=zoffset-fDz;
-    zMax=zoffset+fDz;
+    zMin=zoffset+minVec.z();
+    zMax=zoffset+maxVec.z();
     if (pVoxelLimit.IsZLimited())
     {
       if ( (zMin>pVoxelLimit.GetMaxZExtent()+kCarTolerance)
@@ -2150,13 +2151,11 @@ G4VisExtent G4GenericTrap::GetExtent() const
   } 
 #endif
    
-  G4double Dx,Dy;
   G4ThreeVector minVec = GetMinimumBBox();
   G4ThreeVector maxVec = GetMaximumBBox();
-  Dx = 0.5*(maxVec.x()- minVec.x());
-  Dy = 0.5*(maxVec.y()- minVec.y());
-
-  return G4VisExtent (-Dx, Dx, -Dy, Dy, -fDz, fDz); 
+  return G4VisExtent (minVec.x(), maxVec.x(),
+                      minVec.y(), maxVec.y(),
+                      minVec.z(), maxVec.z()); 
 }    
 
 // --------------------------------------------------------------------

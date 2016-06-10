@@ -42,19 +42,33 @@ G4MapCache< const G4ProcessManager*, G4BiasingProcessSharedData* > G4BiasingProc
 
 
 G4BiasingProcessInterface::G4BiasingProcessInterface(G4String name)
-  :  G4VProcess                      ( name  ),
-     fWrappedProcess                 ( 0     ),
-     fIsPhysicsBasedBiasing          ( false ),
-     fWrappedProcessIsAtRest         ( false ),
-     fWrappedProcessIsAlong          ( false ),
-     fWrappedProcessIsPost           ( false ),
-     fWrappedProcessInteractionLength( -1.0  ),
-     fBiasingInteractionLaw          ( 0     ),
-     fPhysicalInteractionLaw         ( 0     ),
-     fOccurenceBiasingParticleChange ( 0     ),
-     fIamFirstGPIL                   ( false ),
-     fSharedData                     ( 0     )
-
+  :  G4VProcess                           ( name    ),
+     fCurrentTrack                        ( nullptr ),
+     fPreviousStepSize (-1.0), fCurrentMinimumStep( -1.0 ), fProposedSafety ( -1.0),
+             fOccurenceBiasingOperation( nullptr ),         fFinalStateBiasingOperation( nullptr ),         fNonPhysicsBiasingOperation( nullptr ),
+     fPreviousOccurenceBiasingOperation( nullptr ), fPreviousFinalStateBiasingOperation( nullptr ), fPreviousNonPhysicsBiasingOperation( nullptr ),
+     fResetWrappedProcessInteractionLength( true    ),
+     fWrappedProcess                      ( nullptr ),
+     fIsPhysicsBasedBiasing               ( false   ),
+     fWrappedProcessIsAtRest              ( false   ),
+     fWrappedProcessIsAlong               ( false   ),
+     fWrappedProcessIsPost                ( false   ),
+     fWrappedProcessPostStepGPIL          ( -1.0    ),
+     fBiasingPostStepGPIL                 ( -1.0    ),
+     fWrappedProcessInteractionLength     ( -1.0    ),
+     fWrappedProcessForceCondition        ( NotForced ),
+     fBiasingForceCondition               ( NotForced ),
+     fWrappedProcessAlongStepGPIL         ( -1.0    ),
+     fBiasingAlongStepGPIL                ( -1.0    ),
+     fWrappedProcessGPILSelection         ( NotCandidateForSelection ),
+     fBiasingGPILSelection                ( NotCandidateForSelection ),
+     fBiasingInteractionLaw               ( nullptr ),
+     fPreviousBiasingInteractionLaw       ( nullptr ),
+     fPhysicalInteractionLaw              ( nullptr ),
+     fOccurenceBiasingParticleChange      ( nullptr ),
+     fIamFirstGPIL                        ( false   ),
+     fProcessManager                      ( nullptr ),
+     fSharedData                          ( nullptr )
 {
   for (G4int i = 0 ; i < 8 ; i++)  fFirstLastFlags[i] = false;
   fResetInteractionLaws.Put( true );
@@ -69,17 +83,31 @@ G4BiasingProcessInterface::G4BiasingProcessInterface(G4VProcess* wrappedProcess,
 						     G4String useThisName)
   : G4VProcess( useThisName != "" ? useThisName : "biasWrapper("+wrappedProcess->GetProcessName()+")",
 	       wrappedProcess->GetProcessType()),
+    fCurrentTrack                   ( nullptr ),
+    fPreviousStepSize (-1.0), fCurrentMinimumStep( -1.0 ), fProposedSafety ( -1.0),
+            fOccurenceBiasingOperation( nullptr ),         fFinalStateBiasingOperation( nullptr ),         fNonPhysicsBiasingOperation( nullptr ),
+    fPreviousOccurenceBiasingOperation( nullptr ), fPreviousFinalStateBiasingOperation( nullptr ), fPreviousNonPhysicsBiasingOperation( nullptr ),
     fWrappedProcess                 ( wrappedProcess     ),
     fIsPhysicsBasedBiasing          ( true               ),
     fWrappedProcessIsAtRest         ( wrappedIsAtRest    ),
     fWrappedProcessIsAlong          ( wrappedIsAlongStep ),
     fWrappedProcessIsPost           ( wrappedIsPostStep  ),
+    fWrappedProcessPostStepGPIL     ( -1.0               ),
+    fBiasingPostStepGPIL            ( -1.0               ),
     fWrappedProcessInteractionLength( -1.0               ),
-    fBiasingInteractionLaw          ( 0                  ),
-    fPhysicalInteractionLaw         ( 0                  ),
-    fOccurenceBiasingParticleChange ( 0                  ),
+    fWrappedProcessForceCondition   ( NotForced          ),
+    fBiasingForceCondition          ( NotForced          ),
+    fWrappedProcessAlongStepGPIL    ( -1.0               ),
+    fBiasingAlongStepGPIL           ( -1.0               ),
+    fWrappedProcessGPILSelection    ( NotCandidateForSelection ),
+    fBiasingGPILSelection           ( NotCandidateForSelection ),
+    fBiasingInteractionLaw          ( nullptr            ),
+    fPreviousBiasingInteractionLaw  ( nullptr            ),
+    fPhysicalInteractionLaw         ( nullptr            ),
+    fOccurenceBiasingParticleChange ( nullptr            ),
     fIamFirstGPIL                   ( false              ),
-    fSharedData                     ( 0                  )
+    fProcessManager                 ( nullptr            ),
+    fSharedData                     ( nullptr            )
 {
   for (G4int i = 0 ; i < 8 ; i++)  fFirstLastFlags[i] = false;
   fResetInteractionLaws.Put( true );

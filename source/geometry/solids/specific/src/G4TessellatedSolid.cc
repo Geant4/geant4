@@ -24,7 +24,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4TessellatedSolid.cc 94457 2015-11-18 14:35:46Z gcosmo $
+// $Id: G4TessellatedSolid.cc 95424 2016-02-10 14:38:11Z gcosmo $
 //
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 //
@@ -1968,7 +1968,7 @@ G4double G4TessellatedSolid::GetCubicVolume ()
     G4VFacet &facet = *fFacets[i];
     G4double area = facet.GetArea();
     G4ThreeVector unit_normal = facet.GetSurfaceNormal();
-    fCubicVolume += area * (facet.GetVertex(0) * unit_normal);
+    fCubicVolume += area * (facet.GetVertex(0).dot(unit_normal));
   }
   fCubicVolume /= 3.;
   return fCubicVolume;

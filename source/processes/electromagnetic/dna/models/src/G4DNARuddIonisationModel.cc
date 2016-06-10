@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNARuddIonisationModel.cc 92859 2015-09-18 07:58:30Z gcosmo $
+// $Id: G4DNARuddIonisationModel.cc 95457 2016-02-11 10:18:10Z gcosmo $
 // GEANT4 tag $Name:  $
 //
 
@@ -490,6 +490,10 @@ void G4DNARuddIonisationModel::SampleSecondaries(std::vector<G4DynamicParticle*>
 
     G4double bindingEnergy = 0;
     bindingEnergy = waterStructure.IonisationEnergy(ionizationShell);
+
+    //SI: additional protection if tcs interpolation method is modified
+    if (k<bindingEnergy) return;
+    //
 
     G4int Z = 8;
     if(fAtomDeexcitation)

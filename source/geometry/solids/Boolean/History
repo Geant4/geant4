@@ -1,5 +1,5 @@
 
-$Id: History 93153 2015-10-08 11:54:58Z gcosmo $
+$Id: History 95422 2016-02-10 14:35:47Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+ February 8, 2016 G.Cosmo                geom-bool-V10-01-03
+ - Minor optimisation in Inside(p) for G4UnionSolid and G4SubtractionSolid.
 
  October 7, 2015 G.Cosmo                 geom-bool-V10-01-02
  - Protected compilation of USolid wrappers with G4GEOM_USE_USOLIDS flag.

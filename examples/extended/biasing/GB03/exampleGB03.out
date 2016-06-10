@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-02-ref-00    (4-December-2015)
+ Geant4 version Name: geant4-10-02-patch-01    (26-February-2016)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -471,6 +471,11 @@ CoulombScat:   for  pi-, integral: 1     SubType= 1  BuildTable= 1
 ---------------------------------------------------
                            Hadronic Processes for He3
 
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV /n ---> 100 TeV/n
+     Cr_sctns: Glauber-Gribov nucleus nucleus: 0 eV  ---> 2.88022e+295 J  
+     Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
+
   Process: He3Inelastic
         Model:  Binary Light Ion Cascade: 0 eV /n ---> 4 GeV/n
         Model:                      FTFP: 2 GeV/n ---> 100 TeV/n
@@ -800,7 +805,7 @@ GB03BOptrGeometryBasedBiasing : starting run with splitting factor = 2, and prob
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.18s Real=0.18s Sys=0.01s
+  User=0.16s Real=0.17s Sys=0.01s
 
 Region <DefaultRegionForTheWorld> --  -- appears in <World> world volume
  This region is in the mass world.
@@ -860,7 +865,7 @@ GB03BOptrGeometryBasedBiasing : starting run with splitting factor = 2, and prob
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.68s Real=0.69s Sys=0s
+  User=1.03s Real=1.03s Sys=0s
 Graphics systems deleted.
 Visualization Manager deleting...
 G4 kernel has come to Quit state.
@@ -872,9 +877,9 @@ RunManager is deleting RunManagerKernel.
 G4SDManager deleted.
 EventManager deleted.
 Units table cleared.
-Total navigation history collections cleaned: 82
+Total navigation history collections cleaned: 93
 ================== Deleting memory pools ===================
-Pool ID '20G4NavigationLevelRep', size : 0.127 MB
+Pool ID '20G4NavigationLevelRep', size : 0.144 MB
 Pool ID '24G4ReferenceCountedHandleIvE', size : 0.000961 MB
 Pool ID '17G4DynamicParticle', size : 0.0375 MB
 Pool ID '7G4Event', size : 0.000961 MB
@@ -883,11 +888,11 @@ Pool ID '17G4PrimaryParticle', size : 0.000961 MB
 Pool ID '15G4HCofThisEvent', size : 0.000961 MB
 Pool ID '16G4HitsCollection', size : 0 MB
 Pool ID '7G4Track', size : 0.075 MB
-Pool ID '18G4TouchableHistory', size : 0.00961 MB
+Pool ID '18G4TouchableHistory', size : 0.0115 MB
 Pool ID '15G4CountedObjectIvE', size : 0.00192 MB
 Pool ID '10G4Fragment', size : 0.00192 MB
 Number of memory pools allocated: 12 of which, static: 0
-Dynamic pools deleted: 12 / Total memory freed: 0.26 MB
+Dynamic pools deleted: 12 / Total memory freed: 0.28 MB
 ============================================================
 G4Allocator objects are deleted.
 UImanager deleted.

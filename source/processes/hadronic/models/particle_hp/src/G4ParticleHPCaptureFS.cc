@@ -156,7 +156,7 @@
        G4double sinth = std::sin(theta);
        G4ThreeVector direction( sinth*std::cos(phi), sinth*std::sin(phi), std::cos(theta) );
        theOne->SetMomentum( direction ) ;
-       thePhotons->push_back(theOne);
+       if ( thePhotons != NULL ) thePhotons->push_back(theOne);
        nPhotons++; // 0 -> 1
     }
 //One photon case: energy set to Q-value 

@@ -177,8 +177,7 @@ void G4eSingleCoulombScatteringModel::SampleSecondaries(
 
   //G4cout<<"..Z: "<<Z<<" ..iz: "<<iz<<" ..ia: "<<ia<<" ..mass2: "<<mass2<<G4endl;
 
-  G4double cross= Mottcross->GetTotalCross();
-  if(cross == 0.0) { return; }
+  Mottcross->SetupKinematic(kinEnergy, Z);
 
   G4double z1 = Mottcross->GetScatteringAngle();
   G4double sint = sin(z1);

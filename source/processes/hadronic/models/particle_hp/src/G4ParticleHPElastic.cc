@@ -98,7 +98,7 @@
     if(n!=1)
     {
       G4int i;
-      xSec = new G4double[n];
+      G4double* xSec = new G4double[n];
       G4double sum=0;
       const G4double * NumAtomsPerVolume = theMaterial->GetVecNbOfAtomsPerVolume();
       G4double rWeight;    

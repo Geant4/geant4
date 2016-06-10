@@ -90,7 +90,6 @@ private:
   std::vector<G4bool> fLevelManagerFlags[ZMAX];
 
 #ifdef G4MULTITHREADED
-public:
   static G4Mutex nuclearLevelDataMutex;
 #endif
 };

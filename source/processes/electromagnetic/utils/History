@@ -1,4 +1,4 @@
-$Id: History 94233 2015-11-09 10:55:01Z gcosmo $
+$Id: History 95476 2016-02-12 09:39:50Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,18 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+22 January 16: V.Ivant (emutils-V10-01-41)
+- G4LossTableManager - avoid double addition of He3 and alpha to the
+    loss table map (should not have any effect on results)
+- G4EmCalculator - fixed computation of dEdx and range for He3 and 
+    alpha (problem #1808)
+
+14 January 16: V.Ivant
+- G4EmSaturation - fixed #1807 by changing method name from
+    VisibleEnergyDeposition(..) to VisibleEnergyDepositionAtAStep(..)
+    This fix change user interface in order to allow overload virtual
+    method
 
 09 November 15: V.Ivant (emutils-V10-01-40)
 - G4EmParameters - fixed typo in name of the new method

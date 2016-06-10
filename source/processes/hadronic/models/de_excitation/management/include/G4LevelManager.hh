@@ -137,11 +137,13 @@ G4LevelManager::NearestLevelIndex(G4double ener, size_t index) const
   //G4cout << "index= " << index << " max= " << nTransitions << " exc= " << ener 
   //	 << " Emax= " << fLevelEnergy[nTransitions] << G4endl;
   size_t idx = std::min(index, nTransitions);
-  G4float energy = (G4float)ener;
-  if(0 < nTransitions && std::fabs(energy - fLevelEnergy[idx]) > tolerance) {
+  G4float energy = (G4float)ener; 
+  if(std::fabs(energy - fLevelEnergy[idx]) > tolerance) {
     // ground state
-    if(energy <= fLevelEnergy[1]*0.5f)  
+    if(energy <= tolerance)  
       { idx = 0; }
+    else if(energy <= fLevelEnergy[1])  
+      { idx = 1; }
     else if((fLevelEnergy[nTransitions] + fLevelEnergy[nTransitions-1])*0.5f <= energy) 
       { idx = nTransitions; }
 

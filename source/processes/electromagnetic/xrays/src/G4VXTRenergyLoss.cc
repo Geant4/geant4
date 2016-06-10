@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VXTRenergyLoss.cc 84716 2014-10-20 07:38:47Z gcosmo $
+// $Id: G4VXTRenergyLoss.cc 95478 2016-02-12 09:45:33Z gcosmo $
 //
 // History:
 // 2001-2002 R&D by V.Grichine
@@ -55,6 +55,7 @@
 #include "G4PhysicsVector.hh"
 #include "G4PhysicsFreeVector.hh"
 #include "G4PhysicsLinearVector.hh"
+#include "G4EmProcessSubType.hh"
 
 ////////////////////////////////////////////////////////////////////////////
 //
@@ -75,6 +76,7 @@ G4VXTRenergyLoss::G4VXTRenergyLoss(G4LogicalVolume *anEnvelope,
   fAngleForEnergyTable(0)
 {
   verboseLevel = 1;
+  SetProcessSubType(fTransitionRadiation);
 
   fPtrGamma = 0;
   fMinEnergyTR = fMaxEnergyTR = fMaxThetaTR = fGamma = fEnergy = fVarAngle 

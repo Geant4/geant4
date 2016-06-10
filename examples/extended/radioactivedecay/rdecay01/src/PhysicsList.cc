@@ -27,7 +27,7 @@
 /// \brief Implementation of the PhysicsList class
 //
 //
-// $Id: PhysicsList.cc 94458 2015-11-18 14:36:25Z gcosmo $
+// $Id: PhysicsList.cc 95541 2016-02-12 14:33:23Z gcosmo $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -102,8 +102,10 @@ void PhysicsList::ConstructProcess()
   G4PhysicsListHelper* ph = G4PhysicsListHelper::GetPhysicsListHelper();  
   ph->RegisterProcess(radioactiveDecay, G4GenericIon::GenericIon());
   
-  G4NuclideTable::GetInstance()->SetLevelTolerance(100*eV);
-  G4NuclideTable::GetInstance()->SetThresholdOfHalfLife(0.0001*ns);
+  // mandatory for G4NuclideTable
+  //
+  G4NuclideTable::GetInstance()->SetThresholdOfHalfLife(0.1*picosecond);
+  G4NuclideTable::GetInstance()->SetLevelTolerance(1.0*eV);  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

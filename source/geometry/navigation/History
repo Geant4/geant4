@@ -1,4 +1,4 @@
-$Id: History 94380 2015-11-13 10:14:39Z gcosmo $
+$Id: History 95420 2016-02-10 13:47:17Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,23 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+February 1, 2016 - G.Cosmo (geomnav-V10-01-36)
+--------------------------
+- Relax condition for zero or almost-zero steps in G4ReplicaNavigation and
+  G4Navigator, to allow for faster progression in case of stuck tracks in
+  3D scoring meshes. Addressed old problem report #1432.
+
+January 29, 2016 - G.Cosmo
+--------------------------
+- Fix in G4ReplicaNavigation::ComputeStep() for correct setting of copyNo
+  for particle entering. Fixes issue of negative copyNo observed in nested
+  replica setups. Addressing problem report #1634. 
+
+January 11, 2016 - G.Cosmo
+--------------------------
+- Move check for overlaps in G4Navigator::ComputeStep() within G4VERBOSE.
+  Addressing problem report #1811.
 
 November 13, 2015 - G.Cosmo (geomnav-V10-01-35)
 ---------------------------

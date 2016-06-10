@@ -33,7 +33,10 @@
 
 G4BOptnForceCommonTruncatedExp::G4BOptnForceCommonTruncatedExp(G4String name)
   : G4VBiasingOperation(name),
-    fInteractionOccured(false)
+    fNumberOfSharing(0),
+    fProcessToApply(nullptr),
+    fInteractionOccured(false),
+    fMaximumDistance(-1.0)
 {
   fCommonTruncatedExpLaw = new G4ILawCommonTruncatedExp("ExpLawForOperation"+name);
   fForceFreeFlightLaw    = new G4ILawForceFreeFlight   ("FFFLawForOperation"+name);
@@ -47,8 +50,9 @@ G4BOptnForceCommonTruncatedExp::~G4BOptnForceCommonTruncatedExp()
   if ( fForceFreeFlightLaw )    delete fForceFreeFlightLaw;
 }
 
-const G4VBiasingInteractionLaw* G4BOptnForceCommonTruncatedExp::ProvideOccurenceBiasingInteractionLaw( const G4BiasingProcessInterface*       callingProcess, 
-												       G4ForceCondition&                proposeForceCondition )
+const G4VBiasingInteractionLaw* G4BOptnForceCommonTruncatedExp::
+ProvideOccurenceBiasingInteractionLaw( const G4BiasingProcessInterface*       callingProcess, 
+				       G4ForceCondition&                proposeForceCondition )
 {
   if ( callingProcess->GetWrappedProcess() == fProcessToApply )
     {

@@ -31,6 +31,55 @@ add this in the documentation for the changed file as [BUGFIX #BUGNUMBER].
 
      ----------------------------------------------------------
 
+23rd February 2016 - Gunter Folger (cmake-V10-01-44)
+-  Correct md5sum for RadioactiveDecay-4.3.1 after removal of MAC Safari files.
+
+23rd February 2016 - Gunter Folger (cmake-V10-01-43)
+- Modules/Geant4DatasetDefinitions.cmake:
+   use patched data-sets G4ENSDFSTATE-1.2.1 and G4RadioactiveDecay-4.3.1
+	
+22nd January 2016 - Ben Morgan (cmake-V10-01-42)
+- Modules/FindCLHEP.cmake : Restore from last version. Update regexing
+  of defs.h file for CLHEP 2.3.1.1 changes, retaining compatibility with
+  earlier versions. Create imported targets CLHEP and CLHEP::<COMPONENT>
+  to ease transition to full Config mode support once we can support it.
+- Modules/Geant4OptionalComponents.cmake : Rollback to using package-mode
+  to locate CLHEP. Modify CLHEP_LIBRARIES after finding to fill this with
+  the imported targets instead of absolute paths.
+- Modules/Geant4BuildProjectConfig.cmake : Add FindCLHEP.cmake to installed
+  modules so that Geant4Config.cmake can refind CLHEP and hence the imported 
+  targets.
+- Templates/Geant4Config.cmake.in : Refind CLHEP using package-mode,
+  using hardcoded CLHEP_ROOT_DIR if set as a hint.
+
+15th December 2015 - Ben Morgan
+- Templates/Geant4Config.cmake.in : Use PATHS option in find_package
+  for CLHEP, setting it to discovered CLHEP_DIR. Required at present
+  to provide a hint to builds of tests, which do not have 
+  CMAKE_PREFIX_PATH set appropriately.
+
+15th December 2015 - Ben Morgan
+- [BUGFIX #1805] : Preliminary fix for CLHEP 2.3.1.1 config error
+- Modules/FindCLHEP.cmake : REMOVED as obsolete
+- Modules/Geant4OptionalComponents.cmake : Use NO_MODULE in
+  find_package(CLHEP) so that CLHEPConfig.cmake is preferred.
+  Retain use of CLHEP_ROOT_DIR temporarily for transition in
+  testing system
+- Modules/Geant4BuildProjectConfig.cmake : Remove setting of explicit CLHEP
+  directory, defering this to find_package call in Geant4Config.cmake
+- Templates/Geant4Config.cmake.in : Use namespaced name for Geant4 cmake
+  directory to avoid upstream clashes.
+  Add explicit call to find_package(CLHEP) so that imported targets are refound.
+  Move inclusion of targets file to after setup steps to ensure all external
+  targets exist before this is included. This is also to help further work
+  on use of imported targets.
+- Modules/Geant4ConfigureConfigScript.cmake : Extract LOCATION property from
+  CLHEP targets to provide setting of lib paths in geant4-config
+- Templates/geant4-config.cmake.in : Remove explicit calls to clhep-config
+- Modules/Geant4ToolchainBackwardCompatibility.cmake : Extract LOCATION
+  properties from CLHEP imported targets.
+
+
 25th November 2015 - Ben Morgan (cmake-V10-01-41)
 - Modules/Geant4InterfaceOptions.cmake : Move force Qt4 option
   alongside use Qt option so that it can be set in Curses/GUI before

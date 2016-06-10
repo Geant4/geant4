@@ -1,4 +1,4 @@
-$Id: History 82401 2014-06-18 14:43:54Z gcosmo $
+$Id: History 95539 2016-02-12 14:30:02Z gcosmo $
 ----------------------------------------------------
 
      =========================================================
@@ -14,6 +14,10 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+09-12-15 V.Ivant (testem18-V10-01-00)
+- H.Burkhardt fixed root macro allowing to work both with root5 and 6;
+  added run01_prot.mac - demonstrating synkrotron radiation for FCC
 	 
 18-06-14 mma (testem18-V10-00-00)
 - remove PhysicsList::SetCuts()

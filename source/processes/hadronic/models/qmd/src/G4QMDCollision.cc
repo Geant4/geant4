@@ -231,8 +231,9 @@ void G4QMDCollision::CalKinematicsOfBinaryCollisions( G4double dt )
                theSystem->GetParticipant( i )->SetPosition( r0 );
                theSystem->GetParticipant( i )->SetMomentum( p0 );
 
-               for ( G4int i0i = 0 ; i0i < id-1 ; i0i++ )
-               {
+               //for ( G4int i0i = 0 ; i0i < id-1 ; i0i++ )
+               //160210 deletion must be done in descending order
+               for ( G4int i0i = id-2 ; 0 <= i0i ; i0i-- ) {
                   //081118
                   //std::cout << "Decay Energitically Blocked deleteing " << i0i+n0  << std::endl;
                   theSystem->DeleteParticipant( i0i+n0 );
@@ -296,6 +297,7 @@ void G4QMDCollision::CalKinematicsOfBinaryCollisions( G4double dt )
                {
                   //081118
                   //std::cout << "Decay Blocked deleteing " << i0i+n0  << std::endl;
+                  //160210 adding commnet: deletion must be done in descending order
                   theSystem->DeleteParticipant( i0+n0-i0i-1 );
                }
                //081103

@@ -1,4 +1,4 @@
-$Id: History 93806 2015-11-02 11:21:01Z gcosmo $
+$Id: History 95824 2016-02-26 08:45:54Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,20 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Feb 25, 2016 P.Gumplinger             - field-V10-01-16
+-------------------------
+- address Problem Report: 1831
+  change: G4Mag_SpinEqRhs, G4EqEMFieldWithSpin, G4EqEMFieldWithEDM and
+          G4RepleteEofM.cc from g_BMT = (magMoment/muB)/spin
+                           to   g_BMT = (std::abs(magMoment)/muB)/spin
+
+
+Dec 11, 2015 A.Dotti
+--------------------------
+Fixing typo in tests/CMakeList.txt file: subdirecotry() 
+instead of add_subdirectory()
+
 Nov  2, 2015 J.Apostolakis             - field-V10-01-15 (fixed)
 Oct 22, 2015 J.Apostolakis             - field-V10-01-14
 --------------------------

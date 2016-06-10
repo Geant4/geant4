@@ -53,9 +53,19 @@ if(GEANT4_USE_SYSTEM_CLHEP)
     set(__system_clhep_mode " (granular)")
   endif()
 
-  # We keep this as required, because if the user chooses to use a
-  # system option we assume that we absolutely, positively require this.
+  # Find CLHEP using package-mode (i.e. FindCLHEP)
+  # This will set up imported targets for us, but we need
+  # to set CLHEP_LIBRARIES afterwards to use these
   find_package(CLHEP 2.3.1.0 REQUIRED ${__g4_clhep_components})
+
+  set(CLHEP_LIBRARIES CLHEP::CLHEP)
+  if(GEANT4_USE_SYSTEM_CLHEP_GRANULAR)
+    set(CLHEP_LIBRARIES)
+    foreach(_comp ${__g4_clhep_components})
+      list(APPEND CLHEP_LIBRARIES  "CLHEP::${_comp}")
+    endforeach()
+  endif()
+
   set(GEANT4_USE_SYSTEM_CLHEP TRUE)
 else()
   set(CLHEP_FOUND TRUE)

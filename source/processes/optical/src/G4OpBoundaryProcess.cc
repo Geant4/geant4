@@ -849,20 +849,17 @@ void G4OpBoundaryProcess::DielectricLUT()
               phiRad = (-90 + 5*phiIndex)*pi/180;
               // Rotate Photon Momentum in Theta, then in Phi
               NewMomentum = -OldMomentum;
+
               PerpendicularVectorTheta = NewMomentum.cross(theGlobalNormal);
-              if (PerpendicularVectorTheta.mag() > kCarTolerance ) {
-                 PerpendicularVectorPhi = 
-                                  PerpendicularVectorTheta.cross(NewMomentum);
-              }
-              else {
-                 PerpendicularVectorTheta = NewMomentum.orthogonal();
-                 PerpendicularVectorPhi =
-                                  PerpendicularVectorTheta.cross(NewMomentum);
-              }
+              if (PerpendicularVectorTheta.mag() < kCarTolerance )
+                          PerpendicularVectorTheta = NewMomentum.orthogonal();
               NewMomentum =
                  NewMomentum.rotate(anglePhotonToNormal-thetaRad,
                                     PerpendicularVectorTheta);
+              PerpendicularVectorPhi = 
+                                  PerpendicularVectorTheta.cross(NewMomentum);
               NewMomentum = NewMomentum.rotate(-phiRad,PerpendicularVectorPhi);
+
               // Rotate Polarization too:
               theFacetNormal = (NewMomentum - OldMomentum).unit();
               EdotN = OldPolarization * theFacetNormal;

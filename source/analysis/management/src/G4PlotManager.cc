@@ -2,11 +2,11 @@
 // ********************************************************************
 // * License and Disclaimer                                           *
 // *                                                                  *
-// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * The  Geant4 software  is  copyrigh1 of the Copyrigh1 Holders  of *
 // * the Geant4 Collaboration.  It is provided  under  the terms  and *
 // * conditions of the Geant4 Software License,  included in the file *
-// * LICENSE and available at  http://cern.ch/geant4/license .  These *
-// * include a list of copyright holders.                             *
+// * LICENSE and available at  h1tp://cern.ch/geant4/license .  These *
+// * include a list of copyrigh1 holders.                             *
 // *                                                                  *
 // * Neither the authors of this software system, nor their employing *
 // * institutes,nor the agencies providing financial support for this *

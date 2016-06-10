@@ -1,0 +1,201 @@
+
+                 Geant4 10.1 - patch-03 Release Notes
+                 ------------------------------------
+
+                                                            5 February 2016
+
+List of fixes included in this public patch since the public release 10.1.p02:
+
+  o Configuration:
+    -------------
+    + CMake:
+      o Updated Apple Clang detection to work on Xcode-7.
+      o Always use libc++ with Apple Clang so that std-supporting library is
+        used for C++11 mode on older Mac systems where libstdc++ is the default.
+      o Updated std-flag setting rules.
+    + GNUMake:
+      o Updated X11 settings in MacOS platform.
+      o Added settings for C++ standards in platform specific scripts.
+
+  o Analysis:
+    --------
+    + Fixed G4Analysis::Tokenize() which was failing when processsing a string
+      containing opening double quota without a closing one.
+    + Fixed handling ntuples created in MT mode on master thread
+      This fixes the problem reported in hypernews (#459) and the problem
+      of deleting non-empty Root file containing only ntuples.
+
+  o Geometry:
+    --------
+    + divisions:
+      o Fix for use of rotation matrix in G4VDivisionParameterisation in
+        MT-mode; use thread-local pointer for rotation matrix as member of the
+        class G4VDivisionParameterisation and set it to suto-delete.
+        Removed unnecessary thread-local verbose flag.
+        Addressing problem reports #1743 and #1758.
+      o Set as unsupported divisions of polycone and polyhedra in MT-mode.
+    + magneticfield:
+      o Added check in G4ChordFinder against number of iterations in
+        FindNextChord(), to identify potential cases of lack of convergence.
+      o Better diagnostics text in case of errors in G4FieldTrack and
+        G4UniformMagField.
+      o Added explanation comment in G4MagHelicalSteper.
+    + navigation:
+      o G4MultiLevelLocator::EstimateIntersectionPoint(): fix for logic error
+        in keeping consistent candidate intersection. Copes with case that a
+        candidate intersection is not found in the next segment (typically in
+        the 'second half' part).
+        Ensure that splitting of step (new level/depth) advances the required
+        length, used when adding a new level/depth.
+        Revised condition of 'while' loop which ensures that a new candidate
+        intersection exists. Corrected the resetting of 'first_section' flag.
+        Replaced fatal error for exceeding max steps with warning and signal
+        'looping' for too many steps; G4PropagatorInField detects this
+        condition, and identifies it as a 'Looping Particle' which is then
+        flagged; the calling class (Transportation, PathFinder) is expected
+        to stop the tracking of this particle after a few of these steps.
+        Addressing issue seen by ALICE (non-finishing of step due to poor
+        advances).
+      o G4VIntersectionLocator: added new logging methods & revised interfaces.
+      o G4NavigationLogger: added method to report issue with normal that 
+        is the result of applying a rotation.
+      o G4NormalNavigation, G4VoxelNavigation: added check of rotated exit
+        normal.
+      o Relaxed condition for zero or almost-zero steps in G4ReplicaNavigation
+        and G4Navigator, to allow for faster progression in case of stuck tracks
+        in 3D scoring meshes. Addressing old problem report #1432.
+      o Fix in G4ReplicaNavigation::ComputeStep() for correct setting of copyNo
+        for particle entering. Fixes issue of negative copyNo observed in nested
+        replica setups. Addressing problem report #1634.
+      o Moved check for overlaps in G4Navigator::ComputeStep() within G4VERBOSE.
+        Addressing problem report #1811.
+    + solids/Boolean:
+      o Checked for potential never-ending loops. Replaced while-do loop with
+        bounded for-loop in G4IntersectionSolid::DistanceToIn(p,v).
+        Also addressing problem report #1821.
+    + solids/CSG:
+      o Introduced check in G4Sphere::DistanceToIn(p,v) for concave Theta and
+        point located on the origin. Also make proper use of radial tolerance in
+        DistanceToOut(p,v).
+      o Fixed Coverity defect in G4CutTubs::GetMaxMinZ().
+    + solids/specific:
+      o Added specialised implementation for GetCubicVolume() in
+        G4TessellatedSolid. Added debug printouts withing G4SPECSDEBUG for
+        DistanceToIn/Out(p,v) to identify potential wrong responses.
+      o Removed redundant condition in G4Polyhedra and G4polycone
+        SetOriginalParameters() method.
+      o Minor code cleanup in G4SurfaceVoxelizer.
+      o Checked for potential never-ending loops.
+    + volumes:
+      o Enabled paramerisation by solid type in G4GeometryWorkspace in MT-mode.
+        Assumes solids being parameterised are declared thread-local in the
+        user's parameterisation class and allocated just once.
+
+  o Global:
+    ------
+    + Tune radial tolerance to same value as for Cartesian tolerance in
+      G4GeometryTolerance.
+    + Corrected conditions for proper treatment of gcc-5 in tls.hh and
+      G4Threading.hh.
+    + Removed unused and buggy operator=(const G4String&) in G4SubString.
+      Added string length check in G4String::operator==().
+      Added missing 'inline' specification to functions in G4String.
+    + Force use of G4MT wrappers for Intel-icc compiler for random numbers.
+    + Updated date and version for 10.1.p03.
+
+  o Materials:
+    ---------
+    + G4NistElementBuilder: fixed typo in printout.
+      Addressing problem report #1786.
+
+  o Parameterisations:
+    -----------------
+    + gflash: fix for Zeff wrongly computed as ( W1*Z2 ) + ( W2*Z1 ), with Z1
+      and Z2 swapped. Addressing problem report #1719.
+
+  o Particles:
+    ---------
+    + Fixed wrong argument order CreateIon(A,Z,LL,0.0) in G4IonTable to
+      CreateIon(Z,A,LL,0.0).
+    + Fixed setting of mass in decay parent particle.
+      Addressing problem report #1820.
+
+  o Persistency:
+    -----------
+    + GDML:
+      o Use relaxed precision constant for matrix to angle formula evaluation
+        in G4GDMLWriteDefine, to allow for proper treatment of singularities.
+        Fixes issues of misplaced volumes in exported geometries of complex
+        detectors.
+      o Rectify rotation matrices in reading and writing GDML files to reduce
+        spurious roundoff errors in stored values.
+
+  o Physics Lists
+    -------------
+    + constructors/limiters:
+      o G4ParallelWorldPhysics: fixed process order index for
+        G4ParallelWorldProcess to 9900 to make sure it is registered
+        prior to G4OpBoundaryProcess.
+
+  o Processes - Electromagnetic:
+    ---------------------------
+    + xrays:
+      o G4VTransitionRadiation, G4VXTRenergyLoss: fixed process sub-type.
+
+  o Processes - Generic:
+    -------------------
+    + scoring:
+      o G4ParallelWorldProcess: fixed processType from 'fParameterized'
+        to 'fParallel' and set processSubType to 491.
+      o Fixed Coverity defects.
+
+  o Processes - Hadronic:
+    --------------------
+    + cross_sections:
+      o G4NeutronInelasticXS, G4NeutronCaptureXS: fixed isotope cross-sections
+        including retrieve, data management, isotope x-section and isotope
+        selection. Fixed Coverity defects.
+    + models/cascade:
+      o G4CascadeCoalescence: added explicit inclusion of
+        G4InuclElementaryParticle header to address compiler error from Cray
+        (as reported in Configuration Hypernews Forum #1764).
+    + models/coherent_elastic:
+      o G4DiffuseElastic: bug-fix in BuildAngleTable() to improve the angle
+        bin accuracy at high energies.
+    + models/im_r_matrix:
+      o Fixed compiler warning in clang-3.6.
+
+  o Run:
+    ---
+    + G4PhysicsListHelper: add entry for G4ParallelWorldProcess.
+    + G4RunManager, G4WorkerRunManager: fixed process order index of
+      G4ParallelWorldProcess to 9900 to make sure it is registered
+      prior to G4OpBoundaryProcess.
+
+  o Tracking:
+    --------
+    + G4SteppingManager: fix to properly set 'OriginTouchableHandle' for the
+      primary track. Addressing problem report #1773.
+
+  o Examples:
+    --------
+    + Updated reference outputs.
+    + basic/B4:
+      o Restored the third parameter in G4UIsession construction, which was
+        lost when moving G4UIExecutive at the beginning of main().
+        Addressing problem report #1802.
+
+ ----------------------------------------------------------------------------
+
+                             Technical Notes
+                             --------------- 
+
+  o  This patch should be applied on top of release 10.1, 10.1.p01 or 10.1.p02.
+  o  Technical notes distributed for release 10.1 are also applicable and
+     valid for this patch.
+
+The code and rebuilt binary libraries for release 10.1.p03 are available
+through our "Download" Web page.
+
+Please refer to the Geant4 User Documentation for further information about
+using Geant4.

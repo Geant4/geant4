@@ -3,7 +3,7 @@
   
   // Draw histos filled by Geant4 simulation 
   //   
-  TFile f = TFile("water_100um.root");
+  TFile f("water_100um.root");
   TCanvas* c1 = new TCanvas("c1", "  ");
   c1->SetLogy(0);
   c1->cd();

@@ -357,7 +357,10 @@ G4DNAIonElasticModel::SampleSecondaries (
     (1-std::cos(thetaCM*CLHEP::pi/180))
     / (2 * std::pow((fParticle_Mass+water_mass),2));
 
-    if (!statCode) fParticleChangeForGamma->SetProposedKineticEnergy(particleEnergy0 - depositEnergyCM);
+    //SI: added protection particleEnergy0 >= depositEnergyCM
+    if (!statCode && (particleEnergy0 >= depositEnergyCM) ) 
+
+      fParticleChangeForGamma->SetProposedKineticEnergy(particleEnergy0 - depositEnergyCM);
     
     else fParticleChangeForGamma->SetProposedKineticEnergy(particleEnergy0);
    

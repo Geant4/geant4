@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-02-ref-00    (4-December-2015)
+ Geant4 version Name: geant4-10-02-patch-01    (26-February-2016)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -177,7 +177,7 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=17.86s Real=17.93s Sys=0s
+  User=20.6s Real=20.66s Sys=0s
 
 -------------------------------------------------------------
  ---> The calorimeter is 9 Modules

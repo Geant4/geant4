@@ -1,4 +1,4 @@
-$Id: History 94220 2015-11-09 08:26:57Z gcosmo $
+$Id: History 95453 2016-02-11 09:50:51Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,25 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+January 20th, 2016, M. Verderi
+- fix compilation warning in order initialization of data members
+  in src/G4BiasingProcessInterface.cc.
+- proc-biasgen-V10-01-02
+
+January 19th, 2016, M. Verderi
+- fix various coverity warnings (unitialized variables). Should have no
+  effect. Fixes in:
+      src/G4BOptnChangeCrossSection.cc
+      src/G4BOptnCloning.cc
+      src/G4BOptnForceCommonTruncatedExp.cc
+      src/G4BOptnForceFreeFlight.cc
+      src/G4BOptrForceCollision.cc
+      src/G4BiasingProcessInterface.cc
+      include/G4BiasingProcessSharedData.hh
+  and minor cosmetics in:
+      include/G4BOptnCloning.hh
+      include/G4BOptnForceFreeFlight.hh
 
 November 6th, 2015, M. Verderi
 - fix non initialization of model IDs in MT mode.

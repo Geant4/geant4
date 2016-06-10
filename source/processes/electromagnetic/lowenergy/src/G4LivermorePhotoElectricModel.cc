@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LivermorePhotoElectricModel.cc 89826 2015-04-30 15:18:18Z gcosmo $
+// $Id: G4LivermorePhotoElectricModel.cc 95459 2016-02-11 10:23:30Z gcosmo $
 //
 //
 // Author: Sebastien Incerti
@@ -48,13 +48,13 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4LPhysicsFreeVector*  G4LivermorePhotoElectricModel::fCrossSection[] = {0};
-G4LPhysicsFreeVector*  G4LivermorePhotoElectricModel::fCrossSectionLE[] = {0};
-std::vector<G4double>* G4LivermorePhotoElectricModel::fParam[] = {0};
+G4LPhysicsFreeVector*  G4LivermorePhotoElectricModel::fCrossSection[] = {nullptr};
+G4LPhysicsFreeVector*  G4LivermorePhotoElectricModel::fCrossSectionLE[] = {nullptr};
+std::vector<G4double>* G4LivermorePhotoElectricModel::fParam[] = {nullptr};
 G4int                  G4LivermorePhotoElectricModel::fNShells[] = {0};
 G4int                  G4LivermorePhotoElectricModel::fNShellsUsed[] = {0};
-G4ElementData*         G4LivermorePhotoElectricModel::fShellCrossSection = 0;
-G4Material*            G4LivermorePhotoElectricModel::fWater = 0;
+G4ElementData*         G4LivermorePhotoElectricModel::fShellCrossSection = nullptr;
+G4Material*            G4LivermorePhotoElectricModel::fWater = nullptr;
 G4double               G4LivermorePhotoElectricModel::fWaterEnergyLimit = 0.0;
 
 using namespace std;
@@ -63,9 +63,9 @@ using namespace std;
 
 G4LivermorePhotoElectricModel::G4LivermorePhotoElectricModel(
     const G4String& nam)
-  : G4VEmModel(nam),fParticleChange(0),maxZ(99),
+  : G4VEmModel(nam),fParticleChange(nullptr),maxZ(99),
     nShellLimit(100),fDeexcitationActive(false),isInitialised(false),
-    fAtomDeexcitation(0)
+    fAtomDeexcitation(nullptr)
 { 
   verboseLevel= 0;
   // Verbosity scale:

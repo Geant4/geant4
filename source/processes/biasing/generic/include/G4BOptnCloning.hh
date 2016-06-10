@@ -79,9 +79,10 @@ public:
   G4Track* GetCloneTrack() const { return fCloneTrack; }
 
 private:
-  G4double fClone1W, fClone2W;
+  G4double         fClone1W,
+                   fClone2W;
   G4ParticleChange fParticleChange;
-  G4Track* fCloneTrack;
+  G4Track*         fCloneTrack;
 };
 
 #endif

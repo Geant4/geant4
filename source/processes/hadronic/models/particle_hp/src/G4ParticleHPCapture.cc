@@ -103,7 +103,7 @@
     G4int index = theMaterial->GetElement(0)->GetIndex();
     if(n!=1)
     {
-      xSec = new G4double[n];
+      G4double* xSec = new G4double[n];
       G4double sum=0;
       G4int i;
       const G4double * NumAtomsPerVolume = theMaterial->GetVecNbOfAtomsPerVolume();

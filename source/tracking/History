@@ -1,4 +1,4 @@
-$Id: History 91269 2015-06-29 07:05:59Z gcosmo $
+$Id: History 95505 2016-02-12 11:07:51Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+27th January 2016 M. Asai (tracking-V10-01-02)
+- G4SteppingManager.cc: Set OriginTouchableHandle for primary track.
+  Addressing to Bug report #1773.
 
 26th June 2015 J. Allison (tracking-V10-01-01)
 - G4RichTrajectory.cc: Coverity fix.

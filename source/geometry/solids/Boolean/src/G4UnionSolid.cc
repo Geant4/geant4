@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UnionSolid.cc 92010 2015-08-13 10:07:52Z gcosmo $
+// $Id: G4UnionSolid.cc 95422 2016-02-10 14:35:47Z gcosmo $
 //
 // Implementation of methods for the class G4IntersectionSolid
 //
@@ -173,13 +173,14 @@ EInside G4UnionSolid::Inside( const G4ThreeVector& p ) const
   EInside positionA = fPtrSolidA->Inside(p);
   if (positionA == kInside)  { return kInside; }
 
+  static const G4double rtol
+    = 1000*G4GeometryTolerance::GetInstance()->GetRadialTolerance();
   EInside positionB = fPtrSolidB->Inside(p);
 
   if( positionB == kInside  ||
     ( positionA == kSurface && positionB == kSurface &&
         ( fPtrSolidA->SurfaceNormal(p) + 
-          fPtrSolidB->SurfaceNormal(p) ).mag2() < 
-          1000*G4GeometryTolerance::GetInstance()->GetRadialTolerance() ) )
+          fPtrSolidB->SurfaceNormal(p) ).mag2() < rtol ) )
   {
     return kInside;
   }

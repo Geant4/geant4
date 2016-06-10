@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LossTableManager.cc 92921 2015-09-21 15:06:51Z gcosmo $
+// $Id: G4LossTableManager.cc 95476 2016-02-12 09:39:50Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -559,7 +559,9 @@ void G4LossTableManager::LocalPhysicsTables(
       range_vector[i] = p->RangeTableForLoss();
       inv_range_vector[i] = p->InverseRangeTable();
       if(0 == run && p->IsIonisationProcess()) {
-        loss_map[part_vector[i]] = loss_vector[i];
+        loss_map[part_vector[i]] = p;
+	//G4cout << "G4LossTableManager::LocalPhysicsTable " << part_vector[i]->GetParticleName()
+	//     << " added to map " << p << G4endl;
       }
 
       if(1 < verbose) { 
@@ -676,19 +678,25 @@ void G4LossTableManager::BuildPhysicsTable(
       const G4ParticleDefinition* curr_part = part_vector[i];
       if(1 < verbose) {
         G4cout << "### Build Table for " << p->GetProcessName()
-               << " and " << curr_part->GetParticleName() << G4endl;
+               << " and " << curr_part->GetParticleName() 
+	       << "  " << tables_are_built[i] << "  " << base_part_vector[i] << G4endl;
       }
       G4VEnergyLossProcess* curr_proc = BuildTables(curr_part);
-      if(curr_proc) { CopyTables(curr_part, curr_proc); }
+      if(curr_proc) { 
+	CopyTables(curr_part, curr_proc); 
+	if(p == curr_proc && 0 == run && p->IsIonisationProcess()) { 
+	  loss_map[aParticle] = p; 
+	  //G4cout << "G4LossTableManager::BuildPhysicsTable: " << aParticle->GetParticleName()
+	  //	 << " added to map " << p <<  G4endl;
+	}
+      }
     }
     if ( !tables_are_built[i] ) { all_tables_are_built = false; }
   }
-  if(0 == run && p->IsIonisationProcess()) { loss_map[aParticle] = p; }
-
   if(1 < verbose) {
     G4cout << "### G4LossTableManager::BuildPhysicsTable end: "
-           << "all_tables_are_built= " << all_tables_are_built
-           << G4endl;
+           << "all_tables_are_built= " << all_tables_are_built << " "
+           << aParticle->GetParticleName() << " proc: " << p << G4endl;
   }
   if(all_tables_are_built) { 
     if(1 < verbose) {
@@ -722,12 +730,14 @@ void G4LossTableManager::CopyTables(const G4ParticleDefinition* part,
         range_vector[j] = base_proc->RangeTableForLoss();
         inv_range_vector[j] = base_proc->InverseRangeTable();
         loss_map[part_vector[j]] = proc; 
+	//G4cout << "G4LossTableManager::CopyTable " << part_vector[j]->GetParticleName()
+	//     << " added to map " << proc << G4endl;
       }
       if (1 < verbose) {
          G4cout << "For " << proc->GetProcessName()
                 << " for " << part_vector[j]->GetParticleName()
                 << " base_part= " << part->GetParticleName()
-                << " tables are assigned "
+                << " tables are assigned"
                 << G4endl;
       }
     }

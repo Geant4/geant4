@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NistMaterialBuilder.hh 91920 2015-08-11 09:50:13Z gcosmo $
+// $Id: G4NistMaterialBuilder.hh 95428 2016-02-10 15:00:35Z gcosmo $
 
 #ifndef G4NistMaterialBuilder_h
 #define G4NistMaterialBuilder_h 1
@@ -61,6 +61,7 @@
 
 #include "globals.hh"
 #include "G4Material.hh"
+#include "G4Threading.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -218,6 +219,9 @@ private:
   std::vector<G4double>  gasPressure;
 
   G4bool                 first;
+#ifdef G4MULTITHREADED
+  static G4Mutex nistMaterialMutex;
+#endif
 
 };
 

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronElasticPhysics.cc 88356 2015-02-16 09:00:15Z gcosmo $
+// $Id: G4HadronElasticPhysics.cc 95780 2016-02-24 08:34:54Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -62,6 +62,8 @@
 #include "G4ChipsElasticModel.hh"
 #include "G4ElasticHadrNucleusHE.hh"
 #include "G4AntiNuclElastic.hh"
+
+#include "G4ComponentGGNuclNuclXsc.hh"
 
 #include "G4BGGNucleonElasticXS.hh"
 #include "G4BGGPionElasticXS.hh"
@@ -164,6 +166,18 @@ void G4HadronElasticPhysics::ConstructProcess()
        ) {
       
       G4HadronElasticProcess* hel = new G4HadronElasticProcess();
+      hel->RegisterMe(lhep0);
+      pmanager->AddDiscreteProcess(hel);
+      if(verbose > 1) {
+	G4cout << "### HadronElasticPhysics: " << hel->GetProcessName()
+	       << " added for " << particle->GetParticleName() << G4endl;
+      }
+
+    } else if(pname == "He3") {
+      G4HadronElasticProcess* hel = new G4HadronElasticProcess();
+      G4VCrossSectionDataSet* theComponentGGNuclNuclData = 
+        new G4CrossSectionElastic(new G4ComponentGGNuclNuclXsc());
+      hel->AddDataSet(theComponentGGNuclNuclData);
       hel->RegisterMe(lhep0);
       pmanager->AddDiscreteProcess(hel);
       if(verbose > 1) {

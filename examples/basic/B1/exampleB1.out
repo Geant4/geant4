@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-02-ref-00    (4-December-2015)
+ Geant4 version Name: geant4-10-02-patch-01    (26-February-2016)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -461,6 +461,11 @@ CoulombScat:   for  pi-, integral: 1     SubType= 1  BuildTable= 1
 ---------------------------------------------------
                            Hadronic Processes for He3
 
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV /n ---> 100 TeV/n
+     Cr_sctns: Glauber-Gribov nucleus nucleus: 0 eV  ---> 2.88022e+295 J  
+     Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
+
   Process: He3Inelastic
         Model:  Binary Light Ion Cascade: 0 eV /n ---> 4 GeV/n
         Model:                      FTFP: 2 GeV/n ---> 100 TeV/n
@@ -760,7 +765,7 @@ CoulombScat:   for  pi-, integral: 1     SubType= 1  BuildTable= 1
 
 --------------------End of Global Run-----------------------
  The run consists of 1000 proton of 210 MeV
- Cumulated dose per run, in scoring volume : 4.9029 nanoGy  rms = 145.489 picoGy 
+ Cumulated dose per run, in scoring volume : 4.90626 nanoGy  rms = 146.055 picoGy 
 ------------------------------------------------------------
 
 Graphics systems deleted.

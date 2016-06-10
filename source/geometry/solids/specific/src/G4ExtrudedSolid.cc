@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ExtrudedSolid.cc 92024 2015-08-13 14:16:00Z gcosmo $
+// $Id: G4ExtrudedSolid.cc 95805 2016-02-25 11:11:49Z gcosmo $
 //
 //
 // --------------------------------------------------------------------
@@ -44,6 +44,7 @@
 #include <cmath>
 #include <iomanip>
 
+#include "G4GeometryTolerance.hh"
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4VFacet.hh"
@@ -95,7 +96,7 @@ G4ExtrudedSolid::G4ExtrudedSolid( const G4String& pName,
       G4Exception("G4ExtrudedSolid::G4ExtrudedSolid()", "GeomSolids0002",
                   FatalErrorInArgument, message);
     }
-    if ( std::fabs( zsections[i+1].fZ - zsections[i].fZ ) < kCarTolerance * 0.5 ) 
+    if ( std::fabs( zsections[i+1].fZ - zsections[i].fZ ) < kCarToleranceHalf ) 
     {
       std::ostringstream message;
       message << "Z-sections with the same z position are not supported - "
@@ -364,7 +365,7 @@ G4bool G4ExtrudedSolid::IsSameLine(G4TwoVector p,
 
   if ( l1.x() == l2.x() )
   {
-    return std::fabs(p.x() - l1.x()) < kCarTolerance * 0.5; 
+    return std::fabs(p.x() - l1.x()) < kCarToleranceHalf; 
   }
    G4double  slope= ((l2.y() - l1.y())/(l2.x() - l1.x())); 
    G4double predy= l1.y() +  slope *(p.x() - l1.x()); 
@@ -373,12 +374,12 @@ G4bool G4ExtrudedSolid::IsSameLine(G4TwoVector p,
    // Calculate perpendicular distance
    //
    // G4double perpD= std::fabs(dy) / std::sqrt( 1 + slope * slope ); 
-   // G4bool   simpleComp= (perpD<0.5*kCarTolerance); 
+   // G4bool   simpleComp= (perpD<kCarToleranceHalf); 
 
    // Check perpendicular distance vs tolerance 'directly'
    //
-   const G4double tol= 0.5 * kCarTolerance ; 
-   G4bool    squareComp=  (dy*dy < (1+slope*slope) * tol * tol); 
+   G4bool squareComp=  (dy*dy < (1+slope*slope)
+                    * kCarToleranceHalf * kCarToleranceHalf); 
 
    // return  simpleComp; 
    return squareComp;
@@ -392,10 +393,10 @@ G4bool G4ExtrudedSolid::IsSameLineSegment(G4TwoVector p,
   // Return true if p is on the line through l1, l2 and lies between
   // l1 and l2 
 
-  if ( p.x() < std::min(l1.x(), l2.x()) - kCarTolerance * 0.5 || 
-       p.x() > std::max(l1.x(), l2.x()) + kCarTolerance * 0.5 ||
-       p.y() < std::min(l1.y(), l2.y()) - kCarTolerance * 0.5 || 
-       p.y() > std::max(l1.y(), l2.y()) + kCarTolerance * 0.5 )
+  if ( p.x() < std::min(l1.x(), l2.x()) - kCarToleranceHalf || 
+       p.x() > std::max(l1.x(), l2.x()) + kCarToleranceHalf ||
+       p.y() < std::min(l1.y(), l2.y()) - kCarToleranceHalf || 
+       p.y() > std::max(l1.y(), l2.y()) + kCarToleranceHalf )
   {
     return false;
   }
@@ -537,6 +538,9 @@ G4bool G4ExtrudedSolid::AddGeneralPolygonFacets()
 
   typedef std::pair < G4TwoVector, G4int > Vertex;
 
+  static const G4double kAngTolerance =
+    G4GeometryTolerance::GetInstance()->GetAngularTolerance();
+
   // Fill one more vector
   //
   std::vector< Vertex > verticesToBeDone;
@@ -566,7 +570,7 @@ G4bool G4ExtrudedSolid::AddGeneralPolygonFacets()
     //G4cout << "angle " << angle  << G4endl;
 
     G4int counter = 0;
-    while ( angle >= pi )    // Loop checking, 13.08.2015, G.Cosmo
+    while ( angle >= (pi-kAngTolerance) )  // Loop checking, 13.08.2015, G.Cosmo
     {
       // G4cout << "Skipping concave vertex " << c2->second << G4endl;
 
@@ -773,12 +777,12 @@ EInside G4ExtrudedSolid::Inside (const G4ThreeVector &p) const
 
   // Check first if outside extent
   //
-  if ( p.x() < GetMinXExtent() - kCarTolerance * 0.5 ||
-       p.x() > GetMaxXExtent() + kCarTolerance * 0.5 ||
-       p.y() < GetMinYExtent() - kCarTolerance * 0.5 ||
-       p.y() > GetMaxYExtent() + kCarTolerance * 0.5 ||
-       p.z() < GetMinZExtent() - kCarTolerance * 0.5 ||
-       p.z() > GetMaxZExtent() + kCarTolerance * 0.5 )
+  if ( p.x() < GetMinXExtent() - kCarToleranceHalf ||
+       p.x() > GetMaxXExtent() + kCarToleranceHalf ||
+       p.y() < GetMinYExtent() - kCarToleranceHalf ||
+       p.y() > GetMaxYExtent() + kCarToleranceHalf ||
+       p.z() < GetMinZExtent() - kCarToleranceHalf ||
+       p.z() > GetMaxZExtent() + kCarToleranceHalf )
   {
     // G4cout << "G4ExtrudedSolid::Outside extent: " << p << G4endl;
     return kOutside;
@@ -817,8 +821,8 @@ EInside G4ExtrudedSolid::Inside (const G4ThreeVector &p) const
   {
     // Check if on surface of z sides
     //
-    if ( std::fabs( p.z() - fZSections[0].fZ ) < kCarTolerance * 0.5 ||
-         std::fabs( p.z() - fZSections[fNz-1].fZ ) < kCarTolerance * 0.5 )
+    if ( std::fabs( p.z() - fZSections[0].fZ ) < kCarToleranceHalf ||
+         std::fabs( p.z() - fZSections[fNz-1].fZ ) < kCarToleranceHalf )
     {
       // G4cout << "G4ExtrudedSolid::Inside return Surface (on z side)"
       //        << G4endl;

@@ -102,6 +102,8 @@ class G4ParticleHPInelasticData : public G4VCrossSectionDataSet
 
       G4ParticleHPData* theHPData;
 
+      G4bool instanceOfWorker;
+
   //char envVariable[500];
 };
 

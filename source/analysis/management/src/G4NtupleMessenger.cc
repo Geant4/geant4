@@ -45,7 +45,9 @@ G4NtupleMessenger::G4NtupleMessenger(G4VAnalysisManager* manager)
     fManager(manager),
     fSetActivationCmd(nullptr),
     fSetActivationAllCmd(nullptr)
-{  
+{
+  fNtupleDir = G4Analysis::make_unique<G4UIdirectory>("/analysis/ntuple/");
+  fNtupleDir->SetGuidance("ntuple control");
   
   SetActivationCmd();
   SetActivationToAllCmd();

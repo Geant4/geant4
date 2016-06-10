@@ -142,23 +142,30 @@ G4HadFinalState * G4LENDInelastic::ApplyYourself(const G4HadProjectile& aTrack, 
 
       if ( !( iTotZ == 0 && iTotA == 0 ) ) {
 
-      if ( iTotZ >= 0 && iTotA > 0 ) {
-         if ( needResidual ) {
-         G4DynamicParticle* residual = new G4DynamicParticle;
-         residual->SetDefinition( G4IonTable::GetIonTable()->GetIon( iTotZ , iTotA ) );
-         residual->SetMomentum( proj_p - psum );
-         theResult->AddSecondary( residual );
-         } else { 
-            //G4cout << "Charge or Baryon Number Error #1 iTotZ = " << iTotZ << ", iTotA = " << iTotA << G4endl;
-            ;
-         }
-      } else {
+         if ( iTotZ >= 0 && iTotA > 0 ) {
+            if ( needResidual ) {
+               G4DynamicParticle* residual = new G4DynamicParticle;
+               if ( iTotZ > 0 ) {
+                  residual->SetDefinition( G4IonTable::GetIonTable()->GetIon( iTotZ , iTotA ) );
+               } else if ( iTotA == 1 ) {
+                  residual->SetDefinition( G4Neutron::Neutron() );
+               } else {
+                  //G4cout << "Charge or Baryon Number Error #3 iTotZ = " << iTotZ << ", iTotA = " << iTotA << G4endl;
+                  ;
+               }
+               residual->SetMomentum( proj_p - psum );
+               theResult->AddSecondary( residual );
+            } else { 
+               //G4cout << "Charge or Baryon Number Error #1 iTotZ = " << iTotZ << ", iTotA = " << iTotA << G4endl;
+               ;
+            }
+         } else {
 
-         if ( needResidual ) {
-            //G4cout << "Charge or Baryon Number Error #2 iTotZ = " << iTotZ << ", iTotA = " << iTotA << G4endl;
-            ;
+            if ( needResidual ) {
+               //G4cout << "Charge or Baryon Number Error #2 iTotZ = " << iTotZ << ", iTotA = " << iTotA << G4endl;
+               ;
+            }
          }
-      }
 
       }
 

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LivermoreGammaConversionModelRC.hh 93810 2015-11-02 11:27:56Z gcosmo $
+// $Id: G4LivermoreGammaConversionModelRC.hh 95459 2016-02-11 10:23:30Z gcosmo $
 //
 // Authors: G.Depaola & F.Longo
 //
@@ -35,13 +35,7 @@
 #include "G4LPhysicsFreeVector.hh"
 #include "G4ProductionCutsTable.hh"
 
-//#include "G4Electron.hh"
-//#include "G4Positron.hh"
-
-
 class G4ParticleChangeForGamma;
-
-
 
 class G4LivermoreGammaConversionModelRC : public G4VEmModel
 {
@@ -49,7 +43,7 @@ class G4LivermoreGammaConversionModelRC : public G4VEmModel
 public:
 
   G4LivermoreGammaConversionModelRC(const G4ParticleDefinition* p = 0, 
-					     const G4String& nam = "LivermoreGammaConversionRC_1");
+				    const G4String& nam = "LivermoreGammaConversionRC_1");
   
   virtual ~G4LivermoreGammaConversionModelRC();
   
@@ -84,10 +78,8 @@ private:
 
   G4double lowEnergyLimit;  
   
-  //  G4double highEnergyLimit; 
   G4bool isInitialised;
   G4int verboseLevel;
-
 
   void ReadData(size_t Z, const char* path = 0);
   
@@ -107,8 +99,6 @@ private:
 
  G4double fbeta (G4double x);
  G4double Dilog (G4double x);
-
-
 
 };
 

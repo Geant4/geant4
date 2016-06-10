@@ -50,7 +50,10 @@ class G4ParticleHPContAngularPar
       G4bool fresh;
       G4double currentMeanEnergy;
       G4double remaining_energy; 
-      toBeCached():fresh(true),currentMeanEnergy(-2.0),remaining_energy(0.0){};
+      G4double theTargetCode;
+      G4ReactionProduct* theTarget;
+      G4ReactionProduct* thePrimary;
+      toBeCached():fresh(true),currentMeanEnergy(-2.0),remaining_energy(0.0),theTargetCode(-1.0),theTarget(NULL),thePrimary(NULL){};
    };
 
   public:
@@ -83,15 +86,15 @@ class G4ParticleHPContAngularPar
   
   void SetPrimary(G4ReactionProduct * aPrimary)
   {
-    thePrimary = aPrimary;
+    fCache.Get()->thePrimary = aPrimary;
   }
   
   void SetTarget(G4ReactionProduct * aTarget)
   {
-    theTarget = aTarget;
+    fCache.Get()->theTarget = aTarget;
   }
   
-  void SetTargetCode(G4double aTargetCode) { theTargetCode = aTargetCode; }
+ void SetTargetCode(G4double aTargetCode) { fCache.Get()->theTargetCode = aTargetCode; }
   
   void SetInterpolation(G4int theInterpolation)
   {
@@ -170,9 +173,9 @@ private:
   
   G4ParticleHPInterpolator theInt;
   
-  G4double theTargetCode;
-  G4ReactionProduct * theTarget;
-  G4ReactionProduct * thePrimary;
+  //G4double theTargetCode;
+  //G4ReactionProduct * theTarget;
+  //G4ReactionProduct * thePrimary;
   
   //G4double currentMeanEnergy;
 

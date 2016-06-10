@@ -31,8 +31,10 @@
 
 
 G4BOptnForceFreeFlight::G4BOptnForceFreeFlight(G4String name)
-: G4VBiasingOperation(name),
-  fOperationComplete(true)
+  : G4VBiasingOperation    ( name ),
+    fCumulatedWeightChange ( -1.0 ),
+    fInitialTrackWeight    ( -1.0 ),
+    fOperationComplete     ( true )
 {
   fForceFreeFlightInteractionLaw = new G4ILawForceFreeFlight("LawForOperation"+name);
 }

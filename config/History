@@ -1,4 +1,4 @@
-svn log $Id: History 94578 2015-11-25 08:11:03Z gcosmo $
+svn log $Id: History 95400 2016-02-09 11:35:59Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,6 +15,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+5th February 2016  Gabriele Cosmo  (config-V10-01-09)
+- Added settings for 14 and 17 C++ standards in platform specific scripts.
 
 24th November 2015  Gabriele Cosmo  (config-V10-01-08)
 - binmake.gmk: added "analysis/parameters/include" to INCFLAGS.

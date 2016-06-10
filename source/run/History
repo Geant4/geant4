@@ -1,4 +1,4 @@
-$Id: History 94420 2015-11-16 08:18:40Z gcosmo $
+$Id: History 95503 2016-02-12 11:05:11Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,12 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Jan 27th, 2016 M.Asai (run-V10-01-17)
+- G4PhysicsListHelper: add entry for G4ParallelWorldProcess
+- G4RunManager, G4WorkerRunManager: change process order index of
+  G4ParallelWorldProcess to 9900 to make sure it is registered
+  prior to G4OpBoundaryProcess. 
 
 Nov 14th, 2015 M.Asai (run-V10-01-16)
 - Co-working with particles-V10-01-17. Destructor of G4WorkerRunManagerKernel

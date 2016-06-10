@@ -1,4 +1,4 @@
-$Id: History 93666 2015-10-28 09:52:00Z gcosmo $
+$Id: History 95532 2016-02-12 14:22:43Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,12 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+08-01-16 SI (testem12-V10-01-03)
+- updated dna.mac
+
+10-12-15 V.Ivant
+- H.Burkhardt fixed root macro allowing to work both with root5 and 6
 
 27-10-15 D.Sawkey (testem12-V10-01-02)
 - update READMEs

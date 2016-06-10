@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MaterialPropertiesTable.icc 66811 2013-01-12 16:04:23Z gcosmo $
+// $Id: G4MaterialPropertiesTable.icc 95701 2016-02-19 10:04:13Z gcosmo $
 //
 ////////////////////////////////////////////////////////////////////////
 //
@@ -117,10 +117,32 @@ G4MaterialPropertiesTable::GetProperty(const char *key)
 {
   // Returns a Material Property Vector corresponding to a key
 
+  //Important Note for MT. adotti 17 Feb 2016
+  //In previous implementation the following line was at the bottom of the
+  //function causing a rare race-condition.
+  //Moving this line here from the bottom solves the problem because:
+  //1- Map is accessed only via operator[] (to insert) and find() (to search),
+  //   and these are thread safe if done on separate elements.
+  //   See notes on data-races at:
+  //   http://www.cplusplus.com/reference/map/map/operator%5B%5D/
+  //   http://www.cplusplus.com/reference/map/map/find/
+  //2- So we have a data race if two threads access the same element (GROUPVEL)
+  //   one in read and one in write mode. This was happening with the line
+  //   at the bottom of the code, one thread in SetGROUPVEL(), and the other here
+  //3- SetGROUPVEL() is protected by a mutex that ensures that only
+  //   one thread at the time will execute its code
+  //4- The if() statement guarantees that only if two threads are searching
+  //   the same problematic key (GROUPVEL) the mutex will be used.
+  //   Different keys do not lock (good for performances)
+  //5- As soon as a thread acquires the mutex in SetGROUPVEL it checks again
+  //   if the map has GROUPVEL key, if so returns immediately.
+  //   This "double check" allows to execute the heavy code to calculate
+  //   group velocity only once even if two threads enter SetGROUPVEL together
+  if (G4String(key) == "GROUPVEL") return SetGROUPVEL();
+
   MPTiterator i;
   i = MPT.find(G4String(key));
   if ( i != MPT.end() ) return i->second;
-  if (G4String(key) == "GROUPVEL") return SetGROUPVEL();
   return NULL;
 }
 

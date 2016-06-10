@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PhotonEvaporation.cc 94676 2015-12-02 09:51:20Z gunter $
+// $Id: G4PhotonEvaporation.cc 95483 2016-02-12 10:21:53Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -59,7 +59,6 @@ G4float G4PhotonEvaporation::GREnergy[] = {0.0f};
 G4float G4PhotonEvaporation::GRWidth[] = {0.0f};
 const G4float  GREfactor = 5.0f;
 const G4float  GRWfactor = 0.3f;
-const G4double MinGammaEnergy = 10*CLHEP::keV;
 const G4double MaxDeltaEnergy = CLHEP::MeV;
 const G4double LevelDensity   = 0.125/CLHEP::MeV;
 const G4double NormC = 2.5*CLHEP::millibarn/(CLHEP::pi2*CLHEP::hbarc*CLHEP::hbarc);
@@ -106,7 +105,7 @@ G4PhotonEvaporation::EmittedFragment(G4Fragment* nucleus)
 
   G4Fragment* gamma = GenerateGamma(nucleus);
   if(fVerbose > 0) {
-    G4cout << "G4PhotonEvaporation::EmittedFragment: RDM= " << fRDM << G4endl;   
+    G4cout << "G4PhotonEvaporation::EmittedFragment: RDM= " << fRDM << G4endl; 
     if(gamma) { G4cout << *gamma << G4endl; }
     G4cout << "   Residual: " << *nucleus << G4endl;
   }
@@ -191,7 +190,7 @@ G4PhotonEvaporation::GetEmissionProbability(G4Fragment* nucleus)
 
   // ignore gamma de-excitation for highly excited levels
   if(A >= MAXGRDATA) { A =  MAXGRDATA-1; }
-  //G4cout << " GREnergy= " << GREnergy[A] << " GRWidth= " << GRWidth[A] << G4endl; 
+  //G4cout<<" GREnergy= "<< GREnergy[A]<<" GRWidth= "<<GRWidth[A]<<G4endl; 
   if(fExcEnergy >= (G4double)(GREfactor*GRWidth[A] + GREnergy[A])) { 
     return fProbability; 
   }
@@ -271,7 +270,7 @@ G4PhotonEvaporation::GenerateGamma(G4Fragment* nucleus)
 {
   G4Fragment* result = 0;
   G4double eexc = nucleus->GetExcitationEnergy();
-  if(eexc < MinGammaEnergy) { return result; }
+  if(eexc < Tolerance) { return result; }
 
   InitialiseLevelManager(nucleus->GetZ_asInt(), nucleus->GetA_asInt());
 
@@ -288,7 +287,9 @@ G4PhotonEvaporation::GenerateGamma(G4Fragment* nucleus)
 
   if(fVerbose > 1) {
     G4cout << "GenerateGamma: Exc= " << eexc << " Emax= " 
-	   << fLevelEnergyMax << G4endl;
+	   << fLevelEnergyMax << " fEex= " << fExcEnergy 
+	   << " fCode= " << fCode << " fPoints= " << fPoints 
+	   << " fProb= " << fProbability << G4endl;
   }
   // continues part
   if(!fLevelManager || eexc > fLevelEnergyMax + Tolerance) {
@@ -296,7 +297,7 @@ G4PhotonEvaporation::GenerateGamma(G4Fragment* nucleus)
 
     // we compare current excitation versus value used for probability 
     // computation and also Z and A used for probability computation 
-    if(fCode != 1000*theZ + theA && eexc != fExcEnergy) { 
+    if(fCode != 1000*theZ + theA || eexc != fExcEnergy) { 
       GetEmissionProbability(nucleus); 
     }
     if(fProbability == 0.0) { return result; }
@@ -321,9 +322,23 @@ G4PhotonEvaporation::GenerateGamma(G4Fragment* nucleus)
     if(fVerbose > 1) {
       G4cout << "Discrete emission from level Index= " << fIndex 
 	     << " Elevel= " << fLevelManager->LevelEnergy(fIndex)
-	     << "  ICM= " << fICM << G4endl;
+	     << "  RDM= " << fRDM << "  ICM= " << fICM << G4endl;
     }
     if(0 == fIndex) { return result; }
+    const G4NucLevel* level = fLevelManager->GetLevel(fIndex);
+
+    // radioactive decay model call transitions one by one
+    // for X-level corresponding gamma transition is forced 
+    // from the previous one; this is needed, because
+    // X-level assumes a competition between beta amd gamma 
+    // decay probabilities
+    isX = level->IsXLevel();
+    if(isX && fRDM && fIndex > 0) {
+      --fIndex;
+      level = fLevelManager->GetLevel(fIndex);
+      isX = level->IsXLevel();
+    }
+
     G4double ltime = 0.0;
     if(fICM) { ltime = (G4double)fLevelManager->LifeTime(fIndex); }
     else     { ltime = (G4double)fLevelManager->LifeTimeGamma(fIndex); }
@@ -333,12 +348,12 @@ G4PhotonEvaporation::GenerateGamma(G4Fragment* nucleus)
       icm = true; 
       isLongLived = true;
     }
-    const G4NucLevel* level = fLevelManager->GetLevel(fIndex);
     size_t ntrans = level->NumberOfTransitions();
     size_t idx = 0;
-    isX = level->IsXLevel();
-    //G4cout << "Ntrans= " << ntrans << " idx= " << idx << " isX= " << isX 
-    //	   << " icm= " << icm << G4endl;
+    if(fVerbose > 1) {
+      G4cout << "Ntrans= " << ntrans << " idx= " << idx << " isX= " << isX 
+	     << " icm= " << icm << G4endl;
+    }
     if(!isX) {
       if(1 < ntrans) {
 	G4double rndm = G4UniformRand();
@@ -372,6 +387,10 @@ G4PhotonEvaporation::GenerateGamma(G4Fragment* nucleus)
     G4double mom = std::sqrt((e - mass)*(e + mass)); 
     v *= mom;
     nucleus->SetMomentum(G4LorentzVector(v.x(),v.y(),v.z(),efinal+mass));
+    if(fVerbose > 1) { 
+      G4cout << "X-level Eexc= " << nucleus->GetExcitationEnergy() 
+	     << G4endl;
+    }
     // normal case
   } else { 
     result = fTransition->SampleTransition(nucleus, efinal,

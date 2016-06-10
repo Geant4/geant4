@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4AtomicShells.cc 94016 2015-11-05 10:14:49Z gcosmo $
+// $Id: G4AtomicShells.cc 95701 2016-02-19 10:04:13Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
 
@@ -758,7 +758,7 @@ G4AtomicShells::GetNumberOfShells(G4int Z)
 G4double 
 G4AtomicShells::GetBindingEnergy(G4int Z, G4int ShellNb)
 {
-  assert (Z>0 && Z<101 && ShellNb<fNumberOfShells[Z]);
+  //assert (Z>0 && Z<101 && ShellNb<fNumberOfShells[Z]);
   return fBindingEnergies[fIndexOfShells[Z] + ShellNb]*eV;
 }
 

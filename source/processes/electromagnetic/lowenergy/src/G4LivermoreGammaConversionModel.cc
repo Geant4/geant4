@@ -41,13 +41,13 @@ using namespace std;
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4int G4LivermoreGammaConversionModel::maxZ = 99;
-G4LPhysicsFreeVector* G4LivermoreGammaConversionModel::data[] = {0};
+G4LPhysicsFreeVector* G4LivermoreGammaConversionModel::data[] = {nullptr};
 
 G4LivermoreGammaConversionModel::G4LivermoreGammaConversionModel
 (const G4ParticleDefinition*, const G4String& nam)
 :G4VEmModel(nam),isInitialised(false),smallEnergy(2.*MeV)
 {
-  fParticleChange = 0;
+  fParticleChange = nullptr;
 
   lowEnergyLimit = 2.0*electron_mass_c2;
   	 
@@ -95,13 +95,10 @@ void G4LivermoreGammaConversionModel::Initialise(
 
   if(IsMaster()) 
   {
-
     // Initialise element selector
-
     InitialiseElementSelectors(particle, cuts);
 
     // Access to elements
-  
     char* path = getenv("G4LEDATA");
 
     G4ProductionCutsTable* theCoupleTable =

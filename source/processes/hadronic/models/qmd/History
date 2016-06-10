@@ -13,6 +13,10 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+10 February 2016 Tatsumi Koi (hadr-qmd-V10-01-10)
+- Fix bug in handling forgiven decay
+       src/G4QMDCollision.cc
+
 3 November 2015 Tatsumi Koi (hadr-qmd-V10-01-09)
 - Loop checking
 

@@ -34,9 +34,6 @@
 #include "G4VEmModel.hh"
 #include "G4ElementData.hh"
 
-//#include "G4Electron.hh"
-//#include "G4CrossSectionHandler.hh"
-
 class G4ParticleChangeForGamma;
 class G4VAtomDeexcitation; 
 
@@ -87,8 +84,6 @@ private:
   G4ParticleDefinition*   theGamma;
   G4ParticleDefinition*   theElectron;
 
-  G4double lowEnergyLimit;  
-  G4double highEnergyLimit; 
   G4int    verboseLevel;
 
   G4int                   maxZ;
@@ -110,10 +105,6 @@ private:
   G4double                fCurrSection;
   std::vector<G4double>   fSandiaCof;
 
-//  G4VCrossSectionHandler* crossSectionHandler;
-//  G4VCrossSectionHandler* shellCrossSectionHandler;
-
-
   // specific methods for polarization -- FL & GD 
   
   G4ThreeVector GetRandomPolarization(G4ThreeVector& direction0); // Random Polarization
@@ -128,9 +119,7 @@ private:
   void SystemOfRefChange(G4ThreeVector& direction0, G4ThreeVector& direction1, 
 			 G4ThreeVector& polarization0);
 
-
 };
-
 
 inline void G4LivermorePolarizedPhotoElectricGDModel::SetLimitNumberOfShells(G4int n)
 {

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NistMaterialBuilder.cc 93568 2015-10-26 14:52:36Z gcosmo $
+// $Id: G4NistMaterialBuilder.cc 95428 2016-02-10 15:00:35Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -77,6 +77,10 @@
 #include "G4SystemOfUnits.hh"
 #include <iomanip>
 
+#ifdef G4MULTITHREADED
+G4Mutex G4NistMaterialBuilder::nistMaterialMutex = G4MUTEX_INITIALIZER;
+#endif
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4NistMaterialBuilder::G4NistMaterialBuilder(G4NistElementBuilder* eb, G4int vb)
@@ -121,24 +125,6 @@ G4Material* G4NistMaterialBuilder::FindOrBuildMaterial(const G4String& matname,
   // Check if name inside DB
   G4Material* mat = 0;
 
-  for (G4int i=0; i<nMaterials; ++i) {
-
-    if (name == names[i]) {
-      // Build new Nist material 
-      if(matIndex[i] == -1) { 
-	if(!iso && (warning || verbose > 0)) {
-	  G4cout << "G4NistMaterialBuilder::FindOrBuildMaterial warning for "
-		 << name 
-		 << " - since Geant4 9.6 isotopes are always built" << G4endl;
-	}
-	mat = BuildMaterial(i); 
-      }
-      // Nist material was already built
-      else                  { mat = (*theMaterialTable)[matIndex[i]]; }
-      return mat;
-    }
-  }
-
   // Check the list of all materials
   if (nmat > 0) {
     for (G4int i=0; i<nmat; ++i) {
@@ -146,6 +132,31 @@ G4Material* G4NistMaterialBuilder::FindOrBuildMaterial(const G4String& matname,
         mat = (*theMaterialTable)[i];
 	return mat;
       }
+    }
+  }
+
+  for (G4int i=0; i<nMaterials; ++i) {
+
+    if (name == names[i]) {
+#ifdef G4MULTITHREADED
+      G4MUTEXLOCK(&G4NistMaterialBuilder::nistMaterialMutex);
+#endif
+      if(matIndex[i] == -1) { 
+	// Build new Nist material 
+	if(!iso && (warning || verbose > 0)) {
+	  G4cout << "G4NistMaterialBuilder::FindOrBuildMaterial warning for "
+		 << name 
+		 << " - since Geant4 9.6 isotopes are always built" << G4endl;
+	}
+	mat = BuildMaterial(i); 
+      } else { 
+	// Nist material was already built
+	mat = (*theMaterialTable)[matIndex[i]]; 
+      }
+#ifdef G4MULTITHREADED
+      G4MUTEXUNLOCK(&G4NistMaterialBuilder::nistMaterialMutex);
+#endif
+      return mat;
     }
   }
 

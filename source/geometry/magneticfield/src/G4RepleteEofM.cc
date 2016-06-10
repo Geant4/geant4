@@ -73,7 +73,7 @@ G4RepleteEofM::SetChargeMomentumMass(G4ChargeState particleCharge, // e+ units
    G4double muB = 0.5*eplus*hbar_Planck/(mass/c_squared);
 
    G4double g_BMT;
-   if ( spin != 0. ) g_BMT = (magMoment/muB)/spin;
+   if ( spin != 0. ) g_BMT = (std::abs(magMoment)/muB)/spin;
    else g_BMT = 2.;
 
    anomaly = (g_BMT - 2.)/2.;

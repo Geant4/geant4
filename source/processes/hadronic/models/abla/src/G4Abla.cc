@@ -224,9 +224,9 @@ void G4Abla::breakItUp(G4int nucleusA, G4int nucleusZ, G4double nucleusMass, G4d
     ff = 0; 
     zf = zprf;
     af = aprf;
-    pxeva = pxrem;
-    pyeva = pyrem;
-    pleva = pzrem;
+    pxeva = 0.;
+    pyeva = 0.;
+    pleva = 0.;
   }
 
   if (ff == 1) {

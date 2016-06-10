@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhaseSpaceDecayChannel.cc 92057 2015-08-14 13:34:55Z gcosmo $
+// $Id: G4PhaseSpaceDecayChannel.cc 95470 2016-02-12 09:02:26Z gcosmo $
 //
 // 
 // ------------------------------------------------------------
@@ -129,10 +129,12 @@ G4DecayProducts *G4PhaseSpaceDecayChannel::OneBodyDecayIt()
 #ifdef G4VERBOSE
   if (GetVerboseLevel()>1) G4cout << "G4PhaseSpaceDecayChannel::OneBodyDecayIt()"<<G4endl;
 #endif
+  // parent mass
+  G4double parentmass = current_parent_mass;
 
   //create parent G4DynamicParticle at rest
   G4ThreeVector dummy;
-  G4DynamicParticle * parentparticle = new G4DynamicParticle( G4MT_parent, dummy, 0.0);
+  G4DynamicParticle * parentparticle = new G4DynamicParticle( G4MT_parent, dummy, 0.0, parentmass);
   //create G4Decayproducts
   G4DecayProducts *products = new G4DecayProducts(*parentparticle);
   delete parentparticle;
@@ -169,7 +171,7 @@ G4DecayProducts *G4PhaseSpaceDecayChannel::TwoBodyDecayIt()
 
   //create parent G4DynamicParticle at rest
   G4ThreeVector dummy;
-  G4DynamicParticle * parentparticle = new G4DynamicParticle( G4MT_parent, dummy, 0.0);
+  G4DynamicParticle * parentparticle = new G4DynamicParticle( G4MT_parent, dummy, 0.0, parentmass);
   //create G4Decayproducts
   G4DecayProducts *products = new G4DecayProducts(*parentparticle);
   delete parentparticle;
@@ -278,7 +280,7 @@ G4DecayProducts *G4PhaseSpaceDecayChannel::ThreeBodyDecayIt()
   
    //create parent G4DynamicParticle at rest
   G4ThreeVector dummy;
-  G4DynamicParticle * parentparticle = new G4DynamicParticle( G4MT_parent, dummy, 0.0);
+  G4DynamicParticle * parentparticle = new G4DynamicParticle( G4MT_parent, dummy, 0.0, parentmass);
 
 
   //create G4Decayproducts
@@ -460,15 +462,17 @@ G4DecayProducts *G4PhaseSpaceDecayChannel::ManyBodyDecayIt()
   if (GetVerboseLevel()>1) G4cout << "G4PhaseSpaceDecayChannel::ManyBodyDecayIt()"<<G4endl;
 #endif
 
+
+  // parent mass
+  G4double parentmass = current_parent_mass;
+
+  //parent particle
   G4ThreeVector dummy;
-  G4DynamicParticle * parentparticle = new G4DynamicParticle( G4MT_parent, dummy, 0.0);
+  G4DynamicParticle * parentparticle = new G4DynamicParticle( G4MT_parent, dummy, 0.0, parentmass);
 
   //create G4Decayproducts
   G4DecayProducts *products = new G4DecayProducts(*parentparticle);
   delete parentparticle;
-
-  // parent mass
-  G4double parentmass = current_parent_mass;
 
   //daughters'mass
   G4double *daughtermass = new G4double[numberOfDaughters]; 

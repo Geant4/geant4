@@ -1,4 +1,4 @@
-# $Id: History 94484 2015-11-19 08:29:12Z gcosmo $
+# $Id: History 95485 2016-02-12 10:25:26Z gcosmo $
 # -----------------------------------------------------------
 
           ==================================================
@@ -14,6 +14,19 @@ code and to keep track of all tags.
      ---------------------------------------------------------------
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
+
+15 January 2016 Tatsumi Koi (hadr-lend-V10-01-15)
+-----------------------------------------------
+-Fix problem in prodcution of residual neutrons
+
+8 January 2016 Tatsumi Koi
+-----------------------------------------------
+-Fix for Coverity #63079 and 63081
+
+17 December 2015 Gabriele Cosmo
+-----------------------------------------------
+-Corrected use of isnan() in nf_utilities.cc to std::isnan() for
+ compilers different than Windows/VC++.
 
 18 November 2015 Tatsumi Koi (hadr-lend-V10-01-14)
 -----------------------------------------------

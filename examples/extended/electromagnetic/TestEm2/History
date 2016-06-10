@@ -1,4 +1,4 @@
-$Id: History 93736 2015-10-30 11:01:12Z gcosmo $
+$Id: History 95512 2016-02-12 14:02:25Z gcosmo $
 ----------------------------------------------------
 
      =========================================================
@@ -15,6 +15,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+10-12-15 V.Ivant (testem2-V10-01-04)
+- H.Burkhardt fixed root macro allowing to work both with root5 and 6
+    
 28-10-15 D.Sawkey (testem2-V10-01-03)
 - Update description of physics lists in README, again
 

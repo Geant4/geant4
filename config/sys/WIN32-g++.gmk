@@ -13,6 +13,16 @@ ifeq ($(G4SYSTEM),WIN32-g++)
     CPPFLAGS  += -std=c++11
     CXXFLAGS  += -std=c++11
   endif
+  ifdef G4USE_STD14
+    G4USE_STD11 := 1
+    CPPFLAGS  += -std=c++14
+    CXXFLAGS  += -std=c++14
+  endif
+  ifdef G4USE_STD17
+    G4USE_STD11 := 1
+    CPPFLAGS  += -std=c++17
+    CXXFLAGS  += -std=c++17
+  endif
   ifdef G4OPTIMISE
     CXXFLAGS  += -O
     FCFLAGS   := -O

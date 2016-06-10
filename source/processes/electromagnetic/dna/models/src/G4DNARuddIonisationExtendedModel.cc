@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNARuddIonisationExtendedModel.cc 93001 2015-09-28 15:00:44Z gcosmo $
+// $Id: G4DNARuddIonisationExtendedModel.cc 95457 2016-02-11 10:18:10Z gcosmo $
 // GEANT4 tag $Name:  $
 //
 // Modified by Z. Francis, S. Incerti to handle HZE 
@@ -762,6 +762,10 @@ void G4DNARuddIonisationExtendedModel::SampleSecondaries(std::vector<G4DynamicPa
         G4int secNumberFinal = 0; // So I'll make the diference and then sum the energies
         G4double bindingEnergy = 0;
         bindingEnergy = waterStructure.IonisationEnergy(ionizationShell);
+
+        //SI: additional protection if tcs interpolation method is modified
+        if (k<bindingEnergy) return;
+        //
 
         G4int Z = 8;
 

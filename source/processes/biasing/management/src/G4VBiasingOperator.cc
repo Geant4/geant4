@@ -34,7 +34,17 @@ G4Cache< G4BiasingOperatorStateNotifier* >                G4VBiasingOperator::fS
 
 
 G4VBiasingOperator::G4VBiasingOperator(G4String name)
-  : fName(name)
+  : fName                                      (name),
+    fOccurenceBiasingOperation                 (nullptr),
+    fFinalStateBiasingOperation                (nullptr),
+    fNonPhysicsBiasingOperation                (nullptr),
+    fPreviousProposedOccurenceBiasingOperation (nullptr),
+    fPreviousProposedFinalStateBiasingOperation(nullptr),
+    fPreviousProposedNonPhysicsBiasingOperation(nullptr),
+    fPreviousAppliedOccurenceBiasingOperation  (nullptr),
+    fPreviousAppliedFinalStateBiasingOperation (nullptr),
+    fPreviousAppliedNonPhysicsBiasingOperation (nullptr),
+    fPreviousBiasingAppliedCase                (BAC_None)
 {
   fOperators.Push_back(this);
 

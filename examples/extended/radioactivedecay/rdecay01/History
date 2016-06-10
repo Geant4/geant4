@@ -1,4 +1,4 @@
-$Id: History 94458 2015-11-18 14:36:25Z gcosmo $
+$Id: History 95541 2016-02-12 14:33:23Z gcosmo $
 -----------------------------------------------------
 
      =========================================================
@@ -14,6 +14,18 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+	 
+31-01-16 mma (rdecay01-V10-01-07)
+- Run::EndOfRun() : improve printout
+
+08-12-15 dwright
+- PhysicsList : SetLevelTolerance (1*eV) : needed to fix crash in system testing 
+  There appears to already be a level Ni60[1332.510] stored somewhere instead of
+  Ni60[1332.514].  Setting the tolerance to 1 eV gets the right level.
+
+06-12-15 mma
+- PhysicsList : SetLevelTolerance (10*eV)
+- update references : it1.mac it2.mac
 	 
 18-11-15 mma  (rdecay01-V10-01-06)
 - PhysicsList : add LevelTolerance (100*eV),  HalfLife(0.1*ps)

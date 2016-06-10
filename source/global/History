@@ -17,6 +17,13 @@ committal in the SVN repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+December 17, 2015 G.Cosmo (global-V10-01-26)
+- Corrected conditions for proper treatment of gcc-5 in tls.hh and
+  G4Threading.hh.
+
+December 10, 2015 G.Cosmo
+- Removed unused and buggy operator=(const G4String&) in G4SubString.
+
 November 5, 2015 G.Cosmo (global-V10-01-25)
 - Enabled units liter, L, dL, cL, mL in G4SystemOfUnits.hh and G4UnitsTable.
   Requires new CLHEP version 2.3.1.0.

@@ -240,7 +240,7 @@ void Run::EndOfRun()
     G4double Ebmean = fEkinTot[0]/fDecayCount;
     G4double Pbmean = fPbalance[0]/fDecayCount;
          
-    G4cout << "\n   Ekin Total (Q): mean = "
+    G4cout << "\n   Ekin Total (Q single decay): mean = "
            << std::setw(wid) << G4BestUnit(Ebmean, "Energy")
            << "\t( "  << G4BestUnit(fEkinTot[1], "Energy")
            << " --> " << G4BestUnit(fEkinTot[2], "Energy")
@@ -259,7 +259,7 @@ void Run::EndOfRun()
     G4double Tmean = fEventTime[0]/fTimeCount;
     G4double halfLife = Tmean*std::log(2.);
    
-    G4cout << "\n   Total time of life : mean = "
+    G4cout << "\n   Total time of life (full chain): mean = "
            << std::setw(wid) << G4BestUnit(Tmean, "Time")
            << "  half-life = "
            << std::setw(wid) << G4BestUnit(halfLife, "Time")
@@ -273,7 +273,7 @@ void Run::EndOfRun()
  if (fTimeCount > 0) {
     G4double Evmean = fEvisEvent[0]/fTimeCount;
    
-    G4cout << "\n   Total visible energy : mean = "
+    G4cout << "\n   Total visible energy (full chain) : mean = "
            << std::setw(wid) << G4BestUnit(Evmean,  "Energy")
            << "   ( "  << G4BestUnit(fEvisEvent[1], "Energy")
            << " --> "  << G4BestUnit(fEvisEvent[2], "Energy")

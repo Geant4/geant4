@@ -13,25 +13,25 @@
  
   //file open
   //
-  TFile f  = TFile("testem6_0.root");  
+  TFile f("testem6_0.root");
 
   //CrossSectionPerAtom
   //
-  TH1D* h7 = (TH1D*)f.Get("7");  //ee to MuMu
-  TH1D* h8 = (TH1D*)f.Get("8");  //ee to gammagamma
-  TH1D* h9 = (TH1D*)f.Get("9");  //ee to Hadrons
-  TH1D* h10 = (TH1D*)f.Get("10"); //ee to gammagamma(theory)
-  TH1D* h11 = (TH1D*)f.Get("11"); //ee to MuMu(theory)
+  TH1D* h7 = (TH1D*)f.Get("h7");  //ee to MuMu
+  TH1D* h8 = (TH1D*)f.Get("h8");  //ee to gammagamma
+  TH1D* h9 = (TH1D*)f.Get("h9");  //ee to Hadrons
+  TH1D* h10 = (TH1D*)f.Get("h10"); //ee to gammagamma(theory)
+  TH1D* h11 = (TH1D*)f.Get("h11"); //ee to MuMu(theory)
   //CrossSectionPerVolume
   //
-  TH1D* h12 = (TH1D*)f.Get("12"); //eBrem
-  TH1D* h13 = (TH1D*)f.Get("13"); //eIoni
-  TH1D* h14 = (TH1D*)f.Get("14"); //ee to MuMu
-  TH1D* h15 = (TH1D*)f.Get("15"); //ee to gammagamma
-  TH1D* h16 = (TH1D*)f.Get("16"); //ee to Hadrons
+  TH1D* h12 = (TH1D*)f.Get("h12"); //eBrem
+  TH1D* h13 = (TH1D*)f.Get("h13"); //eIoni
+  TH1D* h14 = (TH1D*)f.Get("h14"); //ee to MuMu
+  TH1D* h15 = (TH1D*)f.Get("h15"); //ee to gammagamma
+  TH1D* h16 = (TH1D*)f.Get("h16"); //ee to Hadrons
   //R ratio
   //
-  TH1D* h17 = (TH1D*)f.Get("17"); //R
+  TH1D* h17 = (TH1D*)f.Get("h17"); //R
 
   //c1
   //

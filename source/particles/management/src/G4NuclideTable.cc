@@ -64,7 +64,7 @@ G4NuclideTable::G4NuclideTable()
    minimum_threshold_of_half_life(DBL_MAX),
    fUserDefinedList(NULL), 
    fIsotopeList(NULL),
-   flevelTolerance(1.0e-3*eV)
+   flevelTolerance(1.0*eV)
 {
   //SetVerboseLevel(G4ParticleTable::GetParticleTable()->GetVerboseLevel());
   //FillHardCodeList();

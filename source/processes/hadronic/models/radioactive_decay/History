@@ -14,6 +14,15 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ---------------------------------------------------------
 
+ 3 December 2015 Dennis Wright  radioactive_decay-V10-01-25
+-----------------------------------------------------------
+- retag radioactive_decay-V10-01-24
+
+ 2 December 2015 Dennis Wright  radioactive_decay-V10-01-24
+-----------------------------------------------------------
+- G4BetaMinusDecay.cc, G4RadioactiveDecay.cc: add protection for case
+  when endpoint energy is 0 in beta- decay.  This fixes bug #1766.
+
 18 November 2015 Dennis Wright  radioactive_decay-V10-01-23
 -----------------------------------------------------------
 - use method proposed by Andreas Zoglauer to temporarily fix energy 

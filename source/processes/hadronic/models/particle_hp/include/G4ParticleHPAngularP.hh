@@ -41,8 +41,10 @@ class G4ParticleHPAngularP
   
   G4ParticleHPAngularP()
   {
-    theCosTh = 0;
-    theProb = 0;
+    theCosTh = NULL;
+    theProb = NULL;
+    theEnergy = 0.;
+    nCoeff = 0;
   }
   ~G4ParticleHPAngularP()
   {

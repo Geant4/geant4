@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4IonisParamMat.cc 93568 2015-10-26 14:52:36Z gcosmo $
+// $Id: G4IonisParamMat.cc 95428 2016-02-10 15:00:35Z gcosmo $
 //
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
@@ -221,6 +221,7 @@ void G4IonisParamMat::ComputeDensityEffect()
     // Atom. Data Nucl. Data Tabl. 30 (1984) 261-271. 
 
     fCdensity = fDensityData->GetCdensity(idx); 
+    //G4double Cdensity = fCdensity; 
     fMdensity = fDensityData->GetMdensity(idx);
     fAdensity = fDensityData->GetAdensity(idx);
     fX0density = fDensityData->GetX0density(idx);
@@ -228,6 +229,11 @@ void G4IonisParamMat::ComputeDensityEffect()
     fD0density = fDensityData->GetDelta0density(idx);
     fPlasmaEnergy = fDensityData->GetPlasmaEnergy(idx);
     fAdjustmentFactor = fDensityData->GetAdjustmentFactor(idx);
+
+    // parameter C is computed and not taken from Sternheimer tables
+    //fCdensity = 1. + 2*G4Log(fMeanExcitationEnergy/fPlasmaEnergy);
+    //G4cout << "IonisParamMat: " << fMaterial->GetName() 
+    //	   << "  Cst= " << Cdensity << " C= " << fCdensity << G4endl;
 
     // correction on nominal density
     fCdensity  += corr;

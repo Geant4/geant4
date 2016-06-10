@@ -90,9 +90,6 @@ private:
   G4double fTime;
   G4double fSpin;
   G4double fAlpha;
-  G4double fNorm1;
-  G4double fNorm2;
-  G4double fNorm3;
   G4double fICC[10];
 
   static G4String fTrans[10];
@@ -104,6 +101,9 @@ private:
   char bufp[2];
 
   G4int    fVerbose;
+
+  G4float fNorm1;
+  G4float fNorm2;
 
   std::vector<G4float> vEnergy;
   std::vector<G4float> vTime;

@@ -1,4 +1,4 @@
-$Id: History 94083 2015-11-05 15:06:58Z gcosmo $
+$Id: History 95459 2016-02-11 10:23:30Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,16 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+20.01.2016 S. Incerti, emlowen-V10-01-18
+           - Fixed bugzilla 1816
+
+11.12.2015 V.Ivanchenko
+           - G4LivermorePolarizedPhotoElectricGDModel - fixed Coverity warning
+           - G4LivermorePolarizedPhotoElectricGDModel, G4LivermorePolarizedPhotoElectricModel
+             G4LivermorePolarizedPhotoElectricModel, G4LivermorePolarizedGammaConversionModel, 
+             G4LivermoreGammaConversionModelRC, G4LivermoreGammaConversionModel - use nullptr,
+             removed commented code, improve formatting of the code
 
 05.11.2015 G.Cosmo, emlowen-V10-01-17
 	   - Replaced use of variable 'L' in G4Generator2BN.cc to avoid

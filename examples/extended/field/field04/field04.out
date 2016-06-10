@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-02-ref-00    (4-December-2015)
+ Geant4 version Name: geant4-10-02-patch-01    (26-February-2016)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -668,6 +668,11 @@ CoulombScat:   for  pi-, integral: 1     SubType= 1  BuildTable= 1
 
 ---------------------------------------------------
                            Hadronic Processes for He3
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV /n ---> 100 TeV/n
+     Cr_sctns: Glauber-Gribov nucleus nucleus: 0 eV  ---> 2.88022e+295 J  
+     Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
 
   Process: He3Inelastic
         Model:  Binary Light Ion Cascade: 0 eV /n ---> 4 GeV/n
@@ -10426,7 +10431,7 @@ Terminate current event processing.
 =====================================
   G4EventManager::ProcessOneEvent()  
 =====================================
-G4PrimaryTransformer::PrimaryVertex (-13.317862(mm),-1.8452643(mm),78.885831(mm),0(nsec))
+G4PrimaryTransformer::PrimaryVertex (-14.544682(mm),-2.8878088(mm),78.669509(mm),0(nsec))
 1 primaries are passed from G4EventTransformer.
 !!!!!!! Now start processing an event !!!!!!!
 Track (trackID 1, parentID 0) is processed with stopping code 2
@@ -10435,7 +10440,7 @@ Terminate current event processing.
 =====================================
   G4EventManager::ProcessOneEvent()  
 =====================================
-G4PrimaryTransformer::PrimaryVertex (-13.864508(mm),-3.3819159(mm),78.789442(mm),0(nsec))
+G4PrimaryTransformer::PrimaryVertex (-10.173481(mm),0.91170846(mm),79.44027(mm),0(nsec))
 1 primaries are passed from G4EventTransformer.
 !!!!!!! Now start processing an event !!!!!!!
 Track (trackID 1, parentID 0) is processed with stopping code 2
@@ -10444,7 +10449,7 @@ Terminate current event processing.
 =====================================
   G4EventManager::ProcessOneEvent()  
 =====================================
-G4PrimaryTransformer::PrimaryVertex (-11.287952(mm),-0.74354809(mm),79.243758(mm),0(nsec))
+G4PrimaryTransformer::PrimaryVertex (-16.038075(mm),-2.3568589(mm),78.406184(mm),0(nsec))
 1 primaries are passed from G4EventTransformer.
 !!!!!!! Now start processing an event !!!!!!!
 Track (trackID 1, parentID 0) is processed with stopping code 2
@@ -10453,7 +10458,7 @@ Terminate current event processing.
 =====================================
   G4EventManager::ProcessOneEvent()  
 =====================================
-G4PrimaryTransformer::PrimaryVertex (-13.023635(mm),1.4634589(mm),78.937711(mm),0(nsec))
+G4PrimaryTransformer::PrimaryVertex (-14.323991(mm),1.1083385(mm),78.708423(mm),0(nsec))
 1 primaries are passed from G4EventTransformer.
 !!!!!!! Now start processing an event !!!!!!!
 Track (trackID 1, parentID 0) is processed with stopping code 2
@@ -10462,7 +10467,7 @@ Terminate current event processing.
 =====================================
   G4EventManager::ProcessOneEvent()  
 =====================================
-G4PrimaryTransformer::PrimaryVertex (-16.090006(mm),-1.5355645(mm),78.397027(mm),0(nsec))
+G4PrimaryTransformer::PrimaryVertex (-10.195744(mm),0.26019034(mm),79.436344(mm),0(nsec))
 1 primaries are passed from G4EventTransformer.
 !!!!!!! Now start processing an event !!!!!!!
 Track (trackID 1, parentID 0) is processed with stopping code 2
@@ -10471,7 +10476,7 @@ Terminate current event processing.
 =====================================
   G4EventManager::ProcessOneEvent()  
 =====================================
-G4PrimaryTransformer::PrimaryVertex (-13.213337(mm),-3.7890583(mm),78.904261(mm),0(nsec))
+G4PrimaryTransformer::PrimaryVertex (-16.504392(mm),0.86593787(mm),78.323959(mm),0(nsec))
 1 primaries are passed from G4EventTransformer.
 !!!!!!! Now start processing an event !!!!!!!
 Track (trackID 1, parentID 0) is processed with stopping code 2
@@ -10480,7 +10485,7 @@ Terminate current event processing.
 =====================================
   G4EventManager::ProcessOneEvent()  
 =====================================
-G4PrimaryTransformer::PrimaryVertex (-13.516123(mm),-1.7167665(mm),78.850872(mm),0(nsec))
+G4PrimaryTransformer::PrimaryVertex (-16.711929(mm),1.0749337(mm),78.287365(mm),0(nsec))
 1 primaries are passed from G4EventTransformer.
 !!!!!!! Now start processing an event !!!!!!!
 Track (trackID 1, parentID 0) is processed with stopping code 2
@@ -10489,7 +10494,7 @@ Terminate current event processing.
 =====================================
   G4EventManager::ProcessOneEvent()  
 =====================================
-G4PrimaryTransformer::PrimaryVertex (-15.391159(mm),-1.3945912(mm),78.520252(mm),0(nsec))
+G4PrimaryTransformer::PrimaryVertex (-15.693666(mm),-3.0754061(mm),78.466912(mm),0(nsec))
 1 primaries are passed from G4EventTransformer.
 !!!!!!! Now start processing an event !!!!!!!
 Track (trackID 1, parentID 0) is processed with stopping code 2
@@ -10498,7 +10503,7 @@ Terminate current event processing.
 =====================================
   G4EventManager::ProcessOneEvent()  
 =====================================
-G4PrimaryTransformer::PrimaryVertex (-13.339441(mm),-2.0158807(mm),78.882026(mm),0(nsec))
+G4PrimaryTransformer::PrimaryVertex (-10.594242(mm),-0.062898697(mm),79.366078(mm),0(nsec))
 1 primaries are passed from G4EventTransformer.
 !!!!!!! Now start processing an event !!!!!!!
 Track (trackID 1, parentID 0) is processed with stopping code 2

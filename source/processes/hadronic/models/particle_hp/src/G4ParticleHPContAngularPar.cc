@@ -518,12 +518,12 @@ G4ParticleHPContAngularPar::G4ParticleHPContAngularPar( G4ParticleDefinition* pr
       G4double incidentMass = theProjectile->GetPDGMass();
       G4double productEnergy = fsEnergy;
       G4double productMass = result->GetMass();
-      G4int targetZ = G4int(theTargetCode/1000);
-      G4int targetA = G4int(theTargetCode-1000*targetZ);
+      G4int targetZ = G4int(fCache.Get()->theTargetCode/1000);
+      G4int targetA = G4int(fCache.Get()->theTargetCode-1000*targetZ);
       // To correspond to natural composition (-nat-) data files. 
       if ( targetA == 0 ) 
-         targetA = G4int ( theTarget->GetMass()/amu_c2 + 0.5 );
-      G4double targetMass = theTarget->GetMass();
+         targetA = G4int ( fCache.Get()->theTarget->GetMass()/amu_c2 + 0.5 );
+      G4double targetMass = fCache.Get()->theTarget->GetMass();
       G4int residualA = targetA+1-A;
       G4int residualZ = targetZ-Z;
       G4double residualMass =  residualZ*G4Proton::Proton()->GetPDGMass();

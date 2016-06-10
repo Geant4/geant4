@@ -241,7 +241,7 @@ throw G4HadronicException(__FILE__, __LINE__, "Channel: Do not know what to do w
     G4int it=0;
     if(n!=1)
     {
-      xSec = new G4double[n];
+      G4double* xSec = new G4double[n];
       G4double sum=0;
       G4int i;
       const G4double * NumAtomsPerVolume = theMaterial->GetVecNbOfAtomsPerVolume();
@@ -532,6 +532,7 @@ void G4ParticleHPInelastic::BuildPhysicsTable(const G4ParticleDefinition& projec
 
         if ( itry == 6 ) {
            // No Final State at all.
+           /*
            G4bool exceptional = false;
            if ( (*(G4Element::GetElementTable()))[i]->GetNumberOfIsotopes() == 1 )
            {
@@ -541,6 +542,16 @@ void G4ParticleHPInelastic::BuildPhysicsTable(const G4ParticleDefinition& projec
  	      G4cerr << " ELEMENT Z " << (*(G4Element::GetElementTable()))[i]->GetIsotope( 0 )->GetZ() << " N " << (*(G4Element::GetElementTable()))[i]->GetIsotope( 0 )->GetN() << G4endl;  //1H
               throw G4HadronicException(__FILE__, __LINE__, "Channel: Do not know what to do with this element");
 	   }
+           */
+           if ( G4ParticleHPManager::GetInstance()->GetVerboseLevel() > 1 ) {
+              G4cout << "ParticleHP::Inelastic for " << projectile.GetParticleName() << ". Do not know what to do with element of \"" << (*(G4Element::GetElementTable()))[i]->GetName() << "\"." << G4endl;
+              G4cout << "The components of the element are" << G4endl;
+ 	      //G4cout << "TKDB dataDirVariable = " << dataDirVariable << G4endl;
+              for ( G4int ii = 0 ; ii < (G4int)( (*(G4Element::GetElementTable()))[i]->GetNumberOfIsotopes() ) ; ii++ ) { 
+ 	          G4cout << " Z: " << (*(G4Element::GetElementTable()))[i]->GetIsotope( ii )->GetZ() << ", A: " << (*(G4Element::GetElementTable()))[i]->GetIsotope( ii )->GetN() << G4endl;
+              }
+              G4cout << "No possible final state data of the element is found in " << dataDirVariable << "." << G4endl;
+           }
         }
       }
       hpmanager->RegisterInelasticFinalStates( &projectile , theInelastic );

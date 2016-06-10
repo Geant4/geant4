@@ -1,4 +1,4 @@
-$Id: History 94599 2015-11-25 13:00:41Z gcosmo $
+$Id: History 95416 2016-02-10 13:34:47Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the SVN repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+December 8, 2015 I. Hrivnacova (analysis-V10-01-48)
+- Fixed definition of /analysis/ntuple command directory
+  which was created implicitly with the commands and so
+  defined without a guideline and not deleted
 
 November 25, 2015 I. Hrivnacova (analysis-V10-01-47)
 - Adding GNUmakefile in parameters sub-category

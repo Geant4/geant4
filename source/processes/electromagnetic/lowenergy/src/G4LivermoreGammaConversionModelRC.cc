@@ -45,13 +45,13 @@ using namespace std;
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4int G4LivermoreGammaConversionModelRC::maxZ = 99;
-G4LPhysicsFreeVector* G4LivermoreGammaConversionModelRC::data[] = {0};
+G4LPhysicsFreeVector* G4LivermoreGammaConversionModelRC::data[] = {nullptr};
 
 G4LivermoreGammaConversionModelRC::G4LivermoreGammaConversionModelRC
 (const G4ParticleDefinition*, const G4String& nam)
 :G4VEmModel(nam),isInitialised(false),smallEnergy(2.*MeV)
 {
-  fParticleChange = 0;
+  fParticleChange = nullptr;
 
   lowEnergyLimit = 2.0*electron_mass_c2;
   	 
@@ -444,9 +444,7 @@ void G4LivermoreGammaConversionModelRC::SampleSecondaries(
       
   
   // Fix charges randomly
-  
-  
-  
+    
   // Scattered electron (positron) angles. ( Z - axis along the parent photon)
   // Universal distribution suggested by L. Urban (Geant3 manual (1993) Phys211),
   // derived from Tsai distribution (Rev. Mod. Phys. 49, 421 (1977)

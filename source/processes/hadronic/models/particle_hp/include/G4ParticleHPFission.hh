@@ -69,7 +69,6 @@ class G4ParticleHPFission : public G4HadronicInteraction
 
   private:
   
-  G4double * xSec;
   //G4ParticleHPChannel * theFission;
       std::vector<G4ParticleHPChannel*>* theFission;
   G4String dirName;

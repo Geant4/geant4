@@ -1,4 +1,4 @@
-$Id: History 94620 2015-11-26 14:05:52Z gcosmo $
+$Id: History 95471 2016-02-12 09:09:23Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,28 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+- 27 January 2016  Hisaya Kurashige (particles-V10-01-20)
+- Fix the bug(#1820) in G4PhaseSpaceDecayChannel
+
+- 21 January 2016  Hisaya Kurashige
+- Fix G4DecayTable::SelectADecayChannel
+
+- 28 December 2015  Makoto Asai
+- Fix wrong argument order CreateIon(A,Z,LL,0.0) of line #485 in
+  G4IonTable.cc to CreateIon(Z,A,LL,0.0).
+
+- 18 December 2015  Tatsumi Koi
+- Fix problem on previous tag
+
+- 17 December 2015  Tatsumi Koi
+- Revert default value of level tolerance in NuclideTable to 1 eV
+- Turn out rounding of excitation energy to avoid potential conservation problem  
+
+- 3 December 2015  Dennis Wright (particles-V10-01-19)
+- In G4IonTable remove static const tolerance and replace it with 
+  pNuclideTable->GetLevelTolerance() in all locations.
+  This recovers missed levels when they are closer together than 2 keV
 
 - 25 Nov. 2015  Gunter Folger (particles-V10-01-18)
 - Fix for Windows in G4NuclideTable:

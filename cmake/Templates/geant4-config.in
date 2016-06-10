@@ -57,8 +57,6 @@ description="Geant4 toolkit for the simulation of the passage of particles throu
 version="@Geant4_VERSION@"
 
 # 'Requires' that may affect cflags and libs.
-clhep_config_exe=@CLHEP_CONFIG_EXECUTABLE@
-
 # Basic flags and libraries for visualization
 vis_cflags="-DG4UI_USE_TCSH"
 
@@ -131,7 +129,7 @@ have_clhep="@G4_BUILTWITH_CLHEP@"
 feature_list="${feature_list} clhep[${have_clhep}]"
 
 if test "x${have_clhep}" = "xno" ; then
-  cflags="${cflags} `${clhep_config_exe} --include`"
+  cflags="${cflags} -I@G4_SYSTEM_CLHEP_INCLUDE_DIR@"
   libs="${libs} @G4_SYSTEM_CLHEP_LIBRARIES@"
 fi
 if test "x${have_clhep}" = "xyes" ; then

@@ -79,9 +79,11 @@
 #include "G4Pow.hh"
 #include "G4LossTableManager.hh"
 
-class G4ParticleDefinition;
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+static const G4int DIM = 750;
+
+class G4ParticleDefinition;
 
 class G4ScreeningMottCrossSection
 {
@@ -178,11 +180,8 @@ private:
         G4double                 e2;
 
         //angle
-        static const G4int DIM = 950;
-
-        G4double angle[DIM];
-        G4double tet[DIM];
-        G4double dangle[DIM];
+        static G4double dangle[DIM];
+        static G4double tet[DIM];
         G4double cross[DIM];
 };
 

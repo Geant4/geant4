@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4IntersectionSolid.cc 92010 2015-08-13 10:07:52Z gcosmo $
+// $Id: G4IntersectionSolid.cc 95422 2016-02-10 14:35:47Z gcosmo $
 //
 // Implementation of methods for the class G4IntersectionSolid
 //
@@ -158,10 +158,6 @@ G4IntersectionSolid::CalculateExtent(const EAxis pAxis,
     pMin = std::max( minA, minB ); 
     pMax = std::min( maxA, maxB );
     out  = (pMax > pMin); // true;
-#ifdef G4BOOLDEBUG
-    // G4cout.precision(16);
-    // G4cout<<"pMin = "<<pMin<<"; pMax = "<<pMax<<G4endl;
-#endif
   }
   else out = false;
 

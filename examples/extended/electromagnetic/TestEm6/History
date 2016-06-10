@@ -1,4 +1,4 @@
-$Id: History 93739 2015-10-30 11:04:09Z gcosmo $
+$Id: History 95523 2016-02-12 14:11:08Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,6 +15,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+10-12-15 V.Ivant (testem6-V10-01-01)
+- H.Burkhardt fixed root macro allowing to work both with root5 and 6
+    
 28-10-15 D.Sawkey (testem6-V10-01-00)
 - update physics description in READMEs
 - add more standard EM physics builders

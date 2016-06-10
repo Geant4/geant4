@@ -16,6 +16,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+16 Feb 16: P. Gumplinger (op-V10-01-06)
+- addresses bug report #1826, thanks to Tetsuma Yaguchi
+  in DielectricLUT of G4OpBoundaryProcess
+
  9 Oct 15: P. Gumplinger (op-V10-01-05)
 -  fix Coverity error in G4OpBoundaryProcess.cc
 

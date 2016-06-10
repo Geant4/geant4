@@ -1,4 +1,4 @@
-$Id: History 94234 2015-11-09 10:58:13Z gcosmo $
+$Id: History 95701 2016-02-19 10:04:13Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,18 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+18-02-16 A. Dotti   (materials-V10-01-16)
+- Fix rare data-race in G4MaterialPropertiesTable for optical physics
+  crash
+
+03-01-16 M. Verderi (materials-V10-01-15)
+- src/G4NistElementBuilder.cc : fixed typo in print reported in #1786.
+
+20-01-16 V.Ivanchenko
+- G4NistMaterialBuilder - added lock to build of a new NIST
+    material. This is needed, because some physics processes may 
+    create a new NIST material from a worker thread.
 
 09-11-15 V.Ivanchenko (materials-V10-01-14)
 - fixed typo in comments (no code change)

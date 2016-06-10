@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmSaturation.hh 81936 2014-06-06 15:42:55Z gcosmo $
+// $Id: G4EmSaturation.hh 95476 2016-02-12 09:39:50Z gcosmo $
 //
 //
 #ifndef G4EmSaturation_h
@@ -84,19 +84,19 @@ public:
 					   G4double edepTotal,
 					   G4double edepNIEL = 0.0);
 
-  // this method should not be overwitten
-  inline G4double VisibleEnergyDeposition(const G4Step*); 
-
   // find and Birks coefficient 
   G4double FindG4BirksCoefficient(const G4Material*);
-
-  inline void SetVerbose(G4int);
 
   // dump coeffitients used in run time
   void DumpBirksCoefficients();
 
   // dump G4 list
   void DumpG4BirksCoefficients();
+
+  // this method should not be overwitten
+  inline G4double VisibleEnergyDepositionAtAStep(const G4Step*); 
+
+  inline void SetVerbose(G4int);
 
 private:
 
@@ -146,7 +146,7 @@ inline void G4EmSaturation::SetVerbose(G4int val)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline G4double G4EmSaturation::VisibleEnergyDeposition(
+inline G4double G4EmSaturation::VisibleEnergyDepositionAtAStep(
                 const G4Step* step)
 {
   G4Track* track = step->GetTrack();

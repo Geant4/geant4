@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-02-ref-00    (4-December-2015)
+ Geant4 version Name: geant4-10-02-patch-01    (26-February-2016)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -2835,18 +2835,18 @@ Start closing geometry.
 G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 
     Total memory consumed for geometry optimisation:   1 kByte
-    Total CPU time elapsed for geometry optimisation: 0 seconds
+    Total CPU time elapsed for geometry optimisation: 0.01 seconds
 
     Voxelisation: top CPU users:
     Percent   Total CPU    System CPU       Memory  Volume
     -------   ----------   ----------     --------  ----------
-       0.00         0.00         0.00            1k World
+     100.00         0.01         0.00            1k World
        0.00         0.00         0.00            0k HPGeDetector
 
     Voxelisation: top memory users:
     Percent     Memory      Heads    Nodes   Pointers    Total CPU    Volume
     -------   --------     ------   ------   --------   ----------    ----------
-      69.08          0k         3        9         24         0.00    World
+      69.08          0k         3        9         24         0.01    World
       30.92          0k         2        3         11         0.00    HPGeDetector
 ### Run 0 starts.
 ### Run 0 starts (master).
@@ -2862,7 +2862,7 @@ Created histos
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=1.5s Real=1.51s Sys=0s
+  User=1.86s Real=1.91s Sys=0s
 Going to save histograms
 ... write Root file : xrayfluo.root - done
 /vis/viewer/update

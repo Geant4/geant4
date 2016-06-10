@@ -14,6 +14,14 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------*
 
+16-12-2015, SI, tag emdna-V10-01-56
+* Ionisation models : in SampleSecondaries: 
+added protection on energy for interpolation method change
+
+16-12-2015, SI
+* G4DNAIonElasticModel::SampleSecondaries: added protection on 
+energy
+
 13-11-2015, MK, tag emdna-V10-01-55
 * G4MoleculeCounter::Use / InUse => move implementation to source
 file

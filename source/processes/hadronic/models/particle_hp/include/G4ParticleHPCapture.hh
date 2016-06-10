@@ -66,7 +66,6 @@ class G4ParticleHPCapture : public G4HadronicInteraction
   
   private:
   
-  G4double * xSec;
       std::vector<G4ParticleHPChannel*>* theCapture;
   G4String dirName;
   G4int numEle;

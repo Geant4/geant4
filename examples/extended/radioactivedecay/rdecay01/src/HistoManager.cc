@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: HistoManager.cc 87827 2015-01-14 17:17:27Z gcosmo $
+// $Id: HistoManager.cc 95541 2016-02-12 14:33:23Z gcosmo $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -69,7 +69,7 @@ void HistoManager::Book()
             "energy spectrum (%): gamma",               //3
             "energy spectrum (%): alpha",               //4
             "energy spectrum (%): ions",                //5
-            "total kinetic energy (Q)",                 //6
+            "total kinetic energy per single decay (Q)",//6
             "momentum balance",                         //7
             "total time of life of decay chain",        //8
             "total visible energy in decay chain"       //9

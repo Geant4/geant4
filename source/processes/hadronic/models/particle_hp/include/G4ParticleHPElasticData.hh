@@ -91,6 +91,7 @@ class G4ParticleHPElasticData : public G4VCrossSectionDataSet
    
       G4PhysicsTable * theCrossSections;
       G4bool onFlightDB;
+      G4bool instanceOfWorker;
    
 };
 

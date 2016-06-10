@@ -103,7 +103,7 @@ inline size_t G4NucLevel::NumberOfTransitions() const
 
 inline G4bool G4NucLevel::IsXLevel() const
 {
-  return (0.0 == fGammaECumProbability[0]);
+  return (1 == fTrans[0]);
 }
 
 inline G4float G4NucLevel::FinalExcitationEnergy(size_t idx) const

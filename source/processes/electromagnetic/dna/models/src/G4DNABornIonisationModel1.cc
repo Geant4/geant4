@@ -476,6 +476,10 @@ void G4DNABornIonisationModel1::SampleSecondaries(std::vector<G4DynamicParticle*
     G4double bindingEnergy = 0;
     bindingEnergy = waterStructure.IonisationEnergy(ionizationShell);
 
+    //SI: additional protection if tcs interpolation method is modified
+    if (k<bindingEnergy) return;
+    //
+
     G4int Z = 8;
     if(fAtomDeexcitation)
     {

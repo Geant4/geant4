@@ -1,4 +1,4 @@
-$Id: History 94232 2015-11-09 10:53:57Z gcosmo $
+$Id: History 95647 2016-02-17 11:19:25Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,8 +14,14 @@ introduced in the code and keeptrack of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+17-Feb-2016 V.Ivanchenko (phys-ctor-em-V10-01-23)
+- G4EmStandardPhysicsSS - do not compute cross section tables
+    if Mott cross section is enabled (this provides a significant
+    increase of CPU penalty but only in this conditions Mott 
+    corrections are valid)
+
 09-Nov-2015 V.Ivanchenko (phys-ctor-em-V10-01-22)
-- G4EmStandardPhysicsSS - allowing ally Mott correction for e-
+- G4EmStandardPhysicsSS - allowing Mott correction for e-
 
 28-Oct-2015 V.Ivanchenko (phys-ctor-em-V10-01-21)
 - G4EmStandardPhysicsGS - M. Novak tunned parameters and make 

@@ -1,4 +1,4 @@
-$Id: History 92046 2015-08-14 07:22:07Z gcosmo $
+$Id: History 95478 2016-02-12 09:45:33Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,14 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+14 Jan 16: V.Ivanchenko (xrays-V10-01-03)
+- G4Scintillation - use a new method of G4EmSaturation class
+    G4EmSaturation::VisibleEnergyDepositionAtAStep(aStep)
+    in order to fix overload problem #1807
+
+17 Dec 15: V.Ivanchenko
+- G4VTransitionRadiation, G4VXTRenergyLoss - fixed process sub-type
 
 13 Aug 14: V.Ivanchenko, P. Gumplinger (xrays-V10-01-01/02)
 - G4Cerenkov, G4Scintillation, G4SynchrotronRadiationMat - checked while

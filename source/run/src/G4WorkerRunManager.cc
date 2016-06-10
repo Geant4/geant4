@@ -493,9 +493,9 @@ void G4WorkerRunManager::ConstructScoringWorlds()
             {
               pmanager->AddProcess(theParallelWorldProcess);
               if(theParallelWorldProcess->IsAtRestRequired(particle))
-              { pmanager->SetProcessOrdering(theParallelWorldProcess, idxAtRest, 9999); }
+              { pmanager->SetProcessOrdering(theParallelWorldProcess, idxAtRest, 9900); }
               pmanager->SetProcessOrderingToSecond(theParallelWorldProcess, idxAlongStep);
-              pmanager->SetProcessOrdering(theParallelWorldProcess, idxPostStep, 9999);
+              pmanager->SetProcessOrdering(theParallelWorldProcess, idxPostStep, 9900);
             } //if(pmanager)
           }//while
         }

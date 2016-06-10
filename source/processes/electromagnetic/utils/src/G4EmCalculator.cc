@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmCalculator.cc 93291 2015-10-15 10:04:27Z gcosmo $
+// $Id: G4EmCalculator.cc 95476 2016-02-12 09:39:50Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -110,7 +110,7 @@ G4EmCalculator::G4EmCalculator()
   massRatio          = 1.0;
   mass               = 0.0;
   currentCut         = 0.0;
-  cutenergy[0] =  cutenergy[1] = cutenergy[2] = DBL_MAX;
+  cutenergy[0] = cutenergy[1] = cutenergy[2] = DBL_MAX;
   currentParticleName= "";
   currentMaterialName= "";
   currentName        = "";
@@ -184,8 +184,9 @@ G4double G4EmCalculator::GetRangeFromRestricteDEDX(G4double kinEnergy,
   const G4MaterialCutsCouple* couple = FindCouple(mat,region);
   if(couple && UpdateParticle(p, kinEnergy)) {
     res = manager->GetRangeFromRestricteDEDX(p, kinEnergy, couple);
-    if(verbose>0) {
-      G4cout << "G4EmCalculator::GetRange: E(MeV)= " << kinEnergy/MeV
+    if(verbose>1) {
+      G4cout << " G4EmCalculator::GetRangeFromRestrictedDEDX: E(MeV)= " 
+	     << kinEnergy/MeV
              << " range(mm)= " << res/mm
              << "  " <<  p->GetParticleName()
              << " in " <<  mat->GetName()
@@ -203,7 +204,7 @@ G4double G4EmCalculator::GetCSDARange(G4double kinEnergy,
                                       const G4Region* region)
 {
   G4double res = 0.0;
-  if(!G4LossTableManager::Instance()->BuildCSDARange()) {
+  if(!manager->BuildCSDARange()) {
     G4ExceptionDescription ed;
     ed << "G4EmCalculator::GetCSDARange: CSDA table is not built; " 
        << " use UI command: /process/eLoss/CSDARange true";
@@ -215,8 +216,8 @@ G4double G4EmCalculator::GetCSDARange(G4double kinEnergy,
   const G4MaterialCutsCouple* couple = FindCouple(mat,region);
   if(couple && UpdateParticle(p, kinEnergy)) {
     res = manager->GetCSDARange(p, kinEnergy, couple);
-    if(verbose>0) {
-      G4cout << "G4EmCalculator::GetRange: E(MeV)= " << kinEnergy/MeV
+    if(verbose>1) {
+      G4cout << " G4EmCalculator::GetCSDARange: E(MeV)= " << kinEnergy/MeV
              << " range(mm)= " << res/mm
              << "  " <<  p->GetParticleName()
              << " in " <<  mat->GetName()
@@ -234,16 +235,10 @@ G4double G4EmCalculator::GetRange(G4double kinEnergy,
                                   const G4Region* region)
 {
   G4double res = 0.0;
-  const G4MaterialCutsCouple* couple = FindCouple(mat,region);
-  if(couple && UpdateParticle(p, kinEnergy)) {
-    res = manager->GetRange(p, kinEnergy, couple);
-    if(verbose>0) {
-      G4cout << "G4EmCalculator::GetRange: E(MeV)= " << kinEnergy/MeV
-             << " range(mm)= " << res/mm
-             << "  " <<  p->GetParticleName()
-             << " in " <<  mat->GetName()
-             << G4endl;
-    }
+  if(manager->BuildCSDARange()) {
+    res = GetCSDARange(kinEnergy, p, mat, region);
+  } else {
+    res = GetRangeFromRestricteDEDX(kinEnergy, p, mat, region);
   }
   return res;
 }
@@ -809,9 +804,12 @@ G4bool G4EmCalculator::UpdateParticle(const G4ParticleDefinition* p,
         isIon = true;
         massRatio = theGenericIon->GetPDGMass()/p->GetPDGMass();
         baseParticle = theGenericIon;
-        //      G4cout << p->GetParticleName()
-        // << " in " << currentMaterial->GetName()
-        //       << "  e= " << kinEnergy << G4endl;
+	if(verbose>1) {
+          G4cout << "\n G4EmCalculator::UpdateParticle: isIon 1 "
+		 << p->GetParticleName()
+		 << " in " << currentMaterial->GetName()
+		 << "  e= " << kinEnergy << G4endl;
+	}
       }
     }
   }
@@ -823,8 +821,10 @@ G4bool G4EmCalculator::UpdateParticle(const G4ParticleDefinition* p,
       * corr->EffectiveChargeCorrection(p,currentMaterial,kinEnergy);
     if(currentProcess) {
       currentProcess->SetDynamicMassCharge(massRatio,chargeSquare);
-      //G4cout <<"NewP: massR= "<< massRatio << "   q2= " 
-      // << chargeSquare << G4endl;
+      if(verbose>1) {
+	G4cout <<"\n NewIon: massR= "<< massRatio << "   q2= " 
+	       << chargeSquare << "  " << currentProcess << G4endl;
+      }
     }
   }
   return true;
@@ -1120,12 +1120,19 @@ G4VEnergyLossProcess* G4EmCalculator::FindEnergyLossProcess(
   if(p->GetParticleType() == "nucleus" 
      && currentParticleName != "deuteron"  
      && currentParticleName != "triton"
+     && currentParticleName != "He3"
+     && currentParticleName != "alpha"
      && currentParticleName != "alpha+"
      && currentParticleName != "helium"
      && currentParticleName != "hydrogen"
      ) { part = theGenericIon; } 
 
-  elp = G4LossTableManager::Instance()->GetEnergyLossProcess(part);
+  elp = manager->GetEnergyLossProcess(part);
+  /*
+  G4cout << "\n G4EmCalculator::FindEnergyLossProcess: for " << p->GetParticleName()
+	 << " found " << elp->GetProcessName() << " of " 
+	 << elp->Particle()->GetParticleName() << "  " << elp << G4endl;
+  */
   return elp;
 }
 
@@ -1137,7 +1144,7 @@ G4EmCalculator::FindEnLossProcess(const G4ParticleDefinition* part,
 {
   G4VEnergyLossProcess* proc = 0;
   const std::vector<G4VEnergyLossProcess*> v = 
-    G4LossTableManager::Instance()->GetEnergyLossProcessVector();
+    manager->GetEnergyLossProcessVector();
   G4int n = v.size();
   for(G4int i=0; i<n; ++i) {
     if((v[i])->GetProcessName() == processName) {
@@ -1159,7 +1166,7 @@ G4EmCalculator::FindDiscreteProcess(const G4ParticleDefinition* part,
 {
   G4VEmProcess* proc = 0;
   const std::vector<G4VEmProcess*> v = 
-    G4LossTableManager::Instance()->GetEmProcessVector();
+    manager->GetEmProcessVector();
   G4int n = v.size();
   for(G4int i=0; i<n; ++i) {
     if((v[i])->GetProcessName() == processName) {
@@ -1181,7 +1188,7 @@ G4EmCalculator::FindMscProcess(const G4ParticleDefinition* part,
 {
   G4VMultipleScattering* proc = 0;
   const std::vector<G4VMultipleScattering*> v = 
-    G4LossTableManager::Instance()->GetMultipleScatteringVector();
+    manager->GetMultipleScatteringVector();
   G4int n = v.size();
   for(G4int i=0; i<n; ++i) {
     if((v[i])->GetProcessName() == processName) {

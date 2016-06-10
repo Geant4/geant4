@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4String.hh 67970 2013-03-13 10:10:06Z gcosmo $
+// $Id: G4String.hh 95426 2016-02-10 14:54:59Z gcosmo $
 //
 // 
 //---------------------------------------------------------------
@@ -66,7 +66,6 @@ public:
 
   inline G4SubString& operator=(const char*);         
 
-  inline G4SubString& operator=(const G4String&);
   inline G4SubString& operator=(const G4SubString&);
  
   inline char& operator()(str_size);

@@ -999,10 +999,14 @@ static nfu_status ptwXY_mergeFrom( ptwXYPoints *ptwXY, int /*incY*/, int length,
     if( length == 0 ) return( nfu_Okay );
     if( ( status = ptwXY_simpleCoalescePoints( ptwXY ) ) != nfu_Okay ) return( status );
 
-    if( ( sortedXs = (double *) nfu_malloc( length * sizeof( double * ) ) ) == NULL ) return( nfu_mallocError );
+    //if( ( sortedXs = (double *) nfu_malloc( length * sizeof( double * ) ) ) == NULL ) return( nfu_mallocError );
+    //TK fixed for Coverity 63081 
+    if( ( sortedXs = (double *) nfu_malloc( length * sizeof( double ) ) ) == NULL ) return( nfu_mallocError );
 
     for( i = 0, p1 = sortedXs, p2 = xs; i < length; i++, p1++, p2++ ) *p1 = *p2;
-    qsort( sortedXs, length, sizeof( double * ), ptwXY_mergeCompareFunction );
+    //qsort( sortedXs, length, sizeof( double * ), ptwXY_mergeCompareFunction );
+    //TK fixed for Coverity 63079
+    qsort( sortedXs, length, sizeof( double ), ptwXY_mergeCompareFunction );
 
     for( i = 0, p1 = sortedXs, j = 0, n = 0; i < length; i++, p1++, n++ ) {
         for( ; j < ptwXY->length; j++, n++ ) {

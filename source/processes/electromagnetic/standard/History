@@ -1,4 +1,4 @@
-$Id: History 94237 2015-11-09 11:01:24Z gcosmo $
+$Id: History 95547 2016-02-12 15:05:34Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -18,7 +18,27 @@ committal in the CVS repository !
 
      ----------------------------------------------------------
 
-09 October 15: V.Ivanchenko (emstand-V10-01-41)
+12 February 16: V.Ivanchenko (emstand-V10-01-43)
+- G4eSingleCoulombScatteringModel - fixed sampling of scattering angle.
+  Addressing problem report #1823.
+
+11 February 16: M.Novak (emstand-V10-01-42)
+- G4GoudsmitSaundersonMscModel - handle special case (when gun is on 
+  the boundary) in the step limitation
+ 
+23 January 16: V.Ivanchenko
+- G4ScreeningMottCrossSection - a bit cleanup the code to be
+    more fast: keep fixed static array of angles, use G4Pow::powN 
+    method instead of pow (Mauro Tacconi)
+
+17 December 15: M.Novak
+- G4GoudsmitSaundersonMscModel G4GoudsmitSaundersonTable - updated step 
+    limitations, fixed coverity problems and improved comments.      
+
+17 December 15: V.Ivanchenko
+- G4ScreeningMottCrossSection - fixed FPE problem (Mauro Tacconi)
+
+09 November 15: V.Ivanchenko (emstand-V10-01-41)
 - G4ScreeningMottCrossSection - fixed Coverity report
 
 28 October 15: V.Ivanchenko (emstand-V10-01-40)

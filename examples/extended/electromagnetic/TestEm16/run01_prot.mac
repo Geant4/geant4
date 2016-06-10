@@ -1,0 +1,47 @@
+#
+# Macro file for "TestEm16.cc"
+#
+# exmaple of synchrotron radiation for heavier particles, as relevant for fcc-hh
+#
+/control/verbose 2
+/run/verbose 2
+#
+/testem/det/setMat Vacuum
+#
+/run/initialize
+#
+# /process/activate SynchrotronRadiation
+#
+# inactivate other processes to make SynchrotronRadiation more visible
+/process/inactivate msc
+/process/inactivate eIoni
+/process/inactivate eBrem
+/process/inactivate annihil
+/process/inactivate phot
+/process/inactivate compt
+/process/inactivate conv
+/process/inactivate Rayl
+# fcc-hh example
+/globalField/setValue 0 0 20 tesla
+#
+# proton
+/gun/particle proton
+/gun/energy 50 TeV
+#
+#
+# muon
+# /gun/particle mu+
+# /gun/energy 10 TeV
+#
+# GenericIon, here Z=6, multiply gun energy with Z  50*Z = 300
+# /gun/particle ion
+# /gun/ion 6 12
+# /gun/energy 300 TeV
+#
+# set up histos.  A reasonable choice for the upper limits is about 5*Ecr and 10*MeanFreePath
+/analysis/setFileName run01
+/analysis/h1/set 1 100 0   40 keV	#SynRad Energy
+/analysis/h1/set 2 100 0   40 keV	#SynRad Power
+/analysis/h1/set 3 100 0   16 m	    #Path Length
+#
+/run/beamOn 10000

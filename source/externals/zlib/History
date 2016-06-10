@@ -20,6 +20,10 @@ committal in the CVS repository !
 History file for G4 zlib package
 --------------------------------
 
+15 January 2015Gunter Folger   (zlib-V10-01-02)
+-  fix clang compiler warning in inflate.cc: return explicit value 
+     of -1L << 16 (0xffffFFFFffff000L)
+	  
 10 July 2015 Gunter Folger  (zlib-V10-01-01)
 -  Add type casts to fix windows compilations errors.
 

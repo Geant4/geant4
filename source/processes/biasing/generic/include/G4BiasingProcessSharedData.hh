@@ -74,7 +74,13 @@ public:
 private:
   // -- Methods used by the G4BiasingProcessInterface objects, thanks to class friendness.
   // -- Object is created by G4BiasingProcessInterface object:
-  G4BiasingProcessSharedData( const G4ProcessManager* mgr) : fProcessManager(mgr) {} 
+  G4BiasingProcessSharedData( const G4ProcessManager* mgr)
+    : fProcessManager         (mgr),
+      fCurrentBiasingOperator (0),
+      fPreviousBiasingOperator(0),
+      fIsNewOperator          (true),
+      fLeavingPreviousOperator(false)
+  {} 
   ~G4BiasingProcessSharedData() {}
   // -- biasing operators:
   void                 CurrentBiasingOperator( G4VBiasingOperator* );

@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-02-ref-00    (4-December-2015)
+ Geant4 version Name: geant4-10-02-patch-01    (26-February-2016)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -518,15 +518,6 @@ Index : 3     used in the geometry : Yes
     DefaultRegionForTheWorld
 
 ====================================================================
-
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : de0001
-      issued by : G4AtomicTransitionManager::Shell()
-No de-excitation for Z= 77  shellIndex= 21>=  numberOfShells= 21 AtomicShell not found
-
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
 
 /score/dumpQuantityToFile boxMesh_1 eDep EnergyDeposition_iridium.out
 Graphics systems deleted.

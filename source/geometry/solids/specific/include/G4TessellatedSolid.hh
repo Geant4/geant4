@@ -24,7 +24,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4TessellatedSolid.hh 83572 2014-09-01 15:23:27Z gcosmo $
+// $Id: G4TessellatedSolid.hh 95805 2016-02-25 11:11:49Z gcosmo $
 //
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 //
@@ -264,6 +264,10 @@ class G4TessellatedSolid : public G4VSolid
     inline G4bool OutsideOfExtent(const G4ThreeVector &p,
                                         G4double tolerance=0) const;
 
+  protected:
+
+    G4double kCarToleranceHalf;
+
   private:
 
     mutable G4bool fRebuildPolyhedron;
@@ -286,8 +290,6 @@ class G4TessellatedSolid : public G4VSolid
     G4bool fSolidClosed;
 
     std::vector<G4ThreeVector> fRandir;
-
-    G4double kCarToleranceHalf;
 
     G4int fMaxTries;
 

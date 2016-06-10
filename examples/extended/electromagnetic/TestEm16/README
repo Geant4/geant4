@@ -1,4 +1,4 @@
-$Id: README 83423 2014-08-21 15:38:28Z gcosmo $
+$Id: README 95536 2016-02-12 14:27:12Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -71,7 +71,7 @@ $Id: README 83423 2014-08-21 15:38:28Z gcosmo $
      allows to activate/inactivate the processes one by one.
 
      The threshold for producing secondaries can be changed.
-     eg: /run/particle/setCut 100 micrometer
+     eg: /run/setCut 100 micrometer
          /run/initialize
 	
      To visualize the Synchrotron radiation :

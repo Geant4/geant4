@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-02-ref-00    (4-December-2015)
+ Geant4 version Name: geant4-10-02-patch-01    (26-February-2016)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -453,6 +453,11 @@ CoulombScat:   for  pi-, integral: 1     SubType= 1  BuildTable= 1
 ---------------------------------------------------
                            Hadronic Processes for He3
 
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV /n ---> 100 TeV/n
+     Cr_sctns: Glauber-Gribov nucleus nucleus: 0 eV  ---> 2.88022e+295 J  
+     Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
+
   Process: He3Inelastic
         Model:  Binary Light Ion Cascade: 0 eV /n ---> 4 GeV/n
         Model:                      FTFP: 2 GeV/n ---> 100 TeV/n
@@ -756,33 +761,33 @@ Index : 1     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.31s Real=0.4s Sys=0s
+  User=0.28s Real=0.28s Sys=0s
 RunAction: End of run action is starting
 HistoManager: End of run actions are started
 ========================================================
 Beam particle                        S32
 Beam Energy(GeV)                     200
 Number of events                     100
-Average energy deposit (GeV)         6.416   RMS(GeV) 4.161
-Average number of steps              54.52
-Average number of gamma              1.36
+Average energy deposit (GeV)         6.409   RMS(GeV) 4.103
+Average number of steps              54.55
+Average number of gamma              1.34
 Average number of e-                 0
 Average number of e+                 0
-Average number of neutrons           9.41
-Average number of protons            9.04
+Average number of neutrons           9.6
+Average number of protons            9.46
 Average number of antiprotons        0
-Average number of pi+ & pi-          9.1
-Average number of pi0                4.59
-Average number of kaons              0.43
+Average number of pi+ & pi-          9.65
+Average number of pi0                5.03
+Average number of kaons              0.41
 Average number of muons              0
-Average number of deuterons+tritons  1.34
-Average number of He3+alpha          1.52
-Average number of ions               1.13
+Average number of deuterons+tritons  1.44
+Average number of He3+alpha          1.6
+Average number of ions               1.11
 ========================================================
 
 G4 kernel has come to Quit state.
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 12 of which, static: 0
-Dynamic pools deleted: 12 / Total memory freed: 0.092 MB
+Dynamic pools deleted: 12 / Total memory freed: 0.084 MB
 ============================================================
 RunManagerKernel is deleted. Good bye :)
